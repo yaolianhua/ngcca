@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>hotCloud-core</module>
+        <module>hotCloud-server</module>
+        <module>hotCloud-starter</module>
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.4</version>
+    </parent>
+
+    <groupId>io.hotCloud</groupId>
+    <artifactId>hotCloud</artifactId>
+    <version>0.1</version>
+    <packaging>pom</packaging>
+    <name>Hot Cloud</name>
+
+    <properties>
+        <java.version>11</java.version>
+        <swagger-api.version>1.6.2</swagger-api.version>
+        <springfox-version>3.0.0</springfox-version>
+        <kubernetes-client.version>13.0.0</kubernetes-client.version>
+        <lombok.version>1.18.20</lombok.version>
+        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.hotCloud</groupId>
+                <artifactId>hotCloud-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotCloud</groupId>
+                <artifactId>hotCloud-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Swagger -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-version}</version>
+            </dependency>
+
+            <!-- Kubernetes -->
+            <dependency>
+                <groupId>io.kubernetes</groupId>
+                <artifactId>client-java-api</artifactId>
+                <version>${kubernetes-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.kubernetes</groupId>
+                <artifactId>client-java</artifactId>
+                <version>${kubernetes-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <developers>
+        <developer>
+            <id>yaolianhua</id>
+            <name>Yaolianhua</name>
+            <email>yaolianhua789@gmail.com</email>
+            <organization>Hot Cloud</organization>
+            <timezone>Asia/Shanghai</timezone>
+        </developer>
+        <!-- Add your profile here -->
+    </developers>
+</project>

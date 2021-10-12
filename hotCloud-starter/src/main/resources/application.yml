@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: hot-cloud
+  profiles:
+    include:
+      - kubernetes
+server:
+  servlet:
+    context-path: /api/v1
