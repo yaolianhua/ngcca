@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,7 +24,14 @@ public class KubernetesExceptionHandler {
     @ExceptionHandler(value = ApiException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorWebResult> handle(ApiException ex, HttpServletRequest request){
-        ErrorWebResult error = ErrorWebResult.error(HttpStatus.FORBIDDEN, request.getRequestURI(), ex.getResponseBody());
+        Object message;
+        String msg = ex.getMessage();
+        if (StringUtils.hasText(msg)){
+            message = msg;
+        }else {
+            message = ex.getResponseBody();
+        }
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.FORBIDDEN, request.getRequestURI(), message);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 

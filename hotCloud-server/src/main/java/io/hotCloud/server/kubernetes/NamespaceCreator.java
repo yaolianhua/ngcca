@@ -60,7 +60,7 @@ public class NamespaceCreator implements V1NamespaceCreation {
         namespace.setApiVersion("v1");
         namespace.setKind("Namespace");
 
-        coreV1Api.createNamespace(namespace,"true",null,null);
-        log.info("Namespace '{}' created", name);
+        V1Namespace v1Namespace = coreV1Api.createNamespace(namespace, "true", null, null);
+        log.debug("Namespace '{}' created \n '{}'", name, v1Namespace);
     }
 }

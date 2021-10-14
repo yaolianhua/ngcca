@@ -24,22 +24,24 @@ public class WebMvcExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorWebResult handle(MissingServletRequestParameterException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWebResult> handle(MissingServletRequestParameterException ex, HttpServletRequest request) {
         log.warn("Required request parameter '{}' for '{}'", ex.getParameterName(), request.getRequestURI(), ex);
-        return ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), String.format("Required request parameter '%s'", ex.getParameterName()));
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), String.format("Required request parameter '%s'", ex.getParameterName()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(ServletRequestBindingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorWebResult handle(ServletRequestBindingException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWebResult> handle(ServletRequestBindingException ex, HttpServletRequest request) {
         log.warn("Parameter exception '{}' for '{}'",ex.getMessage(), request.getRequestURI(), ex);
-        return ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), "Request parameter exception");
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), "Request parameter exception");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorWebResult handle(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorWebResult> handle(MethodArgumentNotValidException ex, HttpServletRequest request) {
         log.warn(ex.getMessage(), ex);
 
         StringBuffer message = new StringBuffer();
@@ -48,12 +50,13 @@ public class WebMvcExceptionHandler {
             message.append("; ");
         });
 
-        return ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), message.toString());
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), message.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorWebResult handle(BindException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWebResult> handle(BindException ex, HttpServletRequest request) {
         log.warn("Request parameter error for '{}'", request.getRequestURI(), ex);
 
         FieldError fieldError = ex.getFieldError();
@@ -62,7 +65,8 @@ public class WebMvcExceptionHandler {
             message = String.format("Request parameter '%s' error, message: '%s'", fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), message);
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler
@@ -84,10 +88,11 @@ public class WebMvcExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorWebResult handle(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWebResult> handle(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         log.warn("Not supported method '{}' for '{}'", ex.getMethod(), request.getRequestURI(), ex);
-        return ErrorWebResult.error(HttpStatus.METHOD_NOT_ALLOWED, request.getRequestURI(), String.format(
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.METHOD_NOT_ALLOWED, request.getRequestURI(), String.format(
                 "Not supported method '%s' required method is '%s'", ex.getMethod(), Arrays.toString(ex.getSupportedMethods())));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 }

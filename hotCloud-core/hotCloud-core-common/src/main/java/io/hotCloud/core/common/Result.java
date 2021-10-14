@@ -18,6 +18,10 @@ public class Result<T> {
         this.data = data;
     }
 
+    public static <T> Result<T> none(){
+        return new Result<>(200,null,null);
+    }
+
     public static <T> Result<T> ok(T data){
         return new Result<>(200,null,data);
     }

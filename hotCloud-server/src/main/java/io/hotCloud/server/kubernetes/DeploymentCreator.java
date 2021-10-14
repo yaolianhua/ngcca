@@ -41,6 +41,7 @@ public class DeploymentCreator implements V1DeploymentCreation {
                 "true",
                 null,
                 null);
+        log.debug("create deployment success \n '{}'",deployment);
         return deployment;
     }
 }

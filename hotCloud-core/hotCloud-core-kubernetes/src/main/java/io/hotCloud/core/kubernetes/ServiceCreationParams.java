@@ -13,5 +13,5 @@ public class ServiceCreationParams {
     @NotNull(message = "service metadata is null")
     private ServiceMetadata serviceMetadata;
     @NotNull(message = "service spec is null")
-    private ServiceSpec serviceSpec;
+    private DefaultServiceSpec serviceSpec;
 }

@@ -7,3 +7,6 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+logging:
+  level:
+    io.hotCloud.server: debug

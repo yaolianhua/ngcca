@@ -1,13 +1,11 @@
 package io.hotCloud.core.kubernetes;
 
-import lombok.Builder;
 import lombok.Data;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Data
-@Builder
 public class ServicePort {
 
     private String appProtocol;
@@ -16,7 +14,6 @@ public class ServicePort {
     private Integer port;
     private String targetPort;
 
-    @Builder.Default
     private Protocol protocol = Protocol.TCP;
 
     public enum Protocol{
