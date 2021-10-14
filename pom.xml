@@ -27,9 +27,12 @@
         <kubernetes-client.version>13.0.0</kubernetes-client.version>
         <lombok.version>1.18.20</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
+        <github-api.version>1.133</github-api.version>
+        <gitlab-api.version>4.18.0</gitlab-api.version>
     </properties>
 
     <dependencyManagement>
+        <!-- modules -->
         <dependencies>
             <dependency>
                 <groupId>io.hotCloud</groupId>
@@ -67,17 +70,32 @@
                 <version>${kubernetes-client.version}</version>
             </dependency>
 
+            <!-- lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
 
+            <!-- validator -->
             <dependency>
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
             </dependency>
+
+            <!-- code -->
+            <dependency>
+                <groupId>org.kohsuke</groupId>
+                <artifactId>github-api</artifactId>
+                <version>${github-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gitlab4j</groupId>
+                <artifactId>gitlab4j-api</artifactId>
+                <version>${gitlab-api.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
