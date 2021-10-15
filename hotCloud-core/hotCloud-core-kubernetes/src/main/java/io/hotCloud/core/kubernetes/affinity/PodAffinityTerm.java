@@ -1,7 +1,6 @@
 package io.hotCloud.core.kubernetes.affinity;
 
 import io.hotCloud.core.kubernetes.LabelSelector;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-@Builder
 public class PodAffinityTerm {
 
     public PodAffinityTerm() {
@@ -23,10 +21,8 @@ public class PodAffinityTerm {
         this.labelSelector = labelSelector;
     }
 
-    @Builder.Default
     private List<String> namespaces = new ArrayList<>();
     private String topologyKey;
-    @Builder.Default
     private LabelSelector labelSelector = new LabelSelector();
 
 }
