@@ -1,4 +1,11 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
@@ -19,6 +26,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: hot-cloud
+    namespace: hot-cloud
 ---
 apiVersion: v1
 kind: Service
@@ -54,7 +62,7 @@ spec:
         k8s-app: hot-cloud
     spec:
       containers:
-        - image: registry.local/hot-cloud/hotcloud:0.1.20211017151023
+        - image: yaolianhua/hotcloud:0.1.20211017223300
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -83,7 +91,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
           volumeMounts:
-            - mountPath: /hotCloud
+            - mountPath: /build/hotcloud
               name: hot-cloud-volume
               readOnly: true
       nodeSelector:
