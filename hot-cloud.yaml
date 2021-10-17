@@ -85,12 +85,16 @@ spec:
           volumeMounts:
             - mountPath: /hotCloud
               name: hot-cloud-volume
+              readOnly: true
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: hot-cloud
       volumes:
         - configMap:
             name: hot-cloud-config
+            items:
+              - key: application.yml
+                path: application.yml
           name: hot-cloud-volume
 ---
 apiVersion: v1
