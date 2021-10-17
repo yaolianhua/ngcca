@@ -22,7 +22,7 @@ COPY --from=builder /build/application/ .
 
 ENV ARG HOTCLOUD_VERSION=${HOTCLOUD_VERSION}
 
-ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/hotCloud/starter"
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/hotCloud/starter"
 EXPOSE 8080
 
 CMD java $JAVA_OPTS -Dspring.profiles.active=production org.springframework.boot.loader.JarLauncher
