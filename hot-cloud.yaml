@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+  namespace: hot-cloud
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: hot-cloud
+    namespace: hot-cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+  namespace: hot-cloud
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  selector:
+    k8s-app: hot-cloud
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: hot-cloud
+  name: hot-cloud
+  namespace: hot-cloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: hot-cloud
+  template:
+    metadata:
+      labels:
+        k8s-app: hot-cloud
+    spec:
+      containers:
+        - image: yaolianhua/hotcloud:0.1.20211017223300
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/livez
+              port: http
+            periodSeconds: 10
+          name: hot-cloud
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/readyz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /build/hotcloud
+              name: hot-cloud-volume
+              readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccountName: hot-cloud
+      volumes:
+        - configMap:
+            name: hot-cloud-config
+            items:
+              - key: application.yml
+                path: application.yml
+          name: hot-cloud-volume
+---
+apiVersion: v1
+data:
+  application.yml: |
+    logging:
+      level:
+        io.hotCloud.server: debug
+    kubernetes:
+      in-cluster: true
+kind: ConfigMap
+metadata:
+  name: hot-cloud-config
+  namespace: hot-cloud

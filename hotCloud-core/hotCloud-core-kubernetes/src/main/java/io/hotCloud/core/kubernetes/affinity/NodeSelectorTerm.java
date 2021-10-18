@@ -19,9 +19,7 @@ public class NodeSelectorTerm {
     public static class MatchRequirement {
 
         private String key;
-
         private Operator operator = Operator.In;
-
         private List<String> values = new ArrayList<>();
 
     }
