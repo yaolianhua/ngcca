@@ -7,7 +7,7 @@ RUN mvn -Dmaven.test.skip=true clean compile package install
 RUN cp hotCloud-starter/target/hotCloud-starter.jar .
 RUN java -Djarmode=layertools -jar hotCloud-starter.jar extract
 
-FROM openjdk:11.0.12-jre-buster
+FROM openjdk:11.0.12-jre-slim-buster
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 

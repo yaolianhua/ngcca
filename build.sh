@@ -7,7 +7,7 @@ echo "Using hotCloud version: ${HOTCLOUD_VERSION}"
 # Build image
 
 IMAGE="yaolianhua/hotcloud:${HOTCLOUD_VERSION}.${BUILD_TIMESTAMP}"
-docker build Dockerfile --build-arg HOTCLOUD_VERSION="${HOTCLOUD_VERSION}" -t "${IMAGE}" .
+docker build -f Dockerfile --build-arg HOTCLOUD_VERSION="${HOTCLOUD_VERSION}" -t "${IMAGE}" .
 docker push "${IMAGE}"
 
-echo "Image pushed successful! ${IMAGE}"
+echo "${IMAGE} pushed successful!"
