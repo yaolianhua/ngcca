@@ -26,4 +26,4 @@ ENV ARG HOTCLOUD_VERSION=${HOTCLOUD_VERSION}
 ENV JAVA_OPTS="-Xms128m -Xmx256m"
 EXPOSE 8080
 
-CMD java $JAVA_OPTS org.springframework.boot.loader.JarLauncher
+CMD java $JAVA_OPTS -Dspring.profiles.active=production org.springframework.boot.loader.JarLauncher

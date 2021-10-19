@@ -61,6 +61,13 @@ spec:
       labels:
         k8s-app: hot-cloud
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
       containers:
         - image: yaolianhua/hotcloud:0.1.20211017223300
           imagePullPolicy: IfNotPresent
@@ -87,27 +94,26 @@ spec:
               cpu: 100m
               memory: 128Mi
           securityContext:
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            runAsUser: 1000
+            privileged: true
           volumeMounts:
-            - mountPath: /build/hotcloud
+            - mountPath: /hotcloud/config
               name: hot-cloud-volume
               readOnly: true
-      nodeSelector:
-        kubernetes.io/os: linux
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
       serviceAccountName: hot-cloud
       volumes:
         - configMap:
             name: hot-cloud-config
             items:
-              - key: application.yml
+              - key: config
                 path: application.yml
           name: hot-cloud-volume
 ---
 apiVersion: v1
 data:
-  application.yml: |
+  config: |
     logging:
       level:
         io.hotCloud.server: debug
