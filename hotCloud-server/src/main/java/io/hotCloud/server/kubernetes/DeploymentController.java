@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author yaolianhua789@gmail.com
  **/
 @RestController
-@RequestMapping("/kubernetes/deployments")
+@RequestMapping("/v1/kubernetes/deployments")
 public class DeploymentController {
 
     private final V1DeploymentCreation deploymentCreation;

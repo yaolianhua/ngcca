@@ -1,12 +1,9 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.DeploymentCreationParams;
 import io.hotCloud.core.kubernetes.ServiceCreationParams;
-import io.hotCloud.core.kubernetes.V1DeploymentCreation;
 import io.hotCloud.core.kubernetes.V1ServiceCreation;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
 import org.springframework.http.HttpStatus;
@@ -20,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author yaolianhua789@gmail.com
  **/
 @RestController
-@RequestMapping("/kubernetes/services")
+@RequestMapping("/v1/kubernetes/services")
 public class ServiceController {
 
     private final V1ServiceCreation serviceCreation;
