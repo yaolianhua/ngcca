@@ -1,6 +1,5 @@
 package io.hotCloud.core.kubernetes;
 
-import lombok.Builder;
 import lombok.Data;
 
 /**

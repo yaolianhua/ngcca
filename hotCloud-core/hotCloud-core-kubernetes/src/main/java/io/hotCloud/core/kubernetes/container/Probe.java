@@ -1,13 +1,11 @@
 package io.hotCloud.core.kubernetes.container;
 
-import lombok.Builder;
 import lombok.Data;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Data
-@Builder
 public class Probe {
 
     private int failureThreshold;

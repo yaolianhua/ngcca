@@ -12,7 +12,9 @@ public interface V1NamespaceCreation {
 
     default void namespace(String namespace) throws ApiException {
         NamespaceCreationParams params = new NamespaceCreationParams();
-        params.setMetadata(NamespaceMetadata.builder().name(namespace).build());
+        NamespaceMetadata namespaceMetadata = new NamespaceMetadata();
+        namespaceMetadata.setName(namespace);
+        params.setMetadata(namespaceMetadata);
         this.namespace(params);
     }
 }
