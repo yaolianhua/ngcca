@@ -1,5 +1,8 @@
 package io.hotCloud.server.kubernetes.config;
 
+import io.fabric8.kubernetes.client.Config;
+import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotCloud.core.kubernetes.AbstractKubernetesApi;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.util.ClientBuilder;
@@ -9,25 +12,28 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
 @Slf4j
-public class KubernetesApiClientExplorer extends AbstractKubernetesApi {
+public class KubernetesApiExplorer extends AbstractKubernetesApi {
 
     private final KubernetesProperties kubernetesProperties;
 
-    public KubernetesApiClientExplorer(KubernetesProperties kubernetesProperties) {
+    public KubernetesApiExplorer(KubernetesProperties kubernetesProperties) {
         this.kubernetesProperties = kubernetesProperties;
     }
 
     @Override
-    public ApiClient obtainClient() {
+    public ApiClient obtainApiClient() {
 
         boolean inCluster = kubernetesProperties.isInCluster();
-        if (inCluster){
+        if (inCluster) {
             log.info("Api client is using in-cluster mode");
             // loading the in-cluster config, including:
             //   1. service-account CA
@@ -52,8 +58,31 @@ public class KubernetesApiClientExplorer extends AbstractKubernetesApi {
 
             return client;
         } catch (IOException e) {
-            throw new RuntimeException(String.format("Build api-client error. '%s'",e.getMessage()),e);
+            throw new RuntimeException(String.format("Build api-client error. '%s'", e.getMessage()), e);
         }
+
+    }
+
+    @Override
+    public KubernetesClient obtainFabric8KubernetesClient() {
+
+        boolean inCluster = kubernetesProperties.isInCluster();
+        if (inCluster) {
+            log.warn("Not supported fabric8 kubernetes client in cluster mode! specify the kubeconfig file path manually please");
+            Config config = Config.autoConfigure(null);
+            return new DefaultKubernetesClient(config);
+        }
+        String kubeConfigPath = kubernetesProperties.getKubeConfigPath();
+        String kubeconfig;
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(kubeConfigPath));
+            kubeconfig = String.join("\n", lines);
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Read kubeconfig file error. path='%s' error='%s'", kubeConfigPath, e.getMessage()), e);
+        }
+        Config config = Config.fromKubeconfig(kubeconfig);
+
+        return new DefaultKubernetesClient(config);
 
     }
 }

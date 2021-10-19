@@ -1,5 +1,6 @@
 package io.hotCloud.core.kubernetes;
 
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
@@ -12,7 +13,7 @@ public abstract class AbstractKubernetesApi implements KubernetesApi{
 
     @Override
     public CoreV1Api coreV1Api() {
-        ApiClient apiClient = this.obtainClient();
+        ApiClient apiClient = this.obtainApiClient();
 
         // set the global default api-client to the in-cluster one from above
         Configuration.setDefaultApiClient(apiClient);
@@ -23,7 +24,7 @@ public abstract class AbstractKubernetesApi implements KubernetesApi{
 
     @Override
     public AppsV1Api appsV1Api() {
-        ApiClient apiClient = this.obtainClient();
+        ApiClient apiClient = this.obtainApiClient();
 
         // set the global default api-client to the in-cluster one from above
         Configuration.setDefaultApiClient(apiClient);
@@ -32,7 +33,14 @@ public abstract class AbstractKubernetesApi implements KubernetesApi{
         return new AppsV1Api();
     }
 
-    public abstract ApiClient obtainClient();
+    @Override
+    public KubernetesClient fabric8KubernetesClient() {
+        return this.obtainFabric8KubernetesClient();
+    }
+
+    public abstract ApiClient obtainApiClient();
+
+    public abstract KubernetesClient obtainFabric8KubernetesClient();
 
 
 }

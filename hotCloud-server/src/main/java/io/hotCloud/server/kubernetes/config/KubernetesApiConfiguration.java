@@ -1,5 +1,6 @@
 package io.hotCloud.server.kubernetes.config;
 
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotCloud.core.kubernetes.KubernetesApi;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -19,12 +20,17 @@ public class KubernetesApiConfiguration {
     }
 
     @Bean
-    public CoreV1Api coreV1Api(){
+    public CoreV1Api coreV1Api() {
         return api.coreV1Api();
     }
 
     @Bean
-    public AppsV1Api appsV1Api(){
+    public AppsV1Api appsV1Api() {
         return api.appsV1Api();
+    }
+
+    @Bean
+    public KubernetesClient fabric8KubernetesClient() {
+        return api.fabric8KubernetesClient();
     }
 }

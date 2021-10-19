@@ -25,6 +25,7 @@
         <swagger-api.version>1.6.2</swagger-api.version>
         <springfox-version>3.0.0</springfox-version>
         <kubernetes-client.version>13.0.0</kubernetes-client.version>
+        <fabric8.kubernetes-client.version>5.9.0</fabric8.kubernetes-client.version>
         <lombok.version>1.18.20</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <github-api.version>1.133</github-api.version>
@@ -68,6 +69,12 @@
                 <groupId>io.kubernetes</groupId>
                 <artifactId>client-java</artifactId>
                 <version>${kubernetes-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>kubernetes-client</artifactId>
+                <version>${fabric8.kubernetes-client.version}</version>
             </dependency>
 
             <!-- lombok -->
