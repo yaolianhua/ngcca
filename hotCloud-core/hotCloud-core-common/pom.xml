@@ -22,5 +22,10 @@
             <artifactId>hibernate-validator</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 </project>
