@@ -1,2 +1,2 @@
 kubernetes:
-  in-cluster: false
+  in-cluster: true
