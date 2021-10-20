@@ -1,8 +1,8 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.ServiceCreationParams;
-import io.hotCloud.core.kubernetes.V1ServiceCreation;
+import io.hotCloud.core.kubernetes.svc.ServiceCreationParams;
+import io.hotCloud.core.kubernetes.svc.V1ServiceCreation;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;

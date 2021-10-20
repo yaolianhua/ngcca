@@ -1,10 +1,10 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.DeploymentCreationParams;
-import io.hotCloud.core.kubernetes.DeploymentDeletionParams;
-import io.hotCloud.core.kubernetes.V1DeploymentCreation;
-import io.hotCloud.core.kubernetes.V1DeploymentDeletion;
+import io.hotCloud.core.kubernetes.deploy.DeploymentCreationParams;
+import io.hotCloud.core.kubernetes.deploy.DeploymentDeletionParams;
+import io.hotCloud.core.kubernetes.deploy.V1DeploymentCreation;
+import io.hotCloud.core.kubernetes.deploy.V1DeploymentDeletion;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.util.Yaml;

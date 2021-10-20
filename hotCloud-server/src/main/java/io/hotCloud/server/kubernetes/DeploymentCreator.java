@@ -1,9 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.HotCloudException;
-import io.hotCloud.core.kubernetes.DeploymentCreationParams;
-import io.hotCloud.core.kubernetes.V1DeploymentBuilder;
-import io.hotCloud.core.kubernetes.V1DeploymentCreation;
+import io.hotCloud.core.kubernetes.deploy.V1DeploymentCreation;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;

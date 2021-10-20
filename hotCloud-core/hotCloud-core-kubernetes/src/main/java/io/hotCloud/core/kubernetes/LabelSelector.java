@@ -34,7 +34,7 @@ public class LabelSelector {
         private List<String> values = new ArrayList<>();
     }
 
-    enum Operator {
+    public enum Operator {
         //
         In, NotIn, Exists, DoesNotExist
     }
