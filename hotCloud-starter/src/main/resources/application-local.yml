@@ -1,0 +1,3 @@
+kubernetes:
+  in-cluster: false
+#  kube-config-path: /root/.kube/config

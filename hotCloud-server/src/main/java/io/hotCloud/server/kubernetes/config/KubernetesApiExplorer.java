@@ -34,7 +34,6 @@ public class KubernetesApiExplorer extends AbstractKubernetesApi {
 
         boolean inCluster = kubernetesProperties.isInCluster();
         if (inCluster) {
-            log.info("Api client is using in-cluster mode");
             // loading the in-cluster config, including:
             //   1. service-account CA
             //   2. service-account bearer-token
@@ -68,7 +67,6 @@ public class KubernetesApiExplorer extends AbstractKubernetesApi {
 
         boolean inCluster = kubernetesProperties.isInCluster();
         if (inCluster) {
-            log.warn("Not supported fabric8 kubernetes client in cluster mode! specify the kubeconfig file path manually please");
             Config config = Config.autoConfigure(null);
             return new DefaultKubernetesClient(config);
         }

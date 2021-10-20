@@ -19,15 +19,26 @@ public class KubernetesProperties {
     /**
      * kube config path
      */
-    private String kubeConfigPath = String.format("%s/.kube/config",System.getenv("HOME"));
+    private String kubeConfigPath = defaultKubeconfigPath();
     /**
      * in-cluster mode
      */
     private boolean inCluster = true;
 
+    public static String defaultKubeconfigPath() {
+        return String.format("%s/.kube/config", System.getenv("HOME"));
+    }
+
     @PostConstruct
-    public void log(){
-        log.info("【Load Kubernetes Configuration】in-cluster mode '{}', the kube config path is '{}'",inCluster,kubeConfigPath);
+    public void log() {
+        if (this.inCluster) {
+            log.info("【Load Kubernetes Configuration】using in-cluster mode ");
+            return;
+        }
+
+        log.info("【Load Kubernetes Configuration】using kubeconfig path '{}'", kubeConfigPath);
+
+
     }
 
 
