@@ -1,6 +1,5 @@
 package io.hotCloud.core.kubernetes.pod;
 
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,7 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class PodTemplateMetadata extends V1ObjectMeta {
+public class PodTemplateMetadata {
 
     private Map<String, String> labels = new HashMap<>();
 

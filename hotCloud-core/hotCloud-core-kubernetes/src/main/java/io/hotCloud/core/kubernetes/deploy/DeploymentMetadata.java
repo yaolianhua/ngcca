@@ -1,6 +1,5 @@
 package io.hotCloud.core.kubernetes.deploy;
 
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +12,9 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class DeploymentMetadata extends V1ObjectMeta {
+public class DeploymentMetadata {
 
-    @NotBlank(message = "namespace is empty")
-    private String namespace;
+    private String namespace = "default";
 
     @NotBlank(message = "Deployment name is empty")
     private String name;

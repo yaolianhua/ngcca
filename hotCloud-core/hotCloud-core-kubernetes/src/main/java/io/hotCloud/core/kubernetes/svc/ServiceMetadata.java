@@ -1,6 +1,5 @@
 package io.hotCloud.core.kubernetes.svc;
 
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +12,9 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class ServiceMetadata extends V1ObjectMeta {
+public class ServiceMetadata {
 
-    @NotBlank(message = "namespace is empty")
-    private String namespace;
+    private String namespace = "default";
 
     @NotBlank(message = "service name is empty")
     private String name;

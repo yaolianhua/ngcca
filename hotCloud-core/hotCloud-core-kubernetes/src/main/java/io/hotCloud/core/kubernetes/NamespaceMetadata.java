@@ -1,6 +1,5 @@
 package io.hotCloud.core.kubernetes;
 
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class NamespaceMetadata extends V1ObjectMeta {
+public class NamespaceMetadata {
 
     @NotBlank(message = "Namespace's name is empty")
     private String name;
