@@ -8,5 +8,7 @@ import lombok.Data;
 @Data
 public class PersistentVolumeCreationParam {
 
+    private PersistentVolumeMetadata metadata = new PersistentVolumeMetadata();
 
+    private PersistentVolumeSpec spec = new PersistentVolumeSpec();
 }

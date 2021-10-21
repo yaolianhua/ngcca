@@ -29,7 +29,15 @@ public class PersistentVolumeSpec {
 
     private String storageClassName;
 
+    private ClaimRef claimRef = new ClaimRef();
+
     private VolumeMode volumeMode = VolumeMode.Filesystem;
+
+    @Data
+    public static class ClaimRef {
+        private String name;
+        private String namespaces;
+    }
 
     public enum VolumeMode {
         //
