@@ -5,6 +5,8 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -21,6 +23,15 @@ import java.util.Arrays;
 @Order(0)
 @Slf4j
 public class WebMvcExceptionHandler {
+
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorWebResult> handle(HttpMessageNotWritableException ex, HttpServletRequest request) {
+        log.error("Internal server error '{}'", ex.getMessage(), ex);
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -92,6 +103,15 @@ public class WebMvcExceptionHandler {
         log.warn("Not supported method '{}' for '{}'", ex.getMethod(), request.getRequestURI(), ex);
         ErrorWebResult error = ErrorWebResult.error(HttpStatus.METHOD_NOT_ALLOWED, request.getRequestURI(), String.format(
                 "Not supported method '%s' required method is '%s'", ex.getMethod(), Arrays.toString(ex.getSupportedMethods())));
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorWebResult> handle(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        log.warn("Request error '{}' for '{}'", ex.getMessage(), request.getRequestURI(), ex);
+        ErrorWebResult error = ErrorWebResult.error(HttpStatus.BAD_REQUEST, request.getRequestURI(), String.format(
+                "Request error '%s' for '%s'", ex.getMessage(), request.getRequestURI()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
