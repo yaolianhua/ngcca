@@ -41,8 +41,11 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: http
+      nodePort: 30000
   selector:
     k8s-app: hot-cloud
+  type: NodePort
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -69,7 +72,7 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: yaolianhua/hotcloud:0.1.20211020102109
+        - image: yaolianhua/hotcloud:0.1.20211023100514
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -100,6 +103,9 @@ spec:
             - mountPath: /hotcloud/config
               name: hot-cloud-volume
               readOnly: true
+            - mountPath: /root/.kube/config
+              name: kubeconfig
+              readOnly: true
       tolerations:
         - effect: NoSchedule
           operator: Exists
@@ -111,6 +117,9 @@ spec:
               - key: config
                 path: application.yml
           name: hot-cloud-volume
+        - hostPath:
+            path: /root/.kube/config
+          name: kubeconfig
 ---
 apiVersion: v1
 data:
