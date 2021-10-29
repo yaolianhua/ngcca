@@ -14,13 +14,11 @@ public class ProbeController {
 
     @GetMapping(value = "/livez")
     public ResponseEntity<Void> livenessProbe() {
-        log.trace("livenessProbe check successful");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
     }
 
     @GetMapping(value = "/readyz")
     public ResponseEntity<Void> readinessProbe() {
-        log.trace("readinessProbe check successful");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
     }
 }
