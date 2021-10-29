@@ -7,7 +7,6 @@
         <module>hotCloud-core</module>
         <module>hotCloud-server</module>
         <module>hotCloud-starter</module>
-        <module>hotCloud-buildpack</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

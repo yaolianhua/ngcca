@@ -1,5 +1,0 @@
-spring:
-  application:
-    name: hot-cloud-buildpack
-server:
-  port: 8090
