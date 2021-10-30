@@ -71,7 +71,7 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211030183250
+        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211030214744
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 1
