@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.HotCloudException;
-import io.hotCloud.core.kubernetes.job.V1JobCreation;
+import io.hotCloud.core.kubernetes.job.V1JobCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.models.V1Job;
@@ -17,7 +17,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class JobCreator implements V1JobCreation {
+public class JobCreator implements V1JobCreateApi {
 
     private final BatchV1Api batchV1Api;
 

@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/kubernetes/deployments")
 public class DeploymentController {
 
-    private final V1DeploymentCreation deploymentCreation;
-    private final V1DeploymentDeletion deploymentDeletion;
-    private final V1DeploymentRead deploymentRead;
+    private final V1DeploymentCreateApi deploymentCreation;
+    private final V1DeploymentDeleteApi deploymentDeletion;
+    private final V1DeploymentReadApi deploymentRead;
 
-    public DeploymentController(V1DeploymentCreation deploymentCreation,
-                                V1DeploymentDeletion deploymentDeletion,
-                                V1DeploymentRead deploymentRead) {
+    public DeploymentController(V1DeploymentCreateApi deploymentCreation,
+                                V1DeploymentDeleteApi deploymentDeletion,
+                                V1DeploymentReadApi deploymentRead) {
         this.deploymentCreation = deploymentCreation;
         this.deploymentDeletion = deploymentDeletion;
         this.deploymentRead = deploymentRead;

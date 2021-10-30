@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.HotCloudException;
-import io.hotCloud.core.kubernetes.deploy.V1DeploymentCreation;
+import io.hotCloud.core.kubernetes.deploy.V1DeploymentCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
@@ -17,7 +17,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class DeploymentCreator implements V1DeploymentCreation {
+public class DeploymentCreator implements V1DeploymentCreateApi {
 
     private final AppsV1Api appsV1Api;
 

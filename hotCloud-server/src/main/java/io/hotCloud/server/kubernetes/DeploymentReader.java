@@ -2,7 +2,7 @@ package io.hotCloud.server.kubernetes;
 
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotCloud.core.kubernetes.deploy.V1DeploymentRead;
+import io.hotCloud.core.kubernetes.deploy.V1DeploymentReadApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,7 +16,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class DeploymentReader implements V1DeploymentRead {
+public class DeploymentReader implements V1DeploymentReadApi {
 
     private final KubernetesClient fabric8Client;
 

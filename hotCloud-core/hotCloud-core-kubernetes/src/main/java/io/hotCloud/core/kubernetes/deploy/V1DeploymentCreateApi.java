@@ -8,7 +8,7 @@ import io.kubernetes.client.util.Yaml;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1DeploymentCreation {
+public interface V1DeploymentCreateApi {
 
     default V1Deployment deployment(DeploymentCreationParams request) throws ApiException {
         V1Deployment v1Deployment = V1DeploymentBuilder.buildV1Deployment(request);

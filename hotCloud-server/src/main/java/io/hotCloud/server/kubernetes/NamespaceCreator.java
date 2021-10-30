@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.kubernetes.NamespaceCreationParams;
-import io.hotCloud.core.kubernetes.V1NamespaceCreation;
+import io.hotCloud.core.kubernetes.V1NamespaceCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Namespace;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  **/
 @Component
 @Slf4j
-public class NamespaceCreator implements V1NamespaceCreation {
+public class NamespaceCreator implements V1NamespaceCreateApi {
 
     private final CoreV1Api coreV1Api;
 
