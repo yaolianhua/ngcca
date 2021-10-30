@@ -1,4 +1,4 @@
-package io.hotCloud.core.kubernetes.pod.container;
+package io.hotCloud.core.kubernetes;
 
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.V1ResourceRequirements;
@@ -18,18 +18,16 @@ public final class V1ResourceRequirementsBuilder {
 
         V1ResourceRequirements v1ResourceRequirements = new V1ResourceRequirements();
 
-        Resources.Limits limits = resources.getLimits();
+        Map<String, String> limits = resources.getLimits();
         Map<String, Quantity> limit = new HashMap<>(8);
         if (null != limits) {
-            limit.put("cpu", Quantity.fromString(limits.getCpu()));
-            limit.put("memory", Quantity.fromString(limits.getMemory()));
+            limits.forEach((key, value) -> limit.put(key, Quantity.fromString(value)));
         }
 
-        Resources.Requests requests = resources.getRequests();
+        Map<String, String> requests = resources.getRequests();
         Map<String, Quantity> request = new HashMap<>(8);
         if (null != requests) {
-            request.put("cpu", Quantity.fromString(requests.getCpu()));
-            request.put("memory", Quantity.fromString(requests.getMemory()));
+            requests.forEach((key, value) -> request.put(key, Quantity.fromString(value)));
         }
 
         v1ResourceRequirements.setLimits(limit);
