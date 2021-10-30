@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.HotCloudException;
-import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeCreation;
+import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1PersistentVolume;
@@ -16,7 +16,7 @@ import java.io.IOException;
  **/
 @Component
 @Slf4j
-public class PersistentVolumeCreator implements V1PersistentVolumeCreation {
+public class PersistentVolumeCreator implements V1PersistentVolumeCreateApi {
 
     private final CoreV1Api coreV1Api;
 
