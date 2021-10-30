@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.job.JobCreationParams;
+import io.hotCloud.core.kubernetes.job.JobCreateParams;
 import io.hotCloud.core.kubernetes.job.V1JobCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Job;
@@ -27,7 +27,7 @@ public class JobController {
     }
 
     @PostMapping
-    public Result<String> deployment(@Validated @RequestBody JobCreationParams params) throws ApiException {
+    public Result<String> deployment(@Validated @RequestBody JobCreateParams params) throws ApiException {
         V1Job v1Job = jobCreation.job(params);
         String jobString = Yaml.dump(v1Job);
         return Result.ok(HttpStatus.CREATED.value(), jobString);

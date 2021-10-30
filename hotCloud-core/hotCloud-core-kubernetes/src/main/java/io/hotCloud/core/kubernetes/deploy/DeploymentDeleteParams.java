@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DeploymentDeletionParams {
+public class DeploymentDeleteParams {
 
     @NotBlank(message = "namespace is empty")
     private String namespace;

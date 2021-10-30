@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.volumes.PersistentVolumeCreationParam;
+import io.hotCloud.core.kubernetes.volumes.PersistentVolumeCreateParams;
 import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeCreateApi;
 import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -28,7 +28,7 @@ public class PersistentVolumeController {
     }
 
     @PostMapping
-    public Result<String> persistentvolume(@Validated @RequestBody PersistentVolumeCreationParam params) throws ApiException {
+    public Result<String> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
         V1PersistentVolume v1PersistentVolume = persistentVolumeCreation.persistentVolume(params);
         String pvJson = Yaml.dump(v1PersistentVolume);
         return Result.ok(HttpStatus.CREATED.value(), pvJson);

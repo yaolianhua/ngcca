@@ -6,7 +6,7 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DeploymentCreationParams {
+public class DeploymentCreateParams {
 
     private DeploymentMetadata metadata = new DeploymentMetadata();
 

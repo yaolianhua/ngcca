@@ -6,7 +6,7 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class JobCreationParams {
+public class JobCreateParams {
 
     private JobMetadata metadata = new JobMetadata();
 

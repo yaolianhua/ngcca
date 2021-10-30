@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
-import io.hotCloud.core.kubernetes.svc.ServiceCreationParams;
+import io.hotCloud.core.kubernetes.svc.ServiceCreateParams;
 import io.hotCloud.core.kubernetes.svc.V1ServiceCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Service;
@@ -27,10 +27,10 @@ public class ServiceController {
     }
 
     @PostMapping
-    public Result<String> deployment(@Validated @RequestBody ServiceCreationParams params) throws ApiException {
+    public Result<String> deployment(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
         V1Service service = serviceCreation.service(params);
         String json = Yaml.dump(service);
-        return Result.ok(HttpStatus.CREATED.value(),json);
+        return Result.ok(HttpStatus.CREATED.value(), json);
     }
 
     @PostMapping("/yaml")

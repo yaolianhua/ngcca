@@ -8,6 +8,6 @@ import io.kubernetes.client.openapi.ApiException;
 @FunctionalInterface
 public interface V1DeploymentDeleteApi {
 
-    void delete(DeploymentDeletionParams params) throws ApiException;
+    void delete(DeploymentDeleteParams params) throws ApiException;
 
 }

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class ServiceCreationParams {
+public class ServiceCreateParams {
 
     @NotNull(message = "service metadata is null")
     private ServiceMetadata serviceMetadata;

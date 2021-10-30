@@ -21,7 +21,7 @@ public final class V1ServiceBuilder {
     private V1ServiceBuilder() {
     }
 
-    public static V1Service buildV1Service(ServiceCreationParams request){
+    public static V1Service buildV1Service(ServiceCreateParams request) {
         final V1Service v1Service = new V1Service();
         v1Service.setKind(KIND);
         v1Service.setApiVersion(API_VERSION);

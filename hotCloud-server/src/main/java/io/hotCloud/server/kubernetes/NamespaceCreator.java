@@ -1,6 +1,6 @@
 package io.hotCloud.server.kubernetes;
 
-import io.hotCloud.core.kubernetes.NamespaceCreationParams;
+import io.hotCloud.core.kubernetes.NamespaceCreateParams;
 import io.hotCloud.core.kubernetes.V1NamespaceCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -27,7 +27,7 @@ public class NamespaceCreator implements V1NamespaceCreateApi {
     }
 
     @Override
-    public void namespace(NamespaceCreationParams params) throws ApiException {
+    public void namespace(NamespaceCreateParams params) throws ApiException {
 
         List<V1Namespace> namespaceList = coreV1Api.listNamespace("true",
                 null,

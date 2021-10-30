@@ -44,7 +44,7 @@ public class DeploymentController {
     }
 
     @PostMapping
-    public Result<String> deployment(@Validated @RequestBody DeploymentCreationParams params) throws ApiException {
+    public Result<String> deployment(@Validated @RequestBody DeploymentCreateParams params) throws ApiException {
         V1Deployment v1Deployment = deploymentCreation.deployment(params);
         String deploymentString = Yaml.dump(v1Deployment);
         return Result.ok(HttpStatus.CREATED.value(), deploymentString);
@@ -58,8 +58,8 @@ public class DeploymentController {
     }
 
     @DeleteMapping
-    public Result<Void> deploymentDelete(@Validated @RequestBody DeploymentDeletionParams params) throws ApiException {
+    public Result<Void> deploymentDelete(@Validated @RequestBody DeploymentDeleteParams params) throws ApiException {
         deploymentDeletion.delete(params);
-        return Result.ok(HttpStatus.ACCEPTED.value(),"success",null);
+        return Result.ok(HttpStatus.ACCEPTED.value(), "success", null);
     }
 }

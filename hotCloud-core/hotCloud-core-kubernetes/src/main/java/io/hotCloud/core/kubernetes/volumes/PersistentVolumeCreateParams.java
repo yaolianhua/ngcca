@@ -6,7 +6,7 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PersistentVolumeCreationParam {
+public class PersistentVolumeCreateParams {
 
     private PersistentVolumeMetadata metadata = new PersistentVolumeMetadata();
 
