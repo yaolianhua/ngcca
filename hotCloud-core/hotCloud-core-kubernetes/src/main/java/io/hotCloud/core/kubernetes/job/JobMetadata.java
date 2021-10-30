@@ -3,7 +3,6 @@ package io.hotCloud.core.kubernetes.job;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ public class JobMetadata {
 
     private String namespace = "default";
 
-    @NotBlank(message = "Deployment name is empty")
     private String name;
 
     private Map<String, String> labels = new HashMap<>();
