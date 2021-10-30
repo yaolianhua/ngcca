@@ -1,5 +1,7 @@
 package io.hotCloud.core.kubernetes.pod.container;
 
+import io.hotCloud.core.kubernetes.Resources;
+import io.hotCloud.core.kubernetes.V1ResourceRequirementsBuilder;
 import io.kubernetes.client.openapi.models.*;
 
 import java.util.List;
