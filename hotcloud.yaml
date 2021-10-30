@@ -41,10 +41,9 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: http
-      nodePort: 30000
   selector:
     k8s-app: hotcloud
-  type: NodePort
+  type: ClusterIP
 
 ---
 apiVersion: apps/v1
@@ -72,27 +71,27 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: yaolianhua/hotcloud:0.1.20211023100514
+        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211030183250
           imagePullPolicy: IfNotPresent
           livenessProbe:
-            failureThreshold: 3
+            failureThreshold: 1
             httpGet:
               path: /livez
               port: http
-            periodSeconds: 10
-            initialDelaySeconds: 10
+            periodSeconds: 120
+            initialDelaySeconds: 180
           name: hotcloud
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: 1
             httpGet:
               path: /readyz
               port: http
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 120
+            periodSeconds: 60
           resources:
             requests:
               cpu: 100m
