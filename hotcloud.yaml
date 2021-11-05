@@ -41,9 +41,10 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: http
+      nodePort: 30000
   selector:
     k8s-app: hotcloud
-  type: ClusterIP
+  type: NodePort
 
 ---
 apiVersion: apps/v1
@@ -71,7 +72,7 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211030214744
+        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211105115017
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 1
