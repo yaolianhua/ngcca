@@ -33,14 +33,14 @@ public class JobController {
     }
 
     @PostMapping
-    public Result<String> deployment(@Validated @RequestBody JobCreateParams params) throws ApiException {
+    public Result<String> job(@Validated @RequestBody JobCreateParams params) throws ApiException {
         V1Job v1Job = jobCreation.job(params);
         String jobString = Yaml.dump(v1Job);
         return Result.ok(HttpStatus.CREATED.value(), jobString);
     }
 
     @PostMapping("/yaml")
-    public Result<String> deployment(@RequestBody String yaml) throws ApiException {
+    public Result<String> job(@RequestBody String yaml) throws ApiException {
         V1Job v1Job = jobCreation.job(yaml);
         String jobString = Yaml.dump(v1Job);
         return Result.ok(HttpStatus.CREATED.value(), jobString);
@@ -48,21 +48,21 @@ public class JobController {
 
 
     @GetMapping("/{namespace}/{job}")
-    public Result<Job> configMapRead(@PathVariable String namespace,
-                                     @PathVariable String job) {
+    public Result<Job> jobRead(@PathVariable String namespace,
+                               @PathVariable String job) {
         Job read = jobReadApi.read(namespace, job);
         return Result.ok(read);
     }
 
     @GetMapping
-    public Result<JobList> configMapListRead(@RequestBody ConfigMapReadParams params) {
+    public Result<JobList> jobListRead(@RequestBody ConfigMapReadParams params) {
         JobList list = jobReadApi.read(params.getNamespace(), params.getLabelSelector());
         return Result.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{job}")
-    public Result<Void> configmapDelete(@PathVariable("namespace") String namespace,
-                                        @PathVariable("job") String name) throws ApiException {
+    public Result<Void> jobDelete(@PathVariable("namespace") String namespace,
+                                  @PathVariable("job") String name) throws ApiException {
         jobDeleteApi.delete(namespace, name);
         return Result.ok(HttpStatus.ACCEPTED.value(), "success", null);
     }
