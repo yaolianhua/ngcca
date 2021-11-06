@@ -1,7 +1,7 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.HotCloudException;
-import io.hotCloud.core.kubernetes.svc.V1ServiceCreateApi;
+import io.hotCloud.core.kubernetes.svc.ServiceCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Service;
@@ -17,7 +17,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class ServiceCreator implements V1ServiceCreateApi {
+public class ServiceCreator implements ServiceCreateApi {
 
     private final CoreV1Api coreV1Api;
 

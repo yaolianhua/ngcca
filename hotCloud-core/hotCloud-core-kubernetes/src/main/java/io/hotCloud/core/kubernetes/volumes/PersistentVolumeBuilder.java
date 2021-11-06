@@ -1,7 +1,7 @@
 package io.hotCloud.core.kubernetes.volumes;
 
 import io.hotCloud.core.kubernetes.affinity.NodeSelectorTerm;
-import io.hotCloud.core.kubernetes.affinity.V1NodeSelectorTermBuilder;
+import io.hotCloud.core.kubernetes.affinity.NodeSelectorTermBuilder;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
 
@@ -13,11 +13,11 @@ import java.util.Objects;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1PersistentVolumeBuilder {
+public final class PersistentVolumeBuilder {
     public static final String KIND = "PersistentVolume";
     public static final String VERSION = "v1";
 
-    private V1PersistentVolumeBuilder() {
+    private PersistentVolumeBuilder() {
     }
 
     public static V1PersistentVolume buildV1PersistentVolume(PersistentVolumeCreateParams param) {
@@ -33,7 +33,7 @@ public final class V1PersistentVolumeBuilder {
         V1PersistentVolumeSpec v1PersistentVolumeSpec = new V1PersistentVolumeSpec();
 
         List<NodeSelectorTerm> nodeSelectorTerms = param.getSpec().getNodeAffinity().getRequired().getNodeSelectorTerms();
-        List<V1NodeSelectorTerm> v1NodeSelectorTerms = V1NodeSelectorTermBuilder.build(nodeSelectorTerms);
+        List<V1NodeSelectorTerm> v1NodeSelectorTerms = NodeSelectorTermBuilder.build(nodeSelectorTerms);
 
         V1NodeSelector v1NodeSelector = new V1NodeSelector();
         v1NodeSelector.setNodeSelectorTerms(v1NodeSelectorTerms);
@@ -45,12 +45,12 @@ public final class V1PersistentVolumeBuilder {
 
         NFSVolume nfs = param.getSpec().getNfs();
         if (Objects.nonNull(nfs)) {
-            V1NFSVolumeSource v1NFSVolumeSource = V1VolumeBuilder.build(nfs);
+            V1NFSVolumeSource v1NFSVolumeSource = VolumeBuilder.build(nfs);
             v1PersistentVolumeSpec.setNfs(v1NFSVolumeSource);
         }
         HostPathVolume hostPath = param.getSpec().getHostPath();
         if (Objects.nonNull(hostPath)) {
-            V1HostPathVolumeSource v1HostPathVolumeSource = V1VolumeBuilder.build(hostPath);
+            V1HostPathVolumeSource v1HostPathVolumeSource = VolumeBuilder.build(hostPath);
             v1PersistentVolumeSpec.setHostPath(v1HostPathVolumeSource);
         }
 

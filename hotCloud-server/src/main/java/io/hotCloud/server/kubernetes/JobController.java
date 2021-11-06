@@ -1,8 +1,8 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
+import io.hotCloud.core.kubernetes.job.JobCreateApi;
 import io.hotCloud.core.kubernetes.job.JobCreateParams;
-import io.hotCloud.core.kubernetes.job.V1JobCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Job;
 import io.kubernetes.client.util.Yaml;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/kubernetes/jobs")
 public class JobController {
 
-    private final V1JobCreateApi jobCreation;
+    private final JobCreateApi jobCreation;
 
-    public JobController(V1JobCreateApi jobCreation) {
+    public JobController(JobCreateApi jobCreation) {
         this.jobCreation = jobCreation;
     }
 

@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1DeploymentReadApi {
+public interface DeploymentReadApi {
 
     default Deployment read(String namespace, String deployment) {
         DeploymentList deploymentList = this.read(namespace);

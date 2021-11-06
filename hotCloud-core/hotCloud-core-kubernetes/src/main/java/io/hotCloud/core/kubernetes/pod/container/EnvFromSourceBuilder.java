@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1EnvFromSourceBuilder {
-    private V1EnvFromSourceBuilder() {
+public final class EnvFromSourceBuilder {
+    private EnvFromSourceBuilder() {
     }
 
     public static V1EnvFromSource build(EnvFrom envFrom) {
@@ -39,6 +39,6 @@ public final class V1EnvFromSourceBuilder {
     }
 
     public static List<V1EnvFromSource> build(List<EnvFrom> envFroms) {
-        return envFroms.stream().map(V1EnvFromSourceBuilder::build).collect(Collectors.toList());
+        return envFroms.stream().map(EnvFromSourceBuilder::build).collect(Collectors.toList());
     }
 }

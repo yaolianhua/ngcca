@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1LabelSelectorBuilder {
-    private V1LabelSelectorBuilder() {
+public final class LabelSelectorBuilder {
+    private LabelSelectorBuilder() {
     }
 
     public static V1LabelSelector build(LabelSelector labelSelector) {

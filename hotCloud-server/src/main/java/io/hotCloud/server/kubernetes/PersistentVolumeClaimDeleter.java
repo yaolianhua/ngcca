@@ -1,6 +1,6 @@
 package io.hotCloud.server.kubernetes;
 
-import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeClaimDeleteApi;
+import io.hotCloud.core.kubernetes.volumes.PersistentVolumeClaimDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @Slf4j
-public class PersistentVolumeClaimDeleter implements V1PersistentVolumeClaimDeleteApi {
+public class PersistentVolumeClaimDeleter implements PersistentVolumeClaimDeleteApi {
 
     private final CoreV1Api coreV1Api;
 

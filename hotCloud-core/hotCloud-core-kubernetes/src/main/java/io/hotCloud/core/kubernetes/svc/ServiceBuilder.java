@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1ServiceBuilder {
+public final class ServiceBuilder {
 
     public static final String KIND = "Service";
     public static final String API_VERSION = "v1";
 
-    private V1ServiceBuilder() {
+    private ServiceBuilder() {
     }
 
     public static V1Service buildV1Service(ServiceCreateParams request) {
@@ -40,7 +40,7 @@ public final class V1ServiceBuilder {
         }
         List<V1ServicePort> ports = serviceSpec.ports()
                 .stream()
-                .map(V1ServiceBuilder::buildV1ServicePort)
+                .map(ServiceBuilder::buildV1ServicePort)
                 .collect(Collectors.toList());
         v1ServiceSpec.setPorts(ports);
 

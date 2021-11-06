@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1ProbeBuilder {
+public final class ProbeBuilder {
 
-    private V1ProbeBuilder() {
+    private ProbeBuilder() {
     }
 
     public static V1Probe build(Probe probe) {

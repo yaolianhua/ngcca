@@ -9,17 +9,17 @@ import java.util.List;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1PodAffinityBuilder {
+public final class PodAffinityBuilder {
 
-    private V1PodAffinityBuilder() {
+    private PodAffinityBuilder() {
     }
 
     public static V1PodAffinity build(PodAffinity podAffinity) {
         V1PodAffinity v1PodAffinity = new V1PodAffinity();
-        List<V1PodAffinityTerm> v1PodAffinityTerms = V1PodAffinityTermBuilder.build(podAffinity.getRequiredDuringSchedulingIgnoredDuringExecution());
+        List<V1PodAffinityTerm> v1PodAffinityTerms = PodAffinityTermBuilder.build(podAffinity.getRequiredDuringSchedulingIgnoredDuringExecution());
         v1PodAffinity.setRequiredDuringSchedulingIgnoredDuringExecution(v1PodAffinityTerms);
 
-        List<V1WeightedPodAffinityTerm> v1WeightedPodAffinityTerms = V1WeightedPodAffinityTermsBuilder.build(podAffinity.getPreferredDuringSchedulingIgnoredDuringExecution());
+        List<V1WeightedPodAffinityTerm> v1WeightedPodAffinityTerms = WeightedPodAffinityTermsBuilder.build(podAffinity.getPreferredDuringSchedulingIgnoredDuringExecution());
         v1PodAffinity.setPreferredDuringSchedulingIgnoredDuringExecution(v1WeightedPodAffinityTerms);
 
         return v1PodAffinity;

@@ -1,18 +1,18 @@
 package io.hotCloud.core.kubernetes.volumes;
 
 import io.hotCloud.core.kubernetes.LabelSelector;
-import io.hotCloud.core.kubernetes.V1LabelSelectorBuilder;
-import io.hotCloud.core.kubernetes.V1ResourceRequirementsBuilder;
+import io.hotCloud.core.kubernetes.LabelSelectorBuilder;
+import io.hotCloud.core.kubernetes.ResourceRequirementsBuilder;
 import io.kubernetes.client.openapi.models.*;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1PersistentVolumeClaimBuilder {
+public final class PersistentVolumeClaimBuilder {
     public static final String KIND = "PersistentVolumeClaim";
     public static final String VERSION = "v1";
 
-    private V1PersistentVolumeClaimBuilder() {
+    private PersistentVolumeClaimBuilder() {
     }
 
     public static V1PersistentVolumeClaim buildV1PersistentVolumeClaim(PersistentVolumeClaimCreateParams param) {
@@ -32,11 +32,11 @@ public final class V1PersistentVolumeClaimBuilder {
         v1PersistentVolumeClaimSpec.setStorageClassName(param.getSpec().getStorageClassName());
 
         LabelSelector selector = param.getSpec().getSelector();
-        V1LabelSelector v1LabelSelector = V1LabelSelectorBuilder.build(selector);
+        V1LabelSelector v1LabelSelector = LabelSelectorBuilder.build(selector);
         v1PersistentVolumeClaimSpec.setSelector(v1LabelSelector);
         v1PersistentVolumeClaimSpec.setVolumeName(param.getSpec().getVolumeName());
 
-        V1ResourceRequirements v1ResourceRequirements = V1ResourceRequirementsBuilder.build(param.getSpec().getResources());
+        V1ResourceRequirements v1ResourceRequirements = ResourceRequirementsBuilder.build(param.getSpec().getResources());
         v1PersistentVolumeClaimSpec.setResources(v1ResourceRequirements);
 
         v1PersistentVolumeClaim.setMetadata(v1ObjectMeta);

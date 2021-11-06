@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1EnvVarsBuilder {
-    private V1EnvVarsBuilder() {
+public final class EnvVarsBuilder {
+    private EnvVarsBuilder() {
     }
 
     public static V1EnvVar build(Env env) {
@@ -48,6 +48,6 @@ public final class V1EnvVarsBuilder {
     }
 
     public static List<V1EnvVar> build(List<Env> envs) {
-        return envs.stream().map(V1EnvVarsBuilder::build).collect(Collectors.toList());
+        return envs.stream().map(EnvVarsBuilder::build).collect(Collectors.toList());
     }
 }

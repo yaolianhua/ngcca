@@ -8,10 +8,10 @@ import io.kubernetes.client.util.Yaml;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1JobCreateApi {
+public interface JobCreateApi {
 
     default V1Job job(JobCreateParams request) throws ApiException {
-        V1Job v1Job = V1JobBuilder.buildV1Job(request);
+        V1Job v1Job = JobBuilder.buildV1Job(request);
         String json = Yaml.dump(v1Job);
         return this.job(json);
     }

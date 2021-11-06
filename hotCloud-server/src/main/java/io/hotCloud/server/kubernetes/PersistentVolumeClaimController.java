@@ -1,9 +1,9 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
+import io.hotCloud.core.kubernetes.volumes.PersistentVolumeClaimCreateApi;
 import io.hotCloud.core.kubernetes.volumes.PersistentVolumeClaimCreateParams;
-import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeClaimCreateApi;
-import io.hotCloud.core.kubernetes.volumes.V1PersistentVolumeClaimDeleteApi;
+import io.hotCloud.core.kubernetes.volumes.PersistentVolumeClaimDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
 import io.kubernetes.client.util.Yaml;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/kubernetes/persistentvolumeclaims")
 public class PersistentVolumeClaimController {
 
-    private final V1PersistentVolumeClaimCreateApi persistentVolumeClaimCreation;
-    private final V1PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion;
+    private final PersistentVolumeClaimCreateApi persistentVolumeClaimCreation;
+    private final PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion;
 
-    public PersistentVolumeClaimController(V1PersistentVolumeClaimCreateApi persistentVolumeClaimCreation,
-                                           V1PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion) {
+    public PersistentVolumeClaimController(PersistentVolumeClaimCreateApi persistentVolumeClaimCreation,
+                                           PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion) {
         this.persistentVolumeClaimCreation = persistentVolumeClaimCreation;
         this.persistentVolumeClaimDeletion = persistentVolumeClaimDeletion;
     }

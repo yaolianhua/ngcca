@@ -1,20 +1,20 @@
 package io.hotCloud.core.kubernetes.job;
 
 import io.hotCloud.core.common.Assert;
-import io.hotCloud.core.kubernetes.V1LabelSelectorBuilder;
+import io.hotCloud.core.kubernetes.LabelSelectorBuilder;
 import io.hotCloud.core.kubernetes.pod.PodTemplateMetadata;
 import io.hotCloud.core.kubernetes.pod.PodTemplateSpec;
-import io.hotCloud.core.kubernetes.pod.V1PodTemplateSpecBuilder;
+import io.hotCloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.kubernetes.client.openapi.models.*;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1JobBuilder {
+public final class JobBuilder {
     public static String API_VERSION = "batch/v1";
     public static String KIND = "Job";
 
-    private V1JobBuilder() {
+    private JobBuilder() {
     }
 
     public static V1Job buildV1Job(JobCreateParams request) {
@@ -38,13 +38,13 @@ public final class V1JobBuilder {
         V1JobSpec spec = new V1JobSpec();
 
         //build selector
-        V1LabelSelector v1LabelSelector = V1LabelSelectorBuilder.build(jobSpec.getSelector());
+        V1LabelSelector v1LabelSelector = LabelSelectorBuilder.build(jobSpec.getSelector());
         spec.setSelector(v1LabelSelector);
 
         //build Template
         PodTemplateMetadata podTemplateMetadata = jobSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = jobSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = V1PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
 
         spec.setActiveDeadlineSeconds(jobSpec.getActiveDeadlineSeconds());

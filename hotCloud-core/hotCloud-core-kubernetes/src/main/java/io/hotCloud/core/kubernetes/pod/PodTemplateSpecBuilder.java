@@ -1,12 +1,12 @@
 package io.hotCloud.core.kubernetes.pod;
 
 import io.hotCloud.core.kubernetes.affinity.Affinity;
-import io.hotCloud.core.kubernetes.affinity.V1NodeAffinityBuilder;
-import io.hotCloud.core.kubernetes.affinity.V1PodAffinityBuilder;
-import io.hotCloud.core.kubernetes.affinity.V1PodAntiAffinityBuilder;
-import io.hotCloud.core.kubernetes.pod.container.V1ContainerBuilder;
-import io.hotCloud.core.kubernetes.volumes.V1VolumeBuilder;
+import io.hotCloud.core.kubernetes.affinity.NodeAffinityBuilder;
+import io.hotCloud.core.kubernetes.affinity.PodAffinityBuilder;
+import io.hotCloud.core.kubernetes.affinity.PodAntiAffinityBuilder;
+import io.hotCloud.core.kubernetes.pod.container.ContainerBuilder;
 import io.hotCloud.core.kubernetes.volumes.Volume;
+import io.hotCloud.core.kubernetes.volumes.VolumeBuilder;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
 
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1PodTemplateSpecBuilder {
-    private V1PodTemplateSpecBuilder() {
+public final class PodTemplateSpecBuilder {
+    private PodTemplateSpecBuilder() {
     }
 
 
@@ -66,20 +66,20 @@ public final class V1PodTemplateSpecBuilder {
 
         List<V1Container> containers = podTemplateSpec.getContainers()
                 .stream()
-                .map(V1ContainerBuilder::build)
+                .map(ContainerBuilder::build)
                 .collect(Collectors.toList());
         v1PodSpec.setContainers(containers);
 
         List<V1Container> initContainers = podTemplateSpec.getInitContainers()
                 .stream()
-                .map(V1ContainerBuilder::build)
+                .map(ContainerBuilder::build)
                 .collect(Collectors.toList());
         v1PodSpec.setInitContainers(initContainers);
 
         List<V1Volume> v1Volumes = podTemplateSpec.getVolumes()
                 .stream()
                 .filter(Volume::exist)
-                .map(V1VolumeBuilder::build)
+                .map(VolumeBuilder::build)
                 .collect(Collectors.toList());
         v1PodSpec.setVolumes(v1Volumes);
 
@@ -114,15 +114,15 @@ public final class V1PodTemplateSpecBuilder {
         if (Objects.nonNull(affinity)) {
             V1Affinity v1Affinity = new V1Affinity();
             if (Objects.nonNull(affinity.getNodeAffinity())) {
-                V1NodeAffinity v1NodeAffinity = V1NodeAffinityBuilder.build(affinity.getNodeAffinity());
+                V1NodeAffinity v1NodeAffinity = NodeAffinityBuilder.build(affinity.getNodeAffinity());
                 v1Affinity.setNodeAffinity(v1NodeAffinity);
             }
             if (Objects.nonNull(affinity.getPodAffinity())) {
-                V1PodAffinity v1PodAffinity = V1PodAffinityBuilder.build(affinity.getPodAffinity());
+                V1PodAffinity v1PodAffinity = PodAffinityBuilder.build(affinity.getPodAffinity());
                 v1Affinity.setPodAffinity(v1PodAffinity);
             }
             if (Objects.nonNull(affinity.getPodAntiAffinity())) {
-                V1PodAntiAffinity v1PodAntiAffinity = V1PodAntiAffinityBuilder.build(affinity.getPodAntiAffinity());
+                V1PodAntiAffinity v1PodAntiAffinity = PodAntiAffinityBuilder.build(affinity.getPodAntiAffinity());
                 v1Affinity.setPodAntiAffinity(v1PodAntiAffinity);
             }
             v1PodSpec.setAffinity(v1Affinity);

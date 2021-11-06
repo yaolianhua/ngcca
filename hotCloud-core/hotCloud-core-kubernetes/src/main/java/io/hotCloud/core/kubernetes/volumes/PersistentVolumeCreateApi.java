@@ -8,10 +8,10 @@ import io.kubernetes.client.util.Yaml;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1PersistentVolumeCreateApi {
+public interface PersistentVolumeCreateApi {
 
     default V1PersistentVolume persistentVolume(PersistentVolumeCreateParams request) throws ApiException {
-        V1PersistentVolume v1PersistentVolume = V1PersistentVolumeBuilder.buildV1PersistentVolume(request);
+        V1PersistentVolume v1PersistentVolume = PersistentVolumeBuilder.buildV1PersistentVolume(request);
         String json = Yaml.dump(v1PersistentVolume);
         return this.persistentVolume(json);
     }

@@ -1,18 +1,18 @@
 package io.hotCloud.core.kubernetes.deploy;
 
 import io.hotCloud.core.common.Assert;
-import io.hotCloud.core.kubernetes.V1LabelSelectorBuilder;
+import io.hotCloud.core.kubernetes.LabelSelectorBuilder;
 import io.hotCloud.core.kubernetes.pod.PodTemplateMetadata;
 import io.hotCloud.core.kubernetes.pod.PodTemplateSpec;
-import io.hotCloud.core.kubernetes.pod.V1PodTemplateSpecBuilder;
+import io.hotCloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.openapi.models.*;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1DeploymentBuilder {
-    private V1DeploymentBuilder() {
+public final class DeploymentBuilder {
+    private DeploymentBuilder() {
     }
 
     public static String API_VERSION = "apps/v1";
@@ -43,13 +43,13 @@ public final class V1DeploymentBuilder {
         spec.setStrategy(v1DeploymentStrategy);
 
         //build selector
-        V1LabelSelector v1LabelSelector = V1LabelSelectorBuilder.build(deploymentSpec.getSelector());
+        V1LabelSelector v1LabelSelector = LabelSelectorBuilder.build(deploymentSpec.getSelector());
         spec.setSelector(v1LabelSelector);
 
         //build Template
         PodTemplateMetadata podTemplateMetadata = deploymentSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = deploymentSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = V1PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
 
 

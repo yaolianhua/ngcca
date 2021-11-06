@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1NodeSelectorTermBuilder {
+public final class NodeSelectorTermBuilder {
 
-    private V1NodeSelectorTermBuilder() {
+    private NodeSelectorTermBuilder() {
 
     }
 
@@ -41,7 +41,7 @@ public final class V1NodeSelectorTermBuilder {
     }
 
     public static List<V1NodeSelectorTerm> build(List<NodeSelectorTerm> nodeSelectorTerms) {
-        return nodeSelectorTerms.stream().map(V1NodeSelectorTermBuilder::build).collect(Collectors.toList());
+        return nodeSelectorTerms.stream().map(NodeSelectorTermBuilder::build).collect(Collectors.toList());
     }
 
 }

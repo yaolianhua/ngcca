@@ -6,7 +6,7 @@ import io.kubernetes.client.openapi.ApiException;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1NamespaceCreateApi {
+public interface NamespaceCreateApi {
 
     void namespace(NamespaceCreateParams params) throws ApiException;
 

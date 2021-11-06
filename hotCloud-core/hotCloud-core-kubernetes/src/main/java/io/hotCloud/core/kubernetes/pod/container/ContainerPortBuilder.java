@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1ContainerPortBuilder {
+public final class ContainerPortBuilder {
 
-    private V1ContainerPortBuilder() {
+    private ContainerPortBuilder() {
     }
 
     public static V1ContainerPort build(Port port) {
@@ -27,6 +27,6 @@ public final class V1ContainerPortBuilder {
     }
 
     public static List<V1ContainerPort> build(List<Port> ports) {
-        return ports.stream().map(V1ContainerPortBuilder::build).collect(Collectors.toList());
+        return ports.stream().map(ContainerPortBuilder::build).collect(Collectors.toList());
     }
 }

@@ -1,8 +1,8 @@
 package io.hotCloud.server.kubernetes;
 
 import io.hotCloud.core.common.Result;
+import io.hotCloud.core.kubernetes.svc.ServiceCreateApi;
 import io.hotCloud.core.kubernetes.svc.ServiceCreateParams;
-import io.hotCloud.core.kubernetes.svc.V1ServiceCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/kubernetes/services")
 public class ServiceController {
 
-    private final V1ServiceCreateApi serviceCreation;
+    private final ServiceCreateApi serviceCreation;
 
-    public ServiceController(V1ServiceCreateApi serviceCreation) {
+    public ServiceController(ServiceCreateApi serviceCreation) {
         this.serviceCreation = serviceCreation;
     }
 

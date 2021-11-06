@@ -9,9 +9,9 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1ResourceRequirementsBuilder {
+public final class ResourceRequirementsBuilder {
 
-    private V1ResourceRequirementsBuilder() {
+    private ResourceRequirementsBuilder() {
     }
 
     public static V1ResourceRequirements build(Resources resources) {

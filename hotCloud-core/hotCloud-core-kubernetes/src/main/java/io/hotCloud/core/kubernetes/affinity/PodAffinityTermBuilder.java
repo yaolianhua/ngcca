@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1PodAffinityTermBuilder {
-    private V1PodAffinityTermBuilder() {
+public final class PodAffinityTermBuilder {
+    private PodAffinityTermBuilder() {
     }
 
     public static V1PodAffinityTerm build(PodAffinityTerm podAffinityTerm) {
@@ -37,6 +37,6 @@ public final class V1PodAffinityTermBuilder {
     }
 
     public static List<V1PodAffinityTerm> build(List<PodAffinityTerm> podAffinityTerms) {
-        return podAffinityTerms.stream().map(V1PodAffinityTermBuilder::build).collect(Collectors.toList());
+        return podAffinityTerms.stream().map(PodAffinityTermBuilder::build).collect(Collectors.toList());
     }
 }

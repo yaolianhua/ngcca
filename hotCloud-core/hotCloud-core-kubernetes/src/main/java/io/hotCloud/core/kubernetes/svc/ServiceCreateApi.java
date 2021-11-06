@@ -8,10 +8,10 @@ import io.kubernetes.client.util.Yaml;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1ServiceCreateApi {
+public interface ServiceCreateApi {
 
     default V1Service service(ServiceCreateParams request) throws ApiException {
-        V1Service v1Service = V1ServiceBuilder.buildV1Service(request);
+        V1Service v1Service = ServiceBuilder.buildV1Service(request);
         String json = Yaml.dump(v1Service);
         return this.service(json);
     }

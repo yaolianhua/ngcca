@@ -6,7 +6,7 @@ import io.kubernetes.client.openapi.ApiException;
  * @author yaolianhua789@gmail.com
  **/
 @FunctionalInterface
-public interface V1DeploymentDeleteApi {
+public interface DeploymentDeleteApi {
 
     void delete(DeploymentDeleteParams params) throws ApiException;
 

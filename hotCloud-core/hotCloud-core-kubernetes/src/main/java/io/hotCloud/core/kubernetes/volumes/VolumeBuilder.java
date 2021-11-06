@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1VolumeBuilder {
-    private V1VolumeBuilder() {
+public final class VolumeBuilder {
+    private VolumeBuilder() {
     }
 
     public static V1Volume build(Volume volume) {

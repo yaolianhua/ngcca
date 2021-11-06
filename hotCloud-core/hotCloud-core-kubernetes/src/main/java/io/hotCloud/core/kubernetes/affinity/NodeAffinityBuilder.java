@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class V1NodeAffinityBuilder {
+public final class NodeAffinityBuilder {
 
-    private V1NodeAffinityBuilder() {
+    private NodeAffinityBuilder() {
     }
 
 
@@ -25,7 +25,7 @@ public final class V1NodeAffinityBuilder {
         NodeSelector nodeSelector = nodeAffinity.getRequiredDuringSchedulingIgnoredDuringExecution();
         if (Objects.nonNull(nodeSelector)) {
             V1NodeSelector v1NodeSelector = new V1NodeSelector();
-            List<V1NodeSelectorTerm> v1NodeSelectorTerms = V1NodeSelectorTermBuilder.build(nodeSelector.getNodeSelectorTerms());
+            List<V1NodeSelectorTerm> v1NodeSelectorTerms = NodeSelectorTermBuilder.build(nodeSelector.getNodeSelectorTerms());
             v1NodeSelector.setNodeSelectorTerms(v1NodeSelectorTerms);
             v1NodeAffinity.setRequiredDuringSchedulingIgnoredDuringExecution(v1NodeSelector);
         }
@@ -34,7 +34,7 @@ public final class V1NodeAffinityBuilder {
                 .filter(e -> Objects.nonNull(e.getPreference()))
                 .map(e -> {
                     V1PreferredSchedulingTerm v1PreferredSchedulingTerm = new V1PreferredSchedulingTerm();
-                    V1NodeSelectorTerm v1NodeSelectorTerm = V1NodeSelectorTermBuilder.build(e.getPreference());
+                    V1NodeSelectorTerm v1NodeSelectorTerm = NodeSelectorTermBuilder.build(e.getPreference());
                     v1PreferredSchedulingTerm.setPreference(v1NodeSelectorTerm);
                     v1PreferredSchedulingTerm.setWeight(e.getWeight());
                     return v1PreferredSchedulingTerm;
