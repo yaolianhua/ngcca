@@ -1,9 +1,9 @@
 package io.hotcloud.server.kubernetes.volume;
 
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimCreateApi;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimCreateParams;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimDeleteApi;
+import io.hotcloud.core.kubernetes.volumes.*;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
 import io.kubernetes.client.util.Yaml;
@@ -20,11 +20,14 @@ public class PersistentVolumeClaimController {
 
     private final PersistentVolumeClaimCreateApi persistentVolumeClaimCreation;
     private final PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion;
+    private final PersistentVolumeClaimReadApi persistentVolumeClaimReadApi;
 
     public PersistentVolumeClaimController(PersistentVolumeClaimCreateApi persistentVolumeClaimCreation,
-                                           PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion) {
+                                           PersistentVolumeClaimDeleteApi persistentVolumeClaimDeletion,
+                                           PersistentVolumeClaimReadApi persistentVolumeClaimReadApi) {
         this.persistentVolumeClaimCreation = persistentVolumeClaimCreation;
         this.persistentVolumeClaimDeletion = persistentVolumeClaimDeletion;
+        this.persistentVolumeClaimReadApi = persistentVolumeClaimReadApi;
     }
 
     @PostMapping
@@ -46,6 +49,19 @@ public class PersistentVolumeClaimController {
                                                     @PathVariable("namespace") String namespace) throws ApiException {
         persistentVolumeClaimDeletion.delete(persistentVolumeClaim, namespace);
         return Result.ok(HttpStatus.ACCEPTED.value());
+    }
+
+    @GetMapping("/{namespace}/{persistentvolumeclaim}")
+    public Result<PersistentVolumeClaim> persistentVolumeClaimRead(@PathVariable String namespace,
+                                                                   @PathVariable String persistentvolumeclaim) {
+        PersistentVolumeClaim read = persistentVolumeClaimReadApi.read(namespace, persistentvolumeclaim);
+        return Result.ok(read);
+    }
+
+    @GetMapping
+    public Result<PersistentVolumeClaimList> persistentVolumeClaimListRead(@RequestBody PersistentVolumeClaimReadParams params) {
+        PersistentVolumeClaimList list = persistentVolumeClaimReadApi.read(params.getNamespace(), params.getLabelSelector());
+        return Result.ok(list);
     }
 
 }
