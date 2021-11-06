@@ -54,12 +54,13 @@ public class DeploymentController {
     public Result<String> deployment(@RequestBody String yaml) throws ApiException {
         V1Deployment v1Deployment = deploymentCreation.deployment(yaml);
         String deploymentString = Yaml.dump(v1Deployment);
-        return Result.ok(HttpStatus.CREATED.value(),deploymentString);
+        return Result.ok(HttpStatus.CREATED.value(), deploymentString);
     }
 
-    @DeleteMapping
-    public Result<Void> deploymentDelete(@Validated @RequestBody DeploymentDeleteParams params) throws ApiException {
-        deploymentDeletion.delete(params);
+    @DeleteMapping("/{namespace}/{deployment}")
+    public Result<Void> deploymentDelete(@PathVariable("namespace") String namespace,
+                                         @PathVariable("deployment") String name) throws ApiException {
+        deploymentDeletion.delete(namespace, name);
         return Result.ok(HttpStatus.ACCEPTED.value(), "success", null);
     }
 }

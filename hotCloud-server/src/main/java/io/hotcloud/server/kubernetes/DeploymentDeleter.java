@@ -1,7 +1,6 @@
 package io.hotcloud.server.kubernetes;
 
 import io.hotcloud.core.kubernetes.deploy.DeploymentDeleteApi;
-import io.hotcloud.core.kubernetes.deploy.DeploymentDeleteParams;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Status;
@@ -22,10 +21,10 @@ public class DeploymentDeleter implements DeploymentDeleteApi {
     }
 
     @Override
-    public void delete(DeploymentDeleteParams request) throws ApiException {
+    public void delete(String namespace, String deployment) throws ApiException {
         V1Status v1Status = appsV1Api.deleteNamespacedDeployment(
-                request.getName(),
-                request.getNamespace(),
+                deployment,
+                namespace,
                 "true",
                 null,
                 null,
