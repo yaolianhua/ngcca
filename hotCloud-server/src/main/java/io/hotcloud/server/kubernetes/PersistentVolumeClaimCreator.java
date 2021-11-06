@@ -8,9 +8,12 @@ import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -34,7 +37,8 @@ public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreate
             throw new HotCloudException(String.format("load persistentVolumeClaim yaml error. '%s'", e.getMessage()));
         }
 
-        String namespace = Objects.requireNonNull(v1PersistentVolumeClaim.getMetadata(), "namespace is empty").getNamespace();
+        String namespace = Objects.requireNonNull(v1PersistentVolumeClaim.getMetadata()).getNamespace();
+        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT_NAMESPACE;
         V1PersistentVolumeClaim pvc = coreV1Api.createNamespacedPersistentVolumeClaim(
                 namespace,
                 v1PersistentVolumeClaim,
