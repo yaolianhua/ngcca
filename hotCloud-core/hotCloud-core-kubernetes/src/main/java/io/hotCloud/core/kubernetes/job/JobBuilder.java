@@ -17,23 +17,23 @@ public final class JobBuilder {
     private JobBuilder() {
     }
 
-    public static V1Job buildV1Job(JobCreateParams request) {
+    public static V1Job build(JobCreateParams request) {
 
         V1Job v1Job = new V1Job();
 
         v1Job.setApiVersion(API_VERSION);
         v1Job.setKind(KIND);
 
-        V1ObjectMeta v1ObjectMeta = buildV1JobMetadata(request.getMetadata());
+        V1ObjectMeta v1ObjectMeta = build(request.getMetadata());
         v1Job.setMetadata(v1ObjectMeta);
 
-        V1JobSpec v1JobSpec = buildV1JobSpec(request.getSpec());
+        V1JobSpec v1JobSpec = build(request.getSpec());
         v1Job.setSpec(v1JobSpec);
 
         return v1Job;
     }
 
-    public static V1JobSpec buildV1JobSpec(JobSpec jobSpec) {
+    public static V1JobSpec build(JobSpec jobSpec) {
 
         V1JobSpec spec = new V1JobSpec();
 
@@ -57,7 +57,7 @@ public final class JobBuilder {
         return spec;
     }
 
-    private static V1ObjectMeta buildV1JobMetadata(JobMetadata jobMetadata) {
+    private static V1ObjectMeta build(JobMetadata jobMetadata) {
         String name = jobMetadata.getName();
         String namespace = jobMetadata.getNamespace();
         Assert.argument(name != null && name.length() > 0, () -> "job name is null");

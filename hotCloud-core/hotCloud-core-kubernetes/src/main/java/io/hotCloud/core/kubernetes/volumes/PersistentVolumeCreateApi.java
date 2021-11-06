@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 public interface PersistentVolumeCreateApi {
 
     default V1PersistentVolume persistentVolume(PersistentVolumeCreateParams request) throws ApiException {
-        V1PersistentVolume v1PersistentVolume = PersistentVolumeBuilder.buildV1PersistentVolume(request);
+        V1PersistentVolume v1PersistentVolume = PersistentVolumeBuilder.build(request);
         String json = Yaml.dump(v1PersistentVolume);
         return this.persistentVolume(json);
     }

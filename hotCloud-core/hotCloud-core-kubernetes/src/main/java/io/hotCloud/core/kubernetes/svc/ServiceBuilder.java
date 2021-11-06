@@ -21,7 +21,7 @@ public final class ServiceBuilder {
     private ServiceBuilder() {
     }
 
-    public static V1Service buildV1Service(ServiceCreateParams request) {
+    public static V1Service build(ServiceCreateParams request) {
         final V1Service v1Service = new V1Service();
         v1Service.setKind(KIND);
         v1Service.setApiVersion(API_VERSION);
@@ -29,7 +29,7 @@ public final class ServiceBuilder {
         if (Objects.isNull(serviceMetadata)) {
             throw new RuntimeException("Service metadata can not be null");
         }
-        V1ObjectMeta v1ObjectMeta = buildV1ServiceMetadata(serviceMetadata);
+        V1ObjectMeta v1ObjectMeta = build(serviceMetadata);
         v1Service.setMetadata(v1ObjectMeta);
 
         V1ServiceSpec v1ServiceSpec = new V1ServiceSpec();
@@ -40,7 +40,7 @@ public final class ServiceBuilder {
         }
         List<V1ServicePort> ports = serviceSpec.ports()
                 .stream()
-                .map(ServiceBuilder::buildV1ServicePort)
+                .map(ServiceBuilder::build)
                 .collect(Collectors.toList());
         v1ServiceSpec.setPorts(ports);
 
@@ -53,7 +53,7 @@ public final class ServiceBuilder {
         return v1Service;
     }
 
-    private static V1ServicePort buildV1ServicePort(ServicePort servicePort) {
+    private static V1ServicePort build(ServicePort servicePort) {
         V1ServicePort v1ServicePort = new V1ServicePort();
         v1ServicePort.setAppProtocol(servicePort.getAppProtocol());
         v1ServicePort.setName(servicePort.getName());
@@ -64,7 +64,7 @@ public final class ServiceBuilder {
         return v1ServicePort;
     }
 
-    private static V1ObjectMeta buildV1ServiceMetadata(ServiceMetadata serviceMetadata){
+    private static V1ObjectMeta build(ServiceMetadata serviceMetadata) {
 
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(serviceMetadata.getLabels());

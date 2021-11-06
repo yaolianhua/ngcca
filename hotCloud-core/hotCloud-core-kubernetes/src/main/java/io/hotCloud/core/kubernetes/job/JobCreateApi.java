@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 public interface JobCreateApi {
 
     default V1Job job(JobCreateParams request) throws ApiException {
-        V1Job v1Job = JobBuilder.buildV1Job(request);
+        V1Job v1Job = JobBuilder.build(request);
         String json = Yaml.dump(v1Job);
         return this.job(json);
     }

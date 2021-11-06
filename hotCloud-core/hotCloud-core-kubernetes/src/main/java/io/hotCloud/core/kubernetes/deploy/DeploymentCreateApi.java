@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 public interface DeploymentCreateApi {
 
     default V1Deployment deployment(DeploymentCreateParams request) throws ApiException {
-        V1Deployment v1Deployment = DeploymentBuilder.buildV1Deployment(request);
+        V1Deployment v1Deployment = DeploymentBuilder.build(request);
         String json = Yaml.dump(v1Deployment);
         return this.deployment(json);
     }

@@ -15,7 +15,7 @@ public final class PersistentVolumeClaimBuilder {
     private PersistentVolumeClaimBuilder() {
     }
 
-    public static V1PersistentVolumeClaim buildV1PersistentVolumeClaim(PersistentVolumeClaimCreateParams param) {
+    public static V1PersistentVolumeClaim build(PersistentVolumeClaimCreateParams param) {
 
         V1PersistentVolumeClaim v1PersistentVolumeClaim = new V1PersistentVolumeClaim();
 
