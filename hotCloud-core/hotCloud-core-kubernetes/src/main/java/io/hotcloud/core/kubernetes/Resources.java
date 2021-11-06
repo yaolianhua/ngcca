@@ -1,4 +1,4 @@
-package io.hotCloud.core.kubernetes;
+package io.hotcloud.core.kubernetes;
 
 import lombok.Data;
 
