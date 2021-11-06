@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.deploy;
 
 import io.hotcloud.core.common.HotCloudException;
 import io.hotcloud.core.kubernetes.deploy.DeploymentCreateApi;

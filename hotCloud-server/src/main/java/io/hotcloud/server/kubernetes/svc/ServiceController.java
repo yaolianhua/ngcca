@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.svc;
 
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.svc.ServiceCreateApi;

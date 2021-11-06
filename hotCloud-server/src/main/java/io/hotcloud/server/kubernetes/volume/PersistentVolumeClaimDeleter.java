@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.volume;
 
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimDeleteApi;
 import io.kubernetes.client.openapi.ApiException;

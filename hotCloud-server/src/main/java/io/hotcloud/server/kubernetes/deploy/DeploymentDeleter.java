@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.deploy;
 
 import io.hotcloud.core.kubernetes.deploy.DeploymentDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
