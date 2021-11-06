@@ -4,6 +4,3 @@ spring:
   profiles:
     include:
       - kubernetes
-logging:
-  level:
-    io.hotCloud.server: debug

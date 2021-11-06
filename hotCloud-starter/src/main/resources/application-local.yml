@@ -1,3 +1,6 @@
 kubernetes:
   in-cluster: false
 #  kube-config-path: /root/.kube/config
+logging:
+  level:
+    io.hotcloud.server: debug
