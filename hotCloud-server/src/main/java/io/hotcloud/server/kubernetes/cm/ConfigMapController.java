@@ -7,9 +7,11 @@ import io.hotcloud.core.kubernetes.cm.*;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.util.Yaml;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static io.hotcloud.server.R.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -31,36 +33,36 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public Result<String> configMap(@Validated @RequestBody ConfigMapCreateParams params) throws ApiException {
+    public ResponseEntity<Result<String>> configMap(@Validated @RequestBody ConfigMapCreateParams params) throws ApiException {
         V1ConfigMap v1ConfigMap = configMapCreateApi.configMap(params);
         String json = Yaml.dump(v1ConfigMap);
-        return Result.ok(HttpStatus.CREATED.value(), json);
+        return created(json);
     }
 
     @PostMapping("/yaml")
-    public Result<String> configMap(@RequestBody String yaml) throws ApiException {
+    public ResponseEntity<Result<String>> configMap(@RequestBody String yaml) throws ApiException {
         V1ConfigMap v1ConfigMap = configMapCreateApi.configMap(yaml);
         String json = Yaml.dump(v1ConfigMap);
-        return Result.ok(HttpStatus.CREATED.value(), json);
+        return created(json);
     }
 
     @GetMapping("/{namespace}/{configmap}")
-    public Result<ConfigMap> configMapRead(@PathVariable String namespace,
-                                           @PathVariable String configmap) {
+    public ResponseEntity<Result<ConfigMap>> configMapRead(@PathVariable String namespace,
+                                                           @PathVariable String configmap) {
         ConfigMap read = configMapReadApi.read(namespace, configmap);
-        return Result.ok(read);
+        return ok(read);
     }
 
     @GetMapping
-    public Result<ConfigMapList> configMapListRead(@RequestBody ConfigMapReadParams params) {
+    public ResponseEntity<Result<ConfigMapList>> configMapListRead(@RequestBody ConfigMapReadParams params) {
         ConfigMapList list = configMapReadApi.read(params.getNamespace(), params.getLabelSelector());
-        return Result.ok(list);
+        return ok(list);
     }
 
     @DeleteMapping("/{namespace}/{configmap}")
-    public Result<Void> configmapDelete(@PathVariable("namespace") String namespace,
-                                        @PathVariable("configmap") String name) throws ApiException {
+    public ResponseEntity<Result<Void>> configMapDelete(@PathVariable("namespace") String namespace,
+                                                        @PathVariable("configmap") String name) throws ApiException {
         configMapDeleteApi.delete(namespace, name);
-        return Result.ok(HttpStatus.ACCEPTED.value(), "success", null);
+        return accepted();
     }
 }

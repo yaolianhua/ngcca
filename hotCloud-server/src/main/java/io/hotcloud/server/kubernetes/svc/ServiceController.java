@@ -7,9 +7,11 @@ import io.hotcloud.core.kubernetes.svc.*;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static io.hotcloud.server.R.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -29,36 +31,36 @@ public class ServiceController {
     }
 
     @PostMapping
-    public Result<String> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
+    public ResponseEntity<Result<String>> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
         V1Service service = serviceCreation.service(params);
         String json = Yaml.dump(service);
-        return Result.ok(HttpStatus.CREATED.value(), json);
+        return created(json);
     }
 
     @PostMapping("/yaml")
-    public Result<String> service(@RequestBody String yaml) throws ApiException {
+    public ResponseEntity<Result<String>> service(@RequestBody String yaml) throws ApiException {
         V1Service service = serviceCreation.service(yaml);
         String json = Yaml.dump(service);
-        return Result.ok(HttpStatus.CREATED.value(), json);
+        return created(json);
     }
 
     @GetMapping("/{namespace}/{service}")
-    public Result<Service> serviceRead(@PathVariable String namespace,
-                                       @PathVariable String service) {
+    public ResponseEntity<Result<Service>> serviceRead(@PathVariable String namespace,
+                                                       @PathVariable String service) {
         Service read = serviceReadApi.read(namespace, service);
-        return Result.ok(read);
+        return ok(read);
     }
 
     @GetMapping
-    public Result<ServiceList> serviceListRead(@RequestBody ServiceReadParams params) {
+    public ResponseEntity<Result<ServiceList>> serviceListRead(@RequestBody ServiceReadParams params) {
         ServiceList list = serviceReadApi.read(params.getNamespace(), params.getLabelSelector());
-        return Result.ok(list);
+        return ok(list);
     }
 
     @DeleteMapping("/{namespace}/{service}")
-    public Result<Void> serviceDelete(@PathVariable("namespace") String namespace,
-                                      @PathVariable("service") String name) throws ApiException {
+    public ResponseEntity<Result<Void>> serviceDelete(@PathVariable("namespace") String namespace,
+                                                      @PathVariable("service") String name) throws ApiException {
         serviceDeleteApi.delete(namespace, name);
-        return Result.ok(HttpStatus.ACCEPTED.value(), "success", null);
+        return accepted();
     }
 }

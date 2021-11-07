@@ -10,11 +10,13 @@ import io.hotcloud.core.kubernetes.volumes.PersistentVolumeReadApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1PersistentVolume;
 import io.kubernetes.client.util.Yaml;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static io.hotcloud.server.R.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -36,35 +38,35 @@ public class PersistentVolumeController {
     }
 
     @PostMapping
-    public Result<String> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
+    public ResponseEntity<Result<String>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
         V1PersistentVolume v1PersistentVolume = persistentVolumeCreation.persistentVolume(params);
         String pvJson = Yaml.dump(v1PersistentVolume);
-        return Result.ok(HttpStatus.CREATED.value(), pvJson);
+        return created(pvJson);
     }
 
     @PostMapping("/yaml")
-    public Result<String> persistentvolume(@RequestBody String yaml) throws ApiException {
+    public ResponseEntity<Result<String>> persistentvolume(@RequestBody String yaml) throws ApiException {
         V1PersistentVolume v1PersistentVolume = persistentVolumeCreation.persistentVolume(yaml);
         String pvJson = Yaml.dump(v1PersistentVolume);
-        return Result.ok(HttpStatus.CREATED.value(), pvJson);
+        return created(pvJson);
     }
 
     @DeleteMapping("/{persistentvolume}")
-    public Result<Void> persistentvolumeDelete(@PathVariable String persistentvolume) throws ApiException {
+    public ResponseEntity<Result<Void>> persistentvolumeDelete(@PathVariable String persistentvolume) throws ApiException {
         persistentVolumeDeletion.delete(persistentvolume);
-        return Result.ok(HttpStatus.ACCEPTED.value());
+        return accepted();
     }
 
     @GetMapping("/{persistentvolume}")
-    public Result<PersistentVolume> persistentVolumeRead(@PathVariable String persistentvolume) {
+    public ResponseEntity<Result<PersistentVolume>> persistentVolumeRead(@PathVariable String persistentvolume) {
         PersistentVolume read = persistentVolumeReadApi.read(persistentvolume);
-        return Result.ok(read);
+        return ok(read);
     }
 
     @GetMapping
-    public Result<PersistentVolumeList> persistentVolumeListRead(@RequestBody Map<String, String> labels) {
+    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestBody Map<String, String> labels) {
         PersistentVolumeList list = persistentVolumeReadApi.read(labels);
-        return Result.ok(list);
+        return ok(list);
     }
 
 }
