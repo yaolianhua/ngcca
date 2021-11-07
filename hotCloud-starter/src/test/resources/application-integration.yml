@@ -1,0 +1,6 @@
+kubernetes:
+  in-cluster: true
+#  kube-config-path: /root/.kube/config
+logging:
+  level:
+    io.hotcloud.server: debug

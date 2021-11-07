@@ -8,7 +8,6 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static io.hotcloud.server.R.*;
@@ -33,7 +32,7 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> configMap(@Validated @RequestBody ConfigMapCreateParams params) throws ApiException {
+    public ResponseEntity<Result<String>> configMap(@RequestBody ConfigMapCreateParams params) throws ApiException {
         V1ConfigMap v1ConfigMap = configMapCreateApi.configMap(params);
         String json = Yaml.dump(v1ConfigMap);
         return created(json);

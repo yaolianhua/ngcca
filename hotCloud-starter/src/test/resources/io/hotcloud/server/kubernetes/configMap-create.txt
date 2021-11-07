@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  config: |
+    logging:
+      level:
+        io.hotCloud.server: debug
+    kubernetes:
+      in-cluster: true
+kind: ConfigMap
+metadata:
+  name: hotcloud-config
+  namespace: default
+  labels: {
+      "k8s-app": "hotcloud"
+  }
+immutable: true
