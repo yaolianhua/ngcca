@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.deploy;
 
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.util.Yaml;
@@ -10,12 +11,12 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface DeploymentCreateApi {
 
-    default V1Deployment deployment(DeploymentCreateParams request) throws ApiException {
+    default Deployment deployment(DeploymentCreateParams request) throws ApiException {
         V1Deployment v1Deployment = DeploymentBuilder.build(request);
         String json = Yaml.dump(v1Deployment);
         return this.deployment(json);
     }
 
-    V1Deployment deployment(String yaml) throws ApiException;
+    Deployment deployment(String yaml) throws ApiException;
 
 }

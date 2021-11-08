@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.deploy.*;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,17 +44,15 @@ public class DeploymentController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> deployment(@Validated @RequestBody DeploymentCreateParams params) throws ApiException {
-        V1Deployment v1Deployment = deploymentCreation.deployment(params);
-        String deploymentString = Yaml.dump(v1Deployment);
-        return created(deploymentString);
+    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateParams params) throws ApiException {
+        Deployment deployment = deploymentCreation.deployment(params);
+        return created(deployment);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> deployment(@RequestBody String yaml) throws ApiException {
-        V1Deployment v1Deployment = deploymentCreation.deployment(yaml);
-        String deploymentString = Yaml.dump(v1Deployment);
-        return created(deploymentString);
+    public ResponseEntity<Result<Deployment>> deployment(@RequestBody String yaml) throws ApiException {
+        Deployment deployment = deploymentCreation.deployment(yaml);
+        return created(deployment);
     }
 
     @DeleteMapping("/{namespace}/{deployment}")

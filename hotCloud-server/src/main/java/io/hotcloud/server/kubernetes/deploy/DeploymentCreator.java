@@ -1,5 +1,7 @@
 package io.hotcloud.server.kubernetes.deploy;
 
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.core.common.HotCloudException;
 import io.hotcloud.core.kubernetes.deploy.DeploymentCreateApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -23,27 +25,35 @@ import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
 public class DeploymentCreator implements DeploymentCreateApi {
 
     private final AppsV1Api appsV1Api;
+    private final KubernetesClient fabric8Client;
 
-    public DeploymentCreator(AppsV1Api appsV1Api) {
+    public DeploymentCreator(AppsV1Api appsV1Api, KubernetesClient fabric8Client) {
         this.appsV1Api = appsV1Api;
+        this.fabric8Client = fabric8Client;
     }
 
     @Override
-    public V1Deployment deployment(String yaml) throws ApiException {
+    public Deployment deployment(String yaml) throws ApiException {
         V1Deployment v1Deployment;
         try {
             v1Deployment = (V1Deployment) Yaml.load(yaml);
         } catch (IOException e) {
-            throw new HotCloudException(String.format("load deployment yaml error. '%s'",e.getMessage()));
+            throw new HotCloudException(String.format("load deployment yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Deployment.getMetadata()).getNamespace();
         namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT_NAMESPACE;
-        V1Deployment deployment = appsV1Api.createNamespacedDeployment(namespace,
+        V1Deployment created = appsV1Api.createNamespacedDeployment(namespace,
                 v1Deployment,
                 "true",
                 null,
                 null);
-        log.debug("create deployment success \n '{}'",deployment);
+        log.debug("create deployment success \n '{}'", created);
+
+        Deployment deployment = fabric8Client.apps()
+                .deployments()
+                .inNamespace(namespace)
+                .withName(v1Deployment.getMetadata().getName())
+                .get();
         return deployment;
     }
 }
