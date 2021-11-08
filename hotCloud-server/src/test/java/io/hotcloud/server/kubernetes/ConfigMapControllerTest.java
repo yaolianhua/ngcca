@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.server.R.created;
+import static io.hotcloud.server.R.ok;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -92,10 +93,13 @@ public class ConfigMapControllerTest {
 
         InputStream inputStream = getClass().getResourceAsStream("configMap-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+
+        ConfigMap value = objectMapper.readValue(json, ConfigMap.class);
+        String _json = objectMapper.writeValueAsString(ok(value).getBody());
         this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{configmap}"), "default", "hotcloud-config"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(json));
+                .andExpect(content().json(_json));
     }
 
     public ConfigMap configMap() {
