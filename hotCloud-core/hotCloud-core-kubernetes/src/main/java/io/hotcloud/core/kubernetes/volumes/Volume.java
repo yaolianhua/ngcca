@@ -17,6 +17,8 @@ public class Volume {
     private HostPathVolume hostPath;
     private NFSVolume nfs;
 
+    private String name;
+
     public boolean exist() {
         return Objects.nonNull(configMap) ||
                 Objects.nonNull(emptyDir) ||

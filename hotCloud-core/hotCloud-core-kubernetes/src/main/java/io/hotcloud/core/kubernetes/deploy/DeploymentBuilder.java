@@ -55,7 +55,7 @@ public final class DeploymentBuilder {
 
         spec.setReplicas(deploymentSpec.getReplicas());
         spec.setMinReadySeconds(deploymentSpec.getMinReadySeconds());
-        spec.setPaused(deploymentSpec.isPaused());
+        spec.setPaused(deploymentSpec.getPaused());
         spec.setProgressDeadlineSeconds(deploymentSpec.getProgressDeadlineSeconds());
         spec.setRevisionHistoryLimit(deploymentSpec.getRevisionHistoryLimit());
 

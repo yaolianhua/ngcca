@@ -1,7 +1,9 @@
 package io.hotcloud.core.kubernetes.volumes;
 
+import io.hotcloud.core.kubernetes.NamespaceGenerator;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +33,10 @@ public final class VolumeBuilder {
             V1GitRepoVolumeSource v1GitRepoVolumeSource = build(volume.getGitRepo());
             v1Volume.setGitRepo(v1GitRepoVolumeSource);
         }
+        if (!StringUtils.hasText(volume.getName())) {
+            volume.setName(String.format("%s-volume", NamespaceGenerator.randomNumber32Bit()));
+        }
+        v1Volume.setName(volume.getName());
         return v1Volume;
     }
 

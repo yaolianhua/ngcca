@@ -10,7 +10,7 @@ import lombok.Data;
 public class DeploymentSpec {
 
     private Integer minReadySeconds;
-    private boolean paused;
+    private Boolean paused;
     private Integer progressDeadlineSeconds;
 
     private Integer replicas = 1;
