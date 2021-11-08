@@ -90,32 +90,6 @@ public class ConfigMapControllerTest {
     }
 
     @Test
-    public void configMapCreateUseParams() throws Exception {
-
-        ConfigMapCreateParams params = configMapCreateParams();
-
-        V1ConfigMap v1ConfigMap = io.hotcloud.core.kubernetes.cm.ConfigMapBuilder.build(params);
-        when(configMapCreateApi.configMap(params)).thenReturn(v1ConfigMap);
-
-        String jsonParams = objectMapper.writeValueAsString(params);
-        String contentAsString = this.mockMvc.perform(MockMvcRequestBuilders
-                .post(PATH).contentType(MediaType.APPLICATION_JSON).content(jsonParams))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        String string = Yaml.dump(v1ConfigMap);
-        @SuppressWarnings("unchecked")
-        Result<String> result = objectMapper.readValue(contentAsString, Result.class);
-        assertNotNull(result);
-        assertEquals(string, result.getData());
-
-    }
-
-
-    @Test
     public void configMapDelete() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{namespace}/{configmap}"), "default", "hotcloud-config"))
                 .andDo(print())
