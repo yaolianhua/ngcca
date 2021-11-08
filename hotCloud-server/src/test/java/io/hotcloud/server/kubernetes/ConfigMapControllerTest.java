@@ -1,13 +1,12 @@
 package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.cm.*;
+import io.hotcloud.core.kubernetes.cm.ConfigMapCreateApi;
+import io.hotcloud.core.kubernetes.cm.ConfigMapDeleteApi;
+import io.hotcloud.core.kubernetes.cm.ConfigMapReadApi;
+import io.hotcloud.core.kubernetes.cm.ConfigMapReadParams;
 import io.hotcloud.server.kubernetes.cm.ConfigMapController;
-import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.util.Yaml;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,8 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static io.hotcloud.server.R.created;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -62,31 +60,20 @@ public class ConfigMapControllerTest {
         InputStream inputStream = getClass().getResourceAsStream("configMap-create.txt");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
-        ConfigMapCreateParams params = configMapCreateParams();
-        V1ConfigMap v1ConfigMap = io.hotcloud.core.kubernetes.cm.ConfigMapBuilder.build(params);
-        when(configMapCreateApi.configMap(yaml)).thenReturn(v1ConfigMap);
+        InputStream configMapReadInputStream = getClass().getResourceAsStream("configMap-read.json");
+        String configMapReadJson = new BufferedReader(new InputStreamReader(configMapReadInputStream)).lines().collect(Collectors.joining());
 
-        String string = Yaml.dump(v1ConfigMap);
-        String contentAsString = this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/yaml")).contentType(MediaType.TEXT_PLAIN_VALUE).content(yaml))
+        ConfigMap configMap = objectMapper.readValue(configMapReadJson, ConfigMap.class);
+        when(configMapCreateApi.configMap(yaml)).thenReturn(configMap);
+
+        String json = objectMapper.writeValueAsString(created(configMap).getBody());
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post(PATH.concat("/yaml")).contentType(MediaType.TEXT_PLAIN_VALUE).content(yaml))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-        @SuppressWarnings("unchecked")
-        Result<String> result = objectMapper.readValue(contentAsString, Result.class);
-        assertNotNull(result);
-        assertEquals(string, result.getData());
+                .andExpect(content().json(json, true));
 
-    }
-
-    public ConfigMapCreateParams configMapCreateParams() {
-        ConfigMapCreateParams params = new ConfigMapCreateParams();
-        params.setImmutable(true);
-        params.setData(Map.of("config", "logging:\n  level:\n    io.hotCloud.server: debug\nkubernetes:\n  in-cluster: true\n"));
-        params.setMetadata(new ConfigMapMetadata("default", "hotcloud-config", Map.of("k8s-app", "hotcloud"), null));
-
-        return params;
     }
 
     @Test

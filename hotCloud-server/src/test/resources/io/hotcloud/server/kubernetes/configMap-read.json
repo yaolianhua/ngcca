@@ -1,7 +1,4 @@
 {
-  "status": 200,
-  "message": null,
-  "data": {
     "apiVersion": "v1",
     "kind": "ConfigMap",
     "metadata": {
@@ -15,5 +12,4 @@
       "config": "logging:\n  level:\n    io.hotCloud.server: debug\nkubernetes:\n  in-cluster: true\n"
     },
     "immutable": true
-  }
 }

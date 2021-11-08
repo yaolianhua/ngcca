@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.cm;
 
+import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.util.Yaml;
@@ -10,11 +11,11 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface ConfigMapCreateApi {
 
-    default V1ConfigMap configMap(ConfigMapCreateParams request) throws ApiException {
+    default ConfigMap configMap(ConfigMapCreateParams request) throws ApiException {
         V1ConfigMap v1ConfigMap = ConfigMapBuilder.build(request);
         String json = Yaml.dump(v1ConfigMap);
         return this.configMap(json);
     }
 
-    V1ConfigMap configMap(String yaml) throws ApiException;
+    ConfigMap configMap(String yaml) throws ApiException;
 }

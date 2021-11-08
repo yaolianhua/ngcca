@@ -1,5 +1,7 @@
 package io.hotcloud.server.kubernetes.cm;
 
+import io.fabric8.kubernetes.api.model.ConfigMap;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.core.common.HotCloudException;
 import io.hotcloud.core.kubernetes.cm.ConfigMapCreateApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -23,13 +25,15 @@ import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
 public class ConfigMapCreator implements ConfigMapCreateApi {
 
     private final CoreV1Api coreV1Api;
+    private final KubernetesClient fabric8client;
 
-    public ConfigMapCreator(CoreV1Api coreV1Api) {
+    public ConfigMapCreator(CoreV1Api coreV1Api, KubernetesClient fabric8client) {
         this.coreV1Api = coreV1Api;
+        this.fabric8client = fabric8client;
     }
 
     @Override
-    public V1ConfigMap configMap(String yaml) throws ApiException {
+    public ConfigMap configMap(String yaml) throws ApiException {
 
         V1ConfigMap v1ConfigMap;
         try {
@@ -44,6 +48,12 @@ public class ConfigMapCreator implements ConfigMapCreateApi {
                 "true",
                 null,
                 null);
-        return cm;
+        log.debug("create configMap success \n '{}'", cm);
+
+        ConfigMap configMap = fabric8client.configMaps()
+                .inNamespace(namespace)
+                .withName(v1ConfigMap.getMetadata().getName())
+                .get();
+        return configMap;
     }
 }

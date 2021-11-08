@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.cm.*;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,17 +30,16 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> configMap(@RequestBody ConfigMapCreateParams params) throws ApiException {
-        V1ConfigMap v1ConfigMap = configMapCreateApi.configMap(params);
-        String json = Yaml.dump(v1ConfigMap);
-        return created(json);
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateParams params) throws ApiException {
+        ConfigMap configMap = configMapCreateApi.configMap(params);
+
+        return created(configMap);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> configMap(@RequestBody String yaml) throws ApiException {
-        V1ConfigMap v1ConfigMap = configMapCreateApi.configMap(yaml);
-        String json = Yaml.dump(v1ConfigMap);
-        return created(json);
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody String yaml) throws ApiException {
+        ConfigMap configMap = configMapCreateApi.configMap(yaml);
+        return created(configMap);
     }
 
     @GetMapping("/{namespace}/{configmap}")
