@@ -120,6 +120,8 @@ public class ConfigMapControllerTest {
 
         InputStream inputStream = getClass().getResourceAsStream("configMapList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
+        String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
         String body = objectMapper.writeValueAsString(new ConfigMapReadParams());
         this.mockMvc.perform(MockMvcRequestBuilders
@@ -127,7 +129,7 @@ public class ConfigMapControllerTest {
                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(json));
+                .andExpect(content().json(_json));
     }
 
     public ConfigMapList configMapList() {

@@ -1,7 +1,4 @@
 {
-  "status": 200,
-  "message": null,
-  "data": {
     "apiVersion": "v1",
     "kind": "ConfigMapList",
     "metadata": {},
@@ -36,5 +33,4 @@
         }
       }
     ]
-  }
 }
