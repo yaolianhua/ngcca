@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.volumes;
 
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
 import io.kubernetes.client.util.Yaml;
@@ -10,11 +11,11 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface PersistentVolumeClaimCreateApi {
 
-    default V1PersistentVolumeClaim persistentVolumeClaim(PersistentVolumeClaimCreateParams request) throws ApiException {
+    default PersistentVolumeClaim persistentVolumeClaim(PersistentVolumeClaimCreateParams request) throws ApiException {
         V1PersistentVolumeClaim v1PersistentVolumeClaim = PersistentVolumeClaimBuilder.build(request);
         String json = Yaml.dump(v1PersistentVolumeClaim);
         return this.persistentVolumeClaim(json);
     }
 
-    V1PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException;
+    PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException;
 }

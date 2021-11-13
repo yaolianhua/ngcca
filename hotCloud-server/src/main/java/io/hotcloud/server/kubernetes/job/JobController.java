@@ -9,8 +9,6 @@ import io.hotcloud.core.kubernetes.job.JobCreateParams;
 import io.hotcloud.core.kubernetes.job.JobDeleteApi;
 import io.hotcloud.core.kubernetes.job.JobReadApi;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1Job;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,17 +33,15 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> job(@Validated @RequestBody JobCreateParams params) throws ApiException {
-        V1Job v1Job = jobCreation.job(params);
-        String jobString = Yaml.dump(v1Job);
-        return created(jobString);
+    public ResponseEntity<Result<Job>> job(@Validated @RequestBody JobCreateParams params) throws ApiException {
+        Job job = jobCreation.job(params);
+        return created(job);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> job(@RequestBody String yaml) throws ApiException {
-        V1Job v1Job = jobCreation.job(yaml);
-        String jobString = Yaml.dump(v1Job);
-        return created(jobString);
+    public ResponseEntity<Result<Job>> job(@RequestBody String yaml) throws ApiException {
+        Job job = jobCreation.job(yaml);
+        return created(job);
     }
 
 
