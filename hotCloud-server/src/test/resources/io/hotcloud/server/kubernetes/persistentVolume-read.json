@@ -1,0 +1,30 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolume",
+  "metadata": {
+    "name": "pv0003"
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "capacity": {
+      "storage": "1Gi"
+    },
+    "claimRef": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "name": "myclaim",
+      "namespace": "default"
+    },
+    "hostPath": {
+      "path": "/tmp",
+      "type": ""
+    },
+    "persistentVolumeReclaimPolicy": "Recycle",
+    "volumeMode": "Filesystem"
+  },
+  "status": {
+    "phase": "Bound"
+  }
+}
