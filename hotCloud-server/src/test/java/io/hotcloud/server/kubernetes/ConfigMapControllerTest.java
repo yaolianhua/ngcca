@@ -123,8 +123,6 @@ public class ConfigMapControllerTest {
         ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
         String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
-        ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
-        String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
         String body = objectMapper.writeValueAsString(new ConfigMapReadParams());
         this.mockMvc.perform(MockMvcRequestBuilders
