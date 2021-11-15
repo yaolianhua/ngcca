@@ -15,7 +15,7 @@
     <modules>
         <module>hotCloud-core-kubernetes</module>
         <module>hotCloud-core-common</module>
-<!--        <module>hotCloud-core-code</module>-->
+        <module>hotCloud-core-code</module>
     </modules>
 
 </project>

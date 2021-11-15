@@ -29,7 +29,7 @@
         <fabric8.kubernetes-client.version>5.9.0</fabric8.kubernetes-client.version>
         <lombok.version>1.18.20</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
-        <github-api.version>1.133</github-api.version>
+        <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
     </properties>
 
@@ -44,6 +44,16 @@
             <dependency>
                 <groupId>io.hotCloud</groupId>
                 <artifactId>hotCloud-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotCloud</groupId>
+                <artifactId>hotCloud-middleware</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotCloud</groupId>
+                <artifactId>hotCloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
