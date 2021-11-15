@@ -8,8 +8,6 @@ import io.hotcloud.core.kubernetes.volumes.PersistentVolumeCreateParams;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeReadApi;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1PersistentVolume;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,17 +36,15 @@ public class PersistentVolumeController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
-        V1PersistentVolume v1PersistentVolume = persistentVolumeCreation.persistentVolume(params);
-        String pvJson = Yaml.dump(v1PersistentVolume);
-        return created(pvJson);
+    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
+        PersistentVolume persistentVolume = persistentVolumeCreation.persistentVolume(params);
+        return created(persistentVolume);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> persistentvolume(@RequestBody String yaml) throws ApiException {
-        V1PersistentVolume v1PersistentVolume = persistentVolumeCreation.persistentVolume(yaml);
-        String pvJson = Yaml.dump(v1PersistentVolume);
-        return created(pvJson);
+    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@RequestBody String yaml) throws ApiException {
+        PersistentVolume persistentVolume = persistentVolumeCreation.persistentVolume(yaml);
+        return created(persistentVolume);
     }
 
     @DeleteMapping("/{persistentvolume}")

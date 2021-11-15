@@ -1,5 +1,7 @@
 package io.hotcloud.server.kubernetes.job;
 
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.core.common.HotCloudException;
 import io.hotcloud.core.kubernetes.job.JobCreateApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -23,13 +25,15 @@ import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
 public class JobCreator implements JobCreateApi {
 
     private final BatchV1Api batchV1Api;
+    private final KubernetesClient fabric8Client;
 
-    public JobCreator(BatchV1Api batchV1Api) {
+    public JobCreator(BatchV1Api batchV1Api, KubernetesClient fabric8Client) {
         this.batchV1Api = batchV1Api;
+        this.fabric8Client = fabric8Client;
     }
 
     @Override
-    public V1Job job(String yaml) throws ApiException {
+    public Job job(String yaml) throws ApiException {
         V1Job v1Job;
         try {
             v1Job = (V1Job) Yaml.load(yaml);
@@ -44,6 +48,13 @@ public class JobCreator implements JobCreateApi {
                 null,
                 null);
         log.debug("create job success \n '{}'", job);
-        return job;
+
+        Job j = fabric8Client.batch()
+                .v1()
+                .jobs()
+                .inNamespace(namespace)
+                .withName(v1Job.getMetadata().getName())
+                .get();
+        return j;
     }
 }

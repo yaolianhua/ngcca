@@ -120,6 +120,8 @@ public class ConfigMapControllerTest {
 
         InputStream inputStream = getClass().getResourceAsStream("configMapList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
+        String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
         ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
         String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());

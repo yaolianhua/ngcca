@@ -1,5 +1,7 @@
 package io.hotcloud.server.kubernetes.volume;
 
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.core.common.HotCloudException;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimCreateApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -23,13 +25,15 @@ import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
 public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreateApi {
 
     private final CoreV1Api coreV1Api;
+    private final KubernetesClient fabric8Client;
 
-    public PersistentVolumeClaimCreator(CoreV1Api coreV1Api) {
+    public PersistentVolumeClaimCreator(CoreV1Api coreV1Api, KubernetesClient fabric8Client) {
         this.coreV1Api = coreV1Api;
+        this.fabric8Client = fabric8Client;
     }
 
     @Override
-    public V1PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException {
+    public PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException {
         V1PersistentVolumeClaim v1PersistentVolumeClaim;
         try {
             v1PersistentVolumeClaim = (V1PersistentVolumeClaim) Yaml.load(yaml);
@@ -39,12 +43,18 @@ public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreate
 
         String namespace = Objects.requireNonNull(v1PersistentVolumeClaim.getMetadata()).getNamespace();
         namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT_NAMESPACE;
-        V1PersistentVolumeClaim pvc = coreV1Api.createNamespacedPersistentVolumeClaim(
+        V1PersistentVolumeClaim v1Pvc = coreV1Api.createNamespacedPersistentVolumeClaim(
                 namespace,
                 v1PersistentVolumeClaim,
                 "true",
                 null,
                 null);
+        log.debug("create persistentVolumeClaim success \n '{}'", v1Pvc);
+
+        PersistentVolumeClaim pvc = fabric8Client.persistentVolumeClaims()
+                .inNamespace(namespace)
+                .withName(v1PersistentVolumeClaim.getMetadata().getName())
+                .get();
         return pvc;
     }
 }

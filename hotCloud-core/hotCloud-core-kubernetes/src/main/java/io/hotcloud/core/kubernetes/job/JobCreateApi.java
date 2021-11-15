@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.job;
 
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.models.V1Job;
 import io.kubernetes.client.util.Yaml;
@@ -10,12 +11,12 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface JobCreateApi {
 
-    default V1Job job(JobCreateParams request) throws ApiException {
+    default Job job(JobCreateParams request) throws ApiException {
         V1Job v1Job = JobBuilder.build(request);
         String json = Yaml.dump(v1Job);
         return this.job(json);
     }
 
-    V1Job job(String yaml) throws ApiException;
+    Job job(String yaml) throws ApiException;
 
 }

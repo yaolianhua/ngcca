@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.volumes.*;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +31,15 @@ public class PersistentVolumeClaimController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateParams params) throws ApiException {
-        V1PersistentVolumeClaim v1PersistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(params);
-        String pvcJson = Yaml.dump(v1PersistentVolumeClaim);
-        return created(pvcJson);
+    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateParams params) throws ApiException {
+        PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(params);
+        return created(persistentVolumeClaim);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> persistentVolumeClaim(@RequestBody String yaml) throws ApiException {
-        V1PersistentVolumeClaim v1PersistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(yaml);
-        String pvcJson = Yaml.dump(v1PersistentVolumeClaim);
-        return created(pvcJson);
+    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@RequestBody String yaml) throws ApiException {
+        PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(yaml);
+        return created(persistentVolumeClaim);
     }
 
     @DeleteMapping("/{namespace}/{name}")

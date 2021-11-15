@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.svc.*;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1Service;
-import io.kubernetes.client.util.Yaml;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +29,15 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<String>> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
-        V1Service service = serviceCreation.service(params);
-        String json = Yaml.dump(service);
-        return created(json);
+    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
+        Service service = serviceCreation.service(params);
+        return created(service);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<String>> service(@RequestBody String yaml) throws ApiException {
-        V1Service service = serviceCreation.service(yaml);
-        String json = Yaml.dump(service);
-        return created(json);
+    public ResponseEntity<Result<Service>> service(@RequestBody String yaml) throws ApiException {
+        Service service = serviceCreation.service(yaml);
+        return created(service);
     }
 
     @GetMapping("/{namespace}/{service}")
