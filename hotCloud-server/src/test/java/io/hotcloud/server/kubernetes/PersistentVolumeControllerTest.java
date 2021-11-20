@@ -2,8 +2,6 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeCreateApi;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volumes.PersistentVolumeReadApi;
@@ -94,7 +92,7 @@ public class PersistentVolumeControllerTest {
         InputStream inputStream = getClass().getResourceAsStream("persistentVolume-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
-        Deployment value = objectMapper.readValue(json, Deployment.class);
+        PersistentVolume value = objectMapper.readValue(json, PersistentVolume.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
         this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{persistentvolume}"), "pv0003"))
                 .andDo(print())
@@ -109,7 +107,7 @@ public class PersistentVolumeControllerTest {
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
-        DeploymentList value = objectMapper.readValue(json, DeploymentList.class);
+        PersistentVolumeList value = objectMapper.readValue(json, PersistentVolumeList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
         String body = objectMapper.writeValueAsString(Map.of());
