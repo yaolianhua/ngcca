@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.server.R.created;
-import static io.hotcloud.server.R.ok;
+import static io.hotcloud.server.WebResponse.created;
+import static io.hotcloud.server.WebResponse.ok;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

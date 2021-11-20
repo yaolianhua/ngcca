@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class R {
-    private R() {
+public final class WebResponse {
+    private WebResponse() {
     }
 
     public static <T> ResponseEntity<Result<T>> none() {

@@ -8,7 +8,7 @@ import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.hotcloud.server.R.*;
+import static io.hotcloud.server.WebResponse.*;
 
 /**
  * @author yaolianhua789@gmail.com

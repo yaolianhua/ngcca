@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static io.hotcloud.server.R.*;
+import static io.hotcloud.server.WebResponse.*;
 
 /**
  * @author yaolianhua789@gmail.com

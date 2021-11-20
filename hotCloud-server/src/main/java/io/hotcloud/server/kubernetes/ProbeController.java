@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static io.hotcloud.server.R.accepted;
+import static io.hotcloud.server.WebResponse.accepted;
 
 @RestController
 @RequestMapping
