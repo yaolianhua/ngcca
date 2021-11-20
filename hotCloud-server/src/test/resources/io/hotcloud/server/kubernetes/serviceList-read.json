@@ -17,9 +17,6 @@
       },
       "spec": {
         "clusterIP": "10.107.236.4",
-        "clusterIPs": [
-          "10.107.236.4"
-        ],
         "ports": [
           {
             "name": "http",
@@ -34,9 +31,6 @@
         },
         "sessionAffinity": "None",
         "type": "NodePort"
-      },
-      "status": {
-        "loadBalancer": {}
       }
     }
   ]
