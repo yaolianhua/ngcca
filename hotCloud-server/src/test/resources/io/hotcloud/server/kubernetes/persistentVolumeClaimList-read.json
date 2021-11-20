@@ -24,15 +24,6 @@
         "storageClassName": "",
         "volumeMode": "Filesystem",
         "volumeName": "pv0003"
-      },
-      "status": {
-        "accessModes": [
-          "ReadWriteOnce"
-        ],
-        "capacity": {
-          "storage": "1Gi"
-        },
-        "phase": "Bound"
       }
     }
   ]
