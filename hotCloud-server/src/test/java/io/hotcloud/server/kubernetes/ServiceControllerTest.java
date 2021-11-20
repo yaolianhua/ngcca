@@ -2,8 +2,6 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.kubernetes.svc.ServiceCreateApi;
 import io.hotcloud.core.kubernetes.svc.ServiceDeleteApi;
 import io.hotcloud.core.kubernetes.svc.ServiceReadApi;
@@ -95,7 +93,7 @@ public class ServiceControllerTest {
         InputStream inputStream = getClass().getResourceAsStream("service-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
-        Deployment value = objectMapper.readValue(json, Deployment.class);
+        Service value = objectMapper.readValue(json, Service.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
         this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{service}"), "default", "hotcloud"))
                 .andDo(print())
@@ -110,7 +108,7 @@ public class ServiceControllerTest {
         InputStream inputStream = getClass().getResourceAsStream("serviceList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
-        DeploymentList value = objectMapper.readValue(json, DeploymentList.class);
+        ServiceList value = objectMapper.readValue(json, ServiceList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
         String body = objectMapper.writeValueAsString(new ServiceReadParams());
