@@ -30,9 +30,6 @@
         },
         "persistentVolumeReclaimPolicy": "Recycle",
         "volumeMode": "Filesystem"
-      },
-      "status": {
-        "phase": "Bound"
       }
     }
   ]
