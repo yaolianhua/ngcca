@@ -2,7 +2,7 @@ package io.hotcloud.core.kubernetes.pod;
 
 import io.hotcloud.core.kubernetes.affinity.Affinity;
 import io.hotcloud.core.kubernetes.pod.container.Container;
-import io.hotcloud.core.kubernetes.volumes.Volume;
+import io.hotcloud.core.kubernetes.volume.Volume;
 import lombok.Data;
 
 import java.util.ArrayList;

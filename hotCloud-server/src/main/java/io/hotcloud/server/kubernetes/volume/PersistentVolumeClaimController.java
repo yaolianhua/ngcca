@@ -3,7 +3,7 @@ package io.hotcloud.server.kubernetes.volume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.volumes.*;
+import io.hotcloud.core.kubernetes.volume.*;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

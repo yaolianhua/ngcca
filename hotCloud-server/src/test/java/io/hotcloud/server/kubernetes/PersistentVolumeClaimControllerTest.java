@@ -2,10 +2,10 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimCreateApi;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimDeleteApi;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimReadApi;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimReadParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadParams;
 import io.hotcloud.server.kubernetes.volume.PersistentVolumeClaimController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

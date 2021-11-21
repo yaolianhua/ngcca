@@ -5,8 +5,8 @@ import io.hotcloud.core.kubernetes.affinity.NodeAffinityBuilder;
 import io.hotcloud.core.kubernetes.affinity.PodAffinityBuilder;
 import io.hotcloud.core.kubernetes.affinity.PodAntiAffinityBuilder;
 import io.hotcloud.core.kubernetes.pod.container.ContainerBuilder;
-import io.hotcloud.core.kubernetes.volumes.Volume;
-import io.hotcloud.core.kubernetes.volumes.VolumeBuilder;
+import io.hotcloud.core.kubernetes.volume.Volume;
+import io.hotcloud.core.kubernetes.volume.VolumeBuilder;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
 

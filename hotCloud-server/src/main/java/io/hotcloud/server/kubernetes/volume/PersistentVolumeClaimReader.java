@@ -2,7 +2,7 @@ package io.hotcloud.server.kubernetes.volume;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.core.kubernetes.volumes.PersistentVolumeClaimReadApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

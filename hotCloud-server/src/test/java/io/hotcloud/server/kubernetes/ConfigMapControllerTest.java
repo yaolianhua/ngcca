@@ -2,11 +2,11 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.core.kubernetes.cm.ConfigMapCreateApi;
-import io.hotcloud.core.kubernetes.cm.ConfigMapDeleteApi;
-import io.hotcloud.core.kubernetes.cm.ConfigMapReadApi;
-import io.hotcloud.core.kubernetes.cm.ConfigMapReadParams;
-import io.hotcloud.server.kubernetes.cm.ConfigMapController;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapReadParams;
+import io.hotcloud.server.kubernetes.configmap.ConfigMapController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
