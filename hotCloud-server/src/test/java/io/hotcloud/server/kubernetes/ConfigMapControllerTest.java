@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
-import io.hotcloud.core.kubernetes.configmap.ConfigMapReadParams;
 import io.hotcloud.server.kubernetes.configmap.ConfigMapController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +114,7 @@ public class ConfigMapControllerTest {
 
     @Test
     public void configMapListRead() throws Exception {
-        when(configMapReadApi.read(null, Collections.emptyMap()))
+        when(configMapReadApi.read("default", Collections.emptyMap()))
                 .thenReturn(configMapList());
 
         InputStream inputStream = getClass().getResourceAsStream("configMapList-read.json");
@@ -124,9 +123,9 @@ public class ConfigMapControllerTest {
         String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
 
-        String body = objectMapper.writeValueAsString(new ConfigMapReadParams());
+        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH).contentType(MediaType.APPLICATION_JSON)
+                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())

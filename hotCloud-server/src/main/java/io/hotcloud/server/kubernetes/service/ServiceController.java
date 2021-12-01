@@ -3,11 +3,16 @@ package io.hotcloud.server.kubernetes.service;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.service.*;
+import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
+import io.hotcloud.core.kubernetes.service.ServiceCreateParams;
+import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
+import io.hotcloud.core.kubernetes.service.ServiceReadApi;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static io.hotcloud.server.WebResponse.*;
 
@@ -47,9 +52,10 @@ public class ServiceController {
         return ok(read);
     }
 
-    @GetMapping
-    public ResponseEntity<Result<ServiceList>> serviceListRead(@RequestBody ServiceReadParams params) {
-        ServiceList list = serviceReadApi.read(params.getNamespace(), params.getLabelSelector());
+    @GetMapping("/{namespace}")
+    public ResponseEntity<Result<ServiceList>> serviceListRead(@PathVariable String namespace,
+                                                               @RequestBody(required = false) Map<String, String> labelSelector) {
+        ServiceList list = serviceReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 

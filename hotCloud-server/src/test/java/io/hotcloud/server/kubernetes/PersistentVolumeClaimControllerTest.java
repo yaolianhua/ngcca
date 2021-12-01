@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
-import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadParams;
 import io.hotcloud.server.kubernetes.volume.PersistentVolumeClaimController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,7 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentvolumeclaimListRead() throws Exception {
-        when(persistentVolumeClaimReadApi.read(null, Map.of())).thenReturn(persistentvolumeclaimList());
+        when(persistentVolumeClaimReadApi.read("default", Map.of())).thenReturn(persistentvolumeclaimList());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaimList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
@@ -111,9 +110,9 @@ public class PersistentVolumeClaimControllerTest {
         PersistentVolumeClaimList value = objectMapper.readValue(json, PersistentVolumeClaimList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(new PersistentVolumeClaimReadParams());
+        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH).contentType(MediaType.APPLICATION_JSON)
+                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())

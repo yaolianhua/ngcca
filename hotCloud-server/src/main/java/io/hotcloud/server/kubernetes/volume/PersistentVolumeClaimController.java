@@ -3,11 +3,16 @@ package io.hotcloud.server.kubernetes.volume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.volume.*;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static io.hotcloud.server.WebResponse.*;
 
@@ -56,9 +61,10 @@ public class PersistentVolumeClaimController {
         return ok(read);
     }
 
-    @GetMapping
-    public ResponseEntity<Result<PersistentVolumeClaimList>> persistentVolumeClaimListRead(@RequestBody PersistentVolumeClaimReadParams params) {
-        PersistentVolumeClaimList list = persistentVolumeClaimReadApi.read(params.getNamespace(), params.getLabelSelector());
+    @GetMapping("/{namespace}")
+    public ResponseEntity<Result<PersistentVolumeClaimList>> persistentVolumeClaimListRead(@PathVariable String namespace,
+                                                                                           @RequestBody(required = false) Map<String, String> labelSelector) {
+        PersistentVolumeClaimList list = persistentVolumeClaimReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 

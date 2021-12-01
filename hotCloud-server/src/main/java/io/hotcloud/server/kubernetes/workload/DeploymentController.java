@@ -3,11 +3,16 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.workload.*;
+import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
+import io.hotcloud.core.kubernetes.workload.DeploymentCreateParams;
+import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
+import io.hotcloud.core.kubernetes.workload.DeploymentReadApi;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static io.hotcloud.server.WebResponse.*;
 
@@ -37,9 +42,10 @@ public class DeploymentController {
         return ok(read);
     }
 
-    @GetMapping
-    public ResponseEntity<Result<DeploymentList>> deploymentListRead(@RequestBody DeploymentReadParams params) {
-        DeploymentList list = deploymentRead.read(params.getNamespace(), params.getLabelSelector());
+    @GetMapping("/{namespace}")
+    public ResponseEntity<Result<DeploymentList>> deploymentListRead(@PathVariable String namespace,
+                                                                     @RequestBody(required = false) Map<String, String> labelSelector) {
+        DeploymentList list = deploymentRead.read(namespace, labelSelector);
         return ok(list);
     }
 

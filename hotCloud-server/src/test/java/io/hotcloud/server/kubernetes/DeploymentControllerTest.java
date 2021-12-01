@@ -6,7 +6,6 @@ import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentReadApi;
-import io.hotcloud.core.kubernetes.workload.DeploymentReadParams;
 import io.hotcloud.server.kubernetes.workload.DeploymentController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,7 @@ public class DeploymentControllerTest {
 
     @Test
     public void deploymentListRead() throws Exception {
-        when(deploymentReadApi.read(null, Map.of())).thenReturn(deploymentList());
+        when(deploymentReadApi.read("default", Map.of())).thenReturn(deploymentList());
 
         InputStream inputStream = getClass().getResourceAsStream("deploymentList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
@@ -111,9 +110,9 @@ public class DeploymentControllerTest {
         DeploymentList value = objectMapper.readValue(json, DeploymentList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(new DeploymentReadParams());
+        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH).contentType(MediaType.APPLICATION_JSON)
+                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())

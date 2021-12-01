@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
 import io.hotcloud.core.kubernetes.service.ServiceReadApi;
-import io.hotcloud.core.kubernetes.service.ServiceReadParams;
 import io.hotcloud.server.kubernetes.service.ServiceController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,7 @@ public class ServiceControllerTest {
 
     @Test
     public void serviceListRead() throws Exception {
-        when(serviceReadApi.read(null, Map.of())).thenReturn(serviceList());
+        when(serviceReadApi.read("default", Map.of())).thenReturn(serviceList());
 
         InputStream inputStream = getClass().getResourceAsStream("serviceList-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
@@ -111,9 +110,9 @@ public class ServiceControllerTest {
         ServiceList value = objectMapper.readValue(json, ServiceList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(new ServiceReadParams());
+        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH).contentType(MediaType.APPLICATION_JSON)
+                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())

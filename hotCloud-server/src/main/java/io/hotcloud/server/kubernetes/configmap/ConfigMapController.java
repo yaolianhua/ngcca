@@ -3,10 +3,15 @@ package io.hotcloud.server.kubernetes.configmap;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.configmap.*;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateParams;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static io.hotcloud.server.WebResponse.*;
 
@@ -49,9 +54,10 @@ public class ConfigMapController {
         return ok(read);
     }
 
-    @GetMapping
-    public ResponseEntity<Result<ConfigMapList>> configMapListRead(@RequestBody ConfigMapReadParams params) {
-        ConfigMapList list = configMapReadApi.read(params.getNamespace(), params.getLabelSelector());
+    @GetMapping("/{namespace}")
+    public ResponseEntity<Result<ConfigMapList>> configMapListRead(@PathVariable String namespace,
+                                                                   @RequestBody(required = false) Map<String, String> labelSelector) {
+        ConfigMapList list = configMapReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 

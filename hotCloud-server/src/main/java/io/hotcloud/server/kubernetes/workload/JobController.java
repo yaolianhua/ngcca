@@ -3,7 +3,6 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.core.common.Result;
-import io.hotcloud.core.kubernetes.configmap.ConfigMapReadParams;
 import io.hotcloud.core.kubernetes.workload.JobCreateApi;
 import io.hotcloud.core.kubernetes.workload.JobCreateParams;
 import io.hotcloud.core.kubernetes.workload.JobDeleteApi;
@@ -12,6 +11,8 @@ import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static io.hotcloud.server.WebResponse.*;
 
@@ -52,9 +53,10 @@ public class JobController {
         return ok(read);
     }
 
-    @GetMapping
-    public ResponseEntity<Result<JobList>> jobListRead(@RequestBody ConfigMapReadParams params) {
-        JobList list = jobReadApi.read(params.getNamespace(), params.getLabelSelector());
+    @GetMapping("/{namespace}")
+    public ResponseEntity<Result<JobList>> jobListRead(@PathVariable String namespace,
+                                                       @RequestBody(required = false) Map<String, String> labelSelector) {
+        JobList list = jobReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 

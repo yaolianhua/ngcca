@@ -60,7 +60,7 @@ public class PersistentVolumeController {
     }
 
     @GetMapping
-    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestBody Map<String, String> labels) {
+    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestBody(required = false) Map<String, String> labels) {
         PersistentVolumeList list = persistentVolumeReadApi.read(labels);
         return ok(list);
     }
