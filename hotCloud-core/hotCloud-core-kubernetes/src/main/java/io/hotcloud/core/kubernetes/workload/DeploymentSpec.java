@@ -1,6 +1,7 @@
 package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.kubernetes.LabelSelector;
+import io.hotcloud.core.kubernetes.Strategy;
 import lombok.Data;
 
 /**
@@ -18,7 +19,7 @@ public class DeploymentSpec {
 
     private LabelSelector selector = new LabelSelector();
 
-    private DeploymentStrategy strategy = new DeploymentStrategy();
+    private Strategy strategy = new Strategy();
 
     private DeploymentTemplate template = new DeploymentTemplate();
 
