@@ -1,0 +1,94 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "DaemonSetList",
+  "metadata": {
+    "resourceVersion": "101528695"
+  },
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "DaemonSet",
+      "metadata": {
+        "labels": {
+          "k8s-app": "fluentd-logging"
+        },
+        "name": "fluentd-elasticsearch",
+        "namespace": "default"
+      },
+      "spec": {
+        "selector": {
+          "matchLabels": {
+            "name": "fluentd-elasticsearch"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "name": "fluentd-elasticsearch"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "quay.io/fluentd_elasticsearch/fluentd:v2.5.2",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "fluentd-elasticsearch",
+                "resources": {
+                  "limits": {
+                    "memory": "200Mi"
+                  },
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "200Mi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "mountPath": "/var/log",
+                    "name": "varlog"
+                  },
+                  {
+                    "mountPath": "/var/lib/docker/containers",
+                    "name": "varlibdockercontainers",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "terminationGracePeriodSeconds": 30,
+            "tolerations": [
+              {
+                "effect": "NoSchedule",
+                "key": "node-role.kubernetes.io/master",
+                "operator": "Exists"
+              }
+            ],
+            "volumes": [
+              {
+                "hostPath": {
+                  "path": "/var/log",
+                  "type": ""
+                },
+                "name": "varlog"
+              },
+              {
+                "hostPath": {
+                  "path": "/var/lib/docker/containers",
+                  "type": ""
+                },
+                "name": "varlibdockercontainers"
+              }
+            ]
+          }
+        },
+        "updateStrategy": {
+          "rollingUpdate": {
+            "maxSurge": 0,
+            "maxUnavailable": 1
+          },
+          "type": "RollingUpdate"
+        }
+      }
+    }
+  ]
+}
