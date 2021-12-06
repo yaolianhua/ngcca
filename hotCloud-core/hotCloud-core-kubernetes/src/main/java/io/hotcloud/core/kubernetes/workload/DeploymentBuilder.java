@@ -2,6 +2,7 @@ package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
+import io.hotcloud.core.kubernetes.Strategy;
 import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpecBuilder;
@@ -78,12 +79,12 @@ public final class DeploymentBuilder {
     }
 
 
-    private static V1DeploymentStrategy build(DeploymentStrategy deploymentStrategy) {
+    private static V1DeploymentStrategy build(Strategy deploymentStrategy) {
 
         V1DeploymentStrategy strategy = new V1DeploymentStrategy();
         strategy.setType(deploymentStrategy.getType().name());
 
-        DeploymentStrategy.RollingUpdate rollingUpdate = deploymentStrategy.getRollingUpdate();
+        Strategy.RollingUpdate rollingUpdate = deploymentStrategy.getRollingUpdate();
         if (null != rollingUpdate) {
             V1RollingUpdateDeployment rollingUpdateDeployment = new V1RollingUpdateDeployment();
             rollingUpdateDeployment.setMaxSurge(new IntOrString(rollingUpdate.getMaxSurge()));

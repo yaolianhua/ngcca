@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.workload;
+package io.hotcloud.core.kubernetes;
 
 import lombok.Data;
 
@@ -6,17 +6,17 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DeploymentStrategy {
+public class Strategy {
 
     private Type type = Type.RollingUpdate;
     private RollingUpdate rollingUpdate = new RollingUpdate();
 
-    public DeploymentStrategy(Type type, RollingUpdate rollingUpdate) {
+    public Strategy(Type type, RollingUpdate rollingUpdate) {
         this.type = type;
         this.rollingUpdate = rollingUpdate;
     }
 
-    public DeploymentStrategy() {
+    public Strategy() {
     }
 
     public enum Type {

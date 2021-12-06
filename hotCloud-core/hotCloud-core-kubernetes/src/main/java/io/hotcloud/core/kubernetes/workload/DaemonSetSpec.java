@@ -8,21 +8,11 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DeploymentSpec {
-
+public class DaemonSetSpec {
     private Integer minReadySeconds;
-    private Boolean paused;
-    private Integer progressDeadlineSeconds;
-
-    private Integer replicas = 1;
     private Integer revisionHistoryLimit;
-
     private LabelSelector selector = new LabelSelector();
+    private DaemonSetTemplate template = new DaemonSetTemplate();
 
     private Strategy strategy = new Strategy();
-
-    private DeploymentTemplate template = new DeploymentTemplate();
-
-    public DeploymentSpec() {
-    }
 }
