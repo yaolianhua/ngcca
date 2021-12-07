@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes.volume;
+package io.hotcloud.server.kubernetes;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.client.KubernetesClient;

@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
-import io.hotcloud.server.kubernetes.configmap.ConfigMapController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

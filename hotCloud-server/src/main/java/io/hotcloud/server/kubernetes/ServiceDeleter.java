@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes.service;
+package io.hotcloud.server.kubernetes;
 
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
 import io.kubernetes.client.openapi.ApiException;

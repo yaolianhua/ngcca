@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes.configmap;
+package io.hotcloud.server.kubernetes;
 
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
 import io.kubernetes.client.openapi.ApiException;

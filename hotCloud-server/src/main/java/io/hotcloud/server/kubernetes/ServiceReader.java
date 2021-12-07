@@ -1,8 +1,8 @@
-package io.hotcloud.server.kubernetes.configmap;
+package io.hotcloud.server.kubernetes;
 
-import io.fabric8.kubernetes.api.model.ConfigMapList;
+import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
+import io.hotcloud.core.kubernetes.service.ServiceReadApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,29 +16,31 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class ConfigMapReader implements ConfigMapReadApi {
+public class ServiceReader implements ServiceReadApi {
 
     private final KubernetesClient fabric8Client;
 
-    public ConfigMapReader(KubernetesClient fabric8Client) {
+    public ServiceReader(KubernetesClient fabric8Client) {
         this.fabric8Client = fabric8Client;
     }
 
     @Override
-    public ConfigMapList read(String namespace, Map<String, String> labelSelector) {
+    public ServiceList read(String namespace, Map<String, String> labelSelector) {
         labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
         if (StringUtils.hasText(namespace)) {
-            return fabric8Client.configMaps()
+            return fabric8Client
+                    .services()
                     .inNamespace(namespace)
                     .withLabels(labelSelector)
                     .list();
         }
 
-        ConfigMapList configMapList = fabric8Client.configMaps()
+        ServiceList serviceList = fabric8Client
+                .services()
                 .inAnyNamespace()
                 .withLabels(labelSelector)
                 .list();
 
-        return configMapList;
+        return serviceList;
     }
 }

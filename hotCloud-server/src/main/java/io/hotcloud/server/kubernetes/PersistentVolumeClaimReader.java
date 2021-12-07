@@ -1,8 +1,8 @@
-package io.hotcloud.server.kubernetes.service;
+package io.hotcloud.server.kubernetes;
 
-import io.fabric8.kubernetes.api.model.ServiceList;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.core.kubernetes.service.ServiceReadApi;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,31 +16,31 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class ServiceReader implements ServiceReadApi {
+public class PersistentVolumeClaimReader implements PersistentVolumeClaimReadApi {
 
     private final KubernetesClient fabric8Client;
 
-    public ServiceReader(KubernetesClient fabric8Client) {
+    public PersistentVolumeClaimReader(KubernetesClient fabric8Client) {
         this.fabric8Client = fabric8Client;
     }
 
     @Override
-    public ServiceList read(String namespace, Map<String, String> labelSelector) {
+    public PersistentVolumeClaimList read(String namespace, Map<String, String> labelSelector) {
         labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
         if (StringUtils.hasText(namespace)) {
             return fabric8Client
-                    .services()
+                    .persistentVolumeClaims()
                     .inNamespace(namespace)
                     .withLabels(labelSelector)
                     .list();
         }
 
-        ServiceList serviceList = fabric8Client
-                .services()
+        PersistentVolumeClaimList persistentVolumeClaimList = fabric8Client
+                .persistentVolumeClaims()
                 .inAnyNamespace()
                 .withLabels(labelSelector)
                 .list();
 
-        return serviceList;
+        return persistentVolumeClaimList;
     }
 }
