@@ -2,8 +2,8 @@ package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.Strategy;
-import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.kubernetes.client.custom.IntOrString;
@@ -49,7 +49,7 @@ public final class DaemonSetBuilder {
         spec.setSelector(v1LabelSelector);
 
         //build Template
-        PodTemplateMetadata podTemplateMetadata = daemonSetSpec.getTemplate().getMetadata();
+        ObjectMetadata podTemplateMetadata = daemonSetSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = daemonSetSpec.getTemplate().getSpec();
         V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
@@ -60,7 +60,7 @@ public final class DaemonSetBuilder {
         return spec;
     }
 
-    private static V1ObjectMeta build(DaemonSetMetadata daemonSetMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata daemonSetMetadata) {
         String name = daemonSetMetadata.getName();
         String namespace = daemonSetMetadata.getNamespace();
         Assert.argument(name != null && name.length() > 0, () -> "DaemonSet name is null");

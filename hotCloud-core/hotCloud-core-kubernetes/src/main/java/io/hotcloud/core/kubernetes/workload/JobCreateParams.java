@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.workload;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class JobCreateParams {
 
-    private JobMetadata metadata = new JobMetadata();
+    private ObjectMetadata metadata = new ObjectMetadata();
 
     private JobSpec spec = new JobSpec();
 

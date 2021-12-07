@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.service;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class ServiceCreateParams {
 
     @NotNull(message = "service metadata is null")
-    private ServiceMetadata serviceMetadata;
+    private ObjectMetadata serviceMetadata;
     @NotNull(message = "service spec is null")
     private DefaultServiceSpec serviceSpec;
 }

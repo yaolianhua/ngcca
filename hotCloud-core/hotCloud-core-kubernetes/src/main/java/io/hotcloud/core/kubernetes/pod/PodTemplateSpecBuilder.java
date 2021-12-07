@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.pod;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.affinity.Affinity;
 import io.hotcloud.core.kubernetes.affinity.NodeAffinityBuilder;
 import io.hotcloud.core.kubernetes.affinity.PodAffinityBuilder;
@@ -24,7 +25,7 @@ public final class PodTemplateSpecBuilder {
     }
 
 
-    public static V1PodTemplateSpec build(PodTemplateMetadata podTemplateMetadata, PodTemplateSpec podTemplateSpec) {
+    public static V1PodTemplateSpec build(ObjectMetadata podTemplateMetadata, PodTemplateSpec podTemplateSpec) {
 
         V1PodTemplateSpec v1PodTemplateSpec = new V1PodTemplateSpec();
 

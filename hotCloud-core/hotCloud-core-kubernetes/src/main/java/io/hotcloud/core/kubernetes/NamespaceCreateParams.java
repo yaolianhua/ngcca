@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
 public class NamespaceCreateParams {
 
     @NotNull(message = "Namespace metadata is null")
-    private NamespaceMetadata metadata;
+    private ObjectMetadata metadata;
 }

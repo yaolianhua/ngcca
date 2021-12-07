@@ -1,8 +1,7 @@
-package io.hotcloud.core.kubernetes.volume;
+package io.hotcloud.core.kubernetes;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,15 +9,13 @@ import java.util.Map;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PersistentVolumeClaimMetadata {
-
-    @NotBlank(message = "persistentVolumeClaim name is empty")
-    private String name;
+public class ObjectMetadata {
 
     private String namespace = "default";
+
+    private String name;
 
     private Map<String, String> labels = new HashMap<>();
 
     private Map<String, String> annotations = new HashMap<>();
-
 }

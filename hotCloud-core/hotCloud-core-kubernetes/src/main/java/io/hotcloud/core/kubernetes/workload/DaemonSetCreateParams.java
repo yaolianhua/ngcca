@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.workload;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class DaemonSetCreateParams {
 
-    private DaemonSetMetadata metadata = new DaemonSetMetadata();
+    private ObjectMetadata metadata = new ObjectMetadata();
 
     private DaemonSetSpec spec = new DaemonSetSpec();
 

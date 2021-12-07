@@ -2,7 +2,7 @@ package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
-import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.kubernetes.client.openapi.models.*;
@@ -42,7 +42,7 @@ public final class JobBuilder {
         spec.setSelector(v1LabelSelector);
 
         //build Template
-        PodTemplateMetadata podTemplateMetadata = jobSpec.getTemplate().getMetadata();
+        ObjectMetadata podTemplateMetadata = jobSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = jobSpec.getTemplate().getSpec();
         V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
@@ -57,7 +57,7 @@ public final class JobBuilder {
         return spec;
     }
 
-    private static V1ObjectMeta build(JobMetadata jobMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata jobMetadata) {
         String name = jobMetadata.getName();
         String namespace = jobMetadata.getNamespace();
         Assert.argument(name != null && name.length() > 0, () -> "job name is null");
