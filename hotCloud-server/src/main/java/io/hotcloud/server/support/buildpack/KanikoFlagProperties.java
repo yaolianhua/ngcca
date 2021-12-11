@@ -81,6 +81,6 @@ public class KanikoFlagProperties implements KanikoFlag {
         }
         args.append("]");
 
-        log.info("【Load Kaniko Configuration】\n {}", args.toString());
+        log.info("【Load Kaniko Flag Configuration】\n {}", args.toString());
     }
 }
