@@ -72,27 +72,27 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: yaolianhua/hotcloud:0.1.20211211201413
+        - image: yaolianhua/hotcloud:0.1.20211211193600
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            failureThreshold: 1
-            httpGet:
-              path: /livez
-              port: http
-            periodSeconds: 120
-            initialDelaySeconds: 180
+          #          livenessProbe:
+          #            failureThreshold: 1
+          #            httpGet:
+          #              path: /livez
+          #              port: http
+          #            periodSeconds: 120
+          #            initialDelaySeconds: 180
           name: hotcloud
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 1
-            httpGet:
-              path: /readyz
-              port: http
-            initialDelaySeconds: 120
-            periodSeconds: 60
+          #          readinessProbe:
+          #            failureThreshold: 1
+          #            httpGet:
+          #              path: /readyz
+          #              port: http
+          #            initialDelaySeconds: 120
+          #            periodSeconds: 60
           resources:
             requests:
               cpu: 100m
