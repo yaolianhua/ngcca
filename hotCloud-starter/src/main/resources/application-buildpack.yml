@@ -1,3 +1,41 @@
 buildpack:
   kaniko:
+    cache: false
+    cache-dir:
+    cache-repo:
+    cache-ttl-duration: 168h
+    compressed-caching: true
+    cleanup: true
+    context:
+    context-sub-path:
+    destination:
+    digest-file:
+    dockerfile: Dockerfile
+    force: false
+    image-fs-extract-retry: 3
+    git:
+    ignore-path:
+    ignore-var-run: true
+    image-name-tag-with-digest-file:
+    image-name-with-digest-file:
+    insecure: true
+    insecure-pull: true
     insecure-registry:
+    label:
+    log-format:
+    log-timestamp: false
+    no-push: false
+    push-retry: 3
+    registry-certificate:
+    registry-mirror:
+    reproducible: false
+    single-snapshot: false
+    skip-tls-verify: true
+    skip-tls-verify-pull: true
+    skip-tls-verify-registry: true
+    skip-unused-stages: true
+    snapshot-mode:
+    tar-path:
+    target:
+    use-new-run: true
+    verbosity: debug

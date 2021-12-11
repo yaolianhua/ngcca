@@ -2,12 +2,13 @@ package io.hotcloud.server.support.buildpack;
 
 import io.hotcloud.support.kaniko.KanikoFlag;
 import lombok.Data;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Field;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -16,7 +17,6 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties(prefix = "buildpack.kaniko")
 @Data
 @Slf4j
-@ToString
 public class KanikoFlagProperties implements KanikoFlag {
 
     private boolean cache = false;
@@ -62,7 +62,25 @@ public class KanikoFlagProperties implements KanikoFlag {
     private int imageFsExtractRetry = 3;
 
     @PostConstruct
-    public void print() {
-        log.info("{}", this);
+    public void print() throws IllegalAccessException {
+        Field[] declaredFields = KanikoFlagProperties.class.getDeclaredFields();
+        StringBuilder args = new StringBuilder();
+        args.append("[\n");
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            Object o = field.get(this);
+            if ("log".equals(field.getName())) {
+                continue;
+            }
+            if (o instanceof String && !StringUtils.hasText(((String) o))) {
+                continue;
+            }
+
+            args.append("\t").append("--").append(field.getName()).append("=").append(o);
+            args.append("\n");
+        }
+        args.append("]");
+
+        log.info("【Load Kaniko Configuration】\n {}", args.toString());
     }
 }
