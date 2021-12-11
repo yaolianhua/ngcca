@@ -72,8 +72,8 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: harbor.local:7000/hotcloud/hotcloud:0.1.20211105115017
-          imagePullPolicy: IfNotPresent
+        - image: registry.local:5000/hotcloud/hotcloud:latest
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 1
             httpGet:
@@ -129,7 +129,7 @@ data:
   config: |
     logging:
       level:
-        io.hotCloud.server: debug
+        io.hotCloud.server: info
     kubernetes:
       in-cluster: true
 kind: ConfigMap
