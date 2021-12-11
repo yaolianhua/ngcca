@@ -15,7 +15,7 @@ public class SwaggerConfiguration {
 
     @PostConstruct
     public void postProcess() {
-        log.info("Enabled swagger api docs");
+        log.info("【Load Swagger Configuration】Enabled swagger api docs");
     }
 
 }
