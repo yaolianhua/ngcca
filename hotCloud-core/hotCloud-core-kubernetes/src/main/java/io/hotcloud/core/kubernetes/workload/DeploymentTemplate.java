@@ -1,6 +1,6 @@
 package io.hotcloud.core.kubernetes.workload;
 
-import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import lombok.Data;
 
@@ -10,11 +10,11 @@ import lombok.Data;
 @Data
 public class DeploymentTemplate {
 
-    private PodTemplateMetadata metadata = new PodTemplateMetadata();
+    private ObjectMetadata metadata = new ObjectMetadata();
 
     private PodTemplateSpec spec = new PodTemplateSpec();
 
-    public DeploymentTemplate(PodTemplateMetadata metadata, PodTemplateSpec spec) {
+    public DeploymentTemplate(ObjectMetadata metadata, PodTemplateSpec spec) {
         this.metadata = metadata;
         this.spec = spec;
     }

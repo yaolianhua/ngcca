@@ -12,7 +12,7 @@ public interface NamespaceCreateApi {
 
     default void namespace(String namespace) throws ApiException {
         NamespaceCreateParams params = new NamespaceCreateParams();
-        NamespaceMetadata namespaceMetadata = new NamespaceMetadata();
+        ObjectMetadata namespaceMetadata = new ObjectMetadata();
         namespaceMetadata.setName(namespace);
         params.setMetadata(namespaceMetadata);
         this.namespace(params);

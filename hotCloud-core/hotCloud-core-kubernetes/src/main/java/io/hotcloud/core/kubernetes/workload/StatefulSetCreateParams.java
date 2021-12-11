@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.workload;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class StatefulSetCreateParams {
 
-    private StatefulSetMetadata metadata = new StatefulSetMetadata();
+    private ObjectMetadata metadata = new ObjectMetadata();
 
     private StatefulSetSpec spec = new StatefulSetSpec();
 

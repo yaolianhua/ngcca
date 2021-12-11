@@ -17,6 +17,11 @@
             <artifactId>hotCloud-core-kubernetes</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.hotCloud</groupId>
+            <artifactId>hotCloud-support-buildpack</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

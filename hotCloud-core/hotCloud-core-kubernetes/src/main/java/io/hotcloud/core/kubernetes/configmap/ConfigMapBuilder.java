@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.configmap;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 
@@ -20,11 +21,11 @@ public final class ConfigMapBuilder {
         final V1ConfigMap v1ConfigMap = new V1ConfigMap();
         v1ConfigMap.setKind(KIND);
         v1ConfigMap.setApiVersion(API_VERSION);
-        ConfigMapMetadata configMapMetadata = request.getMetadata();
-        if (Objects.isNull(configMapMetadata)) {
+        ObjectMetadata objectMetadata = request.getMetadata();
+        if (Objects.isNull(objectMetadata)) {
             throw new RuntimeException("configMap metadata can not be null");
         }
-        V1ObjectMeta v1ObjectMeta = build(configMapMetadata);
+        V1ObjectMeta v1ObjectMeta = build(objectMetadata);
         v1ConfigMap.setMetadata(v1ObjectMeta);
         v1ConfigMap.setApiVersion(API_VERSION);
         v1ConfigMap.setKind(KIND);
@@ -34,13 +35,13 @@ public final class ConfigMapBuilder {
         return v1ConfigMap;
     }
 
-    private static V1ObjectMeta build(ConfigMapMetadata configMapMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata objectMetadata) {
 
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
-        v1ObjectMeta.setLabels(configMapMetadata.getLabels());
-        v1ObjectMeta.setName(configMapMetadata.getName());
-        v1ObjectMeta.setAnnotations(configMapMetadata.getAnnotations());
-        v1ObjectMeta.setNamespace(configMapMetadata.getNamespace());
+        v1ObjectMeta.setLabels(objectMetadata.getLabels());
+        v1ObjectMeta.setName(objectMetadata.getName());
+        v1ObjectMeta.setAnnotations(objectMetadata.getAnnotations());
+        v1ObjectMeta.setNamespace(objectMetadata.getNamespace());
 
         return v1ObjectMeta;
 

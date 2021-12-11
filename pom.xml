@@ -7,7 +7,7 @@
         <module>hotCloud-core</module>
         <module>hotCloud-server</module>
         <module>hotCloud-starter</module>
-        <module>hotCloud-middleware</module>
+        <module>hotCloud-support</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,12 +25,13 @@
         <java.version>11</java.version>
         <swagger-api.version>1.6.2</swagger-api.version>
         <springfox-version>3.0.0</springfox-version>
-        <kubernetes-client.version>13.0.0</kubernetes-client.version>
-        <fabric8.kubernetes-client.version>5.9.0</fabric8.kubernetes-client.version>
+        <kubernetes-client.version>14.0.0</kubernetes-client.version>
+        <fabric8.kubernetes-client.version>5.10.0</fabric8.kubernetes-client.version>
         <lombok.version>1.18.20</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
+        <spring-cloud-dependencies.version>2020.0.4</spring-cloud-dependencies.version>
     </properties>
 
     <dependencyManagement>
@@ -48,12 +49,12 @@
             </dependency>
             <dependency>
                 <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-middleware</artifactId>
+                <artifactId>hotCloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-starter</artifactId>
+                <artifactId>hotCloud-support</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -113,7 +114,6 @@
                 <artifactId>gitlab4j-api</artifactId>
                 <version>${gitlab-api.version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>

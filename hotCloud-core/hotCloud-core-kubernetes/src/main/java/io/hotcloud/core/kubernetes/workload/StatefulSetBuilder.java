@@ -2,7 +2,7 @@ package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
-import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimBuilder;
@@ -51,7 +51,7 @@ public final class StatefulSetBuilder {
         spec.setSelector(v1LabelSelector);
 
         //build Template
-        PodTemplateMetadata podTemplateMetadata = statefulSetSpec.getTemplate().getMetadata();
+        ObjectMetadata podTemplateMetadata = statefulSetSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = statefulSetSpec.getTemplate().getSpec();
         V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
@@ -75,7 +75,7 @@ public final class StatefulSetBuilder {
     }
 
 
-    private static V1ObjectMeta build(StatefulSetMetadata statefulSetMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata statefulSetMetadata) {
         String name = statefulSetMetadata.getName();
         String namespace = statefulSetMetadata.getNamespace();
         Assert.argument(name != null && name.length() > 0, () -> "statefulSet name is null");

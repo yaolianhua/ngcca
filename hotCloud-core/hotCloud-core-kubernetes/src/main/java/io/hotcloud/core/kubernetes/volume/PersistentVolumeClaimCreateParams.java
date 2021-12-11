@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.volume;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class PersistentVolumeClaimCreateParams {
 
-    private PersistentVolumeClaimMetadata metadata = new PersistentVolumeClaimMetadata();
+    private ObjectMetadata metadata = new ObjectMetadata();
 
     private PersistentVolumeClaimSpec spec = new PersistentVolumeClaimSpec();
 }

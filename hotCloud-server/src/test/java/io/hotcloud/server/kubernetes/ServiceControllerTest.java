@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
 import io.hotcloud.core.kubernetes.service.ServiceReadApi;
-import io.hotcloud.server.kubernetes.service.ServiceController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

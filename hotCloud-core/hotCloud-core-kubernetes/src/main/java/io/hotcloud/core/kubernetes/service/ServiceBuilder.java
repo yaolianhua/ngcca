@@ -1,5 +1,6 @@
 package io.hotcloud.core.kubernetes.service;
 
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Service;
@@ -25,7 +26,7 @@ public final class ServiceBuilder {
         final V1Service v1Service = new V1Service();
         v1Service.setKind(KIND);
         v1Service.setApiVersion(API_VERSION);
-        ServiceMetadata serviceMetadata = request.getServiceMetadata();
+        ObjectMetadata serviceMetadata = request.getServiceMetadata();
         if (Objects.isNull(serviceMetadata)) {
             throw new RuntimeException("Service metadata can not be null");
         }
@@ -64,7 +65,7 @@ public final class ServiceBuilder {
         return v1ServicePort;
     }
 
-    private static V1ObjectMeta build(ServiceMetadata serviceMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata serviceMetadata) {
 
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(serviceMetadata.getLabels());

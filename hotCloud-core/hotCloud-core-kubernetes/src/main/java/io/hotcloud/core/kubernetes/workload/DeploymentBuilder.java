@@ -2,8 +2,8 @@ package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
+import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.Strategy;
-import io.hotcloud.core.kubernetes.pod.PodTemplateMetadata;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpec;
 import io.hotcloud.core.kubernetes.pod.PodTemplateSpecBuilder;
 import io.kubernetes.client.custom.IntOrString;
@@ -48,7 +48,7 @@ public final class DeploymentBuilder {
         spec.setSelector(v1LabelSelector);
 
         //build Template
-        PodTemplateMetadata podTemplateMetadata = deploymentSpec.getTemplate().getMetadata();
+        ObjectMetadata podTemplateMetadata = deploymentSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = deploymentSpec.getTemplate().getSpec();
         V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
         spec.setTemplate(v1PodTemplateSpec);
@@ -63,7 +63,7 @@ public final class DeploymentBuilder {
         return spec;
     }
 
-    private static V1ObjectMeta build(DeploymentMetadata deploymentMetadata) {
+    private static V1ObjectMeta build(ObjectMetadata deploymentMetadata) {
         String name = deploymentMetadata.getName();
         String namespace = deploymentMetadata.getNamespace();
         Assert.argument(name != null && name.length() > 0, () -> "Deployment name is null");

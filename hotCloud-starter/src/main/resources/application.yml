@@ -4,3 +4,8 @@ spring:
   profiles:
     include:
       - kubernetes
+      - buildpack
+## log level
+logging:
+  level:
+    io.hotcloud.server: info
