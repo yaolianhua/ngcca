@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes.workload;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;

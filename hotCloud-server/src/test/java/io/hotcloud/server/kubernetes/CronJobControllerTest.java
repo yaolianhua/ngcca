@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.*;
 import io.hotcloud.core.kubernetes.workload.CronJobCreateApi;
 import io.hotcloud.core.kubernetes.workload.CronJobDeleteApi;
 import io.hotcloud.core.kubernetes.workload.CronJobReadApi;
-import io.hotcloud.server.kubernetes.workload.CronJobController;
+import io.hotcloud.server.kubernetes.controller.CronJobController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.secret.SecretCreateApi;
 import io.hotcloud.core.kubernetes.secret.SecretDeleteApi;
 import io.hotcloud.core.kubernetes.secret.SecretReadApi;
+import io.hotcloud.server.kubernetes.controller.SecretController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

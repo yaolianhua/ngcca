@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentReadApi;
-import io.hotcloud.server.kubernetes.workload.DeploymentController;
+import io.hotcloud.server.kubernetes.controller.DeploymentController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

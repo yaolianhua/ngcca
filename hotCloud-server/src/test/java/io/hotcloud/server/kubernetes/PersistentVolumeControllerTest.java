@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.*;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeReadApi;
+import io.hotcloud.server.kubernetes.controller.PersistentVolumeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

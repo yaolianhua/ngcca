@@ -1,4 +1,4 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.hotcloud.core.common.Result;
 import lombok.extern.slf4j.Slf4j;

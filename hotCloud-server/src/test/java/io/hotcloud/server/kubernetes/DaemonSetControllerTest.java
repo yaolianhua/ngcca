@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.core.kubernetes.workload.DaemonSetCreateApi;
 import io.hotcloud.core.kubernetes.workload.DaemonSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DaemonSetReadApi;
-import io.hotcloud.server.kubernetes.workload.DaemonSetController;
+import io.hotcloud.server.kubernetes.controller.DaemonSetController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

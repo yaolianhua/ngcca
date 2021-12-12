@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetReadApi;
-import io.hotcloud.server.kubernetes.workload.StatefulSetController;
+import io.hotcloud.server.kubernetes.controller.StatefulSetController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
