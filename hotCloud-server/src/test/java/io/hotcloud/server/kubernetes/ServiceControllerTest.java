@@ -66,7 +66,7 @@ public class ServiceControllerTest {
     @Test
     public void serviceCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("service-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream serviceReadInputStream = getClass().getResourceAsStream("service-read.json");
         String serviceReadJson = new BufferedReader(new InputStreamReader(serviceReadInputStream))

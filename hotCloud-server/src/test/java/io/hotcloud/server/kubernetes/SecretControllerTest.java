@@ -58,7 +58,7 @@ public class SecretControllerTest {
     @Test
     public void secretCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("secret-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream secretReadInputStream = getClass().getResourceAsStream("secret-read.json");
         String secretReadJson = new BufferedReader(new InputStreamReader(secretReadInputStream)).lines().collect(Collectors.joining());

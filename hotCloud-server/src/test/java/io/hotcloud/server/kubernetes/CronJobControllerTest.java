@@ -67,7 +67,7 @@ public class CronJobControllerTest {
     @Test
     public void cronjobCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("cronjob-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream cronjobReadInputStream = getClass().getResourceAsStream("cronjob-read.json");
         String cronjobReadJson = new BufferedReader(new InputStreamReader(cronjobReadInputStream)).lines().collect(Collectors.joining());

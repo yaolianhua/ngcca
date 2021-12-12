@@ -59,7 +59,7 @@ public class ConfigMapControllerTest {
     @Test
     public void configMapCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("configMap-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream configMapReadInputStream = getClass().getResourceAsStream("configMap-read.json");
         String configMapReadJson = new BufferedReader(new InputStreamReader(configMapReadInputStream)).lines().collect(Collectors.joining());

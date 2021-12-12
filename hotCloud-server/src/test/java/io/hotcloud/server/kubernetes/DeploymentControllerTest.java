@@ -68,7 +68,7 @@ public class DeploymentControllerTest {
     @Test
     public void deploymentCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("deployment-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream deploymentReadInputStream = getClass().getResourceAsStream("deployment-read.json");
         String deploymentReadJson = new BufferedReader(new InputStreamReader(deploymentReadInputStream)).lines().collect(Collectors.joining());

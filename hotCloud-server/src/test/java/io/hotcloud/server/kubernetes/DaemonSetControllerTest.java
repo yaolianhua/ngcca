@@ -67,7 +67,7 @@ public class DaemonSetControllerTest {
     @Test
     public void daemonSetCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("daemonSet-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream daemonSetReadInputStream = getClass().getResourceAsStream("daemonSet-read.json");
         String daemonSetReadJson = new BufferedReader(new InputStreamReader(daemonSetReadInputStream)).lines().collect(Collectors.joining());

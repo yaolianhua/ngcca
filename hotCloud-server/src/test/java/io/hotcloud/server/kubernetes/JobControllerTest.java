@@ -67,7 +67,7 @@ public class JobControllerTest {
     @Test
     public void jobCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("job-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream jobReadInputStream = getClass().getResourceAsStream("job-read.json");
         String jobReadJson = new BufferedReader(new InputStreamReader(jobReadInputStream)).lines().collect(Collectors.joining());
