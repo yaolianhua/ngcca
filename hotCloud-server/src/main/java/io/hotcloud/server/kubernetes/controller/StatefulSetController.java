@@ -43,7 +43,7 @@ public class StatefulSetController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<StatefulSetList>> statefulSetListRead(@PathVariable String namespace,
-                                                                       @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
         StatefulSetList list = statefulSetReadApi.read(namespace, labelSelector);
         return ok(list);
     }

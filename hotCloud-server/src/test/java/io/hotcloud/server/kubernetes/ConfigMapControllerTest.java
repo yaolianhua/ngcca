@@ -124,11 +124,8 @@ public class ConfigMapControllerTest {
         ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
         String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
-
-        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                .get(PATH.concat("/{namespace}"), "default"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));

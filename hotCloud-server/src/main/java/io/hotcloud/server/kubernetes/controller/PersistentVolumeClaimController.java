@@ -64,7 +64,7 @@ public class PersistentVolumeClaimController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<PersistentVolumeClaimList>> persistentVolumeClaimListRead(@PathVariable String namespace,
-                                                                                           @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                                           @RequestParam(required = false) Map<String, String> labelSelector) {
         PersistentVolumeClaimList list = persistentVolumeClaimReadApi.read(namespace, labelSelector);
         return ok(list);
     }

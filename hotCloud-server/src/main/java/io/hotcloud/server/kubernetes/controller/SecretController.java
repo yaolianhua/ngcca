@@ -55,7 +55,7 @@ public class SecretController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<SecretList>> secretListRead(@PathVariable String namespace,
-                                                             @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                             @RequestParam(required = false) Map<String, String> labelSelector) {
         SecretList list = secretReadApi.read(namespace, labelSelector);
         return ok(list);
     }

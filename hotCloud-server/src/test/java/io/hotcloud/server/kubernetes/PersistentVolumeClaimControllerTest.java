@@ -112,10 +112,8 @@ public class PersistentVolumeClaimControllerTest {
         PersistentVolumeClaimList value = objectMapper.readValue(json, PersistentVolumeClaimList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                .get(PATH.concat("/{namespace}"), "default"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));

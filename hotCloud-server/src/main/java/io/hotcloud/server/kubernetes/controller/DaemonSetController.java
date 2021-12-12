@@ -43,7 +43,7 @@ public class DaemonSetController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<DaemonSetList>> daemonSetListRead(@PathVariable String namespace,
-                                                                   @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
         DaemonSetList list = daemonSetReadApi.read(namespace, labelSelector);
         return ok(list);
     }

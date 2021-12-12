@@ -56,7 +56,7 @@ public class JobController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<JobList>> jobListRead(@PathVariable String namespace,
-                                                       @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
         JobList list = jobReadApi.read(namespace, labelSelector);
         return ok(list);
     }

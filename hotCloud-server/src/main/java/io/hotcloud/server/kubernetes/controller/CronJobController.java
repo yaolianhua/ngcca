@@ -56,7 +56,7 @@ public class CronJobController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<CronJobList>> cronjobListRead(@PathVariable String namespace,
-                                                               @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
         CronJobList list = cronJobReadApi.read(namespace, labelSelector);
         return ok(list);
     }

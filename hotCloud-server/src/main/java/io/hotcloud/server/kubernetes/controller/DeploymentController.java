@@ -45,7 +45,7 @@ public class DeploymentController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<DeploymentList>> deploymentListRead(@PathVariable String namespace,
-                                                                     @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                     @RequestParam(required = false) Map<String, String> labelSelector) {
         DeploymentList list = deploymentRead.read(namespace, labelSelector);
         return ok(list);
     }

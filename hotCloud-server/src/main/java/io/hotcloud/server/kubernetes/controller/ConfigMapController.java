@@ -57,7 +57,7 @@ public class ConfigMapController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<ConfigMapList>> configMapListRead(@PathVariable String namespace,
-                                                                   @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
         ConfigMapList list = configMapReadApi.read(namespace, labelSelector);
         return ok(list);
     }
