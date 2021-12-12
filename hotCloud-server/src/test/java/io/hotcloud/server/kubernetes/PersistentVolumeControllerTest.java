@@ -2,6 +2,7 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeReadApi;
@@ -77,8 +78,9 @@ public class PersistentVolumeControllerTest {
 
         String json = objectMapper.writeValueAsString(created(persistentVolume).getBody());
 
+        String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
         this.mockMvc.perform(MockMvcRequestBuilders
-                .post(PATH.concat("/yaml")).contentType(MediaType.TEXT_PLAIN_VALUE).content(yaml))
+                .post(PATH.concat("/yaml")).contentType(MediaType.APPLICATION_JSON).content(yamlBody))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().json(json, true));
