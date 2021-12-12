@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DaemonSetCreateApi;
 import io.hotcloud.core.kubernetes.workload.DaemonSetCreateParams;
 import io.hotcloud.core.kubernetes.workload.DaemonSetDeleteApi;
@@ -54,8 +55,8 @@ public class DaemonSetController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<DaemonSet>> daemonSet(@RequestBody String yaml) throws ApiException {
-        DaemonSet daemonSet = daemonSetCreateApi.daemonSet(yaml);
+    public ResponseEntity<Result<DaemonSet>> daemonSet(@RequestBody YamlBody yaml) throws ApiException {
+        DaemonSet daemonSet = daemonSetCreateApi.daemonSet(yaml.getYaml());
         return created(daemonSet);
     }
 

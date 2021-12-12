@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateParams;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
@@ -42,8 +43,8 @@ public class ConfigMapController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody String yaml) throws ApiException {
-        ConfigMap configMap = configMapCreateApi.configMap(yaml);
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody YamlBody yaml) throws ApiException {
+        ConfigMap configMap = configMapCreateApi.configMap(yaml.getYaml());
         return created(configMap);
     }
 

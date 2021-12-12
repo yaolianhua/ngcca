@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.secret.SecretCreateApi;
 import io.hotcloud.core.kubernetes.secret.SecretCreateParams;
 import io.hotcloud.core.kubernetes.secret.SecretDeleteApi;
@@ -40,8 +41,8 @@ public class SecretController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Secret>> secret(@RequestBody String yaml) throws ApiException {
-        Secret secret = secretCreateApi.secret(yaml);
+    public ResponseEntity<Result<Secret>> secret(@RequestBody YamlBody yaml) throws ApiException {
+        Secret secret = secretCreateApi.secret(yaml.getYaml());
         return created(secret);
     }
 

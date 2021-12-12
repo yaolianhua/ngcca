@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateParams;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
@@ -56,8 +57,8 @@ public class DeploymentController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Deployment>> deployment(@RequestBody String yaml) throws ApiException {
-        Deployment deployment = deploymentCreation.deployment(yaml);
+    public ResponseEntity<Result<Deployment>> deployment(@RequestBody YamlBody yaml) throws ApiException {
+        Deployment deployment = deploymentCreation.deployment(yaml.getYaml());
         return created(deployment);
     }
 

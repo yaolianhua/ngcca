@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.JobCreateApi;
 import io.hotcloud.core.kubernetes.workload.JobCreateParams;
 import io.hotcloud.core.kubernetes.workload.JobDeleteApi;
@@ -40,8 +41,8 @@ public class JobController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Job>> job(@RequestBody String yaml) throws ApiException {
-        Job job = jobCreation.job(yaml);
+    public ResponseEntity<Result<Job>> job(@RequestBody YamlBody yaml) throws ApiException {
+        Job job = jobCreation.job(yaml.getYaml());
         return created(job);
     }
 

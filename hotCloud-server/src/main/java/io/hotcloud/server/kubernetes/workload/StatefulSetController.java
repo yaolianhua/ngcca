@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateParams;
 import io.hotcloud.core.kubernetes.workload.StatefulSetDeleteApi;
@@ -54,8 +55,8 @@ public class StatefulSetController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody String yaml) throws ApiException {
-        StatefulSet statefulSet = statefulSetCreateApi.statefulSet(yaml);
+    public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody YamlBody yaml) throws ApiException {
+        StatefulSet statefulSet = statefulSetCreateApi.statefulSet(yaml.getYaml());
         return created(statefulSet);
     }
 

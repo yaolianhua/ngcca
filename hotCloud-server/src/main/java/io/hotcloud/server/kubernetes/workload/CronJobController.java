@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.CronJobCreateApi;
 import io.hotcloud.core.kubernetes.workload.CronJobCreateParams;
 import io.hotcloud.core.kubernetes.workload.CronJobDeleteApi;
@@ -40,8 +41,8 @@ public class CronJobController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<CronJob>> cronjob(@RequestBody String yaml) throws ApiException {
-        CronJob cronjob = cronJobCreateApi.cronjob(yaml);
+    public ResponseEntity<Result<CronJob>> cronjob(@RequestBody YamlBody yaml) throws ApiException {
+        CronJob cronjob = cronJobCreateApi.cronjob(yaml.getYaml());
         return created(cronjob);
     }
 

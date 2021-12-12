@@ -3,6 +3,7 @@ package io.hotcloud.server.kubernetes;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
 import io.hotcloud.core.kubernetes.service.ServiceCreateParams;
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
@@ -40,8 +41,8 @@ public class ServiceController {
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Service>> service(@RequestBody String yaml) throws ApiException {
-        Service service = serviceCreation.service(yaml);
+    public ResponseEntity<Result<Service>> service(@RequestBody YamlBody yaml) throws ApiException {
+        Service service = serviceCreation.service(yaml.getYaml());
         return created(service);
     }
 
