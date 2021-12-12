@@ -11,7 +11,6 @@ import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -33,8 +32,8 @@ public class PersistentVolumeCreator implements PersistentVolumeCreateApi {
     public PersistentVolume persistentVolume(String yaml) throws ApiException {
         V1PersistentVolume v1PersistentVolume;
         try {
-            v1PersistentVolume = (V1PersistentVolume) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1PersistentVolume = Yaml.loadAs(yaml, V1PersistentVolume.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load persistentVolume yaml error. '%s'", e.getMessage()));
         }
 

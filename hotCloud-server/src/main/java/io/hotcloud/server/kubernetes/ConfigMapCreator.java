@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -37,8 +36,8 @@ public class ConfigMapCreator implements ConfigMapCreateApi {
 
         V1ConfigMap v1ConfigMap;
         try {
-            v1ConfigMap = (V1ConfigMap) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1ConfigMap = Yaml.loadAs(yaml, V1ConfigMap.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load configMap yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1ConfigMap.getMetadata()).getNamespace();

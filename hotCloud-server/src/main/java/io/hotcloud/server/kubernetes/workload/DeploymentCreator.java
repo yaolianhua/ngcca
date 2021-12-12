@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -36,8 +35,8 @@ public class DeploymentCreator implements DeploymentCreateApi {
     public Deployment deployment(String yaml) throws ApiException {
         V1Deployment v1Deployment;
         try {
-            v1Deployment = (V1Deployment) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1Deployment = Yaml.loadAs(yaml, V1Deployment.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load deployment yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Deployment.getMetadata()).getNamespace();
