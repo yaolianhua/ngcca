@@ -193,7 +193,9 @@ public interface KanikoFlag {
      *
      * @return log-format
      */
-    String getLogFormat();
+    default String getLogFormat() {
+        return "color";
+    }
 
     /**
      * Set this flag as --log-timestamp=<true|false> to add timestamps to <text|color> log format. Defaults to false.
@@ -317,7 +319,9 @@ public interface KanikoFlag {
      *
      * @return snapshotMode
      */
-    String getSnapshotMode();
+    default String getSnapshotMode() {
+        return "full";
+    }
 
     /**
      * Set this flag as --tarPath=<path> to save the image as a tarball at path. You need to set --destination as well (for example --destination=image). If you want to save the image as tarball only you also need to set --no-push.
