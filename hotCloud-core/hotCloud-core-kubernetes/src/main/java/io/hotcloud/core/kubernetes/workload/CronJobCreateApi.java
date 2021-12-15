@@ -8,6 +8,7 @@ import io.kubernetes.client.util.Yaml;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@FunctionalInterface
 public interface CronJobCreateApi {
 
     default CronJob cronjob(CronJobCreateParams request) throws ApiException {

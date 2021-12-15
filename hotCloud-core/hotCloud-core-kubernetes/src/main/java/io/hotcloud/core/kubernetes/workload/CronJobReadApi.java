@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@FunctionalInterface
 public interface CronJobReadApi {
 
     default CronJob read(String namespace, String cronjob) {
