@@ -14,12 +14,12 @@ import static io.hotcloud.server.WebResponse.ok;
  **/
 @RestController
 @RequestMapping("/v1/kubernetes/pods")
-public class PodLogController {
+public class PodController {
 
 
     private final PodLogFetchApi podLogFetchApi;
 
-    public PodLogController(PodLogFetchApi podLogFetchApi) {
+    public PodController(PodLogFetchApi podLogFetchApi) {
         this.podLogFetchApi = podLogFetchApi;
     }
 
