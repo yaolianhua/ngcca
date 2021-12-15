@@ -26,14 +26,18 @@ public class ErrorWebResult {
         return errorWebResult;
     }
 
-    public static ErrorWebResult error(HttpStatus status, String path, Object body) {
+    public static ErrorWebResult error(int code, String path, Object body) {
         ErrorWebResult errorWebResult = new ErrorWebResult();
-        errorWebResult.setStatus(status.value());
-        errorWebResult.setReason(status.getReasonPhrase());
+        errorWebResult.setStatus(code);
+        errorWebResult.setReason(obtainReasonPhrase(code));
         errorWebResult.setPath(path);
         errorWebResult.setTimestamp(LocalDateTime.now());
         errorWebResult.setMessage(body);
         return errorWebResult;
+    }
+
+    private static String obtainReasonPhrase(int code) {
+        return HttpStatus.valueOf(code).getReasonPhrase();
     }
 
 }
