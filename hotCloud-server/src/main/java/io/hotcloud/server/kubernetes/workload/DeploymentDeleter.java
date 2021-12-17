@@ -1,11 +1,13 @@
 package io.hotcloud.server.kubernetes.workload;
 
+import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -22,6 +24,8 @@ public class DeploymentDeleter implements DeploymentDeleteApi {
 
     @Override
     public void delete(String namespace, String deployment) throws ApiException {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(deployment), () -> "delete resource name is null");
         V1Status v1Status = appsV1Api.deleteNamespacedDeployment(
                 deployment,
                 namespace,

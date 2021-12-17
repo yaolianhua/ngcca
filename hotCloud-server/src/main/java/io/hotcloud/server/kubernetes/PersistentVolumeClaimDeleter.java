@@ -1,11 +1,13 @@
 package io.hotcloud.server.kubernetes;
 
+import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -22,7 +24,8 @@ public class PersistentVolumeClaimDeleter implements PersistentVolumeClaimDelete
 
     @Override
     public void delete(String persistentVolumeClaim, String namespace) throws ApiException {
-
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(persistentVolumeClaim), () -> "delete resource name is null");
         V1PersistentVolumeClaim v1PersistentVolumeClaim = coreV1Api.deleteNamespacedPersistentVolumeClaim(
                 persistentVolumeClaim,
                 namespace,
