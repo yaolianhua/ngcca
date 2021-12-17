@@ -1,0 +1,21 @@
+package io.hotcloud.core.kubernetes.pod;
+
+import io.fabric8.kubernetes.api.model.Pod;
+import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.util.Yaml;
+
+/**
+ * @author yaolianhua789@gmail.com
+ **/
+@FunctionalInterface
+public interface PodCreateApi {
+
+    default Pod pod(PodCreateParams request) throws ApiException {
+        V1Pod v1Pod = PodBuilder.build(request);
+        String json = Yaml.dump(v1Pod);
+        return this.pod(json);
+    }
+
+    Pod pod(String yaml) throws ApiException;
+}
