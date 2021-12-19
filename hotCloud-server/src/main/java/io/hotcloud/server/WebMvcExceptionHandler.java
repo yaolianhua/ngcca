@@ -53,7 +53,7 @@ public class WebMvcExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorWebResult> handle(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        log.warn(ex.getMessage(), ex);
+//        log.warn(ex.getMessage(), ex);
 
         StringBuffer message = new StringBuffer();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
