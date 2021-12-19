@@ -14,9 +14,9 @@ import java.util.List;
 @Data
 public class Container {
 
-    @NotBlank(message = "container image is empty")
+    @NotBlank(message = "container image is null")
     private String image;
-    @NotBlank(message = "container name is empty")
+    @NotBlank(message = "container name is null")
     private String name;
 
     private ImagePullPolicy imagePullPolicy = ImagePullPolicy.IfNotPresent;

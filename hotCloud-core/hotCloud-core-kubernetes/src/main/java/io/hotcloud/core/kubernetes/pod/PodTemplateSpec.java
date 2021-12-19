@@ -5,6 +5,8 @@ import io.hotcloud.core.kubernetes.pod.container.Container;
 import io.hotcloud.core.kubernetes.volume.Volume;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,8 @@ public class PodTemplateSpec {
     private Long activeDeadlineSeconds;
     private Integer priority;
     private Long terminationGracePeriodSeconds;
+    @Valid
+    @NotEmpty(message = "containers is empty")
     private List<Container> containers = new ArrayList<>();
     private List<Container> initContainers = new ArrayList<>();
     private List<Volume> volumes = new ArrayList<>();

@@ -1,6 +1,5 @@
 package io.hotcloud.core.kubernetes.workload;
 
-import io.hotcloud.core.common.Assert;
 import io.hotcloud.core.kubernetes.LabelSelectorBuilder;
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import io.hotcloud.core.kubernetes.Strategy;
@@ -66,8 +65,6 @@ public final class DeploymentBuilder {
     private static V1ObjectMeta build(ObjectMetadata deploymentMetadata) {
         String name = deploymentMetadata.getName();
         String namespace = deploymentMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "Deployment name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "Deployment namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(deploymentMetadata.getLabels());
         v1ObjectMeta.setAnnotations(deploymentMetadata.getAnnotations());
