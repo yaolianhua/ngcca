@@ -2,8 +2,6 @@ package io.hotcloud.core.common;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -13,13 +11,11 @@ public class Result<T> {
     private int code;
     private String message;
     private T data;
-    private LocalDateTime timestamp;
 
     public Result(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
-        timestamp = LocalDateTime.now();
     }
 
     public static <T> Result<T> error(int status, String message) {
