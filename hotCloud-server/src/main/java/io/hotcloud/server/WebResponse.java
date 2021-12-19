@@ -20,7 +20,7 @@ public final class WebResponse {
     }
 
     public static <T> ResponseEntity<Result<T>> ok(HttpStatus status, T data) {
-        return ok(null, status, data);
+        return ok("success", status, data);
     }
 
     public static <T> ResponseEntity<Result<T>> ok(String message, HttpStatus status, T data) {

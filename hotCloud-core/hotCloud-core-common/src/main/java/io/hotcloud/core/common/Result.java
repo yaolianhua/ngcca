@@ -23,11 +23,11 @@ public class Result<T> {
     }
 
     public static <T> Result<T> none() {
-        return new Result<>(200, null, null);
+        return new Result<>(200, "success", null);
     }
 
     public static <T> Result<T> ok(T data) {
-        return new Result<>(200, null, data);
+        return new Result<>(200, "success", data);
     }
 
     public static <T> Result<T> ok(int status) {
@@ -39,6 +39,6 @@ public class Result<T> {
     }
 
     public static <T> Result<T> ok(int status, T data) {
-        return new Result<>(status, null, data);
+        return new Result<>(status, "success", data);
     }
 }
