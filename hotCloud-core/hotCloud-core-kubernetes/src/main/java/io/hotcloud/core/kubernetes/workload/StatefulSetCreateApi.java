@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface StatefulSetCreateApi {
 
-    default StatefulSet statefulSet(StatefulSetCreateParams request) throws ApiException {
+    default StatefulSet statefulSet(StatefulSetCreateRequest request) throws ApiException {
         V1StatefulSet v1StatefulSet = StatefulSetBuilder.build(request);
         String json = Yaml.dump(v1StatefulSet);
         return this.statefulSet(json);

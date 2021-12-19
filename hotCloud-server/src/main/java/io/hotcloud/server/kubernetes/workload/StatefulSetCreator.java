@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -36,8 +35,8 @@ public class StatefulSetCreator implements StatefulSetCreateApi {
     public StatefulSet statefulSet(String yaml) throws ApiException {
         V1StatefulSet v1StatefulSet;
         try {
-            v1StatefulSet = (V1StatefulSet) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1StatefulSet = Yaml.loadAs(yaml, V1StatefulSet.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load statefulSet yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1StatefulSet.getMetadata()).getNamespace();

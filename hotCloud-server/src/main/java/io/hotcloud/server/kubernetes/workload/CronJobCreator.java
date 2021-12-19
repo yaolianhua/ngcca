@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -36,8 +35,8 @@ public class CronJobCreator implements CronJobCreateApi {
     public CronJob cronjob(String yaml) throws ApiException {
         V1CronJob v1CronJob;
         try {
-            v1CronJob = (V1CronJob) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1CronJob = Yaml.loadAs(yaml, V1CronJob.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load cronjob yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1CronJob.getMetadata()).getNamespace();

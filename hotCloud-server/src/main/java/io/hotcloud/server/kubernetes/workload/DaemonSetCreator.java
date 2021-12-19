@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -36,8 +35,8 @@ public class DaemonSetCreator implements DaemonSetCreateApi {
     public DaemonSet daemonSet(String yaml) throws ApiException {
         V1DaemonSet v1DaemonSet;
         try {
-            v1DaemonSet = (V1DaemonSet) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1DaemonSet = Yaml.loadAs(yaml, V1DaemonSet.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load daemonSet yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1DaemonSet.getMetadata()).getNamespace();

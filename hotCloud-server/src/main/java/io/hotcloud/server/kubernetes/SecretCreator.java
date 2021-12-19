@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -37,8 +36,8 @@ public class SecretCreator implements SecretCreateApi {
 
         V1Secret v1Secret;
         try {
-            v1Secret = (V1Secret) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1Secret = Yaml.loadAs(yaml, V1Secret.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load secret yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Secret.getMetadata()).getNamespace();

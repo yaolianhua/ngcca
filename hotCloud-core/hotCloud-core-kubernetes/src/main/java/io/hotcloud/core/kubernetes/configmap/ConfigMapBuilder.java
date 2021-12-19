@@ -17,7 +17,7 @@ public final class ConfigMapBuilder {
     private ConfigMapBuilder() {
     }
 
-    public static V1ConfigMap build(ConfigMapCreateParams request) {
+    public static V1ConfigMap build(ConfigMapCreateRequest request) {
         final V1ConfigMap v1ConfigMap = new V1ConfigMap();
         v1ConfigMap.setKind(KIND);
         v1ConfigMap.setApiVersion(API_VERSION);

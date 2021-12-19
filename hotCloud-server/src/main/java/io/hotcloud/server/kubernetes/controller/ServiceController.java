@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
-import io.hotcloud.core.kubernetes.service.ServiceCreateParams;
+import io.hotcloud.core.kubernetes.service.ServiceCreateRequest;
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
 import io.hotcloud.core.kubernetes.service.ServiceReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -34,14 +35,14 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateRequest params) throws ApiException {
         Service service = serviceCreation.service(params);
         return created(service);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Service>> service(@RequestBody String yaml) throws ApiException {
-        Service service = serviceCreation.service(yaml);
+    public ResponseEntity<Result<Service>> service(@RequestBody YamlBody yaml) throws ApiException {
+        Service service = serviceCreation.service(yaml.getYaml());
         return created(service);
     }
 
@@ -54,7 +55,7 @@ public class ServiceController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<ServiceList>> serviceListRead(@PathVariable String namespace,
-                                                               @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
         ServiceList list = serviceReadApi.read(namespace, labelSelector);
         return ok(list);
     }

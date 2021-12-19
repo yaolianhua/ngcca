@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes.workload;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
-import io.hotcloud.core.kubernetes.workload.DeploymentCreateParams;
+import io.hotcloud.core.kubernetes.workload.DeploymentCreateRequest;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -44,20 +45,20 @@ public class DeploymentController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<DeploymentList>> deploymentListRead(@PathVariable String namespace,
-                                                                     @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                     @RequestParam(required = false) Map<String, String> labelSelector) {
         DeploymentList list = deploymentRead.read(namespace, labelSelector);
         return ok(list);
     }
 
     @PostMapping
-    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
         Deployment deployment = deploymentCreation.deployment(params);
         return created(deployment);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<Deployment>> deployment(@RequestBody String yaml) throws ApiException {
-        Deployment deployment = deploymentCreation.deployment(yaml);
+    public ResponseEntity<Result<Deployment>> deployment(@RequestBody YamlBody yaml) throws ApiException {
+        Deployment deployment = deploymentCreation.deployment(yaml.getYaml());
         return created(deployment);
     }
 

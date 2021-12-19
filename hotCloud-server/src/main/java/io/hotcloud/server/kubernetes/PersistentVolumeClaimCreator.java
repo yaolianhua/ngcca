@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -36,8 +35,8 @@ public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreate
     public PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException {
         V1PersistentVolumeClaim v1PersistentVolumeClaim;
         try {
-            v1PersistentVolumeClaim = (V1PersistentVolumeClaim) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1PersistentVolumeClaim = Yaml.loadAs(yaml, V1PersistentVolumeClaim.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load persistentVolumeClaim yaml error. '%s'", e.getMessage()));
         }
 

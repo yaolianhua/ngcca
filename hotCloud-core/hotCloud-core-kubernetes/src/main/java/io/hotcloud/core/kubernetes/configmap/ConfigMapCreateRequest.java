@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class ConfigMapCreateParams {
+public class ConfigMapCreateRequest {
 
     private Boolean immutable;
     private Map<String, String> data;

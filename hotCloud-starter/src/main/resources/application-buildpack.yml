@@ -22,7 +22,7 @@ buildpack:
     insecure-pull: true
     insecure-registry:
     label:
-    log-format:
+    log-format: color
     log-timestamp: false
     no-push: false
     push-retry: 3
@@ -34,7 +34,7 @@ buildpack:
     skip-tls-verify-pull: true
     skip-tls-verify-registry: true
     skip-unused-stages: true
-    snapshot-mode:
+    snapshot-mode: full
     tar-path:
     target:
     use-new-run: true

@@ -8,9 +8,10 @@ import io.kubernetes.client.util.Yaml;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@FunctionalInterface
 public interface CronJobCreateApi {
 
-    default CronJob cronjob(CronJobCreateParams request) throws ApiException {
+    default CronJob cronjob(CronJobCreateRequest request) throws ApiException {
         V1CronJob v1CronJob = CronJobBuilder.build(request);
         String json = Yaml.dump(v1CronJob);
         return this.cronjob(json);

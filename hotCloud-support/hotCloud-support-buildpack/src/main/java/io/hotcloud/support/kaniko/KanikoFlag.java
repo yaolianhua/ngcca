@@ -13,18 +13,20 @@ public interface KanikoFlag {
      * <p/>
      * You will need to store your build context in a place that kaniko can access. Right now, kaniko supports these storage solutions:
      * <p/>
+     * <ul>
+     * <li>
      * GCS Bucket
-     * <p/>
+     * <li>
      * S3 Bucket
-     * <p/>
+     * <li>
      * Azure Blob Storage
-     * <p/>
+     * <li>
      * Local Directory
-     * <p/>
+     * <li>
      * Local Tar
-     * <p/>
+     * <li>
      * Standard Input
-     * <p/>
+     * <li>
      * Git Repository
      *
      * @return context
@@ -191,7 +193,9 @@ public interface KanikoFlag {
      *
      * @return log-format
      */
-    String getLogFormat();
+    default String getLogFormat() {
+        return "color";
+    }
 
     /**
      * Set this flag as --log-timestamp=<true|false> to add timestamps to <text|color> log format. Defaults to false.
@@ -236,13 +240,14 @@ public interface KanikoFlag {
      * Expected format is mirror.gcr.io for example.
      * <p/>
      * Note that you can't specify a URL with scheme for this flag. Some valid options are:
-     * <p/>
+     * <ul>
+     * <li>
      * mirror.gcr.io
-     * <p/>
+     * <li>
      * 127.0.0.1
-     * <p/>
+     * <li>
      * 192.168.0.1:5000
-     * <p/>
+     * <li>
      * mycompany-docker-virtual.jfrog.io
      *
      * @return registry-mirror
@@ -314,7 +319,9 @@ public interface KanikoFlag {
      *
      * @return snapshotMode
      */
-    String getSnapshotMode();
+    default String getSnapshotMode() {
+        return "full";
+    }
 
     /**
      * Set this flag as --tarPath=<path> to save the image as a tarball at path. You need to set --destination as well (for example --destination=image). If you want to save the image as tarball only you also need to set --no-push.

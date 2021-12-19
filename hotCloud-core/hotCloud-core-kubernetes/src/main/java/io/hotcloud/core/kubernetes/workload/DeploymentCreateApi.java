@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface DeploymentCreateApi {
 
-    default Deployment deployment(DeploymentCreateParams request) throws ApiException {
+    default Deployment deployment(DeploymentCreateRequest request) throws ApiException {
         V1Deployment v1Deployment = DeploymentBuilder.build(request);
         String json = Yaml.dump(v1Deployment);
         return this.deployment(json);

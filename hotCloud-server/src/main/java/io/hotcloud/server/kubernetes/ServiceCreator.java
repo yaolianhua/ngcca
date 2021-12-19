@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static io.hotcloud.core.kubernetes.NamespaceGenerator.DEFAULT_NAMESPACE;
@@ -37,8 +36,8 @@ public class ServiceCreator implements ServiceCreateApi {
 
         V1Service v1Service;
         try {
-            v1Service = (V1Service) Yaml.load(yaml);
-        } catch (IOException e) {
+            v1Service = Yaml.loadAs(yaml, V1Service.class);
+        } catch (Exception e) {
             throw new HotCloudException(String.format("load service yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Service.getMetadata()).getNamespace();

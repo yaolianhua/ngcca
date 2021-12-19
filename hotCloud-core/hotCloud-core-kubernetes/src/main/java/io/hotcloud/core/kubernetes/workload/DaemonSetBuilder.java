@@ -20,7 +20,7 @@ public final class DaemonSetBuilder {
     private DaemonSetBuilder() {
     }
 
-    public static V1DaemonSet build(DaemonSetCreateParams request) {
+    public static V1DaemonSet build(DaemonSetCreateRequest request) {
 
         V1DaemonSet v1Deployment = new V1DaemonSet();
 

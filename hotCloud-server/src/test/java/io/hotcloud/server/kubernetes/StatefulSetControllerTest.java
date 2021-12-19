@@ -3,10 +3,11 @@ package io.hotcloud.server.kubernetes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetReadApi;
-import io.hotcloud.server.kubernetes.workload.StatefulSetController;
+import io.hotcloud.server.kubernetes.controller.StatefulSetController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +67,7 @@ public class StatefulSetControllerTest {
     @Test
     public void statefulSetCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("statefulSet-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream statefulSetReadInputStream = getClass().getResourceAsStream("statefulSet-read.json");
         String statefulSetReadJson = new BufferedReader(new InputStreamReader(statefulSetReadInputStream)).lines().collect(Collectors.joining());
@@ -76,8 +77,9 @@ public class StatefulSetControllerTest {
 
         String json = objectMapper.writeValueAsString(created(statefulSet).getBody());
 
+        String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
         this.mockMvc.perform(MockMvcRequestBuilders
-                .post(PATH.concat("/yaml")).contentType(MediaType.TEXT_PLAIN_VALUE).content(yaml))
+                .post(PATH.concat("/yaml")).contentType(MediaType.APPLICATION_JSON).content(yamlBody))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().json(json, true));
@@ -109,10 +111,8 @@ public class StatefulSetControllerTest {
         StatefulSetList value = objectMapper.readValue(json, StatefulSetList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH.concat("/{namespace}"), "default").contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                .get(PATH.concat("/{namespace}"), "default"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));

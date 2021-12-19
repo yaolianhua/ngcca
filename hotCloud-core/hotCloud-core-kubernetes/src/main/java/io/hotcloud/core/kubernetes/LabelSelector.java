@@ -2,6 +2,7 @@ package io.hotcloud.core.kubernetes;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ public class LabelSelector {
         this.matchExpressions = matchExpressions;
     }
 
+    @NotEmpty(message = "matchLabels is empty")
     private Map<String, String> matchLabels = new HashMap<>();
 
     private List<LabelSelectorRequirement> matchExpressions = new ArrayList<>();

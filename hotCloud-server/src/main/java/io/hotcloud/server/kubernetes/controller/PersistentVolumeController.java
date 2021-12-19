@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateApi;
-import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateRequest;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -36,14 +37,14 @@ public class PersistentVolumeController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateParams params) throws ApiException {
+    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateRequest params) throws ApiException {
         PersistentVolume persistentVolume = persistentVolumeCreation.persistentVolume(params);
         return created(persistentVolume);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@RequestBody String yaml) throws ApiException {
-        PersistentVolume persistentVolume = persistentVolumeCreation.persistentVolume(yaml);
+    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@RequestBody YamlBody yaml) throws ApiException {
+        PersistentVolume persistentVolume = persistentVolumeCreation.persistentVolume(yaml.getYaml());
         return created(persistentVolume);
     }
 
@@ -60,7 +61,7 @@ public class PersistentVolumeController {
     }
 
     @GetMapping
-    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestBody(required = false) Map<String, String> labels) {
+    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestParam(required = false) Map<String, String> labels) {
         PersistentVolumeList list = persistentVolumeReadApi.read(labels);
         return ok(list);
     }

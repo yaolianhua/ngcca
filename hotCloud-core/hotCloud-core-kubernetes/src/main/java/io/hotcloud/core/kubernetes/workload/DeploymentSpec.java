@@ -4,6 +4,8 @@ import io.hotcloud.core.kubernetes.LabelSelector;
 import io.hotcloud.core.kubernetes.Strategy;
 import lombok.Data;
 
+import javax.validation.Valid;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -17,10 +19,11 @@ public class DeploymentSpec {
     private Integer replicas = 1;
     private Integer revisionHistoryLimit;
 
+    @Valid
     private LabelSelector selector = new LabelSelector();
 
     private Strategy strategy = new Strategy();
-
+    @Valid
     private DeploymentTemplate template = new DeploymentTemplate();
 
     public DeploymentSpec() {

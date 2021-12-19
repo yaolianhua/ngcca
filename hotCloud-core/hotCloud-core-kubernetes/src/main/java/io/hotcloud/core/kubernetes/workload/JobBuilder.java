@@ -17,7 +17,7 @@ public final class JobBuilder {
     private JobBuilder() {
     }
 
-    public static V1Job build(JobCreateParams request) {
+    public static V1Job build(JobCreateRequest request) {
 
         V1Job v1Job = new V1Job();
 

@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes.workload;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateApi;
-import io.hotcloud.core.kubernetes.workload.StatefulSetCreateParams;
+import io.hotcloud.core.kubernetes.workload.StatefulSetCreateRequest;
 import io.hotcloud.core.kubernetes.workload.StatefulSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -42,20 +43,20 @@ public class StatefulSetController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<StatefulSetList>> statefulSetListRead(@PathVariable String namespace,
-                                                                       @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
         StatefulSetList list = statefulSetReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 
     @PostMapping
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateParams params) throws ApiException {
+    public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateRequest params) throws ApiException {
         StatefulSet statefulSet = statefulSetCreateApi.statefulSet(params);
         return created(statefulSet);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody String yaml) throws ApiException {
-        StatefulSet statefulSet = statefulSetCreateApi.statefulSet(yaml);
+    public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody YamlBody yaml) throws ApiException {
+        StatefulSet statefulSet = statefulSetCreateApi.statefulSet(yaml.getYaml());
         return created(statefulSet);
     }
 

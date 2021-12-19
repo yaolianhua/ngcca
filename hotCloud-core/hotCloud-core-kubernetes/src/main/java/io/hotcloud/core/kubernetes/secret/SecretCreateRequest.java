@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class SecretCreateParams {
+public class SecretCreateRequest {
 
     private Boolean immutable;
     private Map<String, String> data;

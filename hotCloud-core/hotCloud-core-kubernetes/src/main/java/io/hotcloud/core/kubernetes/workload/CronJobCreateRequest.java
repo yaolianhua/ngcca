@@ -7,10 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DaemonSetCreateParams {
+public class CronJobCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
 
-    private DaemonSetSpec spec = new DaemonSetSpec();
-
+    private CronJobSpec spec = new CronJobSpec();
 }

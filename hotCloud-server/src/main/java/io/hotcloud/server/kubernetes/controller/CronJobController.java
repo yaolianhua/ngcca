@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes.workload;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.CronJobCreateApi;
-import io.hotcloud.core.kubernetes.workload.CronJobCreateParams;
+import io.hotcloud.core.kubernetes.workload.CronJobCreateRequest;
 import io.hotcloud.core.kubernetes.workload.CronJobDeleteApi;
 import io.hotcloud.core.kubernetes.workload.CronJobReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -34,14 +35,14 @@ public class CronJobController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateParams params) throws ApiException {
+    public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateRequest params) throws ApiException {
         CronJob cronjob = cronJobCreateApi.cronjob(params);
         return created(cronjob);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<CronJob>> cronjob(@RequestBody String yaml) throws ApiException {
-        CronJob cronjob = cronJobCreateApi.cronjob(yaml);
+    public ResponseEntity<Result<CronJob>> cronjob(@RequestBody YamlBody yaml) throws ApiException {
+        CronJob cronjob = cronJobCreateApi.cronjob(yaml.getYaml());
         return created(cronjob);
     }
 
@@ -55,7 +56,7 @@ public class CronJobController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<CronJobList>> cronjobListRead(@PathVariable String namespace,
-                                                               @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
         CronJobList list = cronJobReadApi.read(namespace, labelSelector);
         return ok(list);
     }

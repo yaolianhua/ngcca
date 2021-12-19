@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.volume;
+package io.hotcloud.core.kubernetes.pod;
 
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PersistentVolumeCreateParams {
+public class PodCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
+    private PodTemplateSpec spec = new PodTemplateSpec();
 
-    private PersistentVolumeSpec spec = new PersistentVolumeSpec();
 }

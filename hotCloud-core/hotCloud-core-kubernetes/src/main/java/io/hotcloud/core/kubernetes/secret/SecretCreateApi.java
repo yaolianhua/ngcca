@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface SecretCreateApi {
 
-    default Secret secret(SecretCreateParams request) throws ApiException {
+    default Secret secret(SecretCreateRequest request) throws ApiException {
         V1Secret v1Secret = SecretBuilder.build(request);
         String json = Yaml.dump(v1Secret);
         return this.secret(json);

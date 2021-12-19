@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes.workload;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DaemonSetCreateApi;
-import io.hotcloud.core.kubernetes.workload.DaemonSetCreateParams;
+import io.hotcloud.core.kubernetes.workload.DaemonSetCreateRequest;
 import io.hotcloud.core.kubernetes.workload.DaemonSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DaemonSetReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -42,20 +43,20 @@ public class DaemonSetController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<DaemonSetList>> daemonSetListRead(@PathVariable String namespace,
-                                                                   @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
         DaemonSetList list = daemonSetReadApi.read(namespace, labelSelector);
         return ok(list);
     }
 
     @PostMapping
-    public ResponseEntity<Result<DaemonSet>> daemonSet(@Validated @RequestBody DaemonSetCreateParams params) throws ApiException {
+    public ResponseEntity<Result<DaemonSet>> daemonSet(@Validated @RequestBody DaemonSetCreateRequest params) throws ApiException {
         DaemonSet daemonSet = daemonSetCreateApi.daemonSet(params);
         return created(daemonSet);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<DaemonSet>> daemonSet(@RequestBody String yaml) throws ApiException {
-        DaemonSet daemonSet = daemonSetCreateApi.daemonSet(yaml);
+    public ResponseEntity<Result<DaemonSet>> daemonSet(@RequestBody YamlBody yaml) throws ApiException {
+        DaemonSet daemonSet = daemonSetCreateApi.daemonSet(yaml.getYaml());
         return created(daemonSet);
     }
 

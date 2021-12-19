@@ -53,8 +53,8 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String imageNameTagWithDigestFile;
     private String insecureRegistry;
     private String label;
-    private String logFormat;
-    private String snapshotMode;
+    private String logFormat = "color";
+    private String snapshotMode = "full";
     private String tarPath;
     private String target;
     private String verbosity = "debug";

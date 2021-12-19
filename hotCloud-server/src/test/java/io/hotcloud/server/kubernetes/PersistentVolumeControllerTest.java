@@ -2,9 +2,11 @@ package io.hotcloud.server.kubernetes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeCreateApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeReadApi;
+import io.hotcloud.server.kubernetes.controller.PersistentVolumeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -64,7 +66,7 @@ public class PersistentVolumeControllerTest {
     @Test
     public void persistentvolumeCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("persistentVolume-create.txt");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream persistentvolumeReadInputStream = getClass().getResourceAsStream("persistentVolume-read.json");
         String persistentvolumeReadJson = new BufferedReader(new InputStreamReader(persistentvolumeReadInputStream))
@@ -76,8 +78,9 @@ public class PersistentVolumeControllerTest {
 
         String json = objectMapper.writeValueAsString(created(persistentVolume).getBody());
 
+        String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
         this.mockMvc.perform(MockMvcRequestBuilders
-                .post(PATH.concat("/yaml")).contentType(MediaType.TEXT_PLAIN_VALUE).content(yaml))
+                .post(PATH.concat("/yaml")).contentType(MediaType.APPLICATION_JSON).content(yamlBody))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().json(json, true));
@@ -109,10 +112,8 @@ public class PersistentVolumeControllerTest {
         PersistentVolumeList value = objectMapper.readValue(json, PersistentVolumeList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
 
-        String body = objectMapper.writeValueAsString(Map.of());
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get(PATH).contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                .get(PATH))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));

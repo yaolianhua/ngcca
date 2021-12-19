@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
-import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateParams;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateRequest;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -35,15 +36,15 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateParams params) throws ApiException {
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateRequest params) throws ApiException {
         ConfigMap configMap = configMapCreateApi.configMap(params);
 
         return created(configMap);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody String yaml) throws ApiException {
-        ConfigMap configMap = configMapCreateApi.configMap(yaml);
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody YamlBody yaml) throws ApiException {
+        ConfigMap configMap = configMapCreateApi.configMap(yaml.getYaml());
         return created(configMap);
     }
 
@@ -56,7 +57,7 @@ public class ConfigMapController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<ConfigMapList>> configMapListRead(@PathVariable String namespace,
-                                                                   @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
         ConfigMapList list = configMapReadApi.read(namespace, labelSelector);
         return ok(list);
     }

@@ -1,10 +1,11 @@
-package io.hotcloud.server.kubernetes;
+package io.hotcloud.server.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
+import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateApi;
-import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateRequest;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -36,14 +37,14 @@ public class PersistentVolumeClaimController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateParams params) throws ApiException {
+    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateRequest params) throws ApiException {
         PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(params);
         return created(persistentVolumeClaim);
     }
 
     @PostMapping("/yaml")
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@RequestBody String yaml) throws ApiException {
-        PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(yaml);
+    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@RequestBody YamlBody yaml) throws ApiException {
+        PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(yaml.getYaml());
         return created(persistentVolumeClaim);
     }
 
@@ -63,7 +64,7 @@ public class PersistentVolumeClaimController {
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<PersistentVolumeClaimList>> persistentVolumeClaimListRead(@PathVariable String namespace,
-                                                                                           @RequestBody(required = false) Map<String, String> labelSelector) {
+                                                                                           @RequestParam(required = false) Map<String, String> labelSelector) {
         PersistentVolumeClaimList list = persistentVolumeClaimReadApi.read(namespace, labelSelector);
         return ok(list);
     }
