@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration(proxyBeanMethods = false)
 @EnableFeignClients
-@EnableConfigurationProperties
+@EnableConfigurationProperties(HotCloudHttpClientProperties.class)
 public class HotCloudHttpClientConfiguration {
+
 }
