@@ -1,6 +1,7 @@
 package io.hotcloud.server;
 
 import io.hotcloud.core.common.HotCloudException;
+import io.hotcloud.core.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 public class HotCloudExceptionHandler {
 
     @ExceptionHandler(value = HotCloudException.class)
-    public ResponseEntity<ErrorWebResult> handle(HotCloudException ex, HttpServletRequest request){
-        ErrorWebResult error = ErrorWebResult.error(ex.getCode(), request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<Result<Void>> handle(HotCloudException ex, HttpServletRequest request) {
+        Result<Void> error = Result.error(ex.getCode(), ex.getMessage());
         return ResponseEntity.status(ex.getCode()).body(error);
     }
 

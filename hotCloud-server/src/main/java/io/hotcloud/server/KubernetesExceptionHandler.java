@@ -1,6 +1,7 @@
 package io.hotcloud.server;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
+import io.hotcloud.core.common.Result;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -22,29 +23,29 @@ import javax.servlet.http.HttpServletRequest;
 public class KubernetesExceptionHandler {
 
     @ExceptionHandler(value = ApiException.class)
-    public ResponseEntity<ErrorWebResult> handle(ApiException ex, HttpServletRequest request) {
-        Object message;
+    public ResponseEntity<Result<Void>> handle(ApiException ex, HttpServletRequest request) {
+        String message;
         String msg = ex.getMessage();
         if (StringUtils.hasText(msg)) {
             message = msg;
         } else {
             message = ex.getResponseBody();
         }
-        ErrorWebResult error = ErrorWebResult.error(ex.getCode(), request.getRequestURI(), message);
+        Result<Void> error = Result.error(ex.getCode(), message);
         log.error("{}", message, ex);
         return ResponseEntity.status(ex.getCode()).body(error);
     }
 
     @ExceptionHandler(value = YAMLException.class)
-    public ResponseEntity<ErrorWebResult> handle(YAMLException ex, HttpServletRequest request) {
-        ErrorWebResult error = ErrorWebResult.error(HttpStatus.FORBIDDEN, request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<Result<Void>> handle(YAMLException ex, HttpServletRequest request) {
+        Result<Void> error = Result.error(HttpStatus.FORBIDDEN.value(), ex.getMessage());
         log.error("{}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
     @ExceptionHandler(value = KubernetesClientException.class)
-    public ResponseEntity<ErrorWebResult> handle(KubernetesClientException ex, HttpServletRequest request) {
-        ErrorWebResult error = ErrorWebResult.error(ex.getCode(), request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<Result<Void>> handle(KubernetesClientException ex, HttpServletRequest request) {
+        Result<Void> error = Result.error(ex.getCode(), ex.getMessage());
         log.error("{}", ex.getMessage(), ex);
         return ResponseEntity.status(ex.getCode()).body(error);
     }
