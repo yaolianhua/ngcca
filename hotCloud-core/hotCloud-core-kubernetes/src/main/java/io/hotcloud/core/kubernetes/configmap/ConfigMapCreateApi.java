@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface ConfigMapCreateApi {
 
-    default ConfigMap configMap(ConfigMapCreateParams request) throws ApiException {
+    default ConfigMap configMap(ConfigMapCreateRequest request) throws ApiException {
         V1ConfigMap v1ConfigMap = ConfigMapBuilder.build(request);
         String json = Yaml.dump(v1ConfigMap);
         return this.configMap(json);

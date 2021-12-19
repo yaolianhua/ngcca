@@ -22,7 +22,7 @@ public final class StatefulSetBuilder {
     private StatefulSetBuilder() {
     }
 
-    public static V1StatefulSet build(StatefulSetCreateParams request) {
+    public static V1StatefulSet build(StatefulSetCreateRequest request) {
 
         V1StatefulSet v1StatefulSet = new V1StatefulSet();
 

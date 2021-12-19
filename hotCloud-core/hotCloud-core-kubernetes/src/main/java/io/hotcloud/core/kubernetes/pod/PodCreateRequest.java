@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.workload;
+package io.hotcloud.core.kubernetes.pod;
 
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
@@ -7,10 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class DaemonSetCreateParams {
+public class PodCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
-
-    private DaemonSetSpec spec = new DaemonSetSpec();
+    private PodTemplateSpec spec = new PodTemplateSpec();
 
 }

@@ -8,10 +8,10 @@ import io.kubernetes.client.openapi.ApiException;
 @FunctionalInterface
 public interface NamespaceCreateApi {
 
-    void namespace(NamespaceCreateParams params) throws ApiException;
+    void namespace(NamespaceCreateRequest params) throws ApiException;
 
     default void namespace(String namespace) throws ApiException {
-        NamespaceCreateParams params = new NamespaceCreateParams();
+        NamespaceCreateRequest params = new NamespaceCreateRequest();
         ObjectMetadata namespaceMetadata = new ObjectMetadata();
         namespaceMetadata.setName(namespace);
         params.setMetadata(namespaceMetadata);

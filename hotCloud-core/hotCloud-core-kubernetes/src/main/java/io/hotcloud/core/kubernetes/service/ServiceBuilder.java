@@ -22,7 +22,7 @@ public final class ServiceBuilder {
     private ServiceBuilder() {
     }
 
-    public static V1Service build(ServiceCreateParams request) {
+    public static V1Service build(ServiceCreateRequest request) {
         final V1Service v1Service = new V1Service();
         v1Service.setKind(KIND);
         v1Service.setApiVersion(API_VERSION);

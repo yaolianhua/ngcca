@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateApi;
-import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateRequest;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimDeleteApi;
 import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -37,7 +37,7 @@ public class PersistentVolumeClaimController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateParams params) throws ApiException {
+    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateRequest params) throws ApiException {
         PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimCreation.persistentVolumeClaim(params);
         return created(persistentVolumeClaim);
     }

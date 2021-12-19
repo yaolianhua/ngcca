@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateApi;
-import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateParams;
+import io.hotcloud.core.kubernetes.configmap.ConfigMapCreateRequest;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapDeleteApi;
 import io.hotcloud.core.kubernetes.configmap.ConfigMapReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -36,7 +36,7 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateParams params) throws ApiException {
+    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateRequest params) throws ApiException {
         ConfigMap configMap = configMapCreateApi.configMap(params);
 
         return created(configMap);

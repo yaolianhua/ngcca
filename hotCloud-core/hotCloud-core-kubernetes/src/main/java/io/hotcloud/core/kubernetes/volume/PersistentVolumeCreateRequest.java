@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.workload;
+package io.hotcloud.core.kubernetes.volume;
 
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class CronJobCreateParams {
+public class PersistentVolumeCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
 
-    private CronJobSpec spec = new CronJobSpec();
+    private PersistentVolumeSpec spec = new PersistentVolumeSpec();
 }

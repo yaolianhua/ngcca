@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DaemonSetCreateApi;
-import io.hotcloud.core.kubernetes.workload.DaemonSetCreateParams;
+import io.hotcloud.core.kubernetes.workload.DaemonSetCreateRequest;
 import io.hotcloud.core.kubernetes.workload.DaemonSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DaemonSetReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -49,7 +49,7 @@ public class DaemonSetController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<DaemonSet>> daemonSet(@Validated @RequestBody DaemonSetCreateParams params) throws ApiException {
+    public ResponseEntity<Result<DaemonSet>> daemonSet(@Validated @RequestBody DaemonSetCreateRequest params) throws ApiException {
         DaemonSet daemonSet = daemonSetCreateApi.daemonSet(params);
         return created(daemonSet);
     }

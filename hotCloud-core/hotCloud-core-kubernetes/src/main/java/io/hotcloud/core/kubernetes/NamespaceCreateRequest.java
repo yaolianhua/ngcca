@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class NamespaceCreateParams {
+public class NamespaceCreateRequest {
 
     @NotNull(message = "Namespace metadata is null")
     private ObjectMetadata metadata;

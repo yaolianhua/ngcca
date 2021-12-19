@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.StatefulSetCreateApi;
-import io.hotcloud.core.kubernetes.workload.StatefulSetCreateParams;
+import io.hotcloud.core.kubernetes.workload.StatefulSetCreateRequest;
 import io.hotcloud.core.kubernetes.workload.StatefulSetDeleteApi;
 import io.hotcloud.core.kubernetes.workload.StatefulSetReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -49,7 +49,7 @@ public class StatefulSetController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateParams params) throws ApiException {
+    public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateRequest params) throws ApiException {
         StatefulSet statefulSet = statefulSetCreateApi.statefulSet(params);
         return created(statefulSet);
     }

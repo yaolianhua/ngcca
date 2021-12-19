@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.secret.SecretCreateApi;
-import io.hotcloud.core.kubernetes.secret.SecretCreateParams;
+import io.hotcloud.core.kubernetes.secret.SecretCreateRequest;
 import io.hotcloud.core.kubernetes.secret.SecretDeleteApi;
 import io.hotcloud.core.kubernetes.secret.SecretReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -34,7 +34,7 @@ public class SecretController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Secret>> secret(@RequestBody SecretCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Secret>> secret(@RequestBody SecretCreateRequest params) throws ApiException {
         Secret secret = secretCreateApi.secret(params);
 
         return created(secret);

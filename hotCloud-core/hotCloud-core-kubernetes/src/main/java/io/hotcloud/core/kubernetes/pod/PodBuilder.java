@@ -29,7 +29,7 @@ public final class PodBuilder {
     private PodBuilder() {
     }
 
-    public static V1Pod build(PodCreateParams params) {
+    public static V1Pod build(PodCreateRequest params) {
 
         V1Pod v1Pod = new V1Pod();
 

@@ -7,9 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PersistentVolumeCreateParams {
+public class PersistentVolumeClaimCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
 
-    private PersistentVolumeSpec spec = new PersistentVolumeSpec();
+    private PersistentVolumeClaimSpec spec = new PersistentVolumeClaimSpec();
 }

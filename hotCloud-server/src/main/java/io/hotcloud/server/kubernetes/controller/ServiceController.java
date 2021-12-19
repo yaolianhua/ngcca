@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.service.ServiceCreateApi;
-import io.hotcloud.core.kubernetes.service.ServiceCreateParams;
+import io.hotcloud.core.kubernetes.service.ServiceCreateRequest;
 import io.hotcloud.core.kubernetes.service.ServiceDeleteApi;
 import io.hotcloud.core.kubernetes.service.ServiceReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -35,7 +35,7 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateRequest params) throws ApiException {
         Service service = serviceCreation.service(params);
         return created(service);
     }

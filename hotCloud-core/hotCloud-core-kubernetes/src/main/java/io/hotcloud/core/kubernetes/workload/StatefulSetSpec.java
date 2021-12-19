@@ -1,7 +1,7 @@
 package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.kubernetes.LabelSelector;
-import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateParams;
+import io.hotcloud.core.kubernetes.volume.PersistentVolumeClaimCreateRequest;
 import lombok.Data;
 
 import java.util.LinkedList;
@@ -21,5 +21,5 @@ public class StatefulSetSpec {
     private LabelSelector selector = new LabelSelector();
     private StatefulSetTemplate template = new StatefulSetTemplate();
     private StatefulSetUpdateStrategy updateStrategy = new StatefulSetUpdateStrategy();
-    private List<PersistentVolumeClaimCreateParams> volumeClaimTemplates = new LinkedList<>();
+    private List<PersistentVolumeClaimCreateRequest> volumeClaimTemplates = new LinkedList<>();
 }

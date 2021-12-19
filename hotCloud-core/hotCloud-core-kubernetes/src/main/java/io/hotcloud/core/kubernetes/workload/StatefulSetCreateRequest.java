@@ -7,10 +7,10 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class JobCreateParams {
+public class StatefulSetCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
 
-    private JobSpec spec = new JobSpec();
+    private StatefulSetSpec spec = new StatefulSetSpec();
 
 }

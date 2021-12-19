@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface ServiceCreateApi {
 
-    default Service service(ServiceCreateParams request) throws ApiException {
+    default Service service(ServiceCreateRequest request) throws ApiException {
         V1Service v1Service = ServiceBuilder.build(request);
         String json = Yaml.dump(v1Service);
         return this.service(json);

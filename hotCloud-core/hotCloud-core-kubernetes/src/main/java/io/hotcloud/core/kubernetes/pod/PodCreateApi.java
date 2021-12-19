@@ -11,7 +11,7 @@ import io.kubernetes.client.util.Yaml;
 @FunctionalInterface
 public interface PodCreateApi {
 
-    default Pod pod(PodCreateParams request) throws ApiException {
+    default Pod pod(PodCreateRequest request) throws ApiException {
         V1Pod v1Pod = PodBuilder.build(request);
         String json = Yaml.dump(v1Pod);
         return this.pod(json);

@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.DeploymentCreateApi;
-import io.hotcloud.core.kubernetes.workload.DeploymentCreateParams;
+import io.hotcloud.core.kubernetes.workload.DeploymentCreateRequest;
 import io.hotcloud.core.kubernetes.workload.DeploymentDeleteApi;
 import io.hotcloud.core.kubernetes.workload.DeploymentReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -51,7 +51,7 @@ public class DeploymentController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
         Deployment deployment = deploymentCreation.deployment(params);
         return created(deployment);
     }

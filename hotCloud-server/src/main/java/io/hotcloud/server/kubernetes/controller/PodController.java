@@ -52,7 +52,7 @@ public class PodController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Pod>> pod(@Validated @RequestBody PodCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Pod>> pod(@Validated @RequestBody PodCreateRequest params) throws ApiException {
         Pod pod = podCreateApi.pod(params);
         return created(pod);
     }

@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.pod;
+package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PodCreateParams {
+public class CronJobCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
-    private PodTemplateSpec spec = new PodTemplateSpec();
 
+    private CronJobSpec spec = new CronJobSpec();
 }

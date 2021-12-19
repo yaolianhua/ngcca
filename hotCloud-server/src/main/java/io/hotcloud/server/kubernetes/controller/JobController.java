@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.JobCreateApi;
-import io.hotcloud.core.kubernetes.workload.JobCreateParams;
+import io.hotcloud.core.kubernetes.workload.JobCreateRequest;
 import io.hotcloud.core.kubernetes.workload.JobDeleteApi;
 import io.hotcloud.core.kubernetes.workload.JobReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -35,7 +35,7 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<Job>> job(@Validated @RequestBody JobCreateParams params) throws ApiException {
+    public ResponseEntity<Result<Job>> job(@Validated @RequestBody JobCreateRequest params) throws ApiException {
         Job job = jobCreation.job(params);
         return created(job);
     }

@@ -15,7 +15,7 @@ public final class CronJobBuilder {
     private CronJobBuilder() {
     }
 
-    public static V1CronJob build(CronJobCreateParams request) {
+    public static V1CronJob build(CronJobCreateRequest request) {
 
         V1CronJob v1CronJob = new V1CronJob();
 

@@ -16,7 +16,7 @@ public final class SecretBuilder {
     private SecretBuilder() {
     }
 
-    public static V1Secret build(SecretCreateParams request) {
+    public static V1Secret build(SecretCreateRequest request) {
         final V1Secret v1Secret = new V1Secret();
         v1Secret.setKind(KIND);
         v1Secret.setApiVersion(API_VERSION);

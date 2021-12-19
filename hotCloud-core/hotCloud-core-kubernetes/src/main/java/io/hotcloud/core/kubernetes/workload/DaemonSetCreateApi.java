@@ -10,7 +10,7 @@ import io.kubernetes.client.util.Yaml;
  **/
 @FunctionalInterface
 public interface DaemonSetCreateApi {
-    default DaemonSet daemonSet(DaemonSetCreateParams request) throws ApiException {
+    default DaemonSet daemonSet(DaemonSetCreateRequest request) throws ApiException {
         V1DaemonSet v1DaemonSet = DaemonSetBuilder.build(request);
         String json = Yaml.dump(v1DaemonSet);
         return this.daemonSet(json);

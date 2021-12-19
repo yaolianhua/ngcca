@@ -20,7 +20,7 @@ public final class PersistentVolumeBuilder {
     private PersistentVolumeBuilder() {
     }
 
-    public static V1PersistentVolume build(PersistentVolumeCreateParams param) {
+    public static V1PersistentVolume build(PersistentVolumeCreateRequest param) {
 
         V1PersistentVolume v1PersistentVolume = new V1PersistentVolume();
 

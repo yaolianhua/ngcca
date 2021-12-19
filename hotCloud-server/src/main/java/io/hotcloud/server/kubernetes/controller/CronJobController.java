@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.core.common.Result;
 import io.hotcloud.core.kubernetes.YamlBody;
 import io.hotcloud.core.kubernetes.workload.CronJobCreateApi;
-import io.hotcloud.core.kubernetes.workload.CronJobCreateParams;
+import io.hotcloud.core.kubernetes.workload.CronJobCreateRequest;
 import io.hotcloud.core.kubernetes.workload.CronJobDeleteApi;
 import io.hotcloud.core.kubernetes.workload.CronJobReadApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -35,7 +35,7 @@ public class CronJobController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateParams params) throws ApiException {
+    public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateRequest params) throws ApiException {
         CronJob cronjob = cronJobCreateApi.cronjob(params);
         return created(cronjob);
     }

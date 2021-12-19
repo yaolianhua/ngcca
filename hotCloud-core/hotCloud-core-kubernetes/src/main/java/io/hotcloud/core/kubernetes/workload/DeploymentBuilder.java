@@ -19,7 +19,7 @@ public final class DeploymentBuilder {
     public static String API_VERSION = "apps/v1";
     public static String KIND = "Deployment";
 
-    public static V1Deployment build(DeploymentCreateParams request) {
+    public static V1Deployment build(DeploymentCreateRequest request) {
 
         V1Deployment v1Deployment = new V1Deployment();
 

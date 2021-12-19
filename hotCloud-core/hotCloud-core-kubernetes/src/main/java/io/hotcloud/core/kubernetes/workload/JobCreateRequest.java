@@ -1,4 +1,4 @@
-package io.hotcloud.core.kubernetes.volume;
+package io.hotcloud.core.kubernetes.workload;
 
 import io.hotcloud.core.kubernetes.ObjectMetadata;
 import lombok.Data;
@@ -7,9 +7,10 @@ import lombok.Data;
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class PersistentVolumeClaimCreateParams {
+public class JobCreateRequest {
 
     private ObjectMetadata metadata = new ObjectMetadata();
 
-    private PersistentVolumeClaimSpec spec = new PersistentVolumeClaimSpec();
+    private JobSpec spec = new JobSpec();
+
 }
