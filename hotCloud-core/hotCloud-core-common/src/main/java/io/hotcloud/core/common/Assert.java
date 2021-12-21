@@ -10,21 +10,17 @@ public final class Assert {
     }
 
     public static void notNull(Object object, Supplier<String> message) {
-        if (null == object) {
-            throw new HotCloudException(message.get(), 400);
-        }
+        notNull(object, message.get(), 400);
     }
 
-    public static void notNull(Object object, String message) {
+    public static void notNull(Object object, String message, int code) {
         if (null == object) {
-            throw new HotCloudException(message, 400);
+            throw new HotCloudException(message, code);
         }
     }
 
     public static void argument(boolean expression, Supplier<String> message) {
-        if (!expression) {
-            throw new HotCloudException(message.get(), 400);
-        }
+        argument(expression, message.get());
     }
 
     public static void argument(boolean expression, String message) {
@@ -34,14 +30,12 @@ public final class Assert {
     }
 
     public static void state(boolean expression, Supplier<String> message) {
-        if (!expression) {
-            throw new HotCloudException(message.get(), 400);
-        }
+        state(expression, message.get(), 403);
     }
 
-    public static void state(boolean expression, String message) {
+    public static void state(boolean expression, String message, int code) {
         if (!expression) {
-            throw new HotCloudException(message, 400);
+            throw new HotCloudException(message, code);
         }
     }
 }
