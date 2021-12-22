@@ -118,12 +118,13 @@
                 <artifactId>gitlab4j-api</artifactId>
                 <version>${gitlab-api.version}</version>
             </dependency>
-
+<!--
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${openfeign.version}</version>
             </dependency>
+           -->
             <!--
 
                         <dependency>
