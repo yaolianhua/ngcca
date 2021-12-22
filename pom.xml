@@ -32,9 +32,9 @@
         <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
         <openfeign.version>3.1.0</openfeign.version>
-        <grpc.version>1.43.0</grpc.version>
+        <!--<grpc.version>1.43.0</grpc.version>
         <protobuf.version>3.19.1</protobuf.version>
-        <tomcat-annotations-api.version>6.0.53</tomcat-annotations-api.version>
+        <tomcat-annotations-api.version>6.0.53</tomcat-annotations-api.version>-->
     </properties>
 
     <dependencyManagement>
@@ -107,6 +107,7 @@
             </dependency>
 
             <!-- code -->
+
             <dependency>
                 <groupId>org.kohsuke</groupId>
                 <artifactId>github-api</artifactId>
@@ -123,27 +124,29 @@
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${openfeign.version}</version>
             </dependency>
+            <!--
 
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-stub</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-protobuf</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-netty-shaded</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>annotations-api</artifactId>
-                <version>${tomcat-annotations-api.version}</version>
-            </dependency>
+                        <dependency>
+                            <groupId>io.grpc</groupId>
+                            <artifactId>grpc-stub</artifactId>
+                            <version>${grpc.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>io.grpc</groupId>
+                            <artifactId>grpc-protobuf</artifactId>
+                            <version>${grpc.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>io.grpc</groupId>
+                            <artifactId>grpc-netty-shaded</artifactId>
+                            <version>${grpc.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.tomcat</groupId>
+                            <artifactId>annotations-api</artifactId>
+                            <version>${tomcat-annotations-api.version}</version>
+                        </dependency>
+            -->
 
         </dependencies>
     </dependencyManagement>
