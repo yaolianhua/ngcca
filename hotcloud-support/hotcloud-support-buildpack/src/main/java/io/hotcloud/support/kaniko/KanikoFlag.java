@@ -7,27 +7,18 @@ public interface KanikoFlag {
 
     /**
      * <a href="https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts">https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts</a>
-     * <p/>
-     * kaniko's build context is very similar to the build context you would send your Docker daemon for an image build;
+     * <p> kaniko's build context is very similar to the build context you would send your Docker daemon for an image build;
      * it represents a directory containing a Dockerfile which kaniko will use to build your image. For example, a COPY command in your Dockerfile should refer to a file in the build context.
-     * <p/>
-     * You will need to store your build context in a place that kaniko can access. Right now, kaniko supports these storage solutions:
-     * <p/>
+     * <p> You will need to store your build context in a place that kaniko can access. Right now, kaniko supports these storage solutions:
      * <ul>
-     * <li>
-     * GCS Bucket
-     * <li>
-     * S3 Bucket
-     * <li>
-     * Azure Blob Storage
-     * <li>
-     * Local Directory
-     * <li>
-     * Local Tar
-     * <li>
-     * Standard Input
-     * <li>
-     * Git Repository
+     * <li>GCS Bucket
+     * <li>S3 Bucket
+     * <li>Azure Blob Storage
+     * <li>Local Directory
+     * <li>Local Tar
+     * <li>Standard Input
+     * <li>Git Repository
+     * </ul>
      *
      * @return context
      */
@@ -50,21 +41,18 @@ public interface KanikoFlag {
     }
 
     /**
-     * Set this flag to specify a local directory cache for base images. Defaults to /cache.
-     * <p/>
-     * This flag must be used in conjunction with the --cache=true flag.
+     * <p>Set this flag to specify a local directory cache for base images. Defaults to /cache.
+     * <p>This flag must be used in conjunction with the --cache=true flag.
      *
      * @return cache-dir
      */
     String getCacheDir();
 
     /**
-     * Set this flag to specify a remote repository that will be used to store cached layers.
-     * <p/>
-     * If this flag is not provided, a cache repo will be inferred from the --destination flag. If --destination=gcr.io/kaniko-project/test,
+     * <p>Set this flag to specify a remote repository that will be used to store cached layers.
+     * <p>If this flag is not provided, a cache repo will be inferred from the --destination flag. If --destination=gcr.io/kaniko-project/test,
      * then cached layers will be stored in gcr.io/kaniko-project/test/cache.
-     * <p/>
-     * This flag must be used in conjunction with the --cache=true flag.
+     * <p>This flag must be used in conjunction with the --cache=true flag.
      *
      * @return cache-repo
      */
@@ -99,8 +87,7 @@ public interface KanikoFlag {
 
     /**
      * Set a sub path within the given --context.
-     * <p/>
-     * Its particularly useful when your context is, for example, a git repository, and you want to build one of its subfolders instead of the root folder
+     * <p>Its particularly useful when your context is, for example, a git repository, and you want to build one of its subfolders instead of the root folder
      *
      * @return context-sub-path
      */
@@ -108,8 +95,7 @@ public interface KanikoFlag {
 
     /**
      * Set this flag to specify a file in the container. This file will receive the digest of a built image. This can be used to automatically track the exact image built by kaniko.
-     * <p/>
-     * For example, setting the flag to --digest-file=/dev/termination-log will write the digest to that file,
+     * <p>For example, setting the flag to --digest-file=/dev/termination-log will write the digest to that file,
      * which is picked up by Kubernetes automatically as the {{.state.terminated.message}} of the container.
      *
      * @return digest-file
@@ -189,7 +175,7 @@ public interface KanikoFlag {
     String getLabel();
 
     /**
-     * Set this flag as --log-format=<text|color|json> to set the log format. Defaults to color.
+     * Set this flag as --log-format={@code <text|color|json>} to set the log format. Defaults to color.
      *
      * @return log-format
      */
@@ -198,7 +184,7 @@ public interface KanikoFlag {
     }
 
     /**
-     * Set this flag as --log-timestamp=<true|false> to add timestamps to <text|color> log format. Defaults to false.
+     * Set this flag as --log-timestamp={@code <true|false>} to add timestamps to {@code <text|color>} log format. Defaults to false.
      *
      * @return log-timestamp
      */
@@ -226,8 +212,7 @@ public interface KanikoFlag {
 
     /**
      * Set this flag to provide a certificate for TLS communication with a given registry.
-     * <p/>
-     * Expected format is my.registry.url=/path/to/the/certificate.cert
+     * <p>Expected format is my.registry.url=/path/to/the/certificate.cert
      *
      * @return registry-certificate
      */
@@ -236,19 +221,15 @@ public interface KanikoFlag {
     /**
      * Set this flag if you want to use a registry mirror instead of the default index.docker.io. You can use this flag more than once, if you want to set multiple mirrors.
      * If an image is not found on the first mirror, Kaniko will try the next mirror(s), and at the end fallback on the default registry.
-     * <p/>
-     * Expected format is mirror.gcr.io for example.
-     * <p/>
-     * Note that you can't specify a URL with scheme for this flag. Some valid options are:
+     * <p>Expected format is mirror.gcr.io for example.
+     *
+     * <p>Note that you can't specify a URL with scheme for this flag. Some valid options are:
      * <ul>
-     * <li>
-     * mirror.gcr.io
-     * <li>
-     * 127.0.0.1
-     * <li>
-     * 192.168.0.1:5000
-     * <li>
-     * mycompany-docker-virtual.jfrog.io
+     * <li>mirror.gcr.io
+     * <li>127.0.0.1
+     * <li>192.168.0.1:5000
+     * <li>mycompany-docker-virtual.jfrog.io
+     * </ul>
      *
      * @return registry-mirror
      */
@@ -309,13 +290,10 @@ public interface KanikoFlag {
     }
 
     /**
-     * You can set the --snapshotMode=<full (default), redo, time> flag to set how kaniko will snapshot the filesystem.
-     * <p/>
-     * If --snapshotMode=full is set, the full file contents and metadata are considered when snapshotting. This is the least performant option, but also the most robust.
-     * <p/>
-     * If --snapshotMode=redo is set, the file mtime, size, mode, owner uid and gid will be considered when snapshotting. This may be up to 50% faster than "full", particularly if your project has a large number files.
-     * <p/>
-     * If --snapshotMode=time is set, only file mtime will be considered when snapshotting (see limitations related to mtime).
+     * You can set the --snapshotMode={@code <full (default), redo, time>} flag to set how kaniko will snapshot the filesystem.
+     * <p>If --snapshotMode=full is set, the full file contents and metadata are considered when snapshotting. This is the least performant option, but also the most robust.
+     * <p>If --snapshotMode=redo is set, the file mtime, size, mode, owner uid and gid will be considered when snapshotting. This may be up to 50% faster than "full", particularly if your project has a large number files.
+     * <p>If --snapshotMode=time is set, only file mtime will be considered when snapshotting (see limitations related to mtime).
      *
      * @return snapshotMode
      */
@@ -324,7 +302,7 @@ public interface KanikoFlag {
     }
 
     /**
-     * Set this flag as --tarPath=<path> to save the image as a tarball at path. You need to set --destination as well (for example --destination=image). If you want to save the image as tarball only you also need to set --no-push.
+     * Set this flag as --tarPath={@code <path>} to save the image as a tarball at path. You need to set --destination as well (for example --destination=image). If you want to save the image as tarball only you also need to set --no-push.
      *
      * @return tarPath
      */
@@ -347,7 +325,7 @@ public interface KanikoFlag {
     }
 
     /**
-     * Set this flag as --verbosity=<panic|fatal|error|warn|info|debug|trace> to set the logging level. Defaults to info.
+     * Set this flag as --verbosity={@code <panic|fatal|error|warn|info|debug|trace>} to set the logging level. Defaults to info.
      *
      * @return verbosity
      */
@@ -366,7 +344,7 @@ public interface KanikoFlag {
     }
 
     /**
-     * Set this flag as --ignore-path=<path> to ignore path when taking an image snapshot. Set it multiple times for multiple ignore paths.
+     * Set this flag as --ignore-path={@code <path>} to ignore path when taking an image snapshot. Set it multiple times for multiple ignore paths.
      *
      * @return ignore-path
      */

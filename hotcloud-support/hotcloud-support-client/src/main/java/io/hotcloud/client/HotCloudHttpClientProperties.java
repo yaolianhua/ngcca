@@ -31,11 +31,6 @@ public class HotCloudHttpClientProperties {
         this.port = port;
     }
 
-//    @PostConstruct
-//    public void print() {
-//        log.info("【Load Hot Cloud Http Client Configuration】url = '{}'", obtainUrl());
-//    }
-
     public String obtainUrl() {
         return String.format("http://%s:%s", host, port);
     }

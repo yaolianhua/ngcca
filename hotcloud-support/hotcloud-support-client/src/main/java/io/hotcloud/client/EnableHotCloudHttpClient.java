@@ -1,5 +1,6 @@
 package io.hotcloud.client;
 
+import io.hotcloud.client.kubernetes.HotCloudHttpClientAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

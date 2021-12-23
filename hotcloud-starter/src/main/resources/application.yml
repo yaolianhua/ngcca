@@ -5,9 +5,6 @@ spring:
     include:
       - kubernetes
       - buildpack
-  cloud:
-    compatibility-verifier:
-      enabled: false
 ## log level
 logging:
   level:
