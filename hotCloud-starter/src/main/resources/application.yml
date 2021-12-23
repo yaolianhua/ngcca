@@ -5,7 +5,6 @@ spring:
     include:
       - kubernetes
       - buildpack
-      - client
   cloud:
     compatibility-verifier:
       enabled: false
