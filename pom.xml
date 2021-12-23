@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>hotCloud-core</module>
-        <module>hotCloud-server</module>
-        <module>hotCloud-starter</module>
-        <module>hotCloud-support</module>
+        <module>hotcloud-core</module>
+        <module>hotcloud-server</module>
+        <module>hotcloud-starter</module>
+        <module>hotcloud-support</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,8 +15,8 @@
         <version>2.5.6</version>
     </parent>
 
-    <groupId>io.hotCloud</groupId>
-    <artifactId>hotCloud</artifactId>
+    <groupId>io.hotcloud</groupId>
+    <artifactId>hotcloud</artifactId>
     <version>0.1</version>
     <packaging>pom</packaging>
     <name>Hot Cloud</name>
@@ -38,23 +38,23 @@
         <!-- modules -->
         <dependencies>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-core</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-server</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-starter</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-support</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-support</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

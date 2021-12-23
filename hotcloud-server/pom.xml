@@ -3,28 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotCloud</artifactId>
-        <groupId>io.hotCloud</groupId>
+        <artifactId>hotcloud</artifactId>
+        <groupId>io.hotcloud</groupId>
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Hot Cloud :: Server</name>
-    <artifactId>hotCloud-server</artifactId>
+    <artifactId>hotcloud-server</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>io.hotCloud</groupId>
-            <artifactId>hotCloud-core-kubernetes</artifactId>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-core-kubernetes</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.hotCloud</groupId>
-            <artifactId>hotCloud-support-buildpack</artifactId>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-support-buildpack</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.hotCloud</groupId>
-            <artifactId>hotCloud-support-client</artifactId>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-support-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

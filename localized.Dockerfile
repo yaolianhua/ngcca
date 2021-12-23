@@ -2,11 +2,11 @@ FROM openjdk:11.0.12-jre-slim-buster AS builder
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
-COPY hotCloud-starter/target/hotCloud-starter.jar .
-RUN java -Djarmode=layertools -jar hotCloud-starter.jar extract
+COPY hotcloud-starter/target/hotcloud-starter.jar .
+RUN java -Djarmode=layertools -jar hotcloud-starter.jar extract
 
 ARG HOTCLOUD_VERSION
-LABEL hotCloud.version="${HOTCLOUD_VERSION}"
+LABEL hotcloud.version="${HOTCLOUD_VERSION}"
 
 FROM openjdk:11.0.12-jre-slim-buster
 WORKDIR /hotcloud/
