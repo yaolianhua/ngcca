@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>hotcloud-core</module>
-        <module>hotcloud-server</module>
         <module>hotcloud-starter</module>
         <module>hotcloud-support</module>
+        <module>hotcloud-kubernetes</module>
+        <module>hotcloud-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -41,12 +41,12 @@
         <dependencies>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-core</artifactId>
+                <artifactId>hotcloud-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-server</artifactId>
+                <artifactId>hotcloud-kubernetes</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

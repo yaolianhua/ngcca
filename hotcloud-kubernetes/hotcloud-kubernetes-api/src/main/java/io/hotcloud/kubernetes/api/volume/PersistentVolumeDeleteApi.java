@@ -1,0 +1,12 @@
+package io.hotcloud.kubernetes.api.volume;
+
+import io.kubernetes.client.openapi.ApiException;
+
+/**
+ * @author yaolianhua789@gmail.com
+ **/
+@FunctionalInterface
+public interface PersistentVolumeDeleteApi {
+
+    void delete(String persistentVolume) throws ApiException;
+}

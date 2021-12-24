@@ -16,7 +16,13 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-server</artifactId>
+            <artifactId>hotcloud-kubernetes-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
         </dependency>
 
     </dependencies>

@@ -12,11 +12,4 @@
     <artifactId>hotcloud-support-buildpack</artifactId>
     <name>Hot Cloud :: Support :: BuildPack</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-core-kubernetes</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>
