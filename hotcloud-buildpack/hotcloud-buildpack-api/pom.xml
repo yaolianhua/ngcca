@@ -3,13 +3,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotcloud-support</artifactId>
+        <artifactId>hotcloud-buildpack</artifactId>
         <groupId>io.hotcloud</groupId>
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-support-buildpack</artifactId>
-    <name>Hot Cloud :: Support :: BuildPack</name>
+    <artifactId>hotcloud-buildpack-api</artifactId>
+    <name>Hot Cloud :: BuildPack :: Api</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>

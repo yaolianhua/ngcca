@@ -16,7 +16,6 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-kubernetes-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
