@@ -4,15 +4,15 @@ WORKDIR /build/
 
 COPY . .
 RUN mvn -Dmaven.test.skip=true clean compile package install
-RUN cp hotCloud-starter/target/hotCloud-starter.jar .
-RUN java -Djarmode=layertools -jar hotCloud-starter.jar extract
+RUN cp hotcloud-starter/target/hotcloud-starter.jar .
+RUN java -Djarmode=layertools -jar hotcloud-starter.jar extract
 
 FROM openjdk:11.0.12-jre-slim-buster
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
 ARG HOTCLOUD_VERSION
-LABEL hotCloud.version="${HOTCLOUD_VERSION}"
+LABEL hotcloud.version="${HOTCLOUD_VERSION}"
 
 WORKDIR /hotcloud/
 COPY --from=builder /build/dependencies/ .

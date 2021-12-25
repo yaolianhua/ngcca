@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hotcloud</artifactId>
+        <groupId>io.hotcloud</groupId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hotcloud-buildpack</artifactId>
+    <packaging>pom</packaging>
+    <name>Hot Cloud :: BuildPack</name>
+    <modules>
+        <module>hotcloud-buildpack-api</module>
+        <module>hotcloud-buildpack-server</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-buildpack-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-buildpack-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

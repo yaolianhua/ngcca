@@ -4,25 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>hotCloud-core</module>
-        <module>hotCloud-server</module>
-        <module>hotCloud-starter</module>
-        <module>hotCloud-support</module>
+        <module>hotcloud-starter</module>
+        <module>hotcloud-kubernetes</module>
+        <module>hotcloud-common</module>
+        <module>hotcloud-buildpack</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.5.6</version>
     </parent>
 
-    <groupId>io.hotCloud</groupId>
-    <artifactId>hotCloud</artifactId>
+    <groupId>io.hotcloud</groupId>
+    <artifactId>hotcloud</artifactId>
     <version>0.1</version>
     <packaging>pom</packaging>
     <name>Hot Cloud</name>
 
     <properties>
         <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <swagger-api.version>1.6.2</swagger-api.version>
         <springfox-version>3.0.0</springfox-version>
         <kubernetes-client.version>14.0.0</kubernetes-client.version>
@@ -31,30 +33,30 @@
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
-        <spring-cloud-dependencies.version>2020.0.4</spring-cloud-dependencies.version>
+        <openfeign.version>3.1.0</openfeign.version>
     </properties>
 
     <dependencyManagement>
         <!-- modules -->
         <dependencies>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-core</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-server</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-buildpack</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-starter</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-kubernetes</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.hotCloud</groupId>
-                <artifactId>hotCloud-support</artifactId>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -104,6 +106,7 @@
             </dependency>
 
             <!-- code -->
+
             <dependency>
                 <groupId>org.kohsuke</groupId>
                 <artifactId>github-api</artifactId>
@@ -114,6 +117,11 @@
                 <artifactId>gitlab4j-api</artifactId>
                 <version>${gitlab-api.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${openfeign.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -121,12 +129,65 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.xolstice.maven.plugins</groupId>
+                    <artifactId>protobuf-maven-plugin</artifactId>
+                    <version>0.6.1</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
     </build>
 
     <developers>
@@ -139,4 +200,34 @@
         </developer>
         <!-- Add your profile here -->
     </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>local-nexus</id>
+            <name>Local Nexus Releases</name>
+            <url>http://nexus.local/repository/maven-releases/</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <id>local-nexus</id>
+            <name>Local Nexus Snapshots</name>
+            <url>http://nexus.local/repository/maven-snapshots/</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>local-nexus</id>
+            <name>Local Nexus Public</name>
+            <url>http://nexus.local/repository/maven-public/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>local-nexus</id>
+            <name>Local Nexus Public</name>
+            <url>http://nexus.cloudtogo.local/repository/maven-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
