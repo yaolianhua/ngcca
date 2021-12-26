@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run hotcloud build.sh
-    - run: ./build.sh
+      run: ./build.sh
 #     - name: Set up JDK 11
 #       uses: actions/setup-java@v2
 #       with:
