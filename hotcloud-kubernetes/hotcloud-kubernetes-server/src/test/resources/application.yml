@@ -4,3 +4,4 @@ spring:
   profiles:
     include:
       - integration-test
+      - mvc-test
