@@ -25,7 +25,7 @@ jobs:
     
     - name: Build the Docker image
       env:
-        IMAGE: yaolianhua/hotcloud:${{ date '+%Y%m%d%H%M%S' }}
+        IMAGE: yaolianhua/hotcloud:$(date '+%Y%m%d%H%M%S')
         VERSION: 0.1
       run: echo $IMAGE $VERSION
 #       run: |
