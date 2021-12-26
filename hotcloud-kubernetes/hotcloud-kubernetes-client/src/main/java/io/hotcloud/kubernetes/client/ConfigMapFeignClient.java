@@ -1,0 +1,40 @@
+package io.hotcloud.kubernetes.client;
+
+import io.fabric8.kubernetes.api.model.ConfigMap;
+import io.fabric8.kubernetes.api.model.ConfigMapList;
+import io.hotcloud.Result;
+import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
+import io.hotcloud.kubernetes.model.YamlBody;
+import io.kubernetes.client.openapi.ApiException;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+/**
+ * @author yaolianhua789@gmail.com
+ **/
+@FeignClient(value = HotCloudHttpClientProperties.HOT_CLOUD,
+        url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
+interface ConfigMapFeignClient {
+
+
+    @PostMapping("/v1/kubernetes/configmaps")
+    Result<ConfigMap> configMap(@RequestBody ConfigMapCreateRequest params) throws ApiException;
+
+    @PostMapping("/v1/kubernetes/configmaps/yaml")
+    Result<ConfigMap> configMap(@RequestBody YamlBody yaml) throws ApiException;
+
+    @GetMapping("/v1/kubernetes/configmaps/{namespace}/{configmap}")
+    ResponseEntity<Result<ConfigMap>> configMapRead(@PathVariable String namespace,
+                                                    @PathVariable String configmap);
+
+    @GetMapping("/v1/kubernetes/configmaps/{namespace}")
+    ResponseEntity<Result<ConfigMapList>> configMapListRead(@PathVariable String namespace,
+                                                            @RequestParam(required = false) Map<String, String> labelSelector);
+
+    @DeleteMapping("/v1/kubernetes/configmaps/{namespace}/{configmap}")
+    ResponseEntity<Result<Void>> configMapDelete(@PathVariable String namespace,
+                                                 @PathVariable String configmap) throws ApiException;
+}
