@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Slf4j
 public class HotCloudHttpClientProperties {
 
+    public static final String HOT_CLOUD = "hotcloud";
     public static final String HOT_CLOUD_URL = "${hotcloud.host:localhost}:${hotcloud.port:8080}";
 
     private String host = "localhost";

@@ -16,7 +16,8 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@FeignClient(value = "hotcloud", url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
+@FeignClient(value = HotCloudHttpClientProperties.HOT_CLOUD,
+        url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
 interface DeploymentFeignClient {
 
     @GetMapping("/v1/kubernetes/deployments/{namespace}/{deployment}")
