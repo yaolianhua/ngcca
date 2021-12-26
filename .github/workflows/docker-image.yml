@@ -25,9 +25,9 @@ jobs:
     
     - name: Build the Docker image
       env:
-        image: yaolianhua/hotcloud:$(date +%s)
-        version: 0.1
+        IMAGE: yaolianhua/hotcloud:$(date '+%Y%m%d%H%M%S')
+        VERSION: 0.1
       run: |
         echo $image $version
-        docker build -f localized.Dockerfile --build-arg HOTCLOUD_VERSION=$version -t $image .
-        docker push $image
+        docker build -f localized.Dockerfile --build-arg HOTCLOUD_VERSION=$VERSION -t $IMAGE .
+        docker push $IMAGE
