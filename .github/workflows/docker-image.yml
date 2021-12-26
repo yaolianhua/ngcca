@@ -28,5 +28,6 @@ jobs:
         image: yaolianhua/hotcloud:$(date +%s)
         version: 0.1
       run: |
-        docker build . --file localized.Dockerfile --build-arg HOTCLOUD_VERSION=$version --tag $image
+        echo $image $version
+        docker build -f localized.Dockerfile --build-arg HOTCLOUD_VERSION=$version -t $image .
         docker push $image
