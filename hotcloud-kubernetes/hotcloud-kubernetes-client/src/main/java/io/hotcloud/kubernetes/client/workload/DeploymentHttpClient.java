@@ -2,65 +2,62 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.Assert;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
-import java.net.URI;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
-public class DeploymentHttpClient implements HotCloudDeploymentHttpClient {
+public interface DeploymentHttpClient {
 
-    private final DeploymentFeignClient deploymentFeignClient;
-    private final URI uri;
+    /**
+     * Read namespaced Deployment
+     *
+     * @param namespace  namespace
+     * @param deployment deployment name
+     * @return {@link Result}
+     */
+    Result<Deployment> read(String namespace, String deployment);
 
-    public DeploymentHttpClient(HotCloudHttpClientProperties clientProperties,
-                                DeploymentFeignClient deploymentFeignClient) {
-        this.deploymentFeignClient = deploymentFeignClient;
-        uri = URI.create(clientProperties.obtainUrl());
-    }
+    /**
+     * Read namespaced DeploymentList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link Result}
+     */
+    Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector);
 
-    @Override
-    public Result<Deployment> read(String namespace, String deployment) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), "deployment name is null");
-        return deploymentFeignClient.read(uri, namespace, deployment).getBody();
-    }
+    /**
+     * Create Deployment from {@code DeploymentCreateRequest}
+     *
+     * @param request {@link DeploymentCreateRequest}
+     * @return {@link Result}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Result<Deployment> create(DeploymentCreateRequest request) throws ApiException;
 
-    @Override
-    public Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-        return deploymentFeignClient.readList(uri, namespace, labelSelector).getBody();
-    }
+    /**
+     * Create Deployment from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link Result}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Result<Deployment> create(YamlBody yaml) throws ApiException;
 
-    @Override
-    public Result<Deployment> create(DeploymentCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
-        return deploymentFeignClient.create(uri, request).getBody();
-    }
+    /**
+     * Delete namespaced Deployment
+     *
+     * @param namespace  namespace
+     * @param deployment deployment name
+     * @return {@link Result}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Result<Void> delete(String namespace, String deployment) throws ApiException;
 
-    @Override
-    public Result<Deployment> create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null", 400);
-        Assert.argument(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-        return deploymentFeignClient.create(uri, yaml).getBody();
-    }
-
-    @Override
-    public Result<Void> delete(String namespace, String deployment) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), "deployment name is null");
-        return deploymentFeignClient.delete(uri, namespace, deployment).getBody();
-    }
 }
