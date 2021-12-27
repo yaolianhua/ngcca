@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface HotCloudDeploymentHttpClient {
+public interface DeploymentHttpClient {
 
     /**
      * Read namespaced Deployment
