@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.Result;
+import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -18,7 +19,7 @@ import java.util.Map;
  **/
 @FeignClient(value = HotCloudHttpClientProperties.HOT_CLOUD,
         url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
-interface DeploymentFeignClient {
+public interface DeploymentFeignClient {
 
     @GetMapping("/v1/kubernetes/deployments/{namespace}/{deployment}")
     ResponseEntity<Result<Deployment>> read(URI uri,
