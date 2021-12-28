@@ -31,7 +31,7 @@ public interface DaemonSetFeignClient {
                                                    @PathVariable String namespace,
                                                    @RequestParam(required = false) Map<String, String> labelSelector);
 
-    @PostMapping
+    @PostMapping("/v1/kubernetes/daemonsets")
     ResponseEntity<Result<DaemonSet>> create(URI uri,
                                              @RequestBody DaemonSetCreateRequest params) throws ApiException;
 
