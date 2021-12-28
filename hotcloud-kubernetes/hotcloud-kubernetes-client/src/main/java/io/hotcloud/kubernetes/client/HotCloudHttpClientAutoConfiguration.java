@@ -1,11 +1,10 @@
 package io.hotcloud.kubernetes.client;
 
-import io.hotcloud.kubernetes.client.configurations.ConfigMapFeignClient;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
+import io.hotcloud.kubernetes.client.configurations.*;
 import io.hotcloud.kubernetes.client.network.ServiceFeignClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
+import io.hotcloud.kubernetes.client.volume.*;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -43,9 +42,51 @@ public class HotCloudHttpClientAutoConfiguration {
     }
 
     @Bean
+    public SecretHttpClient secretHttpClient(SecretFeignClient feignClient,
+                                             HotCloudHttpClientProperties properties) {
+        return new SecretHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
     public CronJobHttpClient cronJobHttpClient(CronJobFeignClient feignClient,
                                                HotCloudHttpClientProperties properties) {
         return new CronJobHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public DaemonSetHttpClient daemonSetHttpClient(DaemonSetFeignClient feignClient,
+                                                   HotCloudHttpClientProperties properties) {
+        return new DaemonSetHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public JobHttpClient jobHttpClient(JobFeignClient feignClient,
+                                       HotCloudHttpClientProperties properties) {
+        return new JobHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public StatefulSetHttpClient statefulSetHttpClient(StatefulSetFeignClient feignClient,
+                                                       HotCloudHttpClientProperties properties) {
+        return new StatefulSetHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public PodHttpClient podHttpClient(PodFeignClient feignClient,
+                                       HotCloudHttpClientProperties properties) {
+        return new PodHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public PersistentVolumeClaimHttpClient persistentVolumeClaimHttpClient(PersistentVolumeClaimFeignClient feignClient,
+                                                                           HotCloudHttpClientProperties properties) {
+        return new PersistentVolumeClaimHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public PersistentVolumeHttpClient persistentVolumeHttpClient(PersistentVolumeFeignClient feignClient,
+                                                                 HotCloudHttpClientProperties properties) {
+        return new PersistentVolumeHttpClientImpl(properties, feignClient);
     }
 
     @EnableAutoConfiguration(exclude = CompatibilityVerifierAutoConfiguration.class)
