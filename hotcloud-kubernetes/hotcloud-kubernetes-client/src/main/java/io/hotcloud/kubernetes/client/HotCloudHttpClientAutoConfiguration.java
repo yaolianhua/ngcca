@@ -1,8 +1,6 @@
 package io.hotcloud.kubernetes.client;
 
-import io.hotcloud.kubernetes.client.configurations.ConfigMapFeignClient;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
+import io.hotcloud.kubernetes.client.configurations.*;
 import io.hotcloud.kubernetes.client.network.ServiceFeignClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
@@ -40,6 +38,12 @@ public class HotCloudHttpClientAutoConfiguration {
     public ConfigMapHttpClient configMapHttpClient(ConfigMapFeignClient feignClient,
                                                    HotCloudHttpClientProperties properties) {
         return new ConfigMapHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public SecretHttpClient secretHttpClient(SecretFeignClient feignClient,
+                                             HotCloudHttpClientProperties properties) {
+        return new SecretHttpClientImpl(properties, feignClient);
     }
 
     @Bean
