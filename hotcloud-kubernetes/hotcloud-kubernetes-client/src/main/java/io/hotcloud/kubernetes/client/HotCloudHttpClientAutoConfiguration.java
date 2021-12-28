@@ -61,8 +61,8 @@ public class HotCloudHttpClientAutoConfiguration {
     }
 
     @Bean
-    public StatefulSetHttpClient jobHttpClient(StatefulSetFeignClient feignClient,
-                                               HotCloudHttpClientProperties properties) {
+    public StatefulSetHttpClient statefulSetHttpClient(StatefulSetFeignClient feignClient,
+                                                       HotCloudHttpClientProperties properties) {
         return new StatefulSetHttpClientImpl(properties, feignClient);
     }
 
