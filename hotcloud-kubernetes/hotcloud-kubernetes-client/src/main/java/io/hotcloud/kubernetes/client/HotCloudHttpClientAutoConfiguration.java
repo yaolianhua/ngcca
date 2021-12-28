@@ -54,6 +54,12 @@ public class HotCloudHttpClientAutoConfiguration {
         return new DaemonSetHttpClientImpl(properties, feignClient);
     }
 
+    @Bean
+    public JobHttpClient jobHttpClient(JobFeignClient feignClient,
+                                       HotCloudHttpClientProperties properties) {
+        return new JobHttpClientImpl(properties, feignClient);
+    }
+
     @EnableAutoConfiguration(exclude = CompatibilityVerifierAutoConfiguration.class)
     public static class DisableCompatibilityVerifierAutoConfiguration {
 
