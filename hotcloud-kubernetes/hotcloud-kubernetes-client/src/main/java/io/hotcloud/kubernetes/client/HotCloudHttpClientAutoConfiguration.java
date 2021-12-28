@@ -4,6 +4,9 @@ import io.hotcloud.kubernetes.client.configurations.*;
 import io.hotcloud.kubernetes.client.network.ServiceFeignClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
+import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimFeignClient;
+import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClient;
+import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClientImpl;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -74,6 +77,12 @@ public class HotCloudHttpClientAutoConfiguration {
     public PodHttpClient podHttpClient(PodFeignClient feignClient,
                                        HotCloudHttpClientProperties properties) {
         return new PodHttpClientImpl(properties, feignClient);
+    }
+
+    @Bean
+    public PersistentVolumeClaimHttpClient persistentVolumeClaimHttpClient(PersistentVolumeClaimFeignClient feignClient,
+                                                                           HotCloudHttpClientProperties properties) {
+        return new PersistentVolumeClaimHttpClientImpl(properties, feignClient);
     }
 
     @EnableAutoConfiguration(exclude = CompatibilityVerifierAutoConfiguration.class)
