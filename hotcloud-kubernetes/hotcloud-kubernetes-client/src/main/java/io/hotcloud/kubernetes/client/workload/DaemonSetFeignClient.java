@@ -21,12 +21,12 @@ import java.util.Map;
         url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
 public interface DaemonSetFeignClient {
 
-    @GetMapping("/{namespace}/{daemonSet}")
+    @GetMapping("/v1/kubernetes/daemonsets/{namespace}/{daemonSet}")
     ResponseEntity<Result<DaemonSet>> read(URI uri,
                                            @PathVariable String namespace,
                                            @PathVariable String daemonSet);
 
-    @GetMapping("/{namespace}")
+    @GetMapping("/v1/kubernetes/daemonsets/{namespace}")
     ResponseEntity<Result<DaemonSetList>> readList(URI uri,
                                                    @PathVariable String namespace,
                                                    @RequestParam(required = false) Map<String, String> labelSelector);
@@ -35,11 +35,11 @@ public interface DaemonSetFeignClient {
     ResponseEntity<Result<DaemonSet>> create(URI uri,
                                              @RequestBody DaemonSetCreateRequest params) throws ApiException;
 
-    @PostMapping("/yaml")
+    @PostMapping("/v1/kubernetes/daemonsets/yaml")
     ResponseEntity<Result<DaemonSet>> create(URI uri,
                                              @RequestBody YamlBody yaml) throws ApiException;
 
-    @DeleteMapping("/{namespace}/{daemonSet}")
+    @DeleteMapping("/v1/kubernetes/daemonsets/{namespace}/{daemonSet}")
     ResponseEntity<Result<Void>> delete(URI uri,
                                         @PathVariable String namespace,
                                         @PathVariable String daemonSet) throws ApiException;
