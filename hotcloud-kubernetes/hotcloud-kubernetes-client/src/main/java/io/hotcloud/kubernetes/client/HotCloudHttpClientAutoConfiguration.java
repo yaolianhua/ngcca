@@ -66,6 +66,12 @@ public class HotCloudHttpClientAutoConfiguration {
         return new StatefulSetHttpClientImpl(properties, feignClient);
     }
 
+    @Bean
+    public PodHttpClient podHttpClient(PodFeignClient feignClient,
+                                       HotCloudHttpClientProperties properties) {
+        return new PodHttpClientImpl(properties, feignClient);
+    }
+
     @EnableAutoConfiguration(exclude = CompatibilityVerifierAutoConfiguration.class)
     public static class DisableCompatibilityVerifierAutoConfiguration {
 
