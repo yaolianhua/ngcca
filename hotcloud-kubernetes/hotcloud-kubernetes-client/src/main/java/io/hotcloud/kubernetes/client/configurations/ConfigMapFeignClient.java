@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@FeignClient(value = HotCloudHttpClientProperties.HOT_CLOUD,
+@FeignClient(value = "configmap",
         url = HotCloudHttpClientProperties.HOT_CLOUD_URL)
 public interface ConfigMapFeignClient {
 
