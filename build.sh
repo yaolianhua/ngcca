@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOTCLOUD_VERSION="0.1"
+HOTCLOUD_VERSION="0.2"
 BUILD_TIMESTAMP=$(date '+%Y%m%d%H%M%S')
 TAG="${HOTCLOUD_VERSION}.${BUILD_TIMESTAMP}"
 echo "Using hotCloud tag: ${TAG}"
