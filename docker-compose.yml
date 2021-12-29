@@ -4,9 +4,9 @@ services:
     container_name: hotcloud
     hostname: hotcloud
     restart: always
-    #    build:
-    #      context: .
-    #      dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: yaolianhua/hotcloud:latest
     pull_policy: always
     ports:
