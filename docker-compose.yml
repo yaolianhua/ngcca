@@ -1,0 +1,23 @@
+version: '3'
+services:
+  hotcloud:
+    container_name: hotcloud
+    hostname: hotcloud
+    restart: always
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
+    image: yaolianhua/hotcloud:latest
+    pull_policy: always
+    ports:
+      - 30000:8080
+    networks:
+      - hotcloud
+    volumes:
+      - ${HOME}/.kube/config:/root/.kube/config:ro
+    environment:
+      kubernetes_in_cluster: "false"
+      logging_level_io_hotCloud_server: info
+networks:
+  hotcloud:
+    external: true
