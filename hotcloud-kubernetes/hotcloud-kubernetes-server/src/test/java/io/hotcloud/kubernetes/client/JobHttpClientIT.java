@@ -98,7 +98,6 @@ public class JobHttpClientIT extends IntegrationTestBase {
         container.setVolumeMounts(List.of(secret, dockerfile));
 
         spec.setContainers(List.of(container));
-        spec.setRestartPolicy(PodTemplateSpec.RestartPolicy.Never);
 
         Volume v1 = new Volume();
         SecretVolume secretVolume = new SecretVolume();
