@@ -13,6 +13,8 @@ public enum WorkloadsType {
     //
     CronJob,
     //
-    StatefulSet
+    StatefulSet,
+    //
+    Pod
 
 }

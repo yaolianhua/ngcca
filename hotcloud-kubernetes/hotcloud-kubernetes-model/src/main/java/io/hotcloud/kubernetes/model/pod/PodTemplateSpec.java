@@ -49,7 +49,7 @@ public class PodTemplateSpec {
     private PodSecurityContext securityContext;
     private Map<String, String> nodeSelector = new HashMap<>();
     private Map<String, String> overhead = new HashMap<>();
-    private RestartPolicy restartPolicy = RestartPolicy.Never;
+    private RestartPolicy restartPolicy = RestartPolicy.Always;
     private DnsPolicy dnsPolicy = DnsPolicy.ClusterFirst;
     private Affinity affinity;
     private List<Toleration> tolerations = new ArrayList<>();
