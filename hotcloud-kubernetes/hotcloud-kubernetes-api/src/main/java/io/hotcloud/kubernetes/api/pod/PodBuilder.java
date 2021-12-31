@@ -1,6 +1,7 @@
 package io.hotcloud.kubernetes.api.pod;
 
 import io.hotcloud.Assert;
+import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.affinity.NodeAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAntiAffinityBuilder;
@@ -42,7 +43,7 @@ public final class PodBuilder {
         V1ObjectMeta v1ObjectMeta = build(params.getMetadata());
         v1Pod.setMetadata(v1ObjectMeta);
 
-        V1PodSpec v1PodSpec = build(params.getSpec());
+        V1PodSpec v1PodSpec = build(params.getSpec(), WorkloadsType.Pod);
 
         v1Pod.setSpec(v1PodSpec);
 
@@ -64,29 +65,18 @@ public final class PodBuilder {
 
     }
 
-    public static V1PodTemplateSpec build(ObjectMetadata podTemplateMetadata, PodTemplateSpec podTemplateSpec) {
-
-        V1PodTemplateSpec v1PodTemplateSpec = new V1PodTemplateSpec();
-
-        //build pod metadata
-        V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
-        v1ObjectMeta.setLabels(podTemplateMetadata.getLabels());
-        v1ObjectMeta.setAnnotations(podTemplateMetadata.getAnnotations());
-        v1PodTemplateSpec.setMetadata(v1ObjectMeta);
-
-        //build pod Spec
-        V1PodSpec v1PodSpec = build(podTemplateSpec);
-        v1PodTemplateSpec.setSpec(v1PodSpec);
-
-        return v1PodTemplateSpec;
-    }
-
-    public static V1PodSpec build(PodTemplateSpec podTemplateSpec) {
+    public static V1PodSpec build(PodTemplateSpec podTemplateSpec, WorkloadsType type) {
         V1PodSpec v1PodSpec = new V1PodSpec();
         v1PodSpec.setTerminationGracePeriodSeconds(podTemplateSpec.getTerminationGracePeriodSeconds());
         v1PodSpec.setActiveDeadlineSeconds(podTemplateSpec.getActiveDeadlineSeconds());
         v1PodSpec.setHostname(podTemplateSpec.getHostname());
-        v1PodSpec.setRestartPolicy(podTemplateSpec.getRestartPolicy().name());
+
+        String restartPolicy = podTemplateSpec.getRestartPolicy().name();
+        if (Objects.equals(WorkloadsType.Job, type)) {
+            restartPolicy = PodTemplateSpec.RestartPolicy.Never.name();
+        }
+        v1PodSpec.setRestartPolicy(restartPolicy);
+
         v1PodSpec.setDnsPolicy(podTemplateSpec.getDnsPolicy().name());
         v1PodSpec.setEnableServiceLinks(podTemplateSpec.getEnableServiceLinks());
         v1PodSpec.setAutomountServiceAccountToken(podTemplateSpec.getAutomountServiceAccountToken());

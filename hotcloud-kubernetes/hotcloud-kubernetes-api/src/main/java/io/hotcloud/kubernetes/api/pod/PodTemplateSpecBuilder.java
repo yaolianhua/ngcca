@@ -38,7 +38,7 @@ public final class PodTemplateSpecBuilder {
         v1PodTemplateSpec.setMetadata(v1ObjectMeta);
 
         //build pod Spec
-        V1PodSpec v1PodSpec = PodBuilder.build(podTemplateSpec);
+        V1PodSpec v1PodSpec = PodBuilder.build(podTemplateSpec, type);
 
         v1PodTemplateSpec.setSpec(v1PodSpec);
 
