@@ -3,6 +3,8 @@ package io.hotcloud.kubernetes.model.workload;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import lombok.Data;
 
+import javax.validation.Valid;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -18,7 +20,8 @@ public class JobSpec {
     private Boolean suspend;
     private Integer ttlSecondsAfterFinished;
 
-    private LabelSelector selector;
-    private JobTemplate template;
+    private LabelSelector selector = new LabelSelector();
+    @Valid
+    private JobTemplate template = new JobTemplate();
 
 }

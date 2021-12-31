@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.api.workload;
 
 import io.hotcloud.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
+import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
@@ -46,7 +47,7 @@ public final class JobBuilder {
         //build Template
         ObjectMetadata podTemplateMetadata = jobSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = jobSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.Job);
         spec.setTemplate(v1PodTemplateSpec);
 
         spec.setActiveDeadlineSeconds(jobSpec.getActiveDeadlineSeconds());

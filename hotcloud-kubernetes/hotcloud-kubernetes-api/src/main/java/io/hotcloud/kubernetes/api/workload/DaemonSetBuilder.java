@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.api.workload;
 
 import io.hotcloud.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
+import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Strategy;
@@ -53,7 +54,7 @@ public final class DaemonSetBuilder {
         //build Template
         ObjectMetadata podTemplateMetadata = daemonSetSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = daemonSetSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.DaemonSet);
         spec.setTemplate(v1PodTemplateSpec);
 
         spec.setMinReadySeconds(daemonSetSpec.getMinReadySeconds());

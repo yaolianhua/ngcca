@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.api.workload;
 
 import io.hotcloud.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
+import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -56,7 +57,7 @@ public final class StatefulSetBuilder {
         //build Template
         ObjectMetadata podTemplateMetadata = statefulSetSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = statefulSetSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.Job);
         spec.setTemplate(v1PodTemplateSpec);
 
 
