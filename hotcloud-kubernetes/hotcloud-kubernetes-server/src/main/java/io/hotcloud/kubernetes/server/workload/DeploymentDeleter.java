@@ -33,7 +33,7 @@ public class DeploymentDeleter implements DeploymentDeleteApi {
                 null,
                 null,
                 null,
-                null,
+                "Foreground",
                 null
         );
         log.debug("delete namespaced deployment success \n '{}'",v1Status);
