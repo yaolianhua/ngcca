@@ -53,17 +53,17 @@ public class JobHttpClientIT extends IntegrationTestBase {
     @Test
     public void read() {
         Result<JobList> readList = jobHttpClient.readList(NAMESPACE, null);
-        List<Job> jobs = readList.getData().getItems();
-        Assert.assertTrue(jobs.size() > 0);
+        List<Job> items = readList.getData().getItems();
+        Assert.assertTrue(items.size() > 0);
 
-        List<String> jobNames = jobs.stream()
+        List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
-        log.info("List Job Name: {}", jobNames);
+        log.info("List Job Name: {}", names);
 
         Result<Job> result = jobHttpClient.read(NAMESPACE, JOB);
-        String deployment = result.getData().getMetadata().getName();
-        Assert.assertEquals(deployment, JOB);
+        String name = result.getData().getMetadata().getName();
+        Assert.assertEquals(name, JOB);
     }
 
     void create() throws ApiException {

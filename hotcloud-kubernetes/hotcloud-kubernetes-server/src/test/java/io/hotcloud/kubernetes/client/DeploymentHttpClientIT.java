@@ -49,12 +49,12 @@ public class DeploymentHttpClientIT extends IntegrationTestBase {
     @Test
     public void read() {
         Result<DeploymentList> readList = deploymentHttpClient.readList(NAMESPACE, null);
-        List<Deployment> deployments = readList.getData().getItems();
-        Assert.assertTrue(deployments.size() > 0);
+        List<Deployment> items = readList.getData().getItems();
+        Assert.assertTrue(items.size() > 0);
 
         Result<Deployment> result = deploymentHttpClient.read(NAMESPACE, DEPLOYMENT);
-        String deployment = result.getData().getMetadata().getName();
-        Assert.assertEquals(deployment, DEPLOYMENT);
+        String name = result.getData().getMetadata().getName();
+        Assert.assertEquals(name, DEPLOYMENT);
     }
 
     void create() throws ApiException {
