@@ -32,7 +32,12 @@ public class PodDeleter implements PodDeleteApi {
 
         Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.argument(StringUtils.hasText(pod), () -> "delete resource name is null");
-        V1Pod v1Pod = coreV1Api.deleteNamespacedPod(pod, namespace, "true", null, null, null, null, null);
+        V1Pod v1Pod = coreV1Api.deleteNamespacedPod(pod, namespace, "true",
+                null,
+                null,
+                null,
+                "Foreground",
+                null);
 
         log.debug("delete namespaced pod success \n '{}'", v1Pod);
 

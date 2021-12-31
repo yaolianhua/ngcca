@@ -33,7 +33,14 @@ public final class VolumeBuilder {
         } else if (volume.isGitRepo()) {
             V1GitRepoVolumeSource v1GitRepoVolumeSource = build(volume.getGitRepo());
             v1Volume.setGitRepo(v1GitRepoVolumeSource);
+        } else if (volume.isPersistentVolumeClaim()) {
+            V1PersistentVolumeClaimVolumeSource v1PersistentVolumeClaimVolumeSource = build(volume.getPersistentVolumeClaim());
+            v1Volume.setPersistentVolumeClaim(v1PersistentVolumeClaimVolumeSource);
+        } else if (volume.isSecret()) {
+            V1SecretVolumeSource v1SecretVolumeSource = build(volume.getSecretVolume());
+            v1Volume.setSecret(v1SecretVolumeSource);
         }
+
         if (!StringUtils.hasText(volume.getName())) {
             volume.setName(String.format("%s-volume", NamespaceGenerator.randomNumber32Bit()));
         }
@@ -59,6 +66,34 @@ public final class VolumeBuilder {
         v1ConfigMapVolumeSource.setItems(v1KeyToPaths);
 
         return v1ConfigMapVolumeSource;
+    }
+
+    public static V1SecretVolumeSource build(SecretVolume secretVolume) {
+        V1SecretVolumeSource v1SecretVolumeSource = new V1SecretVolumeSource();
+        v1SecretVolumeSource.setSecretName(secretVolume.getSecretName());
+        v1SecretVolumeSource.setDefaultMode(secretVolume.getDefaultModel());
+        v1SecretVolumeSource.setOptional(secretVolume.isOptional());
+        List<V1KeyToPath> v1KeyToPaths = secretVolume.getItems()
+                .stream()
+                .map(item -> {
+                    V1KeyToPath v1KeyToPath = new V1KeyToPath();
+                    v1KeyToPath.setKey(item.getKey());
+                    v1KeyToPath.setMode(item.getMode());
+                    v1KeyToPath.setPath(item.getPath());
+                    return v1KeyToPath;
+                }).collect(Collectors.toList());
+
+        v1SecretVolumeSource.setItems(v1KeyToPaths);
+
+        return v1SecretVolumeSource;
+    }
+
+    public static V1PersistentVolumeClaimVolumeSource build(PersistentVolumeClaimVolume persistentVolumeClaimVolume) {
+        V1PersistentVolumeClaimVolumeSource v1PersistentVolumeClaimVolumeSource = new V1PersistentVolumeClaimVolumeSource();
+        v1PersistentVolumeClaimVolumeSource.setClaimName(persistentVolumeClaimVolume.getClaimName());
+        v1PersistentVolumeClaimVolumeSource.setReadOnly(persistentVolumeClaimVolume.getReadOnly());
+
+        return v1PersistentVolumeClaimVolumeSource;
     }
 
     public static V1EmptyDirVolumeSource build(EmptyDirVolume emptyDirVolume) {

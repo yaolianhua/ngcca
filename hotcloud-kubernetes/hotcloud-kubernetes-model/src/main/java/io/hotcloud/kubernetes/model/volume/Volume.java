@@ -16,6 +16,8 @@ public class Volume {
     private GitRepoVolume gitRepo;
     private HostPathVolume hostPath;
     private NFSVolume nfs;
+    private SecretVolume secretVolume;
+    private PersistentVolumeClaimVolume persistentVolumeClaim;
 
     private String name;
 
@@ -24,7 +26,17 @@ public class Volume {
                 Objects.nonNull(emptyDir) ||
                 Objects.nonNull(gitRepo) ||
                 Objects.nonNull(hostPath) ||
-                Objects.nonNull(nfs);
+                Objects.nonNull(nfs) ||
+                Objects.nonNull(secretVolume) ||
+                Objects.nonNull(persistentVolumeClaim);
+    }
+
+    public boolean isPersistentVolumeClaim() {
+        return persistentVolumeClaim != null;
+    }
+
+    public boolean isSecret() {
+        return secretVolume != null;
     }
 
     public boolean isConfigMap() {

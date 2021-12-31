@@ -31,7 +31,7 @@ public interface DeploymentFeignClient {
                                                     @PathVariable String namespace,
                                                     @RequestParam(required = false) Map<String, String> labelSelector);
 
-    @PostMapping
+    @PostMapping("/v1/kubernetes/deployments")
     ResponseEntity<Result<Deployment>> create(URI uri,
                                               @RequestBody DeploymentCreateRequest request) throws ApiException;
 

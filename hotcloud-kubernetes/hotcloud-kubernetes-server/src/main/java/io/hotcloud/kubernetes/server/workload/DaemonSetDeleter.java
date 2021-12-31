@@ -33,7 +33,7 @@ public class DaemonSetDeleter implements DaemonSetDeleteApi {
                 null,
                 null,
                 null,
-                null,
+                "Foreground",
                 null
         );
         log.debug("delete namespaced daemonSet success \n '{}'", v1Status);

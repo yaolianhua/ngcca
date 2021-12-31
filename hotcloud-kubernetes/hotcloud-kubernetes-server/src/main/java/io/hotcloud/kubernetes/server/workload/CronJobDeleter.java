@@ -33,7 +33,7 @@ public class CronJobDeleter implements CronJobDeleteApi {
                 null,
                 null,
                 null,
-                null,
+                "Foreground",
                 null
         );
         log.debug("delete namespaced cronjob success \n '{}'", v1Status);

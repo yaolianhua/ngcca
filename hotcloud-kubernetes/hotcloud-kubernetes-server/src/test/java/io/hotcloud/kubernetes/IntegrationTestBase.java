@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.server.integration;
+package io.hotcloud.kubernetes;
 
 import io.hotcloud.HotCloudApplicationTest;
 import org.junit.runner.RunWith;
