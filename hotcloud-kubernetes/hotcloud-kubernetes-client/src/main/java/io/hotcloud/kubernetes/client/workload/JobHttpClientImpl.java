@@ -9,7 +9,15 @@ import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Map;
@@ -21,46 +29,89 @@ import java.util.Objects;
 @Slf4j
 public class JobHttpClientImpl implements JobHttpClient {
 
-    private final JobFeignClient jobFeignClient;
     private final URI uri;
+    private static final String PATH = "/v1/kubernetes/jobs";
+    private final RestTemplate restTemplate;
 
     public JobHttpClientImpl(HotCloudHttpClientProperties clientProperties,
-                             JobFeignClient jobFeignClient) {
-        this.jobFeignClient = jobFeignClient;
-        uri = URI.create(clientProperties.obtainUrl());
+                             RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        uri = URI.create(String.format("%s/%s", clientProperties.obtainUrl(), PATH));
     }
 
     @Override
     public Result<Job> read(String namespace, String job) {
         Assert.argument(StringUtils.hasText(namespace), "namespace is null");
         Assert.argument(StringUtils.hasText(job), "job name is null");
-        return jobFeignClient.read(uri, namespace, job).getBody();
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, job);
+
+        ResponseEntity<Result<Job>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
     }
 
     @Override
     public Result<JobList> readList(String namespace, Map<String, String> labelSelector) {
         Assert.argument(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-        return jobFeignClient.readList(uri, namespace, labelSelector).getBody();
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", uri))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<Result<JobList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
     }
 
     @Override
     public Result<Job> create(JobCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null", 400);
-        return jobFeignClient.create(uri, request).getBody();
+
+        ResponseEntity<Result<Job>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
     }
 
     @Override
     public Result<Job> create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null", 400);
         Assert.argument(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-        return jobFeignClient.create(uri, yaml).getBody();
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", uri))
+                .build().toUri();
+        ResponseEntity<Result<Job>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
     }
 
     @Override
     public Result<Void> delete(String namespace, String job) throws ApiException {
         Assert.argument(StringUtils.hasText(namespace), "namespace is null");
         Assert.argument(StringUtils.hasText(job), "job name is null");
-        return jobFeignClient.delete(uri, namespace, job).getBody();
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, job);
+
+        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
     }
 }
