@@ -1,6 +1,6 @@
 spring:
   application:
-    name: hot-cloud
+    name: hotcloud
   profiles:
     include:
       - kubernetes
