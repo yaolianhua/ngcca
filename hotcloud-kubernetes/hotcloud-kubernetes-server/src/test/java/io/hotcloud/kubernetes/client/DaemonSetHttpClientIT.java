@@ -58,10 +58,10 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
         List<DaemonSet> items = readList.getData().getItems();
         Assert.assertTrue(items.size() > 0);
 
-        List<String> daemonSetNames = items.stream()
+        List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
-        log.info("List DaemonSet Name: {}", daemonSetNames);
+        log.info("List DaemonSet Name: {}", names);
 
         Result<DaemonSet> result = daemonSetHttpClient.read(NAMESPACE, DAEMONSET);
         String name = result.getData().getMetadata().getName();

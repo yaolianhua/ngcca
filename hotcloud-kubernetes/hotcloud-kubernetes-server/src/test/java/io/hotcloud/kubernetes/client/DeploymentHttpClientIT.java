@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -48,9 +49,14 @@ public class DeploymentHttpClientIT extends IntegrationTestBase {
 
     @Test
     public void read() {
-        Result<DeploymentList> readList = deploymentHttpClient.readList(NAMESPACE, null);
+        Result<DeploymentList> readList = deploymentHttpClient.readList(NAMESPACE, Map.of("app", DEPLOYMENT));
         List<Deployment> items = readList.getData().getItems();
         Assert.assertTrue(items.size() > 0);
+
+        List<String> names = items.stream()
+                .map(e -> e.getMetadata().getName())
+                .collect(Collectors.toList());
+        log.info("List Deployment Name: {}", names);
 
         Result<Deployment> result = deploymentHttpClient.read(NAMESPACE, DEPLOYMENT);
         String name = result.getData().getMetadata().getName();
@@ -59,13 +65,15 @@ public class DeploymentHttpClientIT extends IntegrationTestBase {
 
     void create() throws ApiException {
 
+        Map<String, String> labels = Map.of("app", DEPLOYMENT);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setName(DEPLOYMENT);
+        metadata.setLabels(labels);
 
         DeploymentSpec deploymentSpec = new DeploymentSpec();
 
         LabelSelector labelSelector = new LabelSelector();
-        labelSelector.setMatchLabels(Map.of("app", DEPLOYMENT));
+        labelSelector.setMatchLabels(labels);
         deploymentSpec.setSelector(labelSelector);
 
         PodTemplateSpec spec = new PodTemplateSpec();
@@ -76,7 +84,7 @@ public class DeploymentHttpClientIT extends IntegrationTestBase {
         spec.setContainers(List.of(container));
 
         ObjectMetadata templateMetadata = new ObjectMetadata();
-        templateMetadata.setLabels(Map.of("app", DEPLOYMENT));
+        templateMetadata.setLabels(labels);
 
         DeploymentTemplate template = new DeploymentTemplate();
         template.setSpec(spec);
