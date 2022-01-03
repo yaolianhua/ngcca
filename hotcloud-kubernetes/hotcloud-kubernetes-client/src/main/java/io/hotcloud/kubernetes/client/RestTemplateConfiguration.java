@@ -20,15 +20,17 @@ public class RestTemplateConfiguration {
         builder.setConnectTimeout(Duration.ofSeconds(30))
                 .setReadTimeout(Duration.ofSeconds(30));
 
-        builder.additionalInterceptors(
+        RestTemplate restTemplate = builder.build();
+
+        restTemplate.getInterceptors().add(
                 ((request, body, execution) -> {
-                    log.info("HTTP '{}' Request From '{}'", Objects.requireNonNull(request.getMethod()).name(),
+                    log.info("HTTP '{}' Request To '{}'", Objects.requireNonNull(request.getMethod()).name(),
                             request.getURI());
                     return execution.execute(request, body);
                 })
         );
 
-        return builder.build();
+        return restTemplate;
 
     }
 
