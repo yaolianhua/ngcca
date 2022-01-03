@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
+@EnableHotCloudHttpClient
 public class DaemonSetHttpClientIT extends IntegrationTestBase {
 
     private static final String DAEMONSET = "fluentd-elasticsearch";
@@ -42,13 +43,15 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        create();
         log.info("DaemonSet Client Integration Test Start");
+        create();
+        log.info("Create DaemonSet Name: '{}'", DAEMONSET);
     }
 
     @After
     public void post() throws ApiException {
         daemonSetHttpClient.delete(NAMESPACE, DAEMONSET);
+        log.info("Delete DaemonSet Name: '{}'", DAEMONSET);
         log.info("DaemonSet Client Integration Test End");
     }
 
@@ -58,10 +61,10 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
         List<DaemonSet> items = readList.getData().getItems();
         Assert.assertTrue(items.size() > 0);
 
-        List<String> daemonSetNames = items.stream()
+        List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
-        log.info("List DaemonSet Name: {}", daemonSetNames);
+        log.info("List DaemonSet Name: {}", names);
 
         Result<DaemonSet> result = daemonSetHttpClient.read(NAMESPACE, DAEMONSET);
         String name = result.getData().getMetadata().getName();

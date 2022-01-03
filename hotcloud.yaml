@@ -72,8 +72,8 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: yaolianhua/hotcloud:0.1.20211211220907
-          imagePullPolicy: IfNotPresent
+        - image: yaolianhua/hotcloud
+          imagePullPolicy: Always
           #          livenessProbe:
           #            failureThreshold: 1
           #            httpGet:
