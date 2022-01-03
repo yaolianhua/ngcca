@@ -11,17 +11,12 @@ FROM openjdk:11.0.12-jre-slim-buster
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
-ARG HOTCLOUD_VERSION
-LABEL hotcloud.version="${HOTCLOUD_VERSION}"
-
 WORKDIR /hotcloud/
 COPY --from=builder /build/dependencies/ .
 COPY --from=builder /build/snapshot-dependencies/ .
 COPY --from=builder /build/spring-boot-loader/ .
 COPY --from=builder /build/application/ .
 
-
-ENV ARG HOTCLOUD_VERSION=${HOTCLOUD_VERSION}
 
 ENV JAVA_OPTS="-Xms128m -Xmx256m"
 EXPOSE 8080
