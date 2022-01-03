@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
+@EnableHotCloudHttpClient
 public class JobHttpClientIT extends IntegrationTestBase {
 
     private static final String JOB = "kaniko";
@@ -40,13 +41,15 @@ public class JobHttpClientIT extends IntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        create();
         log.info("Job Client Integration Test Start");
+        create();
+        log.info("Create Job Name: '{}'", JOB);
     }
 
     @After
     public void post() throws ApiException {
         jobHttpClient.delete(NAMESPACE, JOB);
+        log.info("Delete Job Name: '{}'", JOB);
         log.info("Job Client Integration Test End");
     }
 

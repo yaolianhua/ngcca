@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
+@EnableHotCloudHttpClient
 public class DeploymentHttpClientIT extends IntegrationTestBase {
 
     private static final String DEPLOYMENT = "nginx";
@@ -37,13 +38,15 @@ public class DeploymentHttpClientIT extends IntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        create();
         log.info("Deployment Client Integration Test Start");
+        create();
+        log.info("Create Deployment Name: '{}'", DEPLOYMENT);
     }
 
     @After
     public void post() throws ApiException {
         deploymentHttpClient.delete(NAMESPACE, DEPLOYMENT);
+        log.info("Delete Deployment Name: '{}'", DEPLOYMENT);
         log.info("Deployment Client Integration Test End");
     }
 
