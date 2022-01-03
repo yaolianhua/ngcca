@@ -37,7 +37,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     public PodHttpClientImpl(HotCloudHttpClientProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(String.format("%s/%s", clientProperties.obtainUrl(), PATH));
+        uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
