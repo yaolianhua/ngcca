@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.pod.container;
 
-import io.hotcloud.kubernetes.model.pod.container.Resources;
+import io.hotcloud.kubernetes.model.Resources;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.V1ResourceRequirements;
 

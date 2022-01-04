@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.model.volume;
 
 import io.hotcloud.kubernetes.model.LabelSelector;
-import io.hotcloud.kubernetes.model.pod.container.Resources;
+import io.hotcloud.kubernetes.model.Resources;
 import lombok.Data;
 
 import java.util.ArrayList;
