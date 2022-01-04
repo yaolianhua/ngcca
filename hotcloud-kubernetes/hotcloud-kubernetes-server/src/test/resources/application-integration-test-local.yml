@@ -1,0 +1,9 @@
+kubernetes:
+  in-cluster: false
+logging:
+  level:
+    io.hotcloud.server: debug
+hotcloud:
+  server:
+    host: localhost
+    port: 8080
