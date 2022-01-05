@@ -30,13 +30,13 @@ public final class JobBuilder {
         V1ObjectMeta v1ObjectMeta = build(request.getMetadata());
         v1Job.setMetadata(v1ObjectMeta);
 
-        V1JobSpec v1JobSpec = build(request.getSpec());
+        V1JobSpec v1JobSpec = build(request.getSpec(), WorkloadsType.Job);
         v1Job.setSpec(v1JobSpec);
 
         return v1Job;
     }
 
-    public static V1JobSpec build(JobSpec jobSpec) {
+    public static V1JobSpec build(JobSpec jobSpec, WorkloadsType type) {
 
         V1JobSpec spec = new V1JobSpec();
 
@@ -47,7 +47,7 @@ public final class JobBuilder {
         //build Template
         ObjectMetadata podTemplateMetadata = jobSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = jobSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.Job);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, type);
         spec.setTemplate(v1PodTemplateSpec);
 
         spec.setActiveDeadlineSeconds(jobSpec.getActiveDeadlineSeconds());

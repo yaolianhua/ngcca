@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.model.pod.container;
 
+import io.hotcloud.kubernetes.model.Resources;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

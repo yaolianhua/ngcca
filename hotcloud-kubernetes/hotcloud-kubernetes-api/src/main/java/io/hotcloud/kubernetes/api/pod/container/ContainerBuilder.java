@@ -1,6 +1,10 @@
 package io.hotcloud.kubernetes.api.pod.container;
 
-import io.hotcloud.kubernetes.model.pod.container.*;
+import io.hotcloud.kubernetes.model.Resources;
+import io.hotcloud.kubernetes.model.pod.container.Container;
+import io.hotcloud.kubernetes.model.pod.container.Probe;
+import io.hotcloud.kubernetes.model.pod.container.SecurityContext;
+import io.hotcloud.kubernetes.model.pod.container.VolumeMount;
 import io.kubernetes.client.openapi.models.*;
 
 import java.util.List;

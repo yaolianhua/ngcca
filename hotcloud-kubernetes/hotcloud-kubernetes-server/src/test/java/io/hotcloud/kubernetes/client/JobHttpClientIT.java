@@ -1,10 +1,13 @@
 package io.hotcloud.kubernetes.client;
 
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.Result;
 import io.hotcloud.kubernetes.IntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.JobHttpClient;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.pod.container.Container;
@@ -25,6 +28,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +42,8 @@ public class JobHttpClientIT extends IntegrationTestBase {
     private static final String NAMESPACE = "default";
     @Autowired
     private JobHttpClient jobHttpClient;
+    @Autowired
+    private PodHttpClient podHttpClient;
 
     @Before
     public void init() throws ApiException {
@@ -54,7 +60,7 @@ public class JobHttpClientIT extends IntegrationTestBase {
     }
 
     @Test
-    public void read() {
+    public void read() throws InterruptedException {
         Result<JobList> readList = jobHttpClient.readList(NAMESPACE, null);
         List<Job> items = readList.getData().getItems();
         Assert.assertTrue(items.size() > 0);
@@ -67,6 +73,21 @@ public class JobHttpClientIT extends IntegrationTestBase {
         Result<Job> result = jobHttpClient.read(NAMESPACE, JOB);
         String name = result.getData().getMetadata().getName();
         Assert.assertEquals(name, JOB);
+
+        log.info("Sleep 30s wait pod created");
+        TimeUnit.SECONDS.sleep(30);
+        Result<PodList> podListResult = podHttpClient.readList(NAMESPACE, null);
+        List<Pod> pods = podListResult.getData().getItems();
+        List<String> podNames = pods.stream()
+                .map(e -> e.getMetadata().getName())
+                .filter(e -> e.startsWith(JOB))
+                .collect(Collectors.toList());
+        log.info("List Pod Name: {}", podNames);
+
+        for (String podName : podNames) {
+            Result<String> logResult = podHttpClient.logs(NAMESPACE, podName, 100);
+            log.info("Fetch Pod [{}] logs \n {}", podName, logResult.getData());
+        }
     }
 
     void create() throws ApiException {

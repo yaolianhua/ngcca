@@ -57,7 +57,7 @@ public final class StatefulSetBuilder {
         //build Template
         ObjectMetadata podTemplateMetadata = statefulSetSpec.getTemplate().getMetadata();
         PodTemplateSpec podTemplateSpec = statefulSetSpec.getTemplate().getSpec();
-        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.Job);
+        V1PodTemplateSpec v1PodTemplateSpec = PodTemplateSpecBuilder.build(podTemplateMetadata, podTemplateSpec, WorkloadsType.StatefulSet);
         spec.setTemplate(v1PodTemplateSpec);
 
 

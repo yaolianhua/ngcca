@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.model.pod.container;
+package io.hotcloud.kubernetes.model;
 
 import lombok.Data;
 

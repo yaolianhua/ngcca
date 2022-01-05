@@ -1,6 +1,7 @@
 package io.hotcloud.kubernetes.api.workload;
 
 import io.hotcloud.Assert;
+import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.CronJobSpec;
@@ -64,7 +65,9 @@ public final class CronJobBuilder {
 
         v1JobTemplateSpec.setMetadata(v1ObjectMeta);
 
-        V1JobSpec v1JobSpec = JobBuilder.build(jobSpec);
+        V1JobSpec v1JobSpec = JobBuilder.build(jobSpec, WorkloadsType.CronJob);
+        //fix `selector` will be auto-generated
+        v1JobSpec.setSelector(null);
         v1JobTemplateSpec.setSpec(v1JobSpec);
 
         return v1JobTemplateSpec;
