@@ -1,10 +1,13 @@
 package io.hotcloud.kubernetes.client;
 
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.Result;
 import io.hotcloud.kubernetes.IntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.DaemonSetHttpClient;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
@@ -27,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +44,8 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
     private static final String NAMESPACE = "default";
     @Autowired
     private DaemonSetHttpClient daemonSetHttpClient;
+    @Autowired
+    private PodHttpClient podHttpClient;
 
     @Before
     public void init() throws ApiException {
@@ -56,7 +62,7 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
     }
 
     @Test
-    public void read() {
+    public void read() throws InterruptedException {
         Result<DaemonSetList> readList = daemonSetHttpClient.readList(NAMESPACE, null);
         List<DaemonSet> items = readList.getData().getItems();
         Assert.assertTrue(items.size() > 0);
@@ -69,6 +75,16 @@ public class DaemonSetHttpClientIT extends IntegrationTestBase {
         Result<DaemonSet> result = daemonSetHttpClient.read(NAMESPACE, DAEMONSET);
         String name = result.getData().getMetadata().getName();
         Assert.assertEquals(name, DAEMONSET);
+
+        log.info("Sleep 30s wait pod created");
+        TimeUnit.SECONDS.sleep(30);
+        Result<PodList> podListResult = podHttpClient.readList(NAMESPACE, null);
+        List<Pod> pods = podListResult.getData().getItems();
+        List<String> podNames = pods.stream()
+                .map(e -> e.getMetadata().getName())
+                .filter(e -> e.startsWith(DAEMONSET))
+                .collect(Collectors.toList());
+        log.info("List Pod Name: {}", podNames);
     }
 
     void create() throws ApiException {
