@@ -32,9 +32,9 @@ public class MessageProperties {
     public void print() {
 
         if (WEBSOCKET.equals(type)) {
-            log.info("【Load message service configuration. implementation using WebSocket】");
+            log.info("【Load Message Service Configuration. implementation using WebSocket】");
         } else if (RABBITMQ.equals(type)) {
-            log.info("【Load message service configuration. implementation using RabbitMQ】");
+            log.info("【Load Message Service Configuration. implementation using RabbitMQ】");
         }
 
     }

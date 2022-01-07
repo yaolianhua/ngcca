@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(MessageProperties.class)
 @Slf4j
 public class MessageConfiguration {
-
 }
