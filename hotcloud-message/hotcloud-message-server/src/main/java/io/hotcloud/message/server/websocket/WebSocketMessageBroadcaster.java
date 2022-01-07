@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@ConditionalOnProperty(name = MessageProperties.TYPE_NAME, havingValue = MessageProperties.WEBSOCKET, matchIfMissing = true)
+@ConditionalOnProperty(
+        name = MessageProperties.TYPE_NAME,
+        havingValue = MessageProperties.WEBSOCKET,
+        matchIfMissing = true
+)
 public class WebSocketMessageBroadcaster implements MessageBroadcaster {
 
     @Override

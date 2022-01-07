@@ -12,7 +12,10 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration(proxyBeanMethods = false)
 @Slf4j
-@ConditionalOnProperty(name = MessageProperties.TYPE_NAME, havingValue = MessageProperties.RABBITMQ)
+@ConditionalOnProperty(
+        name = MessageProperties.TYPE_NAME,
+        havingValue = MessageProperties.RABBITMQ
+)
 @EnableConfigurationProperties(RabbitmqProperties.class)
 @EnableRabbit
 public class RabbitmqConfiguration {
