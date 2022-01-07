@@ -5,6 +5,7 @@ spring:
     include:
       - kubernetes
       - buildpack
+      - message
 ## log level
 logging:
   level:

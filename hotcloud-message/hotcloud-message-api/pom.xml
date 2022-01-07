@@ -12,4 +12,10 @@
     <artifactId>hotcloud-message-api</artifactId>
     <name>Hot Cloud :: Message :: Api</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>
