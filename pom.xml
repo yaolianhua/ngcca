@@ -8,6 +8,7 @@
         <module>hotcloud-kubernetes</module>
         <module>hotcloud-common</module>
         <module>hotcloud-buildpack</module>
+        <module>hotcloud-message</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -58,6 +59,11 @@
                 <artifactId>hotcloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-message</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Swagger -->
             <dependency>
@@ -102,19 +108,6 @@
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
-            </dependency>
-
-            <!-- code -->
-
-            <dependency>
-                <groupId>org.kohsuke</groupId>
-                <artifactId>github-api</artifactId>
-                <version>${github-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.gitlab4j</groupId>
-                <artifactId>gitlab4j-api</artifactId>
-                <version>${gitlab-api.version}</version>
             </dependency>
 
         </dependencies>
