@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.server;
+package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
