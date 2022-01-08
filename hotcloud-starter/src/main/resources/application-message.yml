@@ -1,0 +1,9 @@
+message:
+  type: rabbitmq
+  rabbitmq:
+    host:
+    username:
+    password:
+    port:
+    listener:
+      enabled: false

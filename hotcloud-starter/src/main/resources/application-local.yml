@@ -1,5 +1,14 @@
 kubernetes:
   in-cluster: false
+message:
+  type: rabbitmq
+  rabbitmq:
+    host: localhost
+    username: root
+    password: password
+    port: 5672
+    listener:
+      enabled: false
 logging:
   level:
     io.hotcloud.server: debug

@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class RabbitmqProperties {
 
+    public static final String LISTENER_ENABLED = "message.rabbitmq.listener.enabled";
+    private Listener listener = new Listener();
     private String host;
     private Integer port;
 
@@ -22,7 +24,14 @@ public class RabbitmqProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load rabbitmq configuration. url {} 】", String.format("amqp://%s:%s@%s:%s", username, password, host, port));
+        log.info("【Load RabbitMQ Configuration. url {} 】", String.format("amqp://%s:%s@%s:%s", username, password, host, port));
+        if (!this.listener.isEnabled()) {
+            log.warn("【Event listener is disabled, all events will be ignored】");
+        }
     }
 
+    @Data
+    public static class Listener {
+        private boolean enabled;
+    }
 }
