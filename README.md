@@ -1,1 +1,1 @@
-# hotCloud
+# hotcloud
