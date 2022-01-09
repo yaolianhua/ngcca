@@ -18,7 +18,7 @@ public class WebSocketConfiguration {
             WebSocketMessageBroadcaster.class
     })
     public ServerEndpointExporter endpointExporter() {
-        log.info("Register endpoint exporter");
+        log.info("Register websocket endpoint exporter");
         return new ServerEndpointExporter();
     }
 }
