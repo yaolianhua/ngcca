@@ -3,16 +3,10 @@ spring:
     name: hotcloud
   profiles:
     include:
-      - kubernetes
-      - buildpack
-      - message
+      - message-integration-test
   rabbitmq:
     host: ${message.rabbitmq.host:}
     port: ${message.rabbitmq.port:}
     username: ${message.rabbitmq.username:}
     password: ${message.rabbitmq.password:}
     virtual-host: /
-## log level
-logging:
-  level:
-    io.hotcloud.server: info

@@ -1,7 +1,5 @@
-kubernetes:
-  in-cluster: false
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host: localhost
     username: root
@@ -9,5 +7,4 @@ message:
     port: 5672
 logging:
   level:
-    io.hotcloud.server: debug
     io.hotcloud.message: debug
