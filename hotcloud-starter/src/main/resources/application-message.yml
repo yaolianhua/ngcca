@@ -5,5 +5,3 @@ message:
     username:
     password:
     port:
-    listener:
-      enabled: false
