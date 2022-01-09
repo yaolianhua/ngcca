@@ -1,0 +1,10 @@
+message:
+  type: rabbitmq
+  rabbitmq:
+    host: localhost
+    username: root
+    password: password
+    port: 5672
+logging:
+  level:
+    io.hotcloud.message: debug
