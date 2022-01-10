@@ -22,7 +22,7 @@ public class RabbitmqProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load RabbitMQ Configuration. url: {} 】", String.format("amqp://%s:%s@%s:%s", username, password, host, port));
+        log.info("【Load RabbitMQ Configuration. url: {} 】", String.format("amqp://%s@%s:%s", username, host, port));
     }
 
 }

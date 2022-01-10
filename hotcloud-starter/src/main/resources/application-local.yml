@@ -1,7 +1,7 @@
 kubernetes:
   in-cluster: false
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host: localhost
     username: root
