@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         classes = HotCloudMessageApplicationTest.class
 )
 public class MessageBroadcasterIT {
@@ -21,8 +23,9 @@ public class MessageBroadcasterIT {
     private MessageBroadcaster messageBroadcaster;
 
     @Test
-    public void broadcast() {
-        MessageBody body = MessageBody.of("Hi", "RabbitMQ");
+    public void broadcast() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(15);
+        MessageBody body = MessageBody.of("Hi", "Broadcast Message");
         Message<MessageBody> message = Message.of(body, Message.Level.INFO, "Demo desc", "Broadcast message");
         messageBroadcaster.broadcast(message);
     }
