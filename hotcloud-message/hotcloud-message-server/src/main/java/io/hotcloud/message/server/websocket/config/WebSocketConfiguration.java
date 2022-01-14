@@ -1,5 +1,6 @@
-package io.hotcloud.message.server.websocket;
+package io.hotcloud.message.server.websocket.config;
 
+import io.hotcloud.message.server.websocket.WebSocketMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;

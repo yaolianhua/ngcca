@@ -1,5 +1,8 @@
-package io.hotcloud.message.api;
+package io.hotcloud.message.server.rabbitmq;
 
+import io.hotcloud.message.api.Message;
+import io.hotcloud.message.api.MessageBody;
+import io.hotcloud.message.api.MessageBroadcaster;
 import io.hotcloud.message.server.HotCloudMessageApplicationTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +20,7 @@ import java.util.concurrent.TimeUnit;
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         classes = HotCloudMessageApplicationTest.class
 )
-public class MessageBroadcasterIT {
+public class RabbitmqMessageBroadcasterIT {
 
     @Autowired
     private MessageBroadcaster messageBroadcaster;

@@ -24,15 +24,9 @@ import java.util.Set;
 @Slf4j
 public class WebSocketMessageBroadcaster implements MessageBroadcaster {
 
-    private final WebSocketSessionContext webSocketSessionContext;
-
-    public WebSocketMessageBroadcaster(WebSocketSessionContext webSocketSessionContext) {
-        this.webSocketSessionContext = webSocketSessionContext;
-    }
-
     @Override
     public <T> void broadcast(Message<T> message) {
-        Set<Session> sessions = webSocketSessionContext.getSessions();
+        Set<Session> sessions = WebSocketSessionContext.getSessions();
         for (Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(message);
