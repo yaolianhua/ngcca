@@ -1,0 +1,5 @@
+message:
+  type: websocket
+logging:
+  level:
+    io.hotcloud.message: debug

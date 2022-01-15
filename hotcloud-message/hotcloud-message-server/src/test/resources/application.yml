@@ -1,9 +1,6 @@
 spring:
   application:
     name: hotcloud
-  profiles:
-    include:
-      - message-integration-test
   rabbitmq:
     host: ${message.rabbitmq.host:}
     port: ${message.rabbitmq.port:}

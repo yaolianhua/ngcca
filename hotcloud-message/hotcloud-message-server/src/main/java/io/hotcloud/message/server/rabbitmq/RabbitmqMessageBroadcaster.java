@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
         havingValue = MessageProperties.RABBITMQ
 )
 @Slf4j
-public class RabbitMqMessageBroadcaster implements MessageBroadcaster {
+public class RabbitmqMessageBroadcaster implements MessageBroadcaster {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public RabbitMqMessageBroadcaster(RabbitTemplate rabbitTemplate) {
+    public RabbitmqMessageBroadcaster(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
