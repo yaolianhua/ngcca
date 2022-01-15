@@ -1,5 +1,5 @@
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host: localhost
     username: root
