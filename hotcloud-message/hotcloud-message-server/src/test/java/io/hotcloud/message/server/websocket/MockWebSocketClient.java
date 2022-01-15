@@ -10,35 +10,35 @@ import java.net.URI;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class WebSocketMockClient extends WebSocketClient {
+public class MockWebSocketClient extends WebSocketClient {
 
-    public WebSocketMockClient(URI serverUri) {
+    public MockWebSocketClient(URI serverUri) {
         super(serverUri);
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
-        log.info("WebSocketMockClient onOpen ");
+    public void onOpen(ServerHandshake serverHandshake) {
+        log.info("client opened: {}", serverHandshake);
     }
 
     @Override
     public void onMessage(String message) {
-        log.info("WebSocketMockClient onMessage: {}", message);
+        log.info("client received message: {}", message);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        log.info("WebSocketMockClient onClose: code={}, reason={}, remote={}", code, reason, remote);
+        log.info("client closed: code={}, reason={}, remote={}", code, reason, remote);
     }
 
     @Override
     public void onError(Exception ex) {
-        log.info("WebSocketMockClient onError: {}", ex.getCause(), ex);
+        log.info("client onError: {}", ex.getCause(), ex);
     }
 
     @Override
     public void connect() {
         super.connect();
-        log.info("WebSocketMockClient connected");
+        log.info("client connected");
     }
 }

@@ -27,6 +27,7 @@ public class WebSocketMessageBroadcaster implements MessageBroadcaster {
     @Override
     public <T> void broadcast(Message<T> message) {
         Set<Session> sessions = WebSocketSessionContext.getSessions();
+        log.info("Websocket broadcast message: \n {}", message);
         for (Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(message);

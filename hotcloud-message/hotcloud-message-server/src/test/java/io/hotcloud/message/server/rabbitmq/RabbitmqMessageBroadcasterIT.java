@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -30,20 +31,21 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 public class RabbitmqMessageBroadcasterIT {
 
-    public final static CountDownLatch COUNT_DOWN_LATCH = new CountDownLatch(1);
+    public final static CountDownLatch COUNT_DOWN_LATCH = new CountDownLatch(5);
     private final Faker faker = new Faker();
     @Qualifier("rabbitmqMessageBroadcaster")//for eliminate compiler errors only
     @Autowired
     private MessageBroadcaster messageBroadcaster;
 
     @Test
-    public void broadcast() {
+    public void broadcast() throws InterruptedException {
 
         while (COUNT_DOWN_LATCH.getCount() > 0) {
             MessageBody body = MessageBody.of(faker.name().fullName(), faker.address().streetAddress());
             Message<MessageBody> message = Message.of(body, Message.Level.INFO, faker.chuckNorris().fact(), "Broadcast message");
             messageBroadcaster.broadcast(message);
             COUNT_DOWN_LATCH.countDown();
+            TimeUnit.SECONDS.sleep(2);
         }
 
 
