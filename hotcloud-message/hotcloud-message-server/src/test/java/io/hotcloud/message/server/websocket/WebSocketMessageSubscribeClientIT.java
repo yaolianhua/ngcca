@@ -6,6 +6,8 @@ import io.hotcloud.message.api.MessageBody;
 import io.hotcloud.message.api.MessageBroadcaster;
 import io.hotcloud.message.server.HotCloudMessageApplicationTest;
 import lombok.extern.slf4j.Slf4j;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -38,12 +41,39 @@ public class WebSocketMessageSubscribeClientIT {
     private MessageBroadcaster messageBroadcaster;
 
     /**
-     * run this main method after server was started
      * {@link WebSocketMessageSubscribeClientIT#broadcast()}
      */
-    public static void main(String[] args) throws URISyntaxException {
-        MockWebSocketClient mockWebSocketClient = new MockWebSocketClient(new URI("ws://localhost:8078/pub"));
-        mockWebSocketClient.connect();
+    static AtomicReference<Boolean> connected = new AtomicReference<>(false);
+
+    public static void main(String[] args) throws URISyntaxException, InterruptedException {
+
+        while (!connected.get()) {
+            TimeUnit.SECONDS.sleep(3);
+            new WebSocketClient(new URI("ws://localhost:8078/pub")) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    log.info("client opened: {}", serverHandshake);
+                    connected.set(true);
+                }
+
+                @Override
+                public void onMessage(String message) {
+                    log.info("client received message: {}", message);
+                }
+
+                @Override
+                public void onClose(int code, String reason, boolean remote) {
+                    log.info("client connect failure: code={}, reason={}, remote={}", code, reason, remote);
+                    connected.set(false);
+                }
+
+                @Override
+                public void onError(Exception ex) {
+
+                }
+            }.connect();
+        }
+
     }
 
     @Test
