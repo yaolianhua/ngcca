@@ -44,6 +44,9 @@ public class PodWatchApiIT {
     private PodDeleteApi podDeleteApi;
     private Watch watch;
 
+    /**
+     * {@link PodWatchApiIT#watch()}
+     */
     public static void main(String[] args) throws URISyntaxException, InterruptedException {
 
         while (!connected.get()) {
