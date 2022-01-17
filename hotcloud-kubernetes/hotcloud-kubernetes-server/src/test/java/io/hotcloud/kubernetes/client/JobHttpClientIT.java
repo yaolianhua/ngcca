@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.IntegrationTestBase;
+import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.JobHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @EnableHotCloudHttpClient
-public class JobHttpClientIT extends IntegrationTestBase {
+public class JobHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String JOB = "kaniko";
     private static final String NAMESPACE = "default";

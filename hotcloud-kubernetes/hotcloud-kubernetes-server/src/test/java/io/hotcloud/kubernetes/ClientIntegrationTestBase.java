@@ -12,9 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = HotCloudKubernetesApplicationTest.class
 )
 @ActiveProfiles("integration-test-local")
-public class IntegrationTestBase {
+public class ClientIntegrationTestBase {
 }

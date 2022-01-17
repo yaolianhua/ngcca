@@ -1,9 +1,0 @@
-kubernetes:
-  in-cluster: false
-logging:
-  level:
-    io.hotcloud.server: debug
-hotcloud:
-  server:
-    host: 119.91.214.25
-    port: 30000

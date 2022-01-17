@@ -1,7 +1,5 @@
 spring:
   application:
-    name: hot-cloud
+    name: hotcloud
   profiles:
-    include:
-      - integration-test
-      - mvc-test
+    include: integration-test-local

@@ -7,3 +7,5 @@ hotcloud:
   server:
     host: localhost
     port: 8080
+message:
+  type: websocket

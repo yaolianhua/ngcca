@@ -1,5 +1,0 @@
-kubernetes:
-  in-cluster: false
-logging:
-  level:
-    io.hotcloud.server: debug

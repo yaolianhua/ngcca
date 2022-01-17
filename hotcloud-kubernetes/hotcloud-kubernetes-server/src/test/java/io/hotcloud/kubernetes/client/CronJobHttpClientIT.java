@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.IntegrationTestBase;
+import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.CronJobHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @EnableHotCloudHttpClient
-public class CronJobHttpClientIT extends IntegrationTestBase {
+public class CronJobHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String CRONJOB = "hello";
     private static final String NAMESPACE = "default";

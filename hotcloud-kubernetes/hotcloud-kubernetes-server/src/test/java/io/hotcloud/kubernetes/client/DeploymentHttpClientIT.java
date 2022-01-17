@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.IntegrationTestBase;
+import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @EnableHotCloudHttpClient
-public class DeploymentHttpClientIT extends IntegrationTestBase {
+public class DeploymentHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String DEPLOYMENT = "nginx";
     private static final String NAMESPACE = "default";
