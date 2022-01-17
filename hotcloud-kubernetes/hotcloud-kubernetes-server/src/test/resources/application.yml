@@ -1,5 +1,3 @@
 spring:
   application:
     name: hotcloud
-  profiles:
-    include: integration-test-local
