@@ -7,3 +7,5 @@ spring:
     username: ${message.rabbitmq.username:}
     password: ${message.rabbitmq.password:}
     virtual-host: /
+server:
+  port: 8078

@@ -42,7 +42,7 @@ public class WebSocketMessageSubscribeClientIT {
      * {@link WebSocketMessageSubscribeClientIT#broadcast()}
      */
     public static void main(String[] args) throws URISyntaxException {
-        MockWebSocketClient mockWebSocketClient = new MockWebSocketClient(new URI("ws://localhost:8080/pub"));
+        MockWebSocketClient mockWebSocketClient = new MockWebSocketClient(new URI("ws://localhost:8078/pub"));
         mockWebSocketClient.connect();
     }
 
