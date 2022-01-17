@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-message-api</artifactId>
+            <artifactId>hotcloud-message-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

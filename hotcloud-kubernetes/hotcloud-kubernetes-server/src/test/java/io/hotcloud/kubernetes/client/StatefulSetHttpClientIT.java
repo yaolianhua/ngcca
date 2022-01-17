@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.IntegrationTestBase;
+import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.client.workload.StatefulSetHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @EnableHotCloudHttpClient
-public class StatefulSetHttpClientIT extends IntegrationTestBase {
+public class StatefulSetHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String STATEFULSET = "web";
     private static final String NAMESPACE = "default";

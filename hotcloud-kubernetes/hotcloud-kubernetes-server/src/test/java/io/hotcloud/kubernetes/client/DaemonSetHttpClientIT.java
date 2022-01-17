@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.Result;
-import io.hotcloud.kubernetes.IntegrationTestBase;
+import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.DaemonSetHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @EnableHotCloudHttpClient
-public class DaemonSetHttpClientIT extends IntegrationTestBase {
+public class DaemonSetHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String DAEMONSET = "fluentd-elasticsearch";
     private static final String NAMESPACE = "default";

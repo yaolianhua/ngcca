@@ -1,7 +1,5 @@
 spring:
   application:
-    name: hot-cloud
-  profiles:
-    include:
-      - integration-test
-      - mvc-test
+    name: hotcloud
+server:
+  port: 8079

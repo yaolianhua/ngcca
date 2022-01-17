@@ -1,17 +1,19 @@
-package io.hotcloud.message.server.websocket;
+package io.hotcloud.kubernetes.server.workload;
 
-import com.github.javafaker.Faker;
-import io.hotcloud.message.api.Message;
-import io.hotcloud.message.api.MessageBody;
-import io.hotcloud.message.api.MessageBroadcaster;
-import io.hotcloud.message.server.HotCloudMessageApplicationTest;
+import io.fabric8.kubernetes.client.Watch;
+import io.hotcloud.kubernetes.HotCloudKubernetesApplicationTest;
+import io.hotcloud.kubernetes.api.pod.PodCreateApi;
+import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
+import io.hotcloud.kubernetes.api.pod.PodWatchApi;
+import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -28,28 +29,27 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = HotCloudMessageApplicationTest.class
+        classes = HotCloudKubernetesApplicationTest.class
 )
+@ActiveProfiles("integration-test-local")
 @Slf4j
-@ActiveProfiles("websocket-message-integration-test")
-public class WebSocketMessageSubscribeClientIT {
+public class PodWatchApiIT {
 
-    private final Faker faker = new Faker();
-    AtomicInteger count = new AtomicInteger(0);
-    @Qualifier("webSocketMessageBroadcaster")//for eliminate compiler errors only
-    @Autowired
-    private MessageBroadcaster messageBroadcaster;
-
-    /**
-     * {@link WebSocketMessageSubscribeClientIT#broadcast()}
-     */
     static AtomicReference<Boolean> connected = new AtomicReference<>(false);
+    @Autowired
+    private PodWatchApi podWatchApi;
+    @Autowired
+    private PodCreateApi podCreateApi;
+    @Autowired
+    private PodDeleteApi podDeleteApi;
+    private Watch watch;
 
     public static void main(String[] args) throws URISyntaxException, InterruptedException {
 
         while (!connected.get()) {
-            TimeUnit.SECONDS.sleep(3);
-            new WebSocketClient(new URI("ws://localhost:8078/pub")) {
+
+            TimeUnit.SECONDS.sleep(1);
+            new WebSocketClient(new URI("ws://localhost:8079/pub")) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     log.info("client opened: {}", serverHandshake);
@@ -73,17 +73,36 @@ public class WebSocketMessageSubscribeClientIT {
             }.connect();
         }
 
+
+    }
+
+    @Before
+    public void before() {
+        watch = podWatchApi.watch("default", null);
+    }
+
+    @After
+    public void after() {
+        watch.close();
     }
 
     @Test
-    public void broadcast() throws InterruptedException {
-        while (count.incrementAndGet() < 10) {
+    public void watch() throws ApiException, InterruptedException {
 
-            MessageBody body = MessageBody.of(faker.name().fullName(), faker.address().streetAddress());
-            Message<MessageBody> message = Message.of(body, Message.Level.INFO, faker.chuckNorris().fact(), "Broadcast message");
-            messageBroadcaster.broadcast(message);
-            TimeUnit.SECONDS.sleep(2);
-        }
+        podCreateApi.pod("apiVersion: v1\n" +
+                "kind: Pod\n" +
+                "metadata:\n" +
+                "  name: nginx\n" +
+                "spec:\n" +
+                "  containers:\n" +
+                "  - name: nginx\n" +
+                "    image: nginx:1.14.2\n" +
+                "    ports:\n" +
+                "    - containerPort: 80");
+        TimeUnit.SECONDS.sleep(3);
+
+        podDeleteApi.delete("default", "nginx");
+        TimeUnit.SECONDS.sleep(3);
 
     }
 

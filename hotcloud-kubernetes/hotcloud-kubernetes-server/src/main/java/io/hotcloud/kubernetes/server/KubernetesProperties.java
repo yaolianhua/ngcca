@@ -17,11 +17,11 @@ import javax.annotation.PostConstruct;
 public class KubernetesProperties {
 
     /**
-     * kube config path
+     * kube config path, default is {@code $HOME/.kube/config}
      */
     private String kubeConfigPath = defaultKubeconfigPath();
     /**
-     * in-cluster mode
+     * in-cluster mode, default is {@code true}
      */
     private boolean inCluster = true;
 
