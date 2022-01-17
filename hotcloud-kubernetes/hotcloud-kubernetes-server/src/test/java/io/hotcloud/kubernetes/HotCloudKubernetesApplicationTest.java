@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  **/
 @SpringBootApplication(
         scanBasePackageClasses = {
-                MessageConfiguration.class
+                MessageConfiguration.class,
+                HotCloudKubernetesApplicationTest.class
         }
 )
 public class HotCloudKubernetesApplicationTest {
