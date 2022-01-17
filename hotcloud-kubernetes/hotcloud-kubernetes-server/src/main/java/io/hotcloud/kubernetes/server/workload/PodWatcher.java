@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import io.hotcloud.Assert;
+import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.hotcloud.kubernetes.api.pod.PodWatchApi;
 import io.hotcloud.kubernetes.model.WatchMessageBody;
 import io.hotcloud.message.api.Message;
@@ -23,17 +24,19 @@ import java.util.Map;
 @Slf4j
 public class PodWatcher implements PodWatchApi {
 
-    private final KubernetesClient fabric8Client;
+    private final KubernetesApi kubernetesApi;
     private final MessageBroadcaster messageBroadcaster;
 
-    public PodWatcher(KubernetesClient fabric8Client,
+    public PodWatcher(KubernetesApi kubernetesApi,
                       MessageBroadcaster messageBroadcaster) {
-        this.fabric8Client = fabric8Client;
+        this.kubernetesApi = kubernetesApi;
         this.messageBroadcaster = messageBroadcaster;
     }
 
     @Override
     public Watch watch(String namespace, Map<String, String> labels) {
+        //create new one client
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
         Assert.argument(StringUtils.hasText(namespace), "namespace is null");
         labels = labels == null ? Map.of() : labels;
