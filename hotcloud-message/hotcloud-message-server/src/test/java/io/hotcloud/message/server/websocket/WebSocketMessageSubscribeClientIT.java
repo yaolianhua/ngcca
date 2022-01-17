@@ -64,7 +64,6 @@ public class WebSocketMessageSubscribeClientIT {
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
                     log.info("client connect failure: code={}, reason={}, remote={}", code, reason, remote);
-                    connected.set(false);
                 }
 
                 @Override
