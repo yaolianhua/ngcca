@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.model.network;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ServiceCreateRequest {
 
-    @NotNull(message = "service metadata is null")
-    private ObjectMetadata serviceMetadata;
-    @NotNull(message = "service spec is null")
-    private DefaultServiceSpec serviceSpec;
+    private ObjectMetadata serviceMetadata = new ObjectMetadata();
+    @Valid
+    private DefaultServiceSpec serviceSpec = new DefaultServiceSpec();
 }
