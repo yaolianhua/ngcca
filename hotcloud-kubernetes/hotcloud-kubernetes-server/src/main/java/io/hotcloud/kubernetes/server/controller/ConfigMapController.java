@@ -11,6 +11,7 @@ import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.server.WebResponse;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ConfigMapController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody ConfigMapCreateRequest params) throws ApiException {
+    public ResponseEntity<Result<ConfigMap>> configMap(@Validated @RequestBody ConfigMapCreateRequest params) throws ApiException {
         ConfigMap configMap = configMapCreateApi.configMap(params);
 
         return WebResponse.created(configMap);
