@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.api.volume;
 
+import io.hotcloud.Assert;
 import io.hotcloud.kubernetes.api.affinity.NodeSelectorTermBuilder;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
 import io.hotcloud.kubernetes.model.volume.HostPathVolume;
@@ -27,8 +28,10 @@ public final class PersistentVolumeBuilder {
 
         V1PersistentVolume v1PersistentVolume = new V1PersistentVolume();
 
+        String name = param.getMetadata().getName();
+        Assert.argument(name != null && !name.isEmpty(), "persistentVolume name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
-        v1ObjectMeta.setName(param.getMetadata().getName());
+        v1ObjectMeta.setName(name);
         v1ObjectMeta.setNamespace(param.getMetadata().getNamespace());
         v1ObjectMeta.setLabels(param.getMetadata().getLabels());
         v1ObjectMeta.setAnnotations(param.getMetadata().getAnnotations());
@@ -36,15 +39,17 @@ public final class PersistentVolumeBuilder {
         V1PersistentVolumeSpec v1PersistentVolumeSpec = new V1PersistentVolumeSpec();
 
         List<NodeSelectorTerm> nodeSelectorTerms = param.getSpec().getNodeAffinity().getRequired().getNodeSelectorTerms();
-        List<V1NodeSelectorTerm> v1NodeSelectorTerms = NodeSelectorTermBuilder.build(nodeSelectorTerms);
+        if (!nodeSelectorTerms.isEmpty()) {
+            List<V1NodeSelectorTerm> v1NodeSelectorTerms = NodeSelectorTermBuilder.build(nodeSelectorTerms);
 
-        V1NodeSelector v1NodeSelector = new V1NodeSelector();
-        v1NodeSelector.setNodeSelectorTerms(v1NodeSelectorTerms);
+            V1NodeSelector v1NodeSelector = new V1NodeSelector();
+            v1NodeSelector.setNodeSelectorTerms(v1NodeSelectorTerms);
 
-        V1VolumeNodeAffinity v1VolumeNodeAffinity = new V1VolumeNodeAffinity();
-        v1VolumeNodeAffinity.setRequired(v1NodeSelector);
+            V1VolumeNodeAffinity v1VolumeNodeAffinity = new V1VolumeNodeAffinity();
+            v1VolumeNodeAffinity.setRequired(v1NodeSelector);
 
-        v1PersistentVolumeSpec.setNodeAffinity(v1VolumeNodeAffinity);
+            v1PersistentVolumeSpec.setNodeAffinity(v1VolumeNodeAffinity);
+        }
 
         NFSVolume nfs = param.getSpec().getNfs();
         if (Objects.nonNull(nfs)) {
