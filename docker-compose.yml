@@ -16,7 +16,8 @@ services:
     volumes:
       - ${HOME}/.kube/config:/root/.kube/config:ro
     environment:
-      kubernetes_in_cluster: "false"
+      kubernetes_in_cluster: "false",
+      kubernetes_enable_workloads_watcher: "true"
       logging_level_io_hotCloud_server: info
 networks:
   hotcloud:

@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.workload;
 
-import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @Slf4j
-public class PodWatcher implements WorkloadsWatchApi {
+public class JobWatcher implements WorkloadsWatchApi {
 
     private final KubernetesApi kubernetesApi;
     private final MessageBroadcaster messageBroadcaster;
 
-    public PodWatcher(KubernetesApi kubernetesApi,
+    public JobWatcher(KubernetesApi kubernetesApi,
                       MessageBroadcaster messageBroadcaster) {
         this.kubernetesApi = kubernetesApi;
         this.messageBroadcaster = messageBroadcaster;
@@ -35,36 +35,38 @@ public class PodWatcher implements WorkloadsWatchApi {
         //create new one client
         KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-        Watch watch = fabric8Client.pods()
+        Watch watch = fabric8Client.batch()
+                .v1()
+                .jobs()
                 .watch(new Watcher<>() {
                     @Override
-                    public void eventReceived(Action action, Pod resource) {
+                    public void eventReceived(Action action, Job resource) {
                         String namespace = resource.getMetadata().getNamespace();
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Pod.name(), resource.getMetadata().getName(), action.name());
+                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Job.name(), resource.getMetadata().getName(), action.name());
                         Message<WatchMessageBody> message = Message.of(
                                 watchMessageBody,
                                 Message.Level.INFO,
                                 null,
-                                "Pod Watch Event Push"
+                                "Job Watch Event Push"
                         );
                         messageBroadcaster.broadcast(message);
                     }
 
                     @Override
                     public void onClose(WatcherException e) {
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Pod.name(), null, null);
+                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Job.name(), null, null);
                         Message<WatchMessageBody> message = Message.of(
                                 watchMessageBody,
                                 Message.Level.ERROR,
                                 e.getMessage(),
-                                "Pod Watch Event Push"
+                                "Job Watch Event Push"
                         );
                         messageBroadcaster.broadcast(message);
                     }
 
                     @Override
                     public void onClose() {
-                        log.info("Watch Pod gracefully closed");
+                        log.info("Watch Job gracefully closed");
                     }
                 });
 
