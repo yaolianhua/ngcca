@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,6 +14,6 @@ import java.util.Map;
 public class ConfigMapCreateRequest {
 
     private Boolean immutable;
-    private Map<String, String> data;
-    private ObjectMetadata metadata;
+    private Map<String, String> data = new HashMap<>();
+    private ObjectMetadata metadata = new ObjectMetadata();
 }

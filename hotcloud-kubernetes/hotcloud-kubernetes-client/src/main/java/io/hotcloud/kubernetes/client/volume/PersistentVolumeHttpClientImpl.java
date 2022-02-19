@@ -103,7 +103,7 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
         Assert.argument(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(uri.toString())
+                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
                 .build(persistentVolume);
 
         ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

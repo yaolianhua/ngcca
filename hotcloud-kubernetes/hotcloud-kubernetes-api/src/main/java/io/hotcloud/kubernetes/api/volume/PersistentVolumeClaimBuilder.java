@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.api.volume;
 
+import io.hotcloud.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.pod.container.ResourceRequirementsBuilder;
 import io.hotcloud.kubernetes.model.LabelSelector;
@@ -20,6 +21,8 @@ public final class PersistentVolumeClaimBuilder {
 
         V1PersistentVolumeClaim v1PersistentVolumeClaim = new V1PersistentVolumeClaim();
 
+        String name = param.getMetadata().getName();
+        Assert.argument(name != null && !name.isEmpty(), "persistentVolumeClaim name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setName(param.getMetadata().getName());
         v1ObjectMeta.setNamespace(param.getMetadata().getNamespace());

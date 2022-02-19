@@ -16,6 +16,8 @@ import javax.annotation.PostConstruct;
 @Data
 public class KubernetesProperties {
 
+    public static final String ENABLE_WORKLOADS_WATCHER = "kubernetes.enable-workloads-watcher";
+
     /**
      * kube config path, default is {@code $HOME/.kube/config}
      */
@@ -25,18 +27,26 @@ public class KubernetesProperties {
      */
     private boolean inCluster = true;
 
+    /**
+     * enable global-event watch event for workloads, default is {@code false}
+     */
+    private boolean enableWorkloadsWatcher;
+
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
     }
 
     @PostConstruct
     public void log() {
+        if (this.enableWorkloadsWatcher) {
+            log.info("【Load Kubernetes Configuration】Enable global event watch for workloads ");
+        }
         if (this.inCluster) {
-            log.info("【Load Kubernetes Configuration】using in-cluster mode ");
+            log.info("【Load Kubernetes Configuration】Using in-cluster mode ");
             return;
         }
 
-        log.info("【Load Kubernetes Configuration】using kubeconfig path '{}'", kubeConfigPath);
+        log.info("【Load Kubernetes Configuration】Using kubeconfig path '{}'", kubeConfigPath);
 
 
     }

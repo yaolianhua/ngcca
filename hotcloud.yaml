@@ -132,6 +132,7 @@ data:
         io.hotCloud.server: info
     kubernetes:
       in-cluster: true
+      enable-workloads-watcher: true
 kind: ConfigMap
 metadata:
   name: hotcloud-config

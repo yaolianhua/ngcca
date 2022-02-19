@@ -136,7 +136,11 @@ public final class PodBuilder {
 
         Map<String, Quantity> overhead = new HashMap<>(32);
         podTemplateSpec.getOverhead().forEach((k, v) -> overhead.put(k, Quantity.fromString(v)));
-        v1PodSpec.setOverhead(overhead);
+        //fix Pod Overhead set without corresponding RuntimeClass defined Overhead
+        if (!overhead.isEmpty()) {
+            v1PodSpec.setOverhead(overhead);
+        }
+
 
         List<V1LocalObjectReference> localObjectReferences = podTemplateSpec.getImagePullSecrets().stream()
                 .map(imagePullSecret -> {

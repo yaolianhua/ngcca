@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
 public class SecretCreateRequest {
 
     private Boolean immutable;
-    private Map<String, String> data;
+    private Map<String, String> data = new HashMap<>();
     private String type;
     private ObjectMetadata metadata = new ObjectMetadata();
 

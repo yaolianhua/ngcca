@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.model.volume;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,9 @@ import java.util.Map;
 @Data
 public class PersistentVolumeSpec {
 
+    @NotEmpty(message = "accessModes is empty")
     private List<String> accessModes = new ArrayList<>();
-
+    @NotEmpty(message = "capacity is empty")
     private Map<String, String> capacity = new HashMap<>();
 
     private HostPathVolume hostPath;

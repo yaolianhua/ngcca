@@ -1,16 +1,12 @@
 package io.hotcloud.kubernetes.server.workload;
 
-import io.fabric8.kubernetes.client.Watch;
 import io.hotcloud.kubernetes.HotCloudKubernetesApplicationTest;
 import io.hotcloud.kubernetes.api.pod.PodCreateApi;
 import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
-import io.hotcloud.kubernetes.api.pod.PodWatchApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,25 +29,23 @@ import java.util.concurrent.atomic.AtomicReference;
 )
 @ActiveProfiles("integration-test-local")
 @Slf4j
-public class PodWatchApiIT {
+public class PodWorkloadsWatchApiIT {
 
     static AtomicReference<Boolean> connected = new AtomicReference<>(false);
-    @Autowired
-    private PodWatchApi podWatchApi;
+
     @Autowired
     private PodCreateApi podCreateApi;
     @Autowired
     private PodDeleteApi podDeleteApi;
-    private Watch watch;
 
     /**
-     * {@link PodWatchApiIT#watch()}
+     * {@link PodWorkloadsWatchApiIT#watch()}
      */
     public static void main(String[] args) throws URISyntaxException, InterruptedException {
 
         while (!connected.get()) {
 
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(5);
             new WebSocketClient(new URI("ws://localhost:8079/pub")) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
@@ -77,16 +71,6 @@ public class PodWatchApiIT {
         }
 
 
-    }
-
-    @Before
-    public void before() {
-        watch = podWatchApi.watch("default", null);
-    }
-
-    @After
-    public void after() {
-        watch.close();
     }
 
     @Test
