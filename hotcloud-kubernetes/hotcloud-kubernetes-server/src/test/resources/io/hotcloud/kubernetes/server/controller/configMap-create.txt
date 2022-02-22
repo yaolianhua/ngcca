@@ -4,6 +4,7 @@ data:
     logging:
       level:
         io.hotCloud.server: debug
+        enable-workloads-watcher: true
     kubernetes:
       in-cluster: true
 kind: ConfigMap
