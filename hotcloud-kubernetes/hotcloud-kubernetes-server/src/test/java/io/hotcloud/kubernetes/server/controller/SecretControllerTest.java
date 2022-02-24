@@ -6,7 +6,6 @@ import io.hotcloud.kubernetes.api.configurations.SecretCreateApi;
 import io.hotcloud.kubernetes.api.configurations.SecretDeleteApi;
 import io.hotcloud.kubernetes.api.configurations.SecretReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.SecretController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -79,16 +78,16 @@ public class SecretControllerTest {
 
     @Test
     public void secretDelete() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{namespace}/{secret}"), "default", "bootstrap-token-5emitj"))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{namespace}/{secret}"), "default", "regcred"))
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(secretDeleteApi, times(1)).delete("default", "bootstrap-token-5emitj");
+        verify(secretDeleteApi, times(1)).delete("default", "regcred");
     }
 
     @Test
     public void secretRead() throws Exception {
-        when(secretReadApi.read("default", "bootstrap-token-5emitj"))
+        when(secretReadApi.read("default", "regcred"))
                 .thenReturn(secret());
 
         InputStream inputStream = getClass().getResourceAsStream("secret-read.json");
@@ -96,7 +95,7 @@ public class SecretControllerTest {
 
         Secret value = objectMapper.readValue(json, Secret.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{secret}"), "default", "bootstrap-token-5emitj"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{secret}"), "default", "regcred"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));
@@ -105,18 +104,13 @@ public class SecretControllerTest {
     public Secret secret() {
         SecretBuilder builder = new SecretBuilder();
         Secret secret = builder.withImmutable(true)
-                .withMetadata(new ObjectMetaBuilder().withName("bootstrap-token-5emitj")
+                .withMetadata(new ObjectMetaBuilder().withName("regcred")
                         .withNamespace("default")
                         .build())
-                .withData(Map.of("auth-extra-groups", "c3lzdGVtOmJvb3RzdHJhcHBlcnM6a3ViZWFkbTpkZWZhdWx0LW5vZGUtdG9rZW4=",
-                        "expiration", "MjAyMC0wOS0xM1QwNDozOToxMFo=",
-                        "token-id", "NWVtaXRq",
-                        "token-secret", "a3E0Z2lodnN6emduMXAwcg==",
-                        "usage-bootstrap-authentication", "dHJ1ZQ==",
-                        "usage-bootstrap-signing", "dHJ1ZQ=="))
+                .withData(Map.of(".dockerconfigjson", "eyJhdXRocyI6eyJoYXJib3IuY2xvdWQyZ28uY24iOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiSGFyYm9yMTIzNDUiLCJhdXRoIjoiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9In19fQ=="))
                 .withApiVersion("v1")
                 .withKind("Secret")
-                .withType("bootstrap.kubernetes.io/token")
+                .withType("kubernetes.io/dockerconfigjson")
                 .build();
         return secret;
     }

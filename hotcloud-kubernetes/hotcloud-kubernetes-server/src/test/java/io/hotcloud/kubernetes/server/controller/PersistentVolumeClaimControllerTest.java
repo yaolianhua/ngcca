@@ -6,7 +6,6 @@ import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimCreateApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimDeleteApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.PersistentVolumeClaimController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -56,11 +55,11 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentvolumeclaimDelete() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{namespace}/{persistentvolumeclaims}"), "default", "myclaim"))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{namespace}/{persistentvolumeclaims}"), "default", "dockerfile-claim"))
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(persistentVolumeClaimDeleteApi, times(1)).delete("myclaim", "default");
+        verify(persistentVolumeClaimDeleteApi, times(1)).delete("dockerfile-claim", "default");
     }
 
     @Test
@@ -89,14 +88,14 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentVolumeClaimRead() throws Exception {
-        when(persistentVolumeClaimReadApi.read("default", "myclaim")).thenReturn(persistentvolumeclaim());
+        when(persistentVolumeClaimReadApi.read("default", "dockerfile-claim")).thenReturn(persistentvolumeclaim());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaim-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
         PersistentVolume value = objectMapper.readValue(json, PersistentVolume.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{persistentvolumeclaims}"), "default", "myclaim"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/{persistentvolumeclaims}"), "default", "dockerfile-claim"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));
@@ -136,13 +135,13 @@ public class PersistentVolumeClaimControllerTest {
 
         PersistentVolumeClaim persistentVolumeCalim = persistentVolumeClaimBuilder.withApiVersion("v1")
                 .withKind("PersistentVolumeClaim")
-                .withMetadata(new ObjectMetaBuilder().withName("myclaim").withNamespace("default").build())
+                .withMetadata(new ObjectMetaBuilder().withName("dockerfile-claim").withNamespace("default").build())
                 .withSpec(new PersistentVolumeClaimSpecBuilder()
                         .withAccessModes("ReadWriteOnce")
                         .withResources(new ResourceRequirementsBuilder().withRequests(Map.of("storage", Quantity.parse("1Gi"))).build())
                         .withStorageClassName("")
                         .withVolumeMode("Filesystem")
-                        .withVolumeName("pv0003")
+                        .withVolumeName("dockerfile")
                         .build())
                 .build();
 

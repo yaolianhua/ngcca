@@ -9,7 +9,7 @@
       "apiVersion": "v1",
       "kind": "PersistentVolumeClaim",
       "metadata": {
-        "name": "myclaim",
+        "name": "dockerfile-claim",
         "namespace": "default"
       },
       "spec": {
@@ -23,7 +23,7 @@
         },
         "storageClassName": "",
         "volumeMode": "Filesystem",
-        "volumeName": "pv0003"
+        "volumeName": "dockerfile"
       }
     }
   ]
