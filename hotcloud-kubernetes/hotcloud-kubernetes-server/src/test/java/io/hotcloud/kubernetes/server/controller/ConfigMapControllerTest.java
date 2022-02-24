@@ -6,7 +6,6 @@ import io.hotcloud.kubernetes.api.configurations.ConfigMapCreateApi;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapDeleteApi;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.ConfigMapController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -58,7 +57,7 @@ public class ConfigMapControllerTest {
 
     @Test
     public void configMapCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("configMap-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("configMap-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream configMapReadInputStream = getClass().getResourceAsStream("configMap-read.json");

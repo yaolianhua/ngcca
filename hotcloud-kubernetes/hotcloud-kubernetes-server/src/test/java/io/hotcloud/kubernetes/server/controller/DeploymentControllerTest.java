@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.DeploymentController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -67,7 +66,7 @@ public class DeploymentControllerTest {
 
     @Test
     public void deploymentCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("deployment-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("deployment-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream deploymentReadInputStream = getClass().getResourceAsStream("deployment-read.json");

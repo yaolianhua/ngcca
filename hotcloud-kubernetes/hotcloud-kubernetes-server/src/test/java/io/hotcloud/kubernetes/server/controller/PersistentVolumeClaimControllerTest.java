@@ -64,7 +64,7 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentvolumeclaimCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaim-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaim-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream persistentvolumeclaimReadInputStream = getClass().getResourceAsStream("persistentVolumeClaim-read.json");

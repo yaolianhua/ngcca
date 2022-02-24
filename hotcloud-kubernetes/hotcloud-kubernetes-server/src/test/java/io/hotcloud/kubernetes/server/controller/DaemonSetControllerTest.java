@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.workload.DaemonSetCreateApi;
 import io.hotcloud.kubernetes.api.workload.DaemonSetDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DaemonSetReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.DaemonSetController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +65,7 @@ public class DaemonSetControllerTest {
 
     @Test
     public void daemonSetCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("daemonSet-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("daemonSet-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream daemonSetReadInputStream = getClass().getResourceAsStream("daemonSet-read.json");
