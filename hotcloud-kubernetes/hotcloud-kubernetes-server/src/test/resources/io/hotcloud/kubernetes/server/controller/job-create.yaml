@@ -2,6 +2,10 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: kaniko
+  namespace: default
+  labels: {
+    "k8s-app": "kaniko"
+  }
 spec:
   ttlSecondsAfterFinished: 600
   backoffLimit: 3

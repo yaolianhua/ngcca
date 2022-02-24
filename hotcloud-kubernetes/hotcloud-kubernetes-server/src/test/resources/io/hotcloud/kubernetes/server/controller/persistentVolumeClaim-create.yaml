@@ -1,13 +1,17 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: myclaim
+  name: dockerfile-claim
   namespace: default
+  labels: {
+    "k8s-app": "dockerfile-claim"
+  }
 spec:
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
+  volumeName: dockerfile
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ""
+  storageClassName: "storage-local"

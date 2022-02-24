@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.workload.StatefulSetCreateApi;
 import io.hotcloud.kubernetes.api.workload.StatefulSetDeleteApi;
 import io.hotcloud.kubernetes.api.workload.StatefulSetReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.StatefulSetController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +65,7 @@ public class StatefulSetControllerTest {
 
     @Test
     public void statefulSetCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("statefulSet-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("statefulSet-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream statefulSetReadInputStream = getClass().getResourceAsStream("statefulSet-read.json");

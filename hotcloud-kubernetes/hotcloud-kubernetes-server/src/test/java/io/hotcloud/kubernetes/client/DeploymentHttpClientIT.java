@@ -57,6 +57,18 @@ public class DeploymentHttpClientIT extends ClientIntegrationTestBase {
     }
 
     @Test
+    public void scale() {
+
+        deploymentHttpClient.scale(NAMESPACE, DEPLOYMENT, 3, true);
+
+        Result<Deployment> read = deploymentHttpClient.read(NAMESPACE, DEPLOYMENT);
+        Integer replicas = read.getData().getSpec().getReplicas();
+
+        Assert.assertEquals(3, (int) replicas);
+
+    }
+
+    @Test
     public void read() throws InterruptedException {
         Result<DeploymentList> readList = deploymentHttpClient.readList(NAMESPACE, Map.of("app", DEPLOYMENT));
         List<Deployment> items = readList.getData().getItems();

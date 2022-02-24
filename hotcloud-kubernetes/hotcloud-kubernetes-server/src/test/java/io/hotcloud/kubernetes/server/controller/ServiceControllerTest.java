@@ -6,7 +6,6 @@ import io.hotcloud.kubernetes.api.network.ServiceCreateApi;
 import io.hotcloud.kubernetes.api.network.ServiceDeleteApi;
 import io.hotcloud.kubernetes.api.network.ServiceReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.ServiceController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -65,7 +64,7 @@ public class ServiceControllerTest {
 
     @Test
     public void serviceCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("service-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("service-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream serviceReadInputStream = getClass().getResourceAsStream("service-read.json");

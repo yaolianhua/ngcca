@@ -6,7 +6,6 @@ import io.hotcloud.kubernetes.api.volume.PersistentVolumeCreateApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.PersistentVolumeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -56,16 +55,16 @@ public class PersistentVolumeControllerTest {
 
     @Test
     public void persistentvolumeDelete() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{persistentvolume}"), "pv0003"))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH.concat("/{persistentvolume}"), "dockerfile"))
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(persistentVolumeDeleteApi, times(1)).delete("pv0003");
+        verify(persistentVolumeDeleteApi, times(1)).delete("dockerfile");
     }
 
     @Test
     public void persistentvolumeCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("persistentVolume-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("persistentVolume-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream persistentvolumeReadInputStream = getClass().getResourceAsStream("persistentVolume-read.json");
@@ -89,14 +88,14 @@ public class PersistentVolumeControllerTest {
 
     @Test
     public void persistentVolumeRead() throws Exception {
-        when(persistentVolumeReadApi.read("pv0003")).thenReturn(persistentvolume());
+        when(persistentVolumeReadApi.read("dockerfile")).thenReturn(persistentvolume());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolume-read.json");
         String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
 
         PersistentVolume value = objectMapper.readValue(json, PersistentVolume.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{persistentvolume}"), "pv0003"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{persistentvolume}"), "dockerfile"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(_json));
@@ -136,13 +135,13 @@ public class PersistentVolumeControllerTest {
 
         PersistentVolume persistentVolume = persistentVolumeBuilder.withApiVersion("v1")
                 .withKind("PersistentVolume")
-                .withMetadata(new ObjectMetaBuilder().withName("pv0003").build())
+                .withMetadata(new ObjectMetaBuilder().withName("dockerfile").build())
                 .withSpec(new PersistentVolumeSpecBuilder()
                         .withAccessModes("ReadWriteOnce")
                         .withCapacity(Map.of("storage", Quantity.parse("1Gi")))
-                        .withClaimRef(new ObjectReferenceBuilder().withApiVersion("v1").withKind("PersistentVolumeClaim").withName("myclaim").withNamespace("default").build())
-                        .withHostPath(new HostPathVolumeSourceBuilder().withPath("/tmp").withType("").build())
-                        .withPersistentVolumeReclaimPolicy("Recycle")
+                        .withClaimRef(new ObjectReferenceBuilder().withApiVersion("v1").withKind("PersistentVolumeClaim").withName("dockerfile-claim").withNamespace("default").build())
+                        .withHostPath(new HostPathVolumeSourceBuilder().withPath("/kaniko").withType("").build())
+                        .withPersistentVolumeReclaimPolicy("Retain")
                         .withVolumeMode("Filesystem")
                         .build())
                 .build();
