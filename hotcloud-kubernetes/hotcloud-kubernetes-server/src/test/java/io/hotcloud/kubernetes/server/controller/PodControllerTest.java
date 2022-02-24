@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
 import io.hotcloud.kubernetes.api.pod.PodLogFetchApi;
 import io.hotcloud.kubernetes.api.pod.PodReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.PodController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -67,7 +66,7 @@ public class PodControllerTest {
 
     @Test
     public void podCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("pod-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("pod-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
         String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
 

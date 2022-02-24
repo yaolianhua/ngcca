@@ -60,4 +60,15 @@ public interface DeploymentHttpClient {
      */
     Result<Void> delete(String namespace, String deployment) throws ApiException;
 
+    /**
+     * Scale namespaced Deployment
+     *
+     * @param namespace  namespace
+     * @param deployment deployment name
+     * @param count      scale count
+     * @param wait       if true, wait for the number of instances to exist - no guarantee is made as to readiness
+     * @return {@link Result}
+     */
+    Result<Void> scale(String namespace, String deployment, Integer count, boolean wait);
+
 }

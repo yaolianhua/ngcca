@@ -9,7 +9,7 @@
       "apiVersion": "v1",
       "kind": "PersistentVolume",
       "metadata": {
-        "name": "pv0003"
+        "name": "dockerfile"
       },
       "spec": {
         "accessModes": [
@@ -21,14 +21,14 @@
         "claimRef": {
           "apiVersion": "v1",
           "kind": "PersistentVolumeClaim",
-          "name": "myclaim",
+          "name": "dockerfile-claim",
           "namespace": "default"
         },
         "hostPath": {
-          "path": "/tmp",
+          "path": "/kaniko",
           "type": ""
         },
-        "persistentVolumeReclaimPolicy": "Recycle",
+        "persistentVolumeReclaimPolicy": "Retain",
         "volumeMode": "Filesystem"
       }
     }

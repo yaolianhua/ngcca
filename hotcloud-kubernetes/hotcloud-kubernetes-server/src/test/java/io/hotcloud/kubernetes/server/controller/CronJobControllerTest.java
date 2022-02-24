@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.workload.CronJobCreateApi;
 import io.hotcloud.kubernetes.api.workload.CronJobDeleteApi;
 import io.hotcloud.kubernetes.api.workload.CronJobReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.CronJobController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +65,7 @@ public class CronJobControllerTest {
 
     @Test
     public void cronjobCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("cronjob-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("cronjob-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream cronjobReadInputStream = getClass().getResourceAsStream("cronjob-read.json");

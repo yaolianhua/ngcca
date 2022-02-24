@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.api.workload.JobCreateApi;
 import io.hotcloud.kubernetes.api.workload.JobDeleteApi;
 import io.hotcloud.kubernetes.api.workload.JobReadApi;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.server.controller.JobController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +65,7 @@ public class JobControllerTest {
 
     @Test
     public void jobCreateUseYaml() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("job-create.txt");
+        InputStream inputStream = getClass().getResourceAsStream("job-create.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         InputStream jobReadInputStream = getClass().getResourceAsStream("job-read.json");
