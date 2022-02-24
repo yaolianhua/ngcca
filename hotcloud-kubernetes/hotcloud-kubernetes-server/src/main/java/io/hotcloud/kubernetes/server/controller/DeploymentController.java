@@ -6,6 +6,7 @@ import io.hotcloud.Result;
 import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
+import io.hotcloud.kubernetes.api.workload.DeploymentUpdateApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -27,13 +28,16 @@ public class DeploymentController {
     private final DeploymentCreateApi deploymentCreation;
     private final DeploymentDeleteApi deploymentDeletion;
     private final DeploymentReadApi deploymentRead;
+    private final DeploymentUpdateApi deploymentUpdater;
 
     public DeploymentController(DeploymentCreateApi deploymentCreation,
                                 DeploymentDeleteApi deploymentDeletion,
-                                DeploymentReadApi deploymentRead) {
+                                DeploymentReadApi deploymentRead,
+                                DeploymentUpdateApi deploymentUpdater) {
         this.deploymentCreation = deploymentCreation;
         this.deploymentDeletion = deploymentDeletion;
         this.deploymentRead = deploymentRead;
+        this.deploymentUpdater = deploymentUpdater;
     }
 
     @GetMapping("/{namespace}/{deployment}")
@@ -66,6 +70,15 @@ public class DeploymentController {
     public ResponseEntity<Result<Void>> deploymentDelete(@PathVariable("namespace") String namespace,
                                                          @PathVariable("deployment") String name) throws ApiException {
         deploymentDeletion.delete(namespace, name);
+        return WebResponse.accepted();
+    }
+
+    @PatchMapping("/{namespace}/{deployment}/{count}/scale")
+    public ResponseEntity<Result<Void>> deploymentScale(@PathVariable("namespace") String namespace,
+                                                        @PathVariable("deployment") String name,
+                                                        @PathVariable("count") Integer count,
+                                                        @RequestParam(value = "wait", required = false) boolean wait) {
+        deploymentUpdater.scale(namespace, name, count, wait);
         return WebResponse.accepted();
     }
 }

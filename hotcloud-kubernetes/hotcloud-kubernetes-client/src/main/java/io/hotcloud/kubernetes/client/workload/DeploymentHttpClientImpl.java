@@ -115,4 +115,21 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 });
         return response.getBody();
     }
+
+    @Override
+    public Result<Void> scale(String namespace, String deployment, Integer count, boolean wait) {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.argument(Objects.nonNull(count), () -> "scale count is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/{count}/scale", uri))
+                .queryParam("wait", wait)
+                .build(namespace, deployment, count);
+
+        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
 }

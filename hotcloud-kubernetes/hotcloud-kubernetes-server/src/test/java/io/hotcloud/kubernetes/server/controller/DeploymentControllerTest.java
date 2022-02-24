@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
+import io.hotcloud.kubernetes.api.workload.DeploymentUpdateApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @MockBean(classes = {
                 DeploymentCreateApi.class,
                 DeploymentReadApi.class,
-                DeploymentDeleteApi.class
+                DeploymentDeleteApi.class,
+                DeploymentUpdateApi.class
         })
 })
 public class DeploymentControllerTest {
@@ -54,6 +56,17 @@ public class DeploymentControllerTest {
     private DeploymentReadApi deploymentReadApi;
     @MockBean
     private DeploymentDeleteApi deploymentDeleteApi;
+    @MockBean
+    private DeploymentUpdateApi deploymentUpdateApi;
+
+    @Test
+    public void deploymentScale() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PATH.concat("/{namespace}/{deployment}/{count}/scale"), "default", "hotcloud", 3))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(deploymentUpdateApi, times(1)).scale("default", "hotcloud", 3, false);
+    }
 
     @Test
     public void deploymentDelete() throws Exception {
