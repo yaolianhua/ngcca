@@ -11,4 +11,4 @@ message:
 logging:
   level:
     io.hotcloud.server: debug
-    io.hotcloud.message: debug
+    io.hotcloud.message: info
