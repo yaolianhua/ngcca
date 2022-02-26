@@ -129,7 +129,7 @@ data:
   config: |
     logging:
       level:
-        io.hotcloud.server: debug
+        io.hotcloud.kubernetes.server: debug
         io.hotcloud.message: info
     kubernetes:
       in-cluster: true
