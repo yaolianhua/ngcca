@@ -19,7 +19,7 @@ public interface JobHttpClient {
      *
      * @param namespace namespace
      * @param job       job name
-     * @return {@link Result}
+     * @return {@link Job}
      */
     Result<Job> read(String namespace, String job);
 
@@ -28,7 +28,7 @@ public interface JobHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link JobList}
      */
     Result<JobList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface JobHttpClient {
      * Create Job from {@code JobCreateRequest}
      *
      * @param request {@link JobCreateRequest}
-     * @return {@link Result}
+     * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Job> create(JobCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface JobHttpClient {
      * Create Job from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Job> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface JobHttpClient {
      *
      * @param namespace namespace
      * @param job       job name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String job) throws ApiException;

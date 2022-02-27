@@ -19,7 +19,7 @@ public interface DaemonSetHttpClient {
      *
      * @param namespace namespace
      * @param daemonSet daemonSet name
-     * @return {@link Result}
+     * @return {@link DaemonSet}
      */
     Result<DaemonSet> read(String namespace, String daemonSet);
 
@@ -28,7 +28,7 @@ public interface DaemonSetHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link DaemonSetList}
      */
     Result<DaemonSetList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface DaemonSetHttpClient {
      * Create DaemonSet from {@code DaemonSetCreateRequest}
      *
      * @param request {@link DaemonSetCreateRequest}
-     * @return {@link Result}
+     * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<DaemonSet> create(DaemonSetCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface DaemonSetHttpClient {
      * Create DaemonSet from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<DaemonSet> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface DaemonSetHttpClient {
      *
      * @param namespace namespace
      * @param daemonSet daemonSet name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String daemonSet) throws ApiException;

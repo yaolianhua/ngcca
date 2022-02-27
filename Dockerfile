@@ -3,7 +3,7 @@ FROM maven:3.8.3-jdk-11-slim AS builder
 WORKDIR /build/
 
 COPY . .
-RUN mvn -Dmaven.test.skip=true clean compile package install
+RUN mvn clean package
 RUN cp hotcloud-starter/target/hotcloud-starter.jar .
 RUN java -Djarmode=layertools -jar hotcloud-starter.jar extract
 

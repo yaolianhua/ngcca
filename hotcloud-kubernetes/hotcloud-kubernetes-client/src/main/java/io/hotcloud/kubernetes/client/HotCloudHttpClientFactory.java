@@ -5,6 +5,8 @@ import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClientImpl;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClientImpl;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
 import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClient;
@@ -65,6 +67,9 @@ public class HotCloudHttpClientFactory {
         }
         if (Objects.equals(client, PersistentVolumeHttpClient.class)) {
             return (T) new PersistentVolumeHttpClientImpl(properties, restTemplate);
+        }
+        if (Objects.equals(client, KubectlHttpClient.class)) {
+            return (T) new KubectlHttpClientImpl(properties, restTemplate);
         }
 
         throw new HotCloudException("Unsupported type [" + client.getName() + "]");
