@@ -31,7 +31,7 @@ public interface PodHttpClient {
      * @param namespace namespace
      * @param pod       pod name
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
-     * @return {@link List<String>}
+     * @return {@link List}
      */
     Result<List<String>> loglines(String namespace, String pod, Integer tail);
 
