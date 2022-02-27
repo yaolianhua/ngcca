@@ -21,7 +21,7 @@ public interface PodHttpClient {
      * @param namespace namespace
      * @param pod       pod name
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
-     * @return {@link Result}
+     * @return {@link String}
      */
     Result<String> logs(String namespace, String pod, Integer tail);
 
@@ -31,7 +31,7 @@ public interface PodHttpClient {
      * @param namespace namespace
      * @param pod       pod name
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
-     * @return {@link Result}
+     * @return {@link List<String>}
      */
     Result<List<String>> loglines(String namespace, String pod, Integer tail);
 
@@ -40,7 +40,7 @@ public interface PodHttpClient {
      *
      * @param namespace namespace
      * @param pod       pod name
-     * @return {@link Result}
+     * @return {@link Pod}
      */
     Result<Pod> read(String namespace, String pod);
 
@@ -49,7 +49,7 @@ public interface PodHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link PodList}
      */
     Result<PodList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -57,7 +57,7 @@ public interface PodHttpClient {
      * Create Pod from {@code PodCreateRequest}
      *
      * @param request {@link PodCreateRequest}
-     * @return {@link Result}
+     * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Pod> create(PodCreateRequest request) throws ApiException;
@@ -66,7 +66,7 @@ public interface PodHttpClient {
      * Create Pod from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Pod> create(YamlBody yaml) throws ApiException;
@@ -76,7 +76,7 @@ public interface PodHttpClient {
      *
      * @param namespace namespace
      * @param pod       pod name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String pod) throws ApiException;

@@ -19,7 +19,7 @@ public interface StatefulSetHttpClient {
      *
      * @param namespace   namespace
      * @param statefulSet statefulSet name
-     * @return {@link Result}
+     * @return {@link StatefulSet}
      */
     Result<StatefulSet> read(String namespace, String statefulSet);
 
@@ -28,7 +28,7 @@ public interface StatefulSetHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link StatefulSetList}
      */
     Result<StatefulSetList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface StatefulSetHttpClient {
      * Create StatefulSet from {@code StatefulSetCreateRequest}
      *
      * @param request {@link StatefulSetCreateRequest}
-     * @return {@link Result}
+     * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<StatefulSet> create(StatefulSetCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface StatefulSetHttpClient {
      * Create StatefulSet from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<StatefulSet> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface StatefulSetHttpClient {
      *
      * @param namespace   namespace
      * @param statefulSet statefulSet name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String statefulSet) throws ApiException;

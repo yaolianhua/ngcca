@@ -19,7 +19,7 @@ public interface PersistentVolumeClaimHttpClient {
      *
      * @param namespace             namespace
      * @param persistentVolumeClaim persistentVolumeClaim name
-     * @return {@link Result}
+     * @return {@link PersistentVolumeClaim}
      */
     Result<PersistentVolumeClaim> read(String namespace, String persistentVolumeClaim);
 
@@ -28,7 +28,7 @@ public interface PersistentVolumeClaimHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link PersistentVolumeClaimList}
      */
     Result<PersistentVolumeClaimList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface PersistentVolumeClaimHttpClient {
      * Create PersistentVolumeClaim from {@code PersistentVolumeClaimCreateRequest}
      *
      * @param request {@link PersistentVolumeClaimCreateRequest}
-     * @return {@link Result}
+     * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<PersistentVolumeClaim> create(PersistentVolumeClaimCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface PersistentVolumeClaimHttpClient {
      * Create PersistentVolumeClaim from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<PersistentVolumeClaim> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface PersistentVolumeClaimHttpClient {
      *
      * @param namespace             namespace
      * @param persistentVolumeClaim persistentVolumeClaim name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String persistentVolumeClaim) throws ApiException;

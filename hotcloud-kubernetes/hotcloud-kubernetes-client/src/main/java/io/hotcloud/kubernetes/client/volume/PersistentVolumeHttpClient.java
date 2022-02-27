@@ -18,7 +18,7 @@ public interface PersistentVolumeHttpClient {
      * Read namespaced PersistentVolume
      *
      * @param persistentVolume persistentVolume name
-     * @return {@link Result}
+     * @return {@link PersistentVolume}
      */
     Result<PersistentVolume> read(String persistentVolume);
 
@@ -26,7 +26,7 @@ public interface PersistentVolumeHttpClient {
      * Read namespaced PersistentVolumeList
      *
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link PersistentVolumeList}
      */
     Result<PersistentVolumeList> readList(Map<String, String> labelSelector);
 
@@ -34,7 +34,7 @@ public interface PersistentVolumeHttpClient {
      * Create PersistentVolume from {@code PersistentVolumeCreateRequest}
      *
      * @param request {@link PersistentVolumeCreateRequest}
-     * @return {@link Result}
+     * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<PersistentVolume> create(PersistentVolumeCreateRequest request) throws ApiException;
@@ -43,7 +43,7 @@ public interface PersistentVolumeHttpClient {
      * Create PersistentVolume from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<PersistentVolume> create(YamlBody yaml) throws ApiException;
@@ -52,7 +52,7 @@ public interface PersistentVolumeHttpClient {
      * Delete namespaced PersistentVolume
      *
      * @param persistentVolume persistentVolume name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String persistentVolume) throws ApiException;

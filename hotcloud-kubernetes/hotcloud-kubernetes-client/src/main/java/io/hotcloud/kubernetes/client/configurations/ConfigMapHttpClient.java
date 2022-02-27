@@ -19,7 +19,7 @@ public interface ConfigMapHttpClient {
      *
      * @param namespace namespace
      * @param configmap configmap name
-     * @return {@link Result}
+     * @return {@link ConfigMap}
      */
     Result<ConfigMap> read(String namespace, String configmap);
 
@@ -28,7 +28,7 @@ public interface ConfigMapHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link ConfigMapList}
      */
     Result<ConfigMapList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface ConfigMapHttpClient {
      * Create ConfigMap from {@code ConfigMapCreateRequest}
      *
      * @param request {@link ConfigMapCreateRequest}
-     * @return {@link Result}
+     * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<ConfigMap> create(ConfigMapCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface ConfigMapHttpClient {
      * Create ConfigMap from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<ConfigMap> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface ConfigMapHttpClient {
      *
      * @param namespace namespace
      * @param configmap configmap name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String configmap) throws ApiException;
