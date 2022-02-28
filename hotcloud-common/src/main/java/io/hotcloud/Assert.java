@@ -9,6 +9,12 @@ public final class Assert {
     private Assert() {
     }
 
+    public static void hasText(String text, String message, int code) {
+        if (text == null || text.trim().isEmpty()){
+            throw new HotCloudException(message, code);
+        }
+    }
+
     public static void notNull(Object object, Supplier<String> message) {
         notNull(object, message.get(), 400);
     }

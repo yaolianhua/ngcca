@@ -10,5 +10,5 @@ message:
     port: 5672
 logging:
   level:
-    io.hotcloud.server: debug
+    io.hotcloud.kubernetes.server: debug
     io.hotcloud.message: info

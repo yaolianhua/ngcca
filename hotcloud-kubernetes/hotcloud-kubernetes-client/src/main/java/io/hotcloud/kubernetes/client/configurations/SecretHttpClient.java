@@ -19,7 +19,7 @@ public interface SecretHttpClient {
      *
      * @param namespace namespace
      * @param secret    secret name
-     * @return {@link Result}
+     * @return {@link Secret}
      */
     Result<Secret> read(String namespace, String secret);
 
@@ -28,7 +28,7 @@ public interface SecretHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link SecretList}
      */
     Result<SecretList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface SecretHttpClient {
      * Create Secret from {@code SecretCreateRequest}
      *
      * @param request {@link SecretCreateRequest}
-     * @return {@link Result}
+     * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Secret> create(SecretCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface SecretHttpClient {
      * Create Secret from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Secret> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface SecretHttpClient {
      *
      * @param namespace namespace
      * @param secret    secret name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String secret) throws ApiException;

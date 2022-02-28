@@ -19,7 +19,7 @@ public interface DeploymentHttpClient {
      *
      * @param namespace  namespace
      * @param deployment deployment name
-     * @return {@link Result}
+     * @return {@link Deployment}
      */
     Result<Deployment> read(String namespace, String deployment);
 
@@ -28,7 +28,7 @@ public interface DeploymentHttpClient {
      *
      * @param namespace     namespace
      * @param labelSelector label selector
-     * @return {@link Result}
+     * @return {@link DeploymentList}
      */
     Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector);
 
@@ -36,7 +36,7 @@ public interface DeploymentHttpClient {
      * Create Deployment from {@code DeploymentCreateRequest}
      *
      * @param request {@link DeploymentCreateRequest}
-     * @return {@link Result}
+     * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Deployment> create(DeploymentCreateRequest request) throws ApiException;
@@ -45,7 +45,7 @@ public interface DeploymentHttpClient {
      * Create Deployment from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
-     * @return {@link Result}
+     * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Deployment> create(YamlBody yaml) throws ApiException;
@@ -55,7 +55,7 @@ public interface DeploymentHttpClient {
      *
      * @param namespace  namespace
      * @param deployment deployment name
-     * @return {@link Result}
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String namespace, String deployment) throws ApiException;
@@ -67,7 +67,7 @@ public interface DeploymentHttpClient {
      * @param deployment deployment name
      * @param count      scale count
      * @param wait       if true, wait for the number of instances to exist - no guarantee is made as to readiness
-     * @return {@link Result}
+     * @return {@link Void}
      */
     Result<Void> scale(String namespace, String deployment, Integer count, boolean wait);
 
