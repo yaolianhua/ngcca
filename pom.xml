@@ -9,6 +9,7 @@
         <module>hotcloud-common</module>
         <module>hotcloud-buildpack</module>
         <module>hotcloud-message</module>
+        <module>hotcloud-security</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -64,6 +65,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>hotcloud-message</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-security</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
