@@ -12,4 +12,10 @@
     <artifactId>hotcloud-security-user</artifactId>
     <name>Hot Cloud :: Security :: User</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>
