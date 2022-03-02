@@ -18,7 +18,7 @@ public class JwtTest {
     public void sign() {
         JwtSigner jwtSigner = new JwtManager();
         Map<String, Object> data = Map.of("username", "admin",
-                "nickname", "管理员",
+                "nickname", "administrator",
                 "locked", false);
         String sign = jwtSigner.sign(new JwtBody(data));
         log.info("Sign: \n {}", sign);
