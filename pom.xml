@@ -37,6 +37,7 @@
         <gitlab-api.version>4.18.0</gitlab-api.version>
         <java-websocket-version>1.5.2</java-websocket-version>
         <java-faker-version>1.0.2</java-faker-version>
+        <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -130,6 +131,23 @@
                 <groupId>com.github.javafaker</groupId>
                 <artifactId>javafaker</artifactId>
                 <version>${java-faker-version}</version>
+            </dependency>
+
+            <!-- jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

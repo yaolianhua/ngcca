@@ -6,6 +6,7 @@ spring:
       - kubernetes
       - buildpack
       - message
+      - security
   rabbitmq:
     host: ${message.rabbitmq.host:}
     port: ${message.rabbitmq.port:}
