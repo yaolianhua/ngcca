@@ -22,6 +22,10 @@ public class Result<T> {
         return new Result<>(status, message, null);
     }
 
+    public static <T> Result<T> error(int status, String message, T data) {
+        return new Result<>(status, message, data);
+    }
+
     public static <T> Result<T> none() {
         return new Result<>(200, "success", null);
     }

@@ -1,0 +1,11 @@
+security:
+  ignored:
+    urls:
+      - /swagger-resources
+      - /swagger-resources/**
+      - /swagger-ui.html
+      - /webjars/springfox-swagger-ui/**
+      - /v2/api-docs
+      - /v3/api-docs
+      - /swagger-ui/**
+      - /favicon.ico
