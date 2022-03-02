@@ -5,6 +5,8 @@ package io.hotcloud.security.admin.jwt;
  **/
 public interface Jwt {
 
+    String SECRET = "!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)";
+
     HeaderClaims header();
 
     PayloadClaims payload();

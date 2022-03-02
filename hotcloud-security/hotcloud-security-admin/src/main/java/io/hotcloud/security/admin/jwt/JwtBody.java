@@ -8,7 +8,6 @@ import java.util.*;
  **/
 public class JwtBody implements Jwt {
 
-    public static final String SECRET = "!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)";
     private final Map<String, Object> data;
 
     public JwtBody(Map<String, Object> data) {
