@@ -1,21 +1,16 @@
 package io.hotcloud.security.admin.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.Assert;
 import io.hotcloud.HotCloudException;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
-import io.jsonwebtoken.impl.DefaultJwsHeader;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -42,15 +37,6 @@ public class JwtManager implements JwtSigner, JwtVerifier {
         return jwtBuilder.compact();
     }
 
-    public static final List<String> DEFAULT_CLAIMS = List.of(
-            Claims.AUDIENCE,
-            Claims.NOT_BEFORE,
-            Claims.ID,
-            Claims.EXPIRATION,
-            Claims.ISSUED_AT,
-            Claims.ISSUER,
-            Claims.SUBJECT
-    );
     @SuppressWarnings("unchecked")
     @Override
     public Jwt verify(String sign) {
@@ -88,7 +74,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                 payloadClaims.setExpiresAt(claims.getExpiration());
                 payloadClaims.setNotBefore(claims.getNotBefore());
 
-                DEFAULT_CLAIMS.forEach(claims::remove);
+                Jwt.DEFAULT_CLAIMS.forEach(claims::remove);
                 payloadClaims.setAttributes(claims);
                 return payloadClaims;
             }

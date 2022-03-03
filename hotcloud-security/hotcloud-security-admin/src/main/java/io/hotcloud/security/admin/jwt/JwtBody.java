@@ -2,6 +2,7 @@ package io.hotcloud.security.admin.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -9,10 +10,16 @@ import java.util.*;
 public class JwtBody implements Jwt {
 
     private final Map<String, Object> data;
+    private final TimeUnit timeUnit;
+    private final Integer time;
 
-    public JwtBody(Map<String, Object> data) {
+    public JwtBody(Map<String, Object> data,
+                   TimeUnit timeUnit,
+                   Integer time) {
         data = Objects.isNull(data) ? new HashMap<>() : data;
         this.data = data;
+        this.timeUnit = timeUnit;
+        this.time = time;
     }
 
     @Override
@@ -31,6 +38,25 @@ public class JwtBody implements Jwt {
         payloadClaims.setId(UUID.randomUUID().toString());
         payloadClaims.setIssuedAt(new Date());
         payloadClaims.setSubject("Api Auth");
+
+        if (timeUnit != null && time != null && time > 0) {
+            switch (timeUnit) {
+                case DAYS:
+                    payloadClaims.expiredAfterDays(time);
+                    break;
+                case HOURS:
+                    payloadClaims.expiredAfterHours(time);
+                    break;
+                case MINUTES:
+                    payloadClaims.expiredAfterMinutes(time);
+                    break;
+                case SECONDS:
+                    payloadClaims.expiredAfterSeconds(time);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return payloadClaims;
     }
