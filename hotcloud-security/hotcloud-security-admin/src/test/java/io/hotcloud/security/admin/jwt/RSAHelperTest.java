@@ -1,6 +1,5 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.jwt;
 
-import io.hotcloud.security.admin.jwt.RSAHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
