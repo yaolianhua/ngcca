@@ -8,5 +8,7 @@ hotcloud:
   server:
     host: localhost
     port: 8080
+    basic-username: admin
+    basic-password: fake
 message:
   type: websocket

@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.client;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -13,6 +14,12 @@ import java.util.Objects;
  **/
 @Slf4j
 public class RestTemplateConfiguration {
+
+    private final HotCloudHttpClientProperties properties;
+
+    public RestTemplateConfiguration(HotCloudHttpClientProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -29,6 +36,7 @@ public class RestTemplateConfiguration {
                     return execution.execute(request, body);
                 })
         );
+        restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(properties.getBasicUsername(), properties.getBasicPassword()));
 
         return restTemplate;
 
