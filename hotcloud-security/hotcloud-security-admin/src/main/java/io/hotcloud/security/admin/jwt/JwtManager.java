@@ -18,6 +18,13 @@ import java.util.List;
 @Slf4j
 public class JwtManager implements JwtSigner, JwtVerifier {
 
+    private final JwtProperties properties;
+
+    public JwtManager(JwtProperties properties) {
+        properties = properties == null ? new JwtProperties() : properties;
+        this.properties = properties;
+    }
+
     @Override
     public String sign(Jwt jwt) {
 
@@ -29,10 +36,11 @@ public class JwtManager implements JwtSigner, JwtVerifier {
         jwtBuilder.setHeader(headerClaims == null ? new HashMap<>(8) : headerClaims.ofMap());
         jwtBuilder.setClaims(payloadClaims == null ? new HashMap<>(16) : payloadClaims.ofMap());
 
-        Assert.hasText(jwt.signKeySecret(), "Jwt sign key is null", 400);
+        Assert.hasText(properties.getSignKey(), "Jwt sign key is null", 400);
 
-        SecretKey secretKey = Keys.hmacShaKeyFor(jwt.signKeySecret().getBytes(StandardCharsets.UTF_8));
-        jwtBuilder.signWith(secretKey, SignatureAlgorithm.HS512);
+        byte[] encodedSecret = Base64.getEncoder().encode(properties.getSignKey().getBytes(StandardCharsets.UTF_8));
+        SecretKey secretKey = Keys.hmacShaKeyFor(encodedSecret);
+        jwtBuilder.signWith(secretKey, SignatureAlgorithm.valueOf(properties.getAlgorithm()));
 
         return jwtBuilder.compact();
     }
@@ -79,10 +87,6 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                 return payloadClaims;
             }
 
-            @Override
-            public String signKeySecret() {
-                return Base64.getEncoder().encodeToString(Jwt.SECRET.getBytes(StandardCharsets.UTF_8));
-            }
         };
     }
 }

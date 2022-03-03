@@ -1,6 +1,5 @@
 package io.hotcloud.security.admin.jwt;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -59,11 +58,6 @@ public class JwtBody implements Jwt {
         }
 
         return payloadClaims;
-    }
-
-    @Override
-    public String signKeySecret() {
-        return Base64.getEncoder().encodeToString(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
     public Map<String, Object> getData() {

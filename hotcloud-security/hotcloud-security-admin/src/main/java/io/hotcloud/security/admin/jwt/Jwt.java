@@ -25,6 +25,4 @@ public interface Jwt {
 
     PayloadClaims payload();
 
-    String signKeySecret();
-
 }
