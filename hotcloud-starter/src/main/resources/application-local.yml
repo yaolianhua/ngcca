@@ -12,3 +12,7 @@ logging:
   level:
     io.hotcloud.kubernetes.server: debug
     io.hotcloud.message: info
+security:
+  jwt:
+    algorithm: HS512
+    sign-key: QWERTYUIOPASDFGHJKLZXCVBNMmnbvcxzlkjhgfdsapoiuytrewq
