@@ -1,27 +1,29 @@
 package io.hotcloud.security.admin.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.Assert;
 import io.hotcloud.HotCloudException;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
-import io.jsonwebtoken.impl.DefaultJwsHeader;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
 public class JwtManager implements JwtSigner, JwtVerifier {
+
+    private final JwtProperties properties;
+
+    public JwtManager(JwtProperties properties) {
+        properties = properties == null ? new JwtProperties() : properties;
+        this.properties = properties;
+    }
 
     @Override
     public String sign(Jwt jwt) {
@@ -34,23 +36,15 @@ public class JwtManager implements JwtSigner, JwtVerifier {
         jwtBuilder.setHeader(headerClaims == null ? new HashMap<>(8) : headerClaims.ofMap());
         jwtBuilder.setClaims(payloadClaims == null ? new HashMap<>(16) : payloadClaims.ofMap());
 
-        Assert.hasText(jwt.signKeySecret(), "Jwt sign key is null", 400);
+        Assert.hasText(properties.getSignKey(), "Jwt sign key is null", 400);
 
-        SecretKey secretKey = Keys.hmacShaKeyFor(jwt.signKeySecret().getBytes(StandardCharsets.UTF_8));
-        jwtBuilder.signWith(secretKey, SignatureAlgorithm.HS512);
+        byte[] encodedSecret = Base64.getEncoder().encode(properties.getSignKey().getBytes(StandardCharsets.UTF_8));
+        SecretKey secretKey = Keys.hmacShaKeyFor(encodedSecret);
+        jwtBuilder.signWith(secretKey, SignatureAlgorithm.valueOf(properties.getAlgorithm()));
 
         return jwtBuilder.compact();
     }
 
-    public static final List<String> DEFAULT_CLAIMS = List.of(
-            Claims.AUDIENCE,
-            Claims.NOT_BEFORE,
-            Claims.ID,
-            Claims.EXPIRATION,
-            Claims.ISSUED_AT,
-            Claims.ISSUER,
-            Claims.SUBJECT
-    );
     @SuppressWarnings("unchecked")
     @Override
     public Jwt verify(String sign) {
@@ -88,15 +82,11 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                 payloadClaims.setExpiresAt(claims.getExpiration());
                 payloadClaims.setNotBefore(claims.getNotBefore());
 
-                DEFAULT_CLAIMS.forEach(claims::remove);
+                Jwt.DEFAULT_CLAIMS.forEach(claims::remove);
                 payloadClaims.setAttributes(claims);
                 return payloadClaims;
             }
 
-            @Override
-            public String signKeySecret() {
-                return Base64.getEncoder().encodeToString(Jwt.SECRET.getBytes(StandardCharsets.UTF_8));
-            }
         };
     }
 }

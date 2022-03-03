@@ -1,8 +1,10 @@
 package io.hotcloud.security.admin;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +13,13 @@ import java.util.List;
  **/
 @Data
 @ConfigurationProperties("security.ignored")
+@Slf4j
 public class SecureWhitelistConfigure {
 
     private List<String> urls = new LinkedList<>();
+
+    @PostConstruct
+    public void print() {
+        log.info("【Load SecureWhitelist Configuration】ignored urls {}", urls);
+    }
 }
