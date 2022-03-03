@@ -29,7 +29,7 @@ public class FakeUserService implements FakeUserApi {
             String username = FAKER.name().username();
             FakeUser fakeUser = FakeUser.of(username, FAKER.name().fullName(), PASSWORD);
             List<String> usernames = FAKE_USER_LIST.getItems().stream()
-                    .map(FakeUser::getAccount)
+                    .map(FakeUser::getUsername)
                     .collect(Collectors.toList());
 
             if (usernames.contains(username)) {
@@ -42,7 +42,7 @@ public class FakeUserService implements FakeUserApi {
 
     @Override
     public FakeUser retrieve(String username) {
-        return FAKE_USER_LIST.getItems().stream().filter(e -> Objects.equals(username, e.getAccount())).findFirst().orElse(null);
+        return FAKE_USER_LIST.getItems().stream().filter(e -> Objects.equals(username, e.getUsername())).findFirst().orElse(null);
     }
 
     @Override

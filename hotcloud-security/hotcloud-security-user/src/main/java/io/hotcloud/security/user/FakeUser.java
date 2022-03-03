@@ -13,24 +13,19 @@ import java.util.Collections;
 @Data
 public class FakeUser implements UserDetails {
 
-    private String account;
+    private String username;
     private String password;
     private String nickname;
     private boolean enabled;
 
     public static FakeUser of(String username, String nickname, String password) {
         FakeUser fakeUser = new FakeUser();
-        fakeUser.setAccount(username);
+        fakeUser.setUsername(username);
         fakeUser.setNickname(nickname);
         fakeUser.setPassword(password);
         fakeUser.setEnabled(true);
 
         return fakeUser;
-    }
-
-    @Override
-    public String getUsername() {
-        return account;
     }
 
     @Override

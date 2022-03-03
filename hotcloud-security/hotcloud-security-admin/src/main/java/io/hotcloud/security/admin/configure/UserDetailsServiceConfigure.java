@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.configure;
 
 import io.hotcloud.security.api.FakeUserApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

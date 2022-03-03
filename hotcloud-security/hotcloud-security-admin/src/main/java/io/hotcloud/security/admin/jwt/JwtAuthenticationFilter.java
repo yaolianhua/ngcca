@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.jwt;
 
 import io.hotcloud.security.admin.jwt.JwtVerifier;
 import lombok.extern.slf4j.Slf4j;

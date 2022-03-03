@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.configure;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;

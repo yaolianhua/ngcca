@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.jwt;
 
 import io.hotcloud.security.admin.jwt.JwtManager;
 import io.hotcloud.security.admin.jwt.JwtProperties;

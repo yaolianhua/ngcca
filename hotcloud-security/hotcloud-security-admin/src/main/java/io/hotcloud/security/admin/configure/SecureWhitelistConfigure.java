@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.configure;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
