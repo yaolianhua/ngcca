@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Collections;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -46,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
+        //permit all whitelist
         http.authorizeRequests().antMatchers(whitelistConfigure.getUrls().toArray(new String[0])).permitAll();
 
         http.cors();
@@ -53,8 +56,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().disable();
 
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtVerifier, userDetailsService);
+        //enable jwt auth
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+        //enable basic auth
         http.httpBasic().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
 
         http.authorizeRequests().anyRequest().authenticated();
@@ -64,6 +69,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //for test only
+        auth.inMemoryAuthentication().passwordEncoder(passwordEncoder)
+                .withUser("admin")
+                .password(passwordEncoder.encode("fake"))
+                .authorities(Collections.emptyList());
+        //
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 }

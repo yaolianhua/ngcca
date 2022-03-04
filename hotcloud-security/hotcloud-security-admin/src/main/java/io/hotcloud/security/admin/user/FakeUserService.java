@@ -24,7 +24,7 @@ public class FakeUserService implements FakeUserApi {
     private final static FakeUserList FAKE_USER_LIST = new FakeUserList();
 
     static {
-        FAKE_USER_LIST.add(FakeUser.of("admin", "administrator", PASSWORD));
+        FAKE_USER_LIST.add(FakeUser.of("fake", "fake", PASSWORD));
         for (int i = 0; i < 10; i++) {
             String username = FAKER.name().username();
             FakeUser fakeUser = FakeUser.of(username, FAKER.name().fullName(), PASSWORD);
