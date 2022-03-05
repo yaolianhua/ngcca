@@ -2,7 +2,6 @@ package io.hotcloud.security.admin.configure;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -20,4 +19,5 @@ public class NoneSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.logout().disable();
         http.authorizeRequests().anyRequest().permitAll();
     }
+
 }
