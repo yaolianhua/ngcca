@@ -7,6 +7,9 @@ spring:
       - buildpack
       - message
       - security
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   rabbitmq:
     host: ${message.rabbitmq.host:}
     port: ${message.rabbitmq.port:}

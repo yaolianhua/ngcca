@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.6.4</version>
     </parent>
 
     <groupId>io.hotcloud</groupId>
@@ -31,7 +31,7 @@
         <springfox-version>3.0.0</springfox-version>
         <kubernetes-client.version>14.0.0</kubernetes-client.version>
         <fabric8.kubernetes-client.version>5.12.1</fabric8.kubernetes-client.version>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
@@ -155,11 +155,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.xolstice.maven.plugins</groupId>
-                    <artifactId>protobuf-maven-plugin</artifactId>
-                    <version>0.6.1</version>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
