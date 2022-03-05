@@ -1,4 +1,5 @@
 security:
+  enabled: false
   ignored:
     urls:
       - /swagger-resources

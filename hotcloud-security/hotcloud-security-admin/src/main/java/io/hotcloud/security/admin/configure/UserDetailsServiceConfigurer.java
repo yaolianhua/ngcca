@@ -10,11 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class UserDetailsServiceConfigure {
+public class UserDetailsServiceConfigurer {
 
     private final FakeUserApi fakeUserApi;
 
-    public UserDetailsServiceConfigure(FakeUserApi fakeUserApi) {
+    public UserDetailsServiceConfigurer(FakeUserApi fakeUserApi) {
         this.fakeUserApi = fakeUserApi;
     }
 

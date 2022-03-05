@@ -8,7 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class CorsFilterConfigure {
+public class CorsFilterConfigurer {
 
     @Bean
     public CorsFilter corsFilter() {

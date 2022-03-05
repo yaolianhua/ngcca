@@ -1,10 +1,10 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.configure;
 
-import io.hotcloud.security.admin.configure.CorsFilterConfigure;
-import io.hotcloud.security.admin.configure.SecureWhitelistConfigure;
-import io.hotcloud.security.admin.configure.UserDetailsServiceConfigure;
+import io.hotcloud.security.admin.Http401UnauthorizedEntryPoint;
 import io.hotcloud.security.admin.jwt.JwtAuthenticationFilter;
 import io.hotcloud.security.admin.jwt.JwtVerifier;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,28 +16,35 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SecureWhitelistConfigure.class)
+@EnableConfigurationProperties(SecureWhitelistConfigurer.class)
 @Import({
-        CorsFilterConfigure.class,
-        UserDetailsServiceConfigure.class
+        CorsFilterConfigurer.class,
+        UserDetailsServiceConfigurer.class
 })
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@ConditionalOnProperty(name = "security.enabled", havingValue = "true", matchIfMissing = true)
+@Slf4j
+public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private final SecureWhitelistConfigure whitelistConfigure;
+    private final SecureWhitelistConfigurer whitelistConfigure;
     private final JwtVerifier jwtVerifier;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfiguration(SecureWhitelistConfigure whitelistConfigure,
-                                 JwtVerifier jwtVerifier,
-                                 UserDetailsService userDetailsService,
-                                 PasswordEncoder passwordEncoder) {
+    @PostConstruct
+    public void print(){
+        log.info("Spring security enabled. if you want to disable, you need configure the environment [security.enabled=false]");
+    }
+    public SecurityConfigurer(SecureWhitelistConfigurer whitelistConfigure,
+                              JwtVerifier jwtVerifier,
+                              UserDetailsService userDetailsService,
+                              PasswordEncoder passwordEncoder) {
         this.whitelistConfigure = whitelistConfigure;
         this.jwtVerifier = jwtVerifier;
         this.userDetailsService = userDetailsService;
