@@ -203,7 +203,7 @@ data:
         use-new-run: true
         verbosity: debug
     security:
-      enabled: false
+      enabled: true
 kind: ConfigMap
 metadata:
   name: hotcloud-config
