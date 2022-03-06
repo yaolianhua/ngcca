@@ -12,7 +12,7 @@ COPY --from=builder snapshot-dependencies/ ./
 COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 
-ENV JAVA_OPTS="-Xms128m -Xmx256m"
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
 EXPOSE 8080
 
 CMD java $JAVA_OPTS -Dspring.profiles.active=production org.springframework.boot.loader.JarLauncher
