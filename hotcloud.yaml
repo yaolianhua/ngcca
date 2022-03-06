@@ -52,8 +52,9 @@ metadata:
   name: hotcloud-ingress
   namespace: hotcloud
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
     - host: io.hotcloud
       http:
