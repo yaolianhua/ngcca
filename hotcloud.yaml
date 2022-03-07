@@ -56,7 +56,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: io.hotcloud
+    - host: hotcloud.local
       http:
         paths:
           - path: /
