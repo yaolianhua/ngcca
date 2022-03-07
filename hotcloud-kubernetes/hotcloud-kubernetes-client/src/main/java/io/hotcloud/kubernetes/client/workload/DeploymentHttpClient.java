@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.client.workload;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.Result;
+import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -71,4 +72,33 @@ public interface DeploymentHttpClient {
      */
     Result<Void> scale(String namespace, String deployment, Integer count, boolean wait);
 
+    /**
+     * Rolling namespaced Deployment
+     *
+     * @param action     the action (<em>pause</em>, <em>restart</em>, <em>resume</em>, <em>undo</em>) will be applied
+     * @param namespace  namespace
+     * @param deployment deployment name
+     * @return {@link Deployment}
+     */
+    Result<Deployment> rolling(RollingAction action, String namespace, String deployment);
+
+    /**
+     * Update existing container image of single container resource
+     *
+     * @param namespace  namespace
+     * @param deployment deployment name
+     * @param image      image to be updated
+     * @return {@link Deployment}
+     */
+    Result<Deployment> imageSet(String namespace, String deployment, String image);
+
+    /**
+     * Update existing container image(s) of resources
+     *
+     * @param namespace           namespace
+     * @param deployment          deployment name
+     * @param containerToImageMap Map with keys as container name and value as image
+     * @return {@link Deployment}
+     */
+    Result<Deployment> imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap);
 }
