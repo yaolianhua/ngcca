@@ -45,27 +45,27 @@ spec:
   selector:
     k8s-app: hotcloud
   type: NodePort
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hotcloud-ingress
-  namespace: hotcloud
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: hotcloud.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: hotcloud
-                port:
-                  number: 8080
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: hotcloud-ingress
+#  namespace: hotcloud
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#spec:
+#  ingressClassName: nginx
+#  rules:
+#    - host: hotcloud.local
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: hotcloud
+#                port:
+#                  number: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
