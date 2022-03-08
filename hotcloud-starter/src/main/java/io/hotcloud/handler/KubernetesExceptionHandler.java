@@ -1,7 +1,7 @@
 package io.hotcloud.handler;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;

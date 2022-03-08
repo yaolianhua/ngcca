@@ -1,8 +1,8 @@
 package io.hotcloud.kubernetes.client.equivalent;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.Assert;
-import io.hotcloud.Result;
+import io.hotcloud.common.Assert;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.TimeoutImageEditReplacePatchable;
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentUpdateApi;
 import lombok.extern.slf4j.Slf4j;

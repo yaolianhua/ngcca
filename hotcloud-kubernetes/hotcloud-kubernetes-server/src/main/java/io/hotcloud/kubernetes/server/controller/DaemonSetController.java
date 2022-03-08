@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.workload.DaemonSetCreateApi;
 import io.hotcloud.kubernetes.api.workload.DaemonSetDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DaemonSetReadApi;

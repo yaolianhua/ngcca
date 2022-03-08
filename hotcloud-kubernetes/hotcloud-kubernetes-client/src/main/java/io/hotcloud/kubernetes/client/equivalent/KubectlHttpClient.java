@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.client.equivalent;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 
 import java.util.List;

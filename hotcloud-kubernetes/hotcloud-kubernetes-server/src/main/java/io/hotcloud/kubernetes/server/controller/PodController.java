@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.pod.PodCreateApi;
 import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
 import io.hotcloud.kubernetes.api.pod.PodLogFetchApi;

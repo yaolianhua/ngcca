@@ -1,6 +1,6 @@
 package io.hotcloud.handler;
 
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;

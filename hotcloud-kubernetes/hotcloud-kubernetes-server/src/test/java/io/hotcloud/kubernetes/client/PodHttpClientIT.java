@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;

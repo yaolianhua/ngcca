@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.equivalent;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

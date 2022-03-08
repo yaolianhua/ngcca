@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.client;
 
-import io.hotcloud.HotCloudException;
+import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;

@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.server.workload;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.pod.PodLogFetchApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

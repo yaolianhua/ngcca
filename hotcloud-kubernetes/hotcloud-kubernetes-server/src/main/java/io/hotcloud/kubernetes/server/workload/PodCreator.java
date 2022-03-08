@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.workload;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.HotCloudException;
+import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.pod.PodCreateApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;

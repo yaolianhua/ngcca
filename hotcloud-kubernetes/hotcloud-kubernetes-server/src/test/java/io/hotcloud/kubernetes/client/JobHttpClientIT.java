@@ -4,7 +4,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.workload.JobHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;

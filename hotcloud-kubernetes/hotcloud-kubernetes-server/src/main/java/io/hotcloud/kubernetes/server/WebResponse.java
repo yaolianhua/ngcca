@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.server;
 
 
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

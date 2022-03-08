@@ -1,4 +1,4 @@
-package io.hotcloud;
+package io.hotcloud.common;
 
 /**
  * @author yaolianhua789@gmail.com

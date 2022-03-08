@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.configurations;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.Assert;
-import io.hotcloud.Result;
+import io.hotcloud.common.Assert;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
