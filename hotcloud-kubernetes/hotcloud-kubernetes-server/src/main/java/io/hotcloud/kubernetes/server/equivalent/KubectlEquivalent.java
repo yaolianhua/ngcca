@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.server.equivalent;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.LocalPortForward;
 import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,10 @@ import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -21,9 +25,12 @@ import java.util.List;
 public class KubectlEquivalent implements KubectlApi {
 
     private final KubernetesClient fabric8Client;
+    private final ExecutorService executorService;
 
-    public KubectlEquivalent(KubernetesClient fabric8Client) {
+    public KubectlEquivalent(KubernetesClient fabric8Client,
+                             ExecutorService executorService) {
         this.fabric8Client = fabric8Client;
+        this.executorService = executorService;
     }
 
     @Override
@@ -52,5 +59,29 @@ public class KubectlEquivalent implements KubectlApi {
                 fabric8Client.load(inputStream).delete();
 
         return deleted;
+    }
+
+    @Override
+    public Boolean portForward(String namespace, String pod, String ip, Integer containerPort, Integer localPort, long alive, TimeUnit unit) {
+        log.info("Port forward open for {} {}, ip='{}', localPort='{}'", alive, unit.name().toLowerCase(), ip, localPort);
+
+        executorService.execute(() -> {
+            try {
+                InetAddress inetAddress = InetAddress.getByName(ip);
+                LocalPortForward forward = fabric8Client.pods()
+                        .inNamespace(namespace)
+                        .withName(pod)
+                        .portForward(containerPort, inetAddress, localPort);
+
+                unit.sleep(alive);
+            } catch (Exception e) {
+                //
+            }
+
+            log.info("Closing port forward");
+        });
+
+
+        return false;
     }
 }
