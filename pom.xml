@@ -33,6 +33,7 @@
         <fabric8.kubernetes-client.version>5.12.1</fabric8.kubernetes-client.version>
         <lombok.version>1.18.22</lombok.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
+        <apache.commons.validator>1.7</apache.commons.validator>
         <github-api.version>1.135</github-api.version>
         <gitlab-api.version>4.18.0</gitlab-api.version>
         <java-websocket-version>1.5.2</java-websocket-version>
@@ -118,6 +119,12 @@
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
             </dependency>
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${apache.commons.validator}</version>
+            </dependency>
+
 
             <!-- java websocket -->
             <dependency>
