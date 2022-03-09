@@ -16,8 +16,8 @@ public interface KubectlApi {
 
     Boolean portForward(String namespace,
                         String pod,
-                        String ip,
+                        String ipv4Address,
                         Integer containerPort,
                         Integer localPort,
-                        long alive, TimeUnit unit);
+                        Long alive, TimeUnit unit);
 }

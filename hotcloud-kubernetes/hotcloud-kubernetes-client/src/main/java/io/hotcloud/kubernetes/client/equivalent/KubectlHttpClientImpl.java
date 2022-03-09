@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -60,6 +61,29 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 : uriComponentsBuilder.build().toUri();
 
         ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Boolean> portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
+
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.notNull(containerPort, "containerPort is null", 400);
+        Assert.notNull(localPort, "localPort is null", 400);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/forward", uri))
+                .queryParam("ipv4Address", ipv4Address)
+                .queryParam("containerPort", containerPort)
+                .queryParam("localPort", localPort)
+                .queryParam("alive", time)
+                .queryParam("timeUnit", timeUnit)
+                .build(namespace, pod);
+
+        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

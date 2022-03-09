@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
@@ -52,6 +53,20 @@ public class KubectlHttpClientIT extends ClientIntegrationTestBase {
         log.info("ResourceList deleted success='{}'", delete);
 
         log.info("Kubectl Integration Test End");
+    }
+
+    @Test
+    public void portForward() throws InterruptedException {
+        log.info("Sleep 30s wait pod created");
+        TimeUnit.SECONDS.sleep(30);
+        Result<PodList> readList = podHttpClient.readList(NAMESPACE, labelSelector);
+        List<Pod> pods = readList.getData().getItems();
+        List<String> podNames = pods.stream()
+                .map(e -> e.getMetadata().getName())
+                .collect(Collectors.toList());
+
+        Result<Boolean> result = kubectlHttpClient.portForward(NAMESPACE, podNames.get(0), null, 8080, 8078, null, null);
+        Assertions.assertTrue(result.getData());
     }
 
     @Test

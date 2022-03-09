@@ -12,14 +12,18 @@ import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.kubernetes.server.WebResponse.*;
+import static io.hotcloud.kubernetes.server.WebResponse.accepted;
+import static io.hotcloud.kubernetes.server.WebResponse.created;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,12 +49,33 @@ public class KubectlControllerTest {
     private KubectlApi kubectlApi;
 
     @Test
+    public void portForward() throws Exception {
+        when(kubectlApi.portForward("middleware", "redisinsight-6b8658f8cf-fl754", "127.0.0.1", 8001, 8001, 30L, TimeUnit.SECONDS))
+                .thenReturn(Boolean.TRUE);
+
+        LinkedMultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        Map<String, String> params = Map.of("ipv4Address", "127.0.0.1",
+                "containerPort", String.valueOf(8001),
+                "localPort", String.valueOf(8001),
+                "alive", String.valueOf(30L),
+                "timeUnit", TimeUnit.SECONDS.name());
+        multiValueMap.setAll(params);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/{namespace}/{pod}/forward"), "middleware", "redisinsight-6b8658f8cf-fl754")
+                        .params(multiValueMap))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(kubectlApi, times(1)).portForward("middleware", "redisinsight-6b8658f8cf-fl754", "127.0.0.1", 8001, 8001, 30L, TimeUnit.SECONDS);
+    }
+
+    @Test
     public void resourceListDelete() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
         String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
         String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
 
-        when(kubectlApi.delete(null,yaml)).thenReturn(Boolean.TRUE);
+        when(kubectlApi.delete(null, yaml)).thenReturn(Boolean.TRUE);
         String json = objectMapper.writeValueAsString(accepted(Boolean.TRUE).getBody());
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete(PATH).contentType(MediaType.APPLICATION_JSON).content(yamlBody))

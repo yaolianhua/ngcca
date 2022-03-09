@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -33,9 +34,21 @@ public class KubectlController {
 
     @DeleteMapping
     public ResponseEntity<Result<Boolean>> resourceListDelete(@RequestParam(value = "namespace", required = false) String namespace,
-                                                            @RequestBody YamlBody yaml) {
+                                                              @RequestBody YamlBody yaml) {
         Boolean delete = kubectlApi.delete(namespace, yaml.getYaml());
         return WebResponse.accepted(delete);
+    }
+
+    @PostMapping("/{namespace}/{pod}/forward")
+    public ResponseEntity<Result<Boolean>> portForward(@PathVariable(value = "namespace") String namespace,
+                                                       @PathVariable(value = "pod") String pod,
+                                                       @RequestParam(value = "ipv4Address", required = false) String address,
+                                                       @RequestParam(value = "containerPort") Integer containerPort,
+                                                       @RequestParam(value = "localPort") Integer localPort,
+                                                       @RequestParam(value = "alive", required = false) Long alive,
+                                                       @RequestParam(value = "timeUnit", required = false) TimeUnit unit) {
+        Boolean portForward = kubectlApi.portForward(namespace, pod, address, containerPort, localPort, alive, unit);
+        return WebResponse.accepted(portForward);
     }
 
 }
