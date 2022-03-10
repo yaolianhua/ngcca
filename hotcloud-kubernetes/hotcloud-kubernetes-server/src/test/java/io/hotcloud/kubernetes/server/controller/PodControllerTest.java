@@ -1,11 +1,9 @@
 package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.pod.PodCreateApi;
-import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
-import io.hotcloud.kubernetes.api.pod.PodLogFetchApi;
-import io.hotcloud.kubernetes.api.pod.PodReadApi;
+import io.hotcloud.kubernetes.api.pod.*;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -38,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 PodCreateApi.class,
                 PodReadApi.class,
                 PodDeleteApi.class,
-                PodLogFetchApi.class
+                PodLogFetchApi.class,
+                PodUpdateApi.class
         })
 })
 public class PodControllerTest {
@@ -54,6 +54,32 @@ public class PodControllerTest {
     private PodReadApi podReadApi;
     @MockBean
     private PodDeleteApi podDeleteApi;
+    @MockBean
+    private PodUpdateApi podUpdateApi;
+
+    @Test
+    public void annotations() throws Exception {
+        String contentBody = objectMapper.writeValueAsString(Map.of("icon-url", "http://goo.gl/XXBTWq"));
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PATH.concat("/{namespace}/{pod}/annotations"), "default", "nginx")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(contentBody))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(podUpdateApi, times(1)).addAnnotations("default", "nginx", Map.of("icon-url", "http://goo.gl/XXBTWq"));
+    }
+
+    @Test
+    public void labels() throws Exception {
+        String contentBody = objectMapper.writeValueAsString(Map.of("k8s-app", "nginx"));
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PATH.concat("/{namespace}/{pod}/labels"), "default", "nginx")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(contentBody))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(podUpdateApi, times(1)).addLabels("default", "nginx", Map.of("k8s-app", "nginx"));
+    }
 
     @Test
     public void podDelete() throws Exception {
@@ -67,11 +93,11 @@ public class PodControllerTest {
     @Test
     public void podCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("pod-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
         String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
 
         InputStream podReadInputStream = getClass().getResourceAsStream("pod-read.json");
-        String podReadJson = new BufferedReader(new InputStreamReader(podReadInputStream)).lines().collect(Collectors.joining());
+        String podReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(podReadInputStream))).lines().collect(Collectors.joining());
 
         Pod pod = objectMapper.readValue(podReadJson, Pod.class);
         when(podCreateApi.pod(yaml)).thenReturn(pod);
@@ -92,7 +118,7 @@ public class PodControllerTest {
         when(podReadApi.read("default", "nginx")).thenReturn(pod());
 
         InputStream inputStream = getClass().getResourceAsStream("pod-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Pod value = objectMapper.readValue(json, Pod.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -107,7 +133,7 @@ public class PodControllerTest {
         when(podReadApi.read("default", Map.of())).thenReturn(podList());
 
         InputStream inputStream = getClass().getResourceAsStream("podList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         PodList value = objectMapper.readValue(json, PodList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -122,19 +148,18 @@ public class PodControllerTest {
     public PodList podList() {
 
         PodListBuilder podListBuilder = new PodListBuilder();
-        PodList podList = podListBuilder.withApiVersion("v1")
+
+        return podListBuilder.withApiVersion("v1")
                 .withKind("PodList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("65012").build())
                 .withItems(pod())
                 .build();
-
-        return podList;
     }
 
     public Pod pod() {
         PodBuilder podBuilder = new PodBuilder();
 
-        Pod pod = podBuilder.withApiVersion("v1")
+        return podBuilder.withApiVersion("v1")
                 .withKind("Pod")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("nginx")
@@ -146,8 +171,6 @@ public class PodControllerTest {
                                 .withPorts(new ContainerPortBuilder().withContainerPort(80).withProtocol("TCP").build())
                                 .build()
                 ).build()).build();
-
-        return pod;
     }
 
 

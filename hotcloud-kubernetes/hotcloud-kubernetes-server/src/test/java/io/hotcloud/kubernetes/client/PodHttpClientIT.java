@@ -17,9 +17,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,17 @@ public class PodHttpClientIT extends ClientIntegrationTestBase {
         podHttpClient.delete(NAMESPACE, POD);
         log.info("Delete Pod Name: '{}'", POD);
         log.info("Pod Client Integration Test End");
+    }
+
+    @Test
+    public void annotations_labels() {
+        Result<Pod> annotatedPodResult = podHttpClient.addAnnotations(NAMESPACE, POD, Map.of("k8s-app", "nginx"));
+        Map<String, String> annotations = annotatedPodResult.getData().getMetadata().getAnnotations();
+        Assertions.assertTrue(annotations.containsKey("k8s-app"));
+
+        Result<Pod> labeledPodResult = podHttpClient.addLabels(NAMESPACE, POD, Map.of("k8s-app", "nginx"));
+        Map<String, String> labels = labeledPodResult.getData().getMetadata().getAnnotations();
+        Assertions.assertTrue(labels.containsKey("k8s-app"));
     }
 
     @Test
