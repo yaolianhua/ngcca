@@ -30,8 +30,8 @@ public class ValidatorTest {
                 "1.1.1.-100",               // -100
                 "1...1",                    // empty between .
                 "1..1",                     // empty between .
-                "1.1.1.1.",                 // last .
-                "");                        // empty
+                "1.1.1.1."                  // last .
+        );                          // empty
     }
 
     static Stream<String> validIPv4Provider() {
