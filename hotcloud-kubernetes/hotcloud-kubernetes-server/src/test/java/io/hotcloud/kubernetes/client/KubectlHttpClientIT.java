@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.client;
 
+import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -70,6 +72,21 @@ public class KubectlHttpClientIT extends ClientIntegrationTestBase {
     }
 
     @Test
+    public void eventsRead() throws InterruptedException {
+        log.info("Sleep 5s wait ...");
+        TimeUnit.SECONDS.sleep(5);
+
+        Result<List<Event>> events = kubectlHttpClient.events(NAMESPACE);
+        Map<String, String> nameMessages = events.getData().stream()
+                .collect(Collectors.toMap(e -> e.getMetadata().getName(), Event::getMessage));
+        for (Map.Entry<String, String> entry : nameMessages.entrySet()) {
+            log.info("Event name: {}, event message: {}", entry.getKey(), entry.getValue());
+            Result<Event> eventResult = kubectlHttpClient.events(NAMESPACE, entry.getKey());
+            Assertions.assertEquals(entry.getValue(), eventResult.getData().getMessage());
+        }
+    }
+
+    @Test
     public void read() throws InterruptedException {
 
         log.info("Sleep 30s wait pod created");
@@ -85,7 +102,7 @@ public class KubectlHttpClientIT extends ClientIntegrationTestBase {
     List<HasMetadata> apply() {
 
         InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         Result<List<HasMetadata>> result = kubectlHttpClient.resourceListCreateOrReplace(null, YamlBody.of(yaml));
         return result.getData();
@@ -95,7 +112,7 @@ public class KubectlHttpClientIT extends ClientIntegrationTestBase {
     Boolean delete() {
 
         InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         Result<Boolean> result = kubectlHttpClient.delete(null, YamlBody.of(yaml));
         return result.getData();

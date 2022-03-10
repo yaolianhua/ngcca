@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.client.equivalent;
 
+import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Result;
@@ -84,6 +85,33 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 .build(namespace, pod);
 
         ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<List<Event>> events(String namespace) {
+        Assert.hasText(namespace, "namespace is null", 400);
+
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", uri))
+                .build(namespace);
+
+        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Event> events(String namespace, String name) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(name, "name is null", 400);
+
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", uri))
+                .build(namespace, name);
+
+        ResponseEntity<Result<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
