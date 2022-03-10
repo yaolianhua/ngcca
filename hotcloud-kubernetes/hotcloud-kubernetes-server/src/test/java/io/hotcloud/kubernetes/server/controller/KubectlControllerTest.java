@@ -1,6 +1,7 @@
 package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -19,11 +20,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.kubernetes.server.WebResponse.accepted;
-import static io.hotcloud.kubernetes.server.WebResponse.created;
+import static io.hotcloud.kubernetes.server.WebResponse.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,6 +50,40 @@ public class KubectlControllerTest {
     private KubectlApi kubectlApi;
 
     @Test
+    public void eventsRead() throws Exception {
+        InputStream resourceAsStream = getClass().getResourceAsStream("events-read.json");
+        String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream))).lines().collect(Collectors.joining());
+
+        Event events = objectMapper.readValue(readJson, Event.class);
+        when(kubectlApi.events("default", "hotcloud-66459b5b74-zf6sg.16daf5a47394186e")).thenReturn(events);
+
+        String json = objectMapper.writeValueAsString(ok(events).getBody());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/events/{name}"), "default", "hotcloud-66459b5b74-zf6sg.16daf5a47394186e"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(json, true));
+    }
+
+    @Test
+    public void eventsListRead() throws Exception {
+        InputStream resourceAsStream = getClass().getResourceAsStream("events-list-read.json");
+        String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream))).lines().collect(Collectors.joining());
+
+        @SuppressWarnings("unchecked")
+        List<Event> events = objectMapper.readValue(readJson, List.class);
+        when(kubectlApi.events("default")).thenReturn(events);
+
+        String json = objectMapper.writeValueAsString(ok(events).getBody());
+
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PATH.concat("/{namespace}/events"), "default"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(json, true));
+    }
+
+    @Test
     public void portForward() throws Exception {
         when(kubectlApi.portForward("middleware", "redisinsight-6b8658f8cf-fl754", "127.0.0.1", 8001, 8001, 30L, TimeUnit.SECONDS))
                 .thenReturn(Boolean.TRUE);
@@ -72,7 +107,7 @@ public class KubectlControllerTest {
     @Test
     public void resourceListDelete() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
         String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
 
         when(kubectlApi.delete(null, yaml)).thenReturn(Boolean.TRUE);
@@ -88,11 +123,11 @@ public class KubectlControllerTest {
     @Test
     public void resourceListCreateOrReplace() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
         String yamlBody = objectMapper.writeValueAsString(YamlBody.of(yaml));
 
         InputStream resourceAsStream = getClass().getResourceAsStream("resourceList-read.json");
-        String deploymentReadJson = new BufferedReader(new InputStreamReader(resourceAsStream)).lines().collect(Collectors.joining());
+        String deploymentReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream))).lines().collect(Collectors.joining());
 
         @SuppressWarnings("unchecked")
         List<HasMetadata> hasMetadata = objectMapper.readValue(deploymentReadJson, List.class);

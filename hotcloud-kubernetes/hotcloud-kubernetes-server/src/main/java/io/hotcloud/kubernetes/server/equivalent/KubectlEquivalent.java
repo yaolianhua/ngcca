@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.server.equivalent;
 
+import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -144,5 +145,16 @@ public class KubectlEquivalent implements KubectlApi {
         }
         Assert.state(!StringUtils.hasText(errorReference.get()), errorReference.get(), 400);
         return resultBoolean.get();
+    }
+
+    @Override
+    public List<Event> events(String namespace) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        List<Event> items = fabric8Client.v1().events()
+                .inNamespace(namespace)
+                .list()
+                .getItems();
+
+        return items;
     }
 }
