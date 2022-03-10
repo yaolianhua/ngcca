@@ -63,6 +63,28 @@ public interface PodHttpClient {
     Result<Pod> create(PodCreateRequest request) throws ApiException;
 
     /**
+     * Annotate annotations for pod
+     * <p> Equivalent of `kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq`
+     *
+     * @param namespace   namespace
+     * @param pod         pod name
+     * @param annotations map of annotations
+     * @return {@link Pod}
+     */
+    Result<Pod> addAnnotations(String namespace, String pod, Map<String, String> annotations);
+
+    /**
+     * Tag labels for pod
+     * <p> Equivalent of `kubectl label pods my-pod new-label=awesome`
+     *
+     * @param namespace namespace
+     * @param pod       pod name
+     * @param labels    map of labels
+     * @return {@link Pod}
+     */
+    Result<Pod> addLabels(String namespace, String pod, Map<String, String> labels);
+
+    /**
      * Create Pod from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}

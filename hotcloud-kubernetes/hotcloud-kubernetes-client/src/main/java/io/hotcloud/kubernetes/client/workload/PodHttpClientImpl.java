@@ -13,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -145,6 +146,38 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .build(namespace, pod);
 
         ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Pod> addAnnotations(String namespace, String pod, Map<String, String> annotations) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.argument(!CollectionUtils.isEmpty(annotations), "annotations is empty");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/annotations", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(annotations),
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Pod> addLabels(String namespace, String pod, Map<String, String> labels) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.argument(!CollectionUtils.isEmpty(labels), "labels is empty");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/labels", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(labels),
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
