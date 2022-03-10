@@ -4,8 +4,9 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
+import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
@@ -21,6 +22,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -66,6 +68,29 @@ public class DeploymentHttpClientIT extends ClientIntegrationTestBase {
 
         Assert.assertEquals(3, (int) replicas);
 
+    }
+
+    @Test
+    public void rolling_updateImage() {
+        Result<Deployment> pause = deploymentHttpClient.rolling(RollingAction.PAUSE, NAMESPACE, DEPLOYMENT);
+
+        Result<Deployment> imagesSet = deploymentHttpClient.imagesSet(NAMESPACE, DEPLOYMENT, Map.of("nginx", "nginx:1.21.6"));
+
+        String image = imagesSet.getData().getSpec().getTemplate().getSpec().getContainers().get(0).getImage();
+        Assertions.assertEquals("nginx:1.21.6", image);
+
+        Result<Deployment> imageSet = deploymentHttpClient.imageSet(NAMESPACE, DEPLOYMENT, "nginx:1.20.2");
+
+        String image2 = imageSet.getData().getSpec().getTemplate().getSpec().getContainers().get(0).getImage();
+        Assertions.assertEquals("nginx:1.20.2", image2);
+
+        Result<Deployment> resume = deploymentHttpClient.rolling(RollingAction.RESUME, NAMESPACE, DEPLOYMENT);
+
+        Result<Deployment> undo = deploymentHttpClient.rolling(RollingAction.UNDO, NAMESPACE, DEPLOYMENT);
+        String image3 = undo.getData().getSpec().getTemplate().getSpec().getContainers().get(0).getImage();
+        Assertions.assertEquals("nginx", image3);
+
+        Result<Deployment> restart = deploymentHttpClient.rolling(RollingAction.RESTART, NAMESPACE, DEPLOYMENT);
     }
 
     @Test

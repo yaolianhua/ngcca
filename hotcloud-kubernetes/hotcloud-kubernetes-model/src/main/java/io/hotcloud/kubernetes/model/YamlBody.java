@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.model;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import org.springframework.util.StringUtils;
 
 /**

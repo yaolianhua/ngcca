@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.workload.CronJobCreateApi;
 import io.hotcloud.kubernetes.api.workload.CronJobDeleteApi;
 import io.hotcloud.kubernetes.api.workload.CronJobReadApi;

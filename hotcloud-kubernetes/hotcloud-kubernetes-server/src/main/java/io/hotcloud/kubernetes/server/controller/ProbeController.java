@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.controller;
 
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.server.WebResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

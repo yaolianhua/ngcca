@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.workload;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.workload.StatefulSetDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;

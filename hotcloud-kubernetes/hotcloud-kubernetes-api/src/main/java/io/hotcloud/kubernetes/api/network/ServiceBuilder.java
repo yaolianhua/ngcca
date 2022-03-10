@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.network;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;

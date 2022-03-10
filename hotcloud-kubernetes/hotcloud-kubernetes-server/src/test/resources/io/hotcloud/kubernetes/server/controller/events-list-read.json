@@ -1,0 +1,362 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T07:51:40Z",
+      "managedFields": [
+        {
+          "apiVersion": "events.k8s.io/v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:reportingController": {},
+            "f:eventTime": {},
+            "f:note": {},
+            "f:reportingInstance": {},
+            "f:type": {},
+            "f:action": {},
+            "f:reason": {},
+            "f:regarding": {}
+          },
+          "manager": "kube-scheduler",
+          "operation": "Update",
+          "time": "2022-03-10T07:51:40Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74-zf6sg.16daf5a47394186e",
+      "namespace": "default",
+      "resourceVersion": "235001",
+      "uid": "8b431e4e-25f3-4bb4-80df-34f33ec017ff"
+    },
+    "action": "Binding",
+    "eventTime": "2022-03-10T07:51:40.419453Z",
+    "involvedObject": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "name": "hotcloud-66459b5b74-zf6sg",
+      "namespace": "default",
+      "resourceVersion": "234994",
+      "uid": "8b97b86e-c873-49dc-8703-3d62c1efd8f6"
+    },
+    "message": "Successfully assigned default/hotcloud-66459b5b74-zf6sg to minikube",
+    "reason": "Scheduled",
+    "reportingComponent": "default-scheduler",
+    "reportingInstance": "default-scheduler-minikube",
+    "source": {},
+    "type": "Normal"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T07:51:40Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {},
+              "f:host": {}
+            }
+          },
+          "manager": "kubelet",
+          "operation": "Update",
+          "time": "2022-03-10T07:51:40Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74-zf6sg.16daf5a48379ef10",
+      "namespace": "default",
+      "resourceVersion": "235742",
+      "uid": "72971d64-e315-4fd8-b66b-23fd1a8f9666"
+    },
+    "count": 15,
+    "firstTimestamp": "2022-03-10T07:51:40Z",
+    "involvedObject": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "name": "hotcloud-66459b5b74-zf6sg",
+      "namespace": "default",
+      "resourceVersion": "235000",
+      "uid": "8b97b86e-c873-49dc-8703-3d62c1efd8f6"
+    },
+    "lastTimestamp": "2022-03-10T08:06:01Z",
+    "message": "MountVolume.SetUp failed for volume \"hotcloud-volume\" : configmap \"hotcloud-config\" not found",
+    "reason": "FailedMount",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "kubelet",
+      "host": "minikube"
+    },
+    "type": "Warning"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T07:53:43Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {},
+              "f:host": {}
+            }
+          },
+          "manager": "kubelet",
+          "operation": "Update",
+          "time": "2022-03-10T07:53:43Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74-zf6sg.16daf5c11ba5e2b6",
+      "namespace": "default",
+      "resourceVersion": "235809",
+      "uid": "079751cb-320c-4388-94dc-e0bae12ef8e6"
+    },
+    "count": 5,
+    "firstTimestamp": "2022-03-10T07:53:43Z",
+    "involvedObject": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "name": "hotcloud-66459b5b74-zf6sg",
+      "namespace": "default",
+      "resourceVersion": "235000",
+      "uid": "8b97b86e-c873-49dc-8703-3d62c1efd8f6"
+    },
+    "lastTimestamp": "2022-03-10T08:07:20Z",
+    "message": "Unable to attach or mount volumes: unmounted volumes=[hotcloud-volume], unattached volumes=[kubeconfig kube-api-access-kwfzf hotcloud-volume]: timed out waiting for the condition",
+    "reason": "FailedMount",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "kubelet",
+      "host": "minikube"
+    },
+    "type": "Warning"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T08:00:31Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {},
+              "f:host": {}
+            }
+          },
+          "manager": "kubelet",
+          "operation": "Update",
+          "time": "2022-03-10T08:00:31Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74-zf6sg.16daf6202ea537b9",
+      "namespace": "default",
+      "resourceVersion": "235461",
+      "uid": "2923552c-5672-4218-8282-5a017402cded"
+    },
+    "count": 1,
+    "firstTimestamp": "2022-03-10T08:00:31Z",
+    "involvedObject": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "name": "hotcloud-66459b5b74-zf6sg",
+      "namespace": "default",
+      "resourceVersion": "235000",
+      "uid": "8b97b86e-c873-49dc-8703-3d62c1efd8f6"
+    },
+    "lastTimestamp": "2022-03-10T08:00:31Z",
+    "message": "Unable to attach or mount volumes: unmounted volumes=[hotcloud-volume], unattached volumes=[hotcloud-volume kubeconfig kube-api-access-kwfzf]: timed out waiting for the condition",
+    "reason": "FailedMount",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "kubelet",
+      "host": "minikube"
+    },
+    "type": "Warning"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T08:02:46Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {},
+              "f:host": {}
+            }
+          },
+          "manager": "kubelet",
+          "operation": "Update",
+          "time": "2022-03-10T08:02:46Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74-zf6sg.16daf63f9d33aada",
+      "namespace": "default",
+      "resourceVersion": "235576",
+      "uid": "8962c89f-5d77-40da-8caf-9c77c88fb99f"
+    },
+    "count": 1,
+    "firstTimestamp": "2022-03-10T08:02:46Z",
+    "involvedObject": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "name": "hotcloud-66459b5b74-zf6sg",
+      "namespace": "default",
+      "resourceVersion": "235000",
+      "uid": "8b97b86e-c873-49dc-8703-3d62c1efd8f6"
+    },
+    "lastTimestamp": "2022-03-10T08:02:46Z",
+    "message": "Unable to attach or mount volumes: unmounted volumes=[hotcloud-volume], unattached volumes=[kube-api-access-kwfzf hotcloud-volume kubeconfig]: timed out waiting for the condition",
+    "reason": "FailedMount",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "kubelet",
+      "host": "minikube"
+    },
+    "type": "Warning"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T07:51:40Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {}
+            }
+          },
+          "manager": "kube-controller-manager",
+          "operation": "Update",
+          "time": "2022-03-10T07:51:40Z"
+        }
+      ],
+      "name": "hotcloud-66459b5b74.16daf5a471281cd6",
+      "namespace": "default",
+      "resourceVersion": "234995",
+      "uid": "4c2615e8-0990-412a-a2c4-d1e912f6d8ea"
+    },
+    "count": 1,
+    "firstTimestamp": "2022-03-10T07:51:40Z",
+    "involvedObject": {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "name": "hotcloud-66459b5b74",
+      "namespace": "default",
+      "resourceVersion": "234991",
+      "uid": "c6fa3b17-4dfa-418d-a40f-e2fd12c11c0a"
+    },
+    "lastTimestamp": "2022-03-10T07:51:40Z",
+    "message": "Created pod: hotcloud-66459b5b74-zf6sg",
+    "reason": "SuccessfulCreate",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "replicaset-controller"
+    },
+    "type": "Normal"
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+      "creationTimestamp": "2022-03-10T07:51:40Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:firstTimestamp": {},
+            "f:message": {},
+            "f:count": {},
+            "f:type": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {}
+            }
+          },
+          "manager": "kube-controller-manager",
+          "operation": "Update",
+          "time": "2022-03-10T07:51:40Z"
+        }
+      ],
+      "name": "hotcloud.16daf5a46fe05934",
+      "namespace": "default",
+      "resourceVersion": "234992",
+      "uid": "9c36c01c-60b0-44d9-be09-d69ce9dc06aa"
+    },
+    "count": 1,
+    "firstTimestamp": "2022-03-10T07:51:40Z",
+    "involvedObject": {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "name": "hotcloud",
+      "namespace": "default",
+      "resourceVersion": "234990",
+      "uid": "e7e10226-f9b3-40c9-b35f-3ccd196b8715"
+    },
+    "lastTimestamp": "2022-03-10T07:51:40Z",
+    "message": "Scaled up replica set hotcloud-66459b5b74 to 1",
+    "reason": "ScalingReplicaSet",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "deployment-controller"
+    },
+    "type": "Normal"
+  }
+]

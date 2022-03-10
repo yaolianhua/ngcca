@@ -1,7 +1,8 @@
 package io.hotcloud.kubernetes.server.controller;
 
+import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -33,9 +35,32 @@ public class KubectlController {
 
     @DeleteMapping
     public ResponseEntity<Result<Boolean>> resourceListDelete(@RequestParam(value = "namespace", required = false) String namespace,
-                                                            @RequestBody YamlBody yaml) {
+                                                              @RequestBody YamlBody yaml) {
         Boolean delete = kubectlApi.delete(namespace, yaml.getYaml());
         return WebResponse.accepted(delete);
+    }
+
+    @PostMapping("/{namespace}/{pod}/forward")
+    public ResponseEntity<Result<Boolean>> portForward(@PathVariable(value = "namespace") String namespace,
+                                                       @PathVariable(value = "pod") String pod,
+                                                       @RequestParam(value = "ipv4Address", required = false) String address,
+                                                       @RequestParam(value = "containerPort") Integer containerPort,
+                                                       @RequestParam(value = "localPort") Integer localPort,
+                                                       @RequestParam(value = "alive", required = false) Long alive,
+                                                       @RequestParam(value = "timeUnit", required = false) TimeUnit unit) {
+        Boolean portForward = kubectlApi.portForward(namespace, pod, address, containerPort, localPort, alive, unit);
+        return WebResponse.accepted(portForward);
+    }
+
+    @GetMapping("/{namespace}/events")
+    public ResponseEntity<Result<List<Event>>> events(@PathVariable(value = "namespace") String namespace) {
+        return WebResponse.ok(kubectlApi.events(namespace));
+    }
+
+    @GetMapping("/{namespace}/events/{name}")
+    public ResponseEntity<Result<Event>> events(@PathVariable(value = "namespace") String namespace,
+                                                @PathVariable(value = "name") String name) {
+        return WebResponse.ok(kubectlApi.events(namespace, name));
     }
 
 }

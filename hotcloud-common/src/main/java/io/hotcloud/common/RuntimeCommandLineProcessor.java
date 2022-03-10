@@ -1,4 +1,4 @@
-package io.hotcloud;
+package io.hotcloud.common;
 
 import java.io.IOException;
 

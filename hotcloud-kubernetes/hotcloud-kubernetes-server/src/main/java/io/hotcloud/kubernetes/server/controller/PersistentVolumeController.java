@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeCreateApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeDeleteApi;
 import io.hotcloud.kubernetes.api.volume.PersistentVolumeReadApi;

@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;

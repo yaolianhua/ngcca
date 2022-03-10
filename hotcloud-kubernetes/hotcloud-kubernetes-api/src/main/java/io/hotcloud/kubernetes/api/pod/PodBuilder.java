@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.pod;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.affinity.NodeAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAffinityBuilder;

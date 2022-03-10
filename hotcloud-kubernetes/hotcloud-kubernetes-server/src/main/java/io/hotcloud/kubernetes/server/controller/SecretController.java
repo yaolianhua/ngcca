@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.configurations.SecretCreateApi;
 import io.hotcloud.kubernetes.api.configurations.SecretDeleteApi;
 import io.hotcloud.kubernetes.api.configurations.SecretReadApi;

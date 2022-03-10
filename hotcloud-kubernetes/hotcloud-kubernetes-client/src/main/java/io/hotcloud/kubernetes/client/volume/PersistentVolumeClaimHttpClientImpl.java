@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.volume;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.Assert;
-import io.hotcloud.Result;
+import io.hotcloud.common.Assert;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.volume.PersistentVolumeClaimCreateRequest;

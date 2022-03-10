@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapCreateApi;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapDeleteApi;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapReadApi;

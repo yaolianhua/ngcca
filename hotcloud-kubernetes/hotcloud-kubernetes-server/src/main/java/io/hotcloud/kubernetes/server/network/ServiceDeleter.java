@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.network;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.network.ServiceDeleteApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;

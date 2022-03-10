@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.configurations;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;

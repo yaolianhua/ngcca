@@ -2,7 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
+import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
@@ -80,5 +81,29 @@ public class DeploymentController {
                                                         @RequestParam(value = "wait", required = false) boolean wait) {
         deploymentUpdater.scale(namespace, name, count, wait);
         return WebResponse.accepted();
+    }
+
+    @PatchMapping("/{namespace}/{deployment}/rolling")
+    public ResponseEntity<Result<Deployment>> deploymentRolling(@PathVariable("namespace") String namespace,
+                                                                @PathVariable("deployment") String name,
+                                                                @RequestParam(value = "action") RollingAction action) {
+        Deployment deployment = deploymentUpdater.rolling(action, namespace, name);
+        return WebResponse.accepted(deployment);
+    }
+
+    @PatchMapping("/{namespace}/{deployment}/images")
+    public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
+                                                                    @PathVariable("deployment") String name,
+                                                                    @RequestParam Map<String, String> containerToImageMap) {
+        Deployment deployment = deploymentUpdater.imageUpdate(containerToImageMap, namespace, name);
+        return WebResponse.accepted(deployment);
+    }
+
+    @PatchMapping("/{namespace}/{deployment}/image")
+    public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
+                                                                    @PathVariable("deployment") String name,
+                                                                    @RequestParam(value = "image") String image) {
+        Deployment deployment = deploymentUpdater.imageUpdate(namespace, name, image);
+        return WebResponse.accepted(deployment);
     }
 }

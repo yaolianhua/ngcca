@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.Result;
+import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;

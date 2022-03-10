@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.volume;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.affinity.NodeSelectorTermBuilder;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
 import io.hotcloud.kubernetes.model.volume.HostPathVolume;

@@ -1,6 +1,5 @@
 package io.hotcloud.security.admin.jwt;
 
-import io.hotcloud.security.admin.jwt.JwtVerifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,6 +68,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (userDetails == null) {
+                log.warn("Authorization failed [retrieve user null]");
+                filterChain.doFilter(request, response);
+                return;
+            }
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

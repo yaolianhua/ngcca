@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
+import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -58,6 +60,48 @@ public class DeploymentControllerTest {
     private DeploymentDeleteApi deploymentDeleteApi;
     @MockBean
     private DeploymentUpdateApi deploymentUpdateApi;
+
+    @Test
+    public void deploymentUpdateImages() throws Exception {
+        LinkedMultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        Map<String, String> images = Map.of("hotcloud", "yaolianhua/hotcloud:latest",
+                "other-container", "other-image");
+        multiValueMap.setAll(images);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .patch(PATH.concat("/{namespace}/{deployment}/images"), "default", "hotcloud")
+                        .params(multiValueMap))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(deploymentUpdateApi, times(1)).imageUpdate(images, "default", "hotcloud");
+    }
+
+    @Test
+    public void deploymentUpdateImage() throws Exception {
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .patch(PATH.concat("/{namespace}/{deployment}/image"), "default", "hotcloud")
+                        .param("image", "yaolianhua/hotcloud:latest"))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(deploymentUpdateApi, times(1)).imageUpdate("default", "hotcloud", "yaolianhua/hotcloud:latest");
+    }
+
+    @Test
+    public void deploymentRolling() throws Exception {
+        for (RollingAction action : RollingAction.values()) {
+
+            this.mockMvc.perform(MockMvcRequestBuilders
+                            .patch(PATH.concat("/{namespace}/{deployment}/rolling"), "default", "hotcloud")
+                            .param("action", action.name()))
+                    .andDo(print())
+                    .andExpect(status().isAccepted());
+            //was invoked one time
+            verify(deploymentUpdateApi, times(1)).rolling(action, "default", "hotcloud");
+        }
+    }
 
     @Test
     public void deploymentScale() throws Exception {

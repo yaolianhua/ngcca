@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.volume;
 
-import io.hotcloud.Assert;
+import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.pod.container.ResourceRequirementsBuilder;
 import io.hotcloud.kubernetes.model.LabelSelector;
