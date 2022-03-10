@@ -3,10 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.common.Result;
-import io.hotcloud.kubernetes.api.pod.PodCreateApi;
-import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
-import io.hotcloud.kubernetes.api.pod.PodLogFetchApi;
-import io.hotcloud.kubernetes.api.pod.PodReadApi;
+import io.hotcloud.kubernetes.api.pod.*;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -31,12 +28,18 @@ public class PodController {
     private final PodCreateApi podCreateApi;
     private final PodReadApi podReadApi;
     private final PodDeleteApi podDeleteApi;
+    private final PodUpdateApi podUpdateApi;
 
-    public PodController(PodLogFetchApi podLogFetchApi, PodCreateApi podCreateApi, PodReadApi podReadApi, PodDeleteApi podDeleteApi) {
+    public PodController(PodLogFetchApi podLogFetchApi,
+                         PodCreateApi podCreateApi,
+                         PodReadApi podReadApi,
+                         PodDeleteApi podDeleteApi,
+                         PodUpdateApi podUpdateApi) {
         this.podLogFetchApi = podLogFetchApi;
         this.podCreateApi = podCreateApi;
         this.podReadApi = podReadApi;
         this.podDeleteApi = podDeleteApi;
+        this.podUpdateApi = podUpdateApi;
     }
 
     @GetMapping("/{namespace}/{pod}/log")
@@ -73,6 +76,22 @@ public class PodController {
                                                @PathVariable String pod) {
         Pod read = podReadApi.read(namespace, pod);
         return WebResponse.ok(read);
+    }
+
+    @PatchMapping("/{namespace}/{pod}/annotations")
+    public ResponseEntity<Result<Pod>> annotations(@PathVariable String namespace,
+                                                   @PathVariable String pod,
+                                                   @RequestBody Map<String, String> annotations) {
+        Pod patched = podUpdateApi.addAnnotations(namespace, pod, annotations);
+        return WebResponse.accepted(patched);
+    }
+
+    @PatchMapping("/{namespace}/{pod}/labels")
+    public ResponseEntity<Result<Pod>> labels(@PathVariable String namespace,
+                                              @PathVariable String pod,
+                                              @RequestBody Map<String, String> labels) {
+        Pod patched = podUpdateApi.addLabels(namespace, pod, labels);
+        return WebResponse.accepted(patched);
     }
 
     @GetMapping("/{namespace}")
