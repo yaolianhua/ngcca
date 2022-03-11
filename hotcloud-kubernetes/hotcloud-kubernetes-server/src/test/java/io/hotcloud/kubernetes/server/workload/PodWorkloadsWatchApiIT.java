@@ -1,8 +1,7 @@
 package io.hotcloud.kubernetes.server.workload;
 
 import io.hotcloud.kubernetes.HotCloudKubernetesApplicationTest;
-import io.hotcloud.kubernetes.api.pod.PodCreateApi;
-import io.hotcloud.kubernetes.api.pod.PodDeleteApi;
+import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
@@ -34,10 +33,7 @@ public class PodWorkloadsWatchApiIT {
     static AtomicReference<Boolean> connected = new AtomicReference<>(false);
 
     @Autowired
-    private PodCreateApi podCreateApi;
-    @Autowired
-    private PodDeleteApi podDeleteApi;
-
+    private PodApi podApi;
     /**
      * {@link PodWorkloadsWatchApiIT#watch()}
      */
@@ -76,7 +72,7 @@ public class PodWorkloadsWatchApiIT {
     @Test
     public void watch() throws ApiException, InterruptedException {
 
-        podCreateApi.pod("apiVersion: v1\n" +
+        podApi.pod("apiVersion: v1\n" +
                 "kind: Pod\n" +
                 "metadata:\n" +
                 "  name: nginx\n" +
@@ -88,7 +84,7 @@ public class PodWorkloadsWatchApiIT {
                 "    - containerPort: 80");
         TimeUnit.SECONDS.sleep(3);
 
-        podDeleteApi.delete("default", "nginx");
+        podApi.delete("default", "nginx");
         TimeUnit.SECONDS.sleep(3);
 
     }

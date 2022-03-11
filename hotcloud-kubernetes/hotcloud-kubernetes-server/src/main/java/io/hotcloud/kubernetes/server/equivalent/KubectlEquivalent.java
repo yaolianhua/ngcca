@@ -9,7 +9,7 @@ import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.Validator;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
-import io.hotcloud.kubernetes.api.pod.PodReadApi;
+import io.hotcloud.kubernetes.api.pod.PodApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -36,14 +36,14 @@ public class KubectlEquivalent implements KubectlApi {
 
     private final KubernetesClient fabric8Client;
     private final ExecutorService executorService;
-    private final PodReadApi podReadApi;
+    private final PodApi podApi;
 
     public KubectlEquivalent(KubernetesClient fabric8Client,
                              ExecutorService executorService,
-                             PodReadApi podReadApi) {
+                             PodApi podApi) {
         this.fabric8Client = fabric8Client;
         this.executorService = executorService;
-        this.podReadApi = podReadApi;
+        this.podApi = podApi;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class KubectlEquivalent implements KubectlApi {
         Assert.argument(Validator.validIpv4(ipR), "invalid ipv4 address");
 
         //valid pod exist
-        Pod read = podReadApi.read(namespace, pod);
+        Pod read = podApi.read(namespace, pod);
         Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
 
         //return result
