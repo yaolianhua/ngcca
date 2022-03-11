@@ -1,33 +1,37 @@
 package io.hotcloud.kubernetes.server.workload;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
-import io.hotcloud.kubernetes.api.workload.JobCreateApi;
+import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.models.V1Job;
+import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import static io.hotcloud.kubernetes.model.NamespaceGenerator.DEFAULT_NAMESPACE;
-
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
 @Slf4j
-public class JobCreator implements JobCreateApi {
+public class JobOperator implements JobApi {
 
     private final BatchV1Api batchV1Api;
     private final KubernetesClient fabric8Client;
 
-    public JobCreator(BatchV1Api batchV1Api, KubernetesClient fabric8Client) {
+    public JobOperator(BatchV1Api batchV1Api, KubernetesClient fabric8Client) {
         this.batchV1Api = batchV1Api;
         this.fabric8Client = fabric8Client;
     }
@@ -49,12 +53,48 @@ public class JobCreator implements JobCreateApi {
                 null);
         log.debug("create job success \n '{}'", job);
 
-        Job j = fabric8Client.batch()
+        return fabric8Client.batch()
                 .v1()
                 .jobs()
                 .inNamespace(namespace)
                 .withName(v1Job.getMetadata().getName())
                 .get();
-        return j;
+    }
+
+    @Override
+    public void delete(String namespace, String job) throws ApiException {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(job), () -> "delete resource name is null");
+        V1Status v1Status = batchV1Api.deleteNamespacedJob(
+                job,
+                namespace,
+                "true",
+                null,
+                null,
+                null,
+                "Foreground",
+                null
+        );
+        log.debug("delete namespaced job success \n '{}'", v1Status);
+    }
+
+    @Override
+    public JobList read(String namespace, Map<String, String> labelSelector) {
+        labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
+        if (StringUtils.hasText(namespace)) {
+            return fabric8Client.batch()
+                    .v1()
+                    .jobs()
+                    .inNamespace(namespace)
+                    .withLabels(labelSelector)
+                    .list();
+        }
+
+        return fabric8Client.batch()
+                .v1()
+                .jobs()
+                .inAnyNamespace()
+                .withLabels(labelSelector)
+                .list();
     }
 }

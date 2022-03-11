@@ -2,6 +2,10 @@ package io.hotcloud.kubernetes.api.workload;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
+import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
+import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.models.V1DaemonSet;
+import io.kubernetes.client.util.Yaml;
 
 import java.util.Collections;
 import java.util.Map;
@@ -10,8 +14,18 @@ import java.util.Objects;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@FunctionalInterface
-public interface DaemonSetReadApi {
+public interface DaemonSetApi {
+
+    default DaemonSet daemonSet(DaemonSetCreateRequest request) throws ApiException {
+        V1DaemonSet v1DaemonSet = DaemonSetBuilder.build(request);
+        String json = Yaml.dump(v1DaemonSet);
+        return this.daemonSet(json);
+    }
+
+    DaemonSet daemonSet(String yaml) throws ApiException;
+
+    void delete(String namespace, String daemonSet) throws ApiException;
+
     default DaemonSet read(String namespace, String daemonSet) {
         DaemonSetList daemonSetList = this.read(namespace);
         return daemonSetList.getItems()

@@ -3,9 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
-import io.hotcloud.kubernetes.api.workload.DaemonSetCreateApi;
-import io.hotcloud.kubernetes.api.workload.DaemonSetDeleteApi;
-import io.hotcloud.kubernetes.api.workload.DaemonSetReadApi;
+import io.hotcloud.kubernetes.api.workload.DaemonSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -35,9 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = DaemonSetController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                DaemonSetCreateApi.class,
-                DaemonSetReadApi.class,
-                DaemonSetDeleteApi.class
+                DaemonSetApi.class
         })
 })
 public class DaemonSetControllerTest {
@@ -48,11 +45,7 @@ public class DaemonSetControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private DaemonSetCreateApi daemonSetCreateApi;
-    @MockBean
-    private DaemonSetReadApi daemonSetReadApi;
-    @MockBean
-    private DaemonSetDeleteApi daemonSetDeleteApi;
+    private DaemonSetApi daemonSetApi;
 
     @Test
     public void daemonSetDelete() throws Exception {
@@ -60,19 +53,19 @@ public class DaemonSetControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(daemonSetDeleteApi, times(1)).delete("default", "fluentd-elasticsearch");
+        verify(daemonSetApi, times(1)).delete("default", "fluentd-elasticsearch");
     }
 
     @Test
     public void daemonSetCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("daemonSet-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream daemonSetReadInputStream = getClass().getResourceAsStream("daemonSet-read.json");
-        String daemonSetReadJson = new BufferedReader(new InputStreamReader(daemonSetReadInputStream)).lines().collect(Collectors.joining());
+        String daemonSetReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(daemonSetReadInputStream))).lines().collect(Collectors.joining());
 
         DaemonSet daemonSet = objectMapper.readValue(daemonSetReadJson, DaemonSet.class);
-        when(daemonSetCreateApi.daemonSet(yaml)).thenReturn(daemonSet);
+        when(daemonSetApi.daemonSet(yaml)).thenReturn(daemonSet);
 
         String json = objectMapper.writeValueAsString(created(daemonSet).getBody());
 
@@ -87,10 +80,10 @@ public class DaemonSetControllerTest {
 
     @Test
     public void daemonSetRead() throws Exception {
-        when(daemonSetReadApi.read("default", "fluentd-elasticsearch")).thenReturn(daemonSet());
+        when(daemonSetApi.read("default", "fluentd-elasticsearch")).thenReturn(daemonSet());
 
         InputStream inputStream = getClass().getResourceAsStream("daemonSet-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         DaemonSet value = objectMapper.readValue(json, DaemonSet.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -102,10 +95,10 @@ public class DaemonSetControllerTest {
 
     @Test
     public void daemonSetListRead() throws Exception {
-        when(daemonSetReadApi.read("default", Map.of())).thenReturn(daemonSetList());
+        when(daemonSetApi.read("default", Map.of())).thenReturn(daemonSetList());
 
         InputStream inputStream = getClass().getResourceAsStream("daemonSetList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         StatefulSetList value = objectMapper.readValue(json, StatefulSetList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -120,19 +113,18 @@ public class DaemonSetControllerTest {
     public DaemonSetList daemonSetList() {
 
         DaemonSetListBuilder daemonSetListBuilder = new DaemonSetListBuilder();
-        DaemonSetList daemonSetList = daemonSetListBuilder.withApiVersion("apps/v1")
+
+        return daemonSetListBuilder.withApiVersion("apps/v1")
                 .withKind("DaemonSetList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("101528695").build())
                 .withItems(daemonSet())
                 .build();
-
-        return daemonSetList;
     }
 
     public DaemonSet daemonSet() {
         DaemonSetBuilder daemonSetBuilder = new DaemonSetBuilder();
 
-        DaemonSet daemonSet = daemonSetBuilder.withApiVersion("apps/v1")
+        return daemonSetBuilder.withApiVersion("apps/v1")
                 .withKind("DaemonSet")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("fluentd-elasticsearch")
@@ -184,8 +176,6 @@ public class DaemonSetControllerTest {
 
 
                 ).build();
-
-        return daemonSet;
     }
 
 

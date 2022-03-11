@@ -3,9 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.*;
-import io.hotcloud.kubernetes.api.workload.CronJobCreateApi;
-import io.hotcloud.kubernetes.api.workload.CronJobDeleteApi;
-import io.hotcloud.kubernetes.api.workload.CronJobReadApi;
+import io.hotcloud.kubernetes.api.workload.CronJobApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -35,9 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = CronJobController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                CronJobCreateApi.class,
-                CronJobReadApi.class,
-                CronJobDeleteApi.class
+                CronJobApi.class
         })
 })
 public class CronJobControllerTest {
@@ -48,11 +45,7 @@ public class CronJobControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private CronJobCreateApi cronJobCreateApi;
-    @MockBean
-    private CronJobReadApi cronJobReadApi;
-    @MockBean
-    private CronJobDeleteApi cronJobDeleteApi;
+    private CronJobApi cronJobApi;
 
     @Test
     public void cronjobDelete() throws Exception {
@@ -60,19 +53,19 @@ public class CronJobControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(cronJobDeleteApi, times(1)).delete("default", "hello");
+        verify(cronJobApi, times(1)).delete("default", "hello");
     }
 
     @Test
     public void cronjobCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("cronjob-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream cronjobReadInputStream = getClass().getResourceAsStream("cronjob-read.json");
-        String cronjobReadJson = new BufferedReader(new InputStreamReader(cronjobReadInputStream)).lines().collect(Collectors.joining());
+        String cronjobReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(cronjobReadInputStream))).lines().collect(Collectors.joining());
 
         CronJob cronjob = objectMapper.readValue(cronjobReadJson, CronJob.class);
-        when(cronJobCreateApi.cronjob(yaml)).thenReturn(cronjob);
+        when(cronJobApi.cronjob(yaml)).thenReturn(cronjob);
 
         String json = objectMapper.writeValueAsString(created(cronjob).getBody());
 
@@ -87,10 +80,10 @@ public class CronJobControllerTest {
 
     @Test
     public void cronjobRead() throws Exception {
-        when(cronJobReadApi.read("default", "hello")).thenReturn(cronjob());
+        when(cronJobApi.read("default", "hello")).thenReturn(cronjob());
 
         InputStream inputStream = getClass().getResourceAsStream("cronjob-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Job value = objectMapper.readValue(json, Job.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -102,10 +95,10 @@ public class CronJobControllerTest {
 
     @Test
     public void cronjobListRead() throws Exception {
-        when(cronJobReadApi.read("default", Map.of())).thenReturn(cronjobList());
+        when(cronJobApi.read("default", Map.of())).thenReturn(cronjobList());
 
         InputStream inputStream = getClass().getResourceAsStream("cronjobList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         JobList value = objectMapper.readValue(json, JobList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -120,19 +113,18 @@ public class CronJobControllerTest {
     public CronJobList cronjobList() {
 
         CronJobListBuilder cronjobListBuilder = new CronJobListBuilder();
-        CronJobList cronjobList = cronjobListBuilder.withApiVersion("batch/v1")
+
+        return cronjobListBuilder.withApiVersion("batch/v1")
                 .withKind("CronJobList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("18881").build())
                 .withItems(cronjob())
                 .build();
-
-        return cronjobList;
     }
 
     public CronJob cronjob() {
         CronJobBuilder cronjobBuilder = new CronJobBuilder();
 
-        CronJob cronjob = cronjobBuilder.withApiVersion("batch/v1")
+        return cronjobBuilder.withApiVersion("batch/v1")
                 .withKind("CronJob")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("hello")
@@ -168,8 +160,6 @@ public class CronJobControllerTest {
 
                 )
                 .build();
-
-        return cronjob;
     }
 
 

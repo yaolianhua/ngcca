@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
 import io.hotcloud.kubernetes.api.RollingAction;
-import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentUpdateApi;
+import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -39,10 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = DeploymentController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                DeploymentCreateApi.class,
-                DeploymentReadApi.class,
-                DeploymentDeleteApi.class,
-                DeploymentUpdateApi.class
+                DeploymentApi.class
         })
 })
 public class DeploymentControllerTest {
@@ -53,13 +48,7 @@ public class DeploymentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private DeploymentCreateApi deploymentCreateApi;
-    @MockBean
-    private DeploymentReadApi deploymentReadApi;
-    @MockBean
-    private DeploymentDeleteApi deploymentDeleteApi;
-    @MockBean
-    private DeploymentUpdateApi deploymentUpdateApi;
+    private DeploymentApi deploymentApi;
 
     @Test
     public void deploymentUpdateImages() throws Exception {
@@ -74,7 +63,7 @@ public class DeploymentControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(deploymentUpdateApi, times(1)).imageUpdate(images, "default", "hotcloud");
+        verify(deploymentApi, times(1)).imageUpdate(images, "default", "hotcloud");
     }
 
     @Test
@@ -86,7 +75,7 @@ public class DeploymentControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(deploymentUpdateApi, times(1)).imageUpdate("default", "hotcloud", "yaolianhua/hotcloud:latest");
+        verify(deploymentApi, times(1)).imageUpdate("default", "hotcloud", "yaolianhua/hotcloud:latest");
     }
 
     @Test
@@ -99,7 +88,7 @@ public class DeploymentControllerTest {
                     .andDo(print())
                     .andExpect(status().isAccepted());
             //was invoked one time
-            verify(deploymentUpdateApi, times(1)).rolling(action, "default", "hotcloud");
+            verify(deploymentApi, times(1)).rolling(action, "default", "hotcloud");
         }
     }
 
@@ -109,7 +98,7 @@ public class DeploymentControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(deploymentUpdateApi, times(1)).scale("default", "hotcloud", 3, false);
+        verify(deploymentApi, times(1)).scale("default", "hotcloud", 3, false);
     }
 
     @Test
@@ -118,19 +107,19 @@ public class DeploymentControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(deploymentDeleteApi, times(1)).delete("default", "hotcloud");
+        verify(deploymentApi, times(1)).delete("default", "hotcloud");
     }
 
     @Test
     public void deploymentCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("deployment-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream deploymentReadInputStream = getClass().getResourceAsStream("deployment-read.json");
-        String deploymentReadJson = new BufferedReader(new InputStreamReader(deploymentReadInputStream)).lines().collect(Collectors.joining());
+        String deploymentReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(deploymentReadInputStream))).lines().collect(Collectors.joining());
 
         Deployment deployment = objectMapper.readValue(deploymentReadJson, Deployment.class);
-        when(deploymentCreateApi.deployment(yaml)).thenReturn(deployment);
+        when(deploymentApi.deployment(yaml)).thenReturn(deployment);
 
         String json = objectMapper.writeValueAsString(created(deployment).getBody());
 
@@ -145,10 +134,10 @@ public class DeploymentControllerTest {
 
     @Test
     public void deploymentRead() throws Exception {
-        when(deploymentReadApi.read("default", "hotcloud")).thenReturn(deployment());
+        when(deploymentApi.read("default", "hotcloud")).thenReturn(deployment());
 
         InputStream inputStream = getClass().getResourceAsStream("deployment-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Deployment value = objectMapper.readValue(json, Deployment.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -160,10 +149,10 @@ public class DeploymentControllerTest {
 
     @Test
     public void deploymentListRead() throws Exception {
-        when(deploymentReadApi.read("default", Map.of())).thenReturn(deploymentList());
+        when(deploymentApi.read("default", Map.of())).thenReturn(deploymentList());
 
         InputStream inputStream = getClass().getResourceAsStream("deploymentList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         DeploymentList value = objectMapper.readValue(json, DeploymentList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -178,19 +167,18 @@ public class DeploymentControllerTest {
     public DeploymentList deploymentList() {
 
         DeploymentListBuilder deploymentListBuilder = new DeploymentListBuilder();
-        DeploymentList deploymentList = deploymentListBuilder.withApiVersion("apps/v1")
+
+        return deploymentListBuilder.withApiVersion("apps/v1")
                 .withKind("DeploymentList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("206808").build())
                 .withItems(deployment())
                 .build();
-
-        return deploymentList;
     }
 
     public Deployment deployment() {
         DeploymentBuilder deploymentBuilder = new DeploymentBuilder();
 
-        Deployment deployment = deploymentBuilder.withApiVersion("apps/v1")
+        return deploymentBuilder.withApiVersion("apps/v1")
                 .withKind("Deployment")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("hotcloud")
@@ -314,8 +302,6 @@ public class DeploymentControllerTest {
 
 
                 ).build();
-
-        return deployment;
     }
 
 
