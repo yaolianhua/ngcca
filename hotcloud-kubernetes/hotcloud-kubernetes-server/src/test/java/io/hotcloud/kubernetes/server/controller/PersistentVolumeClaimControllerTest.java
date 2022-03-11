@@ -2,9 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimCreateApi;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimDeleteApi;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimReadApi;
+import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -34,9 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = PersistentVolumeClaimController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                PersistentVolumeClaimReadApi.class,
-                PersistentVolumeClaimCreateApi.class,
-                PersistentVolumeClaimDeleteApi.class
+                PersistentVolumeClaimApi.class
         })
 })
 public class PersistentVolumeClaimControllerTest {
@@ -47,11 +44,7 @@ public class PersistentVolumeClaimControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private PersistentVolumeClaimReadApi persistentVolumeClaimReadApi;
-    @MockBean
-    private PersistentVolumeClaimCreateApi persistentVolumeClaimCreateApi;
-    @MockBean
-    private PersistentVolumeClaimDeleteApi persistentVolumeClaimDeleteApi;
+    private PersistentVolumeClaimApi persistentVolumeClaimApi;
 
     @Test
     public void persistentvolumeclaimDelete() throws Exception {
@@ -59,21 +52,21 @@ public class PersistentVolumeClaimControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(persistentVolumeClaimDeleteApi, times(1)).delete("dockerfile-claim", "default");
+        verify(persistentVolumeClaimApi, times(1)).delete("dockerfile-claim", "default");
     }
 
     @Test
     public void persistentvolumeclaimCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaim-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream persistentvolumeclaimReadInputStream = getClass().getResourceAsStream("persistentVolumeClaim-read.json");
-        String persistentvolumeclaimReadJson = new BufferedReader(new InputStreamReader(persistentvolumeclaimReadInputStream))
+        String persistentvolumeclaimReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(persistentvolumeclaimReadInputStream)))
                 .lines()
                 .collect(Collectors.joining());
 
         PersistentVolumeClaim persistentVolumeClaim = objectMapper.readValue(persistentvolumeclaimReadJson, PersistentVolumeClaim.class);
-        when(persistentVolumeClaimCreateApi.persistentVolumeClaim(yaml)).thenReturn(persistentVolumeClaim);
+        when(persistentVolumeClaimApi.persistentVolumeClaim(yaml)).thenReturn(persistentVolumeClaim);
 
         String json = objectMapper.writeValueAsString(created(persistentVolumeClaim).getBody());
 
@@ -88,10 +81,10 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentVolumeClaimRead() throws Exception {
-        when(persistentVolumeClaimReadApi.read("default", "dockerfile-claim")).thenReturn(persistentvolumeclaim());
+        when(persistentVolumeClaimApi.read("default", "dockerfile-claim")).thenReturn(persistentvolumeclaim());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaim-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         PersistentVolume value = objectMapper.readValue(json, PersistentVolume.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -103,10 +96,10 @@ public class PersistentVolumeClaimControllerTest {
 
     @Test
     public void persistentvolumeclaimListRead() throws Exception {
-        when(persistentVolumeClaimReadApi.read("default", Map.of())).thenReturn(persistentvolumeclaimList());
+        when(persistentVolumeClaimApi.read("default", Map.of())).thenReturn(persistentvolumeclaimList());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeClaimList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         PersistentVolumeClaimList value = objectMapper.readValue(json, PersistentVolumeClaimList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -121,19 +114,18 @@ public class PersistentVolumeClaimControllerTest {
     public PersistentVolumeClaimList persistentvolumeclaimList() {
 
         PersistentVolumeClaimListBuilder persistentVolumeClaimListBuilder = new PersistentVolumeClaimListBuilder();
-        PersistentVolumeClaimList persistentVolumeClaimList = persistentVolumeClaimListBuilder.withApiVersion("v1")
+
+        return persistentVolumeClaimListBuilder.withApiVersion("v1")
                 .withKind("PersistentVolumeClaimList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("219844").build())
                 .withItems(persistentvolumeclaim())
                 .build();
-
-        return persistentVolumeClaimList;
     }
 
     public PersistentVolumeClaim persistentvolumeclaim() {
         PersistentVolumeClaimBuilder persistentVolumeClaimBuilder = new PersistentVolumeClaimBuilder();
 
-        PersistentVolumeClaim persistentVolumeCalim = persistentVolumeClaimBuilder.withApiVersion("v1")
+        return persistentVolumeClaimBuilder.withApiVersion("v1")
                 .withKind("PersistentVolumeClaim")
                 .withMetadata(new ObjectMetaBuilder().withName("dockerfile-claim").withNamespace("default").build())
                 .withSpec(new PersistentVolumeClaimSpecBuilder()
@@ -144,8 +136,6 @@ public class PersistentVolumeClaimControllerTest {
                         .withVolumeName("dockerfile")
                         .build())
                 .build();
-
-        return persistentVolumeCalim;
     }
 
 

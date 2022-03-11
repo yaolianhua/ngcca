@@ -2,9 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeCreateApi;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeDeleteApi;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeReadApi;
+import io.hotcloud.kubernetes.api.volume.PersistentVolumeApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -34,9 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = PersistentVolumeController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                PersistentVolumeReadApi.class,
-                PersistentVolumeCreateApi.class,
-                PersistentVolumeDeleteApi.class
+                PersistentVolumeApi.class
         })
 })
 public class PersistentVolumeControllerTest {
@@ -47,11 +44,7 @@ public class PersistentVolumeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private PersistentVolumeReadApi persistentVolumeReadApi;
-    @MockBean
-    private PersistentVolumeCreateApi persistentVolumeCreateApi;
-    @MockBean
-    private PersistentVolumeDeleteApi persistentVolumeDeleteApi;
+    private PersistentVolumeApi persistentVolumeApi;
 
     @Test
     public void persistentvolumeDelete() throws Exception {
@@ -59,21 +52,21 @@ public class PersistentVolumeControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(persistentVolumeDeleteApi, times(1)).delete("dockerfile");
+        verify(persistentVolumeApi, times(1)).delete("dockerfile");
     }
 
     @Test
     public void persistentvolumeCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("persistentVolume-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream persistentvolumeReadInputStream = getClass().getResourceAsStream("persistentVolume-read.json");
-        String persistentvolumeReadJson = new BufferedReader(new InputStreamReader(persistentvolumeReadInputStream))
+        String persistentvolumeReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(persistentvolumeReadInputStream)))
                 .lines()
                 .collect(Collectors.joining());
 
         PersistentVolume persistentVolume = objectMapper.readValue(persistentvolumeReadJson, PersistentVolume.class);
-        when(persistentVolumeCreateApi.persistentVolume(yaml)).thenReturn(persistentVolume);
+        when(persistentVolumeApi.persistentVolume(yaml)).thenReturn(persistentVolume);
 
         String json = objectMapper.writeValueAsString(created(persistentVolume).getBody());
 
@@ -88,10 +81,10 @@ public class PersistentVolumeControllerTest {
 
     @Test
     public void persistentVolumeRead() throws Exception {
-        when(persistentVolumeReadApi.read("dockerfile")).thenReturn(persistentvolume());
+        when(persistentVolumeApi.read("dockerfile")).thenReturn(persistentvolume());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolume-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         PersistentVolume value = objectMapper.readValue(json, PersistentVolume.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -103,10 +96,10 @@ public class PersistentVolumeControllerTest {
 
     @Test
     public void persistentvolumeListRead() throws Exception {
-        when(persistentVolumeReadApi.read(Map.of())).thenReturn(persistentvolumeList());
+        when(persistentVolumeApi.read(Map.of())).thenReturn(persistentvolumeList());
 
         InputStream inputStream = getClass().getResourceAsStream("persistentVolumeList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         PersistentVolumeList value = objectMapper.readValue(json, PersistentVolumeList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -121,19 +114,18 @@ public class PersistentVolumeControllerTest {
     public PersistentVolumeList persistentvolumeList() {
 
         PersistentVolumeListBuilder persistentVolumeListBuilder = new PersistentVolumeListBuilder();
-        PersistentVolumeList persistentVolumeList = persistentVolumeListBuilder.withApiVersion("v1")
+
+        return persistentVolumeListBuilder.withApiVersion("v1")
                 .withKind("PersistentVolumeList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("219596").build())
                 .withItems(persistentvolume())
                 .build();
-
-        return persistentVolumeList;
     }
 
     public PersistentVolume persistentvolume() {
         PersistentVolumeBuilder persistentVolumeBuilder = new PersistentVolumeBuilder();
 
-        PersistentVolume persistentVolume = persistentVolumeBuilder.withApiVersion("v1")
+        return persistentVolumeBuilder.withApiVersion("v1")
                 .withKind("PersistentVolume")
                 .withMetadata(new ObjectMetaBuilder().withName("dockerfile").build())
                 .withSpec(new PersistentVolumeSpecBuilder()
@@ -145,8 +137,6 @@ public class PersistentVolumeControllerTest {
                         .withVolumeMode("Filesystem")
                         .build())
                 .build();
-
-        return persistentVolume;
     }
 
 

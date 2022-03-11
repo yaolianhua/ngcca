@@ -1,9 +1,8 @@
 package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.pod.*;
+import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = PodController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                PodCreateApi.class,
-                PodReadApi.class,
-                PodDeleteApi.class,
-                PodLogFetchApi.class,
-                PodUpdateApi.class
+                PodApi.class
         })
 })
 public class PodControllerTest {
@@ -49,13 +44,7 @@ public class PodControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private PodCreateApi podCreateApi;
-    @MockBean
-    private PodReadApi podReadApi;
-    @MockBean
-    private PodDeleteApi podDeleteApi;
-    @MockBean
-    private PodUpdateApi podUpdateApi;
+    private PodApi podApi;
 
     @Test
     public void annotations() throws Exception {
@@ -66,7 +55,7 @@ public class PodControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(podUpdateApi, times(1)).addAnnotations("default", "nginx", Map.of("icon-url", "http://goo.gl/XXBTWq"));
+        verify(podApi, times(1)).addAnnotations("default", "nginx", Map.of("icon-url", "http://goo.gl/XXBTWq"));
     }
 
     @Test
@@ -78,7 +67,7 @@ public class PodControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(podUpdateApi, times(1)).addLabels("default", "nginx", Map.of("k8s-app", "nginx"));
+        verify(podApi, times(1)).addLabels("default", "nginx", Map.of("k8s-app", "nginx"));
     }
 
     @Test
@@ -87,7 +76,7 @@ public class PodControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(podDeleteApi, times(1)).delete("default", "nginx");
+        verify(podApi, times(1)).delete("default", "nginx");
     }
 
     @Test
@@ -100,7 +89,7 @@ public class PodControllerTest {
         String podReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(podReadInputStream))).lines().collect(Collectors.joining());
 
         Pod pod = objectMapper.readValue(podReadJson, Pod.class);
-        when(podCreateApi.pod(yaml)).thenReturn(pod);
+        when(podApi.pod(yaml)).thenReturn(pod);
 
         String json = objectMapper.writeValueAsString(created(pod).getBody());
 
@@ -115,7 +104,7 @@ public class PodControllerTest {
 
     @Test
     public void podRead() throws Exception {
-        when(podReadApi.read("default", "nginx")).thenReturn(pod());
+        when(podApi.read("default", "nginx")).thenReturn(pod());
 
         InputStream inputStream = getClass().getResourceAsStream("pod-read.json");
         String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
@@ -130,7 +119,7 @@ public class PodControllerTest {
 
     @Test
     public void podListRead() throws Exception {
-        when(podReadApi.read("default", Map.of())).thenReturn(podList());
+        when(podApi.read("default", Map.of())).thenReturn(podList());
 
         InputStream inputStream = getClass().getResourceAsStream("podList-read.json");
         String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());

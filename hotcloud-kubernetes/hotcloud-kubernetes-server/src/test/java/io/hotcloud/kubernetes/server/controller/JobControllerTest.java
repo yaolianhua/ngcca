@@ -3,9 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.*;
-import io.hotcloud.kubernetes.api.workload.JobCreateApi;
-import io.hotcloud.kubernetes.api.workload.JobDeleteApi;
-import io.hotcloud.kubernetes.api.workload.JobReadApi;
+import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -35,9 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = JobController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                JobCreateApi.class,
-                JobReadApi.class,
-                JobDeleteApi.class
+                JobApi.class
         })
 })
 public class JobControllerTest {
@@ -48,11 +45,7 @@ public class JobControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private JobCreateApi jobCreateApi;
-    @MockBean
-    private JobReadApi jobReadApi;
-    @MockBean
-    private JobDeleteApi jobDeleteApi;
+    private JobApi jobApi;
 
     @Test
     public void jobDelete() throws Exception {
@@ -60,19 +53,19 @@ public class JobControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(jobDeleteApi, times(1)).delete("default", "kaniko");
+        verify(jobApi, times(1)).delete("default", "kaniko");
     }
 
     @Test
     public void jobCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("job-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream jobReadInputStream = getClass().getResourceAsStream("job-read.json");
-        String jobReadJson = new BufferedReader(new InputStreamReader(jobReadInputStream)).lines().collect(Collectors.joining());
+        String jobReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(jobReadInputStream))).lines().collect(Collectors.joining());
 
         Job job = objectMapper.readValue(jobReadJson, Job.class);
-        when(jobCreateApi.job(yaml)).thenReturn(job);
+        when(jobApi.job(yaml)).thenReturn(job);
 
         String json = objectMapper.writeValueAsString(created(job).getBody());
 
@@ -87,10 +80,10 @@ public class JobControllerTest {
 
     @Test
     public void jobRead() throws Exception {
-        when(jobReadApi.read("default", "kaniko")).thenReturn(job());
+        when(jobApi.read("default", "kaniko")).thenReturn(job());
 
         InputStream inputStream = getClass().getResourceAsStream("job-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Job value = objectMapper.readValue(json, Job.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -102,10 +95,10 @@ public class JobControllerTest {
 
     @Test
     public void jobListRead() throws Exception {
-        when(jobReadApi.read("default", Map.of())).thenReturn(jobList());
+        when(jobApi.read("default", Map.of())).thenReturn(jobList());
 
         InputStream inputStream = getClass().getResourceAsStream("jobList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         JobList value = objectMapper.readValue(json, JobList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -120,19 +113,18 @@ public class JobControllerTest {
     public JobList jobList() {
 
         JobListBuilder jobListBuilder = new JobListBuilder();
-        JobList jobList = jobListBuilder.withApiVersion("batch/v1")
+
+        return jobListBuilder.withApiVersion("batch/v1")
                 .withKind("JobList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("17674").build())
                 .withItems(job())
                 .build();
-
-        return jobList;
     }
 
     public Job job() {
         JobBuilder jobBuilder = new JobBuilder();
 
-        Job job = jobBuilder.withApiVersion("batch/v1")
+        return jobBuilder.withApiVersion("batch/v1")
                 .withKind("Job")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("kaniko")
@@ -184,8 +176,6 @@ public class JobControllerTest {
 
                 )
                 .build();
-
-        return job;
     }
 
 

@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.common.Result;
+import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -50,6 +51,28 @@ public class KubectlController {
                                                        @RequestParam(value = "timeUnit", required = false) TimeUnit unit) {
         Boolean portForward = kubectlApi.portForward(namespace, pod, address, containerPort, localPort, alive, unit);
         return WebResponse.accepted(portForward);
+    }
+
+    @PostMapping("/{namespace}/{pod}/upload")
+    public ResponseEntity<Result<Boolean>> upload(@PathVariable(value = "namespace") String namespace,
+                                                  @PathVariable(value = "pod") String pod,
+                                                  @RequestParam(value = "container", required = false) String container,
+                                                  @RequestParam(value = "source") String source,
+                                                  @RequestParam(value = "target") String target,
+                                                  @RequestParam(value = "action") CopyAction action) {
+        Boolean uploaded = kubectlApi.upload(namespace, pod, container, source, target, action);
+        return WebResponse.accepted(uploaded);
+    }
+
+    @PostMapping("/{namespace}/{pod}/download")
+    public ResponseEntity<Result<Boolean>> download(@PathVariable(value = "namespace") String namespace,
+                                                    @PathVariable(value = "pod") String pod,
+                                                    @RequestParam(value = "container", required = false) String container,
+                                                    @RequestParam(value = "source") String source,
+                                                    @RequestParam(value = "target") String target,
+                                                    @RequestParam(value = "action") CopyAction action) {
+        Boolean downloaded = kubectlApi.download(namespace, pod, container, source, target, action);
+        return WebResponse.accepted(downloaded);
     }
 
     @GetMapping("/{namespace}/events")

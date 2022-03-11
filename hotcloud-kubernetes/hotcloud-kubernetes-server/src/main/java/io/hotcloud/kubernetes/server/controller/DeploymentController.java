@@ -4,10 +4,7 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.RollingAction;
-import io.hotcloud.kubernetes.api.workload.DeploymentCreateApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentDeleteApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentReadApi;
-import io.hotcloud.kubernetes.api.workload.DeploymentUpdateApi;
+import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -26,51 +23,42 @@ import java.util.Map;
 @RequestMapping("/v1/kubernetes/deployments")
 public class DeploymentController {
 
-    private final DeploymentCreateApi deploymentCreation;
-    private final DeploymentDeleteApi deploymentDeletion;
-    private final DeploymentReadApi deploymentRead;
-    private final DeploymentUpdateApi deploymentUpdater;
+    private final DeploymentApi deploymentApi;
 
-    public DeploymentController(DeploymentCreateApi deploymentCreation,
-                                DeploymentDeleteApi deploymentDeletion,
-                                DeploymentReadApi deploymentRead,
-                                DeploymentUpdateApi deploymentUpdater) {
-        this.deploymentCreation = deploymentCreation;
-        this.deploymentDeletion = deploymentDeletion;
-        this.deploymentRead = deploymentRead;
-        this.deploymentUpdater = deploymentUpdater;
+    public DeploymentController(DeploymentApi deploymentApi) {
+        this.deploymentApi = deploymentApi;
     }
 
     @GetMapping("/{namespace}/{deployment}")
     public ResponseEntity<Result<Deployment>> deploymentRead(@PathVariable String namespace,
                                                              @PathVariable String deployment) {
-        Deployment read = deploymentRead.read(namespace, deployment);
+        Deployment read = deploymentApi.read(namespace, deployment);
         return WebResponse.ok(read);
     }
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<DeploymentList>> deploymentListRead(@PathVariable String namespace,
                                                                      @RequestParam(required = false) Map<String, String> labelSelector) {
-        DeploymentList list = deploymentRead.read(namespace, labelSelector);
+        DeploymentList list = deploymentApi.read(namespace, labelSelector);
         return WebResponse.ok(list);
     }
 
     @PostMapping
     public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
-        Deployment deployment = deploymentCreation.deployment(params);
+        Deployment deployment = deploymentApi.deployment(params);
         return WebResponse.created(deployment);
     }
 
     @PostMapping("/yaml")
     public ResponseEntity<Result<Deployment>> deployment(@RequestBody YamlBody yaml) throws ApiException {
-        Deployment deployment = deploymentCreation.deployment(yaml.getYaml());
+        Deployment deployment = deploymentApi.deployment(yaml.getYaml());
         return WebResponse.created(deployment);
     }
 
     @DeleteMapping("/{namespace}/{deployment}")
     public ResponseEntity<Result<Void>> deploymentDelete(@PathVariable("namespace") String namespace,
                                                          @PathVariable("deployment") String name) throws ApiException {
-        deploymentDeletion.delete(namespace, name);
+        deploymentApi.delete(namespace, name);
         return WebResponse.accepted();
     }
 
@@ -79,7 +67,7 @@ public class DeploymentController {
                                                         @PathVariable("deployment") String name,
                                                         @PathVariable("count") Integer count,
                                                         @RequestParam(value = "wait", required = false) boolean wait) {
-        deploymentUpdater.scale(namespace, name, count, wait);
+        deploymentApi.scale(namespace, name, count, wait);
         return WebResponse.accepted();
     }
 
@@ -87,7 +75,7 @@ public class DeploymentController {
     public ResponseEntity<Result<Deployment>> deploymentRolling(@PathVariable("namespace") String namespace,
                                                                 @PathVariable("deployment") String name,
                                                                 @RequestParam(value = "action") RollingAction action) {
-        Deployment deployment = deploymentUpdater.rolling(action, namespace, name);
+        Deployment deployment = deploymentApi.rolling(action, namespace, name);
         return WebResponse.accepted(deployment);
     }
 
@@ -95,7 +83,7 @@ public class DeploymentController {
     public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
                                                                     @PathVariable("deployment") String name,
                                                                     @RequestParam Map<String, String> containerToImageMap) {
-        Deployment deployment = deploymentUpdater.imageUpdate(containerToImageMap, namespace, name);
+        Deployment deployment = deploymentApi.imageUpdate(containerToImageMap, namespace, name);
         return WebResponse.accepted(deployment);
     }
 
@@ -103,7 +91,7 @@ public class DeploymentController {
     public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
                                                                     @PathVariable("deployment") String name,
                                                                     @RequestParam(value = "image") String image) {
-        Deployment deployment = deploymentUpdater.imageUpdate(namespace, name, image);
+        Deployment deployment = deploymentApi.imageUpdate(namespace, name, image);
         return WebResponse.accepted(deployment);
     }
 }

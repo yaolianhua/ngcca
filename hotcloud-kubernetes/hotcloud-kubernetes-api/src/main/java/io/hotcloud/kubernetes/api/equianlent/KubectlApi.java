@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.common.Assert;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -17,12 +18,11 @@ public interface KubectlApi {
 
     Boolean delete(String namespace, String yaml);
 
-    Boolean portForward(String namespace,
-                        String pod,
-                        String ipv4Address,
-                        Integer containerPort,
-                        Integer localPort,
-                        Long alive, TimeUnit unit);
+    Boolean upload(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action);
+
+    Boolean download(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action);
+
+    Boolean portForward(String namespace, String pod, @Nullable String ipv4Address, Integer containerPort, Integer localPort, @Nullable Long alive, @Nullable TimeUnit unit);
 
     List<Event> events(String namespace);
 

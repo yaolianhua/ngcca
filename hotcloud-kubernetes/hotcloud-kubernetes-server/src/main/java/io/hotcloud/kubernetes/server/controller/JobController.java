@@ -3,9 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.common.Result;
-import io.hotcloud.kubernetes.api.workload.JobCreateApi;
-import io.hotcloud.kubernetes.api.workload.JobDeleteApi;
-import io.hotcloud.kubernetes.api.workload.JobReadApi;
+import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.hotcloud.kubernetes.server.WebResponse;
@@ -23,25 +21,21 @@ import java.util.Map;
 @RequestMapping("/v1/kubernetes/jobs")
 public class JobController {
 
-    private final JobCreateApi jobCreation;
-    private final JobDeleteApi jobDeleteApi;
-    private final JobReadApi jobReadApi;
+    private final JobApi jobApi;
 
-    public JobController(JobCreateApi jobCreation, JobDeleteApi jobDeleteApi, JobReadApi jobReadApi) {
-        this.jobCreation = jobCreation;
-        this.jobDeleteApi = jobDeleteApi;
-        this.jobReadApi = jobReadApi;
+    public JobController(JobApi jobApi) {
+        this.jobApi = jobApi;
     }
 
     @PostMapping
     public ResponseEntity<Result<Job>> job(@Validated @RequestBody JobCreateRequest params) throws ApiException {
-        Job job = jobCreation.job(params);
+        Job job = jobApi.job(params);
         return WebResponse.created(job);
     }
 
     @PostMapping("/yaml")
     public ResponseEntity<Result<Job>> job(@RequestBody YamlBody yaml) throws ApiException {
-        Job job = jobCreation.job(yaml.getYaml());
+        Job job = jobApi.job(yaml.getYaml());
         return WebResponse.created(job);
     }
 
@@ -49,21 +43,21 @@ public class JobController {
     @GetMapping("/{namespace}/{job}")
     public ResponseEntity<Result<Job>> jobRead(@PathVariable String namespace,
                                                @PathVariable String job) {
-        Job read = jobReadApi.read(namespace, job);
+        Job read = jobApi.read(namespace, job);
         return WebResponse.ok(read);
     }
 
     @GetMapping("/{namespace}")
     public ResponseEntity<Result<JobList>> jobListRead(@PathVariable String namespace,
                                                        @RequestParam(required = false) Map<String, String> labelSelector) {
-        JobList list = jobReadApi.read(namespace, labelSelector);
+        JobList list = jobApi.read(namespace, labelSelector);
         return WebResponse.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{job}")
     public ResponseEntity<Result<Void>> jobDelete(@PathVariable("namespace") String namespace,
                                                   @PathVariable("job") String name) throws ApiException {
-        jobDeleteApi.delete(namespace, name);
+        jobApi.delete(namespace, name);
         return WebResponse.accepted();
     }
 

@@ -3,9 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
-import io.hotcloud.kubernetes.api.workload.StatefulSetCreateApi;
-import io.hotcloud.kubernetes.api.workload.StatefulSetDeleteApi;
-import io.hotcloud.kubernetes.api.workload.StatefulSetReadApi;
+import io.hotcloud.kubernetes.api.workload.StatefulSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -35,9 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = StatefulSetController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                StatefulSetCreateApi.class,
-                StatefulSetDeleteApi.class,
-                StatefulSetReadApi.class
+                StatefulSetApi.class
         })
 })
 public class StatefulSetControllerTest {
@@ -48,11 +45,7 @@ public class StatefulSetControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private StatefulSetCreateApi statefulSetCreateApi;
-    @MockBean
-    private StatefulSetReadApi statefulSetReadApi;
-    @MockBean
-    private StatefulSetDeleteApi statefulSetDeleteApi;
+    private StatefulSetApi statefulSetApi;
 
     @Test
     public void statefulSetDelete() throws Exception {
@@ -60,19 +53,19 @@ public class StatefulSetControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(statefulSetDeleteApi, times(1)).delete("default", "web");
+        verify(statefulSetApi, times(1)).delete("default", "web");
     }
 
     @Test
     public void statefulSetCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("statefulSet-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream statefulSetReadInputStream = getClass().getResourceAsStream("statefulSet-read.json");
-        String statefulSetReadJson = new BufferedReader(new InputStreamReader(statefulSetReadInputStream)).lines().collect(Collectors.joining());
+        String statefulSetReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(statefulSetReadInputStream))).lines().collect(Collectors.joining());
 
         StatefulSet statefulSet = objectMapper.readValue(statefulSetReadJson, StatefulSet.class);
-        when(statefulSetCreateApi.statefulSet(yaml)).thenReturn(statefulSet);
+        when(statefulSetApi.statefulSet(yaml)).thenReturn(statefulSet);
 
         String json = objectMapper.writeValueAsString(created(statefulSet).getBody());
 
@@ -87,10 +80,10 @@ public class StatefulSetControllerTest {
 
     @Test
     public void statefulSetRead() throws Exception {
-        when(statefulSetReadApi.read("default", "web")).thenReturn(statefulSet());
+        when(statefulSetApi.read("default", "web")).thenReturn(statefulSet());
 
         InputStream inputStream = getClass().getResourceAsStream("statefulSet-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         StatefulSet value = objectMapper.readValue(json, StatefulSet.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -102,10 +95,10 @@ public class StatefulSetControllerTest {
 
     @Test
     public void statefulSetListRead() throws Exception {
-        when(statefulSetReadApi.read("default", Map.of())).thenReturn(statefulSetList());
+        when(statefulSetApi.read("default", Map.of())).thenReturn(statefulSetList());
 
         InputStream inputStream = getClass().getResourceAsStream("statefulSetList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         StatefulSetList value = objectMapper.readValue(json, StatefulSetList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -120,19 +113,18 @@ public class StatefulSetControllerTest {
     public StatefulSetList statefulSetList() {
 
         StatefulSetListBuilder statefulSetListBuilder = new StatefulSetListBuilder();
-        StatefulSetList statefulSetList = statefulSetListBuilder.withApiVersion("apps/v1")
+
+        return statefulSetListBuilder.withApiVersion("apps/v1")
                 .withKind("StatefulSetList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("6037").build())
                 .withItems(statefulSet())
                 .build();
-
-        return statefulSetList;
     }
 
     public StatefulSet statefulSet() {
         StatefulSetBuilder statefulSetBuilder = new StatefulSetBuilder();
 
-        StatefulSet statefulSet = statefulSetBuilder.withApiVersion("apps/v1")
+        return statefulSetBuilder.withApiVersion("apps/v1")
                 .withKind("StatefulSet")
                 .withMetadata(new ObjectMetaBuilder()
                         .withName("web")
@@ -187,8 +179,6 @@ public class StatefulSetControllerTest {
 
 
                 ).build();
-
-        return statefulSet;
     }
 
 
