@@ -2,9 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.configurations.SecretCreateApi;
-import io.hotcloud.kubernetes.api.configurations.SecretDeleteApi;
-import io.hotcloud.kubernetes.api.configurations.SecretReadApi;
+import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -35,9 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = SecretController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                SecretCreateApi.class,
-                SecretReadApi.class,
-                SecretDeleteApi.class
+                SecretApi.class
         })
 })
 public class SecretControllerTest {
@@ -48,22 +45,18 @@ public class SecretControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private SecretCreateApi secretCreateApi;
-    @MockBean
-    private SecretReadApi secretReadApi;
-    @MockBean
-    private SecretDeleteApi secretDeleteApi;
+    private SecretApi secretApi;
 
     @Test
     public void secretCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("secret-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream secretReadInputStream = getClass().getResourceAsStream("secret-read.json");
-        String secretReadJson = new BufferedReader(new InputStreamReader(secretReadInputStream)).lines().collect(Collectors.joining());
+        String secretReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(secretReadInputStream))).lines().collect(Collectors.joining());
 
         Secret secret = objectMapper.readValue(secretReadJson, Secret.class);
-        when(secretCreateApi.secret(yaml)).thenReturn(secret);
+        when(secretApi.secret(yaml)).thenReturn(secret);
 
         String json = objectMapper.writeValueAsString(created(secret).getBody());
 
@@ -82,16 +75,16 @@ public class SecretControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(secretDeleteApi, times(1)).delete("default", "regcred");
+        verify(secretApi, times(1)).delete("default", "regcred");
     }
 
     @Test
     public void secretRead() throws Exception {
-        when(secretReadApi.read("default", "regcred"))
+        when(secretApi.read("default", "regcred"))
                 .thenReturn(secret());
 
         InputStream inputStream = getClass().getResourceAsStream("secret-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Secret value = objectMapper.readValue(json, Secret.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -103,7 +96,7 @@ public class SecretControllerTest {
 
     public Secret secret() {
         SecretBuilder builder = new SecretBuilder();
-        Secret secret = builder.withImmutable(true)
+        return builder.withImmutable(true)
                 .withMetadata(new ObjectMetaBuilder().withName("regcred")
                         .withNamespace("default")
                         .build())
@@ -112,16 +105,15 @@ public class SecretControllerTest {
                 .withKind("Secret")
                 .withType("kubernetes.io/dockerconfigjson")
                 .build();
-        return secret;
     }
 
     @Test
     public void secretListRead() throws Exception {
-        when(secretReadApi.read("default", Collections.emptyMap()))
+        when(secretApi.read("default", Collections.emptyMap()))
                 .thenReturn(secretList());
 
         InputStream inputStream = getClass().getResourceAsStream("secretList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
         SecretList secretList = objectMapper.readValue(json, SecretList.class);
         String _json = objectMapper.writeValueAsString(ok(secretList).getBody());
 
@@ -135,12 +127,11 @@ public class SecretControllerTest {
     public SecretList secretList() {
         SecretListBuilder builder = new SecretListBuilder();
 
-        SecretList secretList = builder
+        return builder
                 .withApiVersion("v1")
                 .withKind("SecretList")
                 .withItems(secret())
                 .withMetadata(new ListMetaBuilder().withResourceVersion("71689").build())
                 .build();
-        return secretList;
     }
 }
