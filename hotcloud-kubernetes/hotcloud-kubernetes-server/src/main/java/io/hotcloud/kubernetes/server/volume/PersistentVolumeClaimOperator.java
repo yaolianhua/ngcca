@@ -1,9 +1,11 @@
 package io.hotcloud.kubernetes.server.volume;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimCreateApi;
+import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
@@ -12,22 +14,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import static io.hotcloud.kubernetes.model.NamespaceGenerator.DEFAULT_NAMESPACE;
-
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
 @Slf4j
-public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreateApi {
+public class PersistentVolumeClaimOperator implements PersistentVolumeClaimApi {
 
     private final CoreV1Api coreV1Api;
     private final KubernetesClient fabric8Client;
 
-    public PersistentVolumeClaimCreator(CoreV1Api coreV1Api, KubernetesClient fabric8Client) {
+    public PersistentVolumeClaimOperator(CoreV1Api coreV1Api, KubernetesClient fabric8Client) {
         this.coreV1Api = coreV1Api;
         this.fabric8Client = fabric8Client;
     }
@@ -51,10 +54,43 @@ public class PersistentVolumeClaimCreator implements PersistentVolumeClaimCreate
                 null);
         log.debug("create persistentVolumeClaim success \n '{}'", v1Pvc);
 
-        PersistentVolumeClaim pvc = fabric8Client.persistentVolumeClaims()
+        return fabric8Client.persistentVolumeClaims()
                 .inNamespace(namespace)
                 .withName(v1PersistentVolumeClaim.getMetadata().getName())
                 .get();
-        return pvc;
+    }
+
+    @Override
+    public PersistentVolumeClaimList read(String namespace, Map<String, String> labelSelector) {
+        labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
+        if (StringUtils.hasText(namespace)) {
+            return fabric8Client
+                    .persistentVolumeClaims()
+                    .inNamespace(namespace)
+                    .withLabels(labelSelector)
+                    .list();
+        }
+
+        return fabric8Client
+                .persistentVolumeClaims()
+                .inAnyNamespace()
+                .withLabels(labelSelector)
+                .list();
+    }
+
+    @Override
+    public void delete(String persistentVolumeClaim, String namespace) throws ApiException {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(persistentVolumeClaim), () -> "delete resource name is null");
+        V1PersistentVolumeClaim v1PersistentVolumeClaim = coreV1Api.deleteNamespacedPersistentVolumeClaim(
+                persistentVolumeClaim,
+                namespace,
+                "true",
+                null,
+                null,
+                null,
+                null,
+                null);
+        log.debug("Delete namespaced persistentVolumeClaim success \n '{}'", v1PersistentVolumeClaim);
     }
 }
