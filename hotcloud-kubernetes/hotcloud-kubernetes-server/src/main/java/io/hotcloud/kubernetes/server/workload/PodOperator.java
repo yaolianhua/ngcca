@@ -87,18 +87,17 @@ public class PodOperator implements PodApi {
     }
 
     @Override
-    public String getLog(String namespace, String pod, Integer tailingLine) {
+    public String logs(String namespace, String pod, Integer tailingLine) {
         Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.argument(StringUtils.hasText(pod), () -> "pod name is null");
 
         tailingLine = tailingLine == null ? Integer.MAX_VALUE : tailingLine;
-        String log = fabric8Client.pods()
+
+        return fabric8Client.pods()
                 .inNamespace(namespace)
                 .withName(pod)
                 .tailingLines(tailingLine)
                 .getLog(true);
-
-        return log;
     }
 
     @Override
@@ -111,12 +110,10 @@ public class PodOperator implements PodApi {
                     .list();
         }
 
-        PodList podList = fabric8Client.pods()
+        return fabric8Client.pods()
                 .inAnyNamespace()
                 .withLabels(labelSelector)
                 .list();
-
-        return podList;
     }
 
     @Override

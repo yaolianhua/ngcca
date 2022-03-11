@@ -31,14 +31,14 @@ public interface PodApi {
 
     void delete(String namespace, Map<String, String> label);
 
-    default String getLog(String namespace, String pod) {
-        return this.getLog(namespace, pod, null);
+    default String logs(String namespace, String pod) {
+        return this.logs(namespace, pod, null);
     }
 
-    String getLog(String namespace, String pod, Integer tailingLine);
+    String logs(String namespace, String pod, Integer tailingLine);
 
-    default List<String> getLogLines(String namespace, String pod, Integer tailingLine) {
-        String log = getLog(namespace, pod, tailingLine);
+    default List<String> logsline(String namespace, String pod, Integer tailingLine) {
+        String log = logs(namespace, pod, tailingLine);
         return Stream.of(log.split("\n")).collect(Collectors.toList());
     }
 

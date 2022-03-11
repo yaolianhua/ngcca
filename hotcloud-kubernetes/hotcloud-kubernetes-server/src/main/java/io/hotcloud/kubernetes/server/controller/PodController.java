@@ -34,7 +34,7 @@ public class PodController {
     public ResponseEntity<Result<String>> podlogs(@PathVariable String namespace,
                                                   @PathVariable String pod,
                                                   @RequestParam(value = "tail", required = false) Integer tailing) {
-        String log = podApi.getLog(namespace, pod, tailing);
+        String log = podApi.logs(namespace, pod, tailing);
         return WebResponse.ok(log);
     }
 
@@ -42,7 +42,7 @@ public class PodController {
     public ResponseEntity<Result<List<String>>> podloglines(@PathVariable String namespace,
                                                             @PathVariable String pod,
                                                             @RequestParam(value = "tail", required = false) Integer tailing) {
-        List<String> lines = podApi.getLogLines(namespace, pod, tailing);
+        List<String> lines = podApi.logsline(namespace, pod, tailing);
         return WebResponse.ok(lines);
     }
 
