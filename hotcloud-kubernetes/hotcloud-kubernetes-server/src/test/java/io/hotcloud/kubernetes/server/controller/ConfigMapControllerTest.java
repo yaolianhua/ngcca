@@ -2,9 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapCreateApi;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapDeleteApi;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapReadApi;
+import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -36,9 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = ConfigMapController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                ConfigMapCreateApi.class,
-                ConfigMapReadApi.class,
-                ConfigMapDeleteApi.class
+                ConfigMapApi.class
         })
 })
 public class ConfigMapControllerTest {
@@ -49,22 +46,18 @@ public class ConfigMapControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private ConfigMapCreateApi configMapCreateApi;
-    @MockBean
-    private ConfigMapReadApi configMapReadApi;
-    @MockBean
-    private ConfigMapDeleteApi configMapDeleteApi;
+    private ConfigMapApi configMapApi;
 
     @Test
     public void configMapCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("configMap-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream configMapReadInputStream = getClass().getResourceAsStream("configMap-read.json");
-        String configMapReadJson = new BufferedReader(new InputStreamReader(configMapReadInputStream)).lines().collect(Collectors.joining());
+        String configMapReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(configMapReadInputStream))).lines().collect(Collectors.joining());
 
         ConfigMap configMap = objectMapper.readValue(configMapReadJson, ConfigMap.class);
-        when(configMapCreateApi.configMap(yaml)).thenReturn(configMap);
+        when(configMapApi.configMap(yaml)).thenReturn(configMap);
 
         String json = objectMapper.writeValueAsString(created(configMap).getBody());
 
@@ -83,16 +76,16 @@ public class ConfigMapControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(configMapDeleteApi, times(1)).delete("default", "hotcloud-config");
+        verify(configMapApi, times(1)).delete("default", "hotcloud-config");
     }
 
     @Test
     public void configMapRead() throws Exception {
-        when(configMapReadApi.read("default", "hotcloud-config"))
+        when(configMapApi.read("default", "hotcloud-config"))
                 .thenReturn(configMap());
 
         InputStream inputStream = getClass().getResourceAsStream("configMap-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         ConfigMap value = objectMapper.readValue(json, ConfigMap.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -104,22 +97,21 @@ public class ConfigMapControllerTest {
 
     public ConfigMap configMap() {
         ConfigMapBuilder builder = new ConfigMapBuilder();
-        ConfigMap configMap = builder.withImmutable(true)
+        return builder.withImmutable(true)
                 .withMetadata(new ObjectMetaBuilder().withName("hotcloud-config").withNamespace("default").withLabels(Collections.singletonMap("k8s-app", "hotcloud")).build())
                 .withData(Collections.singletonMap("config", "logging:\n  level:\n    io.hotCloud.server: debug\nkubernetes:\n  in-cluster: true\n"))
                 .withApiVersion("v1")
                 .withKind("ConfigMap")
                 .build();
-        return configMap;
     }
 
     @Test
     public void configMapListRead() throws Exception {
-        when(configMapReadApi.read("default", Collections.emptyMap()))
+        when(configMapApi.read("default", Collections.emptyMap()))
                 .thenReturn(configMapList());
 
         InputStream inputStream = getClass().getResourceAsStream("configMapList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
         ConfigMapList configMapList = objectMapper.readValue(json, ConfigMapList.class);
         String _json = objectMapper.writeValueAsString(ok(configMapList).getBody());
 
@@ -159,12 +151,11 @@ public class ConfigMapControllerTest {
                                 .build()
                 )
                 .build();
-        ConfigMapList configMapList = builder
+        return builder
                 .withApiVersion("v1")
                 .withKind("ConfigMapList")
                 .withItems(List.of(item1, item2))
                 .withMetadata(new ListMetaBuilder().build())
                 .build();
-        return configMapList;
     }
 }

@@ -1,33 +1,37 @@
 package io.hotcloud.kubernetes.server.configurations;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
+import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapCreateApi;
+import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
+import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import static io.hotcloud.kubernetes.model.NamespaceGenerator.DEFAULT_NAMESPACE;
-
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
 @Slf4j
-public class ConfigMapCreator implements ConfigMapCreateApi {
+public class ConfigMapOperator implements ConfigMapApi {
 
     private final CoreV1Api coreV1Api;
     private final KubernetesClient fabric8client;
 
-    public ConfigMapCreator(CoreV1Api coreV1Api, KubernetesClient fabric8client) {
+    public ConfigMapOperator(CoreV1Api coreV1Api, KubernetesClient fabric8client) {
         this.coreV1Api = coreV1Api;
         this.fabric8client = fabric8client;
     }
@@ -50,10 +54,42 @@ public class ConfigMapCreator implements ConfigMapCreateApi {
                 null);
         log.debug("create configMap success \n '{}'", cm);
 
-        ConfigMap configMap = fabric8client.configMaps()
+        return fabric8client.configMaps()
                 .inNamespace(namespace)
                 .withName(v1ConfigMap.getMetadata().getName())
                 .get();
-        return configMap;
+    }
+
+    @Override
+    public void delete(String namespace, String configmap) throws ApiException {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(configmap), () -> "delete resource name is null");
+        V1Status v1Status = coreV1Api.deleteNamespacedConfigMap(
+                configmap,
+                namespace,
+                "true",
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        log.debug("delete namespaced configMap success \n '{}'", v1Status);
+    }
+
+    @Override
+    public ConfigMapList read(String namespace, Map<String, String> labelSelector) {
+        labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
+        if (StringUtils.hasText(namespace)) {
+            return fabric8client.configMaps()
+                    .inNamespace(namespace)
+                    .withLabels(labelSelector)
+                    .list();
+        }
+
+        return fabric8client.configMaps()
+                .inAnyNamespace()
+                .withLabels(labelSelector)
+                .list();
     }
 }
