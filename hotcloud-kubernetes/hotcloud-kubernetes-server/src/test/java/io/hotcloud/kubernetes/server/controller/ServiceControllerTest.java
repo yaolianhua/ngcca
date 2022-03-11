@@ -2,9 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.network.ServiceCreateApi;
-import io.hotcloud.kubernetes.api.network.ServiceDeleteApi;
-import io.hotcloud.kubernetes.api.network.ServiceReadApi;
+import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.kubernetes.server.WebResponse.created;
@@ -34,9 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = ServiceController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                ServiceDeleteApi.class,
-                ServiceReadApi.class,
-                ServiceCreateApi.class
+                ServiceApi.class
         })
 })
 public class ServiceControllerTest {
@@ -47,11 +44,7 @@ public class ServiceControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private ServiceReadApi serviceReadApi;
-    @MockBean
-    private ServiceCreateApi serviceCreateApi;
-    @MockBean
-    private ServiceDeleteApi serviceDeleteApi;
+    private ServiceApi serviceApi;
 
     @Test
     public void serviceDelete() throws Exception {
@@ -59,21 +52,21 @@ public class ServiceControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(serviceDeleteApi, times(1)).delete("default", "hotcloud");
+        verify(serviceApi, times(1)).delete("default", "hotcloud");
     }
 
     @Test
     public void serviceCreateUseYaml() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("service-create.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
         InputStream serviceReadInputStream = getClass().getResourceAsStream("service-read.json");
-        String serviceReadJson = new BufferedReader(new InputStreamReader(serviceReadInputStream))
+        String serviceReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(serviceReadInputStream)))
                 .lines()
                 .collect(Collectors.joining());
 
         Service service = objectMapper.readValue(serviceReadJson, Service.class);
-        when(serviceCreateApi.service(yaml)).thenReturn(service);
+        when(serviceApi.service(yaml)).thenReturn(service);
 
         String json = objectMapper.writeValueAsString(created(service).getBody());
 
@@ -88,10 +81,10 @@ public class ServiceControllerTest {
 
     @Test
     public void serviceRead() throws Exception {
-        when(serviceReadApi.read("default", "hotcloud")).thenReturn(service());
+        when(serviceApi.read("default", "hotcloud")).thenReturn(service());
 
         InputStream inputStream = getClass().getResourceAsStream("service-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         Service value = objectMapper.readValue(json, Service.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -103,10 +96,10 @@ public class ServiceControllerTest {
 
     @Test
     public void serviceListRead() throws Exception {
-        when(serviceReadApi.read("default", Map.of())).thenReturn(serviceList());
+        when(serviceApi.read("default", Map.of())).thenReturn(serviceList());
 
         InputStream inputStream = getClass().getResourceAsStream("serviceList-read.json");
-        String json = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
+        String json = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining());
 
         ServiceList value = objectMapper.readValue(json, ServiceList.class);
         String _json = objectMapper.writeValueAsString(ok(value).getBody());
@@ -121,19 +114,18 @@ public class ServiceControllerTest {
     public ServiceList serviceList() {
 
         ServiceListBuilder serviceListBuilder = new ServiceListBuilder();
-        ServiceList serviceList = serviceListBuilder.withApiVersion("v1")
+
+        return serviceListBuilder.withApiVersion("v1")
                 .withKind("ServiceList")
                 .withMetadata(new ListMetaBuilder().withResourceVersion("221388").build())
                 .withItems(service())
                 .build();
-
-        return serviceList;
     }
 
     public Service service() {
         ServiceBuilder serviceBuilder = new ServiceBuilder();
 
-        Service service = serviceBuilder.withApiVersion("v1")
+        return serviceBuilder.withApiVersion("v1")
                 .withKind("Service")
                 .withMetadata(new ObjectMetaBuilder().withLabels(Map.of("k8s-app", "hotcloud")).withName("hotcloud").withNamespace("default").build())
                 .withSpec(new ServiceSpecBuilder()
@@ -144,8 +136,6 @@ public class ServiceControllerTest {
                         .withType("NodePort")
                         .build())
                 .build();
-
-        return service;
     }
 
 

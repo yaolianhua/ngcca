@@ -1,33 +1,37 @@
 package io.hotcloud.kubernetes.server.network;
 
 import io.fabric8.kubernetes.api.model.Service;
+import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
-import io.hotcloud.kubernetes.api.network.ServiceCreateApi;
+import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Service;
+import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import static io.hotcloud.kubernetes.model.NamespaceGenerator.DEFAULT_NAMESPACE;
-
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
 @Slf4j
-public class ServiceCreator implements ServiceCreateApi {
+public class ServiceOperator implements ServiceApi {
 
     private final CoreV1Api coreV1Api;
     private final KubernetesClient fabric8Client;
 
-    public ServiceCreator(CoreV1Api coreV1Api, KubernetesClient fabric8Client) {
+    public ServiceOperator(CoreV1Api coreV1Api, KubernetesClient fabric8Client) {
         this.coreV1Api = coreV1Api;
         this.fabric8Client = fabric8Client;
     }
@@ -50,10 +54,44 @@ public class ServiceCreator implements ServiceCreateApi {
                 null);
         log.debug("create service success \n '{}'", service);
 
-        Service svc = fabric8Client.services()
+        return fabric8Client.services()
                 .inNamespace(namespace)
                 .withName(v1Service.getMetadata().getName())
                 .get();
-        return svc;
+    }
+
+    @Override
+    public void delete(String namespace, String service) throws ApiException {
+        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.argument(StringUtils.hasText(service), () -> "delete resource name is null");
+        V1Status v1Status = coreV1Api.deleteNamespacedService(
+                service,
+                namespace,
+                "true",
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        log.debug("delete namespaced service success \n '{}'", v1Status);
+    }
+
+    @Override
+    public ServiceList read(String namespace, Map<String, String> labelSelector) {
+        labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
+        if (StringUtils.hasText(namespace)) {
+            return fabric8Client
+                    .services()
+                    .inNamespace(namespace)
+                    .withLabels(labelSelector)
+                    .list();
+        }
+
+        return fabric8Client
+                .services()
+                .inAnyNamespace()
+                .withLabels(labelSelector)
+                .list();
     }
 }
