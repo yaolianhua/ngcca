@@ -8,17 +8,21 @@ import io.fabric8.kubernetes.client.LocalPortForward;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.Validator;
+import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -67,21 +71,115 @@ public class KubectlEquivalent implements KubectlApi {
         Assert.hasText(yaml, "Yaml is null", 400);
 
         InputStream inputStream = new ByteArrayInputStream(yaml.getBytes());
-        Boolean deleted = StringUtils.hasText(namespace) ?
+
+        return StringUtils.hasText(namespace) ?
                 fabric8Client.load(inputStream).inNamespace(namespace).delete() :
                 fabric8Client.load(inputStream).delete();
-
-        return deleted;
     }
 
     @Override
-    public Boolean portForward(String namespace,
-                               String pod,
-                               String ipv4Address,
-                               Integer containerPort,
-                               Integer localPort,
-                               Long time,
-                               TimeUnit timeUnit) {
+    public Boolean upload(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
+
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.hasText(source, "source path  is null", 400);
+        Assert.hasText(target, "target path is null", 400);
+
+        //valid pod exist
+        Pod read = podApi.read(namespace, pod);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
+
+        try {
+            if (Objects.equals(action, CopyAction.FILE)) {
+                log.debug("Upload local file '{}' to  '{}' of Pod [{}], container '{}'", source, target, pod, container);
+                return StringUtils.hasText(container) ?
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .inContainer(container)
+                                .file(target)
+                                .upload(Path.of(source)) :
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .file(target)
+                                .upload(Path.of(source));
+            }
+            if (Objects.equals(action, CopyAction.DIRECTORY)) {
+                log.debug("Upload local dir '{}' to '{}' of Pod [{}], container '{}'", source, target, pod, container);
+                return StringUtils.hasText(container) ?
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .inContainer(container)
+                                .dir(target)
+                                .upload(Path.of(source)) :
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .dir(target)
+                                .upload(Path.of(source));
+            }
+        } catch (Exception e) {
+            log.error("upload error '{}'", e.getMessage(), e);
+            throw new HotCloudException(e.getMessage());
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean download(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.hasText(source, "source path  is null", 400);
+        Assert.hasText(target, "target path is null", 400);
+
+        //valid pod exist
+        Pod read = podApi.read(namespace, pod);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
+
+        try {
+            if (Objects.equals(action, CopyAction.FILE)) {
+                log.debug("Download file '{}' from Pod [{}] to local '{}', container '{}'", source, pod, target, container);
+                return StringUtils.hasText(container) ?
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .inContainer(container)
+                                .file(source)
+                                .copy(Path.of(target)) :
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .file(source)
+                                .copy(Path.of(target));
+            }
+            if (Objects.equals(action, CopyAction.DIRECTORY)) {
+                log.debug("Download dir '{}' from Pod [{}] to local '{}', container '{}'", source, pod, target, container);
+                return StringUtils.hasText(container) ?
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .inContainer(container)
+                                .dir(source)
+                                .copy(Path.of(target)) :
+                        fabric8Client.pods()
+                                .inNamespace(namespace)
+                                .withName(pod)
+                                .dir(source)
+                                .copy(Path.of(target));
+            }
+        } catch (Exception e) {
+            log.error("download error '{}'", e.getMessage(), e);
+            throw new HotCloudException(e.getMessage());
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean portForward(String namespace, String pod, @Nullable String ipv4Address, Integer containerPort, Integer localPort, @Nullable Long time, @Nullable TimeUnit timeUnit) {
 
         Assert.notNull(containerPort, "containerPort is null", 400);
         Assert.notNull(localPort, "localPort is null", 400);
@@ -150,11 +248,10 @@ public class KubectlEquivalent implements KubectlApi {
     @Override
     public List<Event> events(String namespace) {
         Assert.hasText(namespace, "namespace is null", 400);
-        List<Event> items = fabric8Client.v1().events()
+
+        return fabric8Client.v1().events()
                 .inNamespace(namespace)
                 .list()
                 .getItems();
-
-        return items;
     }
 }
