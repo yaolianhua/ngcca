@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Result;
+import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
@@ -112,6 +113,50 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 .build(namespace, name);
 
         ResponseEntity<Result<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Boolean> upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.hasText(source, "source path  is null", 400);
+        Assert.hasText(target, "target path is null", 400);
+        Assert.notNull(action, "action is null", 400);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/upload", uri))
+                .queryParam("container", container)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("action", action)
+                .build(namespace, pod);
+
+        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<Boolean> download(String namespace, String pod, String container, String source, String target, CopyAction action) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pod, "pod name is null", 400);
+        Assert.hasText(source, "source path  is null", 400);
+        Assert.hasText(target, "target path is null", 400);
+        Assert.notNull(action, "action is null", 400);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/download", uri))
+                .queryParam("container", container)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("action", action)
+                .build(namespace, pod);
+
+        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

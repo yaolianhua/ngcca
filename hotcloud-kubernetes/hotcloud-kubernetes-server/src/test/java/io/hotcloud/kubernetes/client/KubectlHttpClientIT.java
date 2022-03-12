@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
+import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -55,6 +56,24 @@ public class KubectlHttpClientIT extends ClientIntegrationTestBase {
         log.info("ResourceList deleted success='{}'", delete);
 
         log.info("Kubectl Integration Test End");
+    }
+
+    @Test
+    public void uploadFileToPod_then_downloadDirectoryToLocally() throws InterruptedException {
+        log.info("Sleep 30s wait pod created");
+        TimeUnit.SECONDS.sleep(30);
+
+        Result<PodList> readList = podHttpClient.readList(NAMESPACE, labelSelector);
+        List<Pod> pods = readList.getData().getItems();
+        List<String> podNames = pods.stream()
+                .map(e -> e.getMetadata().getName())
+                .collect(Collectors.toList());
+
+        Result<Boolean> uploaded = kubectlHttpClient.upload(NAMESPACE, podNames.get(0), null, "/home/yaolianhua/.profile", "/hotcloud/.profile", CopyAction.FILE);
+        Assertions.assertTrue(uploaded.getData());
+
+        Result<Boolean> downloaded = kubectlHttpClient.download(NAMESPACE, podNames.get(0), null, "/hotcloud/config", "/home/yaolianhua/download_config", CopyAction.DIRECTORY);
+        Assertions.assertTrue(downloaded.getData());
     }
 
     @Test

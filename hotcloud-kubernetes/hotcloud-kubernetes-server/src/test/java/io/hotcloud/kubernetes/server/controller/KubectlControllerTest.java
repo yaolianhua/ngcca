@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,46 @@ public class KubectlControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private KubectlApi kubectlApi;
+
+    @Test
+    public void download() throws Exception {
+        when(kubectlApi.download("hotcloud", "hotcloud-9c7c6cb94-tkvkk", "hotcloud", "/hotcloud/config", "/home/config", CopyAction.DIRECTORY))
+                .thenReturn(Boolean.TRUE);
+
+        LinkedMultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        Map<String, String> params = Map.of("container", "hotcloud",
+                "source", "/hotcloud/config",
+                "target", "/home/config",
+                "action", CopyAction.DIRECTORY.name());
+        multiValueMap.setAll(params);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/{namespace}/{pod}/download"), "hotcloud", "hotcloud-9c7c6cb94-tkvkk")
+                        .params(multiValueMap))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(kubectlApi, times(1)).download("hotcloud", "hotcloud-9c7c6cb94-tkvkk", "hotcloud", "/hotcloud/config", "/home/config", CopyAction.DIRECTORY);
+    }
+
+    @Test
+    public void upload() throws Exception {
+        when(kubectlApi.upload("hotcloud", "hotcloud-9c7c6cb94-tkvkk", "hotcloud", "/home/directory", "/hotcloud/dir", CopyAction.DIRECTORY))
+                .thenReturn(Boolean.TRUE);
+
+        LinkedMultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        Map<String, String> params = Map.of("container", "hotcloud",
+                "source", "/home/directory",
+                "target", "/hotcloud/dir",
+                "action", CopyAction.DIRECTORY.name());
+        multiValueMap.setAll(params);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/{namespace}/{pod}/upload"), "hotcloud", "hotcloud-9c7c6cb94-tkvkk")
+                        .params(multiValueMap))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+        //was invoked one time
+        verify(kubectlApi, times(1)).upload("hotcloud", "hotcloud-9c7c6cb94-tkvkk", "hotcloud", "/home/directory", "/hotcloud/dir", CopyAction.DIRECTORY);
+    }
 
     @Test
     public void eventsRead() throws Exception {
