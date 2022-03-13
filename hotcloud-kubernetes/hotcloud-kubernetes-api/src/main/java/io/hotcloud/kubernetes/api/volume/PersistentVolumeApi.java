@@ -15,17 +15,42 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 public interface PersistentVolumeApi {
-
+    /**
+     * Create PersistentVolume from {@code PersistentVolumeCreateRequest}
+     *
+     * @param request {@link PersistentVolumeCreateRequest}
+     * @return {@link PersistentVolume}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     default PersistentVolume persistentVolume(PersistentVolumeCreateRequest request) throws ApiException {
         V1PersistentVolume v1PersistentVolume = PersistentVolumeBuilder.build(request);
         String json = Yaml.dump(v1PersistentVolume);
         return this.persistentVolume(json);
     }
 
+    /**
+     * Create PersistentVolume from yaml
+     *
+     * @param yaml kubernetes yaml string
+     * @return {@link PersistentVolume}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     PersistentVolume persistentVolume(String yaml) throws ApiException;
 
+    /**
+     * Delete namespaced PersistentVolume
+     *
+     * @param persistentVolume persistentVolume name
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     void delete(String persistentVolume) throws ApiException;
 
+    /**
+     * Read namespaced PersistentVolume
+     *
+     * @param name persistentVolume name
+     * @return {@link PersistentVolume}
+     */
     default PersistentVolume read(String name) {
         PersistentVolumeList persistentVolumeList = this.read(Collections.emptyMap());
         return persistentVolumeList.getItems()
@@ -35,5 +60,11 @@ public interface PersistentVolumeApi {
                 .orElse(null);
     }
 
+    /**
+     * Read namespaced PersistentVolumeList
+     *
+     * @param labelSelector label selector
+     * @return {@link PersistentVolumeList}
+     */
     PersistentVolumeList read(Map<String, String> labelSelector);
 }
