@@ -27,7 +27,7 @@ public class NamespaceCreator implements NamespaceCreateApi {
     }
 
     @Override
-    public void namespace(NamespaceCreateRequest params) throws ApiException {
+    public void namespace(NamespaceCreateRequest namespaceCreateRequest) throws ApiException {
 
         List<V1Namespace> namespaceList = coreV1Api.listNamespace("true",
                 null,
@@ -44,8 +44,8 @@ public class NamespaceCreator implements NamespaceCreateApi {
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
 
-        String name = params.getMetadata().getName();
-        if (namespaces.contains(name)){
+        String name = namespaceCreateRequest.getMetadata().getName();
+        if (namespaces.contains(name)) {
             log.warn("Namespace '{}' already exists", name);
             return;
         }
@@ -53,8 +53,8 @@ public class NamespaceCreator implements NamespaceCreateApi {
         V1Namespace namespace = new V1Namespace();
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setName(name);
-        v1ObjectMeta.setLabels(params.getMetadata().getLabels());
-        v1ObjectMeta.setAnnotations(params.getMetadata().getAnnotations());
+        v1ObjectMeta.setLabels(namespaceCreateRequest.getMetadata().getLabels());
+        v1ObjectMeta.setAnnotations(namespaceCreateRequest.getMetadata().getAnnotations());
         namespace.setMetadata(v1ObjectMeta);
 
         namespace.setApiVersion("v1");

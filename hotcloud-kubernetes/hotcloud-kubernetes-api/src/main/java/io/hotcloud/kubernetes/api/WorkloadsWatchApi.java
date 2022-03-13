@@ -8,5 +8,10 @@ import io.fabric8.kubernetes.client.Watch;
 @FunctionalInterface
 public interface WorkloadsWatchApi {
 
+    /**
+     * Watch requested resource
+     *
+     * @return {@link Watch}
+     */
     Watch watch();
 }

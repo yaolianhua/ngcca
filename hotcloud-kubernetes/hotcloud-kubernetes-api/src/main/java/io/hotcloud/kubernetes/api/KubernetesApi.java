@@ -10,13 +10,32 @@ import io.kubernetes.client.openapi.apis.CoreV1Api;
  **/
 public interface KubernetesApi {
 
+    /**
+     * Create CoreV1Api
+     *
+     * @return {@link CoreV1Api}
+     */
     CoreV1Api coreV1Api();
 
+    /**
+     * Create AppsV1Api
+     *
+     * @return {@link AppsV1Api}
+     */
     AppsV1Api appsV1Api();
 
+    /**
+     * Create BatchV1Api
+     *
+     * @return {@link BatchV1Api}
+     */
     BatchV1Api batchV1Api();
 
-    //io.fabric8
+    /**
+     * Create KubernetesClient
+     *
+     * @return {@link KubernetesClient}
+     */
     KubernetesClient fabric8KubernetesClient();
 
 }
