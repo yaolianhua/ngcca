@@ -16,16 +16,44 @@ import java.util.Objects;
  **/
 public interface ConfigMapApi {
 
+    /**
+     * Create ConfigMap from {@code ConfigMapCreateRequest}
+     *
+     * @param request {@link ConfigMapCreateRequest}
+     * @return {@link ConfigMap}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     default ConfigMap configMap(ConfigMapCreateRequest request) throws ApiException {
         V1ConfigMap v1ConfigMap = ConfigMapBuilder.build(request);
         String json = Yaml.dump(v1ConfigMap);
         return this.configMap(json);
     }
 
+    /**
+     * Create ConfigMap from kubernetes yaml string
+     *
+     * @param yaml kubernetes yaml string
+     * @return {@link ConfigMap}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     ConfigMap configMap(String yaml) throws ApiException;
 
+    /**
+     * Delete namespaced ConfigMap
+     *
+     * @param namespace namespace
+     * @param configmap configmap name
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     void delete(String namespace, String configmap) throws ApiException;
 
+    /**
+     * Read namespaced ConfigMap
+     *
+     * @param namespace namespace
+     * @param configMap configmap name
+     * @return {@link ConfigMap}
+     */
     default ConfigMap read(String namespace, String configMap) {
         ConfigMapList configMapList = this.read(namespace);
         return configMapList.getItems()
@@ -35,13 +63,31 @@ public interface ConfigMapApi {
                 .orElse(null);
     }
 
+    /**
+     * Read ConfigMapList from all namespace
+     *
+     * @return {@link ConfigMapList}
+     */
     default ConfigMapList read() {
         return this.read(null);
     }
 
+    /**
+     * Read namespaced ConfigMapList
+     *
+     * @param namespace namespace
+     * @return {@link ConfigMapList}
+     */
     default ConfigMapList read(String namespace) {
         return this.read(namespace, Collections.emptyMap());
     }
 
+    /**
+     * Read namespaced ConfigMapList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link ConfigMapList}
+     */
     ConfigMapList read(String namespace, Map<String, String> labelSelector);
 }
