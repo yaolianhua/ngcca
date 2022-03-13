@@ -15,17 +15,44 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 public interface PersistentVolumeClaimApi {
-
+    /**
+     * Create PersistentVolumeClaim from {@code PersistentVolumeClaimCreateRequest}
+     *
+     * @param request {@link PersistentVolumeClaimCreateRequest}
+     * @return {@link PersistentVolumeClaim}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     default PersistentVolumeClaim persistentVolumeClaim(PersistentVolumeClaimCreateRequest request) throws ApiException {
         V1PersistentVolumeClaim v1PersistentVolumeClaim = PersistentVolumeClaimBuilder.build(request);
         String json = Yaml.dump(v1PersistentVolumeClaim);
         return this.persistentVolumeClaim(json);
     }
 
+    /**
+     * Create PersistentVolumeClaim from yaml
+     *
+     * @param yaml kubernetes yaml string
+     * @return {@link PersistentVolumeClaim}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     PersistentVolumeClaim persistentVolumeClaim(String yaml) throws ApiException;
 
+    /**
+     * Delete namespaced PersistentVolumeClaim
+     *
+     * @param namespace             namespace
+     * @param persistentVolumeClaim persistentVolumeClaim name
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     void delete(String persistentVolumeClaim, String namespace) throws ApiException;
 
+    /**
+     * Read namespaced PersistentVolumeClaim
+     *
+     * @param namespace namespace
+     * @param name      persistentVolumeClaim name
+     * @return {@link PersistentVolumeClaim}
+     */
     default PersistentVolumeClaim read(String namespace, String name) {
         PersistentVolumeClaimList persistentVolumeClaimList = this.read(namespace);
         return persistentVolumeClaimList.getItems()
@@ -35,13 +62,31 @@ public interface PersistentVolumeClaimApi {
                 .orElse(null);
     }
 
+    /**
+     * Read PersistentVolumeClaimList all namespace
+     *
+     * @return {@link PersistentVolumeClaimList}
+     */
     default PersistentVolumeClaimList read() {
         return this.read(null);
     }
 
+    /**
+     * Read namespaced PersistentVolumeClaimList
+     *
+     * @param namespace namespace
+     * @return {@link PersistentVolumeClaimList}
+     */
     default PersistentVolumeClaimList read(String namespace) {
         return this.read(namespace, Collections.emptyMap());
     }
 
+    /**
+     * Read namespaced PersistentVolumeClaimList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link PersistentVolumeClaimList}
+     */
     PersistentVolumeClaimList read(String namespace, Map<String, String> labelSelector);
 }
