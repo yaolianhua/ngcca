@@ -26,6 +26,7 @@ import java.util.Collections;
 @EnableConfigurationProperties(SecureWhitelistConfigurer.class)
 @Import({
         CorsFilterConfigurer.class,
+        JwtConfigurer.class,
         UserDetailsServiceConfigurer.class
 })
 @ConditionalOnProperty(name = "security.enabled", havingValue = "true", matchIfMissing = true)
