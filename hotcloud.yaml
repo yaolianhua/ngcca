@@ -41,10 +41,9 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: http
-      nodePort: 30000
   selector:
     k8s-app: hotcloud
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -56,7 +55,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: hotcloud.local
+    - host: api-hotcloud.yaolianhua.cn
       http:
         paths:
           - path: /
@@ -94,25 +93,11 @@ spec:
       containers:
         - image: yaolianhua/hotcloud
           imagePullPolicy: Always
-          #          livenessProbe:
-          #            failureThreshold: 1
-          #            httpGet:
-          #              path: /livez
-          #              port: http
-          #            periodSeconds: 120
-          #            initialDelaySeconds: 180
           name: hotcloud
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
-          #          readinessProbe:
-          #            failureThreshold: 1
-          #            httpGet:
-          #              path: /readyz
-          #              port: http
-          #            initialDelaySeconds: 120
-          #            periodSeconds: 60
           resources:
             requests:
               cpu: 200m
