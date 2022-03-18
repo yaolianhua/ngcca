@@ -52,8 +52,8 @@ metadata:
   namespace: hotcloud
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    ingressclass.kubernetes.io/is-default-class: "true"
 spec:
-  ingressClassName: nginx
   rules:
     - host: api-hotcloud.yaolianhua.cn
       http:
