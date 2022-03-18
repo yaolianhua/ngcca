@@ -38,6 +38,8 @@
         <java-websocket-version>1.5.2</java-websocket-version>
         <java-faker-version>1.0.2</java-faker-version>
         <jjwt.version>0.11.2</jjwt.version>
+        <jgit.version>6.1.0.202203080745-r</jgit.version>
+        <jsr305.version>3.0.2</jsr305.version>
     </properties>
 
     <dependencyManagement>
@@ -150,7 +152,21 @@
                 <artifactId>jjwt-impl</artifactId>
                 <version>${jjwt.version}</version>
             </dependency>
+
+            <!-- jgit -->
+            <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+                <version>${jgit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>
