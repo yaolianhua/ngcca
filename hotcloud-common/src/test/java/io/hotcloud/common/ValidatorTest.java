@@ -55,4 +55,11 @@ public class ValidatorTest {
         validIPv4Provider().forEach(e -> Assertions.assertTrue(Validator.validIpv4(e)));
     }
 
+    @Test
+    public void gitAddress() {
+        Assertions.assertTrue(Validator.validHTTPSGitAddress("https://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertFalse(Validator.validHTTPSGitAddress("http://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertFalse(Validator.validHTTPSGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
+    }
+
 }
