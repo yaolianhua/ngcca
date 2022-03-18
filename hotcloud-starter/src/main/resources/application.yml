@@ -20,4 +20,5 @@ spring:
 logging:
   level:
     io.hotcloud.kubernetes.server: debug
+    io.hotcloud.buildpack.server: debug
     io.hotcloud.message: info
