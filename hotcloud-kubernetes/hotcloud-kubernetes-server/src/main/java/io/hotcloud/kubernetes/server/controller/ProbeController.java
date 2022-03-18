@@ -1,14 +1,16 @@
 package io.hotcloud.kubernetes.server.controller;
 
 import io.hotcloud.common.Result;
-import io.hotcloud.kubernetes.server.WebResponse;
+import io.hotcloud.common.WebResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * @author yaolianhua789@gmail.com
+ **/
 @RestController
 @RequestMapping
 @Slf4j
