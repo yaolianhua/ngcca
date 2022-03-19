@@ -44,7 +44,6 @@ public class GitImpl implements GitApi {
 
         try (Git result = Git.cloneRepository()
                 .setURI(remote)
-                .setBranch(branch)
                 .setDirectory(Path.of(local).toFile())
                 .setProgressMonitor(new SimpleProgressMonitor())
                 .call()) {
