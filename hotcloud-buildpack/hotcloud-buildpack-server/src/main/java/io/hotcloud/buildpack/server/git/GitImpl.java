@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
@@ -26,6 +27,8 @@ public class GitImpl implements GitApi {
         Assert.state(Validator.validHTTPSGitAddress(remote), String.format("Invalid git url '%s', protocol supported only https", remote), 400);
 
         log.debug("Cloning from '{}' to '{}', branch [{}]", remote, local, branch);
+        final StopWatch watch = new StopWatch();
+        watch.start();
         if (StringUtils.hasText(branch)) {
             try (Git result = Git.cloneRepository()
                     .setURI(remote)
@@ -33,8 +36,10 @@ public class GitImpl implements GitApi {
                     .setDirectory(Path.of(local).toFile())
                     .setProgressMonitor(new SimpleProgressMonitor())
                     .call()) {
+
+                watch.stop();
                 // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
-                log.info("Cloned repository: '{}'", result.getRepository().getDirectory());
+                log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
                 return Boolean.TRUE;
             } catch (GitAPIException e) {
                 log.error("Clone repository error. {}", e.getMessage(), e);
@@ -47,6 +52,9 @@ public class GitImpl implements GitApi {
                 .setDirectory(Path.of(local).toFile())
                 .setProgressMonitor(new SimpleProgressMonitor())
                 .call()) {
+
+            watch.stop();
+            log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
             log.info("Cloned repository: '{}'", result.getRepository().getDirectory());
             return Boolean.TRUE;
