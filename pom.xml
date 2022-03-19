@@ -28,13 +28,11 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <springdoc.version>1.6.6</springdoc.version>
-        <kubernetes-client.version>14.0.0</kubernetes-client.version>
-        <fabric8.kubernetes-client.version>5.12.1</fabric8.kubernetes-client.version>
+        <kubernetes.client-version>14.0.0</kubernetes.client-version>
+        <fabric8.kubernetes.client-version>5.12.1</fabric8.kubernetes.client-version>
         <lombok.version>1.18.22</lombok.version>
-        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
-        <apache.commons.validator>1.7</apache.commons.validator>
-        <github-api.version>1.135</github-api.version>
-        <gitlab-api.version>4.18.0</gitlab-api.version>
+        <apache.commons.validator-version>1.7</apache.commons.validator-version>
+        <apache.commons.io-version>2.11.0</apache.commons.io-version>
         <java-websocket-version>1.5.2</java-websocket-version>
         <java-faker-version>1.0.2</java-faker-version>
         <jjwt.version>0.11.2</jjwt.version>
@@ -87,19 +85,19 @@
             <dependency>
                 <groupId>io.kubernetes</groupId>
                 <artifactId>client-java-api</artifactId>
-                <version>${kubernetes-client.version}</version>
+                <version>${kubernetes.client-version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.kubernetes</groupId>
                 <artifactId>client-java</artifactId>
-                <version>${kubernetes-client.version}</version>
+                <version>${kubernetes.client-version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.fabric8</groupId>
                 <artifactId>kubernetes-client</artifactId>
-                <version>${fabric8.kubernetes-client.version}</version>
+                <version>${fabric8.kubernetes.client-version}</version>
             </dependency>
 
             <!-- lombok -->
@@ -115,12 +113,18 @@
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
             </dependency>
+
+            <!-- apache commons -->
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
-                <version>${apache.commons.validator}</version>
+                <version>${apache.commons.validator-version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache.commons.io-version}</version>
+            </dependency>
 
             <!-- java websocket -->
             <dependency>
