@@ -5,6 +5,7 @@ import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.kubernetes.client.openapi.apis.StorageV1Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +24,11 @@ public class KubernetesApiConfiguration {
     @Bean
     public CoreV1Api coreV1Api() {
         return api.coreV1Api();
+    }
+
+    @Bean
+    public StorageV1Api storageV1Api() {
+        return api.storageV1Api();
     }
 
     @Bean

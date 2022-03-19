@@ -6,6 +6,7 @@ import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.kubernetes.client.openapi.apis.StorageV1Api;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -21,6 +22,17 @@ public abstract class AbstractKubernetesApi implements KubernetesApi {
 
         // the CoreV1Api loads default api-client from global configuration.
         return new CoreV1Api();
+    }
+
+    @Override
+    public StorageV1Api storageV1Api() {
+        ApiClient apiClient = this.obtainApiClient();
+
+        // set the global default api-client to the in-cluster one from above
+        Configuration.setDefaultApiClient(apiClient);
+
+        // the CoreV1Api loads default api-client from global configuration.
+        return new StorageV1Api();
     }
 
     @Override
