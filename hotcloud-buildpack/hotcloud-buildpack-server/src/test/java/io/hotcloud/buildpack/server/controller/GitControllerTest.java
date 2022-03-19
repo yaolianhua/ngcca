@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.git.GitApi;
+import io.hotcloud.buildpack.api.GitApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

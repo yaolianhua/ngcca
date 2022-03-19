@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.git;
 
-import io.hotcloud.buildpack.git.GitApi;
+import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import lombok.extern.slf4j.Slf4j;

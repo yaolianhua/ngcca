@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.git;
+package io.hotcloud.buildpack.api;
 
 import javax.annotation.Nullable;
 
