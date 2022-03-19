@@ -38,7 +38,7 @@ public interface PersistentVolumeApi {
     PersistentVolume persistentVolume(String yaml) throws ApiException;
 
     /**
-     * Delete namespaced PersistentVolume
+     * Delete named PersistentVolume
      *
      * @param persistentVolume persistentVolume name
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
@@ -46,7 +46,7 @@ public interface PersistentVolumeApi {
     void delete(String persistentVolume) throws ApiException;
 
     /**
-     * Read namespaced PersistentVolume
+     * Read named PersistentVolume
      *
      * @param name persistentVolume name
      * @return {@link PersistentVolume}
@@ -61,7 +61,7 @@ public interface PersistentVolumeApi {
     }
 
     /**
-     * Read namespaced PersistentVolumeList
+     * Read PersistentVolumeList
      *
      * @param labelSelector label selector
      * @return {@link PersistentVolumeList}

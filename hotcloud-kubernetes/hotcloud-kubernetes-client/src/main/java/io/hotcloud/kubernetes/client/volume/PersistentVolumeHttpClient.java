@@ -15,7 +15,7 @@ import java.util.Map;
 public interface PersistentVolumeHttpClient {
 
     /**
-     * Read namespaced PersistentVolume
+     * Read named PersistentVolume
      *
      * @param persistentVolume persistentVolume name
      * @return {@link PersistentVolume}
@@ -23,7 +23,7 @@ public interface PersistentVolumeHttpClient {
     Result<PersistentVolume> read(String persistentVolume);
 
     /**
-     * Read namespaced PersistentVolumeList
+     * Read PersistentVolumeList
      *
      * @param labelSelector label selector
      * @return {@link PersistentVolumeList}
@@ -49,7 +49,7 @@ public interface PersistentVolumeHttpClient {
     Result<PersistentVolume> create(YamlBody yaml) throws ApiException;
 
     /**
-     * Delete namespaced PersistentVolume
+     * Delete named PersistentVolume
      *
      * @param persistentVolume persistentVolume name
      * @return {@link Void}
