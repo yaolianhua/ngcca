@@ -23,10 +23,10 @@ public class GitImpl implements GitApi {
     @Override
     public Boolean clone(String remote, String branch, String local, @Nullable String username, @Nullable String password) {
 
-        Assert.state(!Validator.existedPath(local), String.format("Repository path '%s' is not empty", local), 409);
+        Assert.state(!Validator.existedPath(local), String.format("Repository path '%s' already exist", local), 409);
         Assert.state(Validator.validHTTPSGitAddress(remote), String.format("Invalid git url '%s', protocol supported only https", remote), 400);
 
-        log.debug("Cloning from '{}' to '{}', branch [{}]", remote, local, branch);
+        log.info("Cloning from '{}' to '{}', branch [{}]", remote, local, branch);
         final StopWatch watch = new StopWatch();
         watch.start();
         if (StringUtils.hasText(branch)) {
@@ -54,9 +54,8 @@ public class GitImpl implements GitApi {
                 .call()) {
 
             watch.stop();
-            log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
-            log.info("Cloned repository: '{}'", result.getRepository().getDirectory());
+            log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             return Boolean.TRUE;
         } catch (GitAPIException e) {
             log.error("Clone repository error. {}", e.getMessage(), e);
