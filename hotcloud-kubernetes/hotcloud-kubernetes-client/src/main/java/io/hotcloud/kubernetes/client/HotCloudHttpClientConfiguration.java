@@ -6,6 +6,7 @@ import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClient;
 import io.hotcloud.kubernetes.client.volume.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.volume.StorageClassHttpClient;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.context.annotation.Bean;
 
@@ -67,6 +68,11 @@ public class HotCloudHttpClientConfiguration {
     @Bean
     public PersistentVolumeHttpClient persistentVolumeHttpClient(HotCloudHttpClientFactory factory) {
         return factory.getClient(PersistentVolumeHttpClient.class);
+    }
+
+    @Bean
+    public StorageClassHttpClient storageClassHttpClient(HotCloudHttpClientFactory factory) {
+        return factory.getClient(StorageClassHttpClient.class);
     }
 
     @Bean

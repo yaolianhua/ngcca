@@ -9,10 +9,7 @@ import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClientImpl;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClient;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClientImpl;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeHttpClient;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeHttpClientImpl;
+import io.hotcloud.kubernetes.client.volume.*;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,6 +64,9 @@ public class HotCloudHttpClientFactory {
         }
         if (Objects.equals(client, PersistentVolumeHttpClient.class)) {
             return (T) new PersistentVolumeHttpClientImpl(properties, restTemplate);
+        }
+        if (Objects.equals(client, StorageClassHttpClient.class)) {
+            return (T) new StorageClassHttpClientImpl(properties, restTemplate);
         }
         if (Objects.equals(client, KubectlHttpClient.class)) {
             return (T) new KubectlHttpClientImpl(properties, restTemplate);
