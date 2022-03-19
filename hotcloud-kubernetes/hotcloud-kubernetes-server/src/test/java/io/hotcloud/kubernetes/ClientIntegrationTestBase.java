@@ -15,6 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         classes = HotCloudKubernetesApplicationTest.class
 )
-@ActiveProfiles("integration-test-local")
+@ActiveProfiles("kubernetes-integration-test-local")
 public class ClientIntegrationTestBase {
 }
