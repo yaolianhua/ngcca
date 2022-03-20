@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    k8s-app: hotcloud-buildpack
+  name: hotcloud-buildpack-job
+  namespace: buildpack
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 3
+  activeDeadlineSeconds: 1800
+  template:
+    spec:
+      containers:
+        - name: hotcloud-buildpack
+          image: gcr.io/kaniko-project/executor:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --dockerfile=/workspace/Dockerfile
+            #            - --insecure-registry=docker-registry-idc01-sz.cloudtogo.cn
+            - --context=dir://workspace
+            - --destination=yaolianhua/devops-thymeleaf:0.2
+            - --tarPath=/workspace/devops.tar
+          volumeMounts:
+            - name: docker-registry-secret-volume
+              mountPath: /kaniko/.docker
+            - name: kaniko-pv
+              mountPath: /workspace
+      restartPolicy: Never
+      volumes:
+        - name: docker-registry-secret-volume
+          secret:
+            secretName: docker-registry-secret
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+        - name: kaniko-pv
+          persistentVolumeClaim:
+            claimName: kaniko-pvc
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage-kaniko
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kaniko-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage-kaniko
+  hostPath:
+    path: /kaniko
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: kaniko-pvc
+  namespace: buildpack
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage-kaniko
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: hotcloud-buildpack
+  name: docker-registry-secret
+  namespace: buildpack
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: "=="

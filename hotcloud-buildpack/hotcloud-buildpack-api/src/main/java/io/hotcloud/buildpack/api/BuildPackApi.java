@@ -3,5 +3,7 @@ package io.hotcloud.buildpack.api;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface BuildPackService {
+public interface BuildPackApi {
+
+
 }
