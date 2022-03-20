@@ -16,6 +16,8 @@ spring:
     username: ${message.rabbitmq.username:}
     password: ${message.rabbitmq.password:}
     virtual-host: /
+server:
+  max-http-header-size: 40KB
 ## log level
 logging:
   level:
