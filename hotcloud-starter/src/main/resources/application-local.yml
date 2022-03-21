@@ -8,6 +8,13 @@ message:
     username: root
     password: password
     port: 5672
+cache:
+  type: redis
+  redis:
+    host: localhost
+    port: 6379
+    password: QbMufCD@9WVQ^Hv
+    database: 16
 logging:
   level:
     io.hotcloud.kubernetes.server: debug
