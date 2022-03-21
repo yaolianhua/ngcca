@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @ConditionalOnProperty(
-        name = MessageProperties.TYPE_NAME,
+        name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
 @Slf4j

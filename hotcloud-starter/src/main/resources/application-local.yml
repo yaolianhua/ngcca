@@ -2,12 +2,19 @@ kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host: localhost
-    username: root
-    password: password
+    username: admin
+    password: QbMufCD@9WVQ^Hv
     port: 5672
+cache:
+  type: redis
+  redis:
+    host: localhost
+    port: 6379
+    password: QbMufCD@9WVQ^Hv
+    database: 16
 logging:
   level:
     io.hotcloud.kubernetes.server: debug

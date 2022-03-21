@@ -147,6 +147,13 @@ data:
         username:
         password:
         port:
+    cache:
+      type: local
+      redis:
+        host:
+        port:
+        password:
+        database:
     buildpack:
       kaniko:
         cache: false

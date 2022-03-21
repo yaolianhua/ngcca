@@ -2,8 +2,8 @@ message:
   type: rabbitmq
   rabbitmq:
     host: localhost
-    username: root
-    password: password
+    username: admin
+    password: QbMufCD@9WVQ^Hv
     port: 5672
 logging:
   level:

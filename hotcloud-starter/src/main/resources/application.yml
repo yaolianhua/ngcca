@@ -6,6 +6,7 @@ spring:
       - kubernetes
       - buildpack
       - message
+      - cache
       - security
   mvc:
     pathmatch:
@@ -16,6 +17,11 @@ spring:
     username: ${message.rabbitmq.username:}
     password: ${message.rabbitmq.password:}
     virtual-host: /
+  redis:
+    database: ${cache.redis.database:0}
+    password: ${cache.redis.password:}
+    host: ${cache.redis.host:}
+    port: ${cache.redis.port:}
 server:
   max-http-header-size: 40KB
 ## log level

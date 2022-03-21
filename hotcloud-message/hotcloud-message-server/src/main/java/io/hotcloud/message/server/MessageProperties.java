@@ -15,10 +15,9 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class MessageProperties {
 
-    public static final String TYPE_NAME = "message.type";
-    public static final String RABBITMQ = "rabbitmq";
+    public static final String PROPERTIES_TYPE_NAME = "message.type";
     public static final String WEBSOCKET = "websocket";
-
+    public static final String RABBITMQ = "rabbitmq";
     /**
      * message service implementation type. default {@code websocket}, optional type:
      * <ul>
@@ -26,17 +25,22 @@ public class MessageProperties {
      * <li> rabbitmq
      * </ul>
      */
-    private String type = WEBSOCKET;
+    private Type type = Type.websocket;
 
     @PostConstruct
     public void print() {
 
-        if (WEBSOCKET.equals(type)) {
+        if (Type.websocket.equals(type)) {
             log.info("【Load Message Service Configuration. implementation using WebSocket】");
-        } else if (RABBITMQ.equals(type)) {
+        } else if (Type.rabbitmq.equals(type)) {
             log.info("【Load Message Service Configuration. implementation using RabbitMQ】");
         }
 
+    }
+
+    public enum Type {
+        //
+        websocket, rabbitmq
     }
 
 }

@@ -2,11 +2,13 @@ package io.hotcloud.kubernetes.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Data
-public class WatchMessageBody {
+public class WatchMessageBody implements Serializable {
 
     private String namespace;
     private String kind;
