@@ -27,7 +27,10 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
     @Override
     protected synchronized Object lookup(String key) {
         Assert.hasText(key, "Key is null", 400);
-        return cache.getIfPresent(key);
+        if (cache.getIfPresent(key) == null) {
+            return null;
+        }
+        return fromStoreValue(cache.getIfPresent(key));
     }
 
     @Override
