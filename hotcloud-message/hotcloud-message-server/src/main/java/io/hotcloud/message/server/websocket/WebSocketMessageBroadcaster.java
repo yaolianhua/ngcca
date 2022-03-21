@@ -17,7 +17,7 @@ import java.util.Set;
  **/
 @Component
 @ConditionalOnProperty(
-        name = MessageProperties.TYPE_NAME,
+        name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.WEBSOCKET,
         matchIfMissing = true
 )
