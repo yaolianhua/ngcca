@@ -2,6 +2,7 @@ package io.hotcloud.common.cache;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -24,6 +25,7 @@ public class RedisCacheTest {
         cacheData.setCacheObjectTests(List.of(new CacheObjectTest("Inner name", "Inner value")));
     }
 
+    @Disabled
     @Test
     public void cache() {
 
