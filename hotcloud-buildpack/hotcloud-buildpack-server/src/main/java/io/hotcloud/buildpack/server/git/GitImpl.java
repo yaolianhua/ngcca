@@ -35,6 +35,7 @@ public class GitImpl implements GitApi {
                     .setBranch(branch)
                     .setDirectory(Path.of(local).toFile())
                     .setProgressMonitor(new SimpleProgressMonitor())
+                    .setTimeout(5)
                     .call()) {
 
                 watch.stop();
@@ -51,6 +52,7 @@ public class GitImpl implements GitApi {
                 .setURI(remote)
                 .setDirectory(Path.of(local).toFile())
                 .setProgressMonitor(new SimpleProgressMonitor())
+                .setTimeout(5)
                 .call()) {
 
             watch.stop();
