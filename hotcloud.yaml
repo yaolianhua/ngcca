@@ -151,9 +151,9 @@ data:
       type: local
       redis:
         host:
-        port:
+        port: 6379
         password:
-        database:
+        database: 0
     buildpack:
       kaniko:
         cache: false
