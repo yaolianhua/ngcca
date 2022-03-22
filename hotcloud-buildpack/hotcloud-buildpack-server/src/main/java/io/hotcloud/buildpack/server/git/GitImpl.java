@@ -43,7 +43,7 @@ public class GitImpl implements GitApi {
                 log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
                 return Boolean.TRUE;
             } catch (GitAPIException e) {
-                log.error("Clone repository error. {}", e.getMessage(), e);
+                log.error("Clone repository error. {}", e.getMessage());
                 return Boolean.FALSE;
             }
         }
@@ -60,7 +60,7 @@ public class GitImpl implements GitApi {
             log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             return Boolean.TRUE;
         } catch (GitAPIException e) {
-            log.error("Clone repository error. {}", e.getMessage(), e);
+            log.error("Clone repository error. {}", e.getMessage());
         }
 
         return Boolean.FALSE;
