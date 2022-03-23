@@ -1,6 +1,7 @@
 package io.hotcloud.security.admin.user;
 
 import com.github.javafaker.Faker;
+import io.hotcloud.common.Assert;
 import io.hotcloud.security.api.FakeUserApi;
 import io.hotcloud.security.user.FakeUser;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +41,12 @@ public class FakeUserService implements FakeUserApi {
 
     @Override
     public FakeUser retrieve(String username) {
-        return FAKE_USER_LIST.stream()
+        FakeUser fakeUser = FAKE_USER_LIST.stream()
                 .filter(e -> Objects.equals(username, e.getUsername()))
                 .map(e -> ((FakeUser) e))
                 .findFirst().orElse(null);
+        Assert.notNull(fakeUser, "Retrieve user null [" + username + "]", 404);
+        return fakeUser;
     }
 
     @Override

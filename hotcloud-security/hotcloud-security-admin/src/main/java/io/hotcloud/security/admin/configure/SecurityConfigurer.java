@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
+import java.util.UUID;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -77,11 +78,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        String plainPassword = UUID.randomUUID().toString();
         //for test only
         auth.inMemoryAuthentication().passwordEncoder(passwordEncoder)
                 .withUser("admin")
-                .password(passwordEncoder.encode("fake"))
+                .password(passwordEncoder.encode(plainPassword))
                 .authorities(Collections.emptyList());
+        log.info("*****************************************************************************");
+        log.info("Generated random access password: user='admin', password='{}'", plainPassword);
+        log.info("*****************************************************************************");
         //
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
