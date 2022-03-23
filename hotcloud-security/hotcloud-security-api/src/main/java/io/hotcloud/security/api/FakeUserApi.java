@@ -10,7 +10,9 @@ import java.util.Collection;
  **/
 public interface FakeUserApi extends UserApi {
 
+    @Override
     FakeUser retrieve(String username);
 
+    @Override
     Collection<UserDetails> users();
 }

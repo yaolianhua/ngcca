@@ -9,6 +9,12 @@ import java.util.Collection;
  **/
 public interface UserApi {
 
+    /**
+     * Retrieve user by {@code username}
+     *
+     * @param username username
+     * @return {@link  UserDetails}
+     */
     UserDetails retrieve(String username);
 
     Collection<UserDetails> users();
