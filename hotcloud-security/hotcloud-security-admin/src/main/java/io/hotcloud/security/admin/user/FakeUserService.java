@@ -24,6 +24,8 @@ public class FakeUserService implements FakeUserApi {
     private final static Collection<UserDetails> FAKE_USER_LIST = new ArrayList<>();
 
     static {
+        FAKE_USER_LIST.add(FakeUser.of("client-user", "client-user",
+                PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea")));
         for (int i = 0; i < 10; i++) {
             String username = FAKER.name().username();
             FakeUser fakeUser = FakeUser.of(username, FAKER.name().fullName(), PASSWORD);
