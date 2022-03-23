@@ -1,6 +1,6 @@
 package io.hotcloud.security.admin.configure;
 
-import io.hotcloud.security.api.FakeUserApi;
+import io.hotcloud.security.api.UserApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,15 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  **/
 public class UserDetailsServiceConfigurer {
 
-    private final FakeUserApi fakeUserApi;
+    private final UserApi userApi;
 
-    public UserDetailsServiceConfigurer(FakeUserApi fakeUserApi) {
-        this.fakeUserApi = fakeUserApi;
+    public UserDetailsServiceConfigurer(UserApi userApi) {
+        this.userApi = userApi;
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return fakeUserApi::retrieve;
+        return userApi::retrieve;
     }
 
     @Bean

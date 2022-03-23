@@ -3,13 +3,12 @@ package io.hotcloud.security.admin.user;
 import com.github.javafaker.Faker;
 import io.hotcloud.security.api.FakeUserApi;
 import io.hotcloud.security.user.FakeUser;
-import io.hotcloud.security.user.FakeUserList;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,16 +19,15 @@ import java.util.stream.Collectors;
 public class FakeUserService implements FakeUserApi {
 
     private static final Faker FAKER = new Faker();
-    private static final String PASSWORD = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("fake");
-    private final static FakeUserList FAKE_USER_LIST = new FakeUserList();
+    private static final String PASSWORD = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(UUID.randomUUID().toString());
+    private final static Collection<UserDetails> FAKE_USER_LIST = new ArrayList<>();
 
     static {
-        FAKE_USER_LIST.add(FakeUser.of("fake", "fake", PASSWORD));
         for (int i = 0; i < 10; i++) {
             String username = FAKER.name().username();
             FakeUser fakeUser = FakeUser.of(username, FAKER.name().fullName(), PASSWORD);
-            List<String> usernames = FAKE_USER_LIST.getItems().stream()
-                    .map(FakeUser::getUsername)
+            List<String> usernames = FAKE_USER_LIST.stream()
+                    .map(UserDetails::getUsername)
                     .collect(Collectors.toList());
 
             if (usernames.contains(username)) {
@@ -42,11 +40,14 @@ public class FakeUserService implements FakeUserApi {
 
     @Override
     public FakeUser retrieve(String username) {
-        return FAKE_USER_LIST.getItems().stream().filter(e -> Objects.equals(username, e.getUsername())).findFirst().orElse(null);
+        return FAKE_USER_LIST.stream()
+                .filter(e -> Objects.equals(username, e.getUsername()))
+                .map(e -> ((FakeUser) e))
+                .findFirst().orElse(null);
     }
 
     @Override
-    public FakeUserList users() {
-        return FAKE_USER_LIST;
+    public Collection<UserDetails> users() {
+        return FAKE_USER_LIST.stream().map(e -> ((FakeUser) e)).collect(Collectors.toList());
     }
 }
