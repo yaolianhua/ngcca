@@ -5,6 +5,8 @@ import io.hotcloud.common.Assert;
 import io.hotcloud.security.api.FakeUserApi;
 import io.hotcloud.security.user.FakeUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,16 @@ public class FakeUserService implements FakeUserApi {
                 .findFirst().orElse(null);
         Assert.notNull(fakeUser, "Retrieve user null [" + username + "]", 404);
         return fakeUser;
+    }
+
+    @Override
+    public FakeUser current() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Assert.notNull(authentication, "Authentication is null", 401);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Assert.notNull(userDetails, "UserDetails is null", 401);
+
+        return retrieve(userDetails.getUsername());
     }
 
     @Override

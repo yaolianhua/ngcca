@@ -4,11 +4,14 @@ import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.user.FakeUser;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,6 +36,13 @@ public class UserApiIT {
     @Autowired
     private UserApi userApi;
 
+    @Before
+    public void authenticated() {
+        UserDetails userDetails = userApi.retrieve("client-user");
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
     @Test
     public void userApi() {
 
@@ -46,5 +56,9 @@ public class UserApiIT {
             log.info("{}", fakeUser);
             Assertions.assertNotNull(userApi.retrieve(fakeUser.getUsername()));
         }
+
+        FakeUser current = (FakeUser) userApi.current();
+        Assertions.assertNotNull(current);
+        Assertions.assertEquals("client-user", current.getUsername());
     }
 }

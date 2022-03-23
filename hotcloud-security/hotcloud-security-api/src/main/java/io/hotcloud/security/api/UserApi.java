@@ -17,5 +17,12 @@ public interface UserApi {
      */
     UserDetails retrieve(String username);
 
+    /**
+     * Retrieve current user
+     *
+     * @return {@link  UserDetails}
+     */
+    UserDetails current();
+
     Collection<UserDetails> users();
 }
