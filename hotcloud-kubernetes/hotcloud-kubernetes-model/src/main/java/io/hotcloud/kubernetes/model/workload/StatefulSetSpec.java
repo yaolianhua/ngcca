@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.model.workload;
 
 import io.hotcloud.kubernetes.model.LabelSelector;
-import io.hotcloud.kubernetes.model.volume.PersistentVolumeClaimCreateRequest;
+import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import lombok.Data;
 
 import javax.validation.Valid;

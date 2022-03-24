@@ -6,13 +6,13 @@ import io.hotcloud.kubernetes.api.affinity.NodeAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAntiAffinityBuilder;
 import io.hotcloud.kubernetes.api.pod.container.ContainerBuilder;
-import io.hotcloud.kubernetes.api.volume.VolumeBuilder;
+import io.hotcloud.kubernetes.api.storage.VolumeBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.affinity.Affinity;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.hotcloud.kubernetes.model.pod.PodSecurityContext;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
-import io.hotcloud.kubernetes.model.volume.Volume;
+import io.hotcloud.kubernetes.model.storage.Volume;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
 

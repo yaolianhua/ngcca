@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.model.pod;
 
 import io.hotcloud.kubernetes.model.affinity.Affinity;
 import io.hotcloud.kubernetes.model.pod.container.Container;
-import io.hotcloud.kubernetes.model.volume.Volume;
+import io.hotcloud.kubernetes.model.storage.Volume;
 import lombok.Data;
 
 import javax.validation.Valid;
