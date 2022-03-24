@@ -1,7 +1,6 @@
-package io.hotcloud.buildpack.server;
+package io.hotcloud.buildpack.api;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.buildpack.api.GitApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
