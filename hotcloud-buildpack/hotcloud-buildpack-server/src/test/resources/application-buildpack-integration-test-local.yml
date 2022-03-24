@@ -1,3 +1,4 @@
 logging:
   level:
     io.hotcloud.buildpack.server: debug
+    io.hotcloud.buildpack.api: debug

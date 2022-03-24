@@ -17,6 +17,11 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-buildpack-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-kubernetes-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- git -->
         <dependency>
             <groupId>org.eclipse.jgit</groupId>

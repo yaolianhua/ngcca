@@ -195,8 +195,21 @@ data:
         target:
         use-new-run: true
         verbosity: debug
+      storage:
+        storage-class:
+          name: storage-class-buildpack
+        type: hostpath
+        host-path:
+          path: /kaniko
+        size-gb: 1
     security:
       enabled: true
+      ignored:
+        urls:
+          - /swagger**/**
+          - /v3/api-docs/**
+          - /favicon.ico
+          - /pub
 kind: ConfigMap
 metadata:
   name: hotcloud-config

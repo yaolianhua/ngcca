@@ -24,3 +24,12 @@ security:
   jwt:
     algorithm: HS512
     sign-key: QWERTYUIOPASDFGHJKLZXCVBNMmnbvcxzlkjhgfdsapoiuytrewq
+buildpack:
+  storage:
+    storage-class:
+      name: storage-class-buildpack
+    type: nfs
+    nfs:
+      server: 119.91.214.25
+      path: /nfs-share
+    size-gb: 1

@@ -16,4 +16,18 @@ public class Resources {
     @NotEmpty(message = "resources[storage]: Required value")
     private Map<String, String> requests = new HashMap<>();
 
+    public static Resources ofRequest(Map<String, String> requests) {
+        Resources resources = new Resources();
+
+        resources.setRequests(requests);
+        return resources;
+    }
+
+    public static Resources ofLimit(Map<String, String> limits) {
+        Resources resources = new Resources();
+
+        resources.setRequests(limits);
+        return resources;
+    }
+
 }
