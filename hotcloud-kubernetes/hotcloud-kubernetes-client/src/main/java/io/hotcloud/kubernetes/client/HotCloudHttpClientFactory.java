@@ -9,7 +9,7 @@ import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClientImpl;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
-import io.hotcloud.kubernetes.client.volume.*;
+import io.hotcloud.kubernetes.client.storage.*;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.web.client.RestTemplate;
 

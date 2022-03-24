@@ -4,7 +4,7 @@ import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
-import io.hotcloud.kubernetes.api.volume.PersistentVolumeClaimBuilder;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;

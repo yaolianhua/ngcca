@@ -35,6 +35,7 @@ public class GitImpl implements GitApi {
                     .setBranch(branch)
                     .setDirectory(Path.of(local).toFile())
                     .setProgressMonitor(new SimpleProgressMonitor())
+                    .setTimeout(5)
                     .call()) {
 
                 watch.stop();
@@ -42,7 +43,7 @@ public class GitImpl implements GitApi {
                 log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
                 return Boolean.TRUE;
             } catch (GitAPIException e) {
-                log.error("Clone repository error. {}", e.getMessage(), e);
+                log.error("Clone repository error. {}", e.getMessage());
                 return Boolean.FALSE;
             }
         }
@@ -51,6 +52,7 @@ public class GitImpl implements GitApi {
                 .setURI(remote)
                 .setDirectory(Path.of(local).toFile())
                 .setProgressMonitor(new SimpleProgressMonitor())
+                .setTimeout(5)
                 .call()) {
 
             watch.stop();
@@ -58,7 +60,7 @@ public class GitImpl implements GitApi {
             log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             return Boolean.TRUE;
         } catch (GitAPIException e) {
-            log.error("Clone repository error. {}", e.getMessage(), e);
+            log.error("Clone repository error. {}", e.getMessage());
         }
 
         return Boolean.FALSE;

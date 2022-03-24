@@ -4,9 +4,9 @@ import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeClaimHttpClient;
-import io.hotcloud.kubernetes.client.volume.PersistentVolumeHttpClient;
-import io.hotcloud.kubernetes.client.volume.StorageClassHttpClient;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.storage.StorageClassHttpClient;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.context.annotation.Bean;
 

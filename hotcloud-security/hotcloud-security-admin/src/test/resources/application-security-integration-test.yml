@@ -1,0 +1,11 @@
+logging:
+  level:
+    io.hotcloud.security: debug
+security:
+  enabled: true
+  ignored:
+    urls:
+      - /swagger**/**
+      - /v3/api-docs/**
+      - /favicon.ico
+      - /pub
