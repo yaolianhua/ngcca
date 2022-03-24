@@ -39,3 +39,10 @@ buildpack:
     target:
     use-new-run: true
     verbosity: debug
+  storage:
+    storage-class:
+      name: storage-class-buildpack
+    type: hostpath
+    host-path:
+      path: /kaniko
+    size-gb: 1
