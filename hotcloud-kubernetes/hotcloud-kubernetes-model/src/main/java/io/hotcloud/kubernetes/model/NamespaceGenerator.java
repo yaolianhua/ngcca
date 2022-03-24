@@ -1,5 +1,7 @@
 package io.hotcloud.kubernetes.model;
 
+import io.hotcloud.common.Assert;
+
 import java.util.UUID;
 
 /**
@@ -16,12 +18,22 @@ public final class NamespaceGenerator {
         return DEFAULT_NAMESPACE;
     }
 
-    public static String uuidNamespace() {
+    public static String uuidDashNamespace() {
         return UUID.randomUUID().toString();
     }
 
-    public static String randomNumber32Bit() {
-        return uuidNamespace().replaceAll("-", "");
+    public static String uuidDashNamespace(String prefix) {
+        Assert.hasText(prefix, "prefix is null", 400);
+        return String.format("%s-%s", prefix, uuidDashNamespace());
+    }
+
+    public static String uuidNoDashNamespace() {
+        return uuidDashNamespace().replaceAll("-", "");
+    }
+
+    public static String uuidNoDashNamespace(String prefix) {
+        Assert.hasText(prefix, "prefix is null", 400);
+        return String.format("%s-%s", prefix, uuidNoDashNamespace());
     }
 
 }

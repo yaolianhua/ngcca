@@ -42,7 +42,7 @@ public final class VolumeBuilder {
         }
 
         if (!StringUtils.hasText(volume.getName())) {
-            volume.setName(String.format("%s-volume", NamespaceGenerator.randomNumber32Bit()));
+            volume.setName(String.format("volume-%s", NamespaceGenerator.uuidNoDashNamespace()));
         }
         v1Volume.setName(volume.getName());
         return v1Volume;
