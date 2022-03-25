@@ -3,12 +3,12 @@ kubernetes:
   enable-workloads-watcher: true
 logging:
   level:
-    io.hotcloud.server: debug
+    io.hotcloud.kubernetes.server: debug
 hotcloud:
   server:
     host: localhost
     port: 8080
-    basic-username: admin
-    basic-password: fake
+    basic-username: client-user
+    basic-password: e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea
 message:
   type: websocket

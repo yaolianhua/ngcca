@@ -2,6 +2,7 @@ package io.hotcloud.security.admin.user;
 
 import com.github.javafaker.Faker;
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.cache.Cache;
 import io.hotcloud.security.api.FakeUserApi;
 import io.hotcloud.security.user.FakeUser;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -20,10 +23,23 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FakeUserService implements FakeUserApi {
+    private static final String PASSWORD = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea");
+    private final Cache cache;
 
     private static final Faker FAKER = new Faker();
-    private static final String PASSWORD = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(UUID.randomUUID().toString());
+
+    public FakeUserService(Cache cache) {
+        this.cache = cache;
+
+        List<FakeUser> fakeUsers = FAKE_USER_LIST.stream().map(e -> ((FakeUser) e)).collect(Collectors.toList());
+        cache.putIfAbsent(CACHE_USERS_KEY_PREFIX, fakeUsers);
+
+        Collection<UserDetails> users = cache.get(CACHE_USERS_KEY_PREFIX, () -> FAKE_USER_LIST);
+        users.forEach(e -> cache.putIfAbsent(String.format(CACHE_USER_KEY_PREFIX, e.getUsername()), e));
+    }
+
     private final static Collection<UserDetails> FAKE_USER_LIST = new ArrayList<>();
+
 
     static {
         FAKE_USER_LIST.add(FakeUser.of("client-user", "client-user",
@@ -45,10 +61,7 @@ public class FakeUserService implements FakeUserApi {
 
     @Override
     public FakeUser retrieve(String username) {
-        FakeUser fakeUser = FAKE_USER_LIST.stream()
-                .filter(e -> Objects.equals(username, e.getUsername()))
-                .map(e -> ((FakeUser) e))
-                .findFirst().orElse(null);
+        FakeUser fakeUser = cache.get(String.format(CACHE_USER_KEY_PREFIX, username), FakeUser.class);
         Assert.notNull(fakeUser, "Retrieve user null [" + username + "]", 404);
         return fakeUser;
     }
@@ -63,8 +76,9 @@ public class FakeUserService implements FakeUserApi {
         return retrieve(userDetails.getUsername());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Collection<UserDetails> users() {
-        return FAKE_USER_LIST.stream().map(e -> ((FakeUser) e)).collect(Collectors.toList());
+        return cache.get(CACHE_USERS_KEY_PREFIX, List.class);
     }
 }

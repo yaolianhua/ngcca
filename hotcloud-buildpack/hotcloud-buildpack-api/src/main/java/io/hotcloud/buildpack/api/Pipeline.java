@@ -5,14 +5,15 @@ package io.hotcloud.buildpack.api;
  * @param <I> the type of the input for the first stage handler
  * @param <O> the final stage handler's output type
  * @author yaolianhua789@gmail.com
- *
- * <p> Main Pipeline class that initially sets the current handler. Processed output of the initial
- * handler is then passed as the input to the next stage handlers.
  */
 public class Pipeline<I, O> {
 
     private final Handler<I, O> currentHandler;
 
+    /**
+     * Main Pipeline class that initially sets the current handler. Processed output of the initial
+     * handler is then passed as the input to the next stage handlers
+     */
     public Pipeline(Handler<I, O> currentHandler) {
         this.currentHandler = currentHandler;
     }

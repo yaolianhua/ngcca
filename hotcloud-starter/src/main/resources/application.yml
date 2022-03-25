@@ -23,6 +23,11 @@ spring:
     host: ${cache.redis.host:}
     port: ${cache.redis.port:}
     client-type: jedis
+    jedis:
+      pool:
+        max-active: 50
+        max-idle: 50
+        min-idle: 50
 server:
   max-http-header-size: 40KB
 ## log level

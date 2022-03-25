@@ -8,7 +8,8 @@ public interface BuildPackApi {
 
 //    String resourceList(KanikoFlag kaniko);
 
-    StorageResourceList storageResourceList();
+
+    StorageResourceList storageResourceList(String namespace);
 
 
 }

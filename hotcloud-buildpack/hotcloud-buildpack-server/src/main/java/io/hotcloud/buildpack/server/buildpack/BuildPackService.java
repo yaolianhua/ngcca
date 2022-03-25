@@ -3,10 +3,13 @@ package io.hotcloud.buildpack.server.buildpack;
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.StorageResourceList;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
-import io.hotcloud.kubernetes.model.NamespaceGenerator;
+import io.hotcloud.kubernetes.api.NamespaceCreateApi;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.storage.*;
+import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,16 +25,23 @@ import java.util.Map;
 public class BuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
+    private final NamespaceCreateApi namespaceCreateApi;
 
-    public BuildPackService(BuildPackStorageProperties storageProperties) {
+    public BuildPackService(BuildPackStorageProperties storageProperties,
+                            NamespaceCreateApi namespaceCreateApi) {
         this.storageProperties = storageProperties;
+        this.namespaceCreateApi = namespaceCreateApi;
     }
 
     @Override
-    public StorageResourceList storageResourceList() {
+    public StorageResourceList storageResourceList(String namespace) {
 
         //namespace
-        String namespace = NamespaceGenerator.uuidNoDashNamespace("buildpack");
+        try {
+            namespaceCreateApi.namespace(namespace);
+        } catch (ApiException e) {
+            //
+        }
         String pvName = "pv-" + namespace;
         String pvcName = "pvc-" + namespace;
         String storageClass = storageProperties.getStorageClass().getName();
@@ -52,6 +62,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         persistentVolumeSpec.setAccessModes(accessModes);
         persistentVolumeSpec.setStorageClassName(storageClass);
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
+        persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Delete);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
             HostPathVolume hostPathVolume = HostPathVolume.of(storageProperties.getHostPath().getPath(), null);
             persistentVolumeSpec.setHostPath(hostPathVolume);
@@ -85,8 +96,8 @@ public class BuildPackService extends AbstractBuildPackApi {
         persistentVolumeClaimCreateRequest.setSpec(persistentVolumeClaimSpec);
 
         //yaml
-        String pvYaml = Yaml.dump(persistentVolumeCreateRequest);
-        String pvcYaml = Yaml.dump(persistentVolumeClaimCreateRequest);
+        String pvYaml = Yaml.dump(PersistentVolumeBuilder.build(persistentVolumeCreateRequest));
+        String pvcYaml = Yaml.dump(PersistentVolumeClaimBuilder.build(persistentVolumeClaimCreateRequest));
 
         StringBuilder stringBuilder;
         stringBuilder = new StringBuilder();

@@ -1,6 +1,13 @@
 logging:
   level:
     io.hotcloud.security: debug
+cache:
+  type: redis
+  redis:
+    database: 15
+    host: localhost
+    password: QbMufCD@9WVQ^Hv
+    port: 6379
 security:
   enabled: true
   ignored:
