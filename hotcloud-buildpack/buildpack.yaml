@@ -17,9 +17,9 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - --dockerfile=/workspace/Dockerfile
-            #            - --insecure-registry=docker-registry-idc01-sz.cloudtogo.cn
+            - --insecure-registry=docker-registry-idc01-sz.cloudtogo.cn
             - --context=dir://workspace
-            - --destination=yaolianhua/devops-thymeleaf:0.2
+            - --destination=docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3
             - --tarPath=/workspace/devops.tar
           volumeMounts:
             - name: docker-registry-secret-volume
@@ -82,4 +82,4 @@ metadata:
   namespace: buildpack
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: "=="
+  .dockerconfigjson: "eyJhdXRocyI6eyJoYXJib3IuY2xvdWQyZ28uY24iOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiSGFyYm9yMTIzNDUiLCJhdXRoIjoiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9In19fQ=="
