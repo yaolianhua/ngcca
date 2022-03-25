@@ -1,5 +1,16 @@
 spring:
   application:
     name: hotcloud
+  redis:
+    database: ${cache.redis.database:}
+    password: ${cache.redis.password:}
+    host: ${cache.redis.host:}
+    port: ${cache.redis.port:}
+    client-type: jedis
+    jedis:
+      pool:
+        max-active: 50
+        max-idle: 50
+        min-idle: 50
 server:
   port: 8076

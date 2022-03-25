@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
@@ -44,14 +44,15 @@ public class CacheConfiguration {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
-        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-        redisTemplate.setDefaultSerializer(genericJackson2JsonRedisSerializer);
+        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
 
-        redisTemplate.setStringSerializer(stringRedisSerializer);
-        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
 
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
+
+        redisTemplate.afterPropertiesSet();
 
         return new RedisCache(redisTemplate);
     }

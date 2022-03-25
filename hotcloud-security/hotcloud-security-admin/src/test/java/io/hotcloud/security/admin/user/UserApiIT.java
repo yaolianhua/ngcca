@@ -1,9 +1,11 @@
 package io.hotcloud.security.admin.user;
 
+import io.hotcloud.common.cache.Cache;
 import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.user.FakeUser;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -35,12 +37,19 @@ public class UserApiIT {
 
     @Autowired
     private UserApi userApi;
+    @Autowired
+    private Cache cache;
 
     @Before
     public void authenticated() {
         UserDetails userDetails = userApi.retrieve("client-user");
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
+    @After
+    public void clear() {
+        cache.clear();
     }
 
     @Test

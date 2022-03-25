@@ -33,6 +33,7 @@
         <lombok.version>1.18.22</lombok.version>
         <apache.commons.validator-version>1.7</apache.commons.validator-version>
         <apache.commons.io-version>2.11.0</apache.commons.io-version>
+        <apache.commons.pool2-version>2.11.1</apache.commons.pool2-version>
         <java-websocket-version>1.5.2</java-websocket-version>
         <java-faker-version>1.0.2</java-faker-version>
         <jjwt.version>0.11.2</jjwt.version>
@@ -125,6 +126,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${apache.commons.io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${apache.commons.pool2-version}</version>
             </dependency>
 
             <!-- java websocket -->
