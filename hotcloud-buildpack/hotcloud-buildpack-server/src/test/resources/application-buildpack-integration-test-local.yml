@@ -2,3 +2,14 @@ logging:
   level:
     io.hotcloud.buildpack.server: debug
     io.hotcloud.buildpack.api: debug
+    io.hotcloud.kubernetes.server: debug
+kubernetes:
+  in-cluster: false
+  enable-workloads-watcher: true
+cache:
+  type: redis
+  redis:
+    database: 15
+    host: localhost
+    password: QbMufCD@9WVQ^Hv
+    port: 6379
