@@ -84,9 +84,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .withUser("admin")
                 .password(passwordEncoder.encode(plainPassword))
                 .authorities(Collections.emptyList());
-        log.info("*****************************************************************************");
-        log.info("Generated random access password: user='admin', password='{}'", plainPassword);
-        log.info("*****************************************************************************");
+        log.info("***************************************************************************************************");
+        log.info("* Generated random access password: user='admin', password='{}' *", plainPassword);
+        log.info("***************************************************************************************************");
         //
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
