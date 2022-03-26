@@ -70,7 +70,7 @@ public class SecretHttpClientIT extends ClientIntegrationTestBase {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setName(SECRET);
         createRequest.setMetadata(objectMetadata);
-        createRequest.setData(Map.of());
+        createRequest.setStringData(Map.of());
 
         secretHttpClient.create(createRequest);
     }
