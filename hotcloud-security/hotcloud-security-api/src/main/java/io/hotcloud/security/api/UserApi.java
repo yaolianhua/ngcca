@@ -9,8 +9,8 @@ import java.util.Collection;
  **/
 public interface UserApi {
 
-    String CACHE_USER_KEY_PREFIX = "HOTCLOUD:USER:%s";
-    String CACHE_USERS_KEY_PREFIX = "HOTCLOUD:USER:ALL";
+    String CACHE_USER_KEY_PREFIX = "hotcloud:user:%s";
+    String CACHE_USERS_KEY_PREFIX = "hotcloud:user:all";
 
     /**
      * Retrieve user by {@code username}
@@ -27,5 +27,10 @@ public interface UserApi {
      */
     UserDetails current();
 
+    /**
+     * List users
+     *
+     * @return {@link  UserDetails}
+     */
     Collection<UserDetails> users();
 }
