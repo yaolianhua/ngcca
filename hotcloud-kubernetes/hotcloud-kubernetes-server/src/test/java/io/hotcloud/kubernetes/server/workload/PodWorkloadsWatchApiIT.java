@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         classes = HotCloudKubernetesApplicationTest.class
 )
-@ActiveProfiles("integration-test-local")
+@ActiveProfiles("kubernetes-integration-test-local")
 @Slf4j
 public class PodWorkloadsWatchApiIT {
 
