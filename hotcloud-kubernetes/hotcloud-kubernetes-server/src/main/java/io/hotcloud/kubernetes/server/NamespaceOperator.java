@@ -1,11 +1,13 @@
 package io.hotcloud.kubernetes.server;
 
-import io.hotcloud.kubernetes.api.NamespaceCreateApi;
+import io.hotcloud.common.Assert;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Namespace;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
+import io.kubernetes.client.openapi.models.V1Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,11 @@ import java.util.stream.Collectors;
  **/
 @Component
 @Slf4j
-public class NamespaceCreator implements NamespaceCreateApi {
+public class NamespaceOperator implements NamespaceApi {
 
     private final CoreV1Api coreV1Api;
 
-    public NamespaceCreator(CoreV1Api coreV1Api) {
+    public NamespaceOperator(CoreV1Api coreV1Api) {
         this.coreV1Api = coreV1Api;
     }
 
@@ -62,5 +64,19 @@ public class NamespaceCreator implements NamespaceCreateApi {
 
         V1Namespace v1Namespace = coreV1Api.createNamespace(namespace, "true", null, null);
         log.debug("Namespace '{}' created \n '{}'", name, v1Namespace);
+    }
+
+    @Override
+    public void delete(String namespace) throws ApiException {
+        Assert.hasText(namespace, "namespace is null", 400);
+        V1Status aTrue = coreV1Api.deleteNamespace(
+                namespace,
+                "true",
+                null,
+                null,
+                null,
+                "Foreground",
+                null);
+        log.debug("delete namespace '{}' success \n '{}'", namespace, aTrue);
     }
 }

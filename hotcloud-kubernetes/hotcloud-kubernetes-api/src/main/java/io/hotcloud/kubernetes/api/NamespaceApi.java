@@ -7,8 +7,7 @@ import io.kubernetes.client.openapi.ApiException;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@FunctionalInterface
-public interface NamespaceCreateApi {
+public interface NamespaceApi {
 
     /**
      * Create namespace from {@code NamespaceCreateRequest}
@@ -31,4 +30,6 @@ public interface NamespaceCreateApi {
         params.setMetadata(namespaceMetadata);
         this.namespace(params);
     }
+
+    void delete(String namespace) throws ApiException;
 }
