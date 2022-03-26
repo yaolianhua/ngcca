@@ -26,7 +26,7 @@ public class Base64HelperTest {
 
     @Test
     public void encodeDockerConfig() {
-        String dockerConfig = Base64Helper.encodeDockerConfig("harbor.cloud2go.cn", "admin", "Harbor12345");
-        Assertions.assertEquals("eyJhdXRocyI6eyJoYXJib3IuY2xvdWQyZ28uY24iOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiSGFyYm9yMTIzNDUiLCJhdXRoIjoiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9In19fQ==", dockerConfig);
+        String dockerConfig = Base64Helper.dockerconfigjson("harbor.cloud2go.cn", "admin", "Harbor12345");
+        Assertions.assertEquals("{\"auths\":{\"harbor.cloud2go.cn\":{\"username\":\"admin\",\"password\":\"Harbor12345\",\"auth\":\"YWRtaW46SGFyYm9yMTIzNDU=\"}}}", dockerConfig);
     }
 }

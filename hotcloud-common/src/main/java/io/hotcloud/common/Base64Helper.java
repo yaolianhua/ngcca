@@ -32,14 +32,14 @@ public final class Base64Helper {
     }
 
     //{"auths":{"harbor.example.cn":{"username":"admin","password":"Harbor12345","auth":"YWRtaW46SGFyYm9yMTIzNDU="}}}
-    public static String encodeDockerConfig(String registry, String username, String password) {
+    public static String dockerconfigjson(String registry, String username, String password) {
         Assert.hasText(registry, "registry is null", 400);
         Assert.hasText(username, "username is null", 400);
         Assert.hasText(password, "password is null", 400);
 
         String auth = encode(username + ":" + password);
         String template = "{\"auths\":{\"" + registry + "\":{\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"auth\":\"" + auth + "\"}}}";
-        return encode(template);
+        return template;
     }
 
 }
