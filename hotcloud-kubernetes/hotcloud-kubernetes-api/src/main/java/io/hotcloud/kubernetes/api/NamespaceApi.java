@@ -31,5 +31,11 @@ public interface NamespaceApi {
         this.namespace(params);
     }
 
+    /**
+     * Delete namespace
+     *
+     * @param namespace namespace name
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
     void delete(String namespace) throws ApiException;
 }
