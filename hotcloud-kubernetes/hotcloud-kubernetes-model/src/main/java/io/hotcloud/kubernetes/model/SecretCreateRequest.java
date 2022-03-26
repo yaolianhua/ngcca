@@ -14,6 +14,7 @@ import java.util.Map;
 public class SecretCreateRequest {
 
     private Boolean immutable;
+    private Map<String, String> stringData = new HashMap<>();
     private Map<String, String> data = new HashMap<>();
     private String type;
     private ObjectMetadata metadata = new ObjectMetadata();

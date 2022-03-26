@@ -6,6 +6,10 @@ import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Secret;
 
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -27,7 +31,12 @@ public final class SecretBuilder {
         v1Secret.setMetadata(v1ObjectMeta);
         v1Secret.setApiVersion(API_VERSION);
         v1Secret.setKind(KIND);
-        v1Secret.setStringData(request.getData());
+        v1Secret.setStringData(request.getStringData());
+
+        Map<String, byte[]> data = new HashMap<>(16);
+        request.getData().forEach((key, value) -> data.put(key, value.getBytes(StandardCharsets.UTF_8)));
+        v1Secret.setData(data);
+
         v1Secret.setType(request.getType());
         v1Secret.setImmutable(request.getImmutable());
 
