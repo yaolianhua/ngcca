@@ -1,5 +1,7 @@
 package io.hotcloud.kubernetes.server;
 
+import io.fabric8.kubernetes.api.model.NamespaceList;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -23,9 +26,12 @@ import java.util.stream.Collectors;
 public class NamespaceOperator implements NamespaceApi {
 
     private final CoreV1Api coreV1Api;
+    private final KubernetesClient fabric8client;
 
-    public NamespaceOperator(CoreV1Api coreV1Api) {
+    public NamespaceOperator(CoreV1Api coreV1Api,
+                             KubernetesClient fabric8client) {
         this.coreV1Api = coreV1Api;
+        this.fabric8client = fabric8client;
     }
 
     @Override
@@ -78,5 +84,13 @@ public class NamespaceOperator implements NamespaceApi {
                 "Foreground",
                 null);
         log.debug("delete namespace '{}' success \n '{}'", namespace, aTrue);
+    }
+
+    @Override
+    public NamespaceList read(Map<String, String> labelSelector) {
+        labelSelector = labelSelector == null ? Map.of() : labelSelector;
+        return fabric8client.namespaces()
+                .withLabels(labelSelector)
+                .list();
     }
 }
