@@ -15,5 +15,6 @@ public class ConfigMapCreateRequest {
 
     private Boolean immutable;
     private Map<String, String> data = new HashMap<>();
+    private Map<String, String> binaryData = new HashMap<>();
     private ObjectMetadata metadata = new ObjectMetadata();
 }

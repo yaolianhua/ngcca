@@ -6,6 +6,9 @@ import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,6 +36,10 @@ public final class ConfigMapBuilder {
         v1ConfigMap.setKind(KIND);
         v1ConfigMap.setData(request.getData());
         v1ConfigMap.setImmutable(request.getImmutable());
+
+        Map<String, byte[]> binaryData = new HashMap<>(16);
+        request.getBinaryData().forEach((key, value) -> binaryData.put(key, value.getBytes(StandardCharsets.UTF_8)));
+        v1ConfigMap.setBinaryData(binaryData);
 
         return v1ConfigMap;
     }
