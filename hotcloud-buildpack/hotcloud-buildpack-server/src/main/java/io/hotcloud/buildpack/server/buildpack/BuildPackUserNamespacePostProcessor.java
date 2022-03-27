@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.server;
+package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.BuildPackRunnerPostProcessor;
 import io.hotcloud.common.cache.Cache;
