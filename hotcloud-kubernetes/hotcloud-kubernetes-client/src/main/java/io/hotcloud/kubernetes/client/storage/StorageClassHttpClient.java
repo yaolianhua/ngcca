@@ -36,6 +36,7 @@ public interface StorageClassHttpClient {
      * Delete named StorageClass
      *
      * @param storageClass StorageClass name
+     * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Result<Void> delete(String storageClass) throws ApiException;
