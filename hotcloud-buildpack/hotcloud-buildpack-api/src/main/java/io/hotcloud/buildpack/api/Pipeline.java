@@ -13,6 +13,8 @@ public class Pipeline<I, O> {
     /**
      * Main Pipeline class that initially sets the current handler. Processed output of the initial
      * handler is then passed as the input to the next stage handlers
+     *
+     * @param currentHandler initially sets the current handler
      */
     public Pipeline(Handler<I, O> currentHandler) {
         this.currentHandler = currentHandler;
@@ -24,6 +26,10 @@ public class Pipeline<I, O> {
      * lines in a factory, where each item in the assembly line is constructed in stages. The partially
      * assembled item is passed from one assembly stage to another. The outputs of the assembly line
      * occur in the same order as that of the inputs.
+     *
+     * @param nextHandler next input handler
+     * @param <K>         type of processed output
+     * @return pipeline
      */
     public <K> Pipeline<I, K> next(Handler<O, K> nextHandler) {
         return new Pipeline<>(input -> nextHandler.process(currentHandler.process(input)));
@@ -31,6 +37,9 @@ public class Pipeline<I, O> {
 
     /**
      * Start pipeline
+     *
+     * @param input input handler
+     * @return Processed output of the input handler
      */
     public O execute(I input) {
         return currentHandler.process(input);

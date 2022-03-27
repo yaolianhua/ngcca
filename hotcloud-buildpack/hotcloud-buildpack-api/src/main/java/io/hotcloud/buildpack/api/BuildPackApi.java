@@ -12,7 +12,7 @@ public interface BuildPackApi {
 
 
     /**
-     * Generate pv&pvc Yaml resource list. {@link StorageResourceList#getResourceListYaml()}
+     * Generate pv/pvc Yaml resource list.
      *
      * @param namespace In which namespace the pvc will be created
      * @param pv        The name pv will be created
@@ -23,7 +23,7 @@ public interface BuildPackApi {
     StorageResourceList storageResourceList(String namespace, @Nullable String pv, @Nullable String pvc, @Nullable Integer sizeGb);
 
     /**
-     * Generate secret Yaml resource. {@link  SecretResource#getSecretResourceYaml()}
+     * Generate secret Yaml resource.
      *
      * @param namespace        In which namespace the secret will be created
      * @param name             The name secret will be created
