@@ -1,11 +1,13 @@
 package io.hotcloud.buildpack.server.controller;
 
 import io.hotcloud.buildpack.api.GitApi;
+import io.hotcloud.security.api.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,9 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = GitController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                GitApi.class
+                GitApi.class,
+                UserApi.class
         })
 })
+@ActiveProfiles("buildpack-mvc-test")
 public class GitControllerTest {
 
     public final static String PATH = "/v1/git";
