@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.api;
+package io.hotcloud.kubernetes.api.namespace;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
