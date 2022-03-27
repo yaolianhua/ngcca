@@ -39,6 +39,7 @@ public interface Cache {
      *
      * @param key  the key whose associated value is to be returned
      * @param type the required type of the returned value
+     * @param <T>  type of class
      * @return the value to which this cache maps the specified key
      */
     <T> T get(String key, Class<T> type);
@@ -60,7 +61,9 @@ public interface Cache {
      * is synchronized so that the specified {@code valueLoader} is only called
      * once in case of concurrent access on the same key.
      *
-     * @param key the key whose associated value is to be returned
+     * @param key         the key whose associated value is to be returned
+     * @param <T>         type of class
+     * @param valueLoader new value will be load by this callable
      * @return the value to which this cache maps the specified key
      */
     <T> T get(String key, Callable<T> valueLoader);
