@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.client;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
 import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
@@ -78,5 +79,10 @@ public class HotCloudHttpClientConfiguration {
     @Bean
     public KubectlHttpClient kubectlHttpClient(HotCloudHttpClientFactory factory) {
         return factory.getClient(KubectlHttpClient.class);
+    }
+
+    @Bean
+    public NamespaceHttpClient namespaceHttpClient(HotCloudHttpClientFactory factory) {
+        return factory.getClient(NamespaceHttpClient.class);
     }
 }
