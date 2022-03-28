@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author yaolianhua789@gmail.com
  **/
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(name = "security.enabled", havingValue = "false")
+@ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "false")
 public class NoneSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override

@@ -3,11 +3,8 @@ spring:
     name: hotcloud
   profiles:
     include:
-      - kubernetes
+      - allinone
       - buildpack
-      - message
-      - cache
-      - security
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

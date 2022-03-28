@@ -1,7 +1,0 @@
-message:
-  type: websocket
-  rabbitmq:
-    host:
-    username:
-    password:
-    port:

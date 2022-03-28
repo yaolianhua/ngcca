@@ -24,13 +24,16 @@ import java.util.UUID;
  * @author yaolianhua789@gmail.com
  **/
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SecureWhitelistConfigurer.class)
+@EnableConfigurationProperties(value = {
+        SecureWhitelistConfigurer.class,
+        SecurityProperties.class
+})
 @Import({
         CorsFilterConfigurer.class,
         JwtConfigurer.class,
         UserDetailsServiceConfigurer.class
 })
-@ConditionalOnProperty(name = "security.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "true", matchIfMissing = true)
 @Slf4j
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 

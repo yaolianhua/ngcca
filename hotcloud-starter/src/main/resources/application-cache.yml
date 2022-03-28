@@ -1,7 +1,0 @@
-cache:
-  type: local
-  redis:
-    host:
-    password:
-    port:
-    database:
