@@ -14,4 +14,13 @@ public class VolumeMount {
     private String subPathExpr;
     private String mountPropagation;
 
+    public static VolumeMount of(String name, String mountPath, Boolean readOnly) {
+        VolumeMount volumeMount = new VolumeMount();
+
+        volumeMount.setMountPath(mountPath);
+        volumeMount.setName(name);
+        volumeMount.setReadOnly(readOnly);
+
+        return volumeMount;
+    }
 }
