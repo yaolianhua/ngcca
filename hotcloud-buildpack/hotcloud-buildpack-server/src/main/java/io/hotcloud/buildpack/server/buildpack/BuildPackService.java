@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
+import io.hotcloud.buildpack.api.JobResource;
 import io.hotcloud.buildpack.api.SecretResource;
 import io.hotcloud.buildpack.api.StorageResourceList;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
@@ -9,10 +10,18 @@ import io.hotcloud.common.Base64Helper;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
+import io.hotcloud.kubernetes.api.workload.JobBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
+import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
+import io.hotcloud.kubernetes.model.pod.container.Container;
+import io.hotcloud.kubernetes.model.pod.container.ImagePullPolicy;
+import io.hotcloud.kubernetes.model.pod.container.VolumeMount;
 import io.hotcloud.kubernetes.model.storage.*;
+import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
+import io.hotcloud.kubernetes.model.workload.JobSpec;
+import io.hotcloud.kubernetes.model.workload.JobTemplate;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +30,7 @@ import org.springframework.util.StringUtils;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -36,7 +46,83 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    public StorageResourceList storageResourceList(String namespace, String pv, String pvc, Integer sizeGb) {
+    protected JobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args) {
+        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(pvc, "pvc is null", 400);
+        Assert.hasText(secret, "secret name is null", 400);
+
+        String dockersecretvolume = "docker-registry-secret-volume";
+        String workspacevolume = "workspace-volume";
+        Map<String, String> labels = Map.of("k8s-app", namespace);
+        String jobName = "buildpack-job-" + namespace;
+
+        JobCreateRequest request = new JobCreateRequest();
+        ObjectMetadata jobMetadata = new ObjectMetadata();
+        jobMetadata.setNamespace(namespace);
+        jobMetadata.setName(jobName);
+        jobMetadata.setLabels(labels);
+        request.setMetadata(jobMetadata);
+
+        JobTemplate template = new JobTemplate();
+
+        PodTemplateSpec templateSpec = new PodTemplateSpec();
+
+        Container container = new Container();
+        container.setName("kaniko");
+        container.setImage("gcr.io/kaniko-project/executor:latest");
+        container.setImagePullPolicy(ImagePullPolicy.IfNotPresent);
+
+        List<String> finalArgs = args.entrySet()
+                .stream()
+                .map(e -> String.format("--%s=%s", e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+        container.setArgs(finalArgs);
+
+        //volume mounts
+        VolumeMount dockersecretVolumeMount = VolumeMount.of(dockersecretvolume, "/kaniko/.docker", true);
+        VolumeMount workspaceVolumeMount = VolumeMount.of(workspacevolume, "/workspace", false);
+        container.setVolumeMounts(List.of(dockersecretVolumeMount, workspaceVolumeMount));
+
+        //volumes
+        SecretVolume secretVolumeType = new SecretVolume();
+        secretVolumeType.setSecretName(secret);
+        secretVolumeType.setItems(List.of(SecretVolume.Item.of(".dockerconfigjson", "config.json")));
+        Volume dockersecretVolume = new Volume();
+        dockersecretVolume.setName(dockersecretvolume);
+        dockersecretVolume.setSecretVolume(secretVolumeType);
+
+        PersistentVolumeClaimVolume persistentVolumeClaimVolume = new PersistentVolumeClaimVolume();
+        persistentVolumeClaimVolume.setClaimName(pvc);
+        Volume workspaceVolume = new Volume();
+        workspaceVolume.setPersistentVolumeClaim(persistentVolumeClaimVolume);
+        workspaceVolume.setName(workspacevolume);
+        //set volumes
+        templateSpec.setContainers(List.of(container));
+        templateSpec.setVolumes(List.of(dockersecretVolume, workspaceVolume));
+        templateSpec.setRestartPolicy(PodTemplateSpec.RestartPolicy.Never);
+
+        template.setSpec(templateSpec);
+
+
+        JobSpec spec = new JobSpec();
+        spec.setTtlSecondsAfterFinished(600);
+        spec.setBackoffLimit(3);
+        spec.setActiveDeadlineSeconds(1800L);
+        spec.setTemplate(template);
+
+        request.setSpec(spec);
+
+        String jobYaml = Yaml.dump(JobBuilder.build(request));
+        return JobResource.builder()
+                .name(jobName)
+                .namespace(namespace)
+                .labels(labels)
+                .jobResourceYaml(jobYaml)
+                .build();
+    }
+
+    @Override
+    protected StorageResourceList storageResourceList(String namespace, String pv, String pvc, Integer sizeGb) {
 
         Assert.hasText(namespace, "namespace is null", 400);
 
@@ -115,7 +201,7 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    public SecretResource dockersecret(String namespace, String name, String registry, String registryUsername, String registryPassword) {
+    protected SecretResource dockersecret(String namespace, String name, String registry, String registryUsername, String registryPassword) {
         Assert.hasText(namespace, "namespace is null", 400);
 
         name = StringUtils.hasText(name) ? name : "secret-" + namespace;

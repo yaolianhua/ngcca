@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -28,7 +29,7 @@ import java.util.List;
 public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Autowired
-    private BuildPackApi buildPackApi;
+    private AbstractBuildPackApi buildPackApi;
     @Autowired
     private KubectlApi kubectlApi;
     public final String namespace = NamespaceGenerator.uuidNoDashNamespace();
@@ -45,6 +46,20 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     @After
     public void after() throws ApiException {
         namespaceApi.delete(namespace);
+    }
+
+    @Test
+    public void jobResource() {
+        Map<String, String> args = Map.of("dockerfile", "/workspace/Dockerfile",
+                "insecure-registry", "docker-registry-idc01-sz.cloudtogo.cn",
+                "context", "dir://workspace",
+                "destination", "docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3",
+                "tarPath", "/workspace/devops.tar");
+
+        JobResource jobResource = buildPackApi.jobResource(namespace, "pvc-" + namespace, "secret-" + namespace, args);
+        Assertions.assertNotNull(jobResource.getJobResourceYaml());
+        Assertions.assertEquals(namespace, jobResource.getNamespace());
+        log.info("job yaml \n {}", jobResource.getJobResourceYaml());
     }
 
     @Test
