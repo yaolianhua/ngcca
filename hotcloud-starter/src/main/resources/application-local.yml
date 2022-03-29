@@ -33,3 +33,6 @@ buildpack:
       server: 119.91.214.25
       path: /nfs-share
     size-gb: 1
+  kaniko:
+    destination: index.docker.io/yaolianhua/
+    no-push: false

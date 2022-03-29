@@ -26,7 +26,7 @@ public class KanikoFlagProperties implements KanikoFlag {
     private boolean insecure = true;
     private boolean insecurePull = true;
     private boolean logTimestamp = false;
-    private boolean noPush = false;
+    private boolean noPush = true;
     private boolean reproducible = false;
     private boolean singleSnapshot = false;
     private boolean skipTlsVerify = true;
@@ -39,7 +39,7 @@ public class KanikoFlagProperties implements KanikoFlag {
     private int pushRetry = 3;
 
     private String context = "dir://workspace";
-    private String destination;
+    private String destination = "index.docker.io/username/";
     private String registryMirror;
     private String registryCertificate;
     private String cacheDir;
@@ -51,11 +51,11 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String git;
     private String imageNameWithDigestFile;
     private String imageNameTagWithDigestFile;
-    private String insecureRegistry;
+    private String insecureRegistry = "index.docker.io";
     private String label;
     private String logFormat = "color";
     private String snapshotMode = "full";
-    private String tarPath;
+    private String tarPath = "/workspace";
     private String target;
     private String verbosity = "debug";
     private String ignorePath;

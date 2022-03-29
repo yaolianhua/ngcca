@@ -8,7 +8,7 @@ buildpack:
     cleanup: true
     context: dir://workspace
     context-sub-path:
-    destination:
+    destination: index.docker.io/username/
     digest-file:
     dockerfile: /workspace/Dockerfile
     force: false
@@ -20,11 +20,11 @@ buildpack:
     image-name-with-digest-file:
     insecure: true
     insecure-pull: true
-    insecure-registry:
+    insecure-registry: index.docker.io
     label:
     log-format: color
     log-timestamp: false
-    no-push: false
+    no-push: true
     push-retry: 3
     registry-certificate:
     registry-mirror:
@@ -35,7 +35,7 @@ buildpack:
     skip-tls-verify-registry: true
     skip-unused-stages: true
     snapshot-mode: full
-    tar-path:
+    tar-path: /workspace
     target:
     use-new-run: true
     verbosity: debug
