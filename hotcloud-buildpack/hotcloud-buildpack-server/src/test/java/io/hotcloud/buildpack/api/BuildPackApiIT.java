@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -28,7 +30,7 @@ import java.util.List;
 public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Autowired
-    private BuildPackApi buildPackApi;
+    private AbstractBuildPackApi buildPackApi;
     @Autowired
     private KubectlApi kubectlApi;
     public final String namespace = NamespaceGenerator.uuidNoDashNamespace();
@@ -48,12 +50,43 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void storageResourceList() {
-        StorageResourceList storageResourceList = buildPackApi.storageResourceList(namespace, null, null, null);
+    public void buildpack() {
+        BuildPack buildpack = buildPackApi.buildpack(namespace, "https://gitlab.com/yaolianhua/hotcloud.git", "/kaniko/" + namespace, "", "", "");
 
-        String yaml = storageResourceList.getResourceListYaml();
+    }
+
+    @Test
+    public void jobResource() {
+        Map<String, String> args = Map.of(
+                "insecure-registry", "docker-registry-idc01-sz.cloudtogo.cn",
+                "destination", "docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3",
+                "tarPath", "/workspace/devops.tar");
+
+        BuildPackJobResourceRequest jobResource = BuildPackJobResourceRequest.builder()
+                .namespace(namespace)
+                .persistentVolumeClaim("pvc-" + namespace)
+                .secret("secret-" + namespace)
+                .args(args)
+                .build();
+        BuildPackJobResource buildPackJobResource = buildPackApi.jobResource(jobResource);
+        Assertions.assertNotNull(buildPackJobResource.getJobResourceYaml());
+        Assertions.assertEquals(namespace, buildPackJobResource.getNamespace());
+        log.info("job yaml \n {}", buildPackJobResource.getJobResourceYaml());
+    }
+
+    @Test
+    public void storageResourceList() {
+        BuildPackStorageResourceRequest resource = BuildPackStorageResourceRequest.builder()
+                .namespace(namespace)
+                .sizeGb(null)
+                .persistentVolume(null)
+                .persistentVolumeClaim(null)
+                .build();
+        BuildPackStorageResourceList buildPackStorageResourceList = buildPackApi.storageResourceList(resource);
+
+        String yaml = buildPackStorageResourceList.getResourceListYaml();
         Assertions.assertTrue(StringUtils.hasText(yaml));
-        log.info("storage resource list yaml: \n {}", storageResourceList.getResourceListYaml());
+        log.info("storage resource list yaml: \n {}", buildPackStorageResourceList.getResourceListYaml());
 
         List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml);
         Assertions.assertFalse(CollectionUtils.isEmpty(hasMetadata));
@@ -65,21 +98,23 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void secretResource() {
-        SecretResource secretResource = buildPackApi.dockersecret(
-                namespace,
-                null,
-                "index.docker.io",
-                "username",
-                "password");
+        BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
+                .name(null)
+                .namespace(namespace)
+                .registry("index.docker.io")
+                .username("username")
+                .password("password")
+                .build();
+        BuildPackDockerSecretResource buildPackDockerSecretResource = buildPackApi.dockersecret(dockersecret);
 
-        String yaml = secretResource.getSecretResourceYaml();
+        String yaml = buildPackDockerSecretResource.getSecretResourceYaml();
         Assertions.assertTrue(StringUtils.hasText(yaml));
         log.info("docker secret resource yaml: \n {}", yaml);
 
         List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml);
         Assertions.assertEquals(1, hasMetadata.size());
 
-        SecretList secretList = secretApi.read(namespace, secretResource.getLabels());
+        SecretList secretList = secretApi.read(namespace, buildPackDockerSecretResource.getLabels());
         Assertions.assertEquals(1, secretList.getItems().size());
 
         Secret secret = secretList.getItems().get(0);

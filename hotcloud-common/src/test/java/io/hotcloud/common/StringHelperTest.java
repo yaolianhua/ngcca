@@ -1,5 +1,6 @@
 package io.hotcloud.common;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@Slf4j
 public class StringHelperTest {
 
     @Test
@@ -29,5 +31,26 @@ public class StringHelperTest {
 
     }
 
+    @Test
+    public void retrieveProjectFromHTTPGitUrl() {
+
+        Assertions.assertEquals("kaniko", StringHelper.retrieveProjectFromHTTPGitUrl("https://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertEquals("kaniko", StringHelper.retrieveProjectFromHTTPGitUrl("http://github.com/GoogleContainerTools/kaniko.git"));
+
+        Assertions.assertEquals("devops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/devops-thymeleaf.git"));
+        Assertions.assertEquals("dev-ops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/DEV-OPS_thymeleaf.git"));
+    }
+
+    @Test
+    public void generatePushedImage() {
+        String generatePushedImage = StringHelper.generatePushedImage("https://github.com/GoogleContainerTools/kaniko.git");
+        log.info("{}", generatePushedImage);
+    }
+
+    @Test
+    public void generateImageTarball() {
+        String generatePushedImage = StringHelper.generateImageTarball("https://github.com/GoogleContainerTools/kaniko.git");
+        log.info("{}", generatePushedImage);
+    }
 
 }

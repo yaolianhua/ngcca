@@ -22,5 +22,13 @@ public class SecretVolume {
         private String key;
         private String path;
         private Integer mode;
+
+        public static Item of(String key, String path) {
+            Item item = new Item();
+
+            item.setKey(key);
+            item.setPath(path);
+            return item;
+        }
     }
 }

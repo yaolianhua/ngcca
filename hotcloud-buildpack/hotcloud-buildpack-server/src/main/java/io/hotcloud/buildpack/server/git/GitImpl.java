@@ -24,7 +24,7 @@ public class GitImpl implements GitApi {
     public Boolean clone(String remote, String branch, String local, @Nullable String username, @Nullable String password) {
 
         Assert.state(!Validator.existedPath(local), String.format("Repository path '%s' already exist", local), 409);
-        Assert.state(Validator.validHTTPSGitAddress(remote), String.format("Invalid git url '%s', protocol supported only https", remote), 400);
+        Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only https", remote), 400);
 
         log.info("Cloning from '{}' to '{}', branch [{}]", remote, local, branch);
         final StopWatch watch = new StopWatch();

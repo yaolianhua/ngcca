@@ -162,11 +162,11 @@ data:
         cache-ttl-duration: 168h
         compressed-caching: true
         cleanup: true
-        context:
+        context: dir://workspace
         context-sub-path:
-        destination:
+        destination: index.docker.io/yaolianhua/
         digest-file:
-        dockerfile: Dockerfile
+        dockerfile: /workspace/Dockerfile
         force: false
         image-fs-extract-retry: 3
         git:
@@ -176,7 +176,7 @@ data:
         image-name-with-digest-file:
         insecure: true
         insecure-pull: true
-        insecure-registry:
+        insecure-registry: index.docker.io
         label:
         log-format: color
         log-timestamp: false
@@ -191,7 +191,7 @@ data:
         skip-tls-verify-registry: true
         skip-unused-stages: true
         snapshot-mode: full
-        tar-path:
+        tar-path: /workspace
         target:
         use-new-run: true
         verbosity: debug

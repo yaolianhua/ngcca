@@ -1,8 +1,0 @@
-security:
-  enabled: true
-  ignored:
-    urls:
-      - /swagger**/**
-      - /v3/api-docs/**
-      - /favicon.ico
-      - /pub

@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.api;
+package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 @Data
 @Builder
-public class SecretResource {
+public class BuildPackDockerSecretResource {
 
     private String name;
     private String namespace;
@@ -20,7 +20,7 @@ public class SecretResource {
     @JsonProperty("yaml")
     private String secretResourceYaml;
 
-    public SecretResource(String name, String namespace, Map<String, String> data, Map<String, String> labels, String secretResourceYaml) {
+    public BuildPackDockerSecretResource(String name, String namespace, Map<String, String> data, Map<String, String> labels, String secretResourceYaml) {
         this.name = name;
         this.namespace = namespace;
         this.data = data;
@@ -28,6 +28,6 @@ public class SecretResource {
         this.secretResourceYaml = secretResourceYaml;
     }
 
-    public SecretResource() {
+    public BuildPackDockerSecretResource() {
     }
 }

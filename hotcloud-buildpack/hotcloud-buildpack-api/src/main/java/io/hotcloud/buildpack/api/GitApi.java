@@ -10,7 +10,7 @@ public interface GitApi {
     /**
      * Clone git repository
      *
-     * @param remote   remote git url. protocol supported https only
+     * @param remote   remote git url. protocol supported http(s) only
      * @param branch   the initial branch to check out when cloning the repository.
      *                 Can be specified as ref name (<code>refs/heads/master</code>),
      *                 branch name (<code>master</code>) or tag name

@@ -1,0 +1,28 @@
+cache:
+  type: local
+  redis:
+    host:
+    password:
+    port:
+    database:
+message:
+  type: websocket
+  rabbitmq:
+    host:
+    username:
+    password:
+    port:
+kubernetes:
+  in-cluster: true
+  enable-workloads-watcher: true
+security:
+  enabled: true
+  jwt:
+    algorithm: HS512
+    sign-key: QWERTYUIOPASDFGHJKLZXCVBNMmnbvcxzlkjhgfdsapoiuytrewq
+  ignored:
+    urls:
+      - /swagger**/**
+      - /v3/api-docs/**
+      - /favicon.ico
+      - /pub

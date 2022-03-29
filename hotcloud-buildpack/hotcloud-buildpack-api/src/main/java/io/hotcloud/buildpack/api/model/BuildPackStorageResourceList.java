@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.api;
+package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Data;
  **/
 @Data
 @Builder
-public class StorageResourceList {
+public class BuildPackStorageResourceList {
 
     private String namespace;
     private String storageClass;
@@ -20,7 +20,7 @@ public class StorageResourceList {
     @JsonProperty("yaml")
     private String resourceListYaml;
 
-    public StorageResourceList(String namespace, String storageClass, String persistentVolume, String persistentVolumeClaim, Integer sizeGb, String resourceListYaml) {
+    public BuildPackStorageResourceList(String namespace, String storageClass, String persistentVolume, String persistentVolumeClaim, Integer sizeGb, String resourceListYaml) {
         this.namespace = namespace;
         this.storageClass = storageClass;
         this.persistentVolume = persistentVolume;
@@ -29,6 +29,6 @@ public class StorageResourceList {
         this.resourceListYaml = resourceListYaml;
     }
 
-    public StorageResourceList() {
+    public BuildPackStorageResourceList() {
     }
 }
