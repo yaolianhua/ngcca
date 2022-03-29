@@ -1,8 +1,8 @@
 package io.hotcloud.buildpack.api;
 
-import io.hotcloud.buildpack.api.model.JobResource;
-import io.hotcloud.buildpack.api.model.SecretResource;
-import io.hotcloud.buildpack.api.model.StorageResourceList;
+import io.hotcloud.buildpack.api.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
+import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -19,9 +19,9 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param pvc       The pvc name that has been bound to the pv
      * @param secret    The docker secret name that has been created from your registry
      * @param args      Kaniko args mapping
-     * @return {@link JobResource}
+     * @return {@link BuildPackJobResource}
      */
-    abstract protected JobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args);
+    abstract protected BuildPackJobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args);
 
 
     /**
@@ -31,9 +31,9 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param pv        The name pv will be created
      * @param pvc       The name pvc will be created
      * @param sizeGb    The capacity of pv. unit is GB
-     * @return {@link StorageResourceList}
+     * @return {@link BuildPackStorageResourceList}
      */
-    abstract protected StorageResourceList storageResourceList(String namespace, @Nullable String pv, @Nullable String pvc, @Nullable Integer sizeGb);
+    abstract protected BuildPackStorageResourceList storageResourceList(String namespace, @Nullable String pv, @Nullable String pvc, @Nullable Integer sizeGb);
 
     /**
      * Generate secret Yaml resource.
@@ -43,7 +43,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param registry         The registry address e.g. index.docker.io
      * @param registryUsername Registry username e.g. your docker hub username
      * @param registryPassword Registry password e.g. your docker hub password
-     * @return {@link  SecretResource}
+     * @return {@link  BuildPackSecretResource}
      */
-    abstract protected SecretResource dockersecret(String namespace, @Nullable String name, String registry, String registryUsername, String registryPassword);
+    abstract protected BuildPackSecretResource dockersecret(String namespace, @Nullable String name, String registry, String registryUsername, String registryPassword);
 }

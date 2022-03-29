@@ -2,9 +2,9 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
-import io.hotcloud.buildpack.api.model.JobResource;
-import io.hotcloud.buildpack.api.model.SecretResource;
-import io.hotcloud.buildpack.api.model.StorageResourceList;
+import io.hotcloud.buildpack.api.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
+import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Base64Helper;
@@ -50,7 +50,7 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected JobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args) {
+    protected BuildPackJobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args) {
         Assert.hasText(namespace, "namespace is null", 400);
         Assert.hasText(pvc, "pvc is null", 400);
         Assert.hasText(secret, "secret name is null", 400);
@@ -119,7 +119,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         request.setSpec(spec);
 
         String jobYaml = Yaml.dump(JobBuilder.build(request));
-        return JobResource.builder()
+        return BuildPackJobResource.builder()
                 .name(jobName)
                 .namespace(namespace)
                 .labels(labels)
@@ -128,7 +128,7 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected StorageResourceList storageResourceList(String namespace, String pv, String pvc, Integer sizeGb) {
+    protected BuildPackStorageResourceList storageResourceList(String namespace, String pv, String pvc, Integer sizeGb) {
 
         Assert.hasText(namespace, "namespace is null", 400);
 
@@ -196,7 +196,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         stringBuilder.append("---\n");
         stringBuilder.append(pvcYaml);
 
-        return StorageResourceList.builder()
+        return BuildPackStorageResourceList.builder()
                 .resourceListYaml(stringBuilder.toString())
                 .namespace(namespace)
                 .persistentVolumeClaim(pvcName)
@@ -207,7 +207,7 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected SecretResource dockersecret(String namespace, String name, String registry, String registryUsername, String registryPassword) {
+    protected BuildPackSecretResource dockersecret(String namespace, String name, String registry, String registryUsername, String registryPassword) {
         Assert.hasText(namespace, "namespace is null", 400);
 
         name = StringUtils.hasText(name) ? name : "secret-" + namespace;
@@ -230,7 +230,7 @@ public class BuildPackService extends AbstractBuildPackApi {
 
         String secretYaml = Yaml.dump(SecretBuilder.build(request));
 
-        return SecretResource.builder()
+        return BuildPackSecretResource.builder()
                 .data(data)
                 .labels(labels)
                 .name(name)

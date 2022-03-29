@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 @Data
 @Builder
-public class JobResource {
+public class BuildPackJobResource {
 
     private String name;
     private String namespace;
