@@ -29,5 +29,14 @@ public class StringHelperTest {
 
     }
 
+    @Test
+    public void retrieveProjectFromHTTPGitUrl() {
+
+        Assertions.assertEquals("kaniko", StringHelper.retrieveProjectFromHTTPGitUrl("https://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertEquals("kaniko", StringHelper.retrieveProjectFromHTTPGitUrl("http://github.com/GoogleContainerTools/kaniko.git"));
+
+        Assertions.assertEquals("devops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/devops-thymeleaf.git"));
+        Assertions.assertEquals("dev-ops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/DEV-OPS_thymeleaf.git"));
+    }
 
 }

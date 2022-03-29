@@ -25,6 +25,7 @@ public final class Validator {
 
     public static boolean validHTTPGitAddress(String url) {
         Assert.hasText(url, "url is null", 400);
-        return new UrlValidator(new String[]{"https", "http"}).isValid(url);
+        boolean valid = new UrlValidator(new String[]{"https", "http"}).isValid(url);
+        return url.endsWith(".git") && valid;
     }
 }

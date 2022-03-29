@@ -41,4 +41,12 @@ public final class StringHelper {
 
         return params;
     }
+
+    public static String retrieveProjectFromHTTPGitUrl(String gitUrl) {
+        Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only", 400);
+        String substring = gitUrl.substring(gitUrl.lastIndexOf("/"));
+        String originString = substring.substring(1, substring.length() - ".git".length());
+        String lowerCaseString = originString.toLowerCase();
+        return lowerCaseString.replaceAll("_", "-");
+    }
 }
