@@ -1,11 +1,11 @@
 package io.hotcloud.buildpack.api;
 
 import io.hotcloud.buildpack.api.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
 import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
 import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -15,13 +15,10 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
     /**
      * Generate job Yaml resource.
      *
-     * @param namespace In which namespace the job will be created
-     * @param pvc       The pvc name that has been bound to the pv
-     * @param secret    The docker secret name that has been created from your registry
-     * @param args      Kaniko args mapping
+     * @param jobResource {@link  BuildPackJobResourceRequest}
      * @return {@link BuildPackJobResource}
      */
-    abstract protected BuildPackJobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args);
+    abstract protected BuildPackJobResource jobResource(BuildPackJobResourceRequest jobResource);
 
 
     /**

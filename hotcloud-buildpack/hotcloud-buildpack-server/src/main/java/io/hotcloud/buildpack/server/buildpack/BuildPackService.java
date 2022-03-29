@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.server.buildpack;
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
 import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
 import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
@@ -50,19 +51,21 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackJobResource jobResource(String namespace, String pvc, String secret, Map<String, String> args) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pvc, "pvc is null", 400);
-        Assert.hasText(secret, "secret name is null", 400);
+    protected BuildPackJobResource jobResource(BuildPackJobResourceRequest resource) {
+
+        Assert.notNull(resource, "buildpack job resource request body is null", 400);
+        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
+        Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null", 400);
+        Assert.hasText(resource.getSecret(), "secret name is null", 400);
 
         String dockersecretvolume = "docker-registry-secret-volume";
         String workspacevolume = "workspace-volume";
-        Map<String, String> labels = Map.of("k8s-app", namespace);
-        String jobName = "buildpack-job-" + namespace;
+        Map<String, String> labels = Map.of("k8s-app", resource.getNamespace());
+        String jobName = "buildpack-job-" + resource.getNamespace();
 
         JobCreateRequest request = new JobCreateRequest();
         ObjectMetadata jobMetadata = new ObjectMetadata();
-        jobMetadata.setNamespace(namespace);
+        jobMetadata.setNamespace(resource.getNamespace());
         jobMetadata.setName(jobName);
         jobMetadata.setLabels(labels);
         request.setMetadata(jobMetadata);
@@ -77,7 +80,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         container.setImagePullPolicy(ImagePullPolicy.IfNotPresent);
 
         Map<String, String> argsMapping = kanikoFlag.resolvedArgs();
-        argsMapping.putAll(args);
+        argsMapping.putAll(resource.getArgs());
         List<String> finalArgs = argsMapping.entrySet()
                 .stream()
                 .map(e -> String.format("--%s=%s", e.getKey(), e.getValue()))
@@ -91,14 +94,14 @@ public class BuildPackService extends AbstractBuildPackApi {
 
         //volumes
         SecretVolume secretVolumeType = new SecretVolume();
-        secretVolumeType.setSecretName(secret);
+        secretVolumeType.setSecretName(resource.getSecret());
         secretVolumeType.setItems(List.of(SecretVolume.Item.of(".dockerconfigjson", "config.json")));
         Volume dockersecretVolume = new Volume();
         dockersecretVolume.setName(dockersecretvolume);
         dockersecretVolume.setSecretVolume(secretVolumeType);
 
         PersistentVolumeClaimVolume persistentVolumeClaimVolume = new PersistentVolumeClaimVolume();
-        persistentVolumeClaimVolume.setClaimName(pvc);
+        persistentVolumeClaimVolume.setClaimName(resource.getPersistentVolumeClaim());
         Volume workspaceVolume = new Volume();
         workspaceVolume.setPersistentVolumeClaim(persistentVolumeClaimVolume);
         workspaceVolume.setName(workspacevolume);
@@ -121,8 +124,9 @@ public class BuildPackService extends AbstractBuildPackApi {
         String jobYaml = Yaml.dump(JobBuilder.build(request));
         return BuildPackJobResource.builder()
                 .name(jobName)
-                .namespace(namespace)
+                .namespace(resource.getNamespace())
                 .labels(labels)
+                .args(argsMapping)
                 .jobResourceYaml(jobYaml)
                 .build();
     }

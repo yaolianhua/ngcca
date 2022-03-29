@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
 import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
 import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
 import io.hotcloud.common.Base64Helper;
@@ -59,7 +60,13 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
                 "destination", "docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3",
                 "tarPath", "/workspace/devops.tar");
 
-        BuildPackJobResource buildPackJobResource = buildPackApi.jobResource(namespace, "pvc-" + namespace, "secret-" + namespace, args);
+        BuildPackJobResourceRequest jobResource = BuildPackJobResourceRequest.builder()
+                .namespace(namespace)
+                .persistentVolumeClaim("pvc-" + namespace)
+                .secret("secret-" + namespace)
+                .args(args)
+                .build();
+        BuildPackJobResource buildPackJobResource = buildPackApi.jobResource(jobResource);
         Assertions.assertNotNull(buildPackJobResource.getJobResourceYaml());
         Assertions.assertEquals(namespace, buildPackJobResource.getNamespace());
         log.info("job yaml \n {}", buildPackJobResource.getJobResourceYaml());
