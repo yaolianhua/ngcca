@@ -93,21 +93,23 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void secretResource() {
-        BuildPackSecretResource buildPackSecretResource = buildPackApi.dockersecret(
-                namespace,
-                null,
-                "index.docker.io",
-                "username",
-                "password");
+        BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
+                .name(null)
+                .namespace(namespace)
+                .registry("index.docker.io")
+                .username("username")
+                .password("password")
+                .build();
+        BuildPackDockerSecretResource buildPackDockerSecretResource = buildPackApi.dockersecret(dockersecret);
 
-        String yaml = buildPackSecretResource.getSecretResourceYaml();
+        String yaml = buildPackDockerSecretResource.getSecretResourceYaml();
         Assertions.assertTrue(StringUtils.hasText(yaml));
         log.info("docker secret resource yaml: \n {}", yaml);
 
         List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml);
         Assertions.assertEquals(1, hasMetadata.size());
 
-        SecretList secretList = secretApi.read(namespace, buildPackSecretResource.getLabels());
+        SecretList secretList = secretApi.read(namespace, buildPackDockerSecretResource.getLabels());
         Assertions.assertEquals(1, secretList.getItems().size());
 
         Secret secret = secretList.getItems().get(0);

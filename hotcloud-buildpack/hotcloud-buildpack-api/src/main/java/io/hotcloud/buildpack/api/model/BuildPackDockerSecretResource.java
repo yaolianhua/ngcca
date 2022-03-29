@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 @Data
 @Builder
-public class BuildPackSecretResource {
+public class BuildPackDockerSecretResource {
 
     private String name;
     private String namespace;
@@ -20,7 +20,7 @@ public class BuildPackSecretResource {
     @JsonProperty("yaml")
     private String secretResourceYaml;
 
-    public BuildPackSecretResource(String name, String namespace, Map<String, String> data, Map<String, String> labels, String secretResourceYaml) {
+    public BuildPackDockerSecretResource(String name, String namespace, Map<String, String> data, Map<String, String> labels, String secretResourceYaml) {
         this.name = name;
         this.namespace = namespace;
         this.data = data;
@@ -28,6 +28,6 @@ public class BuildPackSecretResource {
         this.secretResourceYaml = secretResourceYaml;
     }
 
-    public BuildPackSecretResource() {
+    public BuildPackDockerSecretResource() {
     }
 }

@@ -209,34 +209,35 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackSecretResource dockersecret(String namespace, String name, String registry, String registryUsername, String registryPassword) {
-        Assert.hasText(namespace, "namespace is null", 400);
+    protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceRequest resource) {
+        Assert.notNull(resource, "buildpack docker secret resource request body is null", 400);
+        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 
-        name = StringUtils.hasText(name) ? name : "secret-" + namespace;
-        Map<String, String> labels = Map.of("k8s-app", namespace);
+        String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + resource.getNamespace();
+        Map<String, String> labels = Map.of("k8s-app", resource.getNamespace());
 
         SecretCreateRequest request = new SecretCreateRequest();
         request.setImmutable(true);
         request.setType("kubernetes.io/dockerconfigjson");
 
-        String configjson = Base64Helper.dockerconfigjson(registry, registryUsername, registryPassword);
+        String configjson = Base64Helper.dockerconfigjson(resource.getRegistry(), resource.getUsername(), resource.getPassword());
         Map<String, String> data = Map.of(".dockerconfigjson", configjson);
         request.setData(data);
 
         ObjectMetadata secretMetadata = new ObjectMetadata();
         secretMetadata.setName(name);
-        secretMetadata.setNamespace(namespace);
+        secretMetadata.setNamespace(resource.getNamespace());
         secretMetadata.setLabels(labels);
 
         request.setMetadata(secretMetadata);
 
         String secretYaml = Yaml.dump(SecretBuilder.build(request));
 
-        return BuildPackSecretResource.builder()
+        return BuildPackDockerSecretResource.builder()
                 .data(data)
                 .labels(labels)
                 .name(name)
-                .namespace(namespace)
+                .namespace(resource.getNamespace())
                 .secretResourceYaml(secretYaml)
                 .build();
     }
