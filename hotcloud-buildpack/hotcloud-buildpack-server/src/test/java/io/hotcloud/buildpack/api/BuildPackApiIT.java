@@ -50,10 +50,15 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     }
 
     @Test
+    public void buildpack() {
+        BuildPack buildpack = buildPackApi.buildpack(namespace, "https://gitlab.com/yaolianhua/hotcloud.git", "/kaniko/" + namespace, "", "", "");
+
+    }
+
+    @Test
     public void jobResource() {
-        Map<String, String> args = Map.of("dockerfile", "/workspace/Dockerfile",
+        Map<String, String> args = Map.of(
                 "insecure-registry", "docker-registry-idc01-sz.cloudtogo.cn",
-                "context", "dir://workspace",
                 "destination", "docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3",
                 "tarPath", "/workspace/devops.tar");
 

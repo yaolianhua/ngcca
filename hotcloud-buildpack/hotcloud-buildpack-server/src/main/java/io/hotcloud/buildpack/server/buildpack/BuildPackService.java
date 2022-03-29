@@ -1,11 +1,13 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
+import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Base64Helper;
+import io.hotcloud.common.StringHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
@@ -40,16 +42,59 @@ public class BuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
     private final KanikoFlag kanikoFlag;
+    private final GitApi gitApi;
 
     public BuildPackService(BuildPackStorageProperties storageProperties,
-                            KanikoFlag kanikoFlag) {
+                            KanikoFlag kanikoFlag,
+                            GitApi gitApi) {
         this.storageProperties = storageProperties;
         this.kanikoFlag = kanikoFlag;
+        this.gitApi = gitApi;
+    }
+
+    @Override
+    protected String yaml(BuildPack buildPack) {
+        Assert.notNull(buildPack, "BuildPack is null", 400);
+        Assert.notNull(buildPack.getJob(), "BuildPack job resource is null", 400);
+        Assert.notNull(buildPack.getDockerSecret(), "BuildPack docker secret resource is null", 400);
+        Assert.notNull(buildPack.getStorage(), "BuildPack storage resourceList is null", 400);
+
+        Assert.hasText(buildPack.getJob().getJobResourceYaml(), "BuildPack job resource yaml is null", 400);
+        Assert.hasText(buildPack.getStorage().getResourceListYaml(), "BuildPack storage resource yaml is null", 400);
+        Assert.hasText(buildPack.getDockerSecret().getSecretResourceYaml(), "BuildPack docker secret resource yaml is null", 400);
+
+        StringBuilder stringBuilder;
+        stringBuilder = new StringBuilder();
+        stringBuilder.append(buildPack.getJob().getJobResourceYaml());
+        stringBuilder.append("\n");
+        stringBuilder.append("---\n");
+        stringBuilder.append(buildPack.getStorage().getResourceListYaml());
+        stringBuilder.append("\n");
+        stringBuilder.append("---\n");
+        stringBuilder.append(buildPack.getDockerSecret().getSecretResourceYaml());
+        return stringBuilder.toString();
+    }
+
+    @Override
+    protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneRequest input) {
+        Assert.notNull(input, "BuildPack repository clone request body is null", 400);
+        Assert.hasText(input.getRemote(), "Git url is null", 400);
+        Assert.hasText(input.getLocal(), "Local path is null", 400);
+        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.getUsername(), input.getPassword());
+        if (!cloned) {
+            return null;
+        }
+
+        return BuildPackRepositoryCloned
+                .builder()
+                .local(input.getLocal())
+                .remote(input.getRemote())
+                .project(StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote()))
+                .build();
     }
 
     @Override
     protected BuildPackJobResource jobResource(BuildPackJobResourceRequest resource) {
-
         Assert.notNull(resource, "buildpack job resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
         Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null", 400);
@@ -130,7 +175,6 @@ public class BuildPackService extends AbstractBuildPackApi {
 
     @Override
     protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest resource) {
-
         Assert.notNull(resource, "buildpack storage resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 

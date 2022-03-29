@@ -33,12 +33,6 @@ public class BuildPackJobResourceRequest {
     @Builder.Default
     private Map<String, String> args = new HashMap<>();
 
-    /**
-     * Kaniko default args {@link io.hotcloud.buildpack.api.KanikoFlag}
-     */
-    @Builder.Default
-    private Map<String, String> defaultArgs = new HashMap<>();
-
     public BuildPackJobResourceRequest() {
     }
 }
