@@ -1,5 +1,7 @@
 package io.hotcloud.buildpack.api;
 
+import java.util.Map;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -359,4 +361,10 @@ public interface KanikoFlag {
         return 3;
     }
 
+    /**
+     * Convert kaniko flags, output as container args mapping
+     *
+     * @return mapping of kaniko args
+     */
+    Map<String, String> resolvedArgs();
 }

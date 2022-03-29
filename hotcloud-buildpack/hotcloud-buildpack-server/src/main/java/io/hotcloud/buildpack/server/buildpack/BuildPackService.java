@@ -1,9 +1,6 @@
 package io.hotcloud.buildpack.server.buildpack;
 
-import io.hotcloud.buildpack.api.AbstractBuildPackApi;
-import io.hotcloud.buildpack.api.JobResource;
-import io.hotcloud.buildpack.api.SecretResource;
-import io.hotcloud.buildpack.api.StorageResourceList;
+import io.hotcloud.buildpack.api.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Base64Helper;
@@ -40,9 +37,12 @@ import java.util.stream.Collectors;
 public class BuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
+    private final KanikoFlag kanikoFlag;
 
-    public BuildPackService(BuildPackStorageProperties storageProperties) {
+    public BuildPackService(BuildPackStorageProperties storageProperties,
+                            KanikoFlag kanikoFlag) {
         this.storageProperties = storageProperties;
+        this.kanikoFlag = kanikoFlag;
     }
 
     @Override
@@ -72,7 +72,9 @@ public class BuildPackService extends AbstractBuildPackApi {
         container.setImage("gcr.io/kaniko-project/executor:latest");
         container.setImagePullPolicy(ImagePullPolicy.IfNotPresent);
 
-        List<String> finalArgs = args.entrySet()
+        Map<String, String> argsMapping = kanikoFlag.resolvedArgs();
+        argsMapping.putAll(args);
+        List<String> finalArgs = argsMapping.entrySet()
                 .stream()
                 .map(e -> String.format("--%s=%s", e.getKey(), e.getValue()))
                 .collect(Collectors.toList());

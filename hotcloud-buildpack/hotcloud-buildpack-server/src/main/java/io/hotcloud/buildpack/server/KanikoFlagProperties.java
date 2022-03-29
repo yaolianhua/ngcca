@@ -1,14 +1,15 @@
 package io.hotcloud.buildpack.server;
 
 import io.hotcloud.buildpack.api.KanikoFlag;
+import io.hotcloud.common.HotCloudException;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -16,7 +17,6 @@ import java.lang.reflect.Field;
 @Configuration
 @ConfigurationProperties(prefix = "buildpack.kaniko")
 @Data
-@Slf4j
 public class KanikoFlagProperties implements KanikoFlag {
 
     private boolean cache = false;
@@ -61,26 +61,27 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String ignorePath;
     private int imageFsExtractRetry = 3;
 
-    @PostConstruct
-    public void print() throws IllegalAccessException {
+    @Override
+    public Map<String, String> resolvedArgs() {
         Field[] declaredFields = KanikoFlagProperties.class.getDeclaredFields();
-        StringBuilder args = new StringBuilder();
-        args.append("[\n");
+        Map<String, String> args = new HashMap<>(64);
         for (Field field : declaredFields) {
-            field.setAccessible(true);
-            Object o = field.get(this);
-            if ("log".equals(field.getName())) {
-                continue;
+            try {
+                field.setAccessible(true);
+                Object o = field.get(this);
+                if (o == null) {
+                    continue;
+                }
+                if (o instanceof String && !StringUtils.hasText(((String) o))) {
+                    continue;
+                }
+                args.put(field.getName(), String.valueOf(o));
+            } catch (IllegalAccessException e) {
+                throw new HotCloudException(e.getMessage(), e);
             }
-            if (o instanceof String && !StringUtils.hasText(((String) o))) {
-                continue;
-            }
-
-            args.append("\t").append("--").append(field.getName()).append("=").append(o);
-            args.append("\n");
         }
-        args.append("]");
 
-        log.info("【Load Kaniko Global-Default Configuration】\n {}", args);
+        return args;
     }
+
 }
