@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.api.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.Map;
  **/
 @Data
 @Builder
+@AllArgsConstructor
 public class BuildPackJobResourceRequest {
 
     /**
@@ -31,12 +33,11 @@ public class BuildPackJobResourceRequest {
     @Builder.Default
     private Map<String, String> args = new HashMap<>();
 
-    public BuildPackJobResourceRequest(String namespace, String persistentVolumeClaim, String secret, Map<String, String> args) {
-        this.namespace = namespace;
-        this.persistentVolumeClaim = persistentVolumeClaim;
-        this.secret = secret;
-        this.args = args;
-    }
+    /**
+     * Kaniko default args {@link io.hotcloud.buildpack.api.KanikoFlag}
+     */
+    @Builder.Default
+    private Map<String, String> defaultArgs = new HashMap<>();
 
     public BuildPackJobResourceRequest() {
     }
