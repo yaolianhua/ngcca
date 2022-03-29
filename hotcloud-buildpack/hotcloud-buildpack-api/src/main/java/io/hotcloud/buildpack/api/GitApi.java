@@ -18,9 +18,10 @@ public interface GitApi {
      *                 pointed to by the cloned repository's HEAD and can be
      *                 requested by passing {@code null} or <code>HEAD</code>.
      * @param local    the path will be cloned locally
+     * @param force    Whether to force cloning, if the specified path is not empty, it will be forcibly deleted and then cloned
      * @param username remote repository username credential
      * @param password remote repository password credential
      * @return {@link  Boolean}
      */
-    Boolean clone(String remote, @Nullable String branch, String local, @Nullable String username, @Nullable String password);
+    Boolean clone(String remote, @Nullable String branch, String local, boolean force, @Nullable String username, @Nullable String password);
 }

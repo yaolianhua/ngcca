@@ -32,9 +32,16 @@ public class BuildPackRepositoryCloneRequest {
      * the path will be cloned locally
      */
     private String local;
+
+    /**
+     * Whether to force cloning, if the specified path is not empty, it will be forcibly deleted and then cloned
+     */
+    private boolean force;
+
     /**
      * remote repository username credential
      */
+
     @Nullable
     private String username;
     /**

@@ -48,7 +48,7 @@ public class GitControllerTest {
                 .andExpect(status().isOk());
         //was invoked one time
         verify(gitApi, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
-                null, "localRepository", null, null);
+                null, "localRepository", false, null, null);
     }
 
 }

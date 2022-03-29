@@ -80,7 +80,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         Assert.notNull(input, "BuildPack repository clone request body is null", 400);
         Assert.hasText(input.getRemote(), "Git url is null", 400);
         Assert.hasText(input.getLocal(), "Local path is null", 400);
-        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.getUsername(), input.getPassword());
+        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned) {
             return null;
         }

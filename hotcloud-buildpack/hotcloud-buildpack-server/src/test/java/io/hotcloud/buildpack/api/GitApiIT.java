@@ -29,6 +29,7 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
         Boolean cloned = gitApi.clone("https://github.com/GoogleContainerTools/kaniko.git",
                 null,
                 path,
+                false,
                 null,
                 null);
         Assertions.assertTrue(cloned);
@@ -39,6 +40,14 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
         for (String naming : Objects.requireNonNull(file.list())) {
             log.debug("list of test-clone-repository/kaniko name: {}", naming);
         }
+
+        Boolean forcedCloned = gitApi.clone("https://github.com/GoogleContainerTools/kaniko.git",
+                null,
+                path,
+                true,
+                null,
+                null);
+        Assertions.assertTrue(forcedCloned);
 
         FileUtils.deleteDirectory(file);
         log.info("deleted repository: {}", file.getAbsolutePath());

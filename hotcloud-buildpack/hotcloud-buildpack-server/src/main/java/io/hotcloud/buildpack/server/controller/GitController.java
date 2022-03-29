@@ -26,9 +26,10 @@ public class GitController {
     public ResponseEntity<Result<Boolean>> cloneRepository(@RequestParam("gitUrl") String gitUrl,
                                                            @RequestParam(value = "branch", required = false) String branch,
                                                            @RequestParam("localPath") String local,
+                                                           @RequestParam(value = "force", required = false) boolean force,
                                                            @RequestParam(value = "username", required = false) String username,
                                                            @RequestParam(value = "password", required = false) String password) {
-        Boolean clone = gitApi.clone(gitUrl, branch, local, username, password);
+        Boolean clone = gitApi.clone(gitUrl, branch, local, force, username, password);
         return WebResponse.ok(clone);
     }
 }
