@@ -1,5 +1,9 @@
 package io.hotcloud.buildpack.api;
 
+import io.hotcloud.buildpack.api.model.JobResource;
+import io.hotcloud.buildpack.api.model.SecretResource;
+import io.hotcloud.buildpack.api.model.StorageResourceList;
+
 import javax.annotation.Nullable;
 import java.util.Map;
 

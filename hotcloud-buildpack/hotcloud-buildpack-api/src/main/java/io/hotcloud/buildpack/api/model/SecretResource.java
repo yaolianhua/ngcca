@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.api;
+package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
