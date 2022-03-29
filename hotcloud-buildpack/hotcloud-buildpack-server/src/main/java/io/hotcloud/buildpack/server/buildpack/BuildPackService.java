@@ -80,7 +80,9 @@ public class BuildPackService extends AbstractBuildPackApi {
         Assert.notNull(input, "BuildPack repository clone request body is null", 400);
         Assert.hasText(input.getRemote(), "Git url is null", 400);
         Assert.hasText(input.getLocal(), "Local path is null", 400);
-        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
+
+        String project = StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote());
+        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), Path.of(input.getLocal(), project).toString(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned) {
             return null;
         }
@@ -89,7 +91,7 @@ public class BuildPackService extends AbstractBuildPackApi {
                 .builder()
                 .local(input.getLocal())
                 .remote(input.getRemote())
-                .project(StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote()))
+                .project(project)
                 .build();
     }
 
@@ -121,9 +123,8 @@ public class BuildPackService extends AbstractBuildPackApi {
         container.setImage("gcr.io/kaniko-project/executor:latest");
         container.setImagePullPolicy(ImagePullPolicy.IfNotPresent);
 
-        Map<String, String> argsMapping = kanikoFlag.resolvedArgs();
-        argsMapping.putAll(resource.getArgs());
-        List<String> finalArgs = argsMapping.entrySet()
+        List<String> finalArgs = resource.getArgs()
+                .entrySet()
                 .stream()
                 .map(e -> String.format("--%s=%s", e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
@@ -168,7 +169,7 @@ public class BuildPackService extends AbstractBuildPackApi {
                 .name(jobName)
                 .namespace(resource.getNamespace())
                 .labels(labels)
-                .args(argsMapping)
+                .args(resource.getArgs())
                 .jobResourceYaml(jobYaml)
                 .build();
     }

@@ -3,6 +3,8 @@ package io.hotcloud.buildpack.api;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Assert;
 
+import java.util.Map;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -10,7 +12,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
 
     @Override
-    public BuildPack buildpack(String namespace, String gitUrl, String local, String registry, String registryUser, String registryPass) {
+    public BuildPack buildpack(String namespace, String gitUrl, String local, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
 
         Assert.hasText(namespace, "namespace is null", 400);
         Assert.hasText(local, "local path is null", 400);
@@ -21,8 +23,10 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         BuildPackRepositoryCloneRequest repository = BuildPackRepositoryCloneRequest.builder()
                 .remote(gitUrl)
                 .local(local)
+                .force(force)
                 .build();
         BuildPackRepositoryCloned cloned = clone(repository);
+        Assert.notNull(cloned, "BuildPack Repository clone failed", 404);
 
         BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
                 .namespace(namespace)
@@ -37,20 +41,25 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 
+
         BuildPackJobResourceRequest jobResourceRequest = BuildPackJobResourceRequest.builder()
                 .namespace(namespace)
                 .persistentVolumeClaim(storageResourceList.getPersistentVolumeClaim())
                 .secret(dockerSecretResource.getName())
+                .args(kanikoArgs)
                 .build();
         BuildPackJobResource jobResource = jobResource(jobResourceRequest);
 
 
-        return DefaultBuildPack.builder()
+        DefaultBuildPack buildPack = DefaultBuildPack.builder()
                 .storage(storageResourceList)
                 .dockerSecret(dockerSecretResource)
                 .job(jobResource)
                 .repository(cloned)
                 .build();
+
+        buildPack.setBuildPackYaml(yaml(buildPack));
+        return buildPack;
     }
 
     abstract protected String yaml(BuildPack buildPack);

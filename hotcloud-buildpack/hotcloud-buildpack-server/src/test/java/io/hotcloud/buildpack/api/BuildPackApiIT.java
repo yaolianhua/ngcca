@@ -5,7 +5,9 @@ import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
+import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Base64Helper;
+import io.hotcloud.common.StringHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,10 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     private NamespaceApi namespaceApi;
     @Autowired
     private SecretApi secretApi;
+    @Autowired
+    private BuildPackStorageProperties storageProperties;
+    @Autowired
+    private KanikoFlag kanikoFlag;
 
     @Before
     public void before() throws ApiException {
@@ -51,7 +58,38 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void buildpack() {
-        BuildPack buildpack = buildPackApi.buildpack(namespace, "https://gitlab.com/yaolianhua/hotcloud.git", "/kaniko/" + namespace, "", "", "");
+        String local = null;
+        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
+        if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
+            local = Path.of(storageProperties.getHostPath().getPath(), namespace).toString();
+        }
+        if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
+            local = Path.of(storageProperties.getNfs().getPath(), namespace).toString();
+        }
+
+        String tarball = StringHelper.generateImageTarball(gitUrl);
+        String pushedImage = StringHelper.generatePushedImage(gitUrl);
+        Map<String, String> args = kanikoFlag.resolvedArgs();
+        args.forEach((key, value) -> {
+            if ("tarPath".equals(key)) {
+                args.put(key, Path.of(value, tarball).toString());
+            }
+            if ("destination".equals(key)) {
+                args.put(key, Path.of(value, pushedImage).toString());
+            }
+        });
+
+        BuildPack buildpack = buildPackApi.buildpack(
+                namespace,
+                gitUrl,
+                local,
+                false,
+                "index.docker.io", "username", "password", args);
+
+        Assertions.assertNotNull(buildpack);
+        Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
+
+        log.info("BuildPack yaml \n {}", buildpack.getBuildPackYaml());
 
     }
 
