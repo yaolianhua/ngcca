@@ -162,11 +162,11 @@ data:
         cache-ttl-duration: 168h
         compressed-caching: true
         cleanup: true
-        context:
+        context: dir://workspace
         context-sub-path:
         destination:
         digest-file:
-        dockerfile: Dockerfile
+        dockerfile: /workspace/Dockerfile
         force: false
         image-fs-extract-retry: 3
         git:

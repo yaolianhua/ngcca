@@ -38,7 +38,7 @@ public class KanikoFlagProperties implements KanikoFlag {
 
     private int pushRetry = 3;
 
-    private String context;
+    private String context = "dir://workspace";
     private String destination;
     private String registryMirror;
     private String registryCertificate;
@@ -47,7 +47,7 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String cacheTtlDuration = "168h";
     private String contextSubPath;
     private String digestFile;
-    private String dockerfile = "Dockerfile";
+    private String dockerfile = "/workspace/Dockerfile";
     private String git;
     private String imageNameWithDigestFile;
     private String imageNameTagWithDigestFile;
