@@ -55,7 +55,7 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String label;
     private String logFormat = "color";
     private String snapshotMode = "full";
-    private String tarPath = "/workspace";
+    private String tarPath = "/workspace/";
     private String target;
     private String verbosity = "debug";
     private String ignorePath;

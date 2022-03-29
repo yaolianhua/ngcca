@@ -35,7 +35,7 @@ buildpack:
     skip-tls-verify-registry: true
     skip-unused-stages: true
     snapshot-mode: full
-    tar-path: /workspace
+    tar-path: /workspace/
     target:
     use-new-run: true
     verbosity: debug
