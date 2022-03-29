@@ -14,7 +14,7 @@ import java.util.Map;
 public class BuildPackJobResourceRequest {
 
     /**
-     * namespace in which namespace the job will be created
+     * In which namespace the job will be created
      */
     private String namespace;
     /**

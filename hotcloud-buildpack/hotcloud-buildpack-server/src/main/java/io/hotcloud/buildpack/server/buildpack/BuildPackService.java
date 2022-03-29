@@ -2,10 +2,7 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
-import io.hotcloud.buildpack.api.model.BuildPackJobResource;
-import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
-import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
-import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
+import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Base64Helper;
@@ -132,13 +129,14 @@ public class BuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackStorageResourceList storageResourceList(String namespace, String pv, String pvc, Integer sizeGb) {
+    protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest resource) {
 
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.notNull(resource, "buildpack storage resource request body is null", 400);
+        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 
-        String pvName = StringUtils.hasText(pv) ? pv : "pv-" + namespace;
-        String pvcName = StringUtils.hasText(pvc) ? pvc : "pvc-" + namespace;
-        Integer capacity = null == sizeGb ? storageProperties.getSizeGb() : sizeGb;
+        String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + resource.getNamespace();
+        String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + resource.getNamespace();
+        Integer capacity = null == resource.getSizeGb() ? storageProperties.getSizeGb() : resource.getSizeGb();
         String storageClass = storageProperties.getStorageClass().getName();
         List<String> accessModes = List.of("ReadWriteOnce");
         Map<String, String> storage = Map.of("storage", capacity + "Gi");
@@ -149,7 +147,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         ObjectMetadata pvMetadata = new ObjectMetadata();
         pvMetadata.setName(pvName);
         //nothing affect
-        pvMetadata.setNamespace(namespace);
+        pvMetadata.setNamespace(resource.getNamespace());
         persistentVolumeCreateRequest.setMetadata(pvMetadata);
 
         PersistentVolumeSpec persistentVolumeSpec = new PersistentVolumeSpec();
@@ -159,15 +157,15 @@ public class BuildPackService extends AbstractBuildPackApi {
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
         persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Delete);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
-            HostPathVolume hostPathVolume = HostPathVolume.of(Path.of(storageProperties.getHostPath().getPath(), namespace).toString(), null);
+            HostPathVolume hostPathVolume = HostPathVolume.of(Path.of(storageProperties.getHostPath().getPath(), resource.getNamespace()).toString(), null);
             persistentVolumeSpec.setHostPath(hostPathVolume);
         }
         if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            NFSVolume nfsVolume = NFSVolume.of(Path.of(storageProperties.getNfs().getPath(), namespace).toString(), storageProperties.getNfs().getServer(), false);
+            NFSVolume nfsVolume = NFSVolume.of(Path.of(storageProperties.getNfs().getPath(), resource.getNamespace()).toString(), storageProperties.getNfs().getServer(), false);
             persistentVolumeSpec.setNfs(nfsVolume);
         }
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
-        claimRef.setNamespaces(namespace);
+        claimRef.setNamespaces(resource.getNamespace());
         claimRef.setName(pvcName);
         persistentVolumeSpec.setClaimRef(claimRef);
 
@@ -177,7 +175,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         PersistentVolumeClaimCreateRequest persistentVolumeClaimCreateRequest = new PersistentVolumeClaimCreateRequest();
         ObjectMetadata pvcMetadata = new ObjectMetadata();
         pvcMetadata.setName(pvcName);
-        pvcMetadata.setNamespace(namespace);
+        pvcMetadata.setNamespace(resource.getNamespace());
 
         persistentVolumeClaimCreateRequest.setMetadata(pvcMetadata);
 
@@ -202,11 +200,11 @@ public class BuildPackService extends AbstractBuildPackApi {
 
         return BuildPackStorageResourceList.builder()
                 .resourceListYaml(stringBuilder.toString())
-                .namespace(namespace)
+                .namespace(resource.getNamespace())
                 .persistentVolumeClaim(pvcName)
                 .persistentVolume(pvName)
                 .storageClass(storageClass)
-                .sizeGb(storageProperties.getSizeGb())
+                .sizeGb(capacity)
                 .build();
     }
 

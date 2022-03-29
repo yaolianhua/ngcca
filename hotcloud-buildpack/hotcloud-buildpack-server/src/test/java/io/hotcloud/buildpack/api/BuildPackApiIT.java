@@ -4,10 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.buildpack.api.model.BuildPackJobResource;
-import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
-import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
-import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
+import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -74,7 +71,13 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void storageResourceList() {
-        BuildPackStorageResourceList buildPackStorageResourceList = buildPackApi.storageResourceList(namespace, null, null, null);
+        BuildPackStorageResourceRequest resource = BuildPackStorageResourceRequest.builder()
+                .namespace(namespace)
+                .sizeGb(null)
+                .persistentVolume(null)
+                .persistentVolumeClaim(null)
+                .build();
+        BuildPackStorageResourceList buildPackStorageResourceList = buildPackApi.storageResourceList(resource);
 
         String yaml = buildPackStorageResourceList.getResourceListYaml();
         Assertions.assertTrue(StringUtils.hasText(yaml));

@@ -1,9 +1,6 @@
 package io.hotcloud.buildpack.api;
 
-import io.hotcloud.buildpack.api.model.BuildPackJobResource;
-import io.hotcloud.buildpack.api.model.BuildPackJobResourceRequest;
-import io.hotcloud.buildpack.api.model.BuildPackSecretResource;
-import io.hotcloud.buildpack.api.model.BuildPackStorageResourceList;
+import io.hotcloud.buildpack.api.model.*;
 
 import javax.annotation.Nullable;
 
@@ -24,13 +21,10 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
     /**
      * Generate pv/pvc Yaml resource list.
      *
-     * @param namespace In which namespace the pvc will be created
-     * @param pv        The name pv will be created
-     * @param pvc       The name pvc will be created
-     * @param sizeGb    The capacity of pv. unit is GB
+     * @param storageResource {@link BuildPackStorageResourceRequest}
      * @return {@link BuildPackStorageResourceList}
      */
-    abstract protected BuildPackStorageResourceList storageResourceList(String namespace, @Nullable String pv, @Nullable String pvc, @Nullable Integer sizeGb);
+    abstract protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest storageResource);
 
     /**
      * Generate secret Yaml resource.
