@@ -56,4 +56,9 @@ public final class StringHelper {
 
         return String.format("%s:%s", name, date);
     }
+
+    public static String generateImageTarball(String gitUrl) {
+        String pushedImage = generatePushedImage(gitUrl);
+        return pushedImage.replace(":", "-") + ".tar";
+    }
 }

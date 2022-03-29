@@ -47,4 +47,10 @@ public class StringHelperTest {
         log.info("{}", generatePushedImage);
     }
 
+    @Test
+    public void generateImageTarball() {
+        String generatePushedImage = StringHelper.generateImageTarball("https://github.com/GoogleContainerTools/kaniko.git");
+        log.info("{}", generatePushedImage);
+    }
+
 }
