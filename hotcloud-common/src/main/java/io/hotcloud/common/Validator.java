@@ -23,8 +23,8 @@ public final class Validator {
         return Path.of(path).toFile().exists();
     }
 
-    public static boolean validHTTPSGitAddress(String url) {
+    public static boolean validHTTPGitAddress(String url) {
         Assert.hasText(url, "url is null", 400);
-        return new UrlValidator(new String[]{"https"}).isValid(url);
+        return new UrlValidator(new String[]{"https", "http"}).isValid(url);
     }
 }

@@ -57,9 +57,9 @@ public class ValidatorTest {
 
     @Test
     public void gitAddress() {
-        Assertions.assertTrue(Validator.validHTTPSGitAddress("https://github.com/GoogleContainerTools/kaniko.git"));
-        Assertions.assertFalse(Validator.validHTTPSGitAddress("http://github.com/GoogleContainerTools/kaniko.git"));
-        Assertions.assertFalse(Validator.validHTTPSGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
+        Assertions.assertTrue(Validator.validHTTPGitAddress("https://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertTrue(Validator.validHTTPGitAddress("http://github.com/GoogleContainerTools/kaniko.git"));
+        Assertions.assertFalse(Validator.validHTTPGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
     }
 
 }
