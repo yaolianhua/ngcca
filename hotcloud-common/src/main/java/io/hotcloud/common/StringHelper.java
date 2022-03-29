@@ -6,10 +6,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -48,5 +47,13 @@ public final class StringHelper {
         String originString = substring.substring(1, substring.length() - ".git".length());
         String lowerCaseString = originString.toLowerCase();
         return lowerCaseString.replaceAll("_", "-");
+    }
+
+    public static String generatePushedImage(String gitUrl) {
+        String name = retrieveProjectFromHTTPGitUrl(gitUrl);
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+
+        return String.format("%s:%s", name, date);
     }
 }
