@@ -15,17 +15,17 @@ public class BuildPackStorageResourceList {
     private String storageClass;
     private String persistentVolume;
     private String persistentVolumeClaim;
-    private Integer sizeGb;
+    private String capacity;
 
     @JsonProperty("yaml")
     private String resourceListYaml;
 
-    public BuildPackStorageResourceList(String namespace, String storageClass, String persistentVolume, String persistentVolumeClaim, Integer sizeGb, String resourceListYaml) {
+    public BuildPackStorageResourceList(String namespace, String storageClass, String persistentVolume, String persistentVolumeClaim, String capacity, String resourceListYaml) {
         this.namespace = namespace;
         this.storageClass = storageClass;
         this.persistentVolume = persistentVolume;
         this.persistentVolumeClaim = persistentVolumeClaim;
-        this.sizeGb = sizeGb;
+        this.capacity = capacity;
         this.resourceListYaml = resourceListYaml;
     }
 

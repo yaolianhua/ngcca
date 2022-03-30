@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.server;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.common.HotCloudException;
 import lombok.Data;
@@ -21,45 +22,71 @@ public class KanikoFlagProperties implements KanikoFlag {
 
     private boolean cache = false;
     private boolean cleanup = true;
+    @JsonProperty("compressed-caching")
     private boolean compressedCaching = true;
     private boolean force = false;
     private boolean insecure = true;
+    @JsonProperty("insecure-pull")
     private boolean insecurePull = true;
+    @JsonProperty("log-timestamp")
     private boolean logTimestamp = false;
-    private boolean noPush = true;
+    @JsonProperty("no-push")
+    private boolean noPush = false;
     private boolean reproducible = false;
+    @JsonProperty("single-snapshot")
     private boolean singleSnapshot = false;
+    @JsonProperty("skip-tls-verify")
     private boolean skipTlsVerify = true;
+    @JsonProperty("skip-tls-verify-pull")
     private boolean skipTlsVerifyPull = true;
+    @JsonProperty("skip-tls-verify-registry")
     private boolean skipTlsVerifyRegistry = true;
+    @JsonProperty("skip-unused-stages")
     private boolean skipUnusedStages = false;
+    @JsonProperty("use-new-run")
     private boolean useNewRun = true;
+    @JsonProperty("ignore-var-run")
     private boolean ignoreVarRun = true;
 
-    private int pushRetry = 3;
-
     private String context = "dir://workspace";
-    private String destination = "index.docker.io/username/";
-    private String registryMirror;
-    private String registryCertificate;
-    private String cacheDir;
-    private String cacheRepo;
-    private String cacheTtlDuration = "168h";
-    private String contextSubPath;
-    private String digestFile;
-    private String dockerfile = "/workspace/Dockerfile";
-    private String git;
-    private String imageNameWithDigestFile;
-    private String imageNameTagWithDigestFile;
+    @JsonProperty("insecure-registry")
     private String insecureRegistry = "index.docker.io";
-    private String label;
+    private String destination;
+    private String tarPath;
+    @JsonProperty("cache-ttl")
+    private String cacheTtl = "168h";
+    private String dockerfile = "/workspace/Dockerfile";
+    @JsonProperty("log-format")
     private String logFormat = "color";
     private String snapshotMode = "full";
-    private String tarPath = "/workspace/";
-    private String target;
     private String verbosity = "debug";
-    private String ignorePath;
+    @JsonProperty("image-fs-extract-retry")
     private int imageFsExtractRetry = 3;
+    @JsonProperty("push-retry")
+    private int pushRetry = 3;
+
+    @JsonProperty("registry-mirror")
+    private String registryMirror;
+    @JsonProperty("registry-certificate")
+    private String registryCertificate;
+    @JsonProperty("cache-dir")
+    private String cacheDir;
+    @JsonProperty("cache-repo")
+    private String cacheRepo;
+    @JsonProperty("context-sub-path")
+    private String contextSubPath;
+    @JsonProperty("digest-file")
+    private String digestFile;
+    private String git;
+    @JsonProperty("image-name-with-digest-file")
+    private String imageNameWithDigestFile;
+    @JsonProperty("image-name-tag-with-digest-file")
+    private String imageNameTagWithDigestFile;
+    private String label;
+    private String target;
+    @JsonProperty("ignore-path")
+    private String ignorePath;
+
 
     @Override
     public Map<String, String> resolvedArgs() {
@@ -73,6 +100,11 @@ public class KanikoFlagProperties implements KanikoFlag {
                     continue;
                 }
                 if (o instanceof String && !StringUtils.hasText(((String) o))) {
+                    continue;
+                }
+                JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
+                if (jsonProperty != null) {
+                    args.put(jsonProperty.value(), String.valueOf(o));
                     continue;
                 }
                 args.put(field.getName(), String.valueOf(o));

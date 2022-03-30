@@ -2,6 +2,7 @@ package io.hotcloud.buildpack.api;
 
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -12,17 +13,19 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
 
     @Override
-    public BuildPack buildpack(String namespace, String gitUrl, String local, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
+    public BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
 
         Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(local, "local path is null", 400);
+        Assert.hasText(gitUrl, "git url is null", 400);
+        Assert.hasText(clonePath, "clone path is null", 400);
         Assert.hasText(registry, "registry is null", 400);
         Assert.hasText(registryUser, "registry user is null", 400);
         Assert.hasText(registryPass, "registry password is null", 400);
+        Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty", 400);
 
         BuildPackRepositoryCloneRequest repository = BuildPackRepositoryCloneRequest.builder()
                 .remote(gitUrl)
-                .local(local)
+                .local(clonePath)
                 .force(force)
                 .build();
         BuildPackRepositoryCloned cloned = clone(repository);
@@ -38,6 +41,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
         BuildPackStorageResourceRequest storageResourceRequest = BuildPackStorageResourceRequest.builder()
                 .namespace(namespace)
+                .volumePath(clonePath)
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 

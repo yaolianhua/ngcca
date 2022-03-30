@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.GitApi;
-import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
@@ -28,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,17 +36,14 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
-public class BuildPackService extends AbstractBuildPackApi {
+public class InternalBuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
-    private final KanikoFlag kanikoFlag;
     private final GitApi gitApi;
 
-    public BuildPackService(BuildPackStorageProperties storageProperties,
-                            KanikoFlag kanikoFlag,
-                            GitApi gitApi) {
+    public InternalBuildPackService(BuildPackStorageProperties storageProperties,
+                                    GitApi gitApi) {
         this.storageProperties = storageProperties;
-        this.kanikoFlag = kanikoFlag;
         this.gitApi = gitApi;
     }
 
@@ -66,10 +61,8 @@ public class BuildPackService extends AbstractBuildPackApi {
         StringBuilder stringBuilder;
         stringBuilder = new StringBuilder();
         stringBuilder.append(buildPack.getJob().getJobResourceYaml());
-        stringBuilder.append("\n");
         stringBuilder.append("---\n");
         stringBuilder.append(buildPack.getStorage().getResourceListYaml());
-        stringBuilder.append("\n");
         stringBuilder.append("---\n");
         stringBuilder.append(buildPack.getDockerSecret().getSecretResourceYaml());
         return stringBuilder.toString();
@@ -82,7 +75,7 @@ public class BuildPackService extends AbstractBuildPackApi {
         Assert.hasText(input.getLocal(), "Local path is null", 400);
 
         String project = StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote());
-        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), Path.of(input.getLocal(), project).toString(), input.isForce(), input.getUsername(), input.getPassword());
+        Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned) {
             return null;
         }
@@ -178,13 +171,15 @@ public class BuildPackService extends AbstractBuildPackApi {
     protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest resource) {
         Assert.notNull(resource, "buildpack storage resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
+        Assert.hasText(resource.getVolumePath(), "data volume path is null", 400);
 
         String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + resource.getNamespace();
         String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + resource.getNamespace();
-        Integer capacity = null == resource.getSizeGb() ? storageProperties.getSizeGb() : resource.getSizeGb();
+        String capacity = null == resource.getCapacity() ? storageProperties.getCapacity() : resource.getCapacity();
+
         String storageClass = storageProperties.getStorageClass().getName();
         List<String> accessModes = List.of("ReadWriteOnce");
-        Map<String, String> storage = Map.of("storage", capacity + "Gi");
+        Map<String, String> storage = Map.of("storage", capacity);
 
 
         //pv
@@ -202,11 +197,11 @@ public class BuildPackService extends AbstractBuildPackApi {
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
         persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Delete);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
-            HostPathVolume hostPathVolume = HostPathVolume.of(Path.of(storageProperties.getHostPath().getPath(), resource.getNamespace()).toString(), null);
+            HostPathVolume hostPathVolume = HostPathVolume.of(resource.getVolumePath(), null);
             persistentVolumeSpec.setHostPath(hostPathVolume);
         }
         if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            NFSVolume nfsVolume = NFSVolume.of(Path.of(storageProperties.getNfs().getPath(), resource.getNamespace()).toString(), storageProperties.getNfs().getServer(), false);
+            NFSVolume nfsVolume = NFSVolume.of(resource.getVolumePath(), storageProperties.getNfs().getServer(), false);
             persistentVolumeSpec.setNfs(nfsVolume);
         }
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
@@ -249,7 +244,7 @@ public class BuildPackService extends AbstractBuildPackApi {
                 .persistentVolumeClaim(pvcName)
                 .persistentVolume(pvName)
                 .storageClass(storageClass)
-                .sizeGb(capacity)
+                .capacity(capacity)
                 .build();
     }
 

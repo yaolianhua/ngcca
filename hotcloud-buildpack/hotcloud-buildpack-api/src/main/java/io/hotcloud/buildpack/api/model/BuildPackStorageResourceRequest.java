@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,11 +29,15 @@ public class BuildPackStorageResourceRequest {
     @Nullable
     private String persistentVolumeClaim;
     /**
-     * The capacity of pv. unit is GB
+     * The capacity of pv.
      */
     @Nullable
-    @JsonProperty("size")
-    private Integer sizeGb;
+    private String capacity;
+
+    /**
+     * data path
+     */
+    private String volumePath;
 
     public BuildPackStorageResourceRequest() {
     }

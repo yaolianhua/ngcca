@@ -27,7 +27,7 @@ public interface KanikoFlag {
     String getContext();
 
     /**
-     * image name. {@code gcr.io/$PROJECT/$IMAGE:$TAG>}
+     * Registry the final image should be pushed to. Set it repeatedly for multiple destinations. {@code gcr.io/$PROJECT/$IMAGE:$TAG>}
      *
      * @return destination
      */
@@ -63,9 +63,9 @@ public interface KanikoFlag {
     /**
      * Cache timeout in hours. Defaults to two weeks.
      *
-     * @return cache-ttl-duration
+     * @return cache-ttl
      */
-    String getCacheTtlDuration();
+    String getCacheTtl();
 
     /**
      * Set this flag to clean the filesystem at the end of the build.
