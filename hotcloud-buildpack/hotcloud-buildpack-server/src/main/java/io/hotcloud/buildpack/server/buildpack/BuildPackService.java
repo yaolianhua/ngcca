@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.GitApi;
-import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
@@ -41,14 +40,11 @@ import java.util.stream.Collectors;
 public class BuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
-    private final KanikoFlag kanikoFlag;
     private final GitApi gitApi;
 
     public BuildPackService(BuildPackStorageProperties storageProperties,
-                            KanikoFlag kanikoFlag,
                             GitApi gitApi) {
         this.storageProperties = storageProperties;
-        this.kanikoFlag = kanikoFlag;
         this.gitApi = gitApi;
     }
 

@@ -27,7 +27,7 @@ public class GitImpl implements GitApi {
     @Override
     public Boolean clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
 
-        Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only https", remote), 400);
+        Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote), 400);
 
         if (force && Validator.existedPath(local)) {
             try {

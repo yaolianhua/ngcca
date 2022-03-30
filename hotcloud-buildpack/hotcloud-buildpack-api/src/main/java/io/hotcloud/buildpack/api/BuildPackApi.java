@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface BuildPackApi {
+interface BuildPackApi {
 
-    BuildPack buildpack(String namespace, String gitUrl, String local, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs);
+    BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs);
 }
