@@ -72,7 +72,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
                 "index.docker.io",
                 "yaolianhua",
                 "yaolianhua",
-                "BBwhyyan,-0309");
+                "");
 
         Assertions.assertNotNull(buildpack);
         Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
