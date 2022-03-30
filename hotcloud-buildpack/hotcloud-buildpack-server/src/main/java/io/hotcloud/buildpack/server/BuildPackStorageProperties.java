@@ -21,9 +21,9 @@ public class BuildPackStorageProperties {
      */
     private Type type = Type.hostPath;
     /**
-     * Storage capacity will be allocated. default 1Gi
+     * Storage capacity will be allocated. default 100M
      */
-    private Integer sizeGb = 1;
+    private String capacity = "100M";
     /**
      * PV type of nfs
      */
@@ -39,11 +39,11 @@ public class BuildPackStorageProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load BuildPack Storage Configuration】 storage-class = '{}', type = '{}', mount path = '{}', size = '{}'GB",
+        log.info("【Load BuildPack Storage Configuration】 storage-class = '{}', type = '{}', mount path = '{}', size = '{}'",
                 storageClass.getName(),
                 type,
                 retrieveStoragePath(),
-                sizeGb);
+                capacity);
     }
 
     public String retrieveStoragePath() {
@@ -73,7 +73,7 @@ public class BuildPackStorageProperties {
 
     @Data
     public static class HostPath {
-        private String path = "/kaniko";
+        private String path = "/tmp/kaniko";
     }
 
     @Data

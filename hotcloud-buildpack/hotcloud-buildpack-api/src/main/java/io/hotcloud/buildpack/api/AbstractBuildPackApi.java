@@ -41,6 +41,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
         BuildPackStorageResourceRequest storageResourceRequest = BuildPackStorageResourceRequest.builder()
                 .namespace(namespace)
+                .volumePath(clonePath)
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 

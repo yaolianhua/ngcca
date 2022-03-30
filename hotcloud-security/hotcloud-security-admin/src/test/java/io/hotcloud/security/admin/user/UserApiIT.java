@@ -42,7 +42,7 @@ public class UserApiIT {
 
     @Before
     public void authenticated() {
-        UserDetails userDetails = userApi.retrieve("client-user");
+        UserDetails userDetails = userApi.retrieve("admin");
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
@@ -68,6 +68,6 @@ public class UserApiIT {
 
         FakeUser current = (FakeUser) userApi.current();
         Assertions.assertNotNull(current);
-        Assertions.assertEquals("client-user", current.getUsername());
+        Assertions.assertEquals("admin", current.getUsername());
     }
 }

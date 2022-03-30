@@ -13,8 +13,3 @@ cache:
     host: localhost
     password: QbMufCD@9WVQ^Hv
     port: 6379
-buildpack:
-  storage:
-    type: hostpath
-    host-path:
-      path: /kaniko
