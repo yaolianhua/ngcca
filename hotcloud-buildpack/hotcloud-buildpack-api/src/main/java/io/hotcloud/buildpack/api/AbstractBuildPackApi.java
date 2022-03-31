@@ -23,6 +23,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         Assert.hasText(registryPass, "registry password is null", 400);
         Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty", 400);
 
+        //Repository clone
         BuildPackRepositoryCloneRequest repository = BuildPackRepositoryCloneRequest.builder()
                 .remote(gitUrl)
                 .local(clonePath)
@@ -31,6 +32,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         BuildPackRepositoryCloned cloned = clone(repository);
         Assert.notNull(cloned, "BuildPack Repository clone failed", 404);
 
+        //Docker secret auth
         BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
                 .namespace(namespace)
                 .registry(registry)
@@ -39,22 +41,24 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
                 .build();
         BuildPackDockerSecretResource dockerSecretResource = dockersecret(dockersecret);
 
+        //persistentVolume & persistentVolumeClaim
         BuildPackStorageResourceRequest storageResourceRequest = BuildPackStorageResourceRequest.builder()
                 .namespace(namespace)
                 .volumePath(clonePath)
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 
-
+        //Kaniko job
         BuildPackJobResourceRequest jobResourceRequest = BuildPackJobResourceRequest.builder()
                 .namespace(namespace)
                 .persistentVolumeClaim(storageResourceList.getPersistentVolumeClaim())
                 .secret(dockerSecretResource.getName())
                 .args(kanikoArgs)
+                .alternative(Map.of("git:project:name", cloned.getProject()))
                 .build();
         BuildPackJobResource jobResource = jobResource(jobResourceRequest);
 
-
+        //Build final deployment yaml
         DefaultBuildPack buildPack = DefaultBuildPack.builder()
                 .storage(storageResourceList)
                 .dockerSecret(dockerSecretResource)

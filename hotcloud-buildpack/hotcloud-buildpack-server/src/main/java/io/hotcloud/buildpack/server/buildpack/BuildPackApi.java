@@ -93,12 +93,13 @@ public class BuildPackApi implements BuildPackApiAdaptor {
         String tarball = StringHelper.generateImageTarball(gitUrl);
 
         if (StringUtils.hasText(dockerfile)) {
-            args.put("dockerfile", String.format("/workspace/%s", dockerfile));
+            args.put("dockerfile", Path.of(kanikoFlag.getContext(), dockerfile).toString());
         }
         if (StringUtils.hasText(registry)) {
             args.put("insecure-registry", registry);
         }
-        args.put("tarPath", String.format("/workspace/%s", tarball));
+
+        args.put("tarPath", Path.of(kanikoFlag.getTarPath(), tarball).toString());
 
         if (!StringUtils.hasText(kanikoFlag.getDestination())) {
             registryProject = StringUtils.hasText(registryProject) ? registryProject : "registry-project-name";

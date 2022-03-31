@@ -2,6 +2,7 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.GitApi;
+import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
@@ -29,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,11 +42,14 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
     private final GitApi gitApi;
+    private final KanikoFlag kanikoFlag;
 
     public InternalBuildPackService(BuildPackStorageProperties storageProperties,
-                                    GitApi gitApi) {
+                                    GitApi gitApi,
+                                    KanikoFlag kanikoFlag) {
         this.storageProperties = storageProperties;
         this.gitApi = gitApi;
+        this.kanikoFlag = kanikoFlag;
     }
 
     @Override
@@ -97,8 +102,12 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
 
         String dockersecretvolume = "docker-registry-secret-volume";
         String workspacevolume = "workspace-volume";
-        Map<String, String> labels = Map.of("k8s-app", resource.getNamespace());
-        String jobName = "buildpack-job-" + resource.getNamespace();
+
+        Map<String, String> alternative = resource.getAlternative();
+        String project = alternative.get("git:project:name");
+
+        Map<String, String> labels = Map.of("k8s-app", project + "-" + resource.getNamespace());
+        String jobName = String.format("%s-job-buildpack-%s", project, resource.getNamespace());
 
         JobCreateRequest request = new JobCreateRequest();
         ObjectMetadata jobMetadata = new ObjectMetadata();
@@ -125,7 +134,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
 
         //volume mounts
         VolumeMount dockersecretVolumeMount = VolumeMount.of(dockersecretvolume, "/kaniko/.docker", true);
-        VolumeMount workspaceVolumeMount = VolumeMount.of(workspacevolume, "/workspace", false);
+        VolumeMount workspaceVolumeMount = VolumeMount.of(workspacevolume, kanikoFlag.getContext(), false);
         container.setVolumeMounts(List.of(dockersecretVolumeMount, workspaceVolumeMount));
 
         //volumes
@@ -148,6 +157,9 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
 
         template.setSpec(templateSpec);
 
+        ObjectMetadata podMetadata = new ObjectMetadata();
+        podMetadata.setLabels(labels);
+        template.setMetadata(podMetadata);
 
         JobSpec spec = new JobSpec();
         spec.setTtlSecondsAfterFinished(600);
@@ -163,6 +175,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
                 .namespace(resource.getNamespace())
                 .labels(labels)
                 .args(resource.getArgs())
+                .alternative(alternative)
                 .jobResourceYaml(jobYaml)
                 .build();
     }
@@ -195,7 +208,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         persistentVolumeSpec.setAccessModes(accessModes);
         persistentVolumeSpec.setStorageClassName(storageClass);
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
-        persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Delete);
+        persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Retain);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
             HostPathVolume hostPathVolume = HostPathVolume.of(resource.getVolumePath(), null);
             persistentVolumeSpec.setHostPath(hostPathVolume);
@@ -260,7 +273,11 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         request.setImmutable(true);
         request.setType("kubernetes.io/dockerconfigjson");
 
-        String configjson = Base64Helper.dockerconfigjson(resource.getRegistry(), resource.getUsername(), resource.getPassword());
+        String registry = resource.getRegistry();
+        if (Objects.equals(registry, "index.docker.io")) {
+            registry = "https://index.docker.io/v1/";
+        }
+        String configjson = Base64Helper.dockerconfigjson(registry, resource.getUsername(), resource.getPassword());
         Map<String, String> data = Map.of(".dockerconfigjson", configjson);
         request.setData(data);
 
