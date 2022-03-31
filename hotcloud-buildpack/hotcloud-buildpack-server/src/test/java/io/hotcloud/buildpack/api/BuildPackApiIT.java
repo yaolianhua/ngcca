@@ -1,14 +1,15 @@
 package io.hotcloud.buildpack.api;
 
-import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.fabric8.kubernetes.api.model.Secret;
-import io.fabric8.kubernetes.api.model.SecretList;
+import io.fabric8.kubernetes.api.model.*;
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.pod.PodApi;
+import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.hotcloud.security.api.UserApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -26,6 +27,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -47,6 +50,10 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     @Autowired
     private UserApi userApi;
 
+    final CountDownLatch latch = new CountDownLatch(60);
+    @Autowired
+    private JobApi jobApi;
+
 
     @Before
     public void before() throws ApiException {
@@ -62,14 +69,17 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         namespaceApi.delete(namespace);
     }
 
+    @Autowired
+    private PodApi podApi;
+
     @Test
-    public void buildpack() {
+    public void buildpack() throws InterruptedException, ApiException {
 
         String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
         BuildPack buildpack = buildPackApiAdaptor.buildpack(gitUrl,
-                "Dockerfile",
+                "",
                 true,
-                "index.docker.io",
+                "",
                 "yaolianhua",
                 "yaolianhua",
                 "");
@@ -78,8 +88,32 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
 
         log.info("BuildPack yaml \n {}", buildpack.getBuildPackYaml());
+        String namespace = buildpack.getJob().getNamespace();
+        String job = buildpack.getJob().getName();
 
         kubectlApi.apply(null, buildpack.getBuildPackYaml());
+
+        Job jobRead = jobApi.read(namespace, job);
+        Assertions.assertNotNull(jobRead);
+
+        PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
+        Assertions.assertEquals(1, podList.getItems().size());
+
+        Pod pod = podList.getItems().get(0);
+        while (latch.getCount() != 0) {
+            TimeUnit.SECONDS.sleep(1);
+
+            try {
+                String logs = podApi.logs(namespace, pod.getMetadata().getName());
+                log.info("{}", logs);
+                latch.countDown();
+            } catch (Exception e) {
+                log.warn("{}", e.getMessage());
+            }
+
+        }
+
+        namespaceApi.delete(namespace);
     }
 
     @Test
