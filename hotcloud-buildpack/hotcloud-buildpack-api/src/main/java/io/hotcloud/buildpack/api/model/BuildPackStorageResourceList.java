@@ -11,12 +11,30 @@ import lombok.Data;
 @Builder
 public class BuildPackStorageResourceList {
 
+    /**
+     * In which namespace the pvc be created
+     */
     private String namespace;
+    /**
+     * StorageClass name
+     */
     private String storageClass;
+    /**
+     * The name pv be created
+     */
     private String persistentVolume;
+    /**
+     * The name pvc be created
+     */
     private String persistentVolumeClaim;
+    /**
+     * The capacity of pv.
+     */
     private String capacity;
 
+    /**
+     * Generated pv/pvc resource list yaml
+     */
     @JsonProperty("yaml")
     private String resourceListYaml;
 

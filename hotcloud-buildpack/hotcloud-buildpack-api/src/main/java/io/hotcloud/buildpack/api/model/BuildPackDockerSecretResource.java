@@ -13,10 +13,25 @@ import java.util.Map;
 @Builder
 public class BuildPackDockerSecretResource {
 
+    /**
+     * The name secret be created
+     */
     private String name;
+    /**
+     * In which namespace the secret be created
+     */
     private String namespace;
+    /**
+     * secret data be created
+     */
     private Map<String, String> data;
+    /**
+     * secret labels be created
+     */
     private Map<String, String> labels;
+    /**
+     * generated secret yaml resource
+     */
     @JsonProperty("yaml")
     private String secretResourceYaml;
 

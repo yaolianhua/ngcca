@@ -10,9 +10,18 @@ import lombok.Data;
 @Data
 @Builder
 public class BuildPackRepositoryCloned {
+    /**
+     * remote git url. protocol supported http(s) only
+     */
     @JsonProperty("git_url")
     private String remote;
+    /**
+     * the path will be cloned locally
+     */
     private String local;
-    @JsonProperty("project_name")
+    /**
+     * retrieved git project name
+     */
+    @JsonProperty("git_project")
     private String project;
 }
