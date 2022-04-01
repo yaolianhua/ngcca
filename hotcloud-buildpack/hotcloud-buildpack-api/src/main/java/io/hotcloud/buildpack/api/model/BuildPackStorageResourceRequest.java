@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -35,9 +37,10 @@ public class BuildPackStorageResourceRequest {
     private String capacity;
 
     /**
-     * data path
+     * Alternate properties container
      */
-    private String volumePath;
+    @Builder.Default
+    private Map<String, String> alternative = new HashMap<>();
 
     public BuildPackStorageResourceRequest() {
     }

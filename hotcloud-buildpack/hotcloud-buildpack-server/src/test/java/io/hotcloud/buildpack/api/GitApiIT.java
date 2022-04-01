@@ -26,7 +26,7 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
 
         final String path = "test-clone-repository";
 
-        Boolean cloned = gitApi.clone("https://github.com/GoogleContainerTools/kaniko.git",
+        Boolean cloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 false,
@@ -38,10 +38,10 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
         Assertions.assertNotNull(file);
         log.info("full path: {}", file.getAbsolutePath());
         for (String naming : Objects.requireNonNull(file.list())) {
-            log.debug("list of test-clone-repository/kaniko name: {}", naming);
+            log.debug("list of test-clone-repository/hotcloud name: {}", naming);
         }
 
-        Boolean forcedCloned = gitApi.clone("https://github.com/GoogleContainerTools/kaniko.git",
+        Boolean forcedCloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 true,

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +21,8 @@ import java.util.Map;
 @Data
 public class KanikoFlagProperties implements KanikoFlag {
 
-    private boolean cache = false;
-    private boolean cleanup = true;
+    private boolean cache = true;
+    private boolean cleanup = false;
     @JsonProperty("compressed-caching")
     private boolean compressedCaching = true;
     private boolean force = false;
@@ -48,14 +49,19 @@ public class KanikoFlagProperties implements KanikoFlag {
     @JsonProperty("ignore-var-run")
     private boolean ignoreVarRun = true;
 
-    private String context = "dir://workspace";
+    private String context = "/workspace";
     @JsonProperty("insecure-registry")
     private String insecureRegistry = "index.docker.io";
+    /**
+     * e.g. gcr.io/kaniko-project/
+     */
     private String destination;
-    private String tarPath;
+    private String tarPath = Path.of(this.context).toString();
     @JsonProperty("cache-ttl")
-    private String cacheTtl = "168h";
-    private String dockerfile = "/workspace/Dockerfile";
+    private String cacheTtl = "336h";
+    @JsonProperty("cache-dir")
+    private String cacheDir = "/cache";
+    private String dockerfile = Path.of(this.context, "Dockerfile").toString();
     @JsonProperty("log-format")
     private String logFormat = "color";
     private String snapshotMode = "full";
@@ -69,8 +75,6 @@ public class KanikoFlagProperties implements KanikoFlag {
     private String registryMirror;
     @JsonProperty("registry-certificate")
     private String registryCertificate;
-    @JsonProperty("cache-dir")
-    private String cacheDir;
     @JsonProperty("cache-repo")
     private String cacheRepo;
     @JsonProperty("context-sub-path")

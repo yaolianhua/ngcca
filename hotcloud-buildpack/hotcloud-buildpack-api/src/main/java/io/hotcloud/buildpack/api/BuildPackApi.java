@@ -9,5 +9,23 @@ import java.util.Map;
  **/
 interface BuildPackApi {
 
-    BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs);
+    /**
+     * @param namespace    In which namespace the {@link BuildPack} resource be created
+     * @param gitUrl       Remote url of git repository
+     * @param clonePath    The path will be cloned locally
+     * @param force        Whether to force cloning, if the specified path is not empty, it will be forcibly deleted and then cloned
+     * @param registry     The registry address where the {@code git project} build is pushed to
+     * @param registryUser The registry auth user if it's non-public
+     * @param registryPass The registry auth password if it's non-public
+     * @param kanikoArgs   Kaniko args
+     * @return {@link BuildPack}
+     */
+    BuildPack buildpack(String namespace,
+                        String gitUrl,
+                        String clonePath,
+                        boolean force,
+                        String registry,
+                        String registryUser,
+                        String registryPass,
+                        Map<String, String> kanikoArgs);
 }

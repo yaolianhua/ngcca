@@ -32,6 +32,11 @@ public class BuildPackJobResourceRequest {
      */
     @Builder.Default
     private Map<String, String> args = new HashMap<>();
+    /**
+     * Alternate properties container
+     */
+    @Builder.Default
+    private Map<String, String> alternative = new HashMap<>();
 
     public BuildPackJobResourceRequest() {
     }

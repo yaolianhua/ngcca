@@ -24,7 +24,9 @@ public interface KanikoFlag {
      *
      * @return context
      */
-    String getContext();
+    default String getContext() {
+        return "/workspace";
+    }
 
     /**
      * Registry the final image should be pushed to. Set it repeatedly for multiple destinations. {@code gcr.io/$PROJECT/$IMAGE:$TAG>}
@@ -48,7 +50,9 @@ public interface KanikoFlag {
      *
      * @return cache-dir
      */
-    String getCacheDir();
+    default String getCacheDir() {
+        return "/cache";
+    }
 
     /**
      * <p>Set this flag to specify a remote repository that will be used to store cached layers.
@@ -65,7 +69,9 @@ public interface KanikoFlag {
      *
      * @return cache-ttl
      */
-    String getCacheTtl();
+    default String getCacheTtl() {
+        return "336h";
+    }
 
     /**
      * Set this flag to clean the filesystem at the end of the build.

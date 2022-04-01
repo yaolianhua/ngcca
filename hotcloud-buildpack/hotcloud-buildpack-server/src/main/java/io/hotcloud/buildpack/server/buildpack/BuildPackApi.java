@@ -4,6 +4,7 @@ import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.BuildPackApiAdaptor;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.BuildPack;
+import io.hotcloud.buildpack.api.model.BuildPackConstant;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -50,7 +53,7 @@ public class BuildPackApi implements BuildPackApiAdaptor {
     }
 
     @Override
-    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, String registry, String registryProject, String registryUser, String registryPass) {
+    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush, String registry, String registryProject, String registryUser, String registryPass) {
 
         UserDetails current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
@@ -65,10 +68,12 @@ public class BuildPackApi implements BuildPackApiAdaptor {
             throw new HotCloudException(String.format("Namespace '%s' create failed [%s]", namespace, e.getMessage()));
         }
 
+        Map<String, String> alternative = new HashMap<>(16);
+
         String gitProject = StringHelper.retrieveProjectFromHTTPGitUrl(gitUrl);
         //handle kaniko args
         registry = StringUtils.hasText(registry) ? registry : kanikoFlag.getInsecureRegistry();
-        Map<String, String> args = resolvedArgs(gitUrl, dockerfile, registry, registryProject);
+        Map<String, String> args = resolvedArgs(gitUrl, dockerfile, noPush, registry, registryProject, alternative);
 
         //repository clone path locally, it will be mounted by user pod
         String clonePath = null;
@@ -84,21 +89,29 @@ public class BuildPackApi implements BuildPackApiAdaptor {
         registryUser = StringUtils.hasText(registryUser) ? registryUser : "no-auth-user";
         registryPass = StringUtils.hasText(registryPass) ? registryPass : "no-auth-pass";
 
-        return abstractBuildPackApi.buildpack(namespace, gitUrl, clonePath, force, registry, registryUser, registryPass, args);
+        BuildPack buildpack = abstractBuildPackApi.buildpack(namespace, gitUrl, clonePath, force, registry, registryUser, registryPass, args);
+        buildpack.getJob().getAlternative().putAll(alternative);
+
+        return buildpack;
     }
 
-    private Map<String, String> resolvedArgs(String gitUrl, String dockerfile, String registry, String registryProject) {
+    private Map<String, String> resolvedArgs(String gitUrl, String dockerfile, Boolean noPush, String registry, String registryProject, Map<String, String> alternative) {
         Map<String, String> args = kanikoFlag.resolvedArgs();
         String pushedImage = StringHelper.generatePushedImage(gitUrl);
         String tarball = StringHelper.generateImageTarball(gitUrl);
 
         if (StringUtils.hasText(dockerfile)) {
-            args.put("dockerfile", String.format("/workspace/%s", dockerfile));
+            args.put("dockerfile", Path.of(kanikoFlag.getContext(), dockerfile).toString());
         }
         if (StringUtils.hasText(registry)) {
             args.put("insecure-registry", registry);
         }
-        args.put("tarPath", String.format("/workspace/%s", tarball));
+        if (Objects.nonNull(noPush)) {
+            args.put("no-push", String.valueOf(noPush));
+        }
+
+        args.put("tarPath", Path.of(kanikoFlag.getTarPath(), tarball).toString());
+        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, tarball);
 
         if (!StringUtils.hasText(kanikoFlag.getDestination())) {
             registryProject = StringUtils.hasText(registryProject) ? registryProject : "registry-project-name";

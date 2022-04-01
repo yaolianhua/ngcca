@@ -21,9 +21,9 @@ public class BuildPackStorageProperties {
      */
     private Type type = Type.hostPath;
     /**
-     * Storage capacity will be allocated. default 100M
+     * Storage capacity will be allocated. default 500M
      */
-    private String capacity = "100M";
+    private String capacity = "500M";
     /**
      * PV type of nfs
      */
@@ -67,8 +67,8 @@ public class BuildPackStorageProperties {
 
     @Data
     public static class Nfs {
-        private String server;
-        private String path;
+        private String server = "127.0.0.1";
+        private String path = "/home/nfs-share";
     }
 
     @Data

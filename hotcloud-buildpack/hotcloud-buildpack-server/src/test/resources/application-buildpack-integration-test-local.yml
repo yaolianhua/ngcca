@@ -13,3 +13,11 @@ cache:
     host: localhost
     password: QbMufCD@9WVQ^Hv
     port: 6379
+buildpack:
+  storage:
+    type: nfs
+    nfs:
+      server: 127.0.0.1
+      path: /home/nfs-share
+  kaniko:
+    verbosity: info
