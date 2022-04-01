@@ -19,3 +19,5 @@ buildpack:
     nfs:
       server: 127.0.0.1
       path: /home/nfs-share
+  kaniko:
+    verbosity: info
