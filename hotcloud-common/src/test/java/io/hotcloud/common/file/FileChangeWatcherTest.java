@@ -2,6 +2,7 @@ package io.hotcloud.common.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class FileChangeWatcherTest {
     /**
      * Run this Test before {@link FileChangeWatcherTest#trigger()} ()}
      */
+    @Disabled
     @Test
     public void watch() throws IOException, InterruptedException {
 
@@ -50,6 +52,7 @@ public class FileChangeWatcherTest {
     /**
      * Run this Test after {@link FileChangeWatcherTest#watch()}
      */
+    @Disabled
     @Test
     public void trigger() throws InterruptedException, IOException {
 
