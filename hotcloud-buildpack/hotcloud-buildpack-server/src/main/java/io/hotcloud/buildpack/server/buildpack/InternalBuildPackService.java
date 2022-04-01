@@ -100,13 +100,10 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null", 400);
         Assert.hasText(resource.getSecret(), "secret name is null", 400);
 
-        String dockersecretvolume = "docker-registry-secret-volume";
-        String workspacevolume = "workspace-volume";
-
         Map<String, String> alternative = resource.getAlternative();
-        String project = alternative.get("git:project:name");
+        String project = alternative.get(BuildPackConstant.GIT_PROJECT_NAME);
 
-        Map<String, String> labels = Map.of("k8s-app", project + "-" + resource.getNamespace());
+        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, project + "-" + resource.getNamespace());
         String jobName = String.format("%s-job-buildpack-%s", project, resource.getNamespace());
 
         JobCreateRequest request = new JobCreateRequest();
@@ -121,8 +118,8 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         PodTemplateSpec templateSpec = new PodTemplateSpec();
 
         Container container = new Container();
-        container.setName("kaniko");
-        container.setImage("gcr.io/kaniko-project/executor:latest");
+        container.setName(BuildPackConstant.KANIKO_CONTAINER);
+        container.setImage(BuildPackConstant.KANIKO_IMAGE);
         container.setImagePullPolicy(ImagePullPolicy.IfNotPresent);
 
         List<String> finalArgs = resource.getArgs()
@@ -133,23 +130,23 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         container.setArgs(finalArgs);
 
         //volume mounts
-        VolumeMount dockersecretVolumeMount = VolumeMount.of(dockersecretvolume, "/kaniko/.docker", true);
-        VolumeMount workspaceVolumeMount = VolumeMount.of(workspacevolume, kanikoFlag.getContext(), false);
+        VolumeMount dockersecretVolumeMount = VolumeMount.of(BuildPackConstant.DOCKER_SECRET_VOLUME, "/kaniko/.docker", true);
+        VolumeMount workspaceVolumeMount = VolumeMount.of(BuildPackConstant.WORKSPACE_VOLUME, kanikoFlag.getContext(), false);
         container.setVolumeMounts(List.of(dockersecretVolumeMount, workspaceVolumeMount));
 
         //volumes
         SecretVolume secretVolumeType = new SecretVolume();
         secretVolumeType.setSecretName(resource.getSecret());
-        secretVolumeType.setItems(List.of(SecretVolume.Item.of(".dockerconfigjson", "config.json")));
+        secretVolumeType.setItems(List.of(SecretVolume.Item.of(BuildPackConstant.DOCKER_CONFIG_JSON, "config.json")));
         Volume dockersecretVolume = new Volume();
-        dockersecretVolume.setName(dockersecretvolume);
+        dockersecretVolume.setName(BuildPackConstant.DOCKER_SECRET_VOLUME);
         dockersecretVolume.setSecretVolume(secretVolumeType);
 
         PersistentVolumeClaimVolume persistentVolumeClaimVolume = new PersistentVolumeClaimVolume();
         persistentVolumeClaimVolume.setClaimName(resource.getPersistentVolumeClaim());
         Volume workspaceVolume = new Volume();
         workspaceVolume.setPersistentVolumeClaim(persistentVolumeClaimVolume);
-        workspaceVolume.setName(workspacevolume);
+        workspaceVolume.setName(BuildPackConstant.WORKSPACE_VOLUME);
         //set volumes
         templateSpec.setContainers(List.of(container));
         templateSpec.setVolumes(List.of(dockersecretVolume, workspaceVolume));
@@ -184,10 +181,13 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
     protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest resource) {
         Assert.notNull(resource, "buildpack storage resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
-        Assert.hasText(resource.getVolumePath(), "data volume path is null", 400);
 
-        String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + resource.getNamespace();
-        String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + resource.getNamespace();
+        String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
+        String gitProjectPath = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
+        Assert.hasText(gitProjectPath, "data volume path is null", 400);
+
+        String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + gitProject + "-" + resource.getNamespace();
+        String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + gitProject + "-" + resource.getNamespace();
         String capacity = null == resource.getCapacity() ? storageProperties.getCapacity() : resource.getCapacity();
 
         String storageClass = storageProperties.getStorageClass().getName();
@@ -210,11 +210,11 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
         persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Retain);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
-            HostPathVolume hostPathVolume = HostPathVolume.of(resource.getVolumePath(), null);
+            HostPathVolume hostPathVolume = HostPathVolume.of(gitProjectPath, null);
             persistentVolumeSpec.setHostPath(hostPathVolume);
         }
         if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            NFSVolume nfsVolume = NFSVolume.of(resource.getVolumePath(), storageProperties.getNfs().getServer(), false);
+            NFSVolume nfsVolume = NFSVolume.of(gitProjectPath, storageProperties.getNfs().getServer(), false);
             persistentVolumeSpec.setNfs(nfsVolume);
         }
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
@@ -258,6 +258,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
                 .persistentVolume(pvName)
                 .storageClass(storageClass)
                 .capacity(capacity)
+                .alternative(resource.getAlternative())
                 .build();
     }
 
@@ -266,8 +267,9 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         Assert.notNull(resource, "buildpack docker secret resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 
-        String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + resource.getNamespace();
-        Map<String, String> labels = Map.of("k8s-app", resource.getNamespace());
+        String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
+        String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + gitProject + "-" + resource.getNamespace();
+        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, resource.getNamespace());
 
         SecretCreateRequest request = new SecretCreateRequest();
         request.setImmutable(true);
@@ -278,7 +280,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
             registry = "https://index.docker.io/v1/";
         }
         String configjson = Base64Helper.dockerconfigjson(registry, resource.getUsername(), resource.getPassword());
-        Map<String, String> data = Map.of(".dockerconfigjson", configjson);
+        Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, configjson);
         request.setData(data);
 
         ObjectMetadata secretMetadata = new ObjectMetadata();
@@ -295,6 +297,7 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
                 .labels(labels)
                 .name(name)
                 .namespace(resource.getNamespace())
+                .alternative(resource.getAlternative())
                 .secretResourceYaml(secretYaml)
                 .build();
     }

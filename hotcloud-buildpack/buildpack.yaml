@@ -3,8 +3,8 @@ kind: Job
 metadata:
   annotations: { }
   labels: &id001
-    k8s-app: hotcloud-025070bae0ef4668a96f2d0a712203af
-  name: hotcloud-job-buildpack-025070bae0ef4668a96f2d0a712203af
+    k8s-app: devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  name: devops-thymeleaf-job-buildpack-025070bae0ef4668a96f2d0a712203af
   namespace: 025070bae0ef4668a96f2d0a712203af
 spec:
   activeDeadlineSeconds: 1800
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - args:
-            - --destination=index.docker.io/yaolianhua/hotcloud:20220331190813
+            - --destination=10.10.12.123/demo/devops-thymeleaf:20220401183914
             - --skip-tls-verify=true
             - --log-timestamp=false
             - --cache-ttl=336h
@@ -39,14 +39,14 @@ spec:
             - --dockerfile=/workspace/Dockerfile
             - --cache-dir=/cache
             - --single-snapshot=false
-            - --tarPath=/workspace/hotcloud-20220331190813.tar
+            - --tarPath=/workspace/devops-thymeleaf-20220401183914.tar
             - --snapshotMode=full
             - --skip-unused-stages=false
             - --cleanup=false
-            - --insecure-registry=index.docker.io
+            - --insecure-registry=10.10.12.123
             - --log-format=color
             - --force=false
-            - --verbosity=debug
+            - --verbosity=info
           command: [ ]
           env: [ ]
           envFrom: [ ]
@@ -74,10 +74,10 @@ spec:
               - key: .dockerconfigjson
                 path: config.json
             optional: false
-            secretName: secret-025070bae0ef4668a96f2d0a712203af
+            secretName: secret-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
         - name: workspace-volume
           persistentVolumeClaim:
-            claimName: pvc-025070bae0ef4668a96f2d0a712203af
+            claimName: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
   ttlSecondsAfterFinished: 600
 ---
 apiVersion: v1
@@ -85,7 +85,7 @@ kind: PersistentVolume
 metadata:
   annotations: { }
   labels: { }
-  name: pv-025070bae0ef4668a96f2d0a712203af
+  name: pv-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
   namespace: 025070bae0ef4668a96f2d0a712203af
 spec:
   accessModes:
@@ -94,11 +94,11 @@ spec:
     storage: 500M
   claimRef:
     kind: PersistentVolumeClaim
-    name: pvc-025070bae0ef4668a96f2d0a712203af
+    name: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
     namespace: 025070bae0ef4668a96f2d0a712203af
   mountOptions: [ ]
   nfs:
-    path: /home/nfs-share/025070bae0ef4668a96f2d0a712203af/hotcloud
+    path: /home/nfs-share/025070bae0ef4668a96f2d0a712203af/devops-thymeleaf
     readOnly: false
     server: 127.0.0.1
   persistentVolumeReclaimPolicy: Retain
@@ -110,7 +110,7 @@ kind: PersistentVolumeClaim
 metadata:
   annotations: { }
   labels: { }
-  name: pvc-025070bae0ef4668a96f2d0a712203af
+  name: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
   namespace: 025070bae0ef4668a96f2d0a712203af
 spec:
   accessModes:
@@ -124,7 +124,7 @@ spec:
     matchLabels: { }
   storageClassName: storage-class-buildpack
   volumeMode: Filesystem
-  volumeName: pv-025070bae0ef4668a96f2d0a712203af
+  volumeName: pv-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
 ---
 apiVersion: v1
 kind: Secret
@@ -132,10 +132,10 @@ metadata:
   annotations: { }
   labels:
     k8s-app: 025070bae0ef4668a96f2d0a712203af
-  name: secret-025070bae0ef4668a96f2d0a712203af
+  name: secret-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
   namespace: 025070bae0ef4668a96f2d0a712203af
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: auth info
+  .dockerconfigjson: eyJhdXRocyI6eyIxMC4xMC4xMi4xMjMiOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiSGFyYm9yMTIzNDUiLCJhdXRoIjoiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9In19fQ==
 immutable: true
 stringData: { }

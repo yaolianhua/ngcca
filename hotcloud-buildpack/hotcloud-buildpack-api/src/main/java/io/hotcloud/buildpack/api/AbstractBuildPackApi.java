@@ -4,6 +4,7 @@ import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,19 +33,24 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         BuildPackRepositoryCloned cloned = clone(repository);
         Assert.notNull(cloned, "BuildPack Repository clone failed", 404);
 
+        Map<String, String> alternative = new HashMap<>(16);
+        alternative.put(BuildPackConstant.GIT_PROJECT_NAME, cloned.getProject());
+        alternative.put(BuildPackConstant.GIT_PROJECT_PATH, clonePath);
+
         //Docker secret auth
         BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
                 .namespace(namespace)
                 .registry(registry)
                 .username(registryUser)
                 .password(registryPass)
+                .alternative(alternative)
                 .build();
         BuildPackDockerSecretResource dockerSecretResource = dockersecret(dockersecret);
 
         //persistentVolume & persistentVolumeClaim
         BuildPackStorageResourceRequest storageResourceRequest = BuildPackStorageResourceRequest.builder()
                 .namespace(namespace)
-                .volumePath(clonePath)
+                .alternative(alternative)
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 
@@ -54,7 +60,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
                 .persistentVolumeClaim(storageResourceList.getPersistentVolumeClaim())
                 .secret(dockerSecretResource.getName())
                 .args(kanikoArgs)
-                .alternative(Map.of("git:project:name", cloned.getProject()))
+                .alternative(alternative)
                 .build();
         BuildPackJobResource jobResource = jobResource(jobResourceRequest);
 
