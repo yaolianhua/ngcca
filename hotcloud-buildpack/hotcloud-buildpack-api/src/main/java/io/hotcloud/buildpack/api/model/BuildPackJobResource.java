@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  **/
 @Data
 @Builder
+@AllArgsConstructor
 public class BuildPackJobResource {
 
     /**
@@ -44,4 +46,7 @@ public class BuildPackJobResource {
      */
     @JsonProperty("yaml")
     private String jobResourceYaml;
+
+    public BuildPackJobResource() {
+    }
 }

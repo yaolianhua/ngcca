@@ -1,14 +1,19 @@
 package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Data
 @Builder
+@AllArgsConstructor
 public class BuildPackStorageResourceList {
 
     /**
@@ -33,19 +38,16 @@ public class BuildPackStorageResourceList {
     private String capacity;
 
     /**
+     * Alternate properties container
+     */
+    @Builder.Default
+    private Map<String, String> alternative = new HashMap<>();
+
+    /**
      * Generated pv/pvc resource list yaml
      */
     @JsonProperty("yaml")
     private String resourceListYaml;
-
-    public BuildPackStorageResourceList(String namespace, String storageClass, String persistentVolume, String persistentVolumeClaim, String capacity, String resourceListYaml) {
-        this.namespace = namespace;
-        this.storageClass = storageClass;
-        this.persistentVolume = persistentVolume;
-        this.persistentVolumeClaim = persistentVolumeClaim;
-        this.capacity = capacity;
-        this.resourceListYaml = resourceListYaml;
-    }
 
     public BuildPackStorageResourceList() {
     }

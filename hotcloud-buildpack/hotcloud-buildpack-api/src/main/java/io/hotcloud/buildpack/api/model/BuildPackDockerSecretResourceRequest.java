@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -39,6 +41,12 @@ public class BuildPackDockerSecretResourceRequest {
      */
     @JsonProperty("registry_password")
     private String password;
+
+    /**
+     * Alternate properties container
+     */
+    @Builder.Default
+    private Map<String, String> alternative = new HashMap<>();
 
     public BuildPackDockerSecretResourceRequest() {
     }
