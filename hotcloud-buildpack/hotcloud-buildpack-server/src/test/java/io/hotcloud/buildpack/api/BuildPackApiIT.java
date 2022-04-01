@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
+import io.hotcloud.common.file.FileChangeWatcher;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -25,8 +26,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +54,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     @Autowired
     private UserApi userApi;
 
-    final CountDownLatch latch = new CountDownLatch(60);
+    final CountDownLatch latch = new CountDownLatch(1);
     @Autowired
     private JobApi jobApi;
 
@@ -73,16 +77,18 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     private PodApi podApi;
 
     @Test
-    public void buildpack() throws InterruptedException, ApiException {
+    public void buildpack() throws InterruptedException, ApiException, IOException {
 
         String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
+//        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
         BuildPack buildpack = buildPackApiAdaptor.buildpack(gitUrl,
                 "",
                 true,
-                "",
-                "yaolianhua",
-                "yaolianhua",
-                "");
+                false,
+                "harbor.cloud2go.cn",
+                "test",
+                "admin",
+                "Harbor12345");
 
         Assertions.assertNotNull(buildpack);
         Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
@@ -99,21 +105,27 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
         Assertions.assertEquals(1, podList.getItems().size());
 
+        FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(buildpack.getRepository().getLocal()), event -> {
+            if (Objects.equals(event.context().toString(), buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL))) {
+                log.info("Git project '{}' image tar '{}' generated", buildpack.getRepository().getProject(), event.context().toString());
+                latch.countDown();
+            }
+        });
+        fileChangeWatcher.start();
+
         Pod pod = podList.getItems().get(0);
         while (latch.getCount() != 0) {
             TimeUnit.SECONDS.sleep(1);
-
             try {
-                String logs = podApi.logs(namespace, pod.getMetadata().getName());
+                String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
                 log.info("{}", logs);
-                latch.countDown();
+
             } catch (Exception e) {
                 log.warn("{}", e.getMessage());
             }
-
         }
 
-        namespaceApi.delete(namespace);
+        fileChangeWatcher.stop();
     }
 
     @Test
