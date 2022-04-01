@@ -1,4 +1,4 @@
-package io.hotcloud.common;
+package io.hotcloud.common.file;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,7 +7,9 @@ import java.nio.file.*;
 import java.util.function.Consumer;
 
 /**
- * Instances of this class can be used to watch a directory for file changes. When a file is added to, deleted from,
+ * @author yaolianhua789@gmail.com
+ *
+ * <p>Instances of this class can be used to watch a directory for file changes. When a file is added to, deleted from,
  * or is modified in the given directory, the callback provided by the user will be called from a background thread.
  * Some things to keep in mind:
  * <ul>
@@ -21,7 +23,9 @@ import java.util.function.Consumer;
 public class FileChangeWatcher {
 
     private final WatcherThread watcherThread;
-    // protected by synchronized(this)
+    /**
+     * protected by synchronized(this)
+     */
     private State state;
 
     /**
