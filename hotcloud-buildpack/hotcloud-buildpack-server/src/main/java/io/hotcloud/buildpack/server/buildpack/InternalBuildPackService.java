@@ -159,9 +159,9 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         template.setMetadata(podMetadata);
 
         JobSpec spec = new JobSpec();
-        spec.setTtlSecondsAfterFinished(600);
+        spec.setTtlSecondsAfterFinished(0);
         spec.setBackoffLimit(3);
-        spec.setActiveDeadlineSeconds(1800L);
+        spec.setActiveDeadlineSeconds(3600L);
         spec.setTemplate(template);
 
         request.setSpec(spec);

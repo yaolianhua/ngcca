@@ -53,7 +53,14 @@ public class BuildPackApi implements BuildPackApiAdaptor {
     }
 
     @Override
-    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush, String registry, String registryProject, String registryUser, String registryPass) {
+    public BuildPack buildpack(String gitUrl,
+                               String dockerfile,
+                               boolean force,
+                               Boolean noPush,
+                               String registry,
+                               String registryProject,
+                               String registryUser,
+                               String registryPass) {
 
         UserDetails current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
@@ -108,20 +115,31 @@ public class BuildPackApi implements BuildPackApiAdaptor {
         }
         if (Objects.nonNull(noPush)) {
             args.put("no-push", String.valueOf(noPush));
+            if (noPush) {
+                //if using cache with --no-push, specify cache repo with --cache-repo
+                args.put("cache", String.valueOf(false));
+            }
         }
 
         args.put("tarPath", Path.of(kanikoFlag.getTarPath(), tarball).toString());
         alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, tarball);
 
-        if (!StringUtils.hasText(kanikoFlag.getDestination())) {
-            registryProject = StringUtils.hasText(registryProject) ? registryProject : "registry-project-name";
-            String registryGet = args.getOrDefault("insecure-registry", "index.docker.io");
+        boolean nopush = Boolean.parseBoolean(args.get("no-push"));
+        if (!nopush) {
+            String destinationDefault = kanikoFlag.getDestination();
+            boolean destinationManually = StringUtils.hasText(registry) && StringUtils.hasText(registryProject);
+            boolean validDestination = StringUtils.hasText(destinationDefault) || destinationManually;
+            Assert.state(validDestination, "Using --no-push=false, must specify ths destination value! e.g. destination=gcr.io/kaniko/ or specify the parameter registry & registryProject manually", 400);
 
             //index.docker.io/example/image-name:latest
-            String destination = String.format("%s/%s/%s", registryGet, registryProject, pushedImage);
-            args.put("destination", destination);
+            if (destinationManually) {
+                args.put("destination", Path.of(registry, registryProject, pushedImage).toString());
+            } else {
+                args.put("destination", Path.of(kanikoFlag.getDestination(), pushedImage).toString());
+            }
         } else {
-            args.put("destination", kanikoFlag.getDestination() + pushedImage);
+            //must provide at least one destination when tarPath is specified
+            args.put("destination", Path.of("index.docker.io").toString());
         }
 
         return args;
