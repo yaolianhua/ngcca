@@ -1,20 +1,23 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
-import io.hotcloud.buildpack.api.BuildPackApiAdaptor;
+import io.hotcloud.buildpack.api.BuildPackPlayer;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.BuildPack;
 import io.hotcloud.buildpack.api.model.BuildPackConstant;
+import io.hotcloud.buildpack.api.model.BuildPackStartedEvent;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.StringHelper;
 import io.hotcloud.common.cache.Cache;
+import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.hotcloud.security.api.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -29,7 +32,7 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class BuildPackApi implements BuildPackApiAdaptor {
+public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
@@ -37,19 +40,35 @@ public class BuildPackApi implements BuildPackApiAdaptor {
     private final BuildPackStorageProperties storageProperties;
     private final Cache cache;
     private final NamespaceApi namespaceApi;
+    private final KubectlApi kubectlApi;
 
-    public BuildPackApi(AbstractBuildPackApi abstractBuildPackApi,
-                        UserApi userApi,
-                        KanikoFlag kanikoFlag,
-                        BuildPackStorageProperties storageProperties,
-                        Cache cache,
-                        NamespaceApi namespaceApi) {
+    private final ApplicationEventPublisher eventPublisher;
+
+    public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
+                                  UserApi userApi,
+                                  KanikoFlag kanikoFlag,
+                                  BuildPackStorageProperties storageProperties,
+                                  Cache cache,
+                                  NamespaceApi namespaceApi,
+                                  KubectlApi kubectlApi,
+                                  ApplicationEventPublisher eventPublisher) {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
         this.storageProperties = storageProperties;
         this.cache = cache;
         this.namespaceApi = namespaceApi;
+        this.kubectlApi = kubectlApi;
+        this.eventPublisher = eventPublisher;
+    }
+
+    @Override
+    public void apply(BuildPack buildPack) {
+        Assert.notNull(buildPack, "BuildPack body is null", 400);
+        Assert.hasText(buildPack.getBuildPackYaml(), "BuildPack resource yaml is null", 400);
+        kubectlApi.apply(null, buildPack.getBuildPackYaml());
+
+        eventPublisher.publishEvent(new BuildPackStartedEvent(buildPack));
     }
 
     @Override
