@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
+import io.hotcloud.buildpack.api.BuildPackConstant;
 import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
-public class InternalBuildPackService extends AbstractBuildPackApi {
+class InternalBuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
     private final GitApi gitApi;
@@ -159,9 +160,9 @@ public class InternalBuildPackService extends AbstractBuildPackApi {
         template.setMetadata(podMetadata);
 
         JobSpec spec = new JobSpec();
-        spec.setTtlSecondsAfterFinished(600);
+        spec.setTtlSecondsAfterFinished(0);
         spec.setBackoffLimit(3);
-        spec.setActiveDeadlineSeconds(1800L);
+        spec.setActiveDeadlineSeconds(3600L);
         spec.setTemplate(template);
 
         request.setSpec(spec);

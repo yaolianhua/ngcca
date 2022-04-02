@@ -1,5 +1,6 @@
-package io.hotcloud.buildpack.api.model;
+package io.hotcloud.buildpack.api.model.event;
 
+import io.hotcloud.buildpack.api.model.BuildPack;
 import org.springframework.context.ApplicationEvent;
 
 /**

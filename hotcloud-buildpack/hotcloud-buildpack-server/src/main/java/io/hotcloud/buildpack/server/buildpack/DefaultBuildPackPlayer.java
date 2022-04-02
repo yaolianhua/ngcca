@@ -1,20 +1,24 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
-import io.hotcloud.buildpack.api.BuildPackApiAdaptor;
+import io.hotcloud.buildpack.api.BuildPackConstant;
+import io.hotcloud.buildpack.api.BuildPackPlayer;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.BuildPack;
-import io.hotcloud.buildpack.api.model.BuildPackConstant;
+import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
+import io.hotcloud.buildpack.api.model.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.StringHelper;
 import io.hotcloud.common.cache.Cache;
+import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.hotcloud.security.api.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -29,7 +33,7 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class BuildPackApi implements BuildPackApiAdaptor {
+public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
@@ -37,23 +41,51 @@ public class BuildPackApi implements BuildPackApiAdaptor {
     private final BuildPackStorageProperties storageProperties;
     private final Cache cache;
     private final NamespaceApi namespaceApi;
+    private final KubectlApi kubectlApi;
 
-    public BuildPackApi(AbstractBuildPackApi abstractBuildPackApi,
-                        UserApi userApi,
-                        KanikoFlag kanikoFlag,
-                        BuildPackStorageProperties storageProperties,
-                        Cache cache,
-                        NamespaceApi namespaceApi) {
+    private final ApplicationEventPublisher eventPublisher;
+
+    public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
+                                  UserApi userApi,
+                                  KanikoFlag kanikoFlag,
+                                  BuildPackStorageProperties storageProperties,
+                                  Cache cache,
+                                  NamespaceApi namespaceApi,
+                                  KubectlApi kubectlApi,
+                                  ApplicationEventPublisher eventPublisher) {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
         this.storageProperties = storageProperties;
         this.cache = cache;
         this.namespaceApi = namespaceApi;
+        this.kubectlApi = kubectlApi;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
-    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush, String registry, String registryProject, String registryUser, String registryPass) {
+    public void apply(BuildPack buildPack) {
+        Assert.notNull(buildPack, "BuildPack body is null", 400);
+        Assert.hasText(buildPack.getBuildPackYaml(), "BuildPack resource yaml is null", 400);
+
+        try {
+            kubectlApi.apply(null, buildPack.getBuildPackYaml());
+        } catch (Exception e) {
+            eventPublisher.publishEvent(new BuildPackStartFailureEvent(buildPack, e));
+        }
+
+        eventPublisher.publishEvent(new BuildPackStartedEvent(buildPack));
+    }
+
+    @Override
+    public BuildPack buildpack(String gitUrl,
+                               String dockerfile,
+                               boolean force,
+                               Boolean noPush,
+                               String registry,
+                               String registryProject,
+                               String registryUser,
+                               String registryPass) {
 
         UserDetails current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
@@ -108,20 +140,31 @@ public class BuildPackApi implements BuildPackApiAdaptor {
         }
         if (Objects.nonNull(noPush)) {
             args.put("no-push", String.valueOf(noPush));
+            if (noPush) {
+                //if using cache with --no-push, specify cache repo with --cache-repo
+                args.put("cache", String.valueOf(false));
+            }
         }
 
         args.put("tarPath", Path.of(kanikoFlag.getTarPath(), tarball).toString());
         alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, tarball);
 
-        if (!StringUtils.hasText(kanikoFlag.getDestination())) {
-            registryProject = StringUtils.hasText(registryProject) ? registryProject : "registry-project-name";
-            String registryGet = args.getOrDefault("insecure-registry", "index.docker.io");
+        boolean nopush = Boolean.parseBoolean(args.get("no-push"));
+        if (!nopush) {
+            String destinationDefault = kanikoFlag.getDestination();
+            boolean destinationManually = StringUtils.hasText(registry) && StringUtils.hasText(registryProject);
+            boolean validDestination = StringUtils.hasText(destinationDefault) || destinationManually;
+            Assert.state(validDestination, "Using --no-push=false, must specify ths destination value! e.g. destination=gcr.io/kaniko/ or specify the parameter registry & registryProject manually", 400);
 
             //index.docker.io/example/image-name:latest
-            String destination = String.format("%s/%s/%s", registryGet, registryProject, pushedImage);
-            args.put("destination", destination);
+            if (destinationManually) {
+                args.put("destination", Path.of(registry, registryProject, pushedImage).toString());
+            } else {
+                args.put("destination", Path.of(kanikoFlag.getDestination(), pushedImage).toString());
+            }
         } else {
-            args.put("destination", kanikoFlag.getDestination() + pushedImage);
+            //must provide at least one destination when tarPath is specified
+            args.put("destination", Path.of("index.docker.io").toString());
         }
 
         return args;

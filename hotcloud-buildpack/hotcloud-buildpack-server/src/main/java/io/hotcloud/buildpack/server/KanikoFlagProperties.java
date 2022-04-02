@@ -32,7 +32,7 @@ public class KanikoFlagProperties implements KanikoFlag {
     @JsonProperty("log-timestamp")
     private boolean logTimestamp = false;
     @JsonProperty("no-push")
-    private boolean noPush = false;
+    private boolean noPush = true;
     private boolean reproducible = false;
     @JsonProperty("single-snapshot")
     private boolean singleSnapshot = false;

@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.server.buildpack;
+package io.hotcloud.buildpack.server.buildpack.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.api.BuildPackRunnerPostProcessor;
@@ -17,7 +17,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class BuildPackStorageClassPostProcessor implements BuildPackRunnerPostProcessor {
+class BuildPackStorageClassPostProcessor implements BuildPackRunnerPostProcessor {
 
     private final StorageClassApi storageClassApi;
     private final BuildPackStorageProperties properties;

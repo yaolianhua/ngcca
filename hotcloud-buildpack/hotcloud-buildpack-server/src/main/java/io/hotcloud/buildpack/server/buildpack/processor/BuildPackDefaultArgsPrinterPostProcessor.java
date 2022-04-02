@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.server.buildpack;
+package io.hotcloud.buildpack.server.buildpack.processor;
 
 import io.hotcloud.buildpack.api.BuildPackRunnerPostProcessor;
 import io.hotcloud.buildpack.api.KanikoFlag;
@@ -12,7 +12,7 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-public class BuildPackDefaultArgsPrinterPostProcessor implements BuildPackRunnerPostProcessor {
+class BuildPackDefaultArgsPrinterPostProcessor implements BuildPackRunnerPostProcessor {
 
     private final KanikoFlag kanikoFlag;
 

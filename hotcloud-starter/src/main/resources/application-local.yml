@@ -30,9 +30,8 @@ buildpack:
       name: storage-class-buildpack
     type: nfs
     nfs:
-      server: 119.91.214.25
-      path: /nfs-share
-    size-gb: 1
+      server: 127.0.0.1
+      path: /home/nfs-share
+    capacity: 1Gi
   kaniko:
-    destination: index.docker.io/yaolianhua/
-    no-push: false
+    verbosity: info

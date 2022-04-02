@@ -1,18 +1,15 @@
 package io.hotcloud.buildpack.api;
 
-import io.fabric8.kubernetes.api.model.*;
-import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.Secret;
+import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
-import io.hotcloud.common.file.FileChangeWatcher;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
-import io.hotcloud.kubernetes.api.pod.PodApi;
-import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
-import io.hotcloud.security.api.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -20,19 +17,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -43,89 +32,21 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     @Autowired
     private AbstractBuildPackApi buildPackApi;
     @Autowired
-    private BuildPackApiAdaptor buildPackApiAdaptor;
-    @Autowired
     private KubectlApi kubectlApi;
-    public final String namespace = NamespaceGenerator.uuidNoDashNamespace();
     @Autowired
     private NamespaceApi namespaceApi;
     @Autowired
     private SecretApi secretApi;
-    @Autowired
-    private UserApi userApi;
 
-    final CountDownLatch latch = new CountDownLatch(1);
-    @Autowired
-    private JobApi jobApi;
-
-
+    public final String namespace = NamespaceGenerator.uuidNoDashNamespace();
     @Before
     public void before() throws ApiException {
         namespaceApi.namespace(namespace);
-
-        UserDetails userDetails = userApi.retrieve("admin");
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     @After
     public void after() throws ApiException {
         namespaceApi.delete(namespace);
-    }
-
-    @Autowired
-    private PodApi podApi;
-
-    @Test
-    public void buildpack() throws InterruptedException, ApiException, IOException {
-
-        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
-//        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
-        BuildPack buildpack = buildPackApiAdaptor.buildpack(gitUrl,
-                "",
-                true,
-                false,
-                "harbor.cloud2go.cn",
-                "test",
-                "admin",
-                "Harbor12345");
-
-        Assertions.assertNotNull(buildpack);
-        Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
-
-        log.info("BuildPack yaml \n {}", buildpack.getBuildPackYaml());
-        String namespace = buildpack.getJob().getNamespace();
-        String job = buildpack.getJob().getName();
-
-        kubectlApi.apply(null, buildpack.getBuildPackYaml());
-
-        Job jobRead = jobApi.read(namespace, job);
-        Assertions.assertNotNull(jobRead);
-
-        PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
-        Assertions.assertEquals(1, podList.getItems().size());
-
-        FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(buildpack.getRepository().getLocal()), event -> {
-            if (Objects.equals(event.context().toString(), buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL))) {
-                log.info("Git project '{}' image tar '{}' generated", buildpack.getRepository().getProject(), event.context().toString());
-                latch.countDown();
-            }
-        });
-        fileChangeWatcher.start();
-
-        Pod pod = podList.getItems().get(0);
-        while (latch.getCount() != 0) {
-            TimeUnit.SECONDS.sleep(1);
-            try {
-                String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
-                log.info("{}", logs);
-
-            } catch (Exception e) {
-                log.warn("{}", e.getMessage());
-            }
-        }
-
-        fileChangeWatcher.stop();
     }
 
     @Test
@@ -151,9 +72,10 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     public void storageResourceList() {
         BuildPackStorageResourceRequest resource = BuildPackStorageResourceRequest.builder()
                 .namespace(namespace)
-                .capacity(null)
+                .capacity("1Gi")
                 .persistentVolume(null)
                 .persistentVolumeClaim(null)
+                .alternative(Map.of(BuildPackConstant.GIT_PROJECT_PATH, "/tmp/kaniko/namespace/project"))
                 .build();
         BuildPackStorageResourceList buildPackStorageResourceList = buildPackApi.storageResourceList(resource);
 
@@ -192,7 +114,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
         Secret secret = secretList.getItems().get(0);
         String auth = secret.getData().get(".dockerconfigjson");
-        String expected = Base64Helper.dockerconfigjson("index.docker.io", "username", "password");
+        String expected = Base64Helper.dockerconfigjson("https://index.docker.io/v1/", "username", "password");
         Assertions.assertEquals(expected, Base64Helper.decode(auth));
 
         Boolean delete = kubectlApi.delete(namespace, yaml);
