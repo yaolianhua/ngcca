@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.server.buildpack;
+package io.hotcloud.buildpack.server.buildpack.processor;
 
 import io.hotcloud.buildpack.api.BuildPackRunnerPostProcessor;
 import io.hotcloud.common.cache.Cache;
@@ -17,7 +17,7 @@ import static io.hotcloud.security.api.UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX;
  **/
 @Component
 @Slf4j
-public class BuildPackUserNamespacePostProcessor implements BuildPackRunnerPostProcessor {
+class BuildPackUserNamespacePostProcessor implements BuildPackRunnerPostProcessor {
 
     private final UserApi userApi;
     private final Cache cache;
