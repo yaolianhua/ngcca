@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Base64Helper;
 import io.hotcloud.common.file.FileChangeWatcher;
+import io.hotcloud.common.file.FileState;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -28,11 +29,11 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -77,14 +78,14 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     private PodApi podApi;
 
     @Test
-    public void buildpack() throws InterruptedException, ApiException, IOException {
+    public void buildpack() throws IOException {
 
-        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
-//        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
+//        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
+        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
         BuildPack buildpack = buildPackApiAdaptor.buildpack(gitUrl,
                 "",
                 true,
-                false,
+                true,
                 "harbor.cloud2go.cn",
                 "test",
                 "admin",
@@ -105,26 +106,57 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
         Assertions.assertEquals(1, podList.getItems().size());
 
-        FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(buildpack.getRepository().getLocal()), event -> {
-            if (Objects.equals(event.context().toString(), buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL))) {
-                log.info("Git project '{}' image tar '{}' generated", buildpack.getRepository().getProject(), event.context().toString());
-                latch.countDown();
+        String clonedPath = buildpack.getRepository().getLocal();
+        String tarball = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
+        FileState fileState = new FileState(Path.of(clonedPath, tarball));
+        FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(clonedPath), event -> {
+            if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
+                if (Objects.equals(event.context().toString(), tarball)) {
+                    log.info("Git project '{}' image tar '{}' generated. size '{}'",
+                            buildpack.getRepository().getProject(),
+                            event.context().toString(),
+                            Path.of(clonedPath, tarball).toFile().length());
+                }
             }
+
+            if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
+                if (Objects.equals(event.context().toString(), tarball)) {
+                    log.info("Git project '{}' image tar '{}' changed. size '{}'",
+                            buildpack.getRepository().getProject(),
+                            event.context().toString(),
+                            Path.of(clonedPath, tarball).toFile().length());
+                }
+            }
+
         });
         fileChangeWatcher.start();
 
+        new Thread(() -> {
+            while (true) {
+                boolean waitCompleted = fileState.waitCompleted();
+                if (waitCompleted) {
+                    latch.countDown();
+                    break;
+                }
+            }
+        }, "file-state").start();
         Pod pod = podList.getItems().get(0);
+        String logs = "";
         while (latch.getCount() != 0) {
-            TimeUnit.SECONDS.sleep(1);
+//            TimeUnit.SECONDS.sleep(1);
             try {
-                String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
-                log.info("{}", logs);
-
+                String logsNew = podApi.logs(namespace, pod.getMetadata().getName(), 1);
+                if (!Objects.equals(logs, logsNew)) {
+//                    log.info("{}", logsNew);
+                    System.out.println(logsNew);
+                }
+                logs = logsNew;
             } catch (Exception e) {
-                log.warn("{}", e.getMessage());
+//                log.warn("{}", e.getMessage());
             }
         }
 
+        log.info("BuildPack done.");
         fileChangeWatcher.stop();
     }
 
