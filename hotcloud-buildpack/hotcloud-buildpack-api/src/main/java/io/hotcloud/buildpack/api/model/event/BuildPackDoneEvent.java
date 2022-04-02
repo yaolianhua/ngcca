@@ -5,9 +5,9 @@ import io.hotcloud.buildpack.api.model.BuildPack;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class BuildPackSuccessEvent extends BuildPackEvent {
+public class BuildPackDoneEvent extends BuildPackEvent {
 
-    public BuildPackSuccessEvent(BuildPack buildPack) {
+    public BuildPackDoneEvent(BuildPack buildPack) {
         super(buildPack);
     }
 }

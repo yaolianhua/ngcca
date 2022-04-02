@@ -5,6 +5,7 @@ import io.hotcloud.buildpack.api.BuildPackConstant;
 import io.hotcloud.buildpack.api.BuildPackPlayer;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.BuildPack;
+import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
@@ -66,7 +67,12 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     public void apply(BuildPack buildPack) {
         Assert.notNull(buildPack, "BuildPack body is null", 400);
         Assert.hasText(buildPack.getBuildPackYaml(), "BuildPack resource yaml is null", 400);
-        kubectlApi.apply(null, buildPack.getBuildPackYaml());
+
+        try {
+            kubectlApi.apply(null, buildPack.getBuildPackYaml());
+        } catch (Exception e) {
+            eventPublisher.publishEvent(new BuildPackStartFailureEvent(buildPack, e));
+        }
 
         eventPublisher.publishEvent(new BuildPackStartedEvent(buildPack));
     }
