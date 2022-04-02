@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
+import io.hotcloud.buildpack.api.BuildPackConstant;
 import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;

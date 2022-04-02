@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.BuildPack;
-import io.hotcloud.buildpack.api.model.BuildPackConstant;
 import io.hotcloud.common.file.FileChangeWatcher;
 import io.hotcloud.common.file.FileState;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
