@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
-public class InternalBuildPackService extends AbstractBuildPackApi {
+class InternalBuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
     private final GitApi gitApi;
