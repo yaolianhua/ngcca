@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOTCLOUD_VERSION=$1
-if [ ! $1 ]; then
+if [ ! "$1" ]; then
     echo "You can use build.sh <version>"
     exit 0
 fi
