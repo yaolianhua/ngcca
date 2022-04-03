@@ -56,7 +56,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
                 "destination", "docker-registry-idc01-sz.cloudtogo.cn/cloudtogo/devops-thymeleaf:0.3",
                 "tarPath", "/workspace/devops.tar");
 
-        BuildPackJobResourceRequest jobResource = BuildPackJobResourceRequest.builder()
+        BuildPackJobResourceInternalInput jobResource = BuildPackJobResourceInternalInput.builder()
                 .namespace(namespace)
                 .persistentVolumeClaim("pvc-" + namespace)
                 .secret("secret-" + namespace)
@@ -70,7 +70,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void storageResourceList() {
-        BuildPackStorageResourceRequest resource = BuildPackStorageResourceRequest.builder()
+        BuildPackStorageResourceInternalInput resource = BuildPackStorageResourceInternalInput.builder()
                 .namespace(namespace)
                 .capacity("1Gi")
                 .persistentVolume(null)
@@ -93,7 +93,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void secretResource() {
-        BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
+        BuildPackDockerSecretResourceInternalInput dockersecret = BuildPackDockerSecretResourceInternalInput.builder()
                 .name(null)
                 .namespace(namespace)
                 .registry("index.docker.io")

@@ -25,7 +25,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty", 400);
 
         //Repository clone
-        BuildPackRepositoryCloneRequest repository = BuildPackRepositoryCloneRequest.builder()
+        BuildPackRepositoryCloneInternalInput repository = BuildPackRepositoryCloneInternalInput.builder()
                 .remote(gitUrl)
                 .local(clonePath)
                 .force(force)
@@ -38,7 +38,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         alternative.put(BuildPackConstant.GIT_PROJECT_PATH, clonePath);
 
         //Docker secret auth
-        BuildPackDockerSecretResourceRequest dockersecret = BuildPackDockerSecretResourceRequest.builder()
+        BuildPackDockerSecretResourceInternalInput dockersecret = BuildPackDockerSecretResourceInternalInput.builder()
                 .namespace(namespace)
                 .registry(registry)
                 .username(registryUser)
@@ -48,14 +48,14 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         BuildPackDockerSecretResource dockerSecretResource = dockersecret(dockersecret);
 
         //persistentVolume & persistentVolumeClaim
-        BuildPackStorageResourceRequest storageResourceRequest = BuildPackStorageResourceRequest.builder()
+        BuildPackStorageResourceInternalInput storageResourceRequest = BuildPackStorageResourceInternalInput.builder()
                 .namespace(namespace)
                 .alternative(alternative)
                 .build();
         BuildPackStorageResourceList storageResourceList = storageResourceList(storageResourceRequest);
 
         //Kaniko job
-        BuildPackJobResourceRequest jobResourceRequest = BuildPackJobResourceRequest.builder()
+        BuildPackJobResourceInternalInput jobResourceRequest = BuildPackJobResourceInternalInput.builder()
                 .namespace(namespace)
                 .persistentVolumeClaim(storageResourceList.getPersistentVolumeClaim())
                 .secret(dockerSecretResource.getName())
@@ -76,38 +76,44 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         return buildPack;
     }
 
+    /**
+     * Generate final buildpack yaml from input {@link BuildPack}
+     *
+     * @param buildPack {@link BuildPack}
+     * @return Publishable yaml resource
+     */
     abstract protected String yaml(BuildPack buildPack);
 
     /**
      * Repository clone
      *
-     * @param clone {@link  BuildPackRepositoryCloneRequest}
+     * @param clone {@link  BuildPackRepositoryCloneInternalInput}
      * @return {@link BuildPackRepositoryCloned}
      */
-    abstract protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneRequest clone);
+    abstract protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneInternalInput clone);
 
     /**
      * Generate job Yaml resource.
      *
-     * @param jobResource {@link  BuildPackJobResourceRequest}
+     * @param jobResource {@link  BuildPackJobResourceInternalInput}
      * @return {@link BuildPackJobResource}
      */
-    abstract protected BuildPackJobResource jobResource(BuildPackJobResourceRequest jobResource);
+    abstract protected BuildPackJobResource jobResource(BuildPackJobResourceInternalInput jobResource);
 
 
     /**
      * Generate pv/pvc Yaml resource list.
      *
-     * @param storageResource {@link BuildPackStorageResourceRequest}
+     * @param storageResource {@link BuildPackStorageResourceInternalInput}
      * @return {@link BuildPackStorageResourceList}
      */
-    abstract protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest storageResource);
+    abstract protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput storageResource);
 
     /**
      * Generate secret Yaml resource.
      *
-     * @param dockersecretResource {@link BuildPackDockerSecretResourceRequest}
+     * @param dockersecretResource {@link BuildPackDockerSecretResourceInternalInput}
      * @return {@link  BuildPackDockerSecretResource}
      */
-    abstract protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceRequest dockersecretResource);
+    abstract protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput dockersecretResource);
 }

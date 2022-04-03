@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 @Data
 @AllArgsConstructor
 @Builder
-public class BuildPackRepositoryCloneRequest {
+public class BuildPackRepositoryCloneInternalInput {
 
     /**
      * remote git url. protocol supported http(s) only
@@ -50,6 +50,6 @@ public class BuildPackRepositoryCloneRequest {
     @Nullable
     private String password;
 
-    public BuildPackRepositoryCloneRequest() {
+    public BuildPackRepositoryCloneInternalInput() {
     }
 }

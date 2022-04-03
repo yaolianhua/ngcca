@@ -75,7 +75,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneRequest input) {
+    protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneInternalInput input) {
         Assert.notNull(input, "BuildPack repository clone request body is null", 400);
         Assert.hasText(input.getRemote(), "Git url is null", 400);
         Assert.hasText(input.getLocal(), "Local path is null", 400);
@@ -95,7 +95,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackJobResource jobResource(BuildPackJobResourceRequest resource) {
+    protected BuildPackJobResource jobResource(BuildPackJobResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack job resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
         Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null", 400);
@@ -179,7 +179,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceRequest resource) {
+    protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack storage resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 
@@ -264,7 +264,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceRequest resource) {
+    protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack docker secret resource request body is null", 400);
         Assert.hasText(resource.getNamespace(), "namespace is null", 400);
 

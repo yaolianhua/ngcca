@@ -11,12 +11,11 @@ import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
- *
  **/
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildPackDockerSecretResourceRequest {
+public class BuildPackDockerSecretResourceInternalInput {
 
     /**
      * In which namespace the secret will be created
@@ -48,6 +47,6 @@ public class BuildPackDockerSecretResourceRequest {
     @Builder.Default
     private Map<String, String> alternative = new HashMap<>();
 
-    public BuildPackDockerSecretResourceRequest() {
+    public BuildPackDockerSecretResourceInternalInput() {
     }
 }

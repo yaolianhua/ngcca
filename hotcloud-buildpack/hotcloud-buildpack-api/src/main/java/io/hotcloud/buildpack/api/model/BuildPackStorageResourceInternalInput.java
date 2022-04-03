@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildPackStorageResourceRequest {
+public class BuildPackStorageResourceInternalInput {
 
     /**
      * In which namespace the pvc will be created
@@ -42,6 +42,6 @@ public class BuildPackStorageResourceRequest {
     @Builder.Default
     private Map<String, String> alternative = new HashMap<>();
 
-    public BuildPackStorageResourceRequest() {
+    public BuildPackStorageResourceInternalInput() {
     }
 }

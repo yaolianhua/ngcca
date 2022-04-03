@@ -13,7 +13,7 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildPackJobResourceRequest {
+public class BuildPackJobResourceInternalInput {
 
     /**
      * In which namespace the job will be created
@@ -38,6 +38,6 @@ public class BuildPackJobResourceRequest {
     @Builder.Default
     private Map<String, String> alternative = new HashMap<>();
 
-    public BuildPackJobResourceRequest() {
+    public BuildPackJobResourceInternalInput() {
     }
 }
