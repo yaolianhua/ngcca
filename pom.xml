@@ -10,6 +10,7 @@
         <module>hotcloud-buildpack</module>
         <module>hotcloud-message</module>
         <module>hotcloud-security</module>
+        <module>hotcloud-db</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -73,6 +74,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>hotcloud-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
