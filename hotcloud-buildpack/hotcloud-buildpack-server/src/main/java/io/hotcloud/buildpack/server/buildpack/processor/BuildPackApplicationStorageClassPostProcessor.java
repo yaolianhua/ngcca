@@ -40,13 +40,13 @@ class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicat
         try {
             StorageClass existedStorageClass = storageClassApi.read(storageClassName);
             if (Objects.nonNull(existedStorageClass)) {
-                log.info("BuildPack storageClass post processor. storageClass '{}' already exist ", storageClassName);
+                log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", storageClassName);
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
-            log.info("BuildPack storageClass post processor. storageClass '{}' created ", storageClass.getMetadata().getName());
+            log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' created ", storageClass.getMetadata().getName());
         } catch (ApiException e) {
-            log.error("BuildPack storageClass post processor error: {}", e.getMessage());
+            log.error("BuildPackApplicationStorageClassPostProcessor error: {}", e.getMessage());
         }
     }
 }

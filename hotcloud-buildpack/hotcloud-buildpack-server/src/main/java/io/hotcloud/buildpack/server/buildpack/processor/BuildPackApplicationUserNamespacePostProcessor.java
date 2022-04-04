@@ -37,9 +37,9 @@ class BuildPackApplicationUserNamespacePostProcessor implements BuildPackApplica
                 .anyMatch("admin"::equalsIgnoreCase);
         if (!anyMatch) {
             cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, "admin"), NamespaceGenerator.uuidNoDashNamespace());
-            log.info("BuildPack user namespace post processor. {} user namespace cached", users.size() + 1);
+            log.info("BuildPackApplicationUserNamespacePostProcessor. {} user namespace cached", users.size() + 1);
             return;
         }
-        log.info("BuildPack user namespace post processor. {} user namespace cached", users.size());
+        log.info("BuildPackApplicationUserNamespacePostProcessor. {} user namespace cached", users.size());
     }
 }

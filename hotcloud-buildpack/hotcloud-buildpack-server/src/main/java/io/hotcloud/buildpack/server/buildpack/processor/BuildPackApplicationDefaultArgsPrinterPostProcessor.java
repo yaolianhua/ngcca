@@ -28,7 +28,7 @@ class BuildPackApplicationDefaultArgsPrinterPostProcessor implements BuildPackAp
         for (Map.Entry<String, String> entry : args.entrySet()) {
             builder.append("- --").append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
         }
-        log.info("BuildPack default args printer post processor. logged kaniko flags \n {}", builder);
+        log.info("BuildPackApplicationDefaultArgsPrinterPostProcessor. logged kaniko flags \n {}", builder);
 
     }
 }
