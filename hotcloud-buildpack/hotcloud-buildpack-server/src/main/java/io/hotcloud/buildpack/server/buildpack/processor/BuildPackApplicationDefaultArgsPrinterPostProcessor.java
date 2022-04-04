@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.buildpack.processor;
 
-import io.hotcloud.buildpack.api.BuildPackRunnerPostProcessor;
+import io.hotcloud.buildpack.BuildPackApplicationRunnerPostProcessor;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,11 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-class BuildPackDefaultArgsPrinterPostProcessor implements BuildPackRunnerPostProcessor {
+class BuildPackApplicationDefaultArgsPrinterPostProcessor implements BuildPackApplicationRunnerPostProcessor {
 
     private final KanikoFlag kanikoFlag;
 
-    public BuildPackDefaultArgsPrinterPostProcessor(KanikoFlag kanikoFlag) {
+    public BuildPackApplicationDefaultArgsPrinterPostProcessor(KanikoFlag kanikoFlag) {
         this.kanikoFlag = kanikoFlag;
     }
 
