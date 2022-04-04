@@ -1,0 +1,17 @@
+db:
+  type: mongodb
+  mongodb:
+    host: localhost
+    username: admin
+    password: QbMufCD@9WVQ^Hv
+    port: 27017
+    database: hotcloud
+  redis:
+    database: 0
+    password: QbMufCD@9WVQ^Hv
+    host: localhost
+    port: 6379
+
+logging:
+  level:
+    io.hotcloud.db: debug
