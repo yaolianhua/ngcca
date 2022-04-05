@@ -1,4 +1,4 @@
-package io.hotcloud.security.admin;
+package io.hotcloud.security.admin.user;
 
 import io.hotcloud.security.api.BearerToken;
 import io.hotcloud.security.api.LoginApi;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  **/
 @Slf4j
 @Service
-public class LoginService implements LoginApi {
+public class HotCloudLoginService implements LoginApi {
 
     @Override
     public BearerToken basicLogin(String username, String password) {

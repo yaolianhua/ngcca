@@ -25,35 +25,37 @@ import java.util.UUID;
  **/
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(value = {
-        SecureWhitelistConfigurer.class,
+        SecureWhitelistProperties.class,
         SecurityProperties.class
 })
 @Import({
         CorsFilterConfigurer.class,
         JwtConfigurer.class,
+        PasswordEncoderConfigurer.class,
         UserDetailsServiceConfigurer.class
 })
 @ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "true", matchIfMissing = true)
 @Slf4j
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private final SecureWhitelistConfigurer whitelistConfigure;
+    private final SecureWhitelistProperties whitelistProperties;
     private final JwtVerifier jwtVerifier;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void print(){
-        log.info("Spring security enabled. if you want to disable, you need configure the environment [security.enabled=false]");
-    }
-    public SecurityConfigurer(SecureWhitelistConfigurer whitelistConfigure,
+    public SecurityConfigurer(SecureWhitelistProperties whitelistProperties,
                               JwtVerifier jwtVerifier,
                               UserDetailsService userDetailsService,
                               PasswordEncoder passwordEncoder) {
-        this.whitelistConfigure = whitelistConfigure;
+        this.whitelistProperties = whitelistProperties;
         this.jwtVerifier = jwtVerifier;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @PostConstruct
+    public void print() {
+        log.info("Spring security enabled. if you want to disable, you need configure the environment [security.enabled=false]");
     }
 
     @Override
@@ -61,7 +63,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
         //permit all whitelist
-        http.authorizeRequests().antMatchers(whitelistConfigure.getUrls().toArray(new String[0])).permitAll();
+        http.authorizeRequests().antMatchers(whitelistProperties.getUrls().toArray(new String[0])).permitAll();
 
         http.cors();
         http.csrf().disable();
@@ -84,11 +86,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         String plainPassword = UUID.randomUUID().toString();
         //for test only
         auth.inMemoryAuthentication().passwordEncoder(passwordEncoder)
-                .withUser("admin")
+                .withUser("guest")
                 .password(passwordEncoder.encode(plainPassword))
                 .authorities(Collections.emptyList());
         log.info("***************************************************************************************************");
-        log.info("* Generated random access password: user='admin', password='{}' *", plainPassword);
+        log.info("* Generated random access password: user='guest', password='{}' *", plainPassword);
         log.info("***************************************************************************************************");
         //
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);

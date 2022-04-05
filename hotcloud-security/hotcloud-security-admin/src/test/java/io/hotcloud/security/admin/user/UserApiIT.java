@@ -3,7 +3,7 @@ package io.hotcloud.security.admin.user;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.FakeUser;
+import io.hotcloud.security.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -50,23 +50,27 @@ public class UserApiIT {
     @After
     public void clear() {
         cache.clear();
+        userApi.deleteAll(true);
     }
 
     @Test
     public void userApi() {
 
-        Collection<UserDetails> users = userApi.users();
-        Assertions.assertFalse(CollectionUtils.isEmpty(users));
+        Collection<UserDetails> userDetails = userApi.users();
+        //SecurityApplicationRunner
+        Assertions.assertFalse(CollectionUtils.isEmpty(userDetails));
 
-        List<FakeUser> fakeUsers = users.stream().map(e -> ((FakeUser) e))
+        List<User> users = userDetails.stream().map(e -> ((User) e))
                 .collect(Collectors.toList());
+        //In order to test the data is in different database
+        cache.put(UserApi.CACHE_USERS_KEY_PREFIX, users);
 
-        for (FakeUser fakeUser : fakeUsers) {
-            log.info("{}", fakeUser);
-            Assertions.assertNotNull(userApi.retrieve(fakeUser.getUsername()));
+        for (User user : users) {
+            log.info("{}", user);
+            Assertions.assertNotNull(userApi.retrieve(user.getUsername()));
         }
 
-        FakeUser current = (FakeUser) userApi.current();
+        User current = (User) userApi.current();
         Assertions.assertNotNull(current);
         Assertions.assertEquals("admin", current.getUsername());
     }

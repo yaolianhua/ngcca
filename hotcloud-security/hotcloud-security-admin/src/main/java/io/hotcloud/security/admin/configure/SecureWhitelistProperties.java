@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @ConfigurationProperties("security.ignored")
 @Slf4j
-public class SecureWhitelistConfigurer {
+public class SecureWhitelistProperties {
 
     private List<String> urls = new LinkedList<>();
 
