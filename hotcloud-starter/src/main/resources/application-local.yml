@@ -2,7 +2,7 @@ kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
 message:
-  type: rabbitmq
+  type: websocket
   rabbitmq:
     host: localhost
     username: admin
@@ -34,8 +34,8 @@ buildpack:
       name: storage-class-buildpack
     type: nfs
     nfs:
-      server: 127.0.0.1
-      path: /home/nfs-share
+      server: 119.91.214.25
+      path: /tmp/kaniko
     capacity: 1Gi
   kaniko:
     verbosity: info
