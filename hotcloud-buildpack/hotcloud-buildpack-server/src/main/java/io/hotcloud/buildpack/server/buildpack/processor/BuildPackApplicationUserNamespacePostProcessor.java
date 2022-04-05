@@ -1,12 +1,14 @@
 package io.hotcloud.buildpack.server.buildpack.processor;
 
 import io.hotcloud.buildpack.BuildPackApplicationRunnerPostProcessor;
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.hotcloud.security.api.UserApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 
@@ -30,13 +32,14 @@ class BuildPackApplicationUserNamespacePostProcessor implements BuildPackApplica
     @Override
     public void execute() {
         Collection<UserDetails> users = userApi.users();
+        Assert.state(!CollectionUtils.isEmpty(users), "Users is empty", 400);
         users.forEach(user -> cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()),
                 NamespaceGenerator.uuidNoDashNamespace()));
 
         boolean anyMatch = users.stream().map(UserDetails::getUsername)
-                .anyMatch("admin"::equalsIgnoreCase);
+                .anyMatch("guest"::equalsIgnoreCase);
         if (!anyMatch) {
-            cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, "admin"), NamespaceGenerator.uuidNoDashNamespace());
+            cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, "guest"), NamespaceGenerator.uuidNoDashNamespace());
             log.info("BuildPackApplicationUserNamespacePostProcessor. {} user namespace cached", users.size() + 1);
             return;
         }
