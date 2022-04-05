@@ -9,7 +9,14 @@ kubernetes:
 cache:
   type: redis
   redis:
-    database: 15
+    database: 13
+    host: localhost
+    password: QbMufCD@9WVQ^Hv
+    port: 6379
+db:
+  type: redis
+  redis:
+    database: 5
     host: localhost
     password: QbMufCD@9WVQ^Hv
     port: 6379
@@ -17,7 +24,7 @@ buildpack:
   storage:
     type: nfs
     nfs:
-      server: 127.0.0.1
-      path: /home/nfs-share
+      server: 119.91.214.25
+      path: /tmp/kaniko
   kaniko:
     verbosity: info

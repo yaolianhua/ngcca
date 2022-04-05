@@ -39,6 +39,12 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-db-server</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- git -->
         <dependency>
             <groupId>org.eclipse.jgit</groupId>

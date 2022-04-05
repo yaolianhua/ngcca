@@ -68,7 +68,7 @@ public class BuildPackStorageProperties {
     @Data
     public static class Nfs {
         private String server = "127.0.0.1";
-        private String path = "/home/nfs-share";
+        private String path = "/tmp/kaniko";
     }
 
     @Data
