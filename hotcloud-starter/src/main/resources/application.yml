@@ -13,22 +13,20 @@ spring:
     username: ${message.rabbitmq.username:}
     password: ${message.rabbitmq.password:}
     virtual-host: /
-  redis:
-    database: ${cache.redis.database:}
-    password: ${cache.redis.password:}
-    host: ${cache.redis.host:}
-    port: ${cache.redis.port:}
-    client-type: jedis
-    jedis:
-      pool:
-        max-active: 50
-        max-idle: 50
-        min-idle: 50
+  data:
+    mongodb:
+      database: hotcloud
+      host: ${db.mongodb.host:}
+      port: ${db.mongodb.port:}
+      password: ${db.mongodb.password:}
+      username: ${db.mongodb.username:}
+      auto-index-creation: true
 server:
   max-http-header-size: 40KB
-## log level
 logging:
   level:
     io.hotcloud.kubernetes.server: debug
     io.hotcloud.buildpack.server: debug
+    io.hotcloud.security.admin: info
+    io.hotcloud.db.server: info
     io.hotcloud.message: info

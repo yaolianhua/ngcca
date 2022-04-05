@@ -5,6 +5,19 @@ cache:
     password:
     port:
     database:
+db:
+  type: redis
+  redis:
+    database: 0
+    host:
+    port:
+    password:
+  mongodb:
+    database:
+    host:
+    port:
+    password:
+    username:
 message:
   type: websocket
   rabbitmq:
