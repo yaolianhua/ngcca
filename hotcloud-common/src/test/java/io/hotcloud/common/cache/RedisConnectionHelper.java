@@ -1,14 +1,11 @@
 package io.hotcloud.common.cache;
 
+import io.hotcloud.common.util.RedisHelper;
 import lombok.Data;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 
 
 /**
@@ -20,43 +17,19 @@ public final class RedisConnectionHelper {
     }
 
     public static RedisTemplate<String, Object> getRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
-        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-        redisTemplate.setDefaultSerializer(genericJackson2JsonRedisSerializer);
-
-        redisTemplate.setStringSerializer(stringRedisSerializer);
-        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
-
-        redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
+        return RedisHelper.createJdkSerializedRedisTemplate(redisConnectionFactory);
     }
 
-    public static JedisConnectionFactory getJedisConnectionFactory(String host, Integer port, String password, Integer database) throws RedisConnectionFailureException {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+    public static RedisConnectionFactory getRedisConnectionFactory(String host, Integer port, String password, Integer database) throws RedisConnectionFailureException {
 
-        redisStandaloneConfiguration.setPort(port);
-        redisStandaloneConfiguration.setHostName(host);
-        redisStandaloneConfiguration.setPassword(password);
-        redisStandaloneConfiguration.setDatabase(database);
-
-        JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
-        redisConnectionFactory.afterPropertiesSet();
-
-        return redisConnectionFactory;
+        return RedisHelper.creatStandaloneLettuceConnectionFactory(database, host, port, password);
     }
 
     public static ConnectionValidBind isValidConnection(String host, Integer port, String password, Integer database) {
 
-        JedisConnectionFactory jedisConnectionFactory = null;
+        RedisConnectionFactory jedisConnectionFactory = null;
         try {
-            jedisConnectionFactory = getJedisConnectionFactory(host, port, password, database);
+            jedisConnectionFactory = getRedisConnectionFactory(host, port, password, database);
             RedisConnection connection = jedisConnectionFactory.getConnection();
             boolean valid = "PONG".equalsIgnoreCase(connection.ping());
             return new ConnectionValidBind(valid, jedisConnectionFactory);

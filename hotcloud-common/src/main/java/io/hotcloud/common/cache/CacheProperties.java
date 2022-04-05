@@ -41,7 +41,7 @@ public class CacheProperties {
 
         private String host;
         private Integer port = 6379;
-        private Integer database = 0;
+        private Integer database = 15;
 
         private String password;
 
