@@ -39,7 +39,7 @@ public class BuildPackStorageProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load BuildPack Storage Configuration】 storage-class = '{}', type = '{}', mount path = '{}', size = '{}'",
+        log.info("【Load BuildPack Storage Properties】 storage-class = '{}', type = '{}', mount path = '{}', size = '{}'",
                 storageClass.getName(),
                 type,
                 retrieveStoragePath(),
