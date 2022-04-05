@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import javax.annotation.PostConstruct;
-
 
 /**
  * @author yaolianhua789@gmail.com
@@ -26,21 +24,21 @@ public class MessageProperties {
      * </ul>
      */
     private Type type = Type.websocket;
-
-    @PostConstruct
-    public void print() {
-
-        if (Type.websocket.equals(type)) {
-            log.info("【Load Message Service Configuration. implementation using WebSocket】");
-        } else if (Type.rabbitmq.equals(type)) {
-            log.info("【Load Message Service Configuration. implementation using RabbitMQ】");
-        }
-
-    }
+    private RabbitmqProperties rabbitmq;
 
     public enum Type {
         //
         websocket, rabbitmq
+    }
+
+    @Data
+    public static class RabbitmqProperties {
+
+        private String host;
+        private Integer port;
+        private String username;
+        private String password;
+
     }
 
 }
