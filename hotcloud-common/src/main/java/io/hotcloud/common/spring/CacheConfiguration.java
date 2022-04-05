@@ -1,5 +1,6 @@
 package io.hotcloud.common.spring;
 
+import io.hotcloud.common.Assert;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.common.cache.CacheProperties;
 import io.hotcloud.common.cache.CaffeineCache;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -25,6 +28,20 @@ public class CacheConfiguration {
 
     public CacheConfiguration(CacheProperties properties) {
         this.properties = properties;
+    }
+
+    @PostConstruct
+    public void print() {
+        CacheProperties.Type type = properties.getType();
+        CacheProperties.RedisProperties redis = properties.getRedis();
+        if (type == CacheProperties.Type.local) {
+            log.info("【Load Cache Configuration. implementation using Caffeine Cache】");
+        }
+        if (type == CacheProperties.Type.redis) {
+            Assert.notNull(redis, "Redis configuration is null", 400);
+            log.info("【Load Cache Configuration. implementation using Redis Cache. url='{}', using database '{}'】",
+                    String.format("redis://%s:%s", redis.getHost(), redis.getPort()), redis.getDatabase());
+        }
     }
 
     @Bean
