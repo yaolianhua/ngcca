@@ -9,16 +9,5 @@ spring:
       password: ${db.mongodb.password:}
       username: ${db.mongodb.username:}
       auto-index-creation: true
-  redis:
-    database: ${db.redis.database:}
-    password: ${db.redis.password:}
-    host: ${db.redis.host:}
-    port: ${db.redis.port:}
-    client-type: jedis
-    jedis:
-      pool:
-        max-active: 50
-        max-idle: 50
-        min-idle: 50
 server:
   port: 8075

@@ -1,8 +1,10 @@
 package io.hotcloud.db.server;
 
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.util.RedisHelper;
 import io.hotcloud.db.api.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
@@ -13,8 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
@@ -30,7 +30,10 @@ import javax.annotation.PostConstruct;
         havingValue = "redis",
         matchIfMissing = true
 )
-@EnableRedisRepositories(basePackageClasses = AbstractEntity.class)
+@EnableRedisRepositories(
+        basePackageClasses = AbstractEntity.class,
+        redisTemplateRef = "jdkSerializedRedisTemplate"
+)
 @EnableAutoConfiguration(exclude = {
         MongoRepositoriesAutoConfiguration.class,
         MongoAutoConfiguration.class
@@ -52,25 +55,23 @@ public class RedisDatabaseConfiguration {
                 String.format("redis://%s:%s", redis.getHost(), redis.getPort()), redis.getDatabase());
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    @Bean("repositoryRedisConnectionFactory")
+    public RedisConnectionFactory redisConnectionFactory() {
 
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setEnableTransactionSupport(true);
+        DatabaseProperties.RedisProperties redis = properties.getRedis();
+        return RedisHelper.creatStandaloneLettuceConnectionFactory(
+                redis.getDatabase(),
+                redis.getHost(),
+                redis.getPort(),
+                redis.getPassword()
+        );
+    }
 
-        RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
-        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
-
-        redisTemplate.setKeySerializer(stringRedisSerializer);
-        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
-
-        redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
-
-        redisTemplate.afterPropertiesSet();
-
-        return redisTemplate;
+    @Bean("jdkSerializedRedisTemplate")
+    public RedisTemplate<String, Object> redisTemplate(
+            @Qualifier("repositoryRedisConnectionFactory")
+                    RedisConnectionFactory redisConnectionFactory) {
+        return RedisHelper.createJdkSerializedRedisTemplate(redisConnectionFactory);
     }
 
 }

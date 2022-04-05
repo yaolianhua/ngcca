@@ -14,4 +14,12 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
      * @return {@link  UserEntity}
      */
     UserEntity findByUsername(String username);
+
+    /**
+     * Delete user with giving {@code username} physically
+     *
+     * @param username username
+     * @return true/false
+     */
+    boolean deleteByUsername(String username);
 }

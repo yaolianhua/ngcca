@@ -2,10 +2,12 @@ package io.hotcloud.db.api;
 
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class AbstractEntity {
+public class AbstractEntity implements Serializable {
 
     @Id
     private String id;

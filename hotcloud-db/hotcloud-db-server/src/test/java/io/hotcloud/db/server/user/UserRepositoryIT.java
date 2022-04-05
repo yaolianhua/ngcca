@@ -5,6 +5,7 @@ import io.hotcloud.db.DatabaseIntegrationTestBase;
 import io.hotcloud.db.api.user.UserEntity;
 import io.hotcloud.db.api.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class UserRepositoryIT extends DatabaseIntegrationTestBase {
 
     @Autowired
     private UserRepository userRepository;
+
+    @After
+    public void after() {
+        userRepository.deleteAll();
+    }
 
     @Test
     public void readByUsername() {
