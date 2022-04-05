@@ -20,6 +20,6 @@ public class SecureWhitelistProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load SecureWhitelist Configuration】ignored urls {}", urls);
+        log.info("【Load SecureWhitelist Properties】ignored urls {}", urls);
     }
 }

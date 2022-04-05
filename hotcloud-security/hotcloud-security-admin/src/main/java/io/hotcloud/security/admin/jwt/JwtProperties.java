@@ -28,6 +28,6 @@ public class JwtProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load Jwt Configuration】using JWA algorithm name '{}', sign-key '{}'", algorithm, signKey);
+        log.info("【Load Jwt Properties】using JWA algorithm name '{}', sign-key '{}'", algorithm, signKey);
     }
 }
