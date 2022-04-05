@@ -39,14 +39,14 @@ public class KubernetesProperties {
     @PostConstruct
     public void log() {
         if (this.enableWorkloadsWatcher) {
-            log.info("【Load Kubernetes Configuration】Enable global event watch for workloads ");
+            log.info("【Load Kubernetes Properties】enable global event watch for workloads ");
         }
         if (this.inCluster) {
-            log.info("【Load Kubernetes Configuration】Using in-cluster mode ");
+            log.info("【Load Kubernetes Properties】using in-cluster mode ");
             return;
         }
 
-        log.info("【Load Kubernetes Configuration】Using kubeconfig path '{}'", kubeConfigPath);
+        log.info("【Load Kubernetes Properties】using kubeconfig path '{}'", kubeConfigPath);
 
 
     }
