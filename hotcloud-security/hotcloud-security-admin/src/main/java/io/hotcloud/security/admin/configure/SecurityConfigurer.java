@@ -55,7 +55,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     public void print() {
-        log.info("Spring security enabled. if you want to disable, you need configure the environment [security.enabled=false]");
+        log.info("【Spring security enabled. if you want to disable, you need configure the environment 'security.enabled=false'】");
     }
 
     @Override

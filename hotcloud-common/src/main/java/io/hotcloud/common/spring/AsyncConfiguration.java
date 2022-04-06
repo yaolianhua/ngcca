@@ -24,27 +24,27 @@ public class AsyncConfiguration {
 
     @PostConstruct
     public void print() {
-        log.info("enable spring async scheduling configuration");
+        log.info("【Enable spring async scheduling configuration】");
     }
 
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.build();
         threadPoolTaskExecutor.initialize();
-        log.info("initialed ThreadPoolTaskExecutor");
+        log.info("【Initialed ThreadPoolTaskExecutor】");
         return threadPoolTaskExecutor;
     }
 
     @Bean
     public ExecutorService executorService(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("initialed ExecutorService");
+        log.info("【Initialed ExecutorService】");
         return threadPoolTaskExecutor.getThreadPoolExecutor();
     }
 
     @Primary
     @Bean
     public Executor executor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("initialed Executor");
+        log.info("【Initialed Executor】");
         return threadPoolTaskExecutor;
     }
 }

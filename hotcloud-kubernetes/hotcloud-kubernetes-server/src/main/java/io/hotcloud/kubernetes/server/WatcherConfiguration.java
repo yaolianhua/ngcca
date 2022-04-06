@@ -27,7 +27,7 @@ public class WatcherConfiguration {
 
     @PostConstruct
     public void init() {
-        log.info("Start workloads watcher '{}'", watchApiContainer.keySet());
+        log.info("【Start workloads watcher '{}'】", watchApiContainer.keySet());
         for (WorkloadsWatchApi watchApi : watchApiContainer.values()) {
             try {
                 watchApi.watch();
