@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.server;
 
+import io.hotcloud.buildpack.api.BuildPackConstant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,41 +18,26 @@ import javax.annotation.PostConstruct;
 public class BuildPackStorageProperties {
 
     /**
-     * PV type
+     * Storage type
      */
     private Type type = Type.hostPath;
     /**
-     * Storage capacity will be allocated. default 500M
+     * nfs server. it can not be null if {@code type} is nfs
      */
-    private String capacity = "500M";
-    /**
-     * PV type of nfs
-     */
-    private Nfs nfs = new Nfs();
-    /**
-     * PV type of hostPath
-     */
-    private HostPath hostPath = new HostPath();
-    /**
-     * Global storageClass of buildpack
-     */
-    private StorageClass storageClass = new StorageClass();
+    private String nfsServer;
+
 
     @PostConstruct
     public void print() {
-        log.info("【Load BuildPack Storage Properties】 storage-class = '{}', type = '{}', mount path = '{}', size = '{}'",
-                storageClass.getName(),
-                type,
-                retrieveStoragePath(),
-                capacity);
+        log.info("【Load BuildPack Storage Properties】type = '{}', mount path = '{}'", type, retrieveStoragePath());
     }
 
     public String retrieveStoragePath() {
         switch (type) {
             case hostPath:
-                return this.hostPath.getPath();
+                return BuildPackConstant.STORAGE_VOLUME_PATH;
             case nfs:
-                return String.format("%s:%s", this.nfs.server, this.nfs.getPath());
+                return String.format("%s:%s", nfsServer, BuildPackConstant.STORAGE_VOLUME_PATH);
             default:
                 break;
         }
@@ -65,19 +51,4 @@ public class BuildPackStorageProperties {
         nfs
     }
 
-    @Data
-    public static class Nfs {
-        private String server = "127.0.0.1";
-        private String path = "/tmp/kaniko";
-    }
-
-    @Data
-    public static class HostPath {
-        private String path = "/tmp/kaniko";
-    }
-
-    @Data
-    public static class StorageClass {
-        private String name = "storage-class-buildpack";
-    }
 }

@@ -23,8 +23,6 @@ db:
 buildpack:
   storage:
     type: nfs
-    nfs:
-      server: 119.91.214.25
-      path: /tmp/kaniko
+    nfs-server: 119.91.214.25
   kaniko:
     verbosity: info

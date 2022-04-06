@@ -7,8 +7,6 @@ import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.Base64Helper;
-import io.hotcloud.common.StringHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
@@ -31,7 +29,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +77,6 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         Assert.hasText(input.getRemote(), "Git url is null", 400);
         Assert.hasText(input.getLocal(), "Local path is null", 400);
 
-        String project = StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote());
         Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned) {
             return null;
@@ -90,7 +86,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
                 .builder()
                 .local(input.getLocal())
                 .remote(input.getRemote())
-                .project(project)
+                .project(input.retrieveGitProject())
                 .build();
     }
 
@@ -189,9 +185,8 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + gitProject + "-" + resource.getNamespace();
         String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + gitProject + "-" + resource.getNamespace();
-        String capacity = null == resource.getCapacity() ? storageProperties.getCapacity() : resource.getCapacity();
+        String capacity = "1Gi";
 
-        String storageClass = storageProperties.getStorageClass().getName();
         List<String> accessModes = List.of("ReadWriteOnce");
         Map<String, String> storage = Map.of("storage", capacity);
 
@@ -207,7 +202,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         PersistentVolumeSpec persistentVolumeSpec = new PersistentVolumeSpec();
         persistentVolumeSpec.setCapacity(storage);
         persistentVolumeSpec.setAccessModes(accessModes);
-        persistentVolumeSpec.setStorageClassName(storageClass);
+        persistentVolumeSpec.setStorageClassName(BuildPackConstant.STORAGE_CLASS);
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
         persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Retain);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
@@ -215,7 +210,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
             persistentVolumeSpec.setHostPath(hostPathVolume);
         }
         if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            NFSVolume nfsVolume = NFSVolume.of(gitProjectPath, storageProperties.getNfs().getServer(), false);
+            NFSVolume nfsVolume = NFSVolume.of(gitProjectPath, storageProperties.getNfsServer(), false);
             persistentVolumeSpec.setNfs(nfsVolume);
         }
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
@@ -235,7 +230,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         PersistentVolumeClaimSpec persistentVolumeClaimSpec = new PersistentVolumeClaimSpec();
         persistentVolumeClaimSpec.setVolumeMode(PersistentVolumeClaimSpec.VolumeMode.Filesystem);
-        persistentVolumeClaimSpec.setStorageClassName(storageClass);
+        persistentVolumeClaimSpec.setStorageClassName(BuildPackConstant.STORAGE_CLASS);
         persistentVolumeClaimSpec.setAccessModes(accessModes);
         persistentVolumeClaimSpec.setResources(Resources.ofRequest(storage));
         persistentVolumeClaimSpec.setVolumeName(pvName);
@@ -257,7 +252,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
                 .namespace(resource.getNamespace())
                 .persistentVolumeClaim(pvcName)
                 .persistentVolume(pvName)
-                .storageClass(storageClass)
+                .storageClass(BuildPackConstant.STORAGE_CLASS)
                 .capacity(capacity)
                 .alternative(resource.getAlternative())
                 .build();
@@ -276,12 +271,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         request.setImmutable(true);
         request.setType("kubernetes.io/dockerconfigjson");
 
-        String registry = resource.getRegistry();
-        if (Objects.equals(registry, "index.docker.io")) {
-            registry = "https://index.docker.io/v1/";
-        }
-        String configjson = Base64Helper.dockerconfigjson(registry, resource.getUsername(), resource.getPassword());
-        Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, configjson);
+        Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, resource.dockerconfigjson());
         request.setData(data);
 
         ObjectMetadata secretMetadata = new ObjectMetadata();

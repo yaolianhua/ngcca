@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
-import io.hotcloud.common.Base64Helper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -20,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -114,8 +115,9 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
         Secret secret = secretList.getItems().get(0);
         String auth = secret.getData().get(".dockerconfigjson");
-        String expected = Base64Helper.dockerconfigjson("https://index.docker.io/v1/", "username", "password");
-        Assertions.assertEquals(expected, Base64Helper.decode(auth));
+        String dockerconfigjson = new String(Base64.getDecoder().decode(auth), StandardCharsets.UTF_8);
+
+        Assertions.assertEquals(dockersecret.dockerconfigjson(), dockerconfigjson);
 
         Boolean delete = kubectlApi.delete(namespace, yaml);
         Assertions.assertTrue(delete);

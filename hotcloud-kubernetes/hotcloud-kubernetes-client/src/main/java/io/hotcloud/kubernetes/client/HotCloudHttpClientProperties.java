@@ -24,7 +24,7 @@ public class HotCloudHttpClientProperties {
 
     @PostConstruct
     public void print() {
-        log.info("Hot Cloud server address '{}', basic auth user '{}', basic password '{}'", obtainUrl(), basicUsername, basicPassword);
+        log.info("【Hot Cloud server address '{}', basic auth user '{}', basic password '{}'】", obtainUrl(), basicUsername, basicPassword);
     }
 
     public String obtainUrl() {
