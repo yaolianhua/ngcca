@@ -1,4 +1,6 @@
-package io.hotcloud.common;
+package io.hotcloud.common.util;
+
+import io.hotcloud.common.Assert;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

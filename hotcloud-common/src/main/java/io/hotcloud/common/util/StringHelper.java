@@ -1,5 +1,6 @@
-package io.hotcloud.common;
+package io.hotcloud.common.util;
 
+import io.hotcloud.common.Assert;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
