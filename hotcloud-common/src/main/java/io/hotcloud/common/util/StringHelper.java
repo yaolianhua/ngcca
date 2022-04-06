@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -42,10 +43,14 @@ public final class StringHelper {
         return params;
     }
 
+    final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
+
     public static String retrieveProjectFromHTTPGitUrl(String gitUrl) {
+        Assert.state(!CHINESE_PATTERN.matcher(gitUrl).find(), "Git url contains chinese char", 400);
         Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only", 400);
         String substring = gitUrl.substring(gitUrl.lastIndexOf("/"));
         String originString = substring.substring(1, substring.length() - ".git".length());
+
         String lowerCaseString = originString.toLowerCase();
         return lowerCaseString.replaceAll("_", "-");
     }

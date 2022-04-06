@@ -40,6 +40,9 @@ public class StringHelperTest {
 
         Assertions.assertEquals("devops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/devops-thymeleaf.git"));
         Assertions.assertEquals("dev-ops-thymeleaf", StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/DEV-OPS_thymeleaf.git"));
+
+
+        Assertions.assertThrows(HotCloudException.class, () -> StringHelper.retrieveProjectFromHTTPGitUrl("https://gitee.com/yannanshan/DEV-OPS_中文.git"), "Git url contains chinese char");
     }
 
     @Test
