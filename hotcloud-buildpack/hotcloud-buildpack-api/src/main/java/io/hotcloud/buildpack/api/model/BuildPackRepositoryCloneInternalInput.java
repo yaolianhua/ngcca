@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api.model;
 
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.util.Validator;
+import io.hotcloud.common.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -7,7 +7,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
-import io.hotcloud.common.util.Validator;
+import io.hotcloud.common.Validator;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;

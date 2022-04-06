@@ -1,6 +1,5 @@
 package io.hotcloud.common;
 
-import io.hotcloud.common.util.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

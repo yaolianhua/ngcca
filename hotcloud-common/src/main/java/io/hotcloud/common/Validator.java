@@ -1,6 +1,5 @@
-package io.hotcloud.common.util;
+package io.hotcloud.common;
 
-import io.hotcloud.common.Assert;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
