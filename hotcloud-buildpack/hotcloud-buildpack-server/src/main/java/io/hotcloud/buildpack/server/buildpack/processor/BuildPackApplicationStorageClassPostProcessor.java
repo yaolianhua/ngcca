@@ -3,7 +3,6 @@ package io.hotcloud.buildpack.server.buildpack.processor;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.BuildPackApplicationRunnerPostProcessor;
 import io.hotcloud.buildpack.api.BuildPackConstant;
-import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
@@ -21,11 +20,9 @@ import java.util.Objects;
 class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicationRunnerPostProcessor {
 
     private final StorageClassApi storageClassApi;
-    private final BuildPackStorageProperties properties;
 
-    public BuildPackApplicationStorageClassPostProcessor(StorageClassApi storageClassApi, BuildPackStorageProperties properties) {
+    public BuildPackApplicationStorageClassPostProcessor(StorageClassApi storageClassApi) {
         this.storageClassApi = storageClassApi;
-        this.properties = properties;
     }
 
     @Override

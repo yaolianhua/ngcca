@@ -22,6 +22,11 @@ public final class FileHelper {
         return Files.exists(Path.of(path));
     }
 
+    public static boolean exists(Path path) {
+        Assert.notNull(path, "path is null", 400);
+        return Files.exists(path);
+    }
+
     public static boolean deleteRecursively(Path root) throws IOException {
         if (root == null) {
             return false;
