@@ -2,9 +2,9 @@ package io.hotcloud.buildpack.server.git;
 
 import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.util.Validator;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -29,15 +29,15 @@ public class GitImpl implements GitApi {
 
         Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote), 400);
 
-        if (force && Validator.existedPath(local)) {
+        if (force && FileHelper.exists(local)) {
             try {
                 log.warn("The specified path '{}' is not empty, it will be forcibly deleted and then cloned", Path.of(local).toAbsolutePath());
-                FileUtils.deleteDirectory(Path.of(local).toFile());
+                FileHelper.deleteRecursively(Path.of(local));
             } catch (IOException e) {
                 log.error("Delete file path error: {} ", e.getCause().getMessage());
             }
         }
-        Assert.state(!Validator.existedPath(local), String.format("Repository path '%s' already exist", local), 409);
+        Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local), 409);
         boolean needCredential = StringUtils.hasText(username) && StringUtils.hasText(password);
 
         log.info("Cloning from '{}' to '{}', branch [{}]", remote, Path.of(local).toAbsolutePath(), branch);

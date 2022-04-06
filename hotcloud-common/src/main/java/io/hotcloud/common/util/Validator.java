@@ -4,7 +4,6 @@ import io.hotcloud.common.Assert;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 /**
@@ -18,11 +17,6 @@ public final class Validator {
     public static boolean validIpv4(String inetAddress) {
         Assert.hasText(inetAddress, "inetAddress is null", 400);
         return InetAddressValidator.getInstance().isValid(inetAddress);
-    }
-
-    public static boolean existedPath(String path) {
-        Assert.hasText(path, "path is null", 400);
-        return Path.of(path).toFile().exists();
     }
 
     public static boolean validHTTPGitAddress(String url) {
