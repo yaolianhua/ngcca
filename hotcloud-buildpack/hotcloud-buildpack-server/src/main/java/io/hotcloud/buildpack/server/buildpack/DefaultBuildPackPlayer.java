@@ -8,7 +8,6 @@ import io.hotcloud.buildpack.api.model.BuildPack;
 import io.hotcloud.buildpack.api.model.BuildPackRepositoryCloneInternalInput;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartedEvent;
-import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.cache.Cache;
@@ -38,7 +37,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
-    private final BuildPackStorageProperties storageProperties;
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
@@ -48,7 +46,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
                                   UserApi userApi,
                                   KanikoFlag kanikoFlag,
-                                  BuildPackStorageProperties storageProperties,
                                   Cache cache,
                                   NamespaceApi namespaceApi,
                                   KubectlApi kubectlApi,
@@ -56,7 +53,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
-        this.storageProperties = storageProperties;
         this.cache = cache;
         this.namespaceApi = namespaceApi;
         this.kubectlApi = kubectlApi;
