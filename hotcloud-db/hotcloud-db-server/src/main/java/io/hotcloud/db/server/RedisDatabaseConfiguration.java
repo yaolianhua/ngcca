@@ -1,7 +1,7 @@
 package io.hotcloud.db.server;
 
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.util.RedisHelper;
+import io.hotcloud.common.cache.RedisHelper;
 import io.hotcloud.db.api.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

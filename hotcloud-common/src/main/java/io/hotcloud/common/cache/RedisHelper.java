@@ -1,4 +1,4 @@
-package io.hotcloud.common.util;
+package io.hotcloud.common.cache;
 
 import io.lettuce.core.resource.ClientResources;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;

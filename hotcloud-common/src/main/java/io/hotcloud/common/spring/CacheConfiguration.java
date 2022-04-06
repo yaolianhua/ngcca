@@ -1,11 +1,7 @@
 package io.hotcloud.common.spring;
 
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.cache.Cache;
-import io.hotcloud.common.cache.CacheProperties;
-import io.hotcloud.common.cache.CaffeineCache;
-import io.hotcloud.common.cache.RedisCache;
-import io.hotcloud.common.util.RedisHelper;
+import io.hotcloud.common.cache.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
