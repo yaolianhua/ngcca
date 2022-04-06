@@ -34,7 +34,7 @@ public class GitImpl implements GitApi {
                 log.warn("The specified path '{}' is not empty, it will be forcibly deleted and then cloned", Path.of(local).toAbsolutePath());
                 FileUtils.deleteDirectory(Path.of(local).toFile());
             } catch (IOException e) {
-                log.error("Delete file path error: {}", e.getMessage());
+                log.error("Delete file path error: {} ", e.getCause().getMessage());
             }
         }
         Assert.state(!Validator.existedPath(local), String.format("Repository path '%s' already exist", local), 409);
