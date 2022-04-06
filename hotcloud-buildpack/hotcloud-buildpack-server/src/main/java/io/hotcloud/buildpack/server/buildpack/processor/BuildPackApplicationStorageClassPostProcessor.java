@@ -2,6 +2,7 @@ package io.hotcloud.buildpack.server.buildpack.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.BuildPackApplicationRunnerPostProcessor;
+import io.hotcloud.buildpack.api.BuildPackConstant;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -29,18 +30,18 @@ class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicat
 
     @Override
     public void execute() {
-        String storageClassName = properties.getStorageClass().getName();
+
         StorageClassCreateRequest createRequest = new StorageClassCreateRequest();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setName(storageClassName);
+        objectMetadata.setName(BuildPackConstant.STORAGE_CLASS);
 
         createRequest.setMetadata(objectMetadata);
 
         try {
-            StorageClass existedStorageClass = storageClassApi.read(storageClassName);
+            StorageClass existedStorageClass = storageClassApi.read(BuildPackConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
-                log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", storageClassName);
+                log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);

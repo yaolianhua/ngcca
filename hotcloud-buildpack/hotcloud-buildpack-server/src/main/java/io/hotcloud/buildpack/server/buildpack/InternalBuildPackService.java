@@ -189,9 +189,8 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + gitProject + "-" + resource.getNamespace();
         String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + gitProject + "-" + resource.getNamespace();
-        String capacity = null == resource.getCapacity() ? storageProperties.getCapacity() : resource.getCapacity();
+        String capacity = "1Gi";
 
-        String storageClass = storageProperties.getStorageClass().getName();
         List<String> accessModes = List.of("ReadWriteOnce");
         Map<String, String> storage = Map.of("storage", capacity);
 
@@ -207,7 +206,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         PersistentVolumeSpec persistentVolumeSpec = new PersistentVolumeSpec();
         persistentVolumeSpec.setCapacity(storage);
         persistentVolumeSpec.setAccessModes(accessModes);
-        persistentVolumeSpec.setStorageClassName(storageClass);
+        persistentVolumeSpec.setStorageClassName(BuildPackConstant.STORAGE_CLASS);
         persistentVolumeSpec.setVolumeMode(PersistentVolumeSpec.VolumeMode.Filesystem);
         persistentVolumeSpec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Retain);
         if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
@@ -215,7 +214,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
             persistentVolumeSpec.setHostPath(hostPathVolume);
         }
         if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            NFSVolume nfsVolume = NFSVolume.of(gitProjectPath, storageProperties.getNfs().getServer(), false);
+            NFSVolume nfsVolume = NFSVolume.of(gitProjectPath, storageProperties.getNfsServer(), false);
             persistentVolumeSpec.setNfs(nfsVolume);
         }
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
@@ -235,7 +234,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         PersistentVolumeClaimSpec persistentVolumeClaimSpec = new PersistentVolumeClaimSpec();
         persistentVolumeClaimSpec.setVolumeMode(PersistentVolumeClaimSpec.VolumeMode.Filesystem);
-        persistentVolumeClaimSpec.setStorageClassName(storageClass);
+        persistentVolumeClaimSpec.setStorageClassName(BuildPackConstant.STORAGE_CLASS);
         persistentVolumeClaimSpec.setAccessModes(accessModes);
         persistentVolumeClaimSpec.setResources(Resources.ofRequest(storage));
         persistentVolumeClaimSpec.setVolumeName(pvName);
@@ -257,7 +256,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
                 .namespace(resource.getNamespace())
                 .persistentVolumeClaim(pvcName)
                 .persistentVolume(pvName)
-                .storageClass(storageClass)
+                .storageClass(BuildPackConstant.STORAGE_CLASS)
                 .capacity(capacity)
                 .alternative(resource.getAlternative())
                 .build();

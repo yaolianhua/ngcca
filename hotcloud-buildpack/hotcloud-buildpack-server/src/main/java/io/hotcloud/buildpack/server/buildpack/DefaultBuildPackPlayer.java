@@ -108,14 +108,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         Map<String, String> args = resolvedArgs(gitUrl, dockerfile, noPush, registry, registryProject, alternative);
 
         //repository clone path locally, it will be mounted by user pod
-        String clonePath = null;
-        if (BuildPackStorageProperties.Type.hostPath == storageProperties.getType()) {
-            clonePath = Path.of(storageProperties.getHostPath().getPath(), namespace, gitProject).toString();
-        }
-        if (BuildPackStorageProperties.Type.nfs == storageProperties.getType()) {
-            clonePath = Path.of(storageProperties.getNfs().getPath(), namespace, gitProject).toString();
-        }
-        Assert.hasText(clonePath, "repository clone path is null", 404);
+        String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, gitProject).toString();
 
         //registry may be fully public
         registryUser = StringUtils.hasText(registryUser) ? registryUser : "no-auth-user";

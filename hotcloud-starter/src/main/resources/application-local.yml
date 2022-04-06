@@ -30,12 +30,7 @@ db:
     port: 6379
 buildpack:
   storage:
-    storage-class:
-      name: storage-class-buildpack
     type: nfs
-    nfs:
-      server: 119.91.214.25
-      path: /tmp/kaniko
-    capacity: 1Gi
+    nfs-server: 119.91.214.25
   kaniko:
     verbosity: info
