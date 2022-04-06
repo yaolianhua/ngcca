@@ -7,7 +7,6 @@ import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.util.StringHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
@@ -78,7 +77,6 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         Assert.hasText(input.getRemote(), "Git url is null", 400);
         Assert.hasText(input.getLocal(), "Local path is null", 400);
 
-        String project = StringHelper.retrieveProjectFromHTTPGitUrl(input.getRemote());
         Boolean cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned) {
             return null;
@@ -88,7 +86,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
                 .builder()
                 .local(input.getLocal())
                 .remote(input.getRemote())
-                .project(project)
+                .project(input.retrieveGitProject())
                 .build();
     }
 
