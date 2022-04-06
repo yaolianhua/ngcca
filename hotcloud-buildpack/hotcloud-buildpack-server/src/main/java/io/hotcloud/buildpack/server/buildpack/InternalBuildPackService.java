@@ -7,7 +7,6 @@ import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
-import io.hotcloud.common.util.Base64Helper;
 import io.hotcloud.common.util.StringHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
@@ -31,7 +30,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -275,12 +273,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         request.setImmutable(true);
         request.setType("kubernetes.io/dockerconfigjson");
 
-        String registry = resource.getRegistry();
-        if (Objects.equals(registry, "index.docker.io")) {
-            registry = "https://index.docker.io/v1/";
-        }
-        String configjson = Base64Helper.dockerconfigjson(registry, resource.getUsername(), resource.getPassword());
-        Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, configjson);
+        Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, resource.dockerconfigjson());
         request.setData(data);
 
         ObjectMetadata secretMetadata = new ObjectMetadata();
