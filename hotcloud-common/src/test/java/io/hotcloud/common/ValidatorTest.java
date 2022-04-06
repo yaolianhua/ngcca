@@ -63,4 +63,30 @@ public class ValidatorTest {
         Assertions.assertFalse(Validator.validHTTPGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
     }
 
+    static Stream<String> validUsernameProvider() {
+        return Stream.of(
+                "admin",
+                "jason",
+                "smith123",
+                "jasonstanth"
+        );
+    }
+
+    static Stream<String> invalidUsernameProvider() {
+        return Stream.of(
+                "jack",      //length
+                "adminjasonsmihthy", //length
+                "Admin",
+                "jason@",
+                "123smith123",
+                "admin.123"
+        );
+    }
+
+    @Test
+    public void username() {
+        validUsernameProvider().forEach(e -> Assertions.assertTrue(Validator.validUsername(e)));
+        invalidUsernameProvider().forEach(e -> Assertions.assertFalse(Validator.validUsername(e)));
+    }
+
 }
