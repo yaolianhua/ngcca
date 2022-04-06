@@ -114,6 +114,9 @@ spec:
             - mountPath: /root/.kube/config
               name: kubeconfig
               readOnly: true
+            - mountPath: /tmp/kaniko
+              name: buildpack-storage
+              readOnly: false
       tolerations:
         - effect: NoSchedule
           operator: Exists
@@ -128,40 +131,40 @@ spec:
         - hostPath:
             path: /root/.kube/config
           name: kubeconfig
+        - nfs:
+            server: 10.0.20.6
+            path: /tmp/kaniko
+          name: buildpack-storage
 ---
 apiVersion: v1
 data:
   config: |
-    logging:
-      level:
-        io.hotcloud.kubernetes.server: debug
-        io.hotcloud.buildpack.server: debug
-        io.hotcloud.message: info
-    kubernetes:
-      in-cluster: true
-      enable-workloads-watcher: true
-    message:
-      type: websocket
-      rabbitmq:
-        host:
-        username:
-        password:
-        port:
     cache:
-      type: local
+      type: redis
       redis:
-        host:
+        host: redis-release-master.middleware.svc.cluster.local
         port: 6379
-        password:
-        database: 0
-    security:
-      enabled: true
-      ignored:
-        urls:
-          - /swagger**/**
-          - /v3/api-docs/**
-          - /favicon.ico
-          - /pub
+        password: QbMufCD@9WVQ^Hv
+        database: 10
+    db:
+      type: redis
+      redis:
+        database: 9
+        host: redis-release-master.middleware.svc.cluster.local
+        port: 6379
+        password: QbMufCD@9WVQ^Hv
+      mongodb:
+          host: mongo-release-mongodb-headless.middleware.svc.cluster.local
+          username: admin
+          password: QbMufCD@9WVQ^Hv
+          port: 27017
+          database: hotcloud
+    buildpack:
+      storage:
+        type: nfs
+        nfs-server: 10.0.20.6
+      kaniko:
+        verbosity: info
 kind: ConfigMap
 metadata:
   name: hotcloud-config
