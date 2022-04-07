@@ -21,6 +21,7 @@ spring:
       password: ${db.mongodb.password:}
       username: ${db.mongodb.username:}
       auto-index-creation: true
+      authentication-database: admin
 server:
   max-http-header-size: 40KB
 logging:
