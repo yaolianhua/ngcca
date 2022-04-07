@@ -1,8 +1,10 @@
 package io.hotcloud.db.api;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -11,6 +13,22 @@ public class AbstractEntity implements Serializable {
 
     @Id
     private String id;
+
+    public <T> AbstractEntity copyToEntity(T data) {
+        BeanUtils.copyProperties(data, this);
+        return this;
+    }
+
+    public <T> T toT(Class<T> clazz) {
+        T t;
+        try {
+            t = clazz.getDeclaredConstructor().newInstance();
+            BeanUtils.copyProperties(this, t);
+            return t;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return null;
+        }
+    }
 
     /**
      * Returns the identifier of the entity.

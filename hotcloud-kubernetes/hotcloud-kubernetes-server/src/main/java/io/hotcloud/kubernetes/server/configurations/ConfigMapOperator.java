@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.kubernetes.model.NamespaceGenerator.DEFAULT_NAMESPACE;
+import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -46,7 +46,7 @@ public class ConfigMapOperator implements ConfigMapApi {
             throw new HotCloudException(String.format("load configMap yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1ConfigMap.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT_NAMESPACE;
+        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
         V1ConfigMap cm = coreV1Api.createNamespacedConfigMap(namespace,
                 v1ConfigMap,
                 "true",

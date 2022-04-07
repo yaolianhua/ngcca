@@ -7,7 +7,6 @@ import io.hotcloud.common.file.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -60,8 +59,8 @@ public class GitImpl implements GitApi {
             // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
             log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             return Boolean.TRUE;
-        } catch (GitAPIException e) {
-            log.error("Clone repository error. {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Clone repository error. {}", e.getCause().getMessage());
             return Boolean.FALSE;
         }
 

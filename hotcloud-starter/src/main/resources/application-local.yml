@@ -16,13 +16,13 @@ cache:
     password: QbMufCD@9WVQ^Hv
     database: 15
 db:
-  type: redis
+  type: mongodb
   mongodb:
     host: localhost
-    username: admin
+    username: root
     password: QbMufCD@9WVQ^Hv
     port: 27017
-    database: hotcloud
+    database: hotcloud-dev
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv

@@ -19,7 +19,7 @@ public class HotCloudHttpClientProperties {
     private Integer port = 8080;
     private String domainName;
 
-    private String basicUsername = "client-user";
+    private String basicUsername = "clientuser";
     private String basicPassword = "e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea";
 
     @PostConstruct

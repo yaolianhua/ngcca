@@ -1,7 +1,6 @@
 package io.hotcloud.security.api;
 
-import io.hotcloud.security.user.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.hotcloud.security.user.model.User;
 
 import java.util.Collection;
 
@@ -18,9 +17,9 @@ public interface UserApi {
      * Save user
      *
      * @param user {@link User}
-     * @return {@link  UserDetails}
+     * @return {@link  User}
      */
-    UserDetails save(User user);
+    User save(User user);
 
     /**
      * Delete user with giving {@code username}
@@ -50,21 +49,21 @@ public interface UserApi {
      * Retrieve user by {@code username}
      *
      * @param username username
-     * @return {@link  UserDetails}
+     * @return {@link  User}
      */
-    UserDetails retrieve(String username);
+    User retrieve(String username);
 
     /**
      * Retrieve current user
      *
-     * @return {@link  UserDetails}
+     * @return {@link  User}
      */
-    UserDetails current();
+    User current();
 
     /**
      * List users
      *
-     * @return {@link  UserDetails}
+     * @return {@link  User}
      */
-    Collection<UserDetails> users();
+    Collection<User> users();
 }

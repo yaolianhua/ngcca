@@ -2,7 +2,7 @@ package io.hotcloud.security.admin.user;
 
 import io.hotcloud.security.SecurityApplicationRunnerPostProcessor;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.User;
+import io.hotcloud.security.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +27,8 @@ public class SecurityApplicationInternalUserPostProcessor implements SecurityApp
     @Override
     public void execute() {
         boolean adminExisted = userApi.exist("admin");
-        boolean clientUserExisted = userApi.exist("client-user");
+        boolean guestExisted = userApi.exist("guest");
+        boolean clientUserExisted = userApi.exist("clientuser");
 
         if (!adminExisted) {
             User adminUser = User.builder()
@@ -41,12 +42,22 @@ public class SecurityApplicationInternalUserPostProcessor implements SecurityApp
         }
         if (!clientUserExisted) {
             User clientUser = User.builder()
-                    .username("client-user")
+                    .username("clientuser")
                     .password(passwordEncoder.encode("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea"))
-                    .nickname("client-user")
+                    .nickname("clientuser")
                     .enabled(true)
                     .build();
             UserDetails saved = userApi.save(clientUser);
+            log.info("SecurityApplicationInternalUserPostProcessor. {} user created", saved.getUsername());
+        }
+        if (!guestExisted) {
+            User guest = User.builder()
+                    .username("guest")
+                    .password(passwordEncoder.encode("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea"))
+                    .nickname("guest")
+                    .enabled(true)
+                    .build();
+            UserDetails saved = userApi.save(guest);
             log.info("SecurityApplicationInternalUserPostProcessor. {} user created", saved.getUsername());
         }
 

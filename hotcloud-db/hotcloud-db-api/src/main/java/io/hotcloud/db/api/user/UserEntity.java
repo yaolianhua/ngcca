@@ -10,8 +10,8 @@ import org.springframework.data.redis.core.RedisHash;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Document(collection = "user")
-@RedisHash("user")
+@Document(collection = "users")
+@RedisHash("users")
 @Getter
 @Setter
 public class UserEntity extends AbstractEntity {
