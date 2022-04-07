@@ -91,7 +91,9 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         Assert.hasText(namespace, "namespace is null", 400);
         //create user's namespace
         try {
-            namespaceApi.namespace(namespace);
+            if (namespaceApi.read(namespace) == null) {
+                namespaceApi.namespace(namespace);
+            }
         } catch (ApiException e) {
             throw new HotCloudException(String.format("Namespace '%s' create failed [%s]", namespace, e.getMessage()));
         }
