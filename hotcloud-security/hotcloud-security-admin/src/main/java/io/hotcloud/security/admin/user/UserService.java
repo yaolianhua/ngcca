@@ -6,11 +6,9 @@ import io.hotcloud.db.api.user.UserRepository;
 import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.user.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,12 +23,9 @@ import java.util.Collection;
 public class UserService implements UserApi {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -39,15 +34,13 @@ public class UserService implements UserApi {
     }
 
     @Override
-    public UserDetails save(User user) {
+    public User save(User user) {
         Assert.notNull(user, "User body is null", 400);
         Assert.hasText(user.getUsername(), "username is null", 400);
         Assert.hasText(user.getPassword(), "password is null", 400);
 
-        UserEntity entity = new UserEntity();
-        BeanUtils.copyProperties(user, entity);
+        UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
 
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         UserEntity saved = userRepository.save(entity);
 
         return buildUser(saved);
@@ -61,8 +54,12 @@ public class UserService implements UserApi {
         if (physically) {
             return userRepository.deleteByUsername(username);
         }
-        //TODO
-        return false;
+
+        UserEntity entity = userRepository.findByUsername(username);
+        entity.setEnabled(false);
+
+        userRepository.save(entity);
+        return true;
     }
 
     @Override
@@ -70,11 +67,13 @@ public class UserService implements UserApi {
         if (physically) {
             userRepository.deleteAll();
         }
-        //TODO
+        Iterable<UserEntity> entities = userRepository.findAll();
+        entities.forEach(e -> e.setEnabled(false));
+        userRepository.saveAll(entities);
     }
 
     @Override
-    public UserDetails retrieve(String username) {
+    public User retrieve(String username) {
         UserEntity entity = userRepository.findByUsername(username);
         Assert.notNull(entity, "Retrieve user null [" + username + "]", 404);
 
@@ -82,7 +81,7 @@ public class UserService implements UserApi {
     }
 
     @Override
-    public UserDetails current() {
+    public User current() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Assert.notNull(authentication, "Authentication is null", 401);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -92,8 +91,8 @@ public class UserService implements UserApi {
     }
 
     @Override
-    public Collection<UserDetails> users() {
-        Collection<UserDetails> users = new ArrayList<>();
+    public Collection<User> users() {
+        Collection<User> users = new ArrayList<>();
         for (UserEntity entity : userRepository.findAll()) {
             users.add(buildUser(entity));
         }

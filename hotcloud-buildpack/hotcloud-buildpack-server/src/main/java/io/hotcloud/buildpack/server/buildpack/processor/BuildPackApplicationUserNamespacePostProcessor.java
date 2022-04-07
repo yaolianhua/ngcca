@@ -5,6 +5,7 @@ import io.hotcloud.common.Assert;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.hotcloud.security.api.UserApi;
+import io.hotcloud.security.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ class BuildPackApplicationUserNamespacePostProcessor implements BuildPackApplica
 
     @Override
     public void execute() {
-        Collection<UserDetails> users = userApi.users();
+        Collection<User> users = userApi.users();
         Assert.state(!CollectionUtils.isEmpty(users), "Users is empty", 400);
         users.forEach(user -> cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()),
                 NamespaceGenerator.uuidNoDashNamespace()));

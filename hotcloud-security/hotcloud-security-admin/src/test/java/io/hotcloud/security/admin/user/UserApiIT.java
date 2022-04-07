@@ -20,8 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -50,18 +48,16 @@ public class UserApiIT {
     @After
     public void clear() {
         cache.clear();
-        userApi.deleteAll(true);
+        userApi.deleteAll(false);
     }
 
     @Test
-    public void userApi() {
+    public void users() {
 
-        Collection<UserDetails> userDetails = userApi.users();
+        Collection<User> users = userApi.users();
         //SecurityApplicationRunner
-        Assertions.assertFalse(CollectionUtils.isEmpty(userDetails));
+        Assertions.assertFalse(CollectionUtils.isEmpty(users));
 
-        List<User> users = userDetails.stream().map(e -> ((User) e))
-                .collect(Collectors.toList());
         //In order to test the data is in different database
         cache.put(UserApi.CACHE_USERS_KEY_PREFIX, users);
 
@@ -70,7 +66,7 @@ public class UserApiIT {
             Assertions.assertNotNull(userApi.retrieve(user.getUsername()));
         }
 
-        User current = (User) userApi.current();
+        User current = userApi.current();
         Assertions.assertNotNull(current);
         Assertions.assertEquals("admin", current.getUsername());
     }
