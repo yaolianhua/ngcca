@@ -265,7 +265,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
         String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + gitProject + "-" + resource.getNamespace();
-        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, resource.getNamespace());
+        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, gitProject + "-" + resource.getNamespace());
 
         SecretCreateRequest request = new SecretCreateRequest();
         request.setImmutable(true);
