@@ -21,7 +21,7 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
 
     public CaffeineCache(@Nullable SerializationDelegate serializationDelegate) {
         this.serializationDelegate = serializationDelegate;
-        log.info("CaffeineCache init");
+        log.info("【CaffeineCache init】");
     }
 
     @Override
