@@ -1,11 +1,14 @@
 package io.hotcloud.security.admin.user;
 
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.Validator;
 import io.hotcloud.db.api.user.UserEntity;
 import io.hotcloud.db.api.user.UserRepository;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.User;
+import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.user.model.event.UserCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +26,12 @@ import java.util.Collection;
 public class UserService implements UserApi {
 
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -39,10 +45,13 @@ public class UserService implements UserApi {
         Assert.hasText(user.getUsername(), "username is null", 400);
         Assert.hasText(user.getPassword(), "password is null", 400);
 
+        Assert.state(Validator.validUsername(user.getUsername()), "Start with a lowercase letter, can only contain lowercase letters and numbers, [5-16] characters", 400);
         UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
 
         UserEntity saved = userRepository.save(entity);
 
+        user = saved.toT(User.class);
+        eventPublisher.publishEvent(new UserCreatedEvent(user));
         return buildUser(saved);
     }
 

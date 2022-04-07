@@ -1,4 +1,4 @@
-package io.hotcloud.security.user;
+package io.hotcloud.security.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

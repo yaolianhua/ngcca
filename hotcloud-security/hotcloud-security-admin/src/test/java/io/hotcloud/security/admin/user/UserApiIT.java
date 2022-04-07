@@ -3,7 +3,7 @@ package io.hotcloud.security.admin.user;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.User;
+import io.hotcloud.security.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -15,11 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+
+import static io.hotcloud.security.api.UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -48,7 +52,21 @@ public class UserApiIT {
     @After
     public void clear() {
         cache.clear();
-        userApi.deleteAll(false);
+        userApi.deleteAll(true);
+    }
+
+    @Test
+    public void save() throws InterruptedException {
+        User user = User.builder()
+                .username("jason")
+                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("jason123"))
+                .nickname("Jason")
+                .build();
+        userApi.save(user);
+
+        TimeUnit.SECONDS.sleep(1);
+        String namespace = cache.get(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
+        Assertions.assertNotNull(namespace);
     }
 
     @Test
