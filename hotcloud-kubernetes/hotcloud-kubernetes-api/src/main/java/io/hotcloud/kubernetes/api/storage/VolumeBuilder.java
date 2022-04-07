@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.api.storage;
 
-import io.hotcloud.kubernetes.model.NamespaceGenerator;
+import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.kubernetes.model.storage.*;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
@@ -42,7 +42,7 @@ public final class VolumeBuilder {
         }
 
         if (!StringUtils.hasText(volume.getName())) {
-            volume.setName(String.format("volume-%s", NamespaceGenerator.uuidNoDashNamespace()));
+            volume.setName(String.format("volume-%s", UUIDGenerator.uuidNoDash()));
         }
         v1Volume.setName(volume.getName());
         return v1Volume;
