@@ -9,10 +9,13 @@ import io.hotcloud.buildpack.api.model.BuildPackRepositoryCloneInternalInput;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartedEvent;
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.User;
+import io.hotcloud.security.user.model.User;
+import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -34,6 +37,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
     private final Cache cache;
+    private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
 
     private final ApplicationEventPublisher eventPublisher;
@@ -42,12 +46,14 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
                                   UserApi userApi,
                                   KanikoFlag kanikoFlag,
                                   Cache cache,
+                                  NamespaceApi namespaceApi,
                                   KubectlApi kubectlApi,
                                   ApplicationEventPublisher eventPublisher) {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
         this.cache = cache;
+        this.namespaceApi = namespaceApi;
         this.kubectlApi = kubectlApi;
         this.eventPublisher = eventPublisher;
     }
@@ -80,8 +86,15 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         Assert.notNull(current, "Retrieve current user null", 404);
         Assert.hasText(current.getUsername(), "Current user's username is null", 404);
 
-        //get user's namespace. all user's namespace will be cached when application started
+        //get user's namespace.
         String namespace = cache.get(String.format(UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
+        Assert.hasText(namespace, "namespace is null", 400);
+        //create user's namespace
+        try {
+            namespaceApi.namespace(namespace);
+        } catch (ApiException e) {
+            throw new HotCloudException(String.format("Namespace '%s' create failed [%s]", namespace, e.getMessage()));
+        }
 
         Map<String, String> alternative = new HashMap<>(16);
 

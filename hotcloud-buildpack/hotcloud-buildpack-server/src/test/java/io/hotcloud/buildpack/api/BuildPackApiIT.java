@@ -5,10 +5,10 @@ import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.*;
+import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
-import io.hotcloud.kubernetes.model.NamespaceGenerator;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -39,7 +39,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     @Autowired
     private SecretApi secretApi;
 
-    public final String namespace = NamespaceGenerator.uuidNoDashNamespace();
+    public final String namespace = UUIDGenerator.uuidNoDash();
     @Before
     public void before() throws ApiException {
         namespaceApi.namespace(namespace);
