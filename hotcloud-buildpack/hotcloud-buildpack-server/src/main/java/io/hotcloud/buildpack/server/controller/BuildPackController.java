@@ -28,13 +28,9 @@ public class BuildPackController {
             @RequestParam("git_url") String gitUrl,
             @RequestParam(value = "dockerfile", required = false) String dockerfile,
             @RequestParam(value = "no_push", required = false) Boolean noPush,
-            @RequestParam(value = "force", required = false) boolean force,
-            @RequestParam(value = "registry", required = false) String registry,
-            @RequestParam(value = "registry_project", required = false) String registryProject,
-            @RequestParam(value = "registry_username", required = false) String registryUsername,
-            @RequestParam(value = "registry_password", required = false) String registryPassword
+            @RequestParam(value = "force", required = false) boolean force
     ) {
-        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl, dockerfile, force, noPush, registry, registryProject, registryUsername, registryPassword);
+        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl, dockerfile, force, noPush);
         return WebResponse.created(buildpack);
     }
 }

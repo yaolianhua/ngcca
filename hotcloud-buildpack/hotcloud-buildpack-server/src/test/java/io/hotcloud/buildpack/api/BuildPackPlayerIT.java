@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -54,18 +55,14 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void buildpack_apply() throws IOException {
+    public void buildpack_apply() throws IOException, InterruptedException {
 
 //        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
         BuildPack buildpack = buildPackPlayer.buildpack(gitUrl,
-                "",
+                "Dockerfile",
                 true,
-                true,
-                "harbor.cloud2go.cn",
-                "test",
-                "admin",
-                "Harbor12345");
+                true);
 
         Assertions.assertNotNull(buildpack);
         Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
@@ -117,16 +114,11 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
             }
         }, "file-state").start();
         Pod pod = podList.getItems().get(0);
-        String logs = "";
         while (latch.getCount() != 0) {
-//            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(1);
             try {
-                String logsNew = podApi.logs(namespace, pod.getMetadata().getName(), 1);
-                if (!Objects.equals(logs, logsNew)) {
-//                    log.info("{}", logsNew);
-                    System.out.println(logsNew);
-                }
-                logs = logsNew;
+                String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
+                System.out.print(logs);
             } catch (Exception e) {
 //                log.warn("{}", e.getMessage());
             }

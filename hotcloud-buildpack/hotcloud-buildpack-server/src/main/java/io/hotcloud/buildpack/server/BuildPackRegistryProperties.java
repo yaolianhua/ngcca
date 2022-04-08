@@ -44,9 +44,10 @@ public class BuildPackRegistryProperties {
 
     @PostConstruct
     public void print() {
+        Assert.hasText(url, "registry url is null");
         Assert.notNull(project, "registry project name is null");
-        Assert.notNull(username, "registry credential with username is null");
-        Assert.notNull(password, "registry credential with password is null");
+        Assert.hasText(username, "registry credential with username is null");
+        Assert.hasText(password, "registry credential with password is null");
 
         log.info("【Load BuildPack Registry Properties】destination='{}' registry-username='{}' registry-password='{}'",
                 String.format("%s/%s", url, project), username, password);

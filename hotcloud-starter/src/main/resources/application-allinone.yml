@@ -39,3 +39,6 @@ security:
       - /v3/api-docs/**
       - /favicon.ico
       - /pub
+buildpack:
+  kaniko:
+    verbosity: info

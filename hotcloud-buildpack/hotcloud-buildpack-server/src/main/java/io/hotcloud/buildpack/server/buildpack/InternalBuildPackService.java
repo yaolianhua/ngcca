@@ -157,7 +157,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         JobSpec spec = new JobSpec();
         spec.setTtlSecondsAfterFinished(0);
-        spec.setBackoffLimit(3);
+        spec.setBackoffLimit(1);
         spec.setActiveDeadlineSeconds(3600L);
         spec.setTemplate(template);
 

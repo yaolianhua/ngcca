@@ -8,6 +8,7 @@ import io.hotcloud.buildpack.api.model.BuildPack;
 import io.hotcloud.buildpack.api.model.BuildPackRepositoryCloneInternalInput;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartedEvent;
+import io.hotcloud.buildpack.server.BuildPackRegistryProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.cache.Cache;
@@ -36,6 +37,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
+    private final BuildPackRegistryProperties registryProperties;
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
@@ -45,6 +47,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
                                   UserApi userApi,
                                   KanikoFlag kanikoFlag,
+                                  BuildPackRegistryProperties registryProperties,
                                   Cache cache,
                                   NamespaceApi namespaceApi,
                                   KubectlApi kubectlApi,
@@ -52,6 +55,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
+        this.registryProperties = registryProperties;
         this.cache = cache;
         this.namespaceApi = namespaceApi;
         this.kubectlApi = kubectlApi;
@@ -73,14 +77,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     }
 
     @Override
-    public BuildPack buildpack(String gitUrl,
-                               String dockerfile,
-                               boolean force,
-                               Boolean noPush,
-                               String registry,
-                               String registryProject,
-                               String registryUser,
-                               String registryPass) {
+    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush) {
 
         User current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
@@ -108,31 +105,32 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, repositoryCloneInternalInput.retrievePushImage());
 
         //handle kaniko args
-        registry = StringUtils.hasText(registry) ? registry : kanikoFlag.getInsecureRegistry();
-        Map<String, String> args = resolvedArgs(dockerfile, noPush, registry, registryProject, alternative);
+        Map<String, String> args = resolvedArgs(dockerfile, noPush, alternative);
 
         //repository clone path locally, it will be mounted by user pod
         String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, repositoryCloneInternalInput.retrieveGitProject()).toString();
 
-        //registry may be fully public
-        registryUser = StringUtils.hasText(registryUser) ? registryUser : "no-auth-user";
-        registryPass = StringUtils.hasText(registryPass) ? registryPass : "no-auth-pass";
-
-        BuildPack buildpack = abstractBuildPackApi.buildpack(namespace, gitUrl, clonePath, force, registry, registryUser, registryPass, args);
+        BuildPack buildpack = abstractBuildPackApi.buildpack(
+                namespace,
+                gitUrl,
+                clonePath,
+                force,
+                registryProperties.getUrl(),
+                registryProperties.getUsername(),
+                registryProperties.getPassword(),
+                args);
         buildpack.getJob().getAlternative().putAll(alternative);
 
         return buildpack;
     }
 
-    private Map<String, String> resolvedArgs(String dockerfile, Boolean noPush, String registry, String registryProject, Map<String, String> alternative) {
+    private Map<String, String> resolvedArgs(String dockerfile, Boolean noPush, Map<String, String> alternative) {
         Map<String, String> args = kanikoFlag.resolvedArgs();
 
         if (StringUtils.hasText(dockerfile)) {
             args.put("dockerfile", Path.of(kanikoFlag.getContext(), dockerfile).toString());
         }
-        if (StringUtils.hasText(registry)) {
-            args.put("insecure-registry", registry);
-        }
+
         if (Objects.nonNull(noPush)) {
             args.put("no-push", String.valueOf(noPush));
             if (noPush) {
@@ -141,25 +139,13 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
             }
         }
 
+        args.put("insecure-registry", registryProperties.getUrl());
         args.put("tarPath", Path.of(kanikoFlag.getTarPath(), alternative.get(BuildPackConstant.GIT_PROJECT_TARBALL)).toString());
 
-        boolean nopush = Boolean.parseBoolean(args.get("no-push"));
-        if (!nopush) {
-            String destinationDefault = kanikoFlag.getDestination();
-            boolean destinationManually = StringUtils.hasText(registry) && StringUtils.hasText(registryProject);
-            boolean validDestination = StringUtils.hasText(destinationDefault) || destinationManually;
-            Assert.state(validDestination, "Using --no-push=false, must specify ths destination value! e.g. destination=gcr.io/kaniko/ or specify the parameter registry & registryProject manually", 400);
-
-            //index.docker.io/example/image-name:latest
-            if (destinationManually) {
-                args.put("destination", Path.of(registry, registryProject, alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString());
-            } else {
-                args.put("destination", Path.of(kanikoFlag.getDestination(), alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString());
-            }
-        } else {
-            //must provide at least one destination when tarPath is specified
-            args.put("destination", Path.of("index.docker.io").toString());
-        }
+        //index.docker.io/example/image-name:latest
+        String destination = Path.of(registryProperties.getUrl(), registryProperties.getProject(), alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString();
+        //must provide at least one destination when tarPath is specified
+        args.put("destination", destination);
 
         return args;
     }
