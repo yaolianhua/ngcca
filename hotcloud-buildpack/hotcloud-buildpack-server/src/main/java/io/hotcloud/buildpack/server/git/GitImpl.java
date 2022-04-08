@@ -54,9 +54,10 @@ public class GitImpl implements GitApi {
         if (needCredential) {
             cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password));
         }
+
+        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
         try (Git result = cloneCommand.call()) {
             watch.stop();
-            // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
             log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
             return Boolean.TRUE;
         } catch (Exception e) {

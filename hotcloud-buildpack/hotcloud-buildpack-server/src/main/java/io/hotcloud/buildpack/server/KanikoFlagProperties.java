@@ -51,10 +51,7 @@ public class KanikoFlagProperties implements KanikoFlag {
 
     private String context = "/workspace";
     @JsonProperty("insecure-registry")
-    private String insecureRegistry = "index.docker.io";
-    /**
-     * e.g. gcr.io/kaniko-project/
-     */
+    private String insecureRegistry;
     private String destination;
     private String tarPath = Path.of(this.context).toString();
     @JsonProperty("cache-ttl")

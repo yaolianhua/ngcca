@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server;
 
 import io.hotcloud.buildpack.api.BuildPackConstant;
+import io.hotcloud.common.Assert;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,6 +38,7 @@ public class BuildPackStorageProperties {
             case hostPath:
                 return BuildPackConstant.STORAGE_VOLUME_PATH;
             case nfs:
+                Assert.hasText(nfsServer, "nfs server address is null");
                 return String.format("%s:%s", nfsServer, BuildPackConstant.STORAGE_VOLUME_PATH);
             default:
                 break;

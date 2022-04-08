@@ -163,8 +163,11 @@ data:
       storage:
         type: nfs
         nfs-server: 10.0.20.6
-      kaniko:
-        verbosity: info
+      registry:
+        url: 10.0.20.6:5000
+        project: build
+        username: no-auth
+        password: no-auth
 kind: ConfigMap
 metadata:
   name: hotcloud-config
