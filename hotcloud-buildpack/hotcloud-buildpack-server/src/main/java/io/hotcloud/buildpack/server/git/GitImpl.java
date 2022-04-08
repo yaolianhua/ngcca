@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.git;
 
 import io.hotcloud.buildpack.api.GitApi;
+import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.file.FileHelper;
@@ -23,8 +24,21 @@ import java.nio.file.Path;
 @Slf4j
 public class GitImpl implements GitApi {
 
+    private GitRepositoryCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, Throwable throwable) {
+        return GitRepositoryCloned.builder()
+                .success(success)
+                .gitUrl(remote)
+                .branch(branch)
+                .local(local)
+                .force(force)
+                .username(username)
+                .password(password)
+                .throwable(throwable)
+                .build();
+    }
+
     @Override
-    public Boolean clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
+    public GitRepositoryCloned clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
 
         Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote), 400);
 
@@ -34,6 +48,7 @@ public class GitImpl implements GitApi {
                 FileHelper.deleteRecursively(Path.of(local));
             } catch (IOException e) {
                 log.error("Delete file path error: {} ", e.getCause().getMessage());
+                return build(remote, branch, local, force, username, password, false, e);
             }
         }
         Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local), 409);
@@ -59,10 +74,10 @@ public class GitImpl implements GitApi {
         try (Git result = cloneCommand.call()) {
             watch.stop();
             log.info("Cloned repository: '{}'. Takes '{}s'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds()));
-            return Boolean.TRUE;
+            return build(remote, branch, local, force, username, password, true, null);
         } catch (Exception e) {
             log.error("Clone repository error. {}", e.getCause().getMessage());
-            return Boolean.FALSE;
+            return build(remote, branch, local, force, username, password, false, e);
         }
 
     }

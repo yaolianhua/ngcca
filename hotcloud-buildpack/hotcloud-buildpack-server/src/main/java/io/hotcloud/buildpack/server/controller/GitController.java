@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.controller;
 
 import io.hotcloud.buildpack.api.GitApi;
+import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
 import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ public class GitController {
     }
 
     @PostMapping("/clone")
-    public ResponseEntity<Result<Boolean>> cloneRepository(@RequestParam("gitUrl") String gitUrl,
-                                                           @RequestParam(value = "branch", required = false) String branch,
-                                                           @RequestParam("localPath") String local,
-                                                           @RequestParam(value = "force", required = false) boolean force,
-                                                           @RequestParam(value = "username", required = false) String username,
-                                                           @RequestParam(value = "password", required = false) String password) {
-        Boolean clone = gitApi.clone(gitUrl, branch, local, force, username, password);
+    public ResponseEntity<Result<GitRepositoryCloned>> cloneRepository(@RequestParam("gitUrl") String gitUrl,
+                                                                       @RequestParam(value = "branch", required = false) String branch,
+                                                                       @RequestParam("localPath") String local,
+                                                                       @RequestParam(value = "force", required = false) boolean force,
+                                                                       @RequestParam(value = "username", required = false) String username,
+                                                                       @RequestParam(value = "password", required = false) String password) {
+        GitRepositoryCloned clone = gitApi.clone(gitUrl, branch, local, force, username, password);
         return WebResponse.ok(clone);
     }
 }

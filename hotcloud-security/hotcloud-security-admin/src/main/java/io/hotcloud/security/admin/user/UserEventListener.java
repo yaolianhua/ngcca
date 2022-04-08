@@ -29,7 +29,8 @@ public class UserEventListener {
     public void userCreated(UserCreatedEvent event) {
         User user = event.getUser();
         String namespace = UUIDGenerator.uuidNoDash();
-        cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), namespace);
-        log.info("UserEventListener. user '{}' namespace '{}' cached", user.getUsername(), namespace);
+        Object o = cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), namespace);
+        log.info("UserEventListener. user '{}' namespace '{}' cached", user.getUsername(), o == null ? namespace : o);
+
     }
 }

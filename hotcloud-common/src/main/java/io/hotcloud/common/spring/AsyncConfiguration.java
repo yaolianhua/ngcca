@@ -29,7 +29,7 @@ public class AsyncConfiguration {
 
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.build();
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("hotcloud").build();
         threadPoolTaskExecutor.initialize();
         log.info("【Initialed ThreadPoolTaskExecutor】");
         return threadPoolTaskExecutor;

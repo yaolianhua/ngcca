@@ -13,10 +13,11 @@ public interface BuildPackPlayer {
      * @param gitUrl     Remote url of git repository
      * @param dockerfile dockerfile name. default name is {@code Dockerfile}
      * @param force      Whether to force cloning, if the specified path is not empty, it will be forcibly deleted and then cloned
+     * @param async      Whether to execute the clone action asynchronously. default is {@code false}
      * @param noPush     if you only want to build the image, without pushing to a registry
      * @return {@link BuildPack}
      */
-    BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush);
+    BuildPack buildpack(String gitUrl, String dockerfile, boolean force, boolean async, Boolean noPush);
 
     /**
      * Apply BuildPack Yaml

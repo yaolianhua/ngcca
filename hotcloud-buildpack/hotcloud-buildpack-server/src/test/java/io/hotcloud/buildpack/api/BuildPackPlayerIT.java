@@ -62,6 +62,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         BuildPack buildpack = buildPackPlayer.buildpack(gitUrl,
                 "Dockerfile",
                 true,
+                true,
                 true);
 
         Assertions.assertNotNull(buildpack);
