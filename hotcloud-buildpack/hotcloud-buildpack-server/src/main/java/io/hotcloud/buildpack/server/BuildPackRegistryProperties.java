@@ -45,7 +45,7 @@ public class BuildPackRegistryProperties {
     @PostConstruct
     public void print() {
         Assert.hasText(url, "registry url is null");
-        Assert.notNull(project, "registry project name is null");
+        Assert.hasText(project, "registry project name is null");
         Assert.hasText(username, "registry credential with username is null");
         Assert.hasText(password, "registry credential with password is null");
 

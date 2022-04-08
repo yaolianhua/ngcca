@@ -28,6 +28,6 @@ buildpack:
     verbosity: info
   registry:
     url: 127.0.0.1:5000
-    project: ""
+    project: test
     username: "no-auth"
     password: "no-auth"
