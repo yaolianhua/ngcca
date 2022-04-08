@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.buildpack;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
+import io.hotcloud.buildpack.api.model.GitCloned;
 import io.hotcloud.buildpack.api.model.event.GitRepositoryClonedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -22,7 +22,7 @@ public class GitRepositoryClonedListener {
 
     @EventListener
     public void cloned(GitRepositoryClonedEvent event) {
-        GitRepositoryCloned cloned = event.getRepositoryCloned();
+        GitCloned cloned = event.getRepositoryCloned();
         log.info("{}", cloned);
     }
 }

@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.api.model.event;
 
-import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
+import io.hotcloud.buildpack.api.model.GitCloned;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -8,11 +8,11 @@ import org.springframework.context.ApplicationEvent;
  **/
 public class GitRepositoryClonedEvent extends ApplicationEvent {
 
-    public GitRepositoryClonedEvent(GitRepositoryCloned repositoryCloned) {
+    public GitRepositoryClonedEvent(GitCloned repositoryCloned) {
         super(repositoryCloned);
     }
 
-    public GitRepositoryCloned getRepositoryCloned() {
-        return ((GitRepositoryCloned) super.getSource());
+    public GitCloned getRepositoryCloned() {
+        return ((GitCloned) super.getSource());
     }
 }

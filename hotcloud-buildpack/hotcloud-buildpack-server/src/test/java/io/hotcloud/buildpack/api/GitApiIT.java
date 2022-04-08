@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
+import io.hotcloud.buildpack.api.model.GitCloned;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
 
         final String path = "test-clone-repository";
 
-        GitRepositoryCloned cloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        GitCloned cloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 false,
@@ -42,7 +42,7 @@ public class GitApiIT extends BuildPackIntegrationTestBase {
             log.debug("list of test-clone-repository/hotcloud name: {}", naming);
         }
 
-        GitRepositoryCloned forcedCloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        GitCloned forcedCloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 true,

@@ -88,7 +88,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         if (input.isAsync()) {
             executorService.execute(() -> {
-                GitRepositoryCloned clone = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
+                GitCloned clone = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
                 eventPublisher.publishEvent(new GitRepositoryClonedEvent(clone));
             });
             return BuildPackRepositoryCloned
@@ -98,7 +98,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
                     .project(input.retrieveGitProject())
                     .build();
         }
-        GitRepositoryCloned cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
+        GitCloned cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
         if (!cloned.isSuccess()) {
             return null;
         }

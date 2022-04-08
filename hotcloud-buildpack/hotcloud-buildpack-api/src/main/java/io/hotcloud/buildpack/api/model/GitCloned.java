@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class GitRepositoryCloned {
+public class GitCloned {
     private boolean success;
     private String gitUrl;
     private String local;
@@ -20,6 +20,6 @@ public class GitRepositoryCloned {
     private String password;
     private Throwable throwable;
 
-    public GitRepositoryCloned() {
+    public GitCloned() {
     }
 }

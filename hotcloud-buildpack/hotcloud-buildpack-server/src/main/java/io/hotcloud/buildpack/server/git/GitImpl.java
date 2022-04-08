@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.git;
 
 import io.hotcloud.buildpack.api.GitApi;
-import io.hotcloud.buildpack.api.model.GitRepositoryCloned;
+import io.hotcloud.buildpack.api.model.GitCloned;
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.file.FileHelper;
@@ -24,8 +24,8 @@ import java.nio.file.Path;
 @Slf4j
 public class GitImpl implements GitApi {
 
-    private GitRepositoryCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, Throwable throwable) {
-        return GitRepositoryCloned.builder()
+    private GitCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, Throwable throwable) {
+        return GitCloned.builder()
                 .success(success)
                 .gitUrl(remote)
                 .branch(branch)
@@ -38,7 +38,7 @@ public class GitImpl implements GitApi {
     }
 
     @Override
-    public GitRepositoryCloned clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
+    public GitCloned clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
 
         Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote), 400);
 
