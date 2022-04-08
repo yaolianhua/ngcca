@@ -28,9 +28,10 @@ public class BuildPackController {
             @RequestParam("git_url") String gitUrl,
             @RequestParam(value = "dockerfile", required = false) String dockerfile,
             @RequestParam(value = "no_push", required = false) Boolean noPush,
-            @RequestParam(value = "force", required = false) boolean force
+            @RequestParam(value = "force", required = false) boolean force,
+            @RequestParam(value = "async", required = false) boolean async
     ) {
-        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl, dockerfile, force, noPush);
+        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl, dockerfile, force, async, noPush);
         return WebResponse.created(buildpack);
     }
 }

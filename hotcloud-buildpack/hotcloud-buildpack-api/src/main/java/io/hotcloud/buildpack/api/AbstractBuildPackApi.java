@@ -14,7 +14,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
 
     @Override
-    public BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
+    public BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, boolean async, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
 
         Assert.hasText(namespace, "namespace is null", 400);
         Assert.hasText(gitUrl, "git url is null", 400);
@@ -29,6 +29,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
                 .remote(gitUrl)
                 .local(clonePath)
                 .force(force)
+                .async(async)
                 .build();
         BuildPackRepositoryCloned cloned = clone(repository);
         Assert.notNull(cloned, "BuildPack Repository clone failed", 404);

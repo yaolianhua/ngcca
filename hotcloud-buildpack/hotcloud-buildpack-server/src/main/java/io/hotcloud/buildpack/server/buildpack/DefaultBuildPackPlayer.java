@@ -77,7 +77,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     }
 
     @Override
-    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, Boolean noPush) {
+    public BuildPack buildpack(String gitUrl, String dockerfile, boolean force, boolean async, Boolean noPush) {
 
         User current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
@@ -115,6 +115,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
                 gitUrl,
                 clonePath,
                 force,
+                async,
                 registryProperties.getUrl(),
                 registryProperties.getUsername(),
                 registryProperties.getPassword(),

@@ -45,6 +45,11 @@ public class BuildPackRepositoryCloneInternalInput {
     private boolean force;
 
     /**
+     * Whether to execute the clone action asynchronously. default is {@code false}
+     */
+    private boolean async;
+
+    /**
      * remote repository username credential
      */
 
