@@ -10,13 +10,23 @@ public final class Assert {
     }
 
     public static void hasText(String text, String message, int code) {
-        if (text == null || text.trim().isEmpty()){
+        if (text == null || text.trim().isEmpty()) {
             throw new HotCloudException(message, code);
+        }
+    }
+
+    public static void hasText(String text, String message) {
+        if (text == null || text.trim().isEmpty()) {
+            throw new HotCloudException(message);
         }
     }
 
     public static void notNull(Object object, Supplier<String> message) {
         notNull(object, message.get(), 400);
+    }
+
+    public static void notNull(Object object, String message) {
+        notNull(object, message, 400);
     }
 
     public static void notNull(Object object, String message, int code) {
