@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.*;
 import io.hotcloud.buildpack.api.model.BuildPack;
-import io.hotcloud.buildpack.api.model.BuildPackRepositoryCloneInternalInput;
 import io.hotcloud.buildpack.api.model.GitCloned;
 import io.hotcloud.buildpack.api.model.UserNamespacePair;
 import io.hotcloud.buildpack.api.model.event.BuildPackStartFailureEvent;
@@ -107,10 +106,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
         UserNamespacePair pair = retrievedUserNamespacePair();
 
-        BuildPackRepositoryCloneInternalInput repositoryCloneInternalInput = BuildPackRepositoryCloneInternalInput.builder()
-                .remote(gitUrl)
-                .build();
-        String gitProject = repositoryCloneInternalInput.retrieveGitProject();
+        String gitProject = GitCloned.retrieveGitProject(gitUrl);
         String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace(), gitProject).toString();
 
         executorService.execute(() -> {
@@ -128,20 +124,16 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
         UserNamespacePair pair = retrievedUserNamespacePair();
 
-        BuildPackRepositoryCloneInternalInput repositoryCloneInternalInput = BuildPackRepositoryCloneInternalInput.builder()
-                .remote(gitUrl)
-                .build();
-
         Map<String, String> alternative = new HashMap<>(16);
-        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, repositoryCloneInternalInput.retrieveImageTarball());
-        alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, repositoryCloneInternalInput.retrievePushImage());
+        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, GitCloned.retrieveImageTarball(gitUrl));
+        alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, GitCloned.retrievePushImage(gitUrl));
 
         //handle kaniko args
         Map<String, String> args = resolvedArgs(dockerfile, noPush, alternative);
 
         BuildPack buildpack = abstractBuildPackApi.buildpack(
                 pair.getNamespace(),
-                repositoryCloneInternalInput.retrieveGitProject(),
+                GitCloned.retrieveGitProject(gitUrl),
                 registryProperties.getUrl(),
                 registryProperties.getUsername(),
                 registryProperties.getPassword(),
