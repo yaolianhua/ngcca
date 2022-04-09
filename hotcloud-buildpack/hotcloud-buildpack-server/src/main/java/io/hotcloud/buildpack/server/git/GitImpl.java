@@ -24,16 +24,16 @@ import java.nio.file.Path;
 @Slf4j
 public class GitImpl implements GitApi {
 
-    private GitCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, Throwable throwable) {
+    private GitCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, String error) {
         return GitCloned.builder()
                 .success(success)
-                .gitUrl(remote)
+                .url(remote)
                 .branch(branch)
-                .local(local)
+                .localPath(local)
                 .force(force)
                 .username(username)
                 .password(password)
-                .throwable(throwable)
+                .error(error)
                 .build();
     }
 
@@ -48,7 +48,7 @@ public class GitImpl implements GitApi {
                 FileHelper.deleteRecursively(Path.of(local));
             } catch (IOException e) {
                 log.error("Delete file path error: {} ", e.getCause().getMessage());
-                return build(remote, branch, local, force, username, password, false, e);
+                return build(remote, branch, local, force, username, password, false, e.getCause().getMessage());
             }
         }
         Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local), 409);
@@ -77,7 +77,7 @@ public class GitImpl implements GitApi {
             return build(remote, branch, local, force, username, password, true, null);
         } catch (Exception e) {
             log.error("Clone repository error. {}", e.getCause().getMessage());
-            return build(remote, branch, local, force, username, password, false, e);
+            return build(remote, branch, local, force, username, password, false, e.getCause().getMessage());
         }
 
     }

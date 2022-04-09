@@ -4,6 +4,7 @@ import io.hotcloud.buildpack.api.model.*;
 import io.hotcloud.common.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,29 +15,18 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
 
     @Override
-    public BuildPack buildpack(String namespace, String gitUrl, String clonePath, boolean force, boolean async, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
+    public BuildPack buildpack(String namespace, String gitProject, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
 
         Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(gitUrl, "git url is null", 400);
-        Assert.hasText(clonePath, "clone path is null", 400);
+        Assert.hasText(gitProject, "git project name is null", 400);
         Assert.hasText(registry, "registry is null", 400);
-        Assert.hasText(registryUser, "registry user is null", 400);
-        Assert.hasText(registryPass, "registry password is null", 400);
+        Assert.hasText(registryUser, "registry credential user is null", 400);
+        Assert.hasText(registryPass, "registry credential password is null", 400);
         Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty", 400);
 
-        //Repository clone
-        BuildPackRepositoryCloneInternalInput repository = BuildPackRepositoryCloneInternalInput.builder()
-                .remote(gitUrl)
-                .local(clonePath)
-                .force(force)
-                .async(async)
-                .build();
-        BuildPackRepositoryCloned cloned = clone(repository);
-        Assert.notNull(cloned, "BuildPack Repository clone failed", 404);
-
         Map<String, String> alternative = new HashMap<>(16);
-        alternative.put(BuildPackConstant.GIT_PROJECT_NAME, cloned.getProject());
-        alternative.put(BuildPackConstant.GIT_PROJECT_PATH, clonePath);
+        alternative.put(BuildPackConstant.GIT_PROJECT_NAME, gitProject);
+        alternative.put(BuildPackConstant.GIT_PROJECT_PATH, Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, gitProject).toString());
 
         //Docker secret auth
         BuildPackDockerSecretResourceInternalInput dockersecret = BuildPackDockerSecretResourceInternalInput.builder()
@@ -70,7 +60,6 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
                 .storage(storageResourceList)
                 .dockerSecret(dockerSecretResource)
                 .job(jobResource)
-                .repository(cloned)
                 .build();
 
         buildPack.setBuildPackYaml(yaml(buildPack));
@@ -84,14 +73,6 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @return Publishable yaml resource
      */
     abstract protected String yaml(BuildPack buildPack);
-
-    /**
-     * Repository clone
-     *
-     * @param clone {@link  BuildPackRepositoryCloneInternalInput}
-     * @return {@link BuildPackRepositoryCloned}
-     */
-    abstract protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneInternalInput clone);
 
     /**
      * Generate job Yaml resource.

@@ -25,13 +25,12 @@ public class BuildPackController {
 
     @PostMapping
     public ResponseEntity<Result<BuildPack>> buildPackResource(
-            @RequestParam("git_url") String gitUrl,
+            @RequestParam("git_url") String url,
             @RequestParam(value = "dockerfile", required = false) String dockerfile,
-            @RequestParam(value = "no_push", required = false) Boolean noPush,
-            @RequestParam(value = "force", required = false) boolean force,
-            @RequestParam(value = "async", required = false) boolean async
+            @RequestParam(value = "no_push", required = false) Boolean noPush
     ) {
-        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl, dockerfile, force, async, noPush);
+        BuildPack buildpack = buildPackPlayer.buildpack(url, dockerfile, noPush);
         return WebResponse.created(buildpack);
     }
+
 }

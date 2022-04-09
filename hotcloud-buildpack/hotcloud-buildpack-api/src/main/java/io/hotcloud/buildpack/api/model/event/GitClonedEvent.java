@@ -6,13 +6,13 @@ import org.springframework.context.ApplicationEvent;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class GitRepositoryClonedEvent extends ApplicationEvent {
+public class GitClonedEvent extends ApplicationEvent {
 
-    public GitRepositoryClonedEvent(GitCloned repositoryCloned) {
-        super(repositoryCloned);
+    public GitClonedEvent(GitCloned cloned) {
+        super(cloned);
     }
 
-    public GitCloned getRepositoryCloned() {
+    public GitCloned getGitCloned() {
         return ((GitCloned) super.getSource());
     }
 }

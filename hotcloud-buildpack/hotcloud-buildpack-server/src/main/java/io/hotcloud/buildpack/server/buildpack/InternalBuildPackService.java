@@ -2,10 +2,8 @@ package io.hotcloud.buildpack.server.buildpack;
 
 import io.hotcloud.buildpack.api.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.BuildPackConstant;
-import io.hotcloud.buildpack.api.GitApi;
 import io.hotcloud.buildpack.api.KanikoFlag;
 import io.hotcloud.buildpack.api.model.*;
-import io.hotcloud.buildpack.api.model.event.GitRepositoryClonedEvent;
 import io.hotcloud.buildpack.server.BuildPackStorageProperties;
 import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
@@ -25,13 +23,11 @@ import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.hotcloud.kubernetes.model.workload.JobTemplate;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 /**
@@ -42,20 +38,11 @@ import java.util.stream.Collectors;
 class InternalBuildPackService extends AbstractBuildPackApi {
 
     private final BuildPackStorageProperties storageProperties;
-    private final GitApi gitApi;
     private final KanikoFlag kanikoFlag;
-    private final ExecutorService executorService;
-    private final ApplicationEventPublisher eventPublisher;
 
     public InternalBuildPackService(BuildPackStorageProperties storageProperties,
-                                    GitApi gitApi,
-                                    ExecutorService executorService,
-                                    ApplicationEventPublisher eventPublisher,
                                     KanikoFlag kanikoFlag) {
         this.storageProperties = storageProperties;
-        this.gitApi = gitApi;
-        this.executorService = executorService;
-        this.eventPublisher = eventPublisher;
         this.kanikoFlag = kanikoFlag;
     }
 
@@ -78,37 +65,6 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         stringBuilder.append("---\n");
         stringBuilder.append(buildPack.getDockerSecret().getSecretResourceYaml());
         return stringBuilder.toString();
-    }
-
-    @Override
-    protected BuildPackRepositoryCloned clone(BuildPackRepositoryCloneInternalInput input) {
-        Assert.notNull(input, "BuildPack repository clone request body is null", 400);
-        Assert.hasText(input.getRemote(), "Git url is null", 400);
-        Assert.hasText(input.getLocal(), "Local path is null", 400);
-
-        if (input.isAsync()) {
-            executorService.execute(() -> {
-                GitCloned clone = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
-                eventPublisher.publishEvent(new GitRepositoryClonedEvent(clone));
-            });
-            return BuildPackRepositoryCloned
-                    .builder()
-                    .local(input.getLocal())
-                    .remote(input.getRemote())
-                    .project(input.retrieveGitProject())
-                    .build();
-        }
-        GitCloned cloned = gitApi.clone(input.getRemote(), input.getBranch(), input.getLocal(), input.isForce(), input.getUsername(), input.getPassword());
-        if (!cloned.isSuccess()) {
-            return null;
-        }
-
-        return BuildPackRepositoryCloned
-                .builder()
-                .local(input.getLocal())
-                .remote(input.getRemote())
-                .project(input.retrieveGitProject())
-                .build();
     }
 
     @Override

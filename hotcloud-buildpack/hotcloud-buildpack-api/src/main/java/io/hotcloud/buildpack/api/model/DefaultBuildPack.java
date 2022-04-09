@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,9 +10,8 @@ import lombok.Data;
  **/
 @Data
 @Builder
+@AllArgsConstructor
 public class DefaultBuildPack implements BuildPack {
-
-    private BuildPackRepositoryCloned repository;
 
     private BuildPackJobResource job;
 
@@ -21,4 +21,7 @@ public class DefaultBuildPack implements BuildPack {
 
     @JsonProperty("yaml")
     private String buildPackYaml;
+
+    public DefaultBuildPack() {
+    }
 }

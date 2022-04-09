@@ -5,12 +5,15 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.model.BuildPack;
+import io.hotcloud.buildpack.api.model.GitCloned;
 import io.hotcloud.common.file.FileChangeWatcher;
 import io.hotcloud.common.file.FileState;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.hotcloud.security.api.UserApi;
+import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +47,12 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     @Autowired
     private KubectlApi kubectlApi;
     @Autowired
+    private NamespaceApi namespaceApi;
+    @Autowired
     private BuildPackPlayer buildPackPlayer;
+
+    @Autowired
+    private GitClonedService gitClonedService;
 
     @Before
     public void before() {
@@ -55,14 +63,28 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void buildpack_apply() throws IOException, InterruptedException {
+    public void cloned() throws InterruptedException {
+        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
+        buildPackPlayer.clone(gitUrl, null, null, null);
+
+        gitClonedService.deleteOne("admin", "devops-thymeleaf");
+        GitCloned cloned = null;
+        while (null == cloned) {
+            TimeUnit.SECONDS.sleep(5);
+            cloned = gitClonedService.findOne("admin", "devops-thymeleaf");
+        }
+
+        Assertions.assertEquals(gitUrl, cloned.getUrl());
+        Assertions.assertFalse(StringUtils.hasText(cloned.getError()));
+    }
+
+    @Test
+    public void buildPack_apply_manually() throws IOException, ApiException {
 
 //        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
         BuildPack buildpack = buildPackPlayer.buildpack(gitUrl,
                 "Dockerfile",
-                true,
-                true,
                 true);
 
         Assertions.assertNotNull(buildpack);
@@ -70,6 +92,8 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
         log.info("BuildPack yaml \n {}", buildpack.getBuildPackYaml());
         String namespace = buildpack.getJob().getNamespace();
+        namespaceApi.namespace(namespace);
+
         String job = buildpack.getJob().getName();
 
         kubectlApi.apply(null, buildpack.getBuildPackYaml());
@@ -80,14 +104,16 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
         Assertions.assertEquals(1, podList.getItems().size());
 
-        String clonedPath = buildpack.getRepository().getLocal();
+        String clonedPath = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
+        String gitProject = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
         String tarball = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
+
         FileState fileState = new FileState(Path.of(clonedPath, tarball));
         FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(clonedPath), event -> {
             if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
                 if (Objects.equals(event.context().toString(), tarball)) {
                     log.info("Git project '{}' image tar '{}' generated. size '{}'",
-                            buildpack.getRepository().getProject(),
+                            gitProject,
                             event.context().toString(),
                             Path.of(clonedPath, tarball).toFile().length());
                 }
@@ -96,7 +122,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
             if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
                 if (Objects.equals(event.context().toString(), tarball)) {
                     log.info("Git project '{}' image tar '{}' changed. size '{}'",
-                            buildpack.getRepository().getProject(),
+                            gitProject,
                             event.context().toString(),
                             Path.of(clonedPath, tarball).toFile().length());
                 }
@@ -115,11 +141,15 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
             }
         }, "file-state").start();
         Pod pod = podList.getItems().get(0);
+        String line = "";
         while (latch.getCount() != 0) {
-            TimeUnit.SECONDS.sleep(1);
+
             try {
                 String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
-                System.out.print(logs);
+                if (!Objects.equals(line, logs)) {
+                    System.out.print(logs);
+                }
+                line = logs;
             } catch (Exception e) {
 //                log.warn("{}", e.getMessage());
             }

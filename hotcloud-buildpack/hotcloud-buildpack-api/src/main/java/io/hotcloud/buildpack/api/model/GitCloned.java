@@ -11,14 +11,17 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class GitCloned {
+    private String user;
+
     private boolean success;
-    private String gitUrl;
-    private String local;
+    private String url;
+    private String project;
+    private String localPath;
     private String branch;
     private boolean force;
     private String username;
     private String password;
-    private Throwable throwable;
+    private String error;
 
     public GitCloned() {
     }
