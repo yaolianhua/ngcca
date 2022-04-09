@@ -36,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-db-server</artifactId>
+            <artifactId>hotcloud-db</artifactId>
             <version>${project.version}</version>
         </dependency>
 

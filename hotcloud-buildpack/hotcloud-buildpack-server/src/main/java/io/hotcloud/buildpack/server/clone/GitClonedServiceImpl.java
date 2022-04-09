@@ -3,8 +3,8 @@ package io.hotcloud.buildpack.server.clone;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.common.Assert;
-import io.hotcloud.db.api.buildpack.GitClonedEntity;
-import io.hotcloud.db.api.buildpack.GitClonedRepository;
+import io.hotcloud.db.core.buildpack.GitClonedEntity;
+import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

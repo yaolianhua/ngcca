@@ -2,8 +2,8 @@ package io.hotcloud.security.admin.user;
 
 import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
-import io.hotcloud.db.api.user.UserEntity;
-import io.hotcloud.db.api.user.UserRepository;
+import io.hotcloud.db.core.user.UserEntity;
+import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.user.model.User;
 import io.hotcloud.security.user.model.event.UserCreatedEvent;

@@ -19,14 +19,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-db-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-db-server</artifactId>
-            <scope>test</scope>
-            <version>${project.version}</version>
+            <artifactId>hotcloud-db</artifactId>
         </dependency>
 
         <dependency>

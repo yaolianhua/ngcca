@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: hotcloud
+  data:
+    mongodb:
+      database: ${db.mongodb.database:}
+      host: ${db.mongodb.host:}
+      port: ${db.mongodb.port:}
+      password: ${db.mongodb.password:}
+      username: ${db.mongodb.username:}
+      auto-index-creation: true
+      authentication-database: admin
+server:
+  port: 8075
