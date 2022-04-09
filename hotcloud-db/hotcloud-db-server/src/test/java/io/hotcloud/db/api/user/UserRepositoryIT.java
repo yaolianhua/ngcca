@@ -1,9 +1,7 @@
-package io.hotcloud.db.server.user;
+package io.hotcloud.db.api.user;
 
 import com.github.javafaker.Faker;
 import io.hotcloud.db.DatabaseIntegrationTestBase;
-import io.hotcloud.db.api.user.UserEntity;
-import io.hotcloud.db.api.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;

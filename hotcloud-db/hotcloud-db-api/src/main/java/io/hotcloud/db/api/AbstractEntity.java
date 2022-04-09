@@ -1,10 +1,13 @@
 package io.hotcloud.db.api;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -13,6 +16,12 @@ public class AbstractEntity implements Serializable {
 
     @Id
     private String id;
+
+    @CreatedDate
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @LastModifiedDate
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
     public <T> AbstractEntity copyToEntity(T data) {
         BeanUtils.copyProperties(data, this);
@@ -37,6 +46,22 @@ public class AbstractEntity implements Serializable {
      */
     public String getId() {
         return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 
     @Override
