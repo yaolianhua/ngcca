@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.api.GitApi;
+import io.hotcloud.buildpack.api.BuildPackPlayer;
 import io.hotcloud.security.api.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = GitController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                GitApi.class,
+                BuildPackPlayer.class,
                 UserApi.class
         })
 })
@@ -34,21 +34,20 @@ public class GitControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private GitApi gitApi;
+    private BuildPackPlayer buildPackPlayer;
 
     @Test
     public void cloneRepository() throws Exception {
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>(8);
-        params.set("gitUrl", "https://github.com/GoogleContainerTools/kaniko.git");
-        params.set("localPath", "localRepository");
+        params.set("git_url", "https://github.com/GoogleContainerTools/kaniko.git");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clone")).params(params))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isAccepted());
         //was invoked one time
-        verify(gitApi, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
-                null, "localRepository", false, null, null);
+        verify(buildPackPlayer, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
+                null, null, null);
     }
 
 }
