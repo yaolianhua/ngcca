@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.api.BuildPackPlayer;
-import io.hotcloud.buildpack.api.model.BuildPack;
+import io.hotcloud.buildpack.api.core.BuildPackPlayer;
+import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
 import org.springframework.http.ResponseEntity;

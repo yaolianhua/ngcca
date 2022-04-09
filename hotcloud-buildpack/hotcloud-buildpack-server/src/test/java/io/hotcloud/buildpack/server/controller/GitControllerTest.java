@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.api.BuildPackPlayer;
+import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.security.api.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
