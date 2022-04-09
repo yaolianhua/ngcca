@@ -5,7 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
+public interface UserRepository extends PagingAndSortingRepository<UserEntity, String> {
 
     /**
      * Find UserEntity with the giving {@code username}
