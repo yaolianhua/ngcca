@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.api.core.BuildPackPlayer;
+import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/git")
 public class GitController {
 
-    private final BuildPackPlayer buildPackPlayer;
+    private final GitClonedService gitClonedService;
 
-    public GitController(BuildPackPlayer buildPackPlayer) {
-        this.buildPackPlayer = buildPackPlayer;
+    public GitController(GitClonedService gitClonedService) {
+        this.gitClonedService = gitClonedService;
     }
 
     @PostMapping("/clone")
@@ -27,7 +27,7 @@ public class GitController {
                                                         @RequestParam(value = "branch", required = false) String branch,
                                                         @RequestParam(value = "username", required = false) String username,
                                                         @RequestParam(value = "password", required = false) String password) {
-        buildPackPlayer.clone(gitUrl, branch, username, password);
+        gitClonedService.clone(gitUrl, branch, username, password);
         return WebResponse.accepted();
     }
 }

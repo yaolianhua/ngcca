@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
-import io.hotcloud.buildpack.api.core.BuildPackPlayer;
+import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.security.api.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = GitController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                BuildPackPlayer.class,
+                GitClonedService.class,
                 UserApi.class
         })
 })
@@ -34,7 +34,7 @@ public class GitControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private BuildPackPlayer buildPackPlayer;
+    private GitClonedService gitClonedService;
 
     @Test
     public void cloneRepository() throws Exception {
@@ -46,7 +46,7 @@ public class GitControllerTest {
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
-        verify(buildPackPlayer, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
+        verify(gitClonedService, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
                 null, null, null);
     }
 
