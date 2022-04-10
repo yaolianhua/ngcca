@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 @Builder
 @AllArgsConstructor
 public class GitCloned {
+    private String id;
     private String user;
 
     private boolean success;
