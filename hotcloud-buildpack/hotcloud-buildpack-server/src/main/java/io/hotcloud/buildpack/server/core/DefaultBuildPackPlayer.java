@@ -1,12 +1,8 @@
 package io.hotcloud.buildpack.server.core;
 
-import io.hotcloud.buildpack.api.clone.GitApi;
 import io.hotcloud.buildpack.api.clone.GitCloned;
-import io.hotcloud.buildpack.api.clone.GitClonedEvent;
-import io.hotcloud.buildpack.api.core.AbstractBuildPackApi;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackPlayer;
-import io.hotcloud.buildpack.api.core.KanikoFlag;
+import io.hotcloud.buildpack.api.clone.GitClonedService;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
@@ -29,24 +25,24 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
 @Component
-public class DefaultBuildPackPlayer implements BuildPackPlayer {
+class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
     private final BuildPackRegistryProperties registryProperties;
     private final Cache cache;
-    private final GitApi gitApi;
     private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
-    private final ExecutorService executorService;
+
+    private final GitClonedService gitClonedService;
+    private final BuildPackService buildPackService;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -55,26 +51,45 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
                                   KanikoFlag kanikoFlag,
                                   BuildPackRegistryProperties registryProperties,
                                   Cache cache,
-                                  GitApi gitApi,
                                   NamespaceApi namespaceApi,
                                   KubectlApi kubectlApi,
-                                  ExecutorService executorService,
+                                  GitClonedService gitClonedService,
+                                  BuildPackService buildPackService,
                                   ApplicationEventPublisher eventPublisher) {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
         this.kanikoFlag = kanikoFlag;
         this.registryProperties = registryProperties;
         this.cache = cache;
-        this.gitApi = gitApi;
         this.namespaceApi = namespaceApi;
         this.kubectlApi = kubectlApi;
-        this.executorService = executorService;
+        this.gitClonedService = gitClonedService;
+        this.buildPackService = buildPackService;
         this.eventPublisher = eventPublisher;
     }
 
+    @Override
+    protected void beforeApply(String gitUrl) {
+        Assert.hasText(gitUrl, "Git url is null", 400);
+
+        UserNamespacePair userNamespacePair = retrievedUserNamespacePair();
+        String project = GitCloned.retrieveGitProject(gitUrl);
+
+        //check git repository exist
+        GitCloned gitCloned = gitClonedService.findOne(userNamespacePair.getUsername(), project);
+        Assert.notNull(gitCloned, "Please clone the repository [" + gitUrl + "] before deploying the buildPack", 400);
+        Assert.state(gitCloned.isSuccess(), String.format("Git repository [%s] cloned is not successful", gitUrl), 400);
+
+        BuildPack buildPack = buildPackService.findOneWithNoDone(gitCloned.getUser(), gitCloned.getId());
+
+        Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
+                        gitCloned.getUser(),
+                        gitCloned.getProject()),
+                409);
+    }
 
     @Override
-    public void apply(BuildPack buildPack) {
+    protected BuildPack doApply(BuildPack buildPack) {
         Assert.notNull(buildPack, "BuildPack body is null", 400);
         Assert.hasText(buildPack.getBuildPackYaml(), "BuildPack resource yaml is null", 400);
 
@@ -84,16 +99,18 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
             if (namespaceApi.read(pair.getNamespace()) == null) {
                 namespaceApi.namespace(pair.getNamespace());
             }
-            kubectlApi.apply(null, buildPack.getBuildPackYaml());
+            kubectlApi.apply(pair.getNamespace(), buildPack.getBuildPackYaml());
         } catch (ApiException e) {
             eventPublisher.publishEvent(new BuildPackStartFailureEvent(buildPack, e));
-            return;
+            return buildPack;
         }
         eventPublisher.publishEvent(new BuildPackStartedEvent(buildPack));
+
+        return buildPack;
     }
 
     @NotNull
-    UserNamespacePair retrievedUserNamespacePair() {
+    private UserNamespacePair retrievedUserNamespacePair() {
         User current = userApi.current();
         Assert.notNull(current, "Retrieve current user null", 404);
 
@@ -104,27 +121,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     }
 
     @Override
-    public void clone(String gitUrl, String branch, String username, String password) {
-
-        Assert.hasText(gitUrl, "Git url is null", 400);
-
-        UserNamespacePair pair = retrievedUserNamespacePair();
-
-        String gitProject = GitCloned.retrieveGitProject(gitUrl);
-        String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace(), gitProject).toString();
-
-        executorService.execute(() -> {
-            GitCloned cloned = gitApi.clone(gitUrl, branch, clonePath, true, username, password);
-            //The current user cannot be obtained from the asynchronous thread pool
-            cloned.setUser(pair.getUsername());
-            cloned.setProject(gitProject);
-            eventPublisher.publishEvent(new GitClonedEvent(cloned));
-        });
-
-    }
-
-    @Override
-    public BuildPack buildpack(String gitUrl, String dockerfile, Boolean noPush) {
+    protected BuildPack buildpack(String gitUrl, String dockerfile, Boolean noPush) {
 
         UserNamespacePair pair = retrievedUserNamespacePair();
 
@@ -148,7 +145,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     }
 
     @NotNull
-    Map<String, String> resolvedArgs(String dockerfile, Boolean noPush, Map<String, String> alternative) {
+    private Map<String, String> resolvedArgs(String dockerfile, Boolean noPush, Map<String, String> alternative) {
         Map<String, String> args = kanikoFlag.resolvedArgs();
 
         if (StringUtils.hasText(dockerfile)) {

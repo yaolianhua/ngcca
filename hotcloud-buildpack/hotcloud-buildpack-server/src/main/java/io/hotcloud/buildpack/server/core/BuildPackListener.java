@@ -17,12 +17,12 @@ public class BuildPackListener {
     @Async
     @EventListener
     public void started(BuildPackStartedEvent startedEvent) {
-
+        log.info("BuildPackListener. {}", startedEvent);
     }
 
     @Async
     @EventListener
-    public void started(BuildPackStartFailureEvent startFailureEvent) {
-
+    public void startFailure(BuildPackStartFailureEvent startFailureEvent) {
+        log.info("BuildPackListener. {}", startFailureEvent);
     }
 }

@@ -49,8 +49,9 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     private KubectlApi kubectlApi;
     @Autowired
     private NamespaceApi namespaceApi;
+
     @Autowired
-    private BuildPackPlayer buildPackPlayer;
+    private AbstractBuildPackPlayer abstractBuildPackPlayer;
 
     @Autowired
     private GitClonedService gitClonedService;
@@ -66,7 +67,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     @Test
     public void cloned() throws InterruptedException {
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
-        buildPackPlayer.clone(gitUrl, null, null, null);
+        gitClonedService.clone(gitUrl, null, null, null);
 
         gitClonedService.deleteOne("admin", "devops-thymeleaf");
         GitCloned cloned = null;
@@ -84,7 +85,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
 //        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
-        BuildPack buildpack = buildPackPlayer.buildpack(gitUrl,
+        BuildPack buildpack = abstractBuildPackPlayer.buildpack(gitUrl,
                 "Dockerfile",
                 true);
 
