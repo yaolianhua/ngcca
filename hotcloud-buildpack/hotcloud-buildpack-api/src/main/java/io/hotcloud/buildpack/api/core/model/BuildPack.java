@@ -9,32 +9,60 @@ import java.util.Map;
 public interface BuildPack {
 
     /**
+     * Get BuildPack owner
+     *
+     * @return user
+     */
+    String getUser();
+
+    /**
+     * Get git cloned id
+     *
+     * @return clonedId
+     */
+    String getClonedId();
+
+    /**
+     * BuildPack is done
+     *
+     * @return true/false
+     */
+    boolean isDone();
+
+    /**
+     * Get message info
+     *
+     * @return message info
+     */
+    String getMessage();
+
+    /**
      * Get BuildPack Job resource details
      *
      * @return {@link BuildPackJobResource}
      */
-    BuildPackJobResource getJob();
+    BuildPackJobResource getJobResource();
 
     /**
      * Get BuildPack pv/pvc resource details
      *
      * @return {@link BuildPackStorageResourceList}
      */
-    BuildPackStorageResourceList getStorage();
+    BuildPackStorageResourceList getStorageResource();
 
     /**
      * Get BuildPack secret resource details
      *
      * @return {@link BuildPackDockerSecretResource}
      */
-    BuildPackDockerSecretResource getDockerSecret();
+    BuildPackDockerSecretResource getSecretResource();
 
     /**
      * Get BuildPack deploy yaml fully
      *
      * @return buildPack yaml
      */
-    String getBuildPackYaml();
+    String getYaml();
 
     /**
      * Alternate properties container
@@ -42,6 +70,6 @@ public interface BuildPack {
      * @return key-value mapping
      */
     default Map<String, String> getAlternative() {
-        return getJob().getAlternative();
+        return getJobResource().getAlternative();
     }
 }

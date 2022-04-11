@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
+import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.buildpack.api.core.model.UserNamespacePair;
 import io.hotcloud.buildpack.server.clone.BuildPackRegistryProperties;
 import io.hotcloud.common.Assert;
@@ -77,7 +78,8 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]", 404);
         Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()), 400);
 
-        BuildPack buildPack = buildPackService.findOneWithNoDone(gitCloned.getUser(), clonedId);
+        UserNamespacePair pair = retrievedUserNamespacePair();
+        BuildPack buildPack = buildPackService.findOneWithNoDone(pair.getUsername(), clonedId);
 
         Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
                         gitCloned.getUser(),
@@ -88,7 +90,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     @Override
     protected BuildPack doApply(BuildPack buildPack) {
         Assert.notNull(buildPack, "BuildPack body is null", 400);
-        Assert.hasText(buildPack.getBuildPackYaml(), "BuildPack resource yaml is null", 400);
+        Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null", 400);
 
         UserNamespacePair pair = retrievedUserNamespacePair();
         //create user's namespace
@@ -96,7 +98,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
             if (namespaceApi.read(pair.getNamespace()) == null) {
                 namespaceApi.namespace(pair.getNamespace());
             }
-            kubectlApi.apply(pair.getNamespace(), buildPack.getBuildPackYaml());
+            kubectlApi.apply(pair.getNamespace(), buildPack.getYaml());
         } catch (ApiException e) {
             eventPublisher.publishEvent(new BuildPackStartFailureEvent(buildPack, e));
             return buildPack;
@@ -120,8 +122,6 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     @Override
     protected BuildPack buildpack(String clonedId, Boolean noPush) {
 
-        UserNamespacePair pair = retrievedUserNamespacePair();
-
         GitCloned cloned = gitClonedService.findOne(clonedId);
         Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]", 404);
 
@@ -133,6 +133,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         //handle kaniko args
         Map<String, String> args = resolvedArgs(cloned.getDockerfile(), noPush, alternative);
 
+        UserNamespacePair pair = retrievedUserNamespacePair();
         BuildPack buildpack = abstractBuildPackApi.buildpack(
                 pair.getNamespace(),
                 cloned.getProject(),
@@ -140,9 +141,15 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
                 registryProperties.getUsername(),
                 registryProperties.getPassword(),
                 args);
-        buildpack.getJob().getAlternative().putAll(alternative);
 
-        return buildpack;
+        buildpack.getJobResource().getAlternative().putAll(alternative);
+
+        DefaultBuildPack defaultBuildPack = (DefaultBuildPack) buildpack;
+        defaultBuildPack.setClonedId(clonedId);
+        defaultBuildPack.setDone(false);
+        defaultBuildPack.setUser(pair.getUsername());
+
+        return defaultBuildPack;
     }
 
     @NotNull

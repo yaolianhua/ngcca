@@ -57,12 +57,12 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
 
         //Build final deployment yaml
         DefaultBuildPack buildPack = DefaultBuildPack.builder()
-                .storage(storageResourceList)
-                .dockerSecret(dockerSecretResource)
-                .job(jobResource)
+                .storageResource(storageResourceList)
+                .secretResource(dockerSecretResource)
+                .jobResource(jobResource)
                 .build();
 
-        buildPack.setBuildPackYaml(yaml(buildPack));
+        buildPack.setYaml(yaml(buildPack));
         return buildPack;
     }
 

@@ -81,15 +81,15 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         BuildPack buildpack = abstractBuildPackPlayer.buildpack(cloned.getId(), true);
 
         Assertions.assertNotNull(buildpack);
-        Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));
+        Assertions.assertTrue(StringUtils.hasText(buildpack.getYaml()));
 
-        log.info("BuildPack yaml \n {}", buildpack.getBuildPackYaml());
-        String namespace = buildpack.getJob().getNamespace();
+        log.info("BuildPack yaml \n {}", buildpack.getYaml());
+        String namespace = buildpack.getJobResource().getNamespace();
         namespaceApi.namespace(namespace);
 
-        String job = buildpack.getJob().getName();
+        String job = buildpack.getJobResource().getName();
 
-        kubectlApi.apply(null, buildpack.getBuildPackYaml());
+        kubectlApi.apply(null, buildpack.getYaml());
 
         Job jobRead = jobApi.read(namespace, job);
         Assertions.assertNotNull(jobRead);
@@ -97,9 +97,9 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
         Assertions.assertEquals(1, podList.getItems().size());
 
-        String clonedPath = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
-        String gitProject = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
-        String tarball = buildpack.getJob().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
+        String clonedPath = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
+        String gitProject = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
+        String tarball = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
 
         FileState fileState = new FileState(Path.of(clonedPath, tarball));
         FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(clonedPath), event -> {

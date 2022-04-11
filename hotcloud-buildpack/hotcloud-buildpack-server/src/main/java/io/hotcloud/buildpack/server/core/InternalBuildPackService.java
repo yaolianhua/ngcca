@@ -48,21 +48,21 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     @Override
     protected String yaml(BuildPack buildPack) {
         Assert.notNull(buildPack, "BuildPack is null", 400);
-        Assert.notNull(buildPack.getJob(), "BuildPack job resource is null", 400);
-        Assert.notNull(buildPack.getDockerSecret(), "BuildPack docker secret resource is null", 400);
-        Assert.notNull(buildPack.getStorage(), "BuildPack storage resourceList is null", 400);
+        Assert.notNull(buildPack.getJobResource(), "BuildPack job resource is null", 400);
+        Assert.notNull(buildPack.getSecretResource(), "BuildPack docker secret resource is null", 400);
+        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage resourceList is null", 400);
 
-        Assert.hasText(buildPack.getJob().getJobResourceYaml(), "BuildPack job resource yaml is null", 400);
-        Assert.hasText(buildPack.getStorage().getResourceListYaml(), "BuildPack storage resource yaml is null", 400);
-        Assert.hasText(buildPack.getDockerSecret().getSecretResourceYaml(), "BuildPack docker secret resource yaml is null", 400);
+        Assert.hasText(buildPack.getJobResource().getJobResourceYaml(), "BuildPack job resource yaml is null", 400);
+        Assert.hasText(buildPack.getStorageResource().getResourceListYaml(), "BuildPack storage resource yaml is null", 400);
+        Assert.hasText(buildPack.getSecretResource().getSecretResourceYaml(), "BuildPack docker secret resource yaml is null", 400);
 
         StringBuilder stringBuilder;
         stringBuilder = new StringBuilder();
-        stringBuilder.append(buildPack.getJob().getJobResourceYaml());
+        stringBuilder.append(buildPack.getJobResource().getJobResourceYaml());
         stringBuilder.append("---\n");
-        stringBuilder.append(buildPack.getStorage().getResourceListYaml());
+        stringBuilder.append(buildPack.getStorageResource().getResourceListYaml());
         stringBuilder.append("---\n");
-        stringBuilder.append(buildPack.getDockerSecret().getSecretResourceYaml());
+        stringBuilder.append(buildPack.getSecretResource().getSecretResourceYaml());
         return stringBuilder.toString();
     }
 

@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.core.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,14 +12,36 @@ import lombok.Data;
 @AllArgsConstructor
 public class DefaultBuildPack implements BuildPack {
 
-    private BuildPackJobResource job;
+    private BuildPackJobResource jobResource;
 
-    private BuildPackStorageResourceList storage;
+    private BuildPackStorageResourceList storageResource;
 
-    private BuildPackDockerSecretResource dockerSecret;
+    private BuildPackDockerSecretResource secretResource;
 
-    @JsonProperty("yaml")
-    private String buildPackYaml;
+    private String user;
+
+    private String clonedId;
+
+    private boolean done;
+
+    private String message;
+
+    private String yaml;
+
+    @Override
+    public BuildPackJobResource getJobResource() {
+        return jobResource;
+    }
+
+    @Override
+    public BuildPackStorageResourceList getStorageResource() {
+        return storageResource;
+    }
+
+    @Override
+    public BuildPackDockerSecretResource getSecretResource() {
+        return secretResource;
+    }
 
     public DefaultBuildPack() {
     }
