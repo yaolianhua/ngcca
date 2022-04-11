@@ -50,7 +50,7 @@ public class BuildPackServiceIT extends BuildPackIntegrationTestBase {
     }
 
     public GitCloned cloned(String url) throws InterruptedException {
-        gitClonedService.clone(url, null, null, null);
+        gitClonedService.clone(url, null, null, null, null);
 
         String project = GitCloned.retrieveGitProject(url);
         gitClonedService.deleteOne("admin", project);
