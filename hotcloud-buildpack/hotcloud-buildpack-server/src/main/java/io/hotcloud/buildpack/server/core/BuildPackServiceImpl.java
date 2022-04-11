@@ -10,7 +10,9 @@ import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     @Override
-    public BuildPack save(BuildPack buildPack) {
+    public BuildPack saveOrUpdate(BuildPack buildPack) {
 
         Assert.notNull(buildPack, "BuildPack body is null", 400);
         Assert.hasText(buildPack.getUser(), "BuildPack user is null", 400);
@@ -48,9 +50,13 @@ public class BuildPackServiceImpl implements BuildPackService {
         entity.setSecret(writeJson(buildPack.getSecretResource()));
         entity.setStorage(writeJson(buildPack.getStorageResource()));
 
-        BuildPackEntity saved = buildPackRepository.save(entity);
+        if (StringUtils.hasText(entity.getId())) {
+            entity.setModifiedAt(LocalDateTime.now());
+        }
 
-        return toBuildPack(saved);
+        BuildPackEntity saveOrUpdate = buildPackRepository.save(entity);
+
+        return toBuildPack(saveOrUpdate);
     }
 
     @Override

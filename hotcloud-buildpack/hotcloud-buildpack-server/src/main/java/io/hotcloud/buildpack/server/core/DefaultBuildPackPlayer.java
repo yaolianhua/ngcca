@@ -92,20 +92,22 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.notNull(buildPack, "BuildPack body is null", 400);
         Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null", 400);
 
-        UserNamespacePair pair = retrievedUserNamespacePair();
+        BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
+
+        String namespace = savedBuildPack.getJobResource().getNamespace();
         //create user's namespace
         try {
-            if (namespaceApi.read(pair.getNamespace()) == null) {
-                namespaceApi.namespace(pair.getNamespace());
+            if (namespaceApi.read(namespace) == null) {
+                namespaceApi.namespace(namespace);
             }
-            kubectlApi.apply(pair.getNamespace(), buildPack.getYaml());
+            kubectlApi.apply(namespace, savedBuildPack.getYaml());
         } catch (ApiException e) {
-            eventPublisher.publishEvent(new BuildPackStartFailureEvent(buildPack, e));
-            return buildPack;
+            eventPublisher.publishEvent(new BuildPackStartFailureEvent(savedBuildPack, e));
+            return savedBuildPack;
         }
-        eventPublisher.publishEvent(new BuildPackStartedEvent(buildPack));
+        eventPublisher.publishEvent(new BuildPackStartedEvent(savedBuildPack));
 
-        return buildPack;
+        return savedBuildPack;
     }
 
     @NotNull

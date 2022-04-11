@@ -10,12 +10,12 @@ import java.util.List;
 public interface BuildPackService {
 
     /**
-     * Save {@link BuildPack} object
+     * Save or update {@link BuildPack} object
      *
      * @param buildPack {@link BuildPack}
      * @return Saved {@link BuildPack}
      */
-    BuildPack save(BuildPack buildPack);
+    BuildPack saveOrUpdate(BuildPack buildPack);
 
     /**
      * Find all with giving {@code user} and {@code clonedId}

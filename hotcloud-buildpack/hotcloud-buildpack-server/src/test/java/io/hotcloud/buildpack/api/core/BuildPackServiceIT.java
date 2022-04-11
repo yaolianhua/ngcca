@@ -74,7 +74,7 @@ public class BuildPackServiceIT extends BuildPackIntegrationTestBase {
 
         BuildPack buildpack = abstractBuildPackPlayer.buildpack(cloned.getId(), true);
 
-        BuildPack saved = buildPackService.save(buildpack);
+        BuildPack saved = buildPackService.saveOrUpdate(buildpack);
         Assertions.assertTrue(StringUtils.hasText(saved.getId()));
 
         BuildPack find = buildPackService.findOneWithNoDone("admin", cloned.getId());
