@@ -9,6 +9,13 @@ import java.util.Map;
 public interface BuildPack {
 
     /**
+     * BuildPack id
+     *
+     * @return ID
+     */
+    String getId();
+
+    /**
      * Get BuildPack owner
      *
      * @return user

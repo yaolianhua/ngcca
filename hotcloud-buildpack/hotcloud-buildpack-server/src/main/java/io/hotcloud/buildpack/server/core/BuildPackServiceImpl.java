@@ -8,14 +8,11 @@ import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
-import io.hotcloud.db.core.buildpack.GitClonedEntity;
-import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,47 +23,34 @@ import java.util.stream.Collectors;
 public class BuildPackServiceImpl implements BuildPackService {
 
     private final BuildPackRepository buildPackRepository;
-    private final GitClonedRepository gitClonedRepository;
 
     private final ObjectMapper objectMapper;
 
     public BuildPackServiceImpl(BuildPackRepository buildPackRepository,
-                                GitClonedRepository gitClonedRepository,
                                 ObjectMapper objectMapper) {
         this.buildPackRepository = buildPackRepository;
-        this.gitClonedRepository = gitClonedRepository;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public void save(String clonedId, BuildPack buildPack) {
+    public BuildPack save(BuildPack buildPack) {
 
         Assert.notNull(buildPack, "BuildPack body is null", 400);
-        Assert.notNull(buildPack.getJob(), "BuildPack job body is null", 400);
-        Assert.notNull(buildPack.getStorage(), "BuildPack storage body is null", 400);
-        Assert.notNull(buildPack.getDockerSecret(), "BuildPack secret body is null", 400);
+        Assert.hasText(buildPack.getUser(), "BuildPack user is null", 400);
+        Assert.hasText(buildPack.getClonedId(), "BuildPack cloned id is null", 400);
+        Assert.notNull(buildPack.getJobResource(), "BuildPack job body is null", 400);
+        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null", 400);
+        Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null", 400);
 
-        GitClonedEntity clonedEntity = gitClonedRepository.findById(clonedId).orElseThrow(() -> new HotCloudException("Cloned repository is not found [" + clonedId + "]"));
+        BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().copyToEntity(((DefaultBuildPack) buildPack));
 
-        Optional<BuildPackEntity> optionalBuildPack = buildPackRepository.findByUserAndClonedId(clonedEntity.getUser(), clonedId)
-                .stream()
-                .filter(e -> !e.isDone())
-                .findFirst();
+        entity.setJob(writeJson(buildPack.getJobResource()));
+        entity.setSecret(writeJson(buildPack.getSecretResource()));
+        entity.setStorage(writeJson(buildPack.getStorageResource()));
 
-        Assert.state(optionalBuildPack.isEmpty(), String.format("[Conflict] '%s' user's git project '%s' is building",
-                        clonedEntity.getUser(),
-                        clonedEntity.getProject()),
-                409);
+        BuildPackEntity saved = buildPackRepository.save(entity);
 
-        BuildPackEntity entity = new BuildPackEntity();
-        entity.setUser(clonedEntity.getUser());
-        entity.setClonedId(clonedId);
-        entity.setJob(writeJson(buildPack.getJob()));
-        entity.setSecret(writeJson(buildPack.getDockerSecret()));
-        entity.setStorage(writeJson(buildPack.getStorage()));
-        entity.setYaml(buildPack.getBuildPackYaml());
-
-        buildPackRepository.save(entity);
+        return toBuildPack(saved);
     }
 
     @Override
@@ -95,10 +79,15 @@ public class BuildPackServiceImpl implements BuildPackService {
 
     private BuildPack toBuildPack(BuildPackEntity entity) {
         return DefaultBuildPack.builder()
-                .job(readT(entity.getJob(), BuildPackJobResource.class))
-                .storage(readT(entity.getStorage(), BuildPackStorageResourceList.class))
-                .dockerSecret(readT(entity.getSecret(), BuildPackDockerSecretResource.class))
-                .buildPackYaml(entity.getYaml())
+                .id(entity.getId())
+                .jobResource(readT(entity.getJob(), BuildPackJobResource.class))
+                .storageResource(readT(entity.getStorage(), BuildPackStorageResourceList.class))
+                .secretResource(readT(entity.getSecret(), BuildPackDockerSecretResource.class))
+                .yaml(entity.getYaml())
+                .user(entity.getUser())
+                .done(entity.isDone())
+                .clonedId(entity.getClonedId())
+                .message(entity.getMessage())
                 .build();
     }
 

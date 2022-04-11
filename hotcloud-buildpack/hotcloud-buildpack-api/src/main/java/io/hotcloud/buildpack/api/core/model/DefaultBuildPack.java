@@ -12,6 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class DefaultBuildPack implements BuildPack {
 
+    private String id;
+
     private BuildPackJobResource jobResource;
 
     private BuildPackStorageResourceList storageResource;

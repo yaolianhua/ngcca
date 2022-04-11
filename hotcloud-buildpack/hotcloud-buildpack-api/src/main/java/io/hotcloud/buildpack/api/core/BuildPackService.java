@@ -12,10 +12,10 @@ public interface BuildPackService {
     /**
      * Save {@link BuildPack} object
      *
-     * @param clonedId  Git cloned id
      * @param buildPack {@link BuildPack}
+     * @return Saved {@link BuildPack}
      */
-    void save(String clonedId, BuildPack buildPack);
+    BuildPack save(BuildPack buildPack);
 
     /**
      * Find all with giving {@code user} and {@code clonedId}
