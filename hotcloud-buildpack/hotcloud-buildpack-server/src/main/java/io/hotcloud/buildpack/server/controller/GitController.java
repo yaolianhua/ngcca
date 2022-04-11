@@ -24,10 +24,11 @@ public class GitController {
 
     @PostMapping("/clone")
     public ResponseEntity<Result<Void>> cloneRepository(@RequestParam("git_url") String gitUrl,
+                                                        @RequestParam(value = "dockerfile", required = false) String dockerfile,
                                                         @RequestParam(value = "branch", required = false) String branch,
                                                         @RequestParam(value = "username", required = false) String username,
                                                         @RequestParam(value = "password", required = false) String password) {
-        gitClonedService.clone(gitUrl, branch, username, password);
+        gitClonedService.clone(gitUrl, dockerfile, branch, username, password);
         return WebResponse.accepted();
     }
 }

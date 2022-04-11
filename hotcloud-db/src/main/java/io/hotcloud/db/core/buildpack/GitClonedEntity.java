@@ -25,6 +25,7 @@ public class GitClonedEntity extends AbstractEntity {
     private String user;
 
     private String url;
+    private String dockerfile;
     private String localPath;
     @org.springframework.data.redis.core.index.Indexed
     private String project;

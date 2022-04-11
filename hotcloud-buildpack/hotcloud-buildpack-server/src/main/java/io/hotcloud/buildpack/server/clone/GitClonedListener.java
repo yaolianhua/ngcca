@@ -22,10 +22,9 @@ public class GitClonedListener {
 
     @EventListener
     public void cloned(GitClonedEvent event) {
-        GitCloned cloned = event.getGitCloned();
         try {
-            log.info("GitClonedListener. save git cloned '{}'", cloned);
-            gitClonedService.saveOrUpdate(cloned);
+            GitCloned gitCloned = gitClonedService.saveOrUpdate(event.getGitCloned());
+            log.info("GitClonedListener. save or update git cloned '{}'", gitCloned.getId());
         } catch (Exception e) {
             log.error("GitClonedListener error. {}", e.getCause().getMessage());
         }

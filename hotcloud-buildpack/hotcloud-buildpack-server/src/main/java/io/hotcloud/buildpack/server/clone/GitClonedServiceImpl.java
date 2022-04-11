@@ -14,8 +14,10 @@ import io.hotcloud.security.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -49,7 +51,7 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public void saveOrUpdate(GitCloned cloned) {
+    public GitCloned saveOrUpdate(GitCloned cloned) {
         Assert.notNull(cloned, "Git clone body is null", 400);
         Assert.hasText(cloned.getUrl(), "Git url is null", 400);
         Assert.hasText(cloned.getLocalPath(), "Git cloned path is null", 400);
@@ -58,12 +60,15 @@ public class GitClonedServiceImpl implements GitClonedService {
         GitClonedEntity existed = repository.findByUserAndProject(cloned.getUser(), cloned.getProject());
         if (existed != null) {
             existed.setError(cloned.getError());
-            repository.save(existed);
-            return;
+            existed.setModifiedAt(LocalDateTime.now());
+            GitClonedEntity updated = repository.save(existed);
+            return updated.toT(GitCloned.class);
         }
 
         GitClonedEntity entity = (GitClonedEntity) new GitClonedEntity().copyToEntity(cloned);
-        repository.save(entity);
+        GitClonedEntity saved = repository.save(entity);
+
+        return saved.toT(GitCloned.class);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public void clone(String gitUrl, String branch, String username, String password) {
+    public void clone(String gitUrl, String dockerfile, String branch, String username, String password) {
 
         Assert.hasText(gitUrl, "Git url is null", 400);
 
@@ -109,6 +114,7 @@ public class GitClonedServiceImpl implements GitClonedService {
             //The current user cannot be obtained from the asynchronous thread pool
             cloned.setUser(current.getUsername());
             cloned.setProject(gitProject);
+            cloned.setDockerfile(StringUtils.hasText(dockerfile) ? dockerfile : "Dockerfile");
             eventPublisher.publishEvent(new GitClonedEvent(cloned));
         });
 

@@ -9,8 +9,9 @@ public interface GitClonedService {
      * Save or update with giving {@link GitCloned}
      *
      * @param cloned {@link GitCloned}
+     * @return {@link GitCloned}
      */
-    void saveOrUpdate(GitCloned cloned);
+    GitCloned saveOrUpdate(GitCloned cloned);
 
     /**
      * Find {@link GitCloned} with giving {@code  username} and {@code gitProject}
@@ -32,15 +33,16 @@ public interface GitClonedService {
     /**
      * Step with git clone
      *
-     * @param gitUrl   remote git url. protocol supported http(s) only
-     * @param branch   the initial branch to check out when cloning the repository.
-     *                 Can be specified as ref name (<code>refs/heads/master</code>),
-     *                 branch name (<code>master</code>) or tag name
-     *                 (<code>v1.2.3</code>). The default is to use the branch
-     *                 pointed to by the cloned repository's HEAD and can be
-     *                 requested by passing {@code null} or <code>HEAD</code>.
-     * @param username remote repository username credential
-     * @param password remote repository password credential
+     * @param gitUrl     remote git url. protocol supported http(s) only
+     * @param dockerfile dockerfile name. default name is {@code Dockerfile}
+     * @param branch     the initial branch to check out when cloning the repository.
+     *                   Can be specified as ref name (<code>refs/heads/master</code>),
+     *                   branch name (<code>master</code>) or tag name
+     *                   (<code>v1.2.3</code>). The default is to use the branch
+     *                   pointed to by the cloned repository's HEAD and can be
+     *                   requested by passing {@code null} or <code>HEAD</code>.
+     * @param username   remote repository username credential
+     * @param password   remote repository password credential
      */
-    void clone(String gitUrl, String branch, String username, String password);
+    void clone(String gitUrl, String dockerfile, String branch, String username, String password);
 }

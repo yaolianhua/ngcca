@@ -23,6 +23,7 @@ public class GitCloned {
 
     private boolean success;
     private String url;
+    private String dockerfile;
     private String project;
     private String localPath;
     private String branch;
