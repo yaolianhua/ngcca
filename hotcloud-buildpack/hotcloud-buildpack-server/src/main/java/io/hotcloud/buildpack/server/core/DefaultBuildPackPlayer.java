@@ -69,18 +69,15 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     }
 
     @Override
-    protected void beforeApply(String gitUrl) {
-        Assert.hasText(gitUrl, "Git url is null", 400);
-
-        UserNamespacePair userNamespacePair = retrievedUserNamespacePair();
-        String project = GitCloned.retrieveGitProject(gitUrl);
+    protected void beforeApply(String clonedId) {
+        Assert.hasText(clonedId, "Git cloned id is null", 400);
 
         //check git repository exist
-        GitCloned gitCloned = gitClonedService.findOne(userNamespacePair.getUsername(), project);
-        Assert.notNull(gitCloned, "Please clone the repository [" + gitUrl + "] before deploying the buildPack", 400);
-        Assert.state(gitCloned.isSuccess(), String.format("Git repository [%s] cloned is not successful", gitUrl), 400);
+        GitCloned gitCloned = gitClonedService.findOne(clonedId);
+        Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]", 404);
+        Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()), 400);
 
-        BuildPack buildPack = buildPackService.findOneWithNoDone(gitCloned.getUser(), gitCloned.getId());
+        BuildPack buildPack = buildPackService.findOneWithNoDone(gitCloned.getUser(), clonedId);
 
         Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
                         gitCloned.getUser(),
@@ -121,20 +118,24 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     }
 
     @Override
-    protected BuildPack buildpack(String gitUrl, String dockerfile, Boolean noPush) {
+    protected BuildPack buildpack(String clonedId, Boolean noPush) {
 
         UserNamespacePair pair = retrievedUserNamespacePair();
 
+        GitCloned cloned = gitClonedService.findOne(clonedId);
+        Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]", 404);
+
         Map<String, String> alternative = new HashMap<>(16);
-        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, GitCloned.retrieveImageTarball(gitUrl));
-        alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, GitCloned.retrievePushImage(gitUrl));
+        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, GitCloned.retrieveImageTarball(cloned.getUrl()));
+        alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, GitCloned.retrievePushImage(cloned.getUrl()));
+        alternative.put(BuildPackConstant.GIT_PROJECT_ID, clonedId);
 
         //handle kaniko args
-        Map<String, String> args = resolvedArgs(dockerfile, noPush, alternative);
+        Map<String, String> args = resolvedArgs(cloned.getDockerfile(), noPush, alternative);
 
         BuildPack buildpack = abstractBuildPackApi.buildpack(
                 pair.getNamespace(),
-                GitCloned.retrieveGitProject(gitUrl),
+                cloned.getProject(),
                 registryProperties.getUrl(),
                 registryProperties.getUsername(),
                 registryProperties.getPassword(),

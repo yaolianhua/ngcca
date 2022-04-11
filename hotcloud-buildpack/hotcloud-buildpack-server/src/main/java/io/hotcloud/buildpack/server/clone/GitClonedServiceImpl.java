@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -82,6 +83,14 @@ public class GitClonedServiceImpl implements GitClonedService {
             return null;
         }
         return entity.toT(GitCloned.class);
+    }
+
+    @Override
+    public GitCloned findOne(String clonedId) {
+        Optional<GitClonedEntity> optionalGitCloned = repository.findById(clonedId);
+        GitClonedEntity entity = optionalGitCloned.orElse(null);
+
+        return entity == null ? null : entity.toT(GitCloned.class);
     }
 
     @Override

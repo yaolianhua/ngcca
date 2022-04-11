@@ -25,11 +25,10 @@ public class BuildPackController {
 
     @PostMapping
     public ResponseEntity<Result<BuildPack>> apply(
-            @RequestParam("git_url") String url,
-            @RequestParam(value = "dockerfile", required = false) String dockerfile,
+            @RequestParam("cloned_id") String clonedId,
             @RequestParam(value = "no_push", required = false) Boolean noPush
     ) {
-        BuildPack buildpack = buildPackPlayer.apply(url, dockerfile, noPush);
+        BuildPack buildpack = buildPackPlayer.apply(clonedId, noPush);
         return WebResponse.created(buildpack);
     }
 

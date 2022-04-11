@@ -23,6 +23,14 @@ public interface GitClonedService {
     GitCloned findOne(String username, String gitProject);
 
     /**
+     * Find {@link GitCloned} with giving {@code  clonedId}
+     *
+     * @param clonedId id
+     * @return {@link GitCloned}
+     */
+    GitCloned findOne(String clonedId);
+
+    /**
      * Delete {@link GitCloned} with giving {@code  username} and {@code gitProject}
      *
      * @param username   user's username

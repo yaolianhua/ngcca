@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.file.FileChangeWatcher;
@@ -29,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -63,16 +65,20 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void buildPack_apply_manually() throws IOException, ApiException {
+    public void buildPack_apply_manually() throws IOException, ApiException, InterruptedException {
 
-//        String gitUrl = "https://gitlab.com/yaolianhua/hotcloud.git";
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
 
         gitClonedService.clone(gitUrl, null, null, null, null);
+        gitClonedService.deleteOne("admin", "devops-thymeleaf");
+        GitCloned cloned = null;
+        while (null == cloned) {
+            TimeUnit.SECONDS.sleep(5);
+            cloned = gitClonedService.findOne("admin", "devops-thymeleaf");
+        }
 
-        BuildPack buildpack = abstractBuildPackPlayer.buildpack(gitUrl,
-                "Dockerfile",
-                true);
+        Assertions.assertFalse(StringUtils.hasText(cloned.getError()));
+        BuildPack buildpack = abstractBuildPackPlayer.buildpack(cloned.getId(), true);
 
         Assertions.assertNotNull(buildpack);
         Assertions.assertTrue(StringUtils.hasText(buildpack.getBuildPackYaml()));

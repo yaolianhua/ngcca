@@ -1,6 +1,8 @@
 package io.hotcloud.buildpack.api.core.model;
 
 
+import java.util.Map;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -33,4 +35,13 @@ public interface BuildPack {
      * @return buildPack yaml
      */
     String getBuildPackYaml();
+
+    /**
+     * Alternate properties container
+     *
+     * @return key-value mapping
+     */
+    default Map<String, String> getAlternative() {
+        return getJob().getAlternative();
+    }
 }

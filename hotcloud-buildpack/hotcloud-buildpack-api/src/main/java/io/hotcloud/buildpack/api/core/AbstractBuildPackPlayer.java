@@ -10,19 +10,18 @@ public abstract class AbstractBuildPackPlayer implements BuildPackPlayer {
     /**
      * Generate {@link BuildPack} object
      *
-     * @param gitUrl     Remote url of git repository
-     * @param dockerfile dockerfile name. default name is {@code Dockerfile}
-     * @param noPush     if you only want to build the image, without pushing to a registry
+     * @param clonedId Git cloned id
+     * @param noPush   if you only want to build the image, without pushing to a registry
      * @return {@link BuildPack}
      */
-    protected abstract BuildPack buildpack(String gitUrl, String dockerfile, Boolean noPush);
+    protected abstract BuildPack buildpack(String clonedId, Boolean noPush);
 
     @Override
-    public BuildPack apply(String gitUrl, String dockerfile, Boolean noPush) {
+    public BuildPack apply(String clonedId, Boolean noPush) {
 
-        beforeApply(gitUrl);
+        beforeApply(clonedId);
 
-        BuildPack buildpack = buildpack(gitUrl, dockerfile, noPush);
+        BuildPack buildpack = buildpack(clonedId, noPush);
 
         return doApply(buildpack);
     }
@@ -30,9 +29,9 @@ public abstract class AbstractBuildPackPlayer implements BuildPackPlayer {
     /**
      * Do some legality checks
      *
-     * @param gitUrl Remote url of git repository
+     * @param clonedId Git cloned id
      */
-    protected abstract void beforeApply(String gitUrl);
+    protected abstract void beforeApply(String clonedId);
 
     /**
      * Start apply the buildPack resource

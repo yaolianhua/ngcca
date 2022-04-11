@@ -5,6 +5,7 @@ package io.hotcloud.buildpack.api.core;
  **/
 public final class BuildPackConstant {
 
+    public static final String GIT_PROJECT_ID = "git:project:id";
     public static final String GIT_PROJECT_NAME = "git:project:name";
     public static final String GIT_PROJECT_TARBALL = "git:project:tarball";
     public static final String GIT_PROJECT_IMAGE = "git:project:image";

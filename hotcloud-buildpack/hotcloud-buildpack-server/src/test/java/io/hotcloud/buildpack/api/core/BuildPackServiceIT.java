@@ -72,9 +72,7 @@ public class BuildPackServiceIT extends BuildPackIntegrationTestBase {
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
         GitCloned cloned = cloned(gitUrl);
 
-        BuildPack buildpack = abstractBuildPackPlayer.buildpack(gitUrl,
-                "Dockerfile",
-                true);
+        BuildPack buildpack = abstractBuildPackPlayer.buildpack(cloned.getId(), true);
 
         buildPackService.save(cloned.getId(), buildpack);
 
