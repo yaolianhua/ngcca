@@ -37,7 +37,7 @@ public class FileState {
         long length;
         for (; ; ) {
             length = file.length();
-            sleep(30);
+            sleep(5);
 
             if (length == file.length() && length > 0) {
                 sleep(60);

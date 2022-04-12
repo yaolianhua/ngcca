@@ -15,7 +15,6 @@ import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.user.model.User;
-import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -79,7 +78,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()), 400);
 
         UserNamespacePair pair = retrievedUserNamespacePair();
-        BuildPack buildPack = buildPackService.findOneWithNoDone(pair.getUsername(), clonedId);
+        BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(pair.getUsername(), clonedId);
 
         Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
                         gitCloned.getUser(),
@@ -93,6 +92,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null", 400);
 
         BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
+        log.info("[DefaultBuildPackPlayer] save buildPack '{}'", savedBuildPack.getId());
 
         String namespace = savedBuildPack.getJobResource().getNamespace();
         //create user's namespace
@@ -101,7 +101,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
                 namespaceApi.namespace(namespace);
             }
             kubectlApi.apply(namespace, savedBuildPack.getYaml());
-        } catch (ApiException e) {
+        } catch (Exception e) {
             eventPublisher.publishEvent(new BuildPackStartFailureEvent(savedBuildPack, e));
             return savedBuildPack;
         }

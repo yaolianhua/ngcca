@@ -28,6 +28,8 @@ public class DefaultBuildPack implements BuildPack {
 
     private String message;
 
+    private String logs;
+
     private String yaml;
 
     @Override

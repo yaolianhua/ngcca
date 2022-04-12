@@ -55,13 +55,128 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
     @Autowired
     private GitClonedService gitClonedService;
+    CountDownLatch latchMulti = new CountDownLatch(3);
+    @Autowired
+    private BuildPackService buildPackService;
 
     @Before
     public void before() {
 
-        UserDetails userDetails = userApi.retrieve("admin");
+        UserDetails adminUserDetails = userApi.retrieve("admin");
+        UsernamePasswordAuthenticationToken adminUsernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(adminUserDetails, null, adminUserDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(adminUsernamePasswordAuthenticationToken);
+
+    }
+
+    private GitCloned cloned(String username, String url, String project) {
+        gitClonedService.clone(url, null, null, null, null);
+
+        gitClonedService.deleteOne(username, project);
+        GitCloned cloned = null;
+        while (null == cloned) {
+            sleep(5);
+            cloned = gitClonedService.findOne(username, project);
+        }
+
+        Assertions.assertFalse(StringUtils.hasText(cloned.getError()));
+
+        return cloned;
+    }
+
+    @Test
+    public void apply_multi() {
+        buildPackService.deleteAll();
+        new Thread(() -> {
+            try {
+                single("admin", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
+                latch.countDown();
+            } catch (ApiException e) {
+                //
+            }
+        }, "admin").start();
+        new Thread(() -> {
+            try {
+                single("guest", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
+                latch.countDown();
+            } catch (ApiException e) {
+                //
+            }
+        }, "guest").start();
+        new Thread(() -> {
+            try {
+                single("clientuser", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
+                latch.countDown();
+            } catch (ApiException e) {
+                //
+            }
+        }, "clientuser").start();
+
+        while (true) {
+            sleep(10);
+            if (latchMulti.getCount() == 0) {
+                log.info("All user's buildPack done!");
+                break;
+            }
+            log.info("Not all done yet!");
+        }
+        buildPackService.deleteAll();
+    }
+
+    private void single(String username, String url, String project) throws ApiException {
+
+        UserDetails userDetails = userApi.retrieve(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+        GitCloned gitCloned = gitClonedService.findOne(username, project);
+        if (null == gitCloned) {
+            gitCloned = cloned(username, url, project);
+        }
+        Assertions.assertNotNull(gitCloned);
+
+        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), true);
+
+        new Thread(() -> {
+            while (true) {
+                sleep(5);
+                try {
+                    BuildPack find = buildPackService.findOne(buildPack.getId());
+                    if (find.isDone()) {
+                        latch.countDown();
+                        break;
+                    }
+                } catch (Exception e) {
+                    //why NPE?
+                    log.error("{}", e.getCause().getMessage(), e);
+                }
+
+            }
+        }).start();
+
+        while (true) {
+            if (latch.getCount() == 0) {
+                BuildPack find = buildPackService.findOne(buildPack.getId());
+                System.out.printf("message: %s%n logs: %s%n", find.getMessage(), find.getLogs());
+                log.info("BuildPack Done!");
+                jobApi.delete(find.getJobResource().getNamespace(), find.getJobResource().getName());
+                break;
+            }
+        }
+    }
+
+    @Test
+    public void apply_single() throws ApiException {
+        buildPackService.deleteAll();
+        single("admin", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
+        buildPackService.deleteAll();
+    }
+
+    private void sleep(int seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

@@ -132,7 +132,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         template.setMetadata(podMetadata);
 
         JobSpec spec = new JobSpec();
-        spec.setTtlSecondsAfterFinished(0);
+        spec.setTtlSecondsAfterFinished(600);
         spec.setBackoffLimit(1);
         spec.setActiveDeadlineSeconds(3600L);
         spec.setTemplate(template);
@@ -244,7 +244,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, gitProject + "-" + resource.getNamespace());
 
         SecretCreateRequest request = new SecretCreateRequest();
-        request.setImmutable(true);
+        request.setImmutable(false);
         request.setType("kubernetes.io/dockerconfigjson");
 
         Map<String, String> data = Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, resource.dockerconfigjson());

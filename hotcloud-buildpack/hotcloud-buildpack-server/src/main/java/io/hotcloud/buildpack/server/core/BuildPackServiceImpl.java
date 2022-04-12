@@ -52,8 +52,11 @@ public class BuildPackServiceImpl implements BuildPackService {
 
         if (StringUtils.hasText(entity.getId())) {
             entity.setModifiedAt(LocalDateTime.now());
+            BuildPackEntity saveOrUpdate = buildPackRepository.save(entity);
+            return toBuildPack(saveOrUpdate);
         }
 
+        entity.setCreatedAt(LocalDateTime.now());
         BuildPackEntity saveOrUpdate = buildPackRepository.save(entity);
 
         return toBuildPack(saveOrUpdate);
@@ -69,7 +72,13 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     @Override
-    public BuildPack findOneWithNoDone(String user, String clonedId) {
+    public BuildPack findOne(String id) {
+        BuildPackEntity entity = buildPackRepository.findById(id).orElse(null);
+        return entity == null ? null : toBuildPack(entity);
+    }
+
+    @Override
+    public BuildPack findOneOrNullWithNoDone(String user, String clonedId) {
         List<BuildPackEntity> entities = buildPackRepository.findByUserAndClonedId(user, clonedId);
         return entities.stream()
                 .filter(e -> Objects.equals(e.isDone(), false))
@@ -94,6 +103,7 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .done(entity.isDone())
                 .clonedId(entity.getClonedId())
                 .message(entity.getMessage())
+                .logs(entity.getLogs())
                 .build();
     }
 

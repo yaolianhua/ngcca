@@ -27,13 +27,21 @@ public interface BuildPackService {
     List<BuildPack> findAll(String user, String clonedId);
 
     /**
+     * Find one with giving buildPack id
+     *
+     * @param id buildPack id
+     * @return {@link BuildPack}
+     */
+    BuildPack findOne(String id);
+
+    /**
      * Find one the value {@code done} is false with giving {@code user} and {@code clonedId}
      *
      * @param user     user's username
      * @param clonedId git cloned id
      * @return {@link BuildPack}
      */
-    BuildPack findOneWithNoDone(String user, String clonedId);
+    BuildPack findOneOrNullWithNoDone(String user, String clonedId);
 
     /**
      * Delete all

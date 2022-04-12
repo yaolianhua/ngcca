@@ -32,5 +32,5 @@ public class BuildPackEntity extends AbstractEntity {
     private boolean done;
     private String message;
 
-
+    private String logs;
 }

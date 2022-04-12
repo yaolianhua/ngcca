@@ -18,10 +18,10 @@ public class AbstractEntity implements Serializable {
     private String id;
 
     @CreatedDate
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    private LocalDateTime modifiedAt;
 
     public <T> AbstractEntity copyToEntity(T data) {
         BeanUtils.copyProperties(data, this);
@@ -46,6 +46,10 @@ public class AbstractEntity implements Serializable {
      */
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public LocalDateTime getCreatedAt() {

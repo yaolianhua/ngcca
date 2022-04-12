@@ -44,6 +44,13 @@ public interface BuildPack {
     String getMessage();
 
     /**
+     * Get BuildPack logs
+     *
+     * @return buildPack logs
+     */
+    String getLogs();
+
+    /**
      * Get BuildPack Job resource details
      *
      * @return {@link BuildPackJobResource}
