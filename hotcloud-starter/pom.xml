@@ -24,11 +24,7 @@
             <artifactId>hotcloud-buildpack-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-message-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-security-admin</artifactId>

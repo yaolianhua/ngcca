@@ -8,7 +8,6 @@
         <module>hotcloud-kubernetes</module>
         <module>hotcloud-common</module>
         <module>hotcloud-buildpack</module>
-        <module>hotcloud-message</module>
         <module>hotcloud-security</module>
         <module>hotcloud-db</module>
     </modules>
@@ -64,11 +63,6 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>hotcloud-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-message</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
