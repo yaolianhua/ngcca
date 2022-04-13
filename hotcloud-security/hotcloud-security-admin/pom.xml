@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-security-api</artifactId>
         </dependency>
         <dependency>
