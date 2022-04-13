@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
-    final CountDownLatch latch = new CountDownLatch(1);
     @Autowired
     private JobApi jobApi;
     @Autowired
@@ -55,7 +54,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
     @Autowired
     private GitClonedService gitClonedService;
-    CountDownLatch latchMulti = new CountDownLatch(3);
+
     @Autowired
     private BuildPackService buildPackService;
 
@@ -86,28 +85,29 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     @Test
     public void apply_multi() {
         buildPackService.deleteAll();
+        CountDownLatch latchMulti = new CountDownLatch(3);
         new Thread(() -> {
             try {
                 single("admin", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latch.countDown();
+                latchMulti.countDown();
             } catch (ApiException e) {
-                //
+                e.printStackTrace();
             }
         }, "admin").start();
         new Thread(() -> {
             try {
                 single("guest", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latch.countDown();
+                latchMulti.countDown();
             } catch (ApiException e) {
-                //
+                e.printStackTrace();
             }
         }, "guest").start();
         new Thread(() -> {
             try {
                 single("clientuser", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latch.countDown();
+                latchMulti.countDown();
             } catch (ApiException e) {
-                //
+                e.printStackTrace();
             }
         }, "clientuser").start();
 
@@ -123,7 +123,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
     }
 
     private void single(String username, String url, String project) throws ApiException {
-
+        final CountDownLatch latch = new CountDownLatch(1);
         UserDetails userDetails = userApi.retrieve(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
@@ -151,13 +151,12 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
                 }
 
             }
-        }).start();
+        }, "buildpack").start();
 
         while (true) {
             if (latch.getCount() == 0) {
                 BuildPack find = buildPackService.findOne(buildPack.getId());
-                System.out.printf("message: %s%n logs: %s%n", find.getMessage(), find.getLogs());
-                log.info("BuildPack Done!");
+                log.info("{} user's buildPack [{}] done! message: '{}', logs: \n {}", username, find.getId(), find.getMessage(), find.getLogs());
                 jobApi.delete(find.getJobResource().getNamespace(), find.getJobResource().getName());
                 break;
             }
@@ -181,7 +180,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
     @Test
     public void buildPack_apply_manually() throws IOException, ApiException, InterruptedException {
-
+        final CountDownLatch latch = new CountDownLatch(1);
         String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
 
         gitClonedService.clone(gitUrl, null, null, null, null);
