@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.pod;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.affinity.NodeAffinityBuilder;
 import io.hotcloud.kubernetes.api.affinity.PodAffinityBuilder;
@@ -15,6 +14,7 @@ import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.storage.Volume;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +53,8 @@ public final class PodBuilder {
     private static V1ObjectMeta build(ObjectMetadata podMetadata) {
         String name = podMetadata.getName();
         String namespace = podMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "pod name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "pod namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "pod name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "pod namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(podMetadata.getLabels());
         v1ObjectMeta.setAnnotations(podMetadata.getAnnotations());

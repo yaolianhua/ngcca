@@ -1,10 +1,10 @@
 package io.hotcloud.kubernetes.api.configurations;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
+import org.springframework.util.Assert;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public final class ConfigMapBuilder {
 
     private static V1ObjectMeta build(ObjectMetadata objectMetadata) {
 
-        Assert.argument(objectMetadata.getName() != null && !objectMetadata.getName().isEmpty(), "configMap name is null");
+        Assert.isTrue(objectMetadata.getName() != null && !objectMetadata.getName().isEmpty(), "configMap name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(objectMetadata.getLabels());
         v1ObjectMeta.setName(objectMetadata.getName());

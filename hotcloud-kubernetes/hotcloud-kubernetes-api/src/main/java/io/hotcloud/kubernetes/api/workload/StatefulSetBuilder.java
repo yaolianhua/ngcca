@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.workload;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
@@ -11,6 +10,7 @@ import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;
 import io.hotcloud.kubernetes.model.workload.StatefulSetSpec;
 import io.hotcloud.kubernetes.model.workload.StatefulSetUpdateStrategy;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,8 +82,8 @@ public final class StatefulSetBuilder {
     private static V1ObjectMeta build(ObjectMetadata statefulSetMetadata) {
         String name = statefulSetMetadata.getName();
         String namespace = statefulSetMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "statefulSet name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "statefulSet namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "statefulSet name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "statefulSet namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(statefulSetMetadata.getLabels());
         v1ObjectMeta.setAnnotations(statefulSetMetadata.getAnnotations());

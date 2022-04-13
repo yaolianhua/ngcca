@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.workload;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
@@ -11,6 +10,7 @@ import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.hotcloud.kubernetes.model.workload.DaemonSetSpec;
 import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -66,8 +66,8 @@ public final class DaemonSetBuilder {
     private static V1ObjectMeta build(ObjectMetadata daemonSetMetadata) {
         String name = daemonSetMetadata.getName();
         String namespace = daemonSetMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "DaemonSet name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "DaemonSet namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "DaemonSet name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "DaemonSet namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(daemonSetMetadata.getLabels());
         v1ObjectMeta.setAnnotations(daemonSetMetadata.getAnnotations());

@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.workload;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.LabelSelectorBuilder;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.pod.PodTemplateSpecBuilder;
@@ -9,6 +8,7 @@ import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -63,8 +63,8 @@ public final class JobBuilder {
     private static V1ObjectMeta build(ObjectMetadata jobMetadata) {
         String name = jobMetadata.getName();
         String namespace = jobMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "job name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "job namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "job name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "job namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(jobMetadata.getLabels());
         v1ObjectMeta.setAnnotations(jobMetadata.getAnnotations());

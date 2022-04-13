@@ -1,12 +1,12 @@
 package io.hotcloud.kubernetes.api.pod;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1PodSpec;
 import io.kubernetes.client.openapi.models.V1PodTemplateSpec;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public final class PodTemplateSpecBuilder {
         if (Objects.equals(type, WorkloadsType.Deployment) ||
                 Objects.equals(type, WorkloadsType.DaemonSet) ||
                 Objects.equals(type, WorkloadsType.StatefulSet)) {
-            Assert.argument(!labels.isEmpty(), () -> "spec.template.metadata.labels is empty");
+            Assert.isTrue(!labels.isEmpty(), () -> "spec.template.metadata.labels is empty");
         }
 
         v1ObjectMeta.setLabels(labels);

@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.storage;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.affinity.NodeSelectorTermBuilder;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
 import io.hotcloud.kubernetes.model.storage.HostPathVolume;
@@ -8,6 +7,7 @@ import io.hotcloud.kubernetes.model.storage.NFSVolume;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +29,7 @@ public final class PersistentVolumeBuilder {
         V1PersistentVolume v1PersistentVolume = new V1PersistentVolume();
 
         String name = param.getMetadata().getName();
-        Assert.argument(name != null && !name.isEmpty(), "persistentVolume name is null");
+        Assert.isTrue(name != null && !name.isEmpty(), "persistentVolume name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setName(name);
         v1ObjectMeta.setNamespace(param.getMetadata().getNamespace());

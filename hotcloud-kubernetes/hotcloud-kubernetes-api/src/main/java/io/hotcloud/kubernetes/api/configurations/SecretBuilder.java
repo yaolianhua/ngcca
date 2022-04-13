@@ -1,10 +1,10 @@
 package io.hotcloud.kubernetes.api.configurations;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Secret;
+import org.springframework.util.Assert;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -48,8 +48,8 @@ public final class SecretBuilder {
         String name = objectMetadata.getName();
         String namespace = objectMetadata.getNamespace();
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
-        Assert.argument(name != null && name.length() > 0, () -> "secret name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "secret namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "secret name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "secret namespace is null");
         v1ObjectMeta.setLabels(objectMetadata.getLabels());
         v1ObjectMeta.setName(name);
         v1ObjectMeta.setAnnotations(objectMetadata.getAnnotations());

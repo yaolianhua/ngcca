@@ -1,9 +1,9 @@
 package io.hotcloud.kubernetes.api.storage;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1StorageClass;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -36,7 +36,7 @@ public final class StorageClassBuilder {
             v1StorageClass.setMountOptions(request.getMountOptions());
         }
 
-        Assert.hasText(request.getMetadata().getName(), "name is null", 400);
+        Assert.hasText(request.getMetadata().getName(), "name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setName(request.getMetadata().getName());
         v1ObjectMeta.setLabels(request.getMetadata().getLabels());

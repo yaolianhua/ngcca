@@ -1,12 +1,12 @@
 package io.hotcloud.kubernetes.api.storage;
 
-import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.kubernetes.model.storage.*;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.models.*;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +42,7 @@ public final class VolumeBuilder {
         }
 
         if (!StringUtils.hasText(volume.getName())) {
-            volume.setName(String.format("volume-%s", UUIDGenerator.uuidNoDash()));
+            volume.setName(String.format("volume-%s", UUID.randomUUID().toString().replaceAll("-", "")));
         }
         v1Volume.setName(volume.getName());
         return v1Volume;

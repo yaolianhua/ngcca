@@ -1,12 +1,12 @@
 package io.hotcloud.kubernetes.api.workload;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.CronJobSpec;
 import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.kubernetes.client.openapi.models.*;
+import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -76,8 +76,8 @@ public final class CronJobBuilder {
     private static V1ObjectMeta build(ObjectMetadata jobMetadata) {
         String name = jobMetadata.getName();
         String namespace = jobMetadata.getNamespace();
-        Assert.argument(name != null && name.length() > 0, () -> "cronjob name is null");
-        Assert.argument(namespace != null && namespace.length() > 0, () -> "cronjob namespace is null");
+        Assert.isTrue(name != null && name.length() > 0, () -> "cronjob name is null");
+        Assert.isTrue(namespace != null && namespace.length() > 0, () -> "cronjob namespace is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(jobMetadata.getLabels());
         v1ObjectMeta.setAnnotations(jobMetadata.getAnnotations());

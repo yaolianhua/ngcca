@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.api.network;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
@@ -10,6 +9,7 @@ import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.openapi.models.V1ServicePort;
 import io.kubernetes.client.openapi.models.V1ServiceSpec;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +71,7 @@ public final class ServiceBuilder {
 
     private static V1ObjectMeta build(ObjectMetadata serviceMetadata) {
 
-        Assert.argument(serviceMetadata.getName() != null && !serviceMetadata.getName().isEmpty(), "service name is null");
+        Assert.isTrue(serviceMetadata.getName() != null && !serviceMetadata.getName().isEmpty(), "service name is null");
         V1ObjectMeta v1ObjectMeta = new V1ObjectMeta();
         v1ObjectMeta.setLabels(serviceMetadata.getLabels());
         v1ObjectMeta.setName(serviceMetadata.getName());

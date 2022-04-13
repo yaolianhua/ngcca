@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.api.equianlent;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.common.Assert;
+import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -93,7 +93,7 @@ public interface KubectlApi {
      * @return {@link Event}
      */
     default Event events(String namespace, String name) {
-        Assert.hasText(name, "Event name is null", 400);
+        Assert.hasText(name, "Event name is null");
         return this.events(namespace)
                 .parallelStream()
                 .filter(e -> Objects.equals(e.getMetadata().getName(), name))
