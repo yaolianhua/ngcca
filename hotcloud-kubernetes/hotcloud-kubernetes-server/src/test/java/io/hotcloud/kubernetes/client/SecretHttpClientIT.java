@@ -2,10 +2,10 @@ package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;

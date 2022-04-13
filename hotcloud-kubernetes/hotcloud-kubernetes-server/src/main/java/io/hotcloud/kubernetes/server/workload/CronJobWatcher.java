@@ -5,12 +5,12 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.message.Message;
+import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
 import io.hotcloud.kubernetes.model.WatchMessageBody;
-import io.hotcloud.message.api.Message;
-import io.hotcloud.message.api.MessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

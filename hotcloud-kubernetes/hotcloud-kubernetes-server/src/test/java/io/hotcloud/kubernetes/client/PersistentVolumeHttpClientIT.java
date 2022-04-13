@@ -2,10 +2,10 @@ package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.storage.HostPathVolume;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeSpec;
