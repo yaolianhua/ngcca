@@ -1,10 +1,10 @@
 package io.hotcloud.buildpack;
 
+import io.hotcloud.common.message.MessageConfiguration;
 import io.hotcloud.common.spring.AsyncConfiguration;
 import io.hotcloud.common.spring.CacheConfiguration;
 import io.hotcloud.db.DatabaseProperties;
 import io.hotcloud.kubernetes.server.KubernetesApiConfiguration;
-import io.hotcloud.message.server.MessageConfiguration;
 import io.hotcloud.security.NamedSecurityPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
