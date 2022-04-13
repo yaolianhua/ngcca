@@ -1,7 +1,5 @@
 package io.hotcloud.db;
 
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.cache.RedisHelper;
 import io.hotcloud.db.core.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +14,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
@@ -50,7 +49,7 @@ public class RedisDatabaseConfiguration {
     @PostConstruct
     public void print() {
         final DatabaseProperties.RedisProperties redis = properties.getRedis();
-        Assert.notNull(redis, "DB Redis properties is null", 400);
+        Assert.notNull(redis, "DB Redis properties is null");
         log.info("【Load DB Configuration. implementation using redis. url='{}', using database '{}'】",
                 String.format("redis://%s:%s", redis.getHost(), redis.getPort()), redis.getDatabase());
     }
