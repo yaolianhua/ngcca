@@ -18,7 +18,7 @@ public interface BuildPackService {
     BuildPack saveOrUpdate(BuildPack buildPack);
 
     /**
-     * Find all with giving {@code user} and {@code clonedId}
+     * Find all {@link BuildPack} with giving {@code user} and {@code clonedId}
      *
      * @param user     user's username
      * @param clonedId git cloned id
@@ -35,7 +35,7 @@ public interface BuildPackService {
     BuildPack findOne(String id);
 
     /**
-     * Find un-done BuildPack with giving {@code user} and {@code clonedId}
+     * Find un-done {@link BuildPack} with giving {@code user} and {@code clonedId}
      *
      * @param user     user's username
      * @param clonedId git cloned id
