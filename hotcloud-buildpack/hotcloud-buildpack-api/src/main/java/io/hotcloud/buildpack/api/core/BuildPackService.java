@@ -35,7 +35,7 @@ public interface BuildPackService {
     BuildPack findOne(String id);
 
     /**
-     * Find one the value {@code done} is false with giving {@code user} and {@code clonedId}
+     * Find un-done BuildPack with giving {@code user} and {@code clonedId}
      *
      * @param user     user's username
      * @param clonedId git cloned id
