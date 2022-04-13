@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
-import io.hotcloud.common.Result;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

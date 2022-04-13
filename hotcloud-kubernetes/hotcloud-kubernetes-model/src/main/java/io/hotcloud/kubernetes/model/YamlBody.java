@@ -1,7 +1,6 @@
 package io.hotcloud.kubernetes.model;
 
-import io.hotcloud.common.Assert;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -19,7 +18,7 @@ public class YamlBody {
     }
 
     public static YamlBody of(String yaml) {
-        Assert.argument(StringUtils.hasText(yaml), () -> "string yaml is null");
+        Assert.hasText(yaml, () -> "string yaml is null");
         YamlBody yamlBody = new YamlBody();
         yamlBody.setYaml(yaml);
 

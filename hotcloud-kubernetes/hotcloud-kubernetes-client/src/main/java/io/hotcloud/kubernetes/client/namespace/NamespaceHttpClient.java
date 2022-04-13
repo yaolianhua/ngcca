@@ -2,11 +2,11 @@ package io.hotcloud.kubernetes.client.namespace;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
+import io.hotcloud.kubernetes.model.Result;
 import io.kubernetes.client.openapi.ApiException;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public interface NamespaceHttpClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     default Result<Void> create(String namespace) throws ApiException {
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
         NamespaceCreateRequest params = new NamespaceCreateRequest();
         ObjectMetadata namespaceMetadata = new ObjectMetadata();
         namespaceMetadata.setName(namespace);

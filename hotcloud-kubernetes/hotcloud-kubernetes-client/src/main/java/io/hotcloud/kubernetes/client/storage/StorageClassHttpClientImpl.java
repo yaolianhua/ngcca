@@ -2,9 +2,8 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -39,7 +39,7 @@ public class StorageClassHttpClientImpl implements StorageClassHttpClient {
 
     @Override
     public Result<StorageClass> create(StorageClassCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
+        Assert.notNull(request, "request body is null");
 
         ResponseEntity<Result<StorageClass>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -50,8 +50,8 @@ public class StorageClassHttpClientImpl implements StorageClassHttpClient {
 
     @Override
     public Result<StorageClass> create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null", 400);
-        Assert.hasText(yaml.getYaml(), "yaml content is null", 400);
+        Assert.notNull(yaml, "request body is null");
+        Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
@@ -65,7 +65,7 @@ public class StorageClassHttpClientImpl implements StorageClassHttpClient {
 
     @Override
     public Result<Void> delete(String storageClass) throws ApiException {
-        Assert.hasText(storageClass, "storageClass name is null", 400);
+        Assert.hasText(storageClass, "storageClass name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
@@ -79,7 +79,7 @@ public class StorageClassHttpClientImpl implements StorageClassHttpClient {
 
     @Override
     public Result<StorageClass> read(String name) {
-        Assert.hasText(name, "storageClass name is null", 400);
+        Assert.hasText(name, "storageClass name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))

@@ -2,9 +2,8 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -41,8 +41,8 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
 
     @Override
     public Result<PersistentVolumeClaim> read(String namespace, String persistentVolumeClaim) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
 
     @Override
     public Result<PersistentVolumeClaimList> readList(String namespace, Map<String, String> labelSelector) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -76,7 +76,7 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
 
     @Override
     public Result<PersistentVolumeClaim> create(PersistentVolumeClaimCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
+        Assert.notNull(request, "request body is null");
 
         ResponseEntity<Result<PersistentVolumeClaim>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -87,8 +87,8 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
 
     @Override
     public Result<PersistentVolumeClaim> create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null", 400);
-        Assert.argument(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+        Assert.notNull(yaml, "request body is null");
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
@@ -102,8 +102,8 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
 
     @Override
     public Result<Void> delete(String namespace, String persistentVolumeClaim) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

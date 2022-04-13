@@ -2,16 +2,16 @@ package io.hotcloud.kubernetes.client.namespace;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
+import io.hotcloud.kubernetes.model.Result;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -39,7 +39,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
 
     @Override
     public Result<Void> create(NamespaceCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
+        Assert.notNull(request, "request body is null");
 
         ResponseEntity<Result<Void>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -50,7 +50,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
 
     @Override
     public Result<Void> delete(String namespace) throws ApiException {
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
@@ -64,7 +64,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
 
     @Override
     public Result<Namespace> read(String name) {
-        Assert.hasText(name, "namespace is null", 400);
+        Assert.hasText(name, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))

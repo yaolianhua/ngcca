@@ -2,10 +2,9 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -14,10 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -44,8 +40,8 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> read(String namespace, String deployment) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), "deployment name is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), "deployment name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -60,7 +56,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector) {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -79,7 +75,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> create(DeploymentCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
+        Assert.notNull(request, "request body is null");
 
         ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -90,8 +86,8 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null", 400);
-        Assert.argument(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+        Assert.notNull(yaml, "request body is null");
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
@@ -105,8 +101,8 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Void> delete(String namespace, String deployment) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), "deployment name is null");
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), "deployment name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -120,9 +116,9 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Void> scale(String namespace, String deployment, Integer count, boolean wait) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(Objects.nonNull(count), () -> "scale count is null");
+        Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.isTrue(Objects.nonNull(count), () -> "scale count is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/{count}/scale", uri))
@@ -137,9 +133,9 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> rolling(RollingAction action, String namespace, String deployment) {
-        Assert.notNull(action, "action is null", 400);
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.notNull(action, "action is null");
+        Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/rolling", uri))
@@ -154,9 +150,9 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> imageSet(String namespace, String deployment, String image) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(StringUtils.hasText(image), () -> "image name is null");
+        Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.isTrue(StringUtils.hasText(image), () -> "image name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/image", uri))
@@ -171,9 +167,9 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     @Override
     public Result<Deployment> imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(!CollectionUtils.isEmpty(containerToImageMap), () -> "containerToImageMap is empty");
+        Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.isTrue(!CollectionUtils.isEmpty(containerToImageMap), () -> "containerToImageMap is empty");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         containerToImageMap.forEach(params::add);

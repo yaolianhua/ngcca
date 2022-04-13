@@ -2,9 +2,8 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -41,7 +41,7 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
 
     @Override
     public Result<PersistentVolume> read(String persistentVolume) {
-        Assert.argument(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))
@@ -74,7 +74,7 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
 
     @Override
     public Result<PersistentVolume> create(PersistentVolumeCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null", 400);
+        Assert.notNull(request, "request body is null");
 
         ResponseEntity<Result<PersistentVolume>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -85,8 +85,8 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
 
     @Override
     public Result<PersistentVolume> create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null", 400);
-        Assert.argument(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+        Assert.notNull(yaml, "request body is null");
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
@@ -100,7 +100,7 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
 
     @Override
     public Result<Void> delete(String persistentVolume) throws ApiException {
-        Assert.argument(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))

@@ -2,16 +2,16 @@ package io.hotcloud.kubernetes.client.equivalent;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Result;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,8 +39,8 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<List<HasMetadata>> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
-        Assert.notNull(yaml, "yaml body is null", 400);
-        Assert.hasText(yaml.getYaml(), "yaml content is null", 400);
+        Assert.notNull(yaml, "yaml body is null");
+        Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
@@ -55,8 +55,8 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<Boolean> delete(String namespace, YamlBody yaml) {
-        Assert.notNull(yaml, "yaml body is null", 400);
-        Assert.hasText(yaml.getYaml(), "yaml content is null", 400);
+        Assert.notNull(yaml, "yaml body is null");
+        Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
@@ -71,10 +71,10 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
     @Override
     public Result<Boolean> portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
 
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.notNull(containerPort, "containerPort is null", 400);
-        Assert.notNull(localPort, "localPort is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.notNull(containerPort, "containerPort is null");
+        Assert.notNull(localPort, "localPort is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/forward", uri))
@@ -93,7 +93,7 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<List<Event>> events(String namespace) {
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", uri))
                 .build(namespace);
@@ -106,8 +106,8 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<Event> events(String namespace, String name) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(name, "name is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(name, "name is null");
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", uri))
                 .build(namespace, name);
@@ -120,11 +120,11 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<Boolean> upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.hasText(source, "source path  is null", 400);
-        Assert.hasText(target, "target path is null", 400);
-        Assert.notNull(action, "action is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.hasText(source, "source path  is null");
+        Assert.hasText(target, "target path is null");
+        Assert.notNull(action, "action is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/upload", uri))
@@ -142,11 +142,11 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
     @Override
     public Result<Boolean> download(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.hasText(source, "source path  is null", 400);
-        Assert.hasText(target, "target path is null", 400);
-        Assert.notNull(action, "action is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.hasText(source, "source path  is null");
+        Assert.hasText(target, "target path is null");
+        Assert.notNull(action, "action is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/download", uri))

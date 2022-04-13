@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.client;
 
-import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
@@ -77,7 +76,7 @@ public class HotCloudHttpClientFactory {
             return (T) new NamespaceHttpClientImpl(properties, restTemplate);
         }
 
-        throw new HotCloudException("Unsupported type [" + client.getName() + "]");
+        throw new UnsupportedOperationException("Unsupported type [" + client.getName() + "]");
 
     }
 }
