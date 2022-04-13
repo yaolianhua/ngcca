@@ -1,10 +1,10 @@
 package io.hotcloud.buildpack.api.core.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.hotcloud.common.Assert;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
@@ -56,9 +56,9 @@ public class BuildPackDockerSecretResourceInternalInput {
 
     //{"auths":{"harbor.example.cn":{"username":"admin","password":"Harbor12345","auth":"YWRtaW46SGFyYm9yMTIzNDU="}}}
     public String dockerconfigjson() {
-        Assert.hasText(registry, "registry is null", 400);
-        Assert.hasText(username, "username is null", 400);
-        Assert.hasText(password, "password is null", 400);
+        Assert.hasText(registry, "registry is null");
+        Assert.hasText(username, "username is null");
+        Assert.hasText(password, "password is null");
 
         String registryAddress;
         if (Objects.equals(registry, "index.docker.io")) {

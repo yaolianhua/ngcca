@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.api.clone.GitClonedEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.Assert;
+import io.hotcloud.common.Validator;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
@@ -115,6 +116,7 @@ public class GitClonedServiceImpl implements GitClonedService {
         String namespace = cache.get(String.format(UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null", 400);
 
+        Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only", 400);
         String gitProject = GitCloned.retrieveGitProject(gitUrl);
         String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, gitProject).toString();
 

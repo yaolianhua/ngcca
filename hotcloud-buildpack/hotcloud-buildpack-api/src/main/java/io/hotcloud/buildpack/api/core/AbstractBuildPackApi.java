@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.api.core.model.*;
-import io.hotcloud.common.Assert;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.nio.file.Path;
@@ -17,12 +17,12 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
     @Override
     public BuildPack buildpack(String namespace, String gitProject, String registry, String registryUser, String registryPass, Map<String, String> kanikoArgs) {
 
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(gitProject, "git project name is null", 400);
-        Assert.hasText(registry, "registry is null", 400);
-        Assert.hasText(registryUser, "registry credential user is null", 400);
-        Assert.hasText(registryPass, "registry credential password is null", 400);
-        Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(gitProject, "git project name is null");
+        Assert.hasText(registry, "registry is null");
+        Assert.hasText(registryUser, "registry credential user is null");
+        Assert.hasText(registryPass, "registry credential password is null");
+        Assert.state(!CollectionUtils.isEmpty(kanikoArgs), "kaniko args is empty");
 
         Map<String, String> alternative = new HashMap<>(16);
         alternative.put(BuildPackConstant.GIT_PROJECT_NAME, gitProject);

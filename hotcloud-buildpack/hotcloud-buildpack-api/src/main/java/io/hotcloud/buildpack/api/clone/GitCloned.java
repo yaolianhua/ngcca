@@ -1,10 +1,9 @@
 package io.hotcloud.buildpack.api.clone;
 
-import io.hotcloud.common.Assert;
-import io.hotcloud.common.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,9 +37,8 @@ public class GitCloned {
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
 
     public static String retrieveGitProject(String remote) {
-        Assert.hasText(remote, "Git url is null", 400);
-        Assert.state(!CHINESE_PATTERN.matcher(remote).find(), "Git url contains chinese char", 400);
-        Assert.state(Validator.validHTTPGitAddress(remote), "http(s) git url support only", 400);
+        Assert.hasText(remote, "Git url is null");
+        Assert.state(!CHINESE_PATTERN.matcher(remote).find(), "Git url contains chinese char");
         String substring = remote.substring(remote.lastIndexOf("/"));
         String originString = substring.substring(1, substring.length() - ".git".length());
 
