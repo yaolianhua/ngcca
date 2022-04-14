@@ -25,7 +25,7 @@ class BuildPackApplicationStoragePostProcessor implements BuildPackApplicationRu
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
-                log.info("BuildPackApplicationStoragePostProcessor. storage path '{}' already exist ", BuildPackConstant.STORAGE_VOLUME_PATH);
+                log.debug("BuildPackApplicationStoragePostProcessor. storage path '{}' already exist ", BuildPackConstant.STORAGE_VOLUME_PATH);
                 return;
             }
             Path directories = Files.createDirectories(volumePath);

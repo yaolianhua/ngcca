@@ -38,7 +38,7 @@ class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicat
         try {
             StorageClass existedStorageClass = storageClassApi.read(BuildPackConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
-                log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
+                log.debug("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
