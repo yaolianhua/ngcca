@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.clone;
 
 import io.hotcloud.buildpack.api.clone.GitApi;
 import io.hotcloud.buildpack.api.clone.GitCloned;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.file.FileHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
@@ -40,7 +40,7 @@ public class GitImpl implements GitApi {
     @Override
     public GitCloned clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
 
-        Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote), 400);
+        Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote));
 
         if (force && FileHelper.exists(local)) {
             try {
@@ -51,7 +51,7 @@ public class GitImpl implements GitApi {
                 return build(remote, branch, local, force, username, password, false, e.getCause().getMessage());
             }
         }
-        Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local), 409);
+        Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local));
         boolean needCredential = StringUtils.hasText(username) && StringUtils.hasText(password);
 
         log.info("Cloning from '{}' to '{}', branch [{}]", remote, Path.of(local).toAbsolutePath(), branch);

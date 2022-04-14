@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.server.namespace;
 
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -12,6 +11,7 @@ import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -74,7 +74,7 @@ public class NamespaceOperator implements NamespaceApi {
 
     @Override
     public void delete(String namespace) throws ApiException {
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
         V1Status aTrue = coreV1Api.deleteNamespace(
                 namespace,
                 "true",

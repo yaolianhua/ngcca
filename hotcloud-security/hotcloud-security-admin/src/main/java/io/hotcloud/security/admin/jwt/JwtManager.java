@@ -1,10 +1,10 @@
 package io.hotcloud.security.admin.jwt;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -36,7 +36,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
         jwtBuilder.setHeader(headerClaims == null ? new HashMap<>(8) : headerClaims.ofMap());
         jwtBuilder.setClaims(payloadClaims == null ? new HashMap<>(16) : payloadClaims.ofMap());
 
-        Assert.hasText(properties.getSignKey(), "Jwt sign key is null", 400);
+        Assert.hasText(properties.getSignKey(), "Jwt sign key is null");
 
         byte[] encodedSecret = Base64.getEncoder().encode(properties.getSignKey().getBytes(StandardCharsets.UTF_8));
         SecretKey secretKey = Keys.hmacShaKeyFor(encodedSecret);

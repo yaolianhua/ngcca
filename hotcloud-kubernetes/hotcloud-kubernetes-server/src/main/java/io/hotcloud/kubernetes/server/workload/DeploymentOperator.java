@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.TimeoutImageEditReplacePatchable;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
@@ -15,6 +14,7 @@ import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -65,8 +65,8 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public void delete(String namespace, String deployment) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "delete resource name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(deployment, () -> "delete resource name is null");
         V1Status v1Status = appsV1Api.deleteNamespacedDeployment(
                 deployment,
                 namespace,
@@ -104,9 +104,9 @@ public class DeploymentOperator implements DeploymentApi {
                       String deployment,
                       Integer count,
                       boolean wait) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(Objects.nonNull(count), () -> "scale count is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(deployment, () -> "deployment name is null");
+        Assert.state(Objects.nonNull(count), () -> "scale count is null");
 
         fabric8Client.apps()
                 .deployments()
@@ -123,8 +123,8 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public Deployment rolling(RollingAction action, String namespace, String deployment) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(deployment, () -> "deployment name is null");
 
         TimeoutImageEditReplacePatchable<Deployment> patchable = fabric8Client.apps()
                 .deployments()
@@ -153,9 +153,9 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public Deployment imageUpdate(Map<String, String> containerImage, String namespace, String deployment) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(!CollectionUtils.isEmpty(containerImage), () -> "containerImage map is empty");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(deployment, () -> "deployment name is null");
+        Assert.state(!CollectionUtils.isEmpty(containerImage), () -> "containerImage map is empty");
 
         log.debug("Namespaced '{}' Deployment '{}' image patched '{}'", namespace, deployment, containerImage);
         return fabric8Client.apps()
@@ -170,9 +170,9 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public Deployment imageUpdate(String namespace, String deployment, String image) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(deployment), () -> "deployment name is null");
-        Assert.argument(StringUtils.hasText(image), () -> "image name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(deployment, () -> "deployment name is null");
+        Assert.hasText(image, () -> "image name is null");
 
         log.debug("Namespaced '{}' Deployment '{}' image patched '{}'", namespace, deployment, image);
         return fabric8Client.apps()

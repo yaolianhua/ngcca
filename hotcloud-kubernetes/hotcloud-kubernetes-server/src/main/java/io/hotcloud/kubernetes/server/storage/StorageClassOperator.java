@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -12,7 +11,7 @@ import io.kubernetes.client.openapi.models.V1StorageClass;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class StorageClassOperator implements StorageClassApi {
 
     @Override
     public void delete(String storageClass) throws ApiException {
-        Assert.argument(StringUtils.hasText(storageClass), () -> "delete resource name is null");
+        Assert.hasText(storageClass, () -> "delete resource name is null");
         V1StorageClass v1StorageClass = storageV1Api.deleteStorageClass(
                 storageClass,
                 "true",

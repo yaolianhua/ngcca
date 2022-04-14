@@ -1,9 +1,9 @@
 package io.hotcloud.common.message;
 
-import io.hotcloud.common.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
@@ -28,7 +28,7 @@ public class MessageConfiguration {
             log.info("【Load Message Configuration. implementation using WebSocket】");
         } else if (MessageProperties.Type.rabbitmq.equals(type)) {
             MessageProperties.RabbitmqProperties rabbitmq = properties.getRabbitmq();
-            Assert.notNull(rabbitmq, "Rabbitmq config is null", 400);
+            Assert.notNull(rabbitmq, "Rabbitmq config is null");
             log.info("【Load Message Configuration. implementation using RabbitMQ. url='{}'】",
                     String.format("amqp://%s@%s:%s", rabbitmq.getUsername(), rabbitmq.getHost(), rabbitmq.getPort()));
         }

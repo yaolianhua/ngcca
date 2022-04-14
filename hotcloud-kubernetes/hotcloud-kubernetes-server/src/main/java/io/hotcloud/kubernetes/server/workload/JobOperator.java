@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -63,8 +63,8 @@ public class JobOperator implements JobApi {
 
     @Override
     public void delete(String namespace, String job) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(job), () -> "delete resource name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(job, () -> "delete resource name is null");
         V1Status v1Status = batchV1Api.deleteNamespacedJob(
                 job,
                 namespace,

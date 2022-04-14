@@ -5,7 +5,6 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.Validator;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
@@ -13,6 +12,7 @@ import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
@@ -52,7 +52,7 @@ public class KubectlEquivalent implements KubectlApi {
 
     @Override
     public List<HasMetadata> apply(String namespace, String yaml) {
-        Assert.hasText(yaml, "Yaml is null", 400);
+        Assert.hasText(yaml, "Yaml is null");
 
         InputStream inputStream = new ByteArrayInputStream(yaml.getBytes());
         List<HasMetadata> hasMetadata = StringUtils.hasText(namespace) ?
@@ -68,7 +68,7 @@ public class KubectlEquivalent implements KubectlApi {
 
     @Override
     public Boolean delete(String namespace, String yaml) {
-        Assert.hasText(yaml, "Yaml is null", 400);
+        Assert.hasText(yaml, "Yaml is null");
 
         InputStream inputStream = new ByteArrayInputStream(yaml.getBytes());
 
@@ -80,14 +80,14 @@ public class KubectlEquivalent implements KubectlApi {
     @Override
     public Boolean upload(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
 
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.hasText(source, "source path  is null", 400);
-        Assert.hasText(target, "target path is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.hasText(source, "source path  is null");
+        Assert.hasText(target, "target path is null");
 
         //valid pod exist
         Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
 
         try {
             if (Objects.equals(action, CopyAction.FILE)) {
@@ -130,14 +130,14 @@ public class KubectlEquivalent implements KubectlApi {
 
     @Override
     public Boolean download(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.hasText(source, "source path  is null", 400);
-        Assert.hasText(target, "target path is null", 400);
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.hasText(source, "source path  is null");
+        Assert.hasText(target, "target path is null");
 
         //valid pod exist
         Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
 
         try {
             if (Objects.equals(action, CopyAction.FILE)) {
@@ -181,17 +181,17 @@ public class KubectlEquivalent implements KubectlApi {
     @Override
     public Boolean portForward(String namespace, String pod, @Nullable String ipv4Address, Integer containerPort, Integer localPort, @Nullable Long time, @Nullable TimeUnit timeUnit) {
 
-        Assert.notNull(containerPort, "containerPort is null", 400);
-        Assert.notNull(localPort, "localPort is null", 400);
+        Assert.notNull(containerPort, "containerPort is null");
+        Assert.notNull(localPort, "localPort is null");
 
         //valid ipv4Address
         AtomicReference<String> ipReference = new AtomicReference<>(ipv4Address);
         String ipR = StringUtils.hasText(ipReference.get()) ? ipReference.get() : "127.0.0.1";
-        Assert.argument(Validator.validIpv4(ipR), "invalid ipv4 address");
+        Assert.state(Validator.validIpv4(ipR), "invalid ipv4 address");
 
         //valid pod exist
         Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace), 404);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
 
         //return result
         AtomicBoolean resultBoolean = new AtomicBoolean(true);
@@ -241,13 +241,13 @@ public class KubectlEquivalent implements KubectlApi {
         } catch (InterruptedException e) {
             //
         }
-        Assert.state(!StringUtils.hasText(errorReference.get()), errorReference.get(), 400);
+        Assert.state(!StringUtils.hasText(errorReference.get()), errorReference.get());
         return resultBoolean.get();
     }
 
     @Override
     public List<Event> events(String namespace) {
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
 
         return fabric8Client.v1().events()
                 .inNamespace(namespace)

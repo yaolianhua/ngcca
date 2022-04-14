@@ -1,7 +1,7 @@
 package io.hotcloud.common.file;
 
-import io.hotcloud.common.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -21,7 +21,7 @@ public class FileState {
 
     public boolean waitCompleted() {
 
-        Assert.notNull(path, "File path is null", 400);
+        Assert.notNull(path, "File path is null");
 
         File file = path.toFile();
         if (!file.exists()) {

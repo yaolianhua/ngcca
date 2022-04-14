@@ -1,6 +1,5 @@
 package io.hotcloud.common.spring;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.cache.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -9,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
@@ -34,7 +34,7 @@ public class CacheConfiguration {
             log.info("【Load Cache Configuration. implementation using Caffeine Cache】");
         }
         if (type == CacheProperties.Type.redis) {
-            Assert.notNull(redis, "Redis configuration is null", 400);
+            Assert.notNull(redis, "Redis configuration is null");
             log.info("【Load Cache Configuration. implementation using Redis Cache. url='{}', using database '{}'】",
                     String.format("redis://%s:%s", redis.getHost(), redis.getPort()), redis.getDatabase());
         }

@@ -9,7 +9,6 @@ import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.buildpack.api.core.model.UserNamespacePair;
 import io.hotcloud.buildpack.server.clone.BuildPackRegistryProperties;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -18,6 +17,7 @@ import io.hotcloud.security.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
@@ -70,26 +70,25 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
     @Override
     protected void beforeApply(String clonedId) {
-        Assert.hasText(clonedId, "Git cloned id is null", 400);
+        Assert.hasText(clonedId, "Git cloned id is null");
 
         //check git repository exist
         GitCloned gitCloned = gitClonedService.findOne(clonedId);
-        Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]", 404);
-        Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()), 400);
+        Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]");
+        Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()));
 
         UserNamespacePair pair = retrievedUserNamespacePair();
         BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(pair.getUsername(), clonedId);
 
         Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
-                        gitCloned.getUser(),
-                        gitCloned.getProject()),
-                409);
+                gitCloned.getUser(),
+                gitCloned.getProject()));
     }
 
     @Override
     protected BuildPack doApply(BuildPack buildPack) {
-        Assert.notNull(buildPack, "BuildPack body is null", 400);
-        Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null", 400);
+        Assert.notNull(buildPack, "BuildPack body is null");
+        Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null");
 
         BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
         log.info("[DefaultBuildPackPlayer] save buildPack '{}'", savedBuildPack.getId());
@@ -113,11 +112,11 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     @NotNull
     private UserNamespacePair retrievedUserNamespacePair() {
         User current = userApi.current();
-        Assert.notNull(current, "Retrieve current user null", 404);
+        Assert.notNull(current, "Retrieve current user null");
 
         //get user's namespace.
         String namespace = cache.get(String.format(UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
         return new UserNamespacePair(current.getUsername(), namespace);
     }
 
@@ -125,7 +124,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     protected BuildPack buildpack(String clonedId, Boolean noPush) {
 
         GitCloned cloned = gitClonedService.findOne(clonedId);
-        Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]", 404);
+        Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]");
 
         Map<String, String> alternative = new HashMap<>(16);
         alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, GitCloned.retrieveImageTarball(cloned.getUrl()));

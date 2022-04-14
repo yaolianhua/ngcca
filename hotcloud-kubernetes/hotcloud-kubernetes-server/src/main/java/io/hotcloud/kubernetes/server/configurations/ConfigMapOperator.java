@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -62,8 +62,8 @@ public class ConfigMapOperator implements ConfigMapApi {
 
     @Override
     public void delete(String namespace, String configmap) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(configmap), () -> "delete resource name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(configmap, () -> "delete resource name is null");
         V1Status v1Status = coreV1Api.deleteNamespacedConfigMap(
                 configmap,
                 namespace,

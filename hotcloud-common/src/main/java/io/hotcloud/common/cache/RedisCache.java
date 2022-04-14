@@ -1,9 +1,9 @@
 package io.hotcloud.common.cache;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Set;
@@ -23,7 +23,7 @@ public class RedisCache extends AbstractValueAdaptingCache {
 
     @Override
     protected Object lookup(String key) {
-        Assert.hasText(key, "Key is null", 400);
+        Assert.hasText(key, "Key is null");
         Object o = redisTemplate.opsForValue().get(key);
         if (o == null) {
             return null;
@@ -43,16 +43,16 @@ public class RedisCache extends AbstractValueAdaptingCache {
 
     @Override
     public void put(String key, Object value) {
-        Assert.hasText(key, "Key is null", 400);
-        Assert.notNull(value, "Value is null", 400);
+        Assert.hasText(key, "Key is null");
+        Assert.notNull(value, "Value is null");
         redisTemplate.opsForValue().set(key, toStoreValue(value));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(String key, Callable<T> valueLoader) {
-        Assert.hasText(key, "Key is null", 400);
-        Assert.notNull(valueLoader, "Value loader is null", 400);
+        Assert.hasText(key, "Key is null");
+        Assert.notNull(valueLoader, "Value loader is null");
 
         Boolean hasKey = redisTemplate.hasKey(key);
         boolean existKey = hasKey != null && hasKey;
@@ -70,7 +70,7 @@ public class RedisCache extends AbstractValueAdaptingCache {
 
     @Override
     public void evict(String key) {
-        Assert.hasText(key, "Key is null", 400);
+        Assert.hasText(key, "Key is null");
         redisTemplate.delete(key);
         log.info("Evict key '{}'", key);
     }

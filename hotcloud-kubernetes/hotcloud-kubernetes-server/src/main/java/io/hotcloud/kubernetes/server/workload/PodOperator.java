@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -13,6 +12,7 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -63,8 +63,8 @@ public class PodOperator implements PodApi {
 
     @Override
     public void delete(String namespace, String pod) throws ApiException {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(pod), () -> "delete resource name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(pod, () -> "delete resource name is null");
         V1Pod v1Pod = coreV1Api.deleteNamespacedPod(pod, namespace, "true",
                 null,
                 null,
@@ -77,7 +77,7 @@ public class PodOperator implements PodApi {
 
     @Override
     public void delete(String namespace, Map<String, String> label) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
+        Assert.hasText(namespace, () -> "namespace is null");
         label = label == null ? Map.of() : label;
         Boolean delete = fabric8Client.pods()
                 .inNamespace(namespace)
@@ -88,8 +88,8 @@ public class PodOperator implements PodApi {
 
     @Override
     public String logs(String namespace, String pod, Integer tailingLine) {
-        Assert.argument(StringUtils.hasText(namespace), () -> "namespace is null");
-        Assert.argument(StringUtils.hasText(pod), () -> "pod name is null");
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(pod, () -> "pod name is null");
 
         tailingLine = tailingLine == null ? Integer.MAX_VALUE : tailingLine;
 
@@ -118,9 +118,9 @@ public class PodOperator implements PodApi {
 
     @Override
     public Pod addAnnotations(String namespace, String pod, Map<String, String> annotations) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.argument(!CollectionUtils.isEmpty(annotations), "annotations is empty");
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.state(!CollectionUtils.isEmpty(annotations), "annotations is empty");
 
         Pod newPod = fabric8Client.pods()
                 .inNamespace(namespace)
@@ -138,9 +138,9 @@ public class PodOperator implements PodApi {
 
     @Override
     public Pod addLabels(String namespace, String pod, Map<String, String> labels) {
-        Assert.hasText(namespace, "namespace is null", 400);
-        Assert.hasText(pod, "pod name is null", 400);
-        Assert.argument(!CollectionUtils.isEmpty(labels), "labels is empty");
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+        Assert.state(!CollectionUtils.isEmpty(labels), "labels is empty");
 
         Pod newPod = fabric8Client.pods()
                 .inNamespace(namespace)

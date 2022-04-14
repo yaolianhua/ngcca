@@ -5,7 +5,6 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
@@ -15,6 +14,7 @@ import io.hotcloud.security.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.nio.file.Path;
@@ -54,10 +54,10 @@ public class GitClonedServiceImpl implements GitClonedService {
 
     @Override
     public GitCloned saveOrUpdate(GitCloned cloned) {
-        Assert.notNull(cloned, "Git clone body is null", 400);
-        Assert.hasText(cloned.getUrl(), "Git url is null", 400);
-        Assert.hasText(cloned.getLocalPath(), "Git cloned path is null", 400);
-        Assert.hasText(cloned.getProject(), "Git project is null", 400);
+        Assert.notNull(cloned, "Git clone body is null");
+        Assert.hasText(cloned.getUrl(), "Git url is null");
+        Assert.hasText(cloned.getLocalPath(), "Git cloned path is null");
+        Assert.hasText(cloned.getProject(), "Git project is null");
 
         GitClonedEntity existed = repository.findByUserAndProject(cloned.getUser(), cloned.getProject());
         if (existed != null) {
@@ -75,8 +75,8 @@ public class GitClonedServiceImpl implements GitClonedService {
 
     @Override
     public GitCloned findOne(String username, String gitProject) {
-        Assert.hasText(username, "User's username is null", 400);
-        Assert.hasText(gitProject, "Git project is null", 400);
+        Assert.hasText(username, "User's username is null");
+        Assert.hasText(gitProject, "Git project is null");
 
         GitClonedEntity entity = repository.findByUserAndProject(username, gitProject);
 
@@ -107,16 +107,16 @@ public class GitClonedServiceImpl implements GitClonedService {
     @Override
     public void clone(String gitUrl, String dockerfile, String branch, String username, String password) {
 
-        Assert.hasText(gitUrl, "Git url is null", 400);
+        Assert.hasText(gitUrl, "Git url is null");
 
         User current = userApi.current();
-        Assert.notNull(current, "Retrieve current user null", 404);
+        Assert.notNull(current, "Retrieve current user null");
 
         //get user's namespace.
         String namespace = cache.get(String.format(UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "namespace is null", 400);
+        Assert.hasText(namespace, "namespace is null");
 
-        Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only", 400);
+        Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only");
         String gitProject = GitCloned.retrieveGitProject(gitUrl);
         String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, gitProject).toString();
 

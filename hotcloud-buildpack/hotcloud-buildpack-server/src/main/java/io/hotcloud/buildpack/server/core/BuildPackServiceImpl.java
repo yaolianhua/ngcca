@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.model.*;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -37,12 +37,12 @@ public class BuildPackServiceImpl implements BuildPackService {
     @Override
     public BuildPack saveOrUpdate(BuildPack buildPack) {
 
-        Assert.notNull(buildPack, "BuildPack body is null", 400);
-        Assert.hasText(buildPack.getUser(), "BuildPack user is null", 400);
-        Assert.hasText(buildPack.getClonedId(), "BuildPack cloned id is null", 400);
-        Assert.notNull(buildPack.getJobResource(), "BuildPack job body is null", 400);
-        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null", 400);
-        Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null", 400);
+        Assert.notNull(buildPack, "BuildPack body is null");
+        Assert.hasText(buildPack.getUser(), "BuildPack user is null");
+        Assert.hasText(buildPack.getClonedId(), "BuildPack cloned id is null");
+        Assert.notNull(buildPack.getJobResource(), "BuildPack job body is null");
+        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null");
+        Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null");
 
         BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().copyToEntity(((DefaultBuildPack) buildPack));
 

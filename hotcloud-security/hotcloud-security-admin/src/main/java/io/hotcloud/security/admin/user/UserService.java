@@ -1,6 +1,5 @@
 package io.hotcloud.security.admin.user;
 
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.Validator;
 import io.hotcloud.db.core.user.UserEntity;
 import io.hotcloud.db.core.user.UserRepository;
@@ -13,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ public class UserService implements UserApi {
 
     @Override
     public User save(User user) {
-        Assert.notNull(user, "User body is null", 400);
-        Assert.hasText(user.getUsername(), "username is null", 400);
-        Assert.hasText(user.getPassword(), "password is null", 400);
+        Assert.notNull(user, "User body is null");
+        Assert.hasText(user.getUsername(), "username is null");
+        Assert.hasText(user.getPassword(), "password is null");
 
-        Assert.state(Validator.validUsername(user.getUsername()), "Start with a lowercase letter, can only contain lowercase letters and numbers, [5-16] characters", 400);
+        Assert.state(Validator.validUsername(user.getUsername()), "Start with a lowercase letter, can only contain lowercase letters and numbers, [5-16] characters");
         UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
 
         UserEntity saved = userRepository.save(entity);
@@ -84,7 +84,7 @@ public class UserService implements UserApi {
     @Override
     public User retrieve(String username) {
         UserEntity entity = userRepository.findByUsername(username);
-        Assert.notNull(entity, "Retrieve user null [" + username + "]", 404);
+        Assert.notNull(entity, "Retrieve user null [" + username + "]");
 
         return buildUser(entity);
     }
@@ -92,9 +92,9 @@ public class UserService implements UserApi {
     @Override
     public User current() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Assert.notNull(authentication, "Authentication is null", 401);
+        Assert.notNull(authentication, "Authentication is null");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Assert.notNull(userDetails, "UserDetails is null", 401);
+        Assert.notNull(userDetails, "UserDetails is null");
 
         return retrieve(userDetails.getUsername());
     }

@@ -4,7 +4,6 @@ import io.hotcloud.buildpack.api.core.AbstractBuildPackApi;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.KanikoFlag;
 import io.hotcloud.buildpack.api.core.model.*;
-import io.hotcloud.common.Assert;
 import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
@@ -23,6 +22,7 @@ import io.hotcloud.kubernetes.model.workload.JobTemplate;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -47,14 +47,14 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
     @Override
     protected String yaml(BuildPack buildPack) {
-        Assert.notNull(buildPack, "BuildPack is null", 400);
-        Assert.notNull(buildPack.getJobResource(), "BuildPack job resource is null", 400);
-        Assert.notNull(buildPack.getSecretResource(), "BuildPack docker secret resource is null", 400);
-        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage resourceList is null", 400);
+        Assert.notNull(buildPack, "BuildPack is null");
+        Assert.notNull(buildPack.getJobResource(), "BuildPack job resource is null");
+        Assert.notNull(buildPack.getSecretResource(), "BuildPack docker secret resource is null");
+        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage resourceList is null");
 
-        Assert.hasText(buildPack.getJobResource().getJobResourceYaml(), "BuildPack job resource yaml is null", 400);
-        Assert.hasText(buildPack.getStorageResource().getResourceListYaml(), "BuildPack storage resource yaml is null", 400);
-        Assert.hasText(buildPack.getSecretResource().getSecretResourceYaml(), "BuildPack docker secret resource yaml is null", 400);
+        Assert.hasText(buildPack.getJobResource().getJobResourceYaml(), "BuildPack job resource yaml is null");
+        Assert.hasText(buildPack.getStorageResource().getResourceListYaml(), "BuildPack storage resource yaml is null");
+        Assert.hasText(buildPack.getSecretResource().getSecretResourceYaml(), "BuildPack docker secret resource yaml is null");
 
         StringBuilder stringBuilder;
         stringBuilder = new StringBuilder();
@@ -68,10 +68,10 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
     @Override
     protected BuildPackJobResource jobResource(BuildPackJobResourceInternalInput resource) {
-        Assert.notNull(resource, "buildpack job resource request body is null", 400);
-        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
-        Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null", 400);
-        Assert.hasText(resource.getSecret(), "secret name is null", 400);
+        Assert.notNull(resource, "buildpack job resource request body is null");
+        Assert.hasText(resource.getNamespace(), "namespace is null");
+        Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null");
+        Assert.hasText(resource.getSecret(), "secret name is null");
 
         Map<String, String> alternative = resource.getAlternative();
         String project = alternative.get(BuildPackConstant.GIT_PROJECT_NAME);
@@ -152,12 +152,12 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
     @Override
     protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput resource) {
-        Assert.notNull(resource, "buildpack storage resource request body is null", 400);
-        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
+        Assert.notNull(resource, "buildpack storage resource request body is null");
+        Assert.hasText(resource.getNamespace(), "namespace is null");
 
         String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
         String gitProjectPath = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
-        Assert.hasText(gitProjectPath, "data volume path is null", 400);
+        Assert.hasText(gitProjectPath, "data volume path is null");
 
         String pvName = StringUtils.hasText(resource.getPersistentVolume()) ? resource.getPersistentVolume() : "pv-" + gitProject + "-" + resource.getNamespace();
         String pvcName = StringUtils.hasText(resource.getPersistentVolumeClaim()) ? resource.getPersistentVolumeClaim() : "pvc-" + gitProject + "-" + resource.getNamespace();
@@ -236,8 +236,8 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
     @Override
     protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput resource) {
-        Assert.notNull(resource, "buildpack docker secret resource request body is null", 400);
-        Assert.hasText(resource.getNamespace(), "namespace is null", 400);
+        Assert.notNull(resource, "buildpack docker secret resource request body is null");
+        Assert.hasText(resource.getNamespace(), "namespace is null");
 
         String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
         String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + gitProject + "-" + resource.getNamespace();

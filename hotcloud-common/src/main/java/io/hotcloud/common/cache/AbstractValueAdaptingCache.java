@@ -1,6 +1,6 @@
 package io.hotcloud.common.cache;
 
-import io.hotcloud.common.Assert;
+import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -10,11 +10,11 @@ public abstract class AbstractValueAdaptingCache implements Cache {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(String key, Class<T> type) {
-        Assert.hasText(key, "Key is null", 400);
-        Assert.notNull(type, "Class type is null", 400);
+        Assert.hasText(key, "Key is null");
+        Assert.notNull(type, "Class type is null");
         Object lookupValue = lookup(key);
         Object value = fromStoreValue(lookupValue);
-        Assert.state(type.isInstance(value), "Cached value is not of required type [" + type.getName() + "]: " + value, 400);
+        Assert.state(type.isInstance(value), "Cached value is not of required type [" + type.getName() + "]: " + value);
 
         return ((T) value);
     }
@@ -39,7 +39,7 @@ public abstract class AbstractValueAdaptingCache implements Cache {
      * @return the value to store
      */
     protected Object toStoreValue(Object givingValue) {
-        Assert.notNull(givingValue, "Giving value is null", 400);
+        Assert.notNull(givingValue, "Giving value is null");
         return givingValue;
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractValueAdaptingCache implements Cache {
      * @return the value to return to the user
      */
     protected Object fromStoreValue(Object storeValue) {
-        Assert.notNull(storeValue, "Store value is null", 400);
+        Assert.notNull(storeValue, "Store value is null");
         return storeValue;
     }
 

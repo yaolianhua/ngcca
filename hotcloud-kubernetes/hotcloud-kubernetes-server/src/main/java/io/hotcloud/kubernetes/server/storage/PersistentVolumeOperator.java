@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.Assert;
 import io.hotcloud.common.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -12,7 +11,7 @@ import io.kubernetes.client.openapi.models.V1PersistentVolume;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.Map;
@@ -66,7 +65,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
 
     @Override
     public void delete(String persistentVolume) throws ApiException {
-        Assert.argument(StringUtils.hasText(persistentVolume), () -> "delete resource name is null");
+        Assert.hasText(persistentVolume, () -> "delete resource name is null");
         V1PersistentVolume v1PersistentVolume = coreV1Api.deletePersistentVolume(
                 persistentVolume,
                 "true",

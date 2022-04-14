@@ -1,5 +1,7 @@
 package io.hotcloud.common;
 
+import org.springframework.util.Assert;
+
 import java.util.UUID;
 
 /**
@@ -21,7 +23,7 @@ public final class UUIDGenerator {
     }
 
     public static String uuidDashed(String prefix) {
-        Assert.hasText(prefix, "prefix is null", 400);
+        Assert.hasText(prefix, "prefix is null");
         return String.format("%s-%s", prefix, uuidDashed());
     }
 
@@ -30,7 +32,7 @@ public final class UUIDGenerator {
     }
 
     public static String uuidNoDash(String prefix) {
-        Assert.hasText(prefix, "prefix is null", 400);
+        Assert.hasText(prefix, "prefix is null");
         return String.format("%s-%s", prefix, uuidNoDash());
     }
 

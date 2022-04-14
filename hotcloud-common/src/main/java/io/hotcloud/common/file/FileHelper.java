@@ -1,6 +1,6 @@
 package io.hotcloud.common.file;
 
-import io.hotcloud.common.Assert;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -18,12 +18,12 @@ public final class FileHelper {
     }
 
     public static boolean exists(String path) {
-        Assert.hasText(path, "path is null", 400);
+        Assert.hasText(path, "path is null");
         return Files.exists(Path.of(path));
     }
 
     public static boolean exists(Path path) {
-        Assert.notNull(path, "path is null", 400);
+        Assert.notNull(path, "path is null");
         return Files.exists(path);
     }
 

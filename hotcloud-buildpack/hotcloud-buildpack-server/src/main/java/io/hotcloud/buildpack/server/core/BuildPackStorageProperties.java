@@ -1,11 +1,11 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.Assert;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
