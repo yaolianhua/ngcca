@@ -28,6 +28,10 @@ db:
     password: QbMufCD@9WVQ^Hv
     host: localhost
     port: 6379
+minio:
+  access-key: admin
+  secret-key: QbMufCD@9WVQ^Hv
+  endpoint: "http://127.0.0.1:9009"
 buildpack:
   storage:
     type: nfs

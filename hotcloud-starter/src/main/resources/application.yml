@@ -30,4 +30,4 @@ logging:
     io.hotcloud.buildpack.server: info
     io.hotcloud.security.admin: info
     io.hotcloud.db.server: info
-    io.hotcloud.message: info
+    io.hotcloud.common: info
