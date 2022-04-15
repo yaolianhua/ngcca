@@ -10,6 +10,7 @@
         <module>hotcloud-buildpack</module>
         <module>hotcloud-security</module>
         <module>hotcloud-db</module>
+        <module>hotcloud-web</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
