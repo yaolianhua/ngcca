@@ -1,6 +1,6 @@
 package io.hotcloud.common.file.storage;
 
-import io.hotcloud.common.HotCloudException;
+import io.hotcloud.common.exception.HotCloudException;
 import io.minio.MinioClient;
 import io.minio.RemoveObjectArgs;
 import io.minio.UploadObjectArgs;

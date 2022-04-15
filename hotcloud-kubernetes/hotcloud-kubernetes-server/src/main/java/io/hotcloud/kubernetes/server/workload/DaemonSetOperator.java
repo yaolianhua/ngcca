@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.HotCloudException;
+import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.DaemonSetApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;

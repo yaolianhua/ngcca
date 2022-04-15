@@ -1,6 +1,6 @@
 package io.hotcloud.common.cache;
 
-import io.hotcloud.common.HotCloudException;
+import io.hotcloud.common.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;

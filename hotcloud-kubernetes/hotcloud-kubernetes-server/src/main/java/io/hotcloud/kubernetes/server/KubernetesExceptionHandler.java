@@ -1,4 +1,4 @@
-package io.hotcloud.handler;
+package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.hotcloud.common.Result;

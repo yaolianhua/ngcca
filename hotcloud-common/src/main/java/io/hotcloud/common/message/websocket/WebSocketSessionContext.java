@@ -1,6 +1,6 @@
 package io.hotcloud.common.message.websocket;
 
-import io.hotcloud.common.HotCloudException;
+import io.hotcloud.common.exception.HotCloudException;
 
 import javax.websocket.Session;
 import java.util.Objects;
