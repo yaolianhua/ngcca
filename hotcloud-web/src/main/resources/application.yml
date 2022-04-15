@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: hotcloud-web
+server:
+  port: 4000
