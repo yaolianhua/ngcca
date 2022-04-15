@@ -1,6 +1,5 @@
-package io.hotcloud.common.spring;
+package io.hotcloud.common.cache;
 
-import io.hotcloud.common.cache.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
