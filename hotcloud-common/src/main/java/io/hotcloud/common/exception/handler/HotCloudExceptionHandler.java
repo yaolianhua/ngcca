@@ -1,7 +1,7 @@
-package io.hotcloud.handler;
+package io.hotcloud.common.exception.handler;
 
-import io.hotcloud.common.HotCloudException;
 import io.hotcloud.common.Result;
+import io.hotcloud.common.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

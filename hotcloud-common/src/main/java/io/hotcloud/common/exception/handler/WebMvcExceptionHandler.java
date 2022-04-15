@@ -1,4 +1,4 @@
-package io.hotcloud.handler;
+package io.hotcloud.common.exception.handler;
 
 import io.hotcloud.common.Result;
 import lombok.extern.slf4j.Slf4j;
