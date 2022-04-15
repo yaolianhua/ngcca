@@ -1,9 +1,9 @@
 spring:
   application:
     name: hotcloud
-  profiles:
-    include:
-      - allinone
+  config:
+    import:
+      - application-allinone.yml
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
