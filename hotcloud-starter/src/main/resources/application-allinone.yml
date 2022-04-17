@@ -35,14 +35,15 @@ kubernetes:
 security:
   enabled: true
   jwt:
-    algorithm: HS512
-    sign-key: QWERTYUIOPASDFGHJKLZXCVBNMmnbvcxzlkjhgfdsapoiuytrewq
+    algorithm: 'HS512'
+    sign-key: "!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)"
   ignored:
     urls:
       - /swagger**/**
       - /v3/api-docs/**
       - /favicon.ico
       - /pub
+      - /**/login
 buildpack:
   kaniko:
     verbosity: info
