@@ -78,7 +78,11 @@
                 <artifactId>hotcloud-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- Swagger -->
             <dependency>
                 <groupId>org.springdoc</groupId>
@@ -198,7 +202,6 @@
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
             </dependency>
-
 
         </dependencies>
 
