@@ -12,7 +12,17 @@
     <artifactId>hotcloud-web</artifactId>
     <name>Hot Cloud :: Web</name>
 
+    <properties>
+        <openfeign.version>3.1.1</openfeign.version>
+        <hystrix.version>2.2.10.RELEASE</hystrix.version>
+    </properties>
+
     <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -26,6 +36,24 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-security-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${openfeign.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+            <version>${hystrix.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

@@ -1,0 +1,23 @@
+package io.hotcloud.web.client.login;
+
+import io.hotcloud.security.api.BearerToken;
+import io.hotcloud.web.client.HotCloudServerProperties;
+import io.hotcloud.web.client.R;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+ * @author yaolianhua789@gmail.com
+ **/
+@FeignClient(name = "loginClient",
+        url = HotCloudServerProperties.HOTCLOUD_SERVER,
+        fallback = LoginClientFallback.class)
+public interface LoginClient {
+
+    @PostMapping("/v1/security/login")
+    ResponseEntity<R<BearerToken>> login(@RequestParam String username,
+                                         @RequestParam String password);
+
+}
