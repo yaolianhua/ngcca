@@ -1,6 +1,7 @@
 package io.hotcloud.web.client.login;
 
 import io.hotcloud.security.api.BearerToken;
+import io.hotcloud.web.client.ErrorMessageConfiguration;
 import io.hotcloud.web.client.HotCloudServerProperties;
 import io.hotcloud.web.client.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  **/
 @FeignClient(name = "loginClient",
         url = HotCloudServerProperties.HOTCLOUD_SERVER,
-        fallback = LoginClientFallback.class)
+        fallbackFactory = LoginClientFallbackFactory.class,
+        configuration = {ErrorMessageConfiguration.class})
 public interface LoginClient {
 
     @PostMapping("/v1/security/login")

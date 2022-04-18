@@ -1,6 +1,7 @@
 package io.hotcloud.web.client.user;
 
 import io.hotcloud.security.user.model.User;
+import io.hotcloud.web.client.ErrorMessageConfiguration;
 import io.hotcloud.web.client.HotCloudServerProperties;
 import io.hotcloud.web.client.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  **/
 @FeignClient(name = "userClient",
         url = HotCloudServerProperties.HOTCLOUD_SERVER,
-        fallback = UserClientFallback.class)
+        fallbackFactory = UserClientFallbackFactory.class, configuration = ErrorMessageConfiguration.class)
 public interface UserClient {
 
     @GetMapping("/v1/security/users")
     ResponseEntity<R<User>> user(@RequestParam("username") String username);
-
 }

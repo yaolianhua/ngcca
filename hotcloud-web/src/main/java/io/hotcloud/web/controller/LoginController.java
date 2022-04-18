@@ -6,7 +6,6 @@ import io.hotcloud.web.client.ClientAuthorizationManager;
 import io.hotcloud.web.client.R;
 import io.hotcloud.web.client.login.LoginClient;
 import io.hotcloud.web.client.user.UserClient;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +29,8 @@ public class LoginController {
     private final UserClient userClient;
     private final ClientAuthorizationManager authorizationManager;
 
-    public LoginController(@Qualifier("io.hotcloud.web.client.login.LoginClient") LoginClient loginClient,
-                           @Qualifier("io.hotcloud.web.client.user.UserClient") UserClient userClient,
+    public LoginController(LoginClient loginClient,
+                           UserClient userClient,
                            ClientAuthorizationManager authorizationManager) {
         this.loginClient = loginClient;
         this.userClient = userClient;
