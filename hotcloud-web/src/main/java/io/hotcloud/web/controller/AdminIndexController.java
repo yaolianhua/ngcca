@@ -29,7 +29,7 @@ public class AdminIndexController {
                             Model model) {
         String authorization = authorizationManager.getAuthorization(request.getSession().getId());
         if (!StringUtils.hasText(authorization)) {
-            return "redirect:/login";
+            return "redirect:/administrator/login";
         }
 
         model.addAttribute("user", user);

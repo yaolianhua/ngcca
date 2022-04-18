@@ -1,13 +1,14 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.security.api.BearerToken;
+import io.hotcloud.security.user.model.User;
+import io.hotcloud.web.client.ClientAuthorizationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -15,14 +16,23 @@ import java.util.Objects;
 @Controller
 @RequestMapping
 public class IndexController {
+    private final ClientAuthorizationManager authorizationManager;
+
+    public IndexController(ClientAuthorizationManager authorizationManager) {
+        this.authorizationManager = authorizationManager;
+    }
 
     @RequestMapping(value = {"/index", "/"})
-    public String indexPage(@ModelAttribute("authorization") BearerToken bearerToken, Model model) {
-        if (Objects.isNull(bearerToken) || !StringUtils.hasText(bearerToken.getAuthorization())) {
+    public String indexPage(HttpServletRequest request,
+                            @ModelAttribute("user") User user,
+                            Model model) {
+        String authorization = authorizationManager.getAuthorization(request.getSession().getId());
+        if (!StringUtils.hasText(authorization)) {
             return "redirect:/login";
         }
 
-        model.addAttribute("authorization", bearerToken);
+        model.addAttribute("user", user);
+        model.addAttribute("authorization", authorization);
         return "index";
     }
 }
