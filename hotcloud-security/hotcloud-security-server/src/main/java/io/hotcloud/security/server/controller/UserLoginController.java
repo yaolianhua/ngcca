@@ -2,8 +2,8 @@ package io.hotcloud.security.server.controller;
 
 import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
-import io.hotcloud.security.api.BearerToken;
-import io.hotcloud.security.api.LoginApi;
+import io.hotcloud.security.api.login.BearerToken;
+import io.hotcloud.security.api.login.LoginApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

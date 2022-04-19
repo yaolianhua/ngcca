@@ -1,4 +1,4 @@
-package io.hotcloud.security.api;
+package io.hotcloud.security.api.login;
 
 /**
  * @author yaolianhua789@gmail.com
