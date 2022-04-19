@@ -1,6 +1,6 @@
-package io.hotcloud.security.user.model.event;
+package io.hotcloud.security.api.user.event;
 
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import org.springframework.context.ApplicationEvent;
 
 /**
