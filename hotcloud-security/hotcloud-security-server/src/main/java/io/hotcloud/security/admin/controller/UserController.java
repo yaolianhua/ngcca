@@ -3,7 +3,7 @@ package io.hotcloud.security.admin.controller;
 import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

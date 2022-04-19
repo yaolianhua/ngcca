@@ -5,7 +5,7 @@ import io.hotcloud.security.admin.jwt.JwtSigner;
 import io.hotcloud.security.api.BearerToken;
 import io.hotcloud.security.api.LoginApi;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

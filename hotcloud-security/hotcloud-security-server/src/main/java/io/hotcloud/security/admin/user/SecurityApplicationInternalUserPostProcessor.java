@@ -2,7 +2,7 @@ package io.hotcloud.security.admin.user;
 
 import io.hotcloud.security.SecurityApplicationRunnerPostProcessor;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

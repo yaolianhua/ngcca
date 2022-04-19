@@ -3,7 +3,7 @@ package io.hotcloud.security.admin.user;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;

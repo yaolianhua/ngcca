@@ -2,8 +2,8 @@ package io.hotcloud.security.admin.user;
 
 import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.common.cache.Cache;
-import io.hotcloud.security.user.model.User;
-import io.hotcloud.security.user.model.event.UserCreatedEvent;
+import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.event.UserCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
