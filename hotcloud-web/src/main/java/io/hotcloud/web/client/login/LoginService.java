@@ -1,7 +1,7 @@
 package io.hotcloud.web.client.login;
 
-import io.hotcloud.security.api.BearerToken;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.login.BearerToken;
+import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.client.ClientAuthorizationManager;
 import io.hotcloud.web.client.R;
 import io.hotcloud.web.client.user.UserClient;
