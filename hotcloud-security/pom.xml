@@ -11,8 +11,7 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>hotcloud-security-user</module>
-        <module>hotcloud-security-admin</module>
+        <module>hotcloud-security-server</module>
         <module>hotcloud-security-api</module>
     </modules>
     <artifactId>hotcloud-security</artifactId>
@@ -20,15 +19,10 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-security-user</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-security-admin</artifactId>
+                <artifactId>hotcloud-security-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

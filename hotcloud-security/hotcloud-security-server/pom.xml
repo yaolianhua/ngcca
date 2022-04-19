@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-security-admin</artifactId>
-    <name>Hot Cloud :: Security :: Admin</name>
+    <artifactId>hotcloud-security-server</artifactId>
+    <name>Hot Cloud :: Security :: Server</name>
 
     <dependencies>
         <dependency>
