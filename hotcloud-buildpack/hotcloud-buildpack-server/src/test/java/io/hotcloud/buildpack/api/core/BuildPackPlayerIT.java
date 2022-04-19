@@ -13,7 +13,7 @@ import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
-import io.hotcloud.security.api.UserApi;
+import io.hotcloud.security.api.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

@@ -4,7 +4,7 @@ import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
-import io.hotcloud.security.api.UserApi;
+import io.hotcloud.security.api.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;

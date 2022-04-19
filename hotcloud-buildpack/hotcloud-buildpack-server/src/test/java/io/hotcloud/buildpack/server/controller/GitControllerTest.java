@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.controller;
 
 import io.hotcloud.buildpack.api.clone.GitClonedService;
-import io.hotcloud.security.api.UserApi;
+import io.hotcloud.security.api.user.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

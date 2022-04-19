@@ -1,7 +1,6 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.security.user.model.User;
-import io.hotcloud.web.client.ClientAuthorizationManager;
+import io.hotcloud.security.api.login.BearerToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
