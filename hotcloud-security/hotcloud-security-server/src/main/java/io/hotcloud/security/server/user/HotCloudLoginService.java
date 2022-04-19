@@ -1,10 +1,10 @@
 package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.exception.HotCloudException;
-import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
 import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.server.jwt.JwtSigner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

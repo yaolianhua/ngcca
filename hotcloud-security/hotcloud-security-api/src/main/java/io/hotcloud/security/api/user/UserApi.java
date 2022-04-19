@@ -1,6 +1,4 @@
-package io.hotcloud.security.api;
-
-import io.hotcloud.security.api.user.User;
+package io.hotcloud.security.api.user;
 
 import java.util.Collection;
 

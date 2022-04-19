@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import static io.hotcloud.security.api.UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX;
+import static io.hotcloud.security.api.user.UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com

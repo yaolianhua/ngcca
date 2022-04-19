@@ -1,8 +1,8 @@
 package io.hotcloud.security.server.user;
 
 import io.hotcloud.security.SecurityApplicationRunnerPostProcessor;
-import io.hotcloud.security.api.UserApi;
 import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
