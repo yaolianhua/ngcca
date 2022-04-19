@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-security-admin</artifactId>
+            <artifactId>hotcloud-security-server</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
