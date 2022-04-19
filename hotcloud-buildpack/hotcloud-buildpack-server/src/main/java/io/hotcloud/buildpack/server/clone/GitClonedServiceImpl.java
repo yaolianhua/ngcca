@@ -10,7 +10,7 @@ import io.hotcloud.common.cache.Cache;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

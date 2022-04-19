@@ -13,7 +13,7 @@ import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.UserApi;
-import io.hotcloud.security.user.model.User;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
