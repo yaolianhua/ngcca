@@ -1,4 +1,4 @@
-package io.hotcloud.common.spring;
+package io.hotcloud.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.task.TaskExecutorBuilder;
