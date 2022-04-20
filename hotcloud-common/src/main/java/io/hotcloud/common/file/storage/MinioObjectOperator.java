@@ -2,10 +2,13 @@ package io.hotcloud.common.file.storage;
 
 import io.hotcloud.common.exception.HotCloudException;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.UploadObjectArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -21,7 +24,7 @@ public class MinioObjectOperator implements MinioObjectApi {
     }
 
     @Override
-    public void upload(String bucket, String object, String file) {
+    public String uploadFile(String bucket, String object, String file) {
         try {
             UploadObjectArgs objectArgs = UploadObjectArgs.builder()
                     .bucket(bucket)
@@ -29,10 +32,26 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .filename(file)
                     .build();
             minioClient.uploadObject(objectArgs);
+            return object;
         } catch (Exception ex) {
-            throw new HotCloudException("upload failed: " + ex.getMessage() + "");
+            throw new HotCloudException("upload failed: " + ex.getMessage());
         }
 
+    }
+
+    @Override
+    public String uploadFile(String bucket, String object, InputStream inputStream) {
+        try {
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .stream(inputStream, inputStream.available(), -1)
+                    .bucket(bucket)
+                    .object(object)
+                    .build();
+            minioClient.putObject(putObjectArgs);
+            return object;
+        } catch (Exception ex) {
+            throw new HotCloudException("upload failed: " + ex.getMessage());
+        }
     }
 
     @Override
@@ -44,7 +63,7 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .build();
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("remove failed: " + ex.getMessage() + "");
+            throw new HotCloudException("remove failed: " + ex.getMessage());
         }
 
     }
