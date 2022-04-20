@@ -56,17 +56,24 @@ public class UserApiIT {
     }
 
     @Test
-    public void save() throws InterruptedException {
+    public void save_then_update() throws InterruptedException {
         User user = User.builder()
                 .username("jason")
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("jason123"))
                 .nickname("Jason")
                 .build();
-        userApi.save(user);
+        User saved = userApi.save(user);
+        Assertions.assertNotNull(saved.getId());
 
         TimeUnit.SECONDS.sleep(1);
         String namespace = cache.get(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
         Assertions.assertNotNull(namespace);
+
+        saved.setEmail("example.com");
+        userApi.update(saved);
+        User query = userApi.retrieve("jason");
+        Assertions.assertEquals("example.com", query.getEmail());
+
     }
 
     @Test

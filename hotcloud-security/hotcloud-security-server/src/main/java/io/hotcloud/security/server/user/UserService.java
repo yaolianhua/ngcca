@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -26,11 +27,14 @@ import java.util.Collection;
 public class UserService implements UserApi {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
 
     public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
                        ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.eventPublisher = eventPublisher;
     }
 
@@ -48,11 +52,39 @@ public class UserService implements UserApi {
         Assert.state(Validator.validUsername(user.getUsername()), "Start with a lowercase letter, can only contain lowercase letters and numbers, [5-16] characters");
         UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
 
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         UserEntity saved = userRepository.save(entity);
 
         user = saved.toT(User.class);
         eventPublisher.publishEvent(new UserCreatedEvent(user));
         return buildUser(saved);
+    }
+
+    @Override
+    public User update(User user) {
+        Assert.notNull(user, "User body is null");
+        Assert.hasText(user.getId(), "user id is null");
+
+        UserEntity existEntity = userRepository.findById(user.getId()).orElseThrow(() -> new NullPointerException("User is not found"));
+        if (StringUtils.hasText(user.getAvatar())) {
+            existEntity.setAvatar(user.getAvatar());
+        }
+        if (StringUtils.hasText(user.getMobile())) {
+            existEntity.setMobile(user.getMobile());
+        }
+        if (StringUtils.hasText(user.getEmail())) {
+            existEntity.setEmail(user.getEmail());
+        }
+        if (StringUtils.hasText(user.getNickname())) {
+            existEntity.setNickname(user.getNickname());
+        }
+        if (StringUtils.hasText(user.getPassword())) {
+            existEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        UserEntity updated = userRepository.save(existEntity);
+
+        return buildUser(updated);
     }
 
     @Override

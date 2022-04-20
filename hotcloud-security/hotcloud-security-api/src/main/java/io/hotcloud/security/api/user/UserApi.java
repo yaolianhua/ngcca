@@ -20,6 +20,14 @@ public interface UserApi {
     User save(User user);
 
     /**
+     * Update user by id
+     *
+     * @param user {@link  User}
+     * @return {@link  User}
+     */
+    User update(User user);
+
+    /**
      * Delete user with giving {@code username}
      *
      * @param username   username
