@@ -1,4 +1,4 @@
-package io.hotcloud.common.file.storage;
+package io.hotcloud.common.storage.minio;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

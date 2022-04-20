@@ -1,6 +1,6 @@
-package io.hotcloud.common.file.storage;
+package io.hotcloud.common.storage.minio;
 
-import io.hotcloud.common.file.HotCloudMinioApplicationTest;
+import io.hotcloud.common.storage.HotCloudMinioApplicationTest;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;

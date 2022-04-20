@@ -1,4 +1,4 @@
-package io.hotcloud.common.file.storage;
+package io.hotcloud.common.storage.minio;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;

@@ -3,7 +3,7 @@ package io.hotcloud.buildpack.server.clone;
 import io.hotcloud.buildpack.api.clone.GitApi;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.common.Validator;
-import io.hotcloud.common.file.FileHelper;
+import io.hotcloud.common.storage.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
