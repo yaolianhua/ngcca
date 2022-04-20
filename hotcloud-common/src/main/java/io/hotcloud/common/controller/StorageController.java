@@ -24,7 +24,7 @@ public class StorageController {
 
     @PostMapping("/upload")
     public ResponseEntity<Result<String>> upload(@RequestPart MultipartFile file,
-                                                 @RequestParam("bucket") String bucket) {
+                                                 @RequestParam(value = "bucket", required = false) String bucket) {
         String upload = fileUploadService.upload(file, bucket);
         return created(upload);
     }
