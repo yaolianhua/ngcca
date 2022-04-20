@@ -8,6 +8,15 @@ import java.io.InputStream;
 public interface MinioObjectApi {
 
     /**
+     * Get object url
+     *
+     * @param bucket bucket name
+     * @param object object name
+     * @return url
+     */
+    String getObjectUrl(String bucket, String object);
+
+    /**
      * Uploads data from a file to an object
      *
      * @param bucket bucket name
@@ -26,6 +35,7 @@ public interface MinioObjectApi {
      * @return object name
      */
     String uploadFile(String bucket, String object, InputStream inputStream);
+
     /**
      * Removes an object
      *

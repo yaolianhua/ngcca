@@ -1,10 +1,8 @@
 package io.hotcloud.common.file.storage;
 
 import io.hotcloud.common.exception.HotCloudException;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.UploadObjectArgs;
+import io.minio.*;
+import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +19,22 @@ public class MinioObjectOperator implements MinioObjectApi {
 
     public MinioObjectOperator(MinioClient minioClient) {
         this.minioClient = minioClient;
+    }
+
+    @Override
+    public String getObjectUrl(String bucket, String object) {
+        try {
+            //expiry must be minimum 1 second to maximum 7 days
+            GetPresignedObjectUrlArgs presignedObjectUrlArgs = GetPresignedObjectUrlArgs
+                    .builder()
+                    .bucket(bucket)
+                    .object(object)
+                    .method(Method.GET)
+                    .build();
+            return minioClient.getPresignedObjectUrl(presignedObjectUrlArgs);
+        } catch (Exception ex) {
+            throw new HotCloudException("get object url failed: " + ex.getMessage());
+        }
     }
 
     @Override

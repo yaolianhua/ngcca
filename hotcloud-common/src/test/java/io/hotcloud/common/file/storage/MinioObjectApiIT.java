@@ -2,6 +2,7 @@ package io.hotcloud.common.file.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
@@ -33,6 +34,9 @@ public class MinioObjectApiIT extends MinioIT {
         uploadWatch.stop();
         double seconds = uploadWatch.getTotalTimeSeconds();
         log.info("Upload succeed. Takes '{}s'", seconds);
+
+        String objectUrl = minioObjectApi.getObjectUrl(bucket, "devops-thymeleaf");
+        Assertions.assertNotNull(objectUrl);
 
         StopWatch removeWatch = new StopWatch();
         removeWatch.start();
