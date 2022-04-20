@@ -110,6 +110,7 @@ public class UserService implements UserApi {
 
     private User buildUser(UserEntity entity) {
         return User.builder()
+                .id(entity.getId())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
                 .email(entity.getEmail())

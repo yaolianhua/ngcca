@@ -19,6 +19,7 @@ import java.util.Collections;
 @AllArgsConstructor
 public class User implements UserDetails {
 
+    private String id;
     private String username;
     private String password;
     private String nickname;
