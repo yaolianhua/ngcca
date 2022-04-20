@@ -5,11 +5,9 @@ import io.hotcloud.common.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 /**
@@ -45,10 +43,9 @@ public class FileUploadService {
         if (!StringUtils.hasText(filename)) {
             filename = UUIDGenerator.uuidNoDash();
         }
-        String hex = DigestUtils.md5DigestAsHex(filename.getBytes(StandardCharsets.UTF_8));
         try {
-            minioObjectApi.uploadFile(bucket, hex, file.getInputStream());
-            return Path.of(properties.getEndpoint(), bucket, hex).toString();
+            minioObjectApi.uploadFile(bucket, filename, file.getInputStream());
+            return Path.of(properties.getEndpoint(), bucket, filename).toString();
         } catch (Exception e) {
             throw new HotCloudException(e.getMessage());
         }
