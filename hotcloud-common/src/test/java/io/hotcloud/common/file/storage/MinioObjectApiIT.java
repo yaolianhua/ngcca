@@ -41,7 +41,6 @@ public class MinioObjectApiIT extends MinioIT {
         double removeWatchTotalTimeSeconds = removeWatch.getTotalTimeSeconds();
         log.info("Removed succeed. Takes '{}s'", removeWatchTotalTimeSeconds);
     }
-
     @Test
     public void upload_then_removed() {
         String bucket = minioProperties.getDefaultBucket();

@@ -26,7 +26,6 @@ public interface MinioObjectApi {
      * @return object name
      */
     String uploadFile(String bucket, String object, InputStream inputStream);
-
     /**
      * Removes an object
      *
