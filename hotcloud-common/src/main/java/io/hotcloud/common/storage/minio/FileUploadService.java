@@ -1,11 +1,11 @@
 package io.hotcloud.common.storage.minio;
 
-import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.common.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
@@ -40,15 +40,18 @@ public class FileUploadService {
         }
 
         String filename = file.getOriginalFilename();
-        if (!StringUtils.hasText(filename)) {
-            filename = UUIDGenerator.uuidNoDash();
-        }
+        Assert.hasText(filename, "Filename is null");
+
+        long mega = DataSize.ofBytes(file.getSize()).toMegabytes();
+        Assert.state(mega < 1, "Data size need to less than 1MB. current " + mega + "MB");
+
         try {
-            minioObjectApi.uploadFile(bucket, filename, file.getInputStream());
+            minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());
             return Path.of(properties.getEndpoint(), bucket, filename).toString();
         } catch (Exception e) {
             throw new HotCloudException(e.getMessage());
         }
 
     }
+
 }

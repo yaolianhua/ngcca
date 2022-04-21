@@ -5,8 +5,10 @@ import io.minio.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -54,10 +56,15 @@ public class MinioObjectOperator implements MinioObjectApi {
     }
 
     @Override
-    public String uploadFile(String bucket, String object, InputStream inputStream) {
+    public String uploadFile(String bucket, String object, InputStream inputStream, String contentType) {
+        if (!StringUtils.hasText(contentType)) {
+            contentType = "application/octet-stream";
+        }
+        Map<String, String> headers = Map.of("Content-Type", contentType);
         try {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
                     .stream(inputStream, inputStream.available(), -1)
+                    .headers(headers)
                     .bucket(bucket)
                     .object(object)
                     .build();

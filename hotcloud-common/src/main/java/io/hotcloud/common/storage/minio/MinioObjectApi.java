@@ -32,9 +32,10 @@ public interface MinioObjectApi {
      * @param bucket      bucket name
      * @param object      object name
      * @param inputStream file inputStream
+     * @param contentType file content-type
      * @return object name
      */
-    String uploadFile(String bucket, String object, InputStream inputStream);
+    String uploadFile(String bucket, String object, InputStream inputStream, String contentType);
 
     /**
      * Removes an object

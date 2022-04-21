@@ -29,7 +29,7 @@ public class MinioObjectApiIT extends MinioIT {
         uploadWatch.start();
         Path filePath = Path.of("/tmp/kaniko/6f83d4d1c8ad40fdaa4bd9649088a9d8/devops-thymeleaf/devops-thymeleaf-20220413175715.tar");
         try (InputStream inputStream = Files.newInputStream(filePath)) {
-            minioObjectApi.uploadFile(bucket, "devops-thymeleaf", inputStream);
+            minioObjectApi.uploadFile(bucket, "devops-thymeleaf", inputStream, "application/x-tar");
         }
         uploadWatch.stop();
         double seconds = uploadWatch.getTotalTimeSeconds();
