@@ -7,7 +7,14 @@ import io.hotcloud.buildpack.api.core.model.BuildPack;
  **/
 public class BuildPackDoneEvent extends BuildPackEvent {
 
-    public BuildPackDoneEvent(BuildPack buildPack) {
+    private final boolean success;
+
+    public BuildPackDoneEvent(BuildPack buildPack, boolean success) {
         super(buildPack);
+        this.success = success;
+    }
+
+    public boolean isSuccess() {
+        return success;
     }
 }

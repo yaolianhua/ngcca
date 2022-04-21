@@ -1,8 +1,8 @@
 logging:
   level:
-    io.hotcloud.buildpack.server: debug
-    io.hotcloud.buildpack.api: debug
-    io.hotcloud.kubernetes.server: debug
+    io.hotcloud.buildpack: debug
+    io.hotcloud.kubernetes: debug
+    io.hotcloud.common: debug
 kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
@@ -20,6 +20,10 @@ db:
     host: localhost
     password: QbMufCD@9WVQ^Hv
     port: 6379
+minio:
+  access-key: admin
+  secret-key: QbMufCD@9WVQ^Hv
+  endpoint: "http://127.0.0.1:9009"
 buildpack:
   storage:
     type: nfs

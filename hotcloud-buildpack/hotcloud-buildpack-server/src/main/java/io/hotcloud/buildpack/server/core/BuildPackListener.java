@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.event.BuildPackDoneEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
@@ -11,12 +12,14 @@ import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,10 +33,14 @@ public class BuildPackListener {
     private final PodApi podApi;
     private final JobApi jobApi;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     public BuildPackListener(BuildPackService buildPackService,
+                             ApplicationEventPublisher eventPublisher,
                              PodApi podApi,
                              JobApi jobApi) {
         this.buildPackService = buildPackService;
+        this.eventPublisher = eventPublisher;
         this.podApi = podApi;
         this.jobApi = jobApi;
     }
@@ -44,6 +51,30 @@ public class BuildPackListener {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    @EventListener
+    @Async
+    public void done(BuildPackDoneEvent doneEvent) {
+        DefaultBuildPack buildPack = (DefaultBuildPack) doneEvent.getBuildPack();
+        try {
+            boolean success = doneEvent.isSuccess();
+            PodList read = podApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
+            Pod pod = read.getItems().get(0);
+
+            String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName());
+
+            buildPack.setMessage(success ? "BuildPack Success!" : "BuildPack Failed!");
+            buildPack.setLogs(logs);
+
+            BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
+            log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
+        } catch (Exception ex) {
+            log.error("[BuildPackDoneEvent] error: {}", ex.getMessage(), ex);
+            buildPack.setMessage(ex.getMessage());
+            updateBuildPackDone(buildPack);
+        }
+
     }
 
     @Async
@@ -67,25 +98,26 @@ public class BuildPackListener {
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Succeeded || jobStatus == BuildPackStatus.JobStatus.Failed) {
-                    PodList read = podApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
-                    Pod pod = read.getItems().get(0);
-
-                    String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName());
-                    buildPack.setDone(true);
-                    buildPack.setMessage(jobStatus == BuildPackStatus.JobStatus.Succeeded ? "BuildPack Success!" : "BuildPack Failed!");
-                    buildPack.setLogs(logs);
-
-                    Assert.hasText(buildPack.getId(), "BuildPack ID is null");
-                    BuildPack saveOrUpdate = buildPackService.saveOrUpdate(buildPack);
-                    log.info("[BuildPackStartedEvent] update buildPack done [{}]", saveOrUpdate.getId());
+                    eventPublisher.publishEvent(new BuildPackDoneEvent(buildPack, jobStatus == BuildPackStatus.JobStatus.Succeeded));
                     break;
                 }
             }
 
         } catch (Exception e) {
             log.error("[BuildPackStartedEvent] error: {}", e.getMessage(), e);
+            buildPack.setMessage(e.getMessage());
+            updateBuildPackDone(buildPack);
         }
 
+    }
+
+    @NotNull
+    private BuildPack updateBuildPackDone(DefaultBuildPack buildPack) {
+        buildPack.setDone(true);
+        //should be never happened
+        Assert.hasText(buildPack.getId(), "BuildPack ID is null");
+
+        return buildPackService.saveOrUpdate(buildPack);
     }
 
     @Async
