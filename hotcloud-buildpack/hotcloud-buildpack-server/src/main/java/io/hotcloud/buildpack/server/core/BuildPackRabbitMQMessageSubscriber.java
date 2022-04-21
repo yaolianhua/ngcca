@@ -8,6 +8,7 @@ import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
+import io.hotcloud.common.message.MessageProperties;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
@@ -17,6 +18,7 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.util.unit.DataSize;
@@ -28,6 +30,10 @@ import java.nio.file.Path;
  * @author yaolianhua789@gmail.com
  **/
 @Component
+@ConditionalOnProperty(
+        name = MessageProperties.PROPERTIES_TYPE_NAME,
+        havingValue = MessageProperties.RABBITMQ
+)
 @Slf4j
 public class BuildPackRabbitMQMessageSubscriber {
 
