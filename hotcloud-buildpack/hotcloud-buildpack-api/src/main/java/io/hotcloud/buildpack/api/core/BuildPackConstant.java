@@ -23,4 +23,7 @@ public final class BuildPackConstant {
     public static final String KANIKO_CONTAINER = "kaniko";
 
     public static final String DOCKER_CONFIG_JSON = ".dockerconfigjson";
+
+    public static final String QUEUE_SUBSCRIBE_BUILDPACK_DONE_MESSAGE = "hotcloud.message.buildpack.done.subscribe";
+    public static final String EXCHANGE_FANOUT_BUILDPACK_MESSAGE = "hotcloud.message.buildpack.broadcast";
 }

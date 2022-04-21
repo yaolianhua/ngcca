@@ -2,7 +2,7 @@ kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host: localhost
     username: admin
