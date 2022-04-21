@@ -1,5 +1,11 @@
 spring:
   application:
     name: hotcloud
+  rabbitmq:
+    host: ${message.rabbitmq.host:}
+    port: ${message.rabbitmq.port:}
+    username: ${message.rabbitmq.username:}
+    password: ${message.rabbitmq.password:}
+    virtual-host: /
 server:
   port: 8077

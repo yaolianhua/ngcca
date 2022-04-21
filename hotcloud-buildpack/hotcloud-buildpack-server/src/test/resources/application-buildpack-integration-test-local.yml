@@ -20,6 +20,13 @@ db:
     host: localhost
     password: QbMufCD@9WVQ^Hv
     port: 6379
+message:
+  type: rabbitmq
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: QbMufCD@9WVQ^Hv
+    port: 5672
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv

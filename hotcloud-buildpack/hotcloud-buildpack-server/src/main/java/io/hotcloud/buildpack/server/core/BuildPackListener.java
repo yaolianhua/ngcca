@@ -3,12 +3,15 @@ package io.hotcloud.buildpack.server.core;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.BuildPackDoneEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
+import io.hotcloud.common.message.Message;
+import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import lombok.extern.slf4j.Slf4j;
@@ -34,13 +37,16 @@ public class BuildPackListener {
     private final JobApi jobApi;
 
     private final ApplicationEventPublisher eventPublisher;
+    private final MessageBroadcaster messageBroadcaster;
 
     public BuildPackListener(BuildPackService buildPackService,
                              ApplicationEventPublisher eventPublisher,
+                             MessageBroadcaster messageBroadcaster,
                              PodApi podApi,
                              JobApi jobApi) {
         this.buildPackService = buildPackService;
         this.eventPublisher = eventPublisher;
+        this.messageBroadcaster = messageBroadcaster;
         this.podApi = podApi;
         this.jobApi = jobApi;
     }
@@ -69,6 +75,7 @@ public class BuildPackListener {
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
             log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
+            messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(((DefaultBuildPack) saveOrUpdate)));
         } catch (Exception ex) {
             log.error("[BuildPackDoneEvent] error: {}", ex.getMessage(), ex);
             buildPack.setMessage(ex.getMessage());

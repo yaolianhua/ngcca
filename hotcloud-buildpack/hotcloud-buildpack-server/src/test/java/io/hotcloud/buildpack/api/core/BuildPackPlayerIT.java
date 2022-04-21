@@ -141,7 +141,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
                 sleep(5);
                 try {
                     BuildPack find = buildPackService.findOne(buildPack.getId());
-                    if (find.isDone()) {
+                    if (find.isDone() && StringUtils.hasText(find.getArtifact())) {
                         latch.countDown();
                         break;
                     }
@@ -156,6 +156,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         while (true) {
             if (latch.getCount() == 0) {
                 BuildPack find = buildPackService.findOne(buildPack.getId());
+                log.info("Artifact url: {}", find.getArtifact());
                 log.info("{} user's buildPack [{}] done! message: '{}', logs: \n {}", username, find.getId(), find.getMessage(), find.getLogs());
                 jobApi.delete(find.getJobResource().getNamespace(), find.getJobResource().getName());
                 break;

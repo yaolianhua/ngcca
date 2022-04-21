@@ -104,6 +104,7 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .clonedId(entity.getClonedId())
                 .message(entity.getMessage())
                 .logs(entity.getLogs())
+                .artifact(entity.getArtifact())
                 .build();
     }
 

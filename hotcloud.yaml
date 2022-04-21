@@ -147,7 +147,7 @@ data:
         password: QbMufCD@9WVQ^Hv
         database: 10
     db:
-      type: redis
+      type: mongodb
       redis:
         database: 9
         host: redis-release-master.middleware.svc.cluster.local
@@ -159,6 +159,17 @@ data:
           password: QbMufCD@9WVQ^Hv
           port: 27017
           database: hotcloud
+    message:
+      type: rabbitmq
+      rabbitmq:
+        host: rabbitmq-release-headless.middleware.svc.cluster.local
+        username: admin
+        password: QbMufCD@9WVQ^Hv
+        port: 5672
+    minio:
+      access-key: admin
+      secret-key: QbMufCD@9WVQ^Hv
+      endpoint: "http://minio-release.middleware.svc.cluster.local:9000"
     buildpack:
       storage:
         type: nfs
