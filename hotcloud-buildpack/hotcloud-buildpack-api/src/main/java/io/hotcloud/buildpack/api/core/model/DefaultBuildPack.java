@@ -32,6 +32,8 @@ public class DefaultBuildPack implements BuildPack {
 
     private String yaml;
 
+    private String artifact;
+
     @Override
     public BuildPackJobResource getJobResource() {
         return jobResource;

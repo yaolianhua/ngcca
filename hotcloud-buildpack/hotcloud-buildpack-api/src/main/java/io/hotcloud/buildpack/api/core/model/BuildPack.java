@@ -79,6 +79,13 @@ public interface BuildPack {
     String getYaml();
 
     /**
+     * Get BuildPack artifact url
+     *
+     * @return artifact url
+     */
+    String getArtifact();
+
+    /**
      * Alternate properties container
      *
      * @return key-value mapping

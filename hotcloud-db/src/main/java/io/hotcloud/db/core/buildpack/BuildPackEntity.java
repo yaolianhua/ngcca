@@ -33,4 +33,5 @@ public class BuildPackEntity extends AbstractEntity {
     private String message;
 
     private String logs;
+    private String artifact;
 }
