@@ -26,8 +26,8 @@ public class RabbitmqMessageBroadcaster implements MessageBroadcaster {
     }
 
     @Override
-    public <T> void broadcast(Message<T> message) {
-        rabbitTemplate.convertAndSend(RabbitmqConfiguration.EXCHANGE_FANOUT_BROADCAST_MESSAGE, "", message);
+    public <T> void broadcast(String exchange, Message<T> message) {
+        rabbitTemplate.convertAndSend(exchange, "", message);
         log.debug("Rabbitmq broadcast message: \n {}", message);
     }
 }

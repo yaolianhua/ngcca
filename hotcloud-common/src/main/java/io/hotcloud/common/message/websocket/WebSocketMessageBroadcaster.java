@@ -25,7 +25,7 @@ import java.util.Set;
 public class WebSocketMessageBroadcaster implements MessageBroadcaster {
 
     @Override
-    public <T> void broadcast(Message<T> message) {
+    public <T> void broadcast(String exchange, Message<T> message) {
         Set<Session> sessions = WebSocketSessionContext.getSessions();
         log.debug("Websocket broadcast message: \n {}", message);
         for (Session session : sessions) {
