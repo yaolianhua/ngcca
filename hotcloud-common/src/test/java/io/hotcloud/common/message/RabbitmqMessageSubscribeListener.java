@@ -22,7 +22,7 @@ public class RabbitmqMessageSubscribeListener {
                     )
             }
     )
-    public void subscribe(Message<MessageBody> message) throws InterruptedException {
+    public void subscribe(String message) throws InterruptedException {
         RabbitmqMessageBroadcasterIT.COUNT_DOWN_LATCH.await();
         log.info("Received message: \n {}", message);
     }

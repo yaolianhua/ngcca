@@ -1,5 +1,8 @@
 package io.hotcloud.common.message.rabbitmq;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.common.message.MessageProperties;
@@ -20,14 +23,23 @@ import org.springframework.stereotype.Component;
 public class RabbitmqMessageBroadcaster implements MessageBroadcaster {
 
     private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
-    public RabbitmqMessageBroadcaster(RabbitTemplate rabbitTemplate) {
+    public RabbitmqMessageBroadcaster(RabbitTemplate rabbitTemplate,
+                                      ObjectMapper objectMapper) {
         this.rabbitTemplate = rabbitTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Override
     public <T> void broadcast(String exchange, Message<T> message) {
-        rabbitTemplate.convertAndSend(exchange, "", message);
-        log.debug("Rabbitmq broadcast message: \n {}", message);
+        try {
+            String content = objectMapper.writeValueAsString(message);
+            rabbitTemplate.convertAndSend(exchange, "", content);
+            log.debug("Rabbitmq broadcast message: \n {}", content);
+        } catch (JsonProcessingException e) {
+            throw new HotCloudException(e.getMessage());
+        }
+
     }
 }
