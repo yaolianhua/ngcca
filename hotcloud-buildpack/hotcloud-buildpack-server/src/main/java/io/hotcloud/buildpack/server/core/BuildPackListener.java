@@ -75,6 +75,7 @@ public class BuildPackListener {
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
             log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
+            //depends on rabbitmq
             messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(((DefaultBuildPack) saveOrUpdate)));
         } catch (Exception ex) {
             log.error("[BuildPackDoneEvent] error: {}", ex.getMessage(), ex);
