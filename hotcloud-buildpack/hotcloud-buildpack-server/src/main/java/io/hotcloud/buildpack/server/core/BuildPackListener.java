@@ -94,12 +94,12 @@ public class BuildPackListener {
         try {
 
             while (true) {
-                sleep(15);
+                sleep(30);
                 Job job = jobApi.read(namespace, jobName);
                 BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);
 
                 if (jobStatus == BuildPackStatus.JobStatus.Active) {
-                    log.debug("[{}] user's BuildPack [{}] is not done yet!", buildPack.getUser(), buildPack.getId());
+                    log.debug("[{}] user's BuildPack [{}] is not done yet! job [{}] namespace [{}]", buildPack.getUser(), buildPack.getId(), jobName, namespace);
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Ready) {
