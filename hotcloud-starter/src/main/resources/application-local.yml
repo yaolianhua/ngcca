@@ -19,7 +19,7 @@ db:
   type: mongodb
   mongodb:
     host: localhost
-    username: root
+    username: admin
     password: QbMufCD@9WVQ^Hv
     port: 27017
     database: hotcloud-dev
