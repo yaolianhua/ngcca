@@ -134,7 +134,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         }
         Assertions.assertNotNull(gitCloned);
 
-        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), true);
+        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), false);
 
         new Thread(() -> {
             while (true) {

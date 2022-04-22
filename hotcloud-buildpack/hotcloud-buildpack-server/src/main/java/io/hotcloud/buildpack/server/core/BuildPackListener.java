@@ -89,12 +89,13 @@ public class BuildPackListener {
     @EventListener
     public void started(BuildPackStartedEvent startedEvent) {
         DefaultBuildPack buildPack = ((DefaultBuildPack) startedEvent.getBuildPack());
-
+        String namespace = buildPack.getJobResource().getNamespace();
+        String jobName = buildPack.getJobResource().getName();
         try {
 
             while (true) {
                 sleep(15);
-                Job job = jobApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName());
+                Job job = jobApi.read(namespace, jobName);
                 BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);
 
                 if (jobStatus == BuildPackStatus.JobStatus.Active) {
