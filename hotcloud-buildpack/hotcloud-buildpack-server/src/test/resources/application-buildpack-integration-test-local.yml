@@ -10,27 +10,27 @@ cache:
   type: redis
   redis:
     database: 13
-    host: localhost
+    host: 120.78.225.168
     password: QbMufCD@9WVQ^Hv
     port: 6379
 db:
   type: redis
   redis:
     database: 5
-    host: localhost
+    host: 120.78.225.168
     password: QbMufCD@9WVQ^Hv
     port: 6379
 message:
   type: rabbitmq
   rabbitmq:
-    host: localhost
+    host: 120.78.225.168
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://127.0.0.1:9009"
+  endpoint: "http://120.78.225.168:9009"
 buildpack:
   storage:
     type: nfs
@@ -38,7 +38,7 @@ buildpack:
   kaniko:
     verbosity: info
   registry:
-    url: 127.0.0.1:5000
+    url: 119.91.214.25:5000
     project: test
-    username: "no-auth"
-    password: "no-auth"
+    username: admin
+    password: QbMufCD@9WVQ^Hv

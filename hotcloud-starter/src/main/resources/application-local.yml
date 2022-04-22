@@ -4,21 +4,21 @@ kubernetes:
 message:
   type: rabbitmq
   rabbitmq:
-    host: localhost
+    host: 120.78.225.168
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672
 cache:
   type: redis
   redis:
-    host: localhost
+    host: 120.78.225.168
     port: 6379
     password: QbMufCD@9WVQ^Hv
     database: 15
 db:
   type: mongodb
   mongodb:
-    host: localhost
+    host: 120.78.225.168
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 27017
@@ -26,18 +26,18 @@ db:
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: localhost
+    host: 120.78.225.168
     port: 6379
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://127.0.0.1:9009"
+  endpoint: "http://120.78.225.168:9009"
 buildpack:
   storage:
     type: nfs
     nfs-server: 119.91.214.25
   registry:
-    url: harbor.cloud2go.cn
-    project: test
+    url: 119.91.214.25:5000
+    project: dev
     username: admin
-    password: Harbor12345
+    password: QbMufCD@9WVQ^Hv

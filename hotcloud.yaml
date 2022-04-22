@@ -154,8 +154,8 @@ data:
         port: 6379
         password: QbMufCD@9WVQ^Hv
       mongodb:
-          host: mongo-release-mongodb-headless.middleware.svc.cluster.local
-          username: admin
+          host: mongo-release-mongodb.middleware.svc.cluster.local
+          username: root
           password: QbMufCD@9WVQ^Hv
           port: 27017
           database: hotcloud
@@ -175,10 +175,10 @@ data:
         type: nfs
         nfs-server: 10.0.20.6
       registry:
-        url: 10.0.20.6:5000
+        url: 119.91.214.25:5000
         project: build
-        username: no-auth
-        password: no-auth
+        username: admin
+        password: QbMufCD@9WVQ^Hv
 kind: ConfigMap
 metadata:
   name: hotcloud-config
