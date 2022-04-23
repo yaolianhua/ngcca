@@ -1,6 +1,7 @@
 package io.hotcloud.web.client.login;
 
 import io.hotcloud.security.api.login.BearerToken;
+import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.client.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -23,6 +24,14 @@ public class LoginClientFallbackFactory implements FallbackFactory<LoginClient> 
                 log.error("{}", cause.getCause().getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(R.error(401, "Unauthorized[" + cause.getMessage() + "]"));
             }
+
+            @Override
+            public ResponseEntity<R<User>> retrieveUser() {
+                log.error("{}", cause.getCause().getMessage());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(R.error(401, "Unauthorized[" + cause.getMessage() + "]"));
+            }
         };
+
+
     }
 }

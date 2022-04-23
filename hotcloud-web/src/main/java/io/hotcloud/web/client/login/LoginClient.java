@@ -1,11 +1,13 @@
 package io.hotcloud.web.client.login;
 
 import io.hotcloud.security.api.login.BearerToken;
+import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.client.ErrorMessageConfiguration;
 import io.hotcloud.web.client.HotCloudServerProperties;
 import io.hotcloud.web.client.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,5 +23,8 @@ public interface LoginClient {
     @PostMapping("/v1/security/login")
     ResponseEntity<R<BearerToken>> login(@RequestParam String username,
                                          @RequestParam String password);
+
+    @GetMapping("/v1/security/login")
+    ResponseEntity<R<User>> retrieveUser();
 
 }
