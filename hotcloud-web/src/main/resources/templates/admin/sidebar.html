@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a class="brand-link" href="index3.html">
+    <a class="brand-link" th:href="@{/administrator/index}">
         <img alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"
              th:src="@{/dist/img/AdminLTELogo.png}">
         <span class="brand-text font-weight-light">HotCloud</span>
@@ -46,21 +46,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a class="nav-link active" href="./index.html">
+                            <a class="nav-link active" th:href="@{/administrator/index}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./index2.html">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v2</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./index3.html">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v3</p>
+                                <p>Dashboard</p>
                             </a>
                         </li>
                     </ul>
