@@ -4,10 +4,9 @@ import io.hotcloud.common.Result;
 import io.hotcloud.common.WebResponse;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
+import io.hotcloud.security.api.user.User;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -26,5 +25,11 @@ public class UserLoginController {
     public ResponseEntity<Result<BearerToken>> login(String username, String password) {
         BearerToken bearerToken = loginApi.basicLogin(username, password);
         return WebResponse.created(bearerToken);
+    }
+
+    @GetMapping
+    public ResponseEntity<Result<User>> retrieveUser(@RequestHeader(value = "Authorization") String authorization) {
+        User user = loginApi.retrieveUser(authorization);
+        return WebResponse.ok(user);
     }
 }

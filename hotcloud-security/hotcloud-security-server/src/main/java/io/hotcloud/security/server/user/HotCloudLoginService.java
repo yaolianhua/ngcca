@@ -6,6 +6,7 @@ import io.hotcloud.security.api.login.LoginApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.server.jwt.JwtSigner;
+import io.hotcloud.security.server.jwt.JwtVerifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +25,17 @@ public class HotCloudLoginService implements LoginApi {
 
     private final UserApi userApi;
     private final JwtSigner jwtSigner;
+    private final JwtVerifier jwtVerifier;
 
     private final PasswordEncoder passwordEncoder;
 
     public HotCloudLoginService(UserApi userApi,
                                 JwtSigner jwtSigner,
+                                JwtVerifier jwtVerifier,
                                 PasswordEncoder passwordEncoder) {
         this.userApi = userApi;
         this.jwtSigner = jwtSigner;
+        this.jwtVerifier = jwtVerifier;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -53,5 +57,16 @@ public class HotCloudLoginService implements LoginApi {
             throw new HotCloudException("Invalid username or password");
         }
 
+    }
+
+    @Override
+    public User retrieveUser(String authorization) {
+        if (authorization.startsWith("Bearer") || authorization.startsWith("bearer")) {
+            authorization = authorization.substring(7);
+        }
+        Map<String, Object> attributes = jwtVerifier.retrieveAttributes(authorization);
+        String username = (String) attributes.get("username");
+
+        return userApi.retrieve(username);
     }
 }
