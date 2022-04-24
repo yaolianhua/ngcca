@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.server.core;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.*;
+import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
@@ -109,6 +110,20 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         eventPublisher.publishEvent(new BuildPackStartedEvent(savedBuildPack));
 
         return savedBuildPack;
+    }
+
+    @Override
+    public void delete(String id) {
+        Assert.hasText(id, "BuildPack ID is null");
+        BuildPack existBuildPack = buildPackService.findOne(id);
+        Assert.notNull(existBuildPack, "Can not found buildPack [" + id + "]");
+        if (existBuildPack.isDeleted()) {
+            return;
+        }
+        buildPackService.delete(id, false);
+        log.info("[DefaultBuildPackPlayer] delete buildPack '{}'", id);
+
+        eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack));
     }
 
     @NotNull

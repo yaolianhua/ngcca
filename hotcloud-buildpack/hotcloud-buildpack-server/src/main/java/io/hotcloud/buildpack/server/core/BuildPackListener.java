@@ -1,10 +1,12 @@
 package io.hotcloud.buildpack.server.core;
 
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackDoneEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
@@ -13,6 +15,7 @@ import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.pod.PodApi;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,17 +39,21 @@ public class BuildPackListener {
     private final PodApi podApi;
     private final JobApi jobApi;
 
+    private final PersistentVolumeClaimApi persistentVolumeClaimApi;
+
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBroadcaster messageBroadcaster;
 
     public BuildPackListener(BuildPackService buildPackService,
                              ApplicationEventPublisher eventPublisher,
                              MessageBroadcaster messageBroadcaster,
+                             PersistentVolumeClaimApi persistentVolumeClaimApi,
                              PodApi podApi,
                              JobApi jobApi) {
         this.buildPackService = buildPackService;
         this.eventPublisher = eventPublisher;
         this.messageBroadcaster = messageBroadcaster;
+        this.persistentVolumeClaimApi = persistentVolumeClaimApi;
         this.podApi = podApi;
         this.jobApi = jobApi;
     }
@@ -61,8 +68,38 @@ public class BuildPackListener {
 
     @EventListener
     @Async
+    public void delete(BuildPackDeletedEvent deletedEvent) {
+        DefaultBuildPack buildPack = (DefaultBuildPack) deletedEvent.getBuildPack();
+        String job = buildPack.getJobResource().getName();
+        String namespace = buildPack.getJobResource().getNamespace();
+        String persistentVolumeClaim = buildPack.getStorageResource().getPersistentVolumeClaim();
+        try {
+            Job read = jobApi.read(namespace, job);
+            if (read != null) {
+                jobApi.delete(namespace, job);
+                log.info("[BuildPackDeletedEvent] delete job '{}'", job);
+            }
+            PersistentVolumeClaim claim = persistentVolumeClaimApi.read(namespace, persistentVolumeClaim);
+            if (claim != null) {
+                persistentVolumeClaimApi.delete(persistentVolumeClaim, namespace);
+                log.info("[BuildPackDeletedEvent] delete persistentVolumeClaim '{}'", persistentVolumeClaim);
+            }
+
+        } catch (Exception ex) {
+            log.error("[BuildPackDeletedEvent] error: {}", ex.getMessage(), ex);
+        }
+    }
+
+    @EventListener
+    @Async
     public void done(BuildPackDoneEvent doneEvent) {
         DefaultBuildPack buildPack = (DefaultBuildPack) doneEvent.getBuildPack();
+
+        BuildPack buildPackQueried = buildPackService.findOne(buildPack.getId());
+        if (buildPackQueried.isDeleted()) {
+            log.warn("[{}] user's BuildPack [{}] has been deleted", buildPackQueried.getUser(), buildPack.getId());
+            return;
+        }
         try {
             boolean success = doneEvent.isSuccess();
             PodList read = podApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
@@ -94,6 +131,12 @@ public class BuildPackListener {
         try {
 
             while (true) {
+                BuildPack buildPackQueried = buildPackService.findOne(buildPack.getId());
+                if (buildPackQueried.isDeleted()) {
+                    log.warn("[{}] user's BuildPack [{}] has been deleted", buildPackQueried.getUser(), buildPack.getId());
+                    break;
+                }
+
                 sleep(30);
                 Job job = jobApi.read(namespace, jobName);
                 BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);

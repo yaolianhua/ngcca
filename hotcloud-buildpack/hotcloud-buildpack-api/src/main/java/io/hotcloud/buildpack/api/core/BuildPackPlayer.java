@@ -16,4 +16,11 @@ public interface BuildPackPlayer {
      */
     BuildPack apply(String clonedId, Boolean noPush);
 
+    /**
+     * Delete buildPack resource
+     *
+     * @param id buildPack ID
+     */
+    void delete(String id);
+
 }

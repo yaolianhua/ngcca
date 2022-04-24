@@ -3,12 +3,11 @@ package io.hotcloud.buildpack.server.controller;
 import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static io.hotcloud.common.WebResponse.accepted;
+import static io.hotcloud.common.WebResponse.created;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -29,7 +28,13 @@ public class BuildPackController {
             @RequestParam(value = "no_push", required = false) Boolean noPush
     ) {
         BuildPack buildpack = buildPackPlayer.apply(clonedId, noPush);
-        return WebResponse.created(buildpack);
+        return created(buildpack);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
+        buildPackPlayer.delete(id);
+        return accepted();
     }
 
 }
