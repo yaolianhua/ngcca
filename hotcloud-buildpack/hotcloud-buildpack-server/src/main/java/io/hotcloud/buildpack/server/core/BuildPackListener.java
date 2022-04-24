@@ -70,7 +70,7 @@ public class BuildPackListener {
 
             String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName());
 
-            buildPack.setMessage(success ? "BuildPack Success!" : "BuildPack Failed!");
+            buildPack.setMessage(success ? "success" : "failed");
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);

@@ -33,11 +33,12 @@ public final class BuildPackStatus {
             return JobStatus.Succeeded;
         }
 
-        if (failed != null && Objects.equals(failed, 1)) {
+        if (failed != null) {
+            log.error("JobStatus: {}", job.getStatus());
             return JobStatus.Failed;
         }
 
-        log.warn("JobStatus: {}", job.getStatus());
+        log.error("JobStatus: {}", job.getStatus());
         throw new HotCloudException("Unknown job status!");
     }
 

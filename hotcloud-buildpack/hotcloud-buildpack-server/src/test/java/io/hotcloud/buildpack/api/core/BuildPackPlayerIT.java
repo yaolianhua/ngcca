@@ -134,16 +134,22 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         }
         Assertions.assertNotNull(gitCloned);
 
-        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), false);
+        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), null);
 
         new Thread(() -> {
             while (true) {
                 sleep(5);
                 try {
                     BuildPack find = buildPackService.findOne(buildPack.getId());
-                    if (find.isDone() && StringUtils.hasText(find.getArtifact())) {
-                        latch.countDown();
-                        break;
+                    if (find.isDone()) {
+                        if (Objects.equals("success", find.getMessage()) && StringUtils.hasText(find.getArtifact())) {
+                            latch.countDown();
+                            break;
+                        }
+                        if (StringUtils.hasText(find.getMessage()) && !"success".equals(find.getMessage())) {
+                            latch.countDown();
+                            break;
+                        }
                     }
                 } catch (Exception e) {
                     //why NPE?
@@ -156,8 +162,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
         while (true) {
             if (latch.getCount() == 0) {
                 BuildPack find = buildPackService.findOne(buildPack.getId());
-                log.info("Artifact url: {}", find.getArtifact());
-                log.info("{} user's buildPack [{}] done! message: '{}', logs: \n {}", username, find.getId(), find.getMessage(), find.getLogs());
+                log.info("{} user's buildPack [{}] done! \n message: '{}' \n logs: \n {} artifact url: {}", username, find.getId(), find.getMessage(), find.getLogs(), find.getArtifact());
                 jobApi.delete(find.getJobResource().getNamespace(), find.getJobResource().getName());
                 break;
             }

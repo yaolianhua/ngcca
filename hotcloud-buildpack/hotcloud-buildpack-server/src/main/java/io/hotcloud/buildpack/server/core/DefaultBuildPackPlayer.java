@@ -167,6 +167,8 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
                 //if using cache with --no-push, specify cache repo with --cache-repo
                 args.put("cache", String.valueOf(false));
             }
+        } else {
+            args.put("no-push", "false");
         }
 
         args.put("insecure-registry", registryProperties.getUrl());

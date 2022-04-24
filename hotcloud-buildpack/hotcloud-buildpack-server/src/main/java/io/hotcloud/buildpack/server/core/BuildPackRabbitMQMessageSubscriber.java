@@ -78,6 +78,10 @@ public class BuildPackRabbitMQMessageSubscriber {
             String tarball = buildPack.getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
 
             File file = Path.of(clonedPath, tarball).toFile();
+            if (!file.exists()) {
+                log.info("[BuildPackRabbitMQMessageSubscriber] BuildPack tarBall '{}' dose not exist!", tarball);
+                return;
+            }
             log.info("[BuildPackRabbitMQMessageSubscriber] BuildPack tarBall '{}' size '{}MB'", tarball, DataSize.ofBytes(file.length()).toMegabytes());
 
             if (!minioBucketApi.exist(namespace)) {
