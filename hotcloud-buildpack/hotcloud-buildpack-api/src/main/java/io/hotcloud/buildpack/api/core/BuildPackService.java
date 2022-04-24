@@ -47,4 +47,12 @@ public interface BuildPackService {
      * Delete all
      */
     void deleteAll();
+
+    /**
+     * Delete buildPack with giving id
+     *
+     * @param id         buildPack ID
+     * @param physically Whether to physically delete
+     */
+    void delete(String id, boolean physically);
 }

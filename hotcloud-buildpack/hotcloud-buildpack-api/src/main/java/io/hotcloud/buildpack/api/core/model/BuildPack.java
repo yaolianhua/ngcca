@@ -37,6 +37,13 @@ public interface BuildPack {
     boolean isDone();
 
     /**
+     * BuildPack is deleted
+     *
+     * @return true/false
+     */
+    boolean isDeleted();
+
+    /**
      * Get message info
      *
      * @return message info

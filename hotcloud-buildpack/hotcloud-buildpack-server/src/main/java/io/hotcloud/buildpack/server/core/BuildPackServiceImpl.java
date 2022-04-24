@@ -92,6 +92,26 @@ public class BuildPackServiceImpl implements BuildPackService {
         buildPackRepository.deleteAll();
     }
 
+    @Override
+    public void delete(String id, boolean physically) {
+        if (!StringUtils.hasText(id)) {
+            return;
+        }
+        if (physically) {
+            buildPackRepository.deleteById(id);
+            return;
+        }
+
+        BuildPackEntity entity = buildPackRepository.findById(id).orElse(null);
+        if (entity == null) {
+            return;
+        }
+        entity.setDeleted(true);
+        entity.setModifiedAt(LocalDateTime.now());
+        buildPackRepository.save(entity);
+
+    }
+
     private BuildPack toBuildPack(BuildPackEntity entity) {
         return DefaultBuildPack.builder()
                 .id(entity.getId())
@@ -101,6 +121,7 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .yaml(entity.getYaml())
                 .user(entity.getUser())
                 .done(entity.isDone())
+                .deleted(entity.isDeleted())
                 .clonedId(entity.getClonedId())
                 .message(entity.getMessage())
                 .logs(entity.getLogs())

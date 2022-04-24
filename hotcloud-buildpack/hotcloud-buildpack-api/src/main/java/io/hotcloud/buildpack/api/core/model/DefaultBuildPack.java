@@ -26,6 +26,8 @@ public class DefaultBuildPack implements BuildPack {
 
     private boolean done;
 
+    private boolean deleted;
+
     private String message;
 
     private String logs;

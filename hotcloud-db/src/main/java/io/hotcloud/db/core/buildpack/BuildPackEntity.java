@@ -30,6 +30,7 @@ public class BuildPackEntity extends AbstractEntity {
     private String yaml;
 
     private boolean done;
+    private boolean deleted;
     private String message;
 
     private String logs;
