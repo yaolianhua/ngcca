@@ -1,103 +1,47 @@
 package io.hotcloud.buildpack.api.core.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.Map;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface BuildPack {
+@Data
+@Builder
+@AllArgsConstructor
+public class BuildPack {
 
-    /**
-     * BuildPack id
-     *
-     * @return ID
-     */
-    String getId();
+    private String id;
 
-    /**
-     * Get BuildPack owner
-     *
-     * @return user
-     */
-    String getUser();
+    private BuildPackJobResource jobResource;
 
-    /**
-     * Get git cloned id
-     *
-     * @return clonedId
-     */
-    String getClonedId();
+    private BuildPackStorageResourceList storageResource;
 
-    /**
-     * BuildPack is done
-     *
-     * @return true/false
-     */
-    boolean isDone();
+    private BuildPackDockerSecretResource secretResource;
 
-    /**
-     * BuildPack is deleted
-     *
-     * @return true/false
-     */
-    boolean isDeleted();
+    private String user;
 
-    /**
-     * Get message info
-     *
-     * @return message info
-     */
-    String getMessage();
+    private String clonedId;
 
-    /**
-     * Get BuildPack logs
-     *
-     * @return buildPack logs
-     */
-    String getLogs();
+    private boolean done;
 
-    /**
-     * Get BuildPack Job resource details
-     *
-     * @return {@link BuildPackJobResource}
-     */
-    BuildPackJobResource getJobResource();
+    private boolean deleted;
 
-    /**
-     * Get BuildPack pv/pvc resource details
-     *
-     * @return {@link BuildPackStorageResourceList}
-     */
-    BuildPackStorageResourceList getStorageResource();
+    private String message;
 
-    /**
-     * Get BuildPack secret resource details
-     *
-     * @return {@link BuildPackDockerSecretResource}
-     */
-    BuildPackDockerSecretResource getSecretResource();
+    private String logs;
 
-    /**
-     * Get BuildPack deploy yaml fully
-     *
-     * @return buildPack yaml
-     */
-    String getYaml();
+    private String yaml;
 
-    /**
-     * Get BuildPack artifact url
-     *
-     * @return artifact url
-     */
-    String getArtifact();
+    private String artifact;
 
-    /**
-     * Alternate properties container
-     *
-     * @return key-value mapping
-     */
-    default Map<String, String> getAlternative() {
-        return getJobResource().getAlternative();
+    public BuildPack() {
+    }
+
+    public Map<String, String> getAlternative() {
+        return this.jobResource.getAlternative();
     }
 }

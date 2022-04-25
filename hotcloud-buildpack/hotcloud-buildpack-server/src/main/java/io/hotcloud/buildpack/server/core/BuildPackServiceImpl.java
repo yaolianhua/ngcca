@@ -3,7 +3,10 @@ package io.hotcloud.buildpack.server.core;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.model.*;
+import io.hotcloud.buildpack.api.core.model.BuildPack;
+import io.hotcloud.buildpack.api.core.model.BuildPackDockerSecretResource;
+import io.hotcloud.buildpack.api.core.model.BuildPackJobResource;
+import io.hotcloud.buildpack.api.core.model.BuildPackStorageResourceList;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
@@ -44,7 +47,7 @@ public class BuildPackServiceImpl implements BuildPackService {
         Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null");
         Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null");
 
-        BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().copyToEntity(((DefaultBuildPack) buildPack));
+        BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().copyToEntity(buildPack);
 
         entity.setJob(writeJson(buildPack.getJobResource()));
         entity.setSecret(writeJson(buildPack.getSecretResource()));
@@ -113,7 +116,7 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     private BuildPack toBuildPack(BuildPackEntity entity) {
-        return DefaultBuildPack.builder()
+        return BuildPack.builder()
                 .id(entity.getId())
                 .jobResource(readT(entity.getJob(), BuildPackJobResource.class))
                 .storageResource(readT(entity.getStorage(), BuildPackStorageResourceList.class))

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
+import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageProperties;
@@ -66,8 +66,8 @@ public class BuildPackRabbitMQMessageSubscriber {
             }
     )
     public void subscribe(String message) {
-        Message<DefaultBuildPack> messageBody = convertBuildPackMessageBody(message);
-        DefaultBuildPack buildPack = messageBody.getData();
+        Message<BuildPack> messageBody = convertBuildPackMessageBody(message);
+        BuildPack buildPack = messageBody.getData();
         log.info("[BuildPackRabbitMQMessageSubscriber] received buildPack '{}' mq message", buildPack.getId());
 
         StopWatch watch = new StopWatch();
@@ -101,7 +101,7 @@ public class BuildPackRabbitMQMessageSubscriber {
 
     }
 
-    private Message<DefaultBuildPack> convertBuildPackMessageBody(String content) {
+    private Message<BuildPack> convertBuildPackMessageBody(String content) {
         try {
             return objectMapper.readValue(content, new TypeReference<>() {
             });

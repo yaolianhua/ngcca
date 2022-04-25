@@ -11,7 +11,6 @@ import io.hotcloud.buildpack.api.core.event.BuildPackDoneEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
-import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.pod.PodApi;
@@ -69,7 +68,7 @@ public class BuildPackListener {
     @EventListener
     @Async
     public void delete(BuildPackDeletedEvent deletedEvent) {
-        DefaultBuildPack buildPack = (DefaultBuildPack) deletedEvent.getBuildPack();
+        BuildPack buildPack = deletedEvent.getBuildPack();
         String job = buildPack.getJobResource().getName();
         String namespace = buildPack.getJobResource().getNamespace();
         String persistentVolumeClaim = buildPack.getStorageResource().getPersistentVolumeClaim();
@@ -93,7 +92,7 @@ public class BuildPackListener {
     @EventListener
     @Async
     public void done(BuildPackDoneEvent doneEvent) {
-        DefaultBuildPack buildPack = (DefaultBuildPack) doneEvent.getBuildPack();
+        BuildPack buildPack = doneEvent.getBuildPack();
 
         BuildPack buildPackQueried = buildPackService.findOne(buildPack.getId());
         if (buildPackQueried.isDeleted()) {
@@ -113,7 +112,7 @@ public class BuildPackListener {
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
             log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
             //depends on rabbitmq
-            messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(((DefaultBuildPack) saveOrUpdate)));
+            messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(saveOrUpdate));
         } catch (Exception ex) {
             log.error("[BuildPackDoneEvent] error: {}", ex.getMessage(), ex);
             buildPack.setMessage(ex.getMessage());
@@ -125,7 +124,7 @@ public class BuildPackListener {
     @Async
     @EventListener
     public void started(BuildPackStartedEvent startedEvent) {
-        DefaultBuildPack buildPack = ((DefaultBuildPack) startedEvent.getBuildPack());
+        BuildPack buildPack = startedEvent.getBuildPack();
         String namespace = buildPack.getJobResource().getNamespace();
         String jobName = buildPack.getJobResource().getName();
         try {
@@ -164,7 +163,7 @@ public class BuildPackListener {
     }
 
     @NotNull
-    private BuildPack updateBuildPackDone(DefaultBuildPack buildPack) {
+    private BuildPack updateBuildPackDone(BuildPack buildPack) {
         buildPack.setDone(true);
         //should be never happened
         Assert.hasText(buildPack.getId(), "BuildPack ID is null");
@@ -176,7 +175,7 @@ public class BuildPackListener {
     @EventListener
     public void startFailure(BuildPackStartFailureEvent startFailureEvent) {
         try {
-            DefaultBuildPack buildPack = (DefaultBuildPack) startFailureEvent.getBuildPack();
+            BuildPack buildPack = startFailureEvent.getBuildPack();
             Throwable throwable = startFailureEvent.getThrowable();
             String message = StringUtils.hasText(throwable.getMessage()) ? throwable.getMessage() : throwable.getCause().getMessage();
 

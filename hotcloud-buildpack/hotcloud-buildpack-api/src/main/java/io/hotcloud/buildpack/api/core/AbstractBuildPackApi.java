@@ -56,7 +56,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
         BuildPackJobResource jobResource = jobResource(jobResourceRequest);
 
         //Build final deployment yaml
-        DefaultBuildPack buildPack = DefaultBuildPack.builder()
+        BuildPack buildPack = BuildPack.builder()
                 .storageResource(storageResourceList)
                 .secretResource(dockerSecretResource)
                 .jobResource(jobResource)

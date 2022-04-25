@@ -7,7 +7,6 @@ import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
-import io.hotcloud.buildpack.api.core.model.DefaultBuildPack;
 import io.hotcloud.buildpack.api.core.model.UserNamespacePair;
 import io.hotcloud.buildpack.server.clone.BuildPackRegistryProperties;
 import io.hotcloud.common.cache.Cache;
@@ -162,12 +161,11 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
         buildpack.getJobResource().getAlternative().putAll(alternative);
 
-        DefaultBuildPack defaultBuildPack = (DefaultBuildPack) buildpack;
-        defaultBuildPack.setClonedId(clonedId);
-        defaultBuildPack.setDone(false);
-        defaultBuildPack.setUser(pair.getUsername());
+        buildpack.setClonedId(clonedId);
+        buildpack.setDone(false);
+        buildpack.setUser(pair.getUsername());
 
-        return defaultBuildPack;
+        return buildpack;
     }
 
     @NotNull
