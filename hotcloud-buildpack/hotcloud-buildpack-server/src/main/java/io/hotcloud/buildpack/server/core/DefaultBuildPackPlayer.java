@@ -79,7 +79,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()));
 
         UserNamespacePair pair = retrievedUserNamespacePair();
-        Assert.state(Objects.equals(pair.getUsername(), gitCloned.getUsername()), "Git cloned repository [" + gitCloned.getProject() + "] not found for current user [" + pair.getUsername() + "]");
+        Assert.state(Objects.equals(pair.getUsername(), gitCloned.getUser()), "Git cloned repository [" + gitCloned.getProject() + "] not found for current user [" + pair.getUsername() + "]");
 
         BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(pair.getUsername(), clonedId);
 
