@@ -11,6 +11,7 @@
         <module>hotcloud-security</module>
         <module>hotcloud-db</module>
         <module>hotcloud-web</module>
+        <module>hotcloud-application</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -56,6 +57,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>hotcloud-buildpack</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>hotcloud-application</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
