@@ -108,6 +108,8 @@ public class BuildPackListener {
         buildPack = buildPackService.findOne(buildPack.getId());
         if (buildPack.isDeleted()) {
             log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+            buildPack.setMessage("stopped by delete");
+            updateBuildPackDone(buildPack);
             return;
         }
         try {
@@ -146,6 +148,8 @@ public class BuildPackListener {
                 buildPack = buildPackService.findOne(buildPack.getId());
                 if (buildPack.isDeleted()) {
                     log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+                    buildPack.setMessage("stopped by delete");
+                    updateBuildPackDone(buildPack);
                     break;
                 }
 
