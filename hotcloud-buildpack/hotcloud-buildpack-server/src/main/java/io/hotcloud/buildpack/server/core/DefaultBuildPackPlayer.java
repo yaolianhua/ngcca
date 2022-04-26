@@ -93,7 +93,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null");
 
         BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
-        log.info("[DefaultBuildPackPlayer] save buildPack '{}'", savedBuildPack.getId());
+        log.info("[DefaultBuildPackPlayer] saved [{}] user's BuildPack '{}'", savedBuildPack.getUser(), savedBuildPack.getId());
 
         String namespace = savedBuildPack.getJobResource().getNamespace();
         //create user's namespace
@@ -120,7 +120,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
             return;
         }
         buildPackService.delete(id, false);
-        log.info("[DefaultBuildPackPlayer] delete buildPack '{}'", id);
+        log.info("[DefaultBuildPackPlayer] delete BuildPack '{}'", id);
 
         eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack));
     }

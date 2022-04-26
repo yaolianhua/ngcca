@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -37,6 +38,9 @@ public class BuildPack {
     private String yaml;
 
     private String artifact;
+
+    private LocalDateTime modifiedAt;
+    private LocalDateTime createdAt;
 
     public BuildPack() {
     }

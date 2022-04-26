@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.server.core;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
+import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
@@ -13,6 +14,7 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
+import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
@@ -39,6 +41,7 @@ public class BuildPackListener {
     private final JobApi jobApi;
 
     private final PersistentVolumeClaimApi persistentVolumeClaimApi;
+    private final SecretApi secretApi;
 
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBroadcaster messageBroadcaster;
@@ -47,12 +50,14 @@ public class BuildPackListener {
                              ApplicationEventPublisher eventPublisher,
                              MessageBroadcaster messageBroadcaster,
                              PersistentVolumeClaimApi persistentVolumeClaimApi,
+                             SecretApi secretApi,
                              PodApi podApi,
                              JobApi jobApi) {
         this.buildPackService = buildPackService;
         this.eventPublisher = eventPublisher;
         this.messageBroadcaster = messageBroadcaster;
         this.persistentVolumeClaimApi = persistentVolumeClaimApi;
+        this.secretApi = secretApi;
         this.podApi = podApi;
         this.jobApi = jobApi;
     }
@@ -72,6 +77,7 @@ public class BuildPackListener {
         String job = buildPack.getJobResource().getName();
         String namespace = buildPack.getJobResource().getNamespace();
         String persistentVolumeClaim = buildPack.getStorageResource().getPersistentVolumeClaim();
+        String secretName = buildPack.getSecretResource().getName();
         try {
             Job read = jobApi.read(namespace, job);
             if (read != null) {
@@ -82,6 +88,11 @@ public class BuildPackListener {
             if (claim != null) {
                 persistentVolumeClaimApi.delete(persistentVolumeClaim, namespace);
                 log.info("[BuildPackDeletedEvent] delete persistentVolumeClaim '{}'", persistentVolumeClaim);
+            }
+            Secret secret = secretApi.read(namespace, secretName);
+            if (secret != null) {
+                secretApi.delete(namespace, secretName);
+                log.info("[BuildPackDeletedEvent] delete secret '{}'", secretName);
             }
 
         } catch (Exception ex) {
@@ -94,9 +105,11 @@ public class BuildPackListener {
     public void done(BuildPackDoneEvent doneEvent) {
         BuildPack buildPack = doneEvent.getBuildPack();
 
-        BuildPack buildPackQueried = buildPackService.findOne(buildPack.getId());
-        if (buildPackQueried.isDeleted()) {
-            log.warn("[{}] user's BuildPack [{}] has been deleted", buildPackQueried.getUser(), buildPack.getId());
+        buildPack = buildPackService.findOne(buildPack.getId());
+        if (buildPack.isDeleted()) {
+            log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+            buildPack.setMessage("stopped by delete");
+            updateBuildPackDone(buildPack);
             return;
         }
         try {
@@ -110,7 +123,7 @@ public class BuildPackListener {
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
-            log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
+            log.info("[BuildPackDoneEvent] update [{}] user's BuildPack done [{}]", saveOrUpdate.getUser(), saveOrUpdate.getId());
             //depends on rabbitmq
             messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(saveOrUpdate));
         } catch (Exception ex) {
@@ -130,22 +143,25 @@ public class BuildPackListener {
         try {
 
             while (true) {
-                BuildPack buildPackQueried = buildPackService.findOne(buildPack.getId());
-                if (buildPackQueried.isDeleted()) {
-                    log.warn("[{}] user's BuildPack [{}] has been deleted", buildPackQueried.getUser(), buildPack.getId());
+                sleep(30);
+
+                buildPack = buildPackService.findOne(buildPack.getId());
+                if (buildPack.isDeleted()) {
+                    log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+                    buildPack.setMessage("stopped by delete");
+                    updateBuildPackDone(buildPack);
                     break;
                 }
 
-                sleep(30);
                 Job job = jobApi.read(namespace, jobName);
                 BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);
 
                 if (jobStatus == BuildPackStatus.JobStatus.Active) {
-                    log.debug("[{}] user's BuildPack [{}] is not done yet! job [{}] namespace [{}]", buildPack.getUser(), buildPack.getId(), jobName, namespace);
+                    log.info("[{}] user's BuildPack [{}] is not done yet! job [{}] namespace [{}]", buildPack.getUser(), buildPack.getId(), jobName, namespace);
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Ready) {
-                    log.debug("[{}] user's BuildPack [{}] is ready", buildPack.getUser(), buildPack.getId());
+                    log.info("[{}] user's BuildPack [{}] is ready", buildPack.getUser(), buildPack.getId());
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Succeeded || jobStatus == BuildPackStatus.JobStatus.Failed) {

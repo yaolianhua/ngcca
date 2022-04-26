@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,9 @@ public class GitCloned {
     private String username;
     private String password;
     private String error;
+
+    private LocalDateTime modifiedAt;
+    private LocalDateTime createdAt;
 
     public GitCloned() {
     }
