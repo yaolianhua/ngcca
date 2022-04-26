@@ -68,7 +68,7 @@ public class BuildPackRabbitMQMessageSubscriber {
     public void subscribe(String message) {
         Message<BuildPack> messageBody = convertBuildPackMessageBody(message);
         BuildPack buildPack = messageBody.getData();
-        log.info("[BuildPackRabbitMQMessageSubscriber] received buildPack '{}' mq message", buildPack.getId());
+        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user's BuildPack '{}' message", buildPack.getUser(), buildPack.getId());
 
         StopWatch watch = new StopWatch();
         watch.start();
@@ -79,10 +79,10 @@ public class BuildPackRabbitMQMessageSubscriber {
 
             File file = Path.of(clonedPath, tarball).toFile();
             if (!file.exists()) {
-                log.info("[BuildPackRabbitMQMessageSubscriber] BuildPack tarBall '{}' dose not exist!", tarball);
+                log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' dose not exist!", buildPack.getUser(), tarball);
                 return;
             }
-            log.info("[BuildPackRabbitMQMessageSubscriber] BuildPack tarBall '{}' size '{}MB'", tarball, DataSize.ofBytes(file.length()).toMegabytes());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' size '{}MB'", buildPack.getUser(), tarball, DataSize.ofBytes(file.length()).toMegabytes());
 
             if (!minioBucketApi.exist(namespace)) {
                 minioBucketApi.make(namespace);
@@ -91,7 +91,7 @@ public class BuildPackRabbitMQMessageSubscriber {
             String objectname = minioObjectApi.uploadFile(namespace, tarball, file.getAbsolutePath());
 
             watch.stop();
-            log.info("[BuildPackRabbitMQMessageSubscriber] BuildPack tarBall '{}' upload success. takes '{}s'", tarball, watch.getTotalTimeSeconds());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' upload success. takes '{}s'", buildPack.getUser(), tarball, watch.getTotalTimeSeconds());
 
             buildPack.setArtifact(Path.of(minioProperties.getEndpoint(), namespace, objectname).toString());
             buildPackService.saveOrUpdate(buildPack);

@@ -123,7 +123,7 @@ public class BuildPackListener {
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
-            log.info("[BuildPackDoneEvent] update buildPack done [{}]", saveOrUpdate.getId());
+            log.info("[BuildPackDoneEvent] update [{}] user's BuildPack done [{}]", saveOrUpdate.getUser(), saveOrUpdate.getId());
             //depends on rabbitmq
             messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(saveOrUpdate));
         } catch (Exception ex) {
