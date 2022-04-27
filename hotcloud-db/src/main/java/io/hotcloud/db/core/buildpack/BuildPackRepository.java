@@ -17,4 +17,20 @@ public interface BuildPackRepository extends PagingAndSortingRepository<BuildPac
      * @return {@link BuildPackEntity}
      */
     List<BuildPackEntity> findByUserAndClonedId(String user, String clonedId);
+
+    /**
+     * Find entity with giving {@code user}
+     *
+     * @param user user's username
+     * @return {@link BuildPackEntity}
+     */
+    List<BuildPackEntity> findByUser(String user);
+
+    /**
+     * Find entity with giving {@code clonedId}
+     *
+     * @param clonedId git cloned id
+     * @return {@link BuildPackEntity}
+     */
+    List<BuildPackEntity> findByClonedId(String clonedId);
 }
