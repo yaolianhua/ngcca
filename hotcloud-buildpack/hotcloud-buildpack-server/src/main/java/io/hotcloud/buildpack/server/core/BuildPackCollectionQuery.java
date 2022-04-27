@@ -54,8 +54,7 @@ public class BuildPackCollectionQuery {
         }
 
         List<BuildPack> filtered = filter(buildPacks, done, deleted);
-        List<BuildPack> paging = PageResult.paging(filtered, pageable.getPage(), pageable.getPageSize());
-        return PageResult.ofPage(paging, filtered.size(), pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
 
     }
 
