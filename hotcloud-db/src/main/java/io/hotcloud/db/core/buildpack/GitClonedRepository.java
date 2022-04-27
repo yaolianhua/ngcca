@@ -2,6 +2,8 @@ package io.hotcloud.db.core.buildpack;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -15,5 +17,13 @@ public interface GitClonedRepository extends PagingAndSortingRepository<GitClone
      * @return {@link GitClonedEntity}
      */
     GitClonedEntity findByUserAndProject(String user, String project);
+
+    /**
+     * List entity with the giving {@code  user}
+     *
+     * @param user user
+     * @return {@link GitClonedEntity}
+     */
+    List<GitClonedEntity> findByUser(String user);
 
 }

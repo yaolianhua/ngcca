@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -22,6 +25,22 @@ public class GitClonedRepositoryIT extends DatabaseIntegrationTestBase {
     @After
     public void after() {
         gitClonedRepository.deleteAll();
+    }
+
+    @Test
+    public void list() {
+        GitClonedEntity entity = buildGitCloned("admin");
+        gitClonedRepository.save(entity);
+
+        List<GitClonedEntity> entities = gitClonedRepository.findByUser("guest");
+        List<GitClonedEntity> adminEntities = gitClonedRepository.findByUser("admin");
+
+        Assertions.assertTrue(entities.isEmpty());
+        Assertions.assertEquals(1, adminEntities.size());
+
+        List<GitClonedEntity> collect = StreamSupport.stream(gitClonedRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        Assertions.assertFalse(collect.isEmpty());
     }
 
     @Test
