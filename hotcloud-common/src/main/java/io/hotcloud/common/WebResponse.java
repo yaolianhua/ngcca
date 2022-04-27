@@ -4,6 +4,8 @@ package io.hotcloud.common;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collection;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -17,6 +19,14 @@ public final class WebResponse {
 
     public static <T> ResponseEntity<Result<T>> ok(T data) {
         return ok(HttpStatus.OK, data);
+    }
+
+    public static <E> ResponseEntity<PageResult<E>> okSinglePage(Collection<E> data) {
+        return ResponseEntity.ok(PageResult.ofSingle(data));
+    }
+
+    public static <E> ResponseEntity<PageResult<E>> okPage(PageResult<E> pageResult) {
+        return ResponseEntity.ok(PageResult.ofPage(pageResult.getData(), pageResult.getTotal(), pageResult.getPage(), pageResult.getPageSize()));
     }
 
     public static <T> ResponseEntity<Result<T>> ok(HttpStatus status, T data) {
