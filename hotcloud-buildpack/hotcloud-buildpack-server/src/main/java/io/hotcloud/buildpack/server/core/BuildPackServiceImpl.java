@@ -155,6 +155,8 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .message(entity.getMessage())
                 .logs(entity.getLogs())
                 .artifact(entity.getArtifact())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
                 .build();
     }
 
