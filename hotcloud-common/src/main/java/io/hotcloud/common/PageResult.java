@@ -28,8 +28,9 @@ public class PageResult<E> extends Result<Collection<E>> {
         this.pageSize = pageSize;
     }
 
-    public static <E> PageResult<E> ofPage(Collection<E> data, int total, int page, int pageSize) {
-        return new PageResult<>(200, "success", data, total, page, pageSize);
+    public static <E> PageResult<E> ofPage(Collection<E> data, int page, int pageSize) {
+        List<E> paged = paging(data, page, pageSize);
+        return new PageResult<>(200, "success", paged, data.size(), page, pageSize);
     }
 
     public static <E> PageResult<E> ofSingle(Collection<E> data) {

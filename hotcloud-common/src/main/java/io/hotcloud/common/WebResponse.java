@@ -26,7 +26,7 @@ public final class WebResponse {
     }
 
     public static <E> ResponseEntity<PageResult<E>> okPage(PageResult<E> pageResult) {
-        return ResponseEntity.ok(PageResult.ofPage(pageResult.getData(), pageResult.getTotal(), pageResult.getPage(), pageResult.getPageSize()));
+        return ResponseEntity.ok(pageResult);
     }
 
     public static <T> ResponseEntity<Result<T>> ok(HttpStatus status, T data) {
