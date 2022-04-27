@@ -42,7 +42,7 @@ public class GitControllerTest {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>(8);
         params.set("git_url", "https://github.com/GoogleContainerTools/kaniko.git");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clone")).params(params))
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clones")).params(params))
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time
