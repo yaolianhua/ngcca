@@ -13,4 +13,27 @@
     <name>Hot Cloud :: Application :: Server</name>
 
 
+    <dependencies>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-application-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-kubernetes-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
