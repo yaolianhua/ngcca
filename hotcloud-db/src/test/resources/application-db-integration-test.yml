@@ -1,15 +1,15 @@
 db:
   type: mongodb
   mongodb:
-    host: localhost
-    username: root
+    host: 120.78.225.168
+    username: admin
     password: QbMufCD@9WVQ^Hv
     port: 27017
     database: hotcloud-test
   redis:
     database: 1
     password: QbMufCD@9WVQ^Hv
-    host: localhost
+    host: 120.78.225.168
     port: 6379
 
 logging:

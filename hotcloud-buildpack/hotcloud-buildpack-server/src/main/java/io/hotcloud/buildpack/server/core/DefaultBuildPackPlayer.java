@@ -8,7 +8,6 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.buildpack.api.core.model.UserNamespacePair;
-import io.hotcloud.buildpack.server.clone.BuildPackRegistryProperties;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;

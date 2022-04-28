@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.controller;
 
 import io.hotcloud.buildpack.api.clone.GitClonedService;
+import io.hotcloud.buildpack.server.clone.GitClonedCollectionQuery;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBeans(value = {
         @MockBean(classes = {
                 GitClonedService.class,
+                GitClonedCollectionQuery.class,
                 UserApi.class
         })
 })
@@ -42,7 +44,7 @@ public class GitControllerTest {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>(8);
         params.set("git_url", "https://github.com/GoogleContainerTools/kaniko.git");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clone")).params(params))
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clones")).params(params))
                 .andDo(print())
                 .andExpect(status().isAccepted());
         //was invoked one time

@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.server.clone;
+package io.hotcloud.buildpack.server.core;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

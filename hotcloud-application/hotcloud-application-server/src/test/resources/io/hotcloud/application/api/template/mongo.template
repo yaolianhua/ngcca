@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: #{[mongo]}
+  name: #{[mongo]}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: #{[mongo]}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: #{[mongo]}
+    spec:
+      containers:
+        - image: mongo:5.0
+          name: mongo
+          args: ["--dbpath","/data/db"]
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: #{[mongo_root_username]}
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: #{[mongo_root_password]}
+          volumeMounts:
+            - name: mongo-data-dir
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data-dir
+          persistentVolumeClaim:
+            claimName: pvc-mongo-#{[namespace]}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-mongo-#{[namespace]}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: pvc-mongo-#{[namespace]}
+    namespace: #{[namespace]}
+  nfs:
+    path: #{[nfs_path]}/#{[namespace]}/mongo
+    readOnly: false
+    server: #{[nfs_server]}
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: storage-class-application
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-mongo-#{[namespace]}
+  namespace: #{[namespace]}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: pv-mongo-#{[namespace]}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: #{[mongo]}
+  name: #{[mongo]}
+  namespace: #{[namespace]}
+spec:
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+  selector:
+    app: #{[mongo]}
+  type: NodePort

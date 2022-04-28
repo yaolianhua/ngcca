@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hotcloud-application</artifactId>
+        <groupId>io.hotcloud</groupId>
+        <version>0.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hotcloud-application-server</artifactId>
+    <name>Hot Cloud :: Application :: Server</name>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-application-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-kubernetes-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

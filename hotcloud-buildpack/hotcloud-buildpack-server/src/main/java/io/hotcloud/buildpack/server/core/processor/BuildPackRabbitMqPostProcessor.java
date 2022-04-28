@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
-import io.hotcloud.buildpack.api.core.BuildPackApplicationRunnerPostProcessor;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.buildpack.api.core.BuildPackPostProcessor;
 import io.hotcloud.common.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -18,11 +18,11 @@ import org.springframework.stereotype.Component;
         havingValue = MessageProperties.RABBITMQ
 )
 @Slf4j
-class BuildPackApplicationRabbitMQPostProcessor implements BuildPackApplicationRunnerPostProcessor {
+class BuildPackRabbitMqPostProcessor implements BuildPackPostProcessor {
 
     private final RabbitAdmin rabbitAdmin;
 
-    public BuildPackApplicationRabbitMQPostProcessor(RabbitAdmin rabbitAdmin) {
+    public BuildPackRabbitMqPostProcessor(RabbitAdmin rabbitAdmin) {
         this.rabbitAdmin = rabbitAdmin;
     }
 

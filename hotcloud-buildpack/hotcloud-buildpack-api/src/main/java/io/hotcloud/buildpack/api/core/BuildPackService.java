@@ -27,6 +27,29 @@ public interface BuildPackService {
     List<BuildPack> findAll(String user, String clonedId);
 
     /**
+     * Find all user's {@link BuildPack} with giving {@code user}
+     *
+     * @param user user's username
+     * @return {@link BuildPack}
+     */
+    List<BuildPack> findAll(String user);
+
+    /**
+     * Find all {@link BuildPack} with giving {@code clonedId}
+     *
+     * @param clonedId git cloned id
+     * @return {@link BuildPack}
+     */
+    List<BuildPack> findByClonedId(String clonedId);
+
+    /**
+     * Find all user's {@link BuildPack}
+     *
+     * @return {@link BuildPack}
+     */
+    List<BuildPack> findAll();
+
+    /**
      * Find one with giving buildPack id
      *
      * @param id buildPack id

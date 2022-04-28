@@ -1,6 +1,6 @@
-package io.hotcloud.buildpack.server;
+package io.hotcloud.application.server;
 
-import io.hotcloud.buildpack.api.core.BuildPackPostProcessor;
+import io.hotcloud.application.api.ApplicationPostProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,17 +16,17 @@ import java.util.List;
 @Component
 @Slf4j
 @Order(Ordered.LOWEST_PRECEDENCE - 1)
-public class BuildPackApplicationRunner implements ApplicationRunner {
+public class ApplicationApplicationRunner implements ApplicationRunner {
 
-    private final List<BuildPackPostProcessor> buildPackPostProcessors;
+    private final List<ApplicationPostProcessor> applicationPostProcessors;
 
-    public BuildPackApplicationRunner(List<BuildPackPostProcessor> buildPackPostProcessors) {
-        this.buildPackPostProcessors = buildPackPostProcessors;
+    public ApplicationApplicationRunner(List<ApplicationPostProcessor> applicationPostProcessors) {
+        this.applicationPostProcessors = applicationPostProcessors;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        for (BuildPackPostProcessor postProcessor : buildPackPostProcessors) {
+        for (ApplicationPostProcessor postProcessor : applicationPostProcessors) {
             postProcessor.execute();
         }
     }

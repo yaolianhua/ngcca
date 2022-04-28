@@ -1,5 +1,7 @@
 package io.hotcloud.buildpack.api.clone;
 
+import java.util.List;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -14,13 +16,13 @@ public interface GitClonedService {
     GitCloned saveOrUpdate(GitCloned cloned);
 
     /**
-     * Find {@link GitCloned} with giving {@code  username} and {@code gitProject}
+     * Find {@link GitCloned} with giving {@code  user} and {@code gitProject}
      *
-     * @param username   user's username
+     * @param user       user's username
      * @param gitProject cloned git project
      * @return {@link GitCloned}
      */
-    GitCloned findOne(String username, String gitProject);
+    GitCloned findOne(String user, String gitProject);
 
     /**
      * Find {@link GitCloned} with giving {@code  clonedId}
@@ -31,12 +33,27 @@ public interface GitClonedService {
     GitCloned findOne(String clonedId);
 
     /**
-     * Delete {@link GitCloned} with giving {@code  username} and {@code gitProject}
+     * List user's {@link GitCloned} with giving {@code user}
      *
-     * @param username   user's username
+     * @param user user
+     * @return {@link GitCloned}
+     */
+    List<GitCloned> listCloned(String user);
+
+    /**
+     * List all {@link GitCloned}
+     *
+     * @return {@link GitCloned}
+     */
+    List<GitCloned> listAll();
+
+    /**
+     * Delete {@link GitCloned} with giving {@code  user} and {@code gitProject}
+     *
+     * @param user       user's username
      * @param gitProject cloned git project
      */
-    void deleteOne(String username, String gitProject);
+    void deleteOne(String user, String gitProject);
 
     /**
      * Step with git clone

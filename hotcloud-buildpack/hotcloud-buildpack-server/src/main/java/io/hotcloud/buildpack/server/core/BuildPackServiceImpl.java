@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -70,6 +71,31 @@ public class BuildPackServiceImpl implements BuildPackService {
         List<BuildPackEntity> entities = buildPackRepository.findByUserAndClonedId(user, clonedId);
 
         return entities.stream()
+                .map(this::toBuildPack)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BuildPack> findAll(String user) {
+        List<BuildPackEntity> entities = buildPackRepository.findByUser(user);
+
+        return entities.stream()
+                .map(this::toBuildPack)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BuildPack> findByClonedId(String clonedId) {
+        List<BuildPackEntity> entities = buildPackRepository.findByClonedId(clonedId);
+        return entities.stream()
+                .map(this::toBuildPack)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BuildPack> findAll() {
+        Iterable<BuildPackEntity> all = buildPackRepository.findAll();
+        return StreamSupport.stream(all.spliterator(), false)
                 .map(this::toBuildPack)
                 .collect(Collectors.toList());
     }
@@ -129,6 +155,8 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .message(entity.getMessage())
                 .logs(entity.getLogs())
                 .artifact(entity.getArtifact())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
                 .build();
     }
 

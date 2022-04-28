@@ -12,7 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 "io.hotcloud.common",
                 "io.hotcloud.buildpack",
                 "io.hotcloud.security",
-                "io.hotcloud.kubernetes"
+                "io.hotcloud.kubernetes",
+                "io.hotcloud.application"
         }
 )
 public class HotCloudApplication {

@@ -19,8 +19,11 @@ import org.springframework.util.StringUtils;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -75,11 +78,11 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public GitCloned findOne(String username, String gitProject) {
-        Assert.hasText(username, "User's username is null");
+    public GitCloned findOne(String user, String gitProject) {
+        Assert.hasText(user, "User's username is null");
         Assert.hasText(gitProject, "Git project is null");
 
-        GitClonedEntity entity = repository.findByUserAndProject(username, gitProject);
+        GitClonedEntity entity = repository.findByUserAndProject(user, gitProject);
 
         if (entity == null) {
             return null;
@@ -96,10 +99,26 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public void deleteOne(String username, String gitProject) {
-        GitClonedEntity one = repository.findByUserAndProject(username, gitProject);
+    public List<GitCloned> listCloned(String user) {
+        return repository.findByUser(user)
+                .stream()
+                .map(e -> e.toT(GitCloned.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GitCloned> listAll() {
+        Iterable<GitClonedEntity> all = repository.findAll();
+        return StreamSupport.stream(all.spliterator(), false)
+                .map(e -> e.toT(GitCloned.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteOne(String user, String gitProject) {
+        GitClonedEntity one = repository.findByUserAndProject(user, gitProject);
         if (one == null) {
-            log.debug("Git cloned record not found. user='{}', project='{}'", username, gitProject);
+            log.debug("Git cloned record not found. user='{}', project='{}'", user, gitProject);
             return;
         }
         repository.delete(one);
