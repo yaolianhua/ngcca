@@ -19,6 +19,7 @@
             <artifactId>hotcloud-kubernetes-server</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-buildpack-server</artifactId>
@@ -27,9 +28,16 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-application-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-security-server</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-db</artifactId>
