@@ -1,8 +1,8 @@
-package io.hotcloud.buildpack.server.core.processor;
+package io.hotcloud.application.server.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
-import io.hotcloud.buildpack.api.core.BuildPackApplicationRunnerPostProcessor;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.application.api.ApplicationConstant;
+import io.hotcloud.application.api.ApplicationPostProcessor;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
@@ -17,11 +17,11 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicationRunnerPostProcessor {
+class ApplicationStorageClassPostProcessor implements ApplicationPostProcessor {
 
     private final StorageClassApi storageClassApi;
 
-    public BuildPackApplicationStorageClassPostProcessor(StorageClassApi storageClassApi) {
+    public ApplicationStorageClassPostProcessor(StorageClassApi storageClassApi) {
         this.storageClassApi = storageClassApi;
     }
 
@@ -31,20 +31,20 @@ class BuildPackApplicationStorageClassPostProcessor implements BuildPackApplicat
         StorageClassCreateRequest createRequest = new StorageClassCreateRequest();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setName(BuildPackConstant.STORAGE_CLASS);
+        objectMetadata.setName(ApplicationConstant.STORAGE_CLASS);
 
         createRequest.setMetadata(objectMetadata);
 
         try {
-            StorageClass existedStorageClass = storageClassApi.read(BuildPackConstant.STORAGE_CLASS);
+            StorageClass existedStorageClass = storageClassApi.read(ApplicationConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
-                log.debug("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
+                log.debug("ApplicationStorageClassPostProcessor. storageClass '{}' already exist ", ApplicationConstant.STORAGE_CLASS);
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
-            log.info("BuildPackApplicationStorageClassPostProcessor. storageClass '{}' created ", storageClass.getMetadata().getName());
+            log.info("ApplicationStorageClassPostProcessor. storageClass '{}' created ", storageClass.getMetadata().getName());
         } catch (ApiException e) {
-            log.error("BuildPackApplicationStorageClassPostProcessor error: {}", e.getMessage());
+            log.error("ApplicationStorageClassPostProcessor error: {}", e.getMessage());
         }
     }
 }
