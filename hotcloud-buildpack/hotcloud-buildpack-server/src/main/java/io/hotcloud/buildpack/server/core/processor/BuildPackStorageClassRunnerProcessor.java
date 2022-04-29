@@ -2,7 +2,7 @@ package io.hotcloud.buildpack.server.core.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackPostProcessor;
+import io.hotcloud.buildpack.api.core.BuildPackRunnerProcessor;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
@@ -17,16 +17,16 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-class BuildPackStorageClassPostProcessor implements BuildPackPostProcessor {
+class BuildPackStorageClassRunnerProcessor implements BuildPackRunnerProcessor {
 
     private final StorageClassApi storageClassApi;
 
-    public BuildPackStorageClassPostProcessor(StorageClassApi storageClassApi) {
+    public BuildPackStorageClassRunnerProcessor(StorageClassApi storageClassApi) {
         this.storageClassApi = storageClassApi;
     }
 
     @Override
-    public void execute() {
+    public void process() {
 
         StorageClassCreateRequest createRequest = new StorageClassCreateRequest();
 
@@ -38,13 +38,13 @@ class BuildPackStorageClassPostProcessor implements BuildPackPostProcessor {
         try {
             StorageClass existedStorageClass = storageClassApi.read(BuildPackConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
-                log.debug("BuildPackStorageClassPostProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
+                log.debug("BuildPackStorageClassRunnerProcessor. storageClass '{}' already exist ", BuildPackConstant.STORAGE_CLASS);
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
-            log.info("BuildPackStorageClassPostProcessor. storageClass '{}' created ", storageClass.getMetadata().getName());
+            log.info("BuildPackStorageClassRunnerProcessor. storageClass '{}' created ", storageClass.getMetadata().getName());
         } catch (ApiException e) {
-            log.error("BuildPackStorageClassPostProcessor error: {}", e.getMessage());
+            log.error("BuildPackStorageClassRunnerProcessor error: {}", e.getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.core.processor;
 
-import io.hotcloud.buildpack.api.core.BuildPackPostProcessor;
+import io.hotcloud.buildpack.api.core.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.KanikoFlag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,23 +12,23 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-class BuildPackDefaultArgsPrinterPostProcessor implements BuildPackPostProcessor {
+class BuildPackDefaultArgsPrinterRunnerProcessor implements BuildPackRunnerProcessor {
 
     private final KanikoFlag kanikoFlag;
 
-    public BuildPackDefaultArgsPrinterPostProcessor(KanikoFlag kanikoFlag) {
+    public BuildPackDefaultArgsPrinterRunnerProcessor(KanikoFlag kanikoFlag) {
         this.kanikoFlag = kanikoFlag;
     }
 
     @Override
-    public void execute() {
+    public void process() {
         Map<String, String> args = kanikoFlag.resolvedArgs();
 
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, String> entry : args.entrySet()) {
             builder.append("- --").append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
         }
-        log.debug("BuildPackDefaultArgsPrinterPostProcessor. logged kaniko flags \n {}", builder);
+        log.debug("BuildPackDefaultArgsPrinterRunnerProcessor. logged kaniko flags \n {}", builder);
 
     }
 }
