@@ -23,10 +23,20 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-db</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-kubernetes-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-security-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
