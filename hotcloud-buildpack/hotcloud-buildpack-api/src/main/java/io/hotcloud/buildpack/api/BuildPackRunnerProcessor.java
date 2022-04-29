@@ -1,12 +1,12 @@
-package io.hotcloud.buildpack.api.core;
+package io.hotcloud.buildpack.api;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface BuildPackPostProcessor {
+public interface BuildPackRunnerProcessor {
 
     /**
      * After the application is started, the initialization action of the buildpack relation
      */
-    void execute();
+    void process();
 }

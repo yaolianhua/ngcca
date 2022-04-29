@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.buildpack.api.core.model.*;
 import io.hotcloud.common.UUIDGenerator;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;

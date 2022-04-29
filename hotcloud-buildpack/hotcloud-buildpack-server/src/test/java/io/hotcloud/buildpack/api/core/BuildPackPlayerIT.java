@@ -6,7 +6,6 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
-import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.storage.FileChangeWatcher;
 import io.hotcloud.common.storage.FileState;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;

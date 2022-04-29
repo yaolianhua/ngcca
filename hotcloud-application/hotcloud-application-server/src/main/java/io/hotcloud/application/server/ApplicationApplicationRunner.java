@@ -1,6 +1,6 @@
 package io.hotcloud.application.server;
 
-import io.hotcloud.application.api.ApplicationPostProcessor;
+import io.hotcloud.application.api.ApplicationRunnerProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,16 +18,16 @@ import java.util.List;
 @Order(Ordered.LOWEST_PRECEDENCE - 1)
 public class ApplicationApplicationRunner implements ApplicationRunner {
 
-    private final List<ApplicationPostProcessor> applicationPostProcessors;
+    private final List<ApplicationRunnerProcessor> applicationRunnerProcessors;
 
-    public ApplicationApplicationRunner(List<ApplicationPostProcessor> applicationPostProcessors) {
-        this.applicationPostProcessors = applicationPostProcessors;
+    public ApplicationApplicationRunner(List<ApplicationRunnerProcessor> applicationRunnerProcessors) {
+        this.applicationRunnerProcessors = applicationRunnerProcessors;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        for (ApplicationPostProcessor postProcessor : applicationPostProcessors) {
-            postProcessor.execute();
+        for (ApplicationRunnerProcessor postProcessor : applicationRunnerProcessors) {
+            postProcessor.process();
         }
     }
 }

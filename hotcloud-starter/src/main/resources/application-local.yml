@@ -41,3 +41,7 @@ buildpack:
     project: dev
     username: admin
     password: QbMufCD@9WVQ^Hv
+app:
+  storage:
+    type: nfs
+    nfs-server: 119.91.214.25

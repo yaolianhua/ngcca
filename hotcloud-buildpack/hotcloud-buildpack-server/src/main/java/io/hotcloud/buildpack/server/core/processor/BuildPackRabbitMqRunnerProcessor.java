@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
+import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackPostProcessor;
 import io.hotcloud.common.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -18,16 +18,16 @@ import org.springframework.stereotype.Component;
         havingValue = MessageProperties.RABBITMQ
 )
 @Slf4j
-class BuildPackRabbitMqPostProcessor implements BuildPackPostProcessor {
+class BuildPackRabbitMqRunnerProcessor implements BuildPackRunnerProcessor {
 
     private final RabbitAdmin rabbitAdmin;
 
-    public BuildPackRabbitMqPostProcessor(RabbitAdmin rabbitAdmin) {
+    public BuildPackRabbitMqRunnerProcessor(RabbitAdmin rabbitAdmin) {
         this.rabbitAdmin = rabbitAdmin;
     }
 
     @Override
-    public void execute() {
+    public void process() {
         Queue queue = QueueBuilder.durable(BuildPackConstant.QUEUE_SUBSCRIBE_BUILDPACK_DONE_MESSAGE).build();
         FanoutExchange exchange = ExchangeBuilder.fanoutExchange(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE).build();
         Binding binding = BindingBuilder.bind(queue).to(exchange);

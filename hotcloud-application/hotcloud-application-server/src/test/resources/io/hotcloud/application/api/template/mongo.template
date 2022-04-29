@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: #{[mongo]}
-  strategy: {}
+  strategy: { }
   template:
     metadata:
       labels:
@@ -18,7 +18,7 @@ spec:
       containers:
         - image: mongo:5.0
           name: mongo
-          args: ["--dbpath","/data/db"]
+          args: [ "--dbpath","/data/db" ]
           livenessProbe:
             exec:
               command:
@@ -102,6 +102,7 @@ spec:
     - port: 27017
       protocol: TCP
       targetPort: 27017
+      nodePort: 30117
   selector:
     app: #{[mongo]}
   type: NodePort

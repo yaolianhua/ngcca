@@ -1,7 +1,5 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.api.core.model.BuildPack;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
