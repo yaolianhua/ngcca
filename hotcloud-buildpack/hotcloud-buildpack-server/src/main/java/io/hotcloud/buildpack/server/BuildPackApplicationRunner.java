@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server;
 
-import io.hotcloud.buildpack.api.core.BuildPackRunnerProcessor;
+import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

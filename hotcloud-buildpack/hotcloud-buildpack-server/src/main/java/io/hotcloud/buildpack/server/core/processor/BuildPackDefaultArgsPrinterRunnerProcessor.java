@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.server.core.processor;
 
-import io.hotcloud.buildpack.api.core.BuildPackRunnerProcessor;
+import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.KanikoFlag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

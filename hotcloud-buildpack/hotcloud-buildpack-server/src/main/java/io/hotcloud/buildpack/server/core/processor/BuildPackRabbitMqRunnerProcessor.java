@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
+import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackRunnerProcessor;
 import io.hotcloud.common.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;

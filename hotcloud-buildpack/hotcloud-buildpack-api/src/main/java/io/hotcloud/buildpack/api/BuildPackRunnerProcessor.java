@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.api.core;
+package io.hotcloud.buildpack.api;
 
 /**
  * @author yaolianhua789@gmail.com
