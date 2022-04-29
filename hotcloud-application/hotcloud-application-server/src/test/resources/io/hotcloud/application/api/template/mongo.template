@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: #{[mongo]}
-  strategy: {}
+  strategy: { }
   template:
     metadata:
       labels:
@@ -18,7 +18,7 @@ spec:
       containers:
         - image: mongo:5.0
           name: mongo
-          args: ["--dbpath","/data/db"]
+          args: [ "--dbpath","/data/db" ]
           livenessProbe:
             exec:
               command:
