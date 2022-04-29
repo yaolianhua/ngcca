@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.controller;
 
+import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackPlayer;
-import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.buildpack.server.core.BuildPackCollectionQuery;
 import io.hotcloud.common.PageResult;
 import io.hotcloud.common.Pageable;

@@ -1,10 +1,10 @@
-package io.hotcloud.buildpack.api.core.model;
+package io.hotcloud.buildpack.api.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,26 +14,27 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildPackStorageResourceInternalInput {
+public class BuildPackStorageResourceList {
 
     /**
-     * In which namespace the pvc will be created
+     * In which namespace the pvc be created
      */
     private String namespace;
     /**
-     * The name pv will be created
+     * StorageClass name
      */
-    @Nullable
+    private String storageClass;
+    /**
+     * The name pv be created
+     */
     private String persistentVolume;
     /**
-     * The name pvc will be created
+     * The name pvc be created
      */
-    @Nullable
     private String persistentVolumeClaim;
     /**
      * The capacity of pv.
      */
-    @Nullable
     private String capacity;
 
     /**
@@ -42,6 +43,12 @@ public class BuildPackStorageResourceInternalInput {
     @Builder.Default
     private Map<String, String> alternative = new HashMap<>();
 
-    public BuildPackStorageResourceInternalInput() {
+    /**
+     * Generated pv/pvc resource list yaml
+     */
+    @JsonProperty("yaml")
+    private String resourceListYaml;
+
+    public BuildPackStorageResourceList() {
     }
 }

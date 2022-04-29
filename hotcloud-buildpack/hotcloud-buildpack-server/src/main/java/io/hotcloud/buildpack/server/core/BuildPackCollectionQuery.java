@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core;
 
+import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.model.BuildPack;
 import io.hotcloud.common.PageResult;
 import io.hotcloud.common.Pageable;
 import io.hotcloud.common.exception.HotCloudException;

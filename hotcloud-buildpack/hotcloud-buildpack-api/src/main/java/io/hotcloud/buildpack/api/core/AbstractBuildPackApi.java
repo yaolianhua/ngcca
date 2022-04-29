@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.api.core.model.*;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
