@@ -37,7 +37,6 @@ class MongoInstanceTemplateProcessor implements InstanceTemplateResolveProcessor
                 "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD,
                 "mongo_nodeport", String.valueOf(InstanceTemplateConstant.MONGO_NODEPORT),
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,
-                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH,
-                "nfs_server", properties.getNfsServer());
+                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
     }
 }
