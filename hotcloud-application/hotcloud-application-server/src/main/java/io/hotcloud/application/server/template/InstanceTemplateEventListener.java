@@ -1,12 +1,15 @@
 package io.hotcloud.application.server.template;
 
+import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
+import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
-import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
-import io.hotcloud.application.api.template.event.InstanceTemplateDoneEvent;
-import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
-import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
+import io.hotcloud.application.api.template.event.*;
+import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.network.ServiceApi;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -28,13 +33,22 @@ public class InstanceTemplateEventListener {
     private final InstanceTemplateService instanceTemplateService;
     private final ApplicationEventPublisher eventPublisher;
     private final DeploymentApi deploymentApi;
+    private final ServiceApi serviceApi;
+    private final PersistentVolumeClaimApi persistentVolumeClaimApi;
+    private final KubectlApi kubectlApi;
 
     public InstanceTemplateEventListener(InstanceTemplateService instanceTemplateService,
                                          ApplicationEventPublisher eventPublisher,
-                                         DeploymentApi deploymentApi) {
+                                         DeploymentApi deploymentApi,
+                                         ServiceApi serviceApi,
+                                         KubectlApi kubectlApi,
+                                         PersistentVolumeClaimApi persistentVolumeClaimApi) {
         this.instanceTemplateService = instanceTemplateService;
         this.eventPublisher = eventPublisher;
         this.deploymentApi = deploymentApi;
+        this.serviceApi = serviceApi;
+        this.kubectlApi = kubectlApi;
+        this.persistentVolumeClaimApi = persistentVolumeClaimApi;
     }
 
     private void sleep(int seconds) {
@@ -43,6 +57,27 @@ public class InstanceTemplateEventListener {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    @EventListener
+    @Async
+    public void timeout(InstanceTemplateTimeoutEvent event) {
+        InstanceTemplate template = event.getInstance();
+        String namespace = template.getNamespace();
+        try {
+            String events = kubectlApi.events(namespace).stream()
+                    .filter(e -> "warning".equalsIgnoreCase(e.getType()))
+                    .map(Event::getMessage)
+                    .distinct()
+                    .collect(Collectors.joining("\n"));
+            updateTemplate(template, events, false);
+            log.info("[{}] user's template [{}] is failed! deployment [{}] namespace [{}]",
+                    template.getUser(), template.getId(), template.getName(), template.getNamespace());
+        } catch (Exception e) {
+            log.error("[InstanceTemplateTimeoutEvent] error {}", e.getMessage(), e);
+            updateTemplate(template, e.getMessage(), false);
+        }
+
     }
 
     @EventListener
@@ -59,10 +94,20 @@ public class InstanceTemplateEventListener {
 
                 sleep(10);
                 InstanceTemplate template = instanceTemplateService.findOne(instance.getId());
+                //if deleted
                 if (template == null) {
                     log.warn("[{}] user's template [{}] has been deleted", instance.getUser(), instance.getId());
                     break;
                 }
+
+                //if timeout
+                int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(300L));
+                if (timeout > 0) {
+                    eventPublisher.publishEvent(new InstanceTemplateTimeoutEvent(template));
+                    break;
+                }
+
+                //deploying
                 Deployment deployment = deploymentApi.read(namespace, name);
                 boolean ready = InstanceTemplateStatus.isReady(deployment);
                 if (!ready) {
@@ -70,6 +115,7 @@ public class InstanceTemplateEventListener {
                             template.getUser(), template.getId(), template.getName(), template.getNamespace());
                 }
 
+                //deployment success
                 if (ready) {
                     eventPublisher.publishEvent(new InstanceTemplateDoneEvent(template, true));
                     break;
@@ -109,12 +155,23 @@ public class InstanceTemplateEventListener {
 
         try {
             Deployment deployment = deploymentApi.read(namespace, name);
-            if (deployment == null) {
-                return;
+            if (deployment != null) {
+                deploymentApi.delete(namespace, name);
+                log.info("[InstanceTemplateDeleteEvent] Delete deployment '{}'", name);
+            }
+            Service service = serviceApi.read(namespace, name);
+            if (service != null) {
+                serviceApi.delete(namespace, name);
+                log.info("[InstanceTemplateDeleteEvent] Delete service '{}'", name);
             }
 
-            deploymentApi.delete(namespace, name);
-            log.info("[InstanceTemplateDeleteEvent] Delete deployment '{}'", name);
+            String pvc = String.format("pvc-%s-%s", name, namespace);
+            PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimApi.read(namespace, pvc);
+            if (persistentVolumeClaim != null) {
+                persistentVolumeClaimApi.delete(pvc, namespace);
+                log.info("[InstanceTemplateDeleteEvent] Delete persistentVolumeClaim '{}'", pvc);
+            }
+
         } catch (Exception e) {
             log.error("[InstanceTemplateDeleteEvent] error {}", e.getMessage(), e);
         }
