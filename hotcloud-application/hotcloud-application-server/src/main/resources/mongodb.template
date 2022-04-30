@@ -55,12 +55,12 @@ spec:
       volumes:
         - name: mongo-data-dir
           persistentVolumeClaim:
-            claimName: pvc-mongo-#{[namespace]}
+            claimName: pvc-#{[mongo]}-#{[namespace]}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-mongo-#{[namespace]}
+  name: pv-#{[mongo]}-#{[namespace]}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -68,7 +68,7 @@ spec:
     storage: 1Gi
   claimRef:
     kind: PersistentVolumeClaim
-    name: pvc-mongo-#{[namespace]}
+    name: pvc-#{[mongo]}-#{[namespace]}
     namespace: #{[namespace]}
   nfs:
     path: #{[nfs_path]}/#{[namespace]}/mongo
@@ -81,7 +81,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-mongo-#{[namespace]}
+  name: pvc-#{[mongo]}-#{[namespace]}
   namespace: #{[namespace]}
 spec:
   accessModes:
@@ -89,7 +89,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: pv-mongo-#{[namespace]}
+  volumeName: pv-#{[mongo]}-#{[namespace]}
   storageClassName: #{[storage_class_application]}
 ---
 apiVersion: v1
