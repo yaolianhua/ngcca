@@ -71,10 +71,9 @@ spec:
     kind: PersistentVolumeClaim
     name: pvc-#{[mongo]}-#{[namespace]}
     namespace: #{[namespace]}
-  nfs:
+  hostPath:
     path: #{[nfs_path]}/#{[namespace]}/#{[mongo]}
     readOnly: false
-    server: #{[nfs_server]}
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   storageClassName: #{[storage_class_application]}
