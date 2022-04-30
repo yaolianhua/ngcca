@@ -17,7 +17,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
@@ -136,9 +135,7 @@ public class InstanceTemplateEventListener {
         Throwable throwable = event.getThrowable();
 
         try {
-            String message = StringUtils.hasText(throwable.getMessage()) ? throwable.getMessage() : throwable.getCause().getMessage();
-
-            InstanceTemplate updated = updateTemplate(instance, message, false);
+            InstanceTemplate updated = updateTemplate(instance, throwable.getMessage(), false);
             log.info("[InstanceTemplateStartFailureEvent] update instance template [{}]", updated.getId());
         } catch (Exception ex) {
             log.error("[InstanceTemplateStartFailureEvent] error {}", ex.getMessage(), ex);
