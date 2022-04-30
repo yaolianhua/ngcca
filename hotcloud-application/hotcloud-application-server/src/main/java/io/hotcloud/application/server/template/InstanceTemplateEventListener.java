@@ -100,7 +100,7 @@ public class InstanceTemplateEventListener {
                 }
 
                 //if timeout
-                int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(300L));
+                int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(600L));
                 if (timeout > 0) {
                     eventPublisher.publishEvent(new InstanceTemplateTimeoutEvent(template));
                     break;
