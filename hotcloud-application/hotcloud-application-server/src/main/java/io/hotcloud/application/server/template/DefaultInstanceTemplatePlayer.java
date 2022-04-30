@@ -1,5 +1,6 @@
 package io.hotcloud.application.server.template;
 
+import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.Endpoint;
 import io.hotcloud.application.api.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
@@ -9,6 +10,7 @@ import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
 import io.hotcloud.common.cache.Cache;
+import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import java.nio.file.Path;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -60,9 +64,10 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
 
         String yaml = instanceTemplateProcessors.process(template, namespace);
         Endpoint endpoint = this.retrieveEndpoint(template, namespace);
+        String name = template.name().toLowerCase();
         InstanceTemplate instanceTemplate = InstanceTemplate.builder()
                 .success(false)
-                .name(template.name().toLowerCase())
+                .name(name)
                 .namespace(namespace)
                 .user(current.getUsername())
                 .service(endpoint.getHost())
@@ -73,6 +78,10 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         log.info("[DefaultInstanceTemplatePlayer] Saved [{}] user's instance template [{}]", current.getUsername(), saved.getId());
 
         try {
+            Path userPath = Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, namespace, name);
+            if (!FileHelper.exists(userPath)) {
+                FileHelper.createDirectories(userPath);
+            }
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.namespace(namespace);
             }
