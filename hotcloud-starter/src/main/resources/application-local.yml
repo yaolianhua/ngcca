@@ -31,17 +31,10 @@ db:
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://120.78.225.168:9009"
+  endpoint: "http://127.0.0.1:9009"
 buildpack:
-  storage:
-    type: nfs
-    nfs-server: 119.91.214.25
   registry:
     url: 119.91.214.25:5000
     project: dev
     username: admin
     password: QbMufCD@9WVQ^Hv
-app:
-  storage:
-    type: nfs
-    nfs-server: 119.91.214.25
