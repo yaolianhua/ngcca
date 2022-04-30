@@ -24,7 +24,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
@@ -193,10 +192,9 @@ public class BuildPackListener {
         try {
             BuildPack buildPack = startFailureEvent.getBuildPack();
             Throwable throwable = startFailureEvent.getThrowable();
-            String message = StringUtils.hasText(throwable.getMessage()) ? throwable.getMessage() : throwable.getCause().getMessage();
 
             buildPack.setDone(true);
-            buildPack.setMessage(message);
+            buildPack.setMessage(throwable.getMessage());
 
             Assert.hasText(buildPack.getId(), "BuildPack ID is null");
             BuildPack saveOrUpdate = buildPackService.saveOrUpdate(buildPack);
