@@ -27,6 +27,11 @@ public final class FileHelper {
         return Files.exists(path);
     }
 
+    public static void createDirectories(Path path) throws IOException {
+        Assert.notNull(path, "path is null");
+        Files.createDirectories(path);
+    }
+
     public static boolean deleteRecursively(Path root) throws IOException {
         if (root == null) {
             return false;
