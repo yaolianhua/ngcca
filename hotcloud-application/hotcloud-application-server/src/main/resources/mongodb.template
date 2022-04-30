@@ -72,7 +72,7 @@ spec:
     name: pvc-#{[mongo]}-#{[namespace]}
     namespace: #{[namespace]}
   nfs:
-    path: #{[nfs_path]}/#{[namespace]}/mongo
+    path: #{[nfs_path]}/#{[namespace]}/#{[mongo]}
     readOnly: false
     server: #{[nfs_server]}
   volumeMode: Filesystem
