@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
         - image: #{[mongo_image]}
+          imagePullPolicy: IfNotPresent
           name: #{[mongo]}
           args: ["--dbpath","/data/db"]
           livenessProbe:
