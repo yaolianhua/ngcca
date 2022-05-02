@@ -33,41 +33,43 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+        Watch watch;
+        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-        Watch watch = fabric8Client.apps()
-                .daemonSets()
-                .watch(new Watcher<>() {
-                    @Override
-                    public void eventReceived(Action action, DaemonSet resource) {
-                        String namespace = resource.getMetadata().getNamespace();
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.DaemonSet.name(), resource.getMetadata().getName(), action.name());
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.INFO,
-                                null,
-                                "DaemonSet Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+            watch = fabric8Client.apps()
+                    .daemonSets()
+                    .watch(new Watcher<>() {
+                        @Override
+                        public void eventReceived(Action action, DaemonSet resource) {
+                            String namespace = resource.getMetadata().getNamespace();
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.DaemonSet.name(), resource.getMetadata().getName(), action.name());
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.INFO,
+                                    null,
+                                    "DaemonSet Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose(WatcherException e) {
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.DaemonSet.name(), null, null);
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.ERROR,
-                                e.getMessage(),
-                                "DaemonSet Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+                        @Override
+                        public void onClose(WatcherException e) {
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.DaemonSet.name(), null, null);
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.ERROR,
+                                    e.getMessage(),
+                                    "DaemonSet Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose() {
-                        log.info("Watch DaemonSet gracefully closed");
-                    }
-                });
+                        @Override
+                        public void onClose() {
+                            log.info("Watch DaemonSet gracefully closed");
+                        }
+                    });
+        }
 
         return watch;
     }

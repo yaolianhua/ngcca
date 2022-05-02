@@ -33,41 +33,43 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+        Watch watch;
+        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-        Watch watch = fabric8Client.apps()
-                .statefulSets()
-                .watch(new Watcher<>() {
-                    @Override
-                    public void eventReceived(Action action, StatefulSet resource) {
-                        String namespace = resource.getMetadata().getNamespace();
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.StatefulSet.name(), resource.getMetadata().getName(), action.name());
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.INFO,
-                                null,
-                                "StatefulSet Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+            watch = fabric8Client.apps()
+                    .statefulSets()
+                    .watch(new Watcher<>() {
+                        @Override
+                        public void eventReceived(Action action, StatefulSet resource) {
+                            String namespace = resource.getMetadata().getNamespace();
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.StatefulSet.name(), resource.getMetadata().getName(), action.name());
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.INFO,
+                                    null,
+                                    "StatefulSet Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose(WatcherException e) {
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.StatefulSet.name(), null, null);
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.ERROR,
-                                e.getMessage(),
-                                "StatefulSet Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+                        @Override
+                        public void onClose(WatcherException e) {
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.StatefulSet.name(), null, null);
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.ERROR,
+                                    e.getMessage(),
+                                    "StatefulSet Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose() {
-                        log.info("Watch StatefulSet gracefully closed");
-                    }
-                });
+                        @Override
+                        public void onClose() {
+                            log.info("Watch StatefulSet gracefully closed");
+                        }
+                    });
+        }
 
         return watch;
     }

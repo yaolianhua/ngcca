@@ -33,40 +33,42 @@ public class PodWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+        Watch watch;
+        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-        Watch watch = fabric8Client.pods()
-                .watch(new Watcher<>() {
-                    @Override
-                    public void eventReceived(Action action, Pod resource) {
-                        String namespace = resource.getMetadata().getNamespace();
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Pod.name(), resource.getMetadata().getName(), action.name());
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.INFO,
-                                null,
-                                "Pod Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+            watch = fabric8Client.pods()
+                    .watch(new Watcher<>() {
+                        @Override
+                        public void eventReceived(Action action, Pod resource) {
+                            String namespace = resource.getMetadata().getNamespace();
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Pod.name(), resource.getMetadata().getName(), action.name());
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.INFO,
+                                    null,
+                                    "Pod Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose(WatcherException e) {
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Pod.name(), null, null);
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.ERROR,
-                                e.getMessage(),
-                                "Pod Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+                        @Override
+                        public void onClose(WatcherException e) {
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Pod.name(), null, null);
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.ERROR,
+                                    e.getMessage(),
+                                    "Pod Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose() {
-                        log.info("Watch Pod gracefully closed");
-                    }
-                });
+                        @Override
+                        public void onClose() {
+                            log.info("Watch Pod gracefully closed");
+                        }
+                    });
+        }
 
         return watch;
     }

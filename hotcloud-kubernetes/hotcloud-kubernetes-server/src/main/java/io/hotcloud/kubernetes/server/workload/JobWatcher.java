@@ -33,42 +33,44 @@ public class JobWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+        Watch watch;
+        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-        Watch watch = fabric8Client.batch()
-                .v1()
-                .jobs()
-                .watch(new Watcher<>() {
-                    @Override
-                    public void eventReceived(Action action, Job resource) {
-                        String namespace = resource.getMetadata().getNamespace();
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Job.name(), resource.getMetadata().getName(), action.name());
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.INFO,
-                                null,
-                                "Job Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+            watch = fabric8Client.batch()
+                    .v1()
+                    .jobs()
+                    .watch(new Watcher<>() {
+                        @Override
+                        public void eventReceived(Action action, Job resource) {
+                            String namespace = resource.getMetadata().getNamespace();
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Job.name(), resource.getMetadata().getName(), action.name());
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.INFO,
+                                    null,
+                                    "Job Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose(WatcherException e) {
-                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Job.name(), null, null);
-                        Message<WatchMessageBody> message = Message.of(
-                                watchMessageBody,
-                                Message.Level.ERROR,
-                                e.getMessage(),
-                                "Job Watch Event Push"
-                        );
-                        messageBroadcaster.broadcast(message);
-                    }
+                        @Override
+                        public void onClose(WatcherException e) {
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Job.name(), null, null);
+                            Message<WatchMessageBody> message = Message.of(
+                                    watchMessageBody,
+                                    Message.Level.ERROR,
+                                    e.getMessage(),
+                                    "Job Watch Event Push"
+                            );
+                            messageBroadcaster.broadcast(message);
+                        }
 
-                    @Override
-                    public void onClose() {
-                        log.info("Watch Job gracefully closed");
-                    }
-                });
+                        @Override
+                        public void onClose() {
+                            log.info("Watch Job gracefully closed");
+                        }
+                    });
+        }
 
         return watch;
     }
