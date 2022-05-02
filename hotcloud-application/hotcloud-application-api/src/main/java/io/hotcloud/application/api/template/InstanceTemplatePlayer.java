@@ -9,20 +9,43 @@ import org.springframework.util.Assert;
  **/
 public interface InstanceTemplatePlayer {
 
+    /**
+     * Deploy instance template
+     *
+     * @param template {@link Template}
+     * @return {@link InstanceTemplate}
+     */
     InstanceTemplate play(Template template);
 
+    /**
+     * Retrieve endpoint
+     *
+     * @param template  {@link Template}
+     * @param namespace user's k8s namespace
+     * @return {@link Endpoint}
+     */
     default Endpoint retrieveEndpoint(Template template, String namespace) {
         Assert.hasText(namespace, "namespace is null");
         switch (template) {
             case Mongodb:
                 return Endpoint.of("tcp",
-                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace),
-                        InstanceTemplateConstant.MONGO_NODEPORT);
+                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 27017);
+            case Mysql:
+                throw new IllegalStateException("instance template [" + template + "] not impl");
+            case Redis:
+                throw new IllegalStateException("instance template [" + template + "] not impl");
+            case Rabbitmq:
+                throw new IllegalStateException("instance template [" + template + "] not impl");
 
             default:
                 throw new IllegalStateException("Unsupported instance template [" + template + "]");
         }
     }
 
+    /**
+     * Delete instance template with the giving id
+     *
+     * @param id instance template id
+     */
     void delete(String id);
 }

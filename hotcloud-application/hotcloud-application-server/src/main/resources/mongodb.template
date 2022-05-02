@@ -104,7 +104,6 @@ spec:
     - port: 27017
       protocol: TCP
       targetPort: 27017
-      nodePort: #{[mongo_nodeport]}
   selector:
     app: #{[mongo]}
   type: NodePort

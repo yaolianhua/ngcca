@@ -37,6 +37,8 @@ public class InstanceTemplateEntity extends AbstractEntity {
 
     private Integer port;
 
+    private Integer nodePort;
+
     private String yaml;
 
     private boolean success;

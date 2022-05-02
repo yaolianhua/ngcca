@@ -26,6 +26,8 @@ public class InstanceTemplate {
 
     private Integer port;
 
+    private Integer nodePort;
+
     private String yaml;
 
     private boolean success;

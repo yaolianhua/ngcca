@@ -3,6 +3,7 @@ package io.hotcloud.application.server.template;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.Service;
+import io.fabric8.kubernetes.api.model.ServicePort;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
@@ -18,7 +19,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -128,6 +131,14 @@ public class InstanceTemplateEventListener {
         }
     }
 
+    @NotNull
+    private Integer retrieveServiceNodePort(InstanceTemplate template) {
+        Service service = serviceApi.read(template.getNamespace(), template.getName());
+        Assert.notNull(service, "k8s service is null");
+        List<ServicePort> ports = service.getSpec().getPorts();
+        return ports.get(0).getNodePort();
+    }
+
     @EventListener
     @Async
     public void startFailure(InstanceTemplateStartFailureEvent event) {
@@ -187,14 +198,18 @@ public class InstanceTemplateEventListener {
                 return;
             }
 
+            Integer nodePort = retrieveServiceNodePort(instance);
+            template.setNodePort(nodePort);
+
             InstanceTemplate update = updateTemplate(template, "success", true);
-            log.info("[InstanceTemplateDoneEvent] update [{}] user's template [{}] success", update.getUser(), update.getId());
+            log.info("[InstanceTemplateDoneEvent] update [{}] user's template [{}] success. nodePort [{}]", update.getUser(), update.getId(), update.getNodePort());
         } catch (Exception e) {
             log.error("[InstanceTemplateDoneEvent] error {}", e.getMessage(), e);
         }
 
     }
 
+    @NotNull
     private InstanceTemplate updateTemplate(InstanceTemplate template, String message, boolean success) {
         template.setMessage(message);
         template.setSuccess(success);
