@@ -2,6 +2,8 @@ package io.hotcloud.db.core.application;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -15,4 +17,12 @@ public interface InstanceTemplateRepository extends PagingAndSortingRepository<I
      * @return {@link InstanceTemplateEntity}
      */
     InstanceTemplateEntity findByUserAndName(String user, String name);
+
+    /**
+     * Find user's entities
+     *
+     * @param user user's username
+     * @return InstanceTemplateEntity collection
+     */
+    List<InstanceTemplateEntity> findByUser(String user);
 }

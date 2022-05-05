@@ -10,6 +10,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -57,6 +60,22 @@ public class InstanceTemplateServiceImpl implements InstanceTemplateService {
     public InstanceTemplate findOne(String id) {
         InstanceTemplateEntity entity = instanceTemplateRepository.findById(id).orElse(null);
         return entity == null ? null : entity.toT(InstanceTemplate.class);
+    }
+
+    @Override
+    public List<InstanceTemplate> findAll() {
+        Iterable<InstanceTemplateEntity> entityIterable = instanceTemplateRepository.findAll();
+        return StreamSupport.stream(entityIterable.spliterator(), false)
+                .map(e -> e.toT(InstanceTemplate.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InstanceTemplate> findAll(String user) {
+        return instanceTemplateRepository.findByUser(user)
+                .stream()
+                .map(e -> e.toT(InstanceTemplate.class))
+                .collect(Collectors.toList());
     }
 
     @Override
