@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.hotcloud.application.api.InstanceTemplate;
+import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.*;

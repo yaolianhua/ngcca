@@ -1,6 +1,6 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.application.api.InstanceTemplate;
+import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.common.Result;

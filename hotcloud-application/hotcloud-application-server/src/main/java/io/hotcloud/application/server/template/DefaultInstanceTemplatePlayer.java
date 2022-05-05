@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.Endpoint;
-import io.hotcloud.application.api.InstanceTemplate;
+import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.application.api.template.Template;

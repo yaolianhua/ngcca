@@ -1,7 +1,6 @@
 package io.hotcloud.application.api.template;
 
 import io.hotcloud.application.api.Endpoint;
-import io.hotcloud.application.api.InstanceTemplate;
 import org.springframework.util.Assert;
 
 /**
