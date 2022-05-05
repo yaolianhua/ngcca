@@ -29,7 +29,7 @@ spec:
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+          claimName: pvc-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
 ---
 apiVersion: v1
 kind: PersistentVolume

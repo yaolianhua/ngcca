@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: rabbitmq-persistent-storage
         persistentVolumeClaim:
-          claimName: pv-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
+          claimName: pvc-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
 ---
 apiVersion: v1
 kind: PersistentVolume
