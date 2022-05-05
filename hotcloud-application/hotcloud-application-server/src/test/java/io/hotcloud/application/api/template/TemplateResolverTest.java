@@ -74,4 +74,34 @@ public class TemplateResolverTest {
         }
     }
 
+    @Test
+    public void rabbitmqTemplate() throws IOException {
+        try (InputStream inputStream = getClass().getResourceAsStream("rabbitmq.template")) {
+            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+
+            Map<String, String> mysql = Map.of("rabbitmq", "rabbitmq",
+                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "rabbitmq_default_password", "password",
+                    "rabbitmq_default_user","admin",
+                    "rabbitmq_image","rabbitmq:3.9-management",
+                    "nfs_path", "/tmp/app",
+                    "management", "management",
+                    "storage_class_application", "storage-class-application");
+
+            TemplateParserContext templateParserContext = new TemplateParserContext();
+            SpelExpressionParser parser = new SpelExpressionParser();
+            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
+
+            try (InputStream resourceAsStream = getClass().getResourceAsStream("rabbitmq.yaml")) {
+                String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
+
+                Assertions.assertEquals(collect, parsed);
+            }
+        }
+    }
+
 }
