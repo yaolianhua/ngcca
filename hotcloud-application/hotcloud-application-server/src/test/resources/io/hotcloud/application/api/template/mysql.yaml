@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:8.0
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: pvc-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+    namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+  hostPath:
+    path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/mysql
+    readOnly: false
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: storage-class-application
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+  storageClassName: storage-class-application
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+  selector:
+    app: mysql
+  type: NodePort
