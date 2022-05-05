@@ -31,8 +31,13 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
     @SneakyThrows
     @Override
     public void process() {
-        InputStream inputStream = new ClassPathResource("mongodb.template").getInputStream();
-        String mongodb = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        //mongodb template
+        InputStream mongodbStream = new ClassPathResource("mongodb.template").getInputStream();
+        String mongodb = new BufferedReader(new InputStreamReader(mongodbStream)).lines().collect(Collectors.joining("\n"));
         holder.put(Template.Mongodb, mongodb);
+        //mysql template
+        InputStream mysqlStream = new ClassPathResource("mysql.template").getInputStream();
+        String mysql = new BufferedReader(new InputStreamReader(mysqlStream)).lines().collect(Collectors.joining("\n"));
+        holder.put(Template.Mysql, mysql);
     }
 }

@@ -5,7 +5,9 @@ package io.hotcloud.application.api.template;
  **/
 public class InstanceTemplateConstant {
     public static final String MONGO_IMAGE = "mongo:5.0";
+    public static final String MYSQL_IMAGE = "mysql:8.0";
 
     public static final String MONGO_ROOT_USERNAME = "admin";
     public static final String MONGO_ROOT_PASSWORD = "password";
+    public static final String MYSQL_ROOT_PASSWORD = "password";
 }

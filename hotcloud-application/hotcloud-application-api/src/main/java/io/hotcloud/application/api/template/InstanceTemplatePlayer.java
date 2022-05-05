@@ -31,7 +31,8 @@ public interface InstanceTemplatePlayer {
                 return Endpoint.of("tcp",
                         String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 27017);
             case Mysql:
-                throw new IllegalStateException("instance template [" + template + "] not impl");
+                return Endpoint.of("tcp",
+                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 3306);
             case Redis:
                 throw new IllegalStateException("instance template [" + template + "] not impl");
             case Rabbitmq:
