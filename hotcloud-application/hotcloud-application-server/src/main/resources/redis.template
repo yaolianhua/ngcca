@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #{[redis]}
+  namespace: #{[namespace]}
+spec:
+  selector:
+    matchLabels:
+      app: #{[redis]}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: #{[redis]}
+    spec:
+      containers:
+      - image: #{[redis_image]}
+        imagePullPolicy: IfNotPresent
+        name: #{[redis]}
+        command:
+          - redis-server
+          - "/redis-master/redis.conf"
+        env:
+        - name: MASTER
+          value: "true"
+        ports:
+        - containerPort: 6379
+          name: #{[redis]}
+        volumeMounts:
+        - mountPath: /redis-master
+          name: config
+        - name: redis-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: config
+        configMap:
+          name: #{[redis]}
+          items:
+          - key: redis-config
+            path: redis.conf
+      - name: redis-persistent-storage
+        persistentVolumeClaim:
+          claimName: pvc-#{[redis]}-#{[namespace]}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-#{[redis]}-#{[namespace]}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: pvc-#{[redis]}-#{[namespace]}
+    namespace: #{[namespace]}
+  hostPath:
+    path: #{[nfs_path]}/#{[namespace]}/#{[redis]}
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: #{[storage_class_application]}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-#{[redis]}-#{[namespace]}
+  namespace: #{[namespace]}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: pv-#{[redis]}-#{[namespace]}
+  storageClassName: #{[storage_class_application]}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #{[redis]}
+  namespace: #{[namespace]}
+spec:
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+    name: #{[redis]}
+  selector:
+    app: #{[redis]}
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #{[redis]}
+  namespace: #{[namespace]}
+data:
+  redis-config: |
+    requirepass #{[redis_password]}

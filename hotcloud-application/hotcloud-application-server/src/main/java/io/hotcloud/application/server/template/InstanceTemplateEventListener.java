@@ -1,14 +1,12 @@
 package io.hotcloud.application.server.template;
 
-import io.fabric8.kubernetes.api.model.Event;
-import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
-import io.fabric8.kubernetes.api.model.Service;
-import io.fabric8.kubernetes.api.model.ServicePort;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.*;
+import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
@@ -38,6 +36,7 @@ public class InstanceTemplateEventListener {
     private final ApplicationEventPublisher eventPublisher;
     private final DeploymentApi deploymentApi;
     private final ServiceApi serviceApi;
+    private final ConfigMapApi configMapApi;
     private final PersistentVolumeClaimApi persistentVolumeClaimApi;
     private final KubectlApi kubectlApi;
 
@@ -45,12 +44,14 @@ public class InstanceTemplateEventListener {
                                          ApplicationEventPublisher eventPublisher,
                                          DeploymentApi deploymentApi,
                                          ServiceApi serviceApi,
+                                         ConfigMapApi configMapApi,
                                          KubectlApi kubectlApi,
                                          PersistentVolumeClaimApi persistentVolumeClaimApi) {
         this.instanceTemplateService = instanceTemplateService;
         this.eventPublisher = eventPublisher;
         this.deploymentApi = deploymentApi;
         this.serviceApi = serviceApi;
+        this.configMapApi = configMapApi;
         this.kubectlApi = kubectlApi;
         this.persistentVolumeClaimApi = persistentVolumeClaimApi;
     }
@@ -185,6 +186,12 @@ public class InstanceTemplateEventListener {
             if (persistentVolumeClaim != null) {
                 persistentVolumeClaimApi.delete(pvc, namespace);
                 log.info("[InstanceTemplateDeleteEvent] Delete persistentVolumeClaim '{}'", pvc);
+            }
+
+            ConfigMap configMap = configMapApi.read(namespace, name);
+            if (configMap  != null){
+                configMapApi.delete(namespace, name);
+                log.info("[InstanceTemplateDeleteEvent] Delete configMap '{}'", name);
             }
 
         } catch (Exception e) {

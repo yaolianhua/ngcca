@@ -43,5 +43,9 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
         InputStream rabbitmqStream = new ClassPathResource("rabbitmq.template").getInputStream();
         String rabbitmq = new BufferedReader(new InputStreamReader(rabbitmqStream)).lines().collect(Collectors.joining("\n"));
         holder.put(Template.Rabbitmq, rabbitmq);
+        //redis template
+        InputStream redisStream = new ClassPathResource("redis.template").getInputStream();
+        String redis = new BufferedReader(new InputStreamReader(redisStream)).lines().collect(Collectors.joining("\n"));
+        holder.put(Template.Redis, redis);
     }
 }

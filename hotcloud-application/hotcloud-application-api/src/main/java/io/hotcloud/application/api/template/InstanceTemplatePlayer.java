@@ -32,7 +32,7 @@ public interface InstanceTemplatePlayer {
             case Mysql:
                 return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "3306");
             case Redis:
-                throw new IllegalStateException("instance template [" + template + "] not impl");
+                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "6379");
             case Rabbitmq:
                 return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "5672,15672");
 
