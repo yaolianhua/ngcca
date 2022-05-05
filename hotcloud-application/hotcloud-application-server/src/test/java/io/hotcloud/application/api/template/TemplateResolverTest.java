@@ -134,7 +134,7 @@ public class TemplateResolverTest {
 
     @Test
     public void redisInsightTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("redisInsight.template")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("redisinsight.template")) {
             String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
                     .lines()
                     .collect(Collectors.joining("\n"));
@@ -149,7 +149,7 @@ public class TemplateResolverTest {
             SpelExpressionParser parser = new SpelExpressionParser();
             String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
 
-            try (InputStream resourceAsStream = getClass().getResourceAsStream("redisInsight.yaml")) {
+            try (InputStream resourceAsStream = getClass().getResourceAsStream("redisinsight.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
                         .lines()
                         .collect(Collectors.joining("\n"));
