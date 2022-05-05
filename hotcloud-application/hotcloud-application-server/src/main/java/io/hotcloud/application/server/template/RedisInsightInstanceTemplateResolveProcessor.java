@@ -14,19 +14,18 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-class RedisInstanceTemplateProcessor implements InstanceTemplateResolveProcessor {
+class RedisInsightInstanceTemplateResolveProcessor implements InstanceTemplateResolveProcessor {
 
     @Override
     public Template support() {
-        return Template.Redis;
+        return Template.RedisInsight;
     }
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("redis", Template.Redis.name().toLowerCase(),
+        return Map.of("redisinsight", Template.RedisInsight.name().toLowerCase(),
                 "namespace", namespace,
-                "redis_image", InstanceTemplateConstant.REDIS_IMAGE,
-                "redis_password", InstanceTemplateConstant.REDIS_PASSWORD,
+                "redisinsight_image", InstanceTemplateConstant.REDISINSIGHT_IMAGE,
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,
                 "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
     }

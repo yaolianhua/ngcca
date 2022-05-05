@@ -14,19 +14,20 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-class MysqlInstanceTemplateProcessor implements InstanceTemplateResolveProcessor {
+class MongodbInstanceTemplateResolveProcessor implements InstanceTemplateResolveProcessor {
 
     @Override
     public Template support() {
-        return Template.Mysql;
+        return Template.Mongodb;
     }
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("mysql", Template.Mysql.name().toLowerCase(),
+        return Map.of("mongo", Template.Mongodb.name().toLowerCase(),
                 "namespace", namespace,
-                "mysql_image", InstanceTemplateConstant.MYSQL_IMAGE,
-                "mysql_root_password", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD,
+                "mongo_image", InstanceTemplateConstant.MONGO_IMAGE,
+                "mongo_root_username", InstanceTemplateConstant.MONGO_ROOT_USERNAME,
+                "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD,
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,
                 "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
     }

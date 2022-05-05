@@ -14,7 +14,7 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-class RabbitmqInstanceTemplateProcessor implements InstanceTemplateResolveProcessor {
+class RabbitmqInstanceTemplateResolveProcessor implements InstanceTemplateResolveProcessor {
 
     @Override
     public Template support() {
