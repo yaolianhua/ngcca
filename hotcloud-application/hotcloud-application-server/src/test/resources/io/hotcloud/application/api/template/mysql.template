@@ -46,7 +46,6 @@ spec:
     namespace: #{[namespace]}
   hostPath:
     path: #{[nfs_path]}/#{[namespace]}/#{[mysql]}
-    readOnly: false
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   storageClassName: #{[storage_class_application]}

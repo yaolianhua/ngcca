@@ -15,21 +15,21 @@ spec:
         app: mysql
     spec:
       containers:
-        - image: mysql:8.0
+      - image: mysql:8.0
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
           name: mysql
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: password
-          ports:
-            - containerPort: 3306
-              name: mysql
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-      volumes:
+        volumeMounts:
         - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -46,7 +46,6 @@ spec:
     namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
   hostPath:
     path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/mysql
-    readOnly: false
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   storageClassName: storage-class-application
@@ -72,9 +71,9 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   ports:
-    - port: 3306
-      protocol: TCP
-      targetPort: 3306
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
   selector:
     app: mysql
   type: NodePort
