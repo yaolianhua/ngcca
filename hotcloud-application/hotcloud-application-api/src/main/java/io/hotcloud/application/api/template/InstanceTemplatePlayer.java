@@ -36,7 +36,8 @@ public interface InstanceTemplatePlayer {
             case Redis:
                 throw new IllegalStateException("instance template [" + template + "] not impl");
             case Rabbitmq:
-                throw new IllegalStateException("instance template [" + template + "] not impl");
+                return Endpoint.of("tcp",
+                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 5672);
 
             default:
                 throw new IllegalStateException("Unsupported instance template [" + template + "]");

@@ -39,5 +39,9 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
         InputStream mysqlStream = new ClassPathResource("mysql.template").getInputStream();
         String mysql = new BufferedReader(new InputStreamReader(mysqlStream)).lines().collect(Collectors.joining("\n"));
         holder.put(Template.Mysql, mysql);
+        //rabbitmq template
+        InputStream rabbitmqStream = new ClassPathResource("rabbitmq.template").getInputStream();
+        String rabbitmq = new BufferedReader(new InputStreamReader(rabbitmqStream)).lines().collect(Collectors.joining("\n"));
+        holder.put(Template.Rabbitmq, rabbitmq);
     }
 }
