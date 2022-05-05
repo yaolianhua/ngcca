@@ -136,10 +136,15 @@ public class InstanceTemplateEventListener {
 
     @NotNull
     private String retrieveServiceNodePort(InstanceTemplate template) {
-        Service service = serviceApi.read(template.getNamespace(), template.getName());
+        Service service;
+        if (Objects.equals(template.getName(), Template.RedisInsight.name().toLowerCase())) {
+            service = serviceApi.read(template.getNamespace(), String.format("%s-service", template.getName()));
+        } else {
+            service = serviceApi.read(template.getNamespace(), template.getName());
+        }
         Assert.notNull(service, "k8s service is null");
         List<ServicePort> ports = service.getSpec().getPorts();
-        if (Objects.equals(template.getName(), Template.Rabbitmq.name().toLowerCase())){
+        if (Objects.equals(template.getName(), Template.Rabbitmq.name().toLowerCase())) {
             return ports.stream()
                     .map(e -> String.valueOf(e.getNodePort()))
                     .collect(Collectors.joining(","));
@@ -175,11 +180,20 @@ public class InstanceTemplateEventListener {
                 deploymentApi.delete(namespace, name);
                 log.info("[InstanceTemplateDeleteEvent] Delete deployment '{}'", name);
             }
-            Service service = serviceApi.read(namespace, name);
-            if (service != null) {
-                serviceApi.delete(namespace, name);
-                log.info("[InstanceTemplateDeleteEvent] Delete service '{}'", name);
+            if (Objects.equals(name, Template.RedisInsight.name().toLowerCase())) {
+                Service service = serviceApi.read(namespace, String.format("%s-service", name));
+                if (service != null) {
+                    serviceApi.delete(namespace, String.format("%s-service", name));
+                    log.info("[InstanceTemplateDeleteEvent] Delete service '{}'", String.format("%s-service", name));
+                }
+            } else {
+                Service service = serviceApi.read(namespace, name);
+                if (service != null) {
+                    serviceApi.delete(namespace, name);
+                    log.info("[InstanceTemplateDeleteEvent] Delete service '{}'", name);
+                }
             }
+
 
             String pvc = String.format("pvc-%s-%s", name, namespace);
             PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimApi.read(namespace, pvc);

@@ -33,6 +33,8 @@ public interface InstanceTemplatePlayer {
                 return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "3306");
             case Redis:
                 return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "6379");
+            case RedisInsight:
+                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "8001");
             case Rabbitmq:
                 return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "5672,15672");
 

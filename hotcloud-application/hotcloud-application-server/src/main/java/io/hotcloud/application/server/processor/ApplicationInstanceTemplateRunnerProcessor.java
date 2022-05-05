@@ -47,5 +47,9 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
         InputStream redisStream = new ClassPathResource("redis.template").getInputStream();
         String redis = new BufferedReader(new InputStreamReader(redisStream)).lines().collect(Collectors.joining("\n"));
         holder.put(Template.Redis, redis);
+        //redisinsight template
+        InputStream redisinsightStream = new ClassPathResource("redisinsight.template").getInputStream();
+        String redisinsight = new BufferedReader(new InputStreamReader(redisinsightStream)).lines().collect(Collectors.joining("\n"));
+        holder.put(Template.RedisInsight, redisinsight);
     }
 }
