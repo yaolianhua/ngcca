@@ -71,7 +71,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 .namespace(namespace)
                 .user(current.getUsername())
                 .service(endpoint.getHost())
-                .port(endpoint.getPort())
+                .ports(endpoint.getPorts())
                 .yaml(yaml)
                 .build();
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);

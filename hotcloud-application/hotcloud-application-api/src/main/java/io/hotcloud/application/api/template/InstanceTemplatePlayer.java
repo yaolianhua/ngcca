@@ -28,16 +28,13 @@ public interface InstanceTemplatePlayer {
         Assert.hasText(namespace, "namespace is null");
         switch (template) {
             case Mongodb:
-                return Endpoint.of("tcp",
-                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 27017);
+                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "27017");
             case Mysql:
-                return Endpoint.of("tcp",
-                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 3306);
+                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "3306");
             case Redis:
                 throw new IllegalStateException("instance template [" + template + "] not impl");
             case Rabbitmq:
-                return Endpoint.of("tcp",
-                        String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), 5672);
+                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "5672,15672");
 
             default:
                 throw new IllegalStateException("Unsupported instance template [" + template + "]");

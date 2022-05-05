@@ -8,15 +8,13 @@ import lombok.Data;
 @Data
 public class Endpoint {
 
-    private String protocol;
     private String host;
-    private Integer port;
+    private String ports;
 
-    public static Endpoint of(String protocol, String host, Integer port) {
+    public static Endpoint of(String host, String ports) {
         Endpoint endpoint = new Endpoint();
-        endpoint.setProtocol(protocol);
         endpoint.setHost(host);
-        endpoint.setPort(port);
+        endpoint.setPorts(ports);
         return endpoint;
     }
 

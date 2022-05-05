@@ -34,7 +34,7 @@ public class InstanceTemplateServiceImpl implements InstanceTemplateService {
             find.setModifiedAt(LocalDateTime.now());
             find.setSuccess(instance.isSuccess());
             find.setMessage(instance.getMessage());
-            find.setNodePort(instance.getNodePort());
+            find.setNodePorts(instance.getNodePorts());
             InstanceTemplateEntity updated = instanceTemplateRepository.save(find);
 
             return updated.toT(InstanceTemplate.class);

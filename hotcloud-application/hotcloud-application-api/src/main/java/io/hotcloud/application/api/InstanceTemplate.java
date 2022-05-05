@@ -24,9 +24,9 @@ public class InstanceTemplate {
 
     private String service;
 
-    private Integer port;
+    private String ports;
 
-    private Integer nodePort;
+    private String nodePorts;
 
     private String yaml;
 

@@ -7,6 +7,7 @@ import io.fabric8.kubernetes.api.model.ServicePort;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.*;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
@@ -22,6 +23,7 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -132,11 +134,16 @@ public class InstanceTemplateEventListener {
     }
 
     @NotNull
-    private Integer retrieveServiceNodePort(InstanceTemplate template) {
+    private String retrieveServiceNodePort(InstanceTemplate template) {
         Service service = serviceApi.read(template.getNamespace(), template.getName());
         Assert.notNull(service, "k8s service is null");
         List<ServicePort> ports = service.getSpec().getPorts();
-        return ports.get(0).getNodePort();
+        if (Objects.equals(template.getName(), Template.Rabbitmq.name().toLowerCase())){
+            return ports.stream()
+                    .map(e -> String.valueOf(e.getNodePort()))
+                    .collect(Collectors.joining(","));
+        }
+        return String.valueOf(ports.get(0).getNodePort());
     }
 
     @EventListener
@@ -198,11 +205,11 @@ public class InstanceTemplateEventListener {
                 return;
             }
 
-            Integer nodePort = retrieveServiceNodePort(instance);
-            template.setNodePort(nodePort);
+            String nodePorts = retrieveServiceNodePort(instance);
+            template.setNodePorts(nodePorts);
 
             InstanceTemplate update = updateTemplate(template, "success", true);
-            log.info("[InstanceTemplateDoneEvent] update [{}] user's template [{}] success. nodePort [{}]", update.getUser(), update.getId(), update.getNodePort());
+            log.info("[InstanceTemplateDoneEvent] update [{}] user's template [{}] success. nodePorts [{}]", update.getUser(), update.getId(), update.getNodePorts());
         } catch (Exception e) {
             log.error("[InstanceTemplateDoneEvent] error {}", e.getMessage(), e);
         }
