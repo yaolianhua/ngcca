@@ -114,7 +114,7 @@ public class InstanceTemplateEventListener {
 
                 //deploying
                 Deployment deployment = deploymentApi.read(namespace, name);
-                boolean ready = InstanceTemplateStatus.isReady(deployment);
+                boolean ready = InstanceTemplateDeploymentStatus.isReady(deployment);
                 if (!ready) {
                     log.info("[{}] user's template [{}] is not ready! deployment [{}] namespace [{}]",
                             template.getUser(), template.getId(), template.getName(), template.getNamespace());

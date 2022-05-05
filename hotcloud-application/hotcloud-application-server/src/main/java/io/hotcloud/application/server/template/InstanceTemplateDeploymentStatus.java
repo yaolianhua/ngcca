@@ -9,9 +9,9 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public final class InstanceTemplateStatus {
+public final class InstanceTemplateDeploymentStatus {
 
-    private InstanceTemplateStatus() {
+    private InstanceTemplateDeploymentStatus() {
     }
 
     public static boolean isReady(Deployment deployment) {
