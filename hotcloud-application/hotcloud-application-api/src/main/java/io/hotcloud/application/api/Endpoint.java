@@ -20,7 +20,4 @@ public class Endpoint {
         return endpoint;
     }
 
-    public String getUrl() {
-        return String.format("%s://%s:%s", protocol.toLowerCase(), host, port);
-    }
 }
