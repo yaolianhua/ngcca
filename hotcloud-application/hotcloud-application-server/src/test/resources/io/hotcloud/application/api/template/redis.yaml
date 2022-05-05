@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - image: bitnami/redis:6.2
+        name: redis
+        env:
+        - name: REDIS_PASSWORD
+          value: password
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis-persistent-storage
+          mountPath: /bitnami/redis/data
+      volumes:
+      - name: redis-persistent-storage
+        persistentVolumeClaim:
+          claimName: pvc-redis-5b2378dc5d2f4eedb55ed9217255c8cd
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-redis-5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: pvc-redis-5b2378dc5d2f4eedb55ed9217255c8cd
+    namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+  hostPath:
+    path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/redis
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: storage-class-application
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-redis-5b2378dc5d2f4eedb55ed9217255c8cd
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: pv-redis-5b2378dc5d2f4eedb55ed9217255c8cd
+  storageClassName: storage-class-application
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+    name: redis
+  selector:
+    app: redis
+  type: NodePort
