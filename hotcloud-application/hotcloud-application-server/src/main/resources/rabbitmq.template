@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image: #{[rabbitmq_image]}
+        imagePullPolicy: IfNotPresent
         name: #{[rabbitmq]}
         env:
         - name: RABBITMQ_DEFAULT_PASS

@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image: #{[mysql_image]}
+        imagePullPolicy: IfNotPresent
         name: #{[mysql]}
         env:
         - name: MYSQL_ROOT_PASSWORD

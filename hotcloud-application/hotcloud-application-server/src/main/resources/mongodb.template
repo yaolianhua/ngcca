@@ -73,7 +73,6 @@ spec:
     namespace: #{[namespace]}
   hostPath:
     path: #{[nfs_path]}/#{[namespace]}/#{[mongo]}
-    readOnly: false
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   storageClassName: #{[storage_class_application]}
