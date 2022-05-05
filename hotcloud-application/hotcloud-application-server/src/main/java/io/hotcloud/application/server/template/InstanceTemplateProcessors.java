@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
-import io.hotcloud.application.api.template.InstanceTemplateResourceHolder;
+import io.hotcloud.application.api.template.InstanceTemplateResourceManager;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.common.exception.HotCloudException;
 import org.springframework.stereotype.Component;
@@ -16,18 +16,18 @@ import java.util.Objects;
 public class InstanceTemplateProcessors {
 
     private final List<InstanceTemplateResolveProcessor> resolveProcessors;
-    private final InstanceTemplateResourceHolder instanceTemplateResourceHolder;
+    private final InstanceTemplateResourceManager instanceTemplateResourceManager;
 
     public InstanceTemplateProcessors(List<InstanceTemplateResolveProcessor> resolveProcessors,
-                                      InstanceTemplateResourceHolder instanceTemplateResourceHolder) {
+                                      InstanceTemplateResourceManager instanceTemplateResourceManager) {
         this.resolveProcessors = resolveProcessors;
-        this.instanceTemplateResourceHolder = instanceTemplateResourceHolder;
+        this.instanceTemplateResourceManager = instanceTemplateResourceManager;
     }
 
     public String process(Template template, String namespace) {
         for (InstanceTemplateResolveProcessor resolveProcessor : resolveProcessors) {
             if (Objects.equals(template, resolveProcessor.support())) {
-                return resolveProcessor.process(instanceTemplateResourceHolder.get(template), namespace);
+                return resolveProcessor.process(instanceTemplateResourceManager.get(template), namespace);
             }
         }
         throw new HotCloudException("Unsupported instance template [" + template + "]");

@@ -8,18 +8,18 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class InstanceTemplateResourceHolder {
+public class InstanceTemplateResourceManager {
 
-    private final Map<Template, String> holder = new ConcurrentHashMap<>(32);
+    private final Map<Template, String> container = new ConcurrentHashMap<>(32);
 
     public void put(Template type, String template) {
         Assert.hasText(template, "Instance template is null");
         Assert.notNull(type, "Instance template type is null");
-        holder.put(type, template);
+        container.put(type, template);
     }
 
     public String get(Template type) {
         Assert.notNull(type, "Instance template type is null");
-        return holder.get(type);
+        return container.get(type);
     }
 }

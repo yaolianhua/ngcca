@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.processor;
 
 import io.hotcloud.application.api.ApplicationRunnerProcessor;
-import io.hotcloud.application.api.template.InstanceTemplateResourceHolder;
+import io.hotcloud.application.api.template.InstanceTemplateResourceManager;
 import io.hotcloud.application.api.template.Template;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
  **/
 @Component
 @Slf4j
-@Import(InstanceTemplateResourceHolder.class)
+@Import(InstanceTemplateResourceManager.class)
 class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerProcessor {
 
-    private final InstanceTemplateResourceHolder holder;
+    private final InstanceTemplateResourceManager resourceManager;
 
-    public ApplicationInstanceTemplateRunnerProcessor(InstanceTemplateResourceHolder holder) {
-        this.holder = holder;
+    public ApplicationInstanceTemplateRunnerProcessor(InstanceTemplateResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
     }
 
     @SneakyThrows
@@ -34,22 +34,22 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
         //mongodb template
         InputStream mongodbStream = new ClassPathResource("mongodb.template").getInputStream();
         String mongodb = new BufferedReader(new InputStreamReader(mongodbStream)).lines().collect(Collectors.joining("\n"));
-        holder.put(Template.Mongodb, mongodb);
+        resourceManager.put(Template.Mongodb, mongodb);
         //mysql template
         InputStream mysqlStream = new ClassPathResource("mysql.template").getInputStream();
         String mysql = new BufferedReader(new InputStreamReader(mysqlStream)).lines().collect(Collectors.joining("\n"));
-        holder.put(Template.Mysql, mysql);
+        resourceManager.put(Template.Mysql, mysql);
         //rabbitmq template
         InputStream rabbitmqStream = new ClassPathResource("rabbitmq.template").getInputStream();
         String rabbitmq = new BufferedReader(new InputStreamReader(rabbitmqStream)).lines().collect(Collectors.joining("\n"));
-        holder.put(Template.Rabbitmq, rabbitmq);
+        resourceManager.put(Template.Rabbitmq, rabbitmq);
         //redis template
         InputStream redisStream = new ClassPathResource("redis.template").getInputStream();
         String redis = new BufferedReader(new InputStreamReader(redisStream)).lines().collect(Collectors.joining("\n"));
-        holder.put(Template.Redis, redis);
+        resourceManager.put(Template.Redis, redis);
         //redisinsight template
         InputStream redisinsightStream = new ClassPathResource("redisinsight.template").getInputStream();
         String redisinsight = new BufferedReader(new InputStreamReader(redisinsightStream)).lines().collect(Collectors.joining("\n"));
-        holder.put(Template.RedisInsight, redisinsight);
+        resourceManager.put(Template.RedisInsight, redisinsight);
     }
 }
