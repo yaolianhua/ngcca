@@ -87,7 +87,7 @@ public class TemplateResolverTest {
                     "rabbitmq_default_user","admin",
                     "rabbitmq_image","rabbitmq:3.9-management",
                     "nfs_path", "/tmp/app",
-                    "management", "management",
+                    "rabbitmq_management", "rabbitmq_management",
                     "storage_class_application", "storage-class-application");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
