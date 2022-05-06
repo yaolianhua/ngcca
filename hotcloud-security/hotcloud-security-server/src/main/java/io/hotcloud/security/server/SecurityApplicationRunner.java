@@ -1,6 +1,6 @@
 package io.hotcloud.security.server;
 
-import io.hotcloud.security.SecurityApplicationRunnerPostProcessor;
+import io.hotcloud.security.SecurityRunnerProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,15 +18,15 @@ import java.util.List;
 @Order(Ordered.LOWEST_PRECEDENCE - 2)
 public class SecurityApplicationRunner implements ApplicationRunner {
 
-    private final List<SecurityApplicationRunnerPostProcessor> processors;
+    private final List<SecurityRunnerProcessor> processors;
 
-    public SecurityApplicationRunner(List<SecurityApplicationRunnerPostProcessor> processors) {
+    public SecurityApplicationRunner(List<SecurityRunnerProcessor> processors) {
         this.processors = processors;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        for (SecurityApplicationRunnerPostProcessor processor : processors) {
+        for (SecurityRunnerProcessor processor : processors) {
             processor.execute();
         }
 
