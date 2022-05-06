@@ -26,6 +26,31 @@ public class UserController {
         this.collectionQuery = collectionQuery;
     }
 
+    @PutMapping
+    public ResponseEntity<Result<User>> update(@RequestBody User user) {
+        User updated = userApi.update(user);
+        return WebResponse.accepted(updated);
+    }
+
+    @PutMapping("/{username}/{enable}")
+    public ResponseEntity<Result<Void>> onOff(@PathVariable("username") String username,
+                                              @PathVariable("enable") Boolean enable) {
+        userApi.switchUser(username, enable);
+        return WebResponse.accepted();
+    }
+
+    @PostMapping
+    public ResponseEntity<Result<User>> save(@RequestBody User user) {
+        User saved = userApi.save(user);
+        return WebResponse.created(saved);
+    }
+
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Result<Boolean>> delete(@PathVariable("username") String username) {
+        boolean deleted = userApi.delete(username, true);
+        return WebResponse.accepted(deleted);
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<Result<User>> user(@PathVariable("username") String username) {
         User user = userApi.retrieve(username);

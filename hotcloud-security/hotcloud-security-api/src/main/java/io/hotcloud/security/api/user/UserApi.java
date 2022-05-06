@@ -28,6 +28,14 @@ public interface UserApi {
     User update(User user);
 
     /**
+     * Enable or disable user
+     *
+     * @param username username
+     * @param onOff    if true. enable user
+     */
+    void switchUser(String username, Boolean onOff);
+
+    /**
      * Delete user with giving {@code username}
      *
      * @param username   username
