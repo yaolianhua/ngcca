@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -138,6 +139,14 @@ public class UserService implements UserApi {
             users.add(buildUser(entity));
         }
         return users;
+    }
+
+    @Override
+    public Collection<User> usersLike(String username) {
+        return userRepository.findByUsernameLike(username)
+                .stream()
+                .map(this::buildUser)
+                .collect(Collectors.toList());
     }
 
     private User buildUser(UserEntity entity) {
