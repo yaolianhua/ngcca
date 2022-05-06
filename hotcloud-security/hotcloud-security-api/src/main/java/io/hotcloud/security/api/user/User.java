@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -30,6 +31,9 @@ public class User implements UserDetails {
     private boolean enabled;
 
     private String avatar;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

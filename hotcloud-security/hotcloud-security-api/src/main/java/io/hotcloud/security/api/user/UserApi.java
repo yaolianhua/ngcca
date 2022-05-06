@@ -28,6 +28,14 @@ public interface UserApi {
     User update(User user);
 
     /**
+     * Enable or disable user
+     *
+     * @param username username
+     * @param onOff    if true. enable user
+     */
+    void switchUser(String username, Boolean onOff);
+
+    /**
      * Delete user with giving {@code username}
      *
      * @param username   username
@@ -72,4 +80,12 @@ public interface UserApi {
      * @return {@link  User}
      */
     Collection<User> users();
+
+    /**
+     * Fuzzy query users with the giving {@code username}
+     *
+     * @param username username
+     * @return user collection
+     */
+    Collection<User> usersLike(String username);
 }

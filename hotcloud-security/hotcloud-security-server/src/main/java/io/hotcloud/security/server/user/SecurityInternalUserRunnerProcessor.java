@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.security.SecurityApplicationRunnerPostProcessor;
+import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +13,11 @@ import java.util.stream.Stream;
  **/
 @Component
 @Slf4j
-public class SecurityApplicationInternalUserPostProcessor implements SecurityApplicationRunnerPostProcessor {
+public class SecurityInternalUserRunnerProcessor implements SecurityRunnerProcessor {
 
     private final UserApi userApi;
 
-    public SecurityApplicationInternalUserPostProcessor(UserApi userApi) {
+    public SecurityInternalUserRunnerProcessor(UserApi userApi) {
         this.userApi = userApi;
     }
 
@@ -29,7 +29,7 @@ public class SecurityApplicationInternalUserPostProcessor implements SecurityApp
                     .nickname(username)
                     .build();
             User saved = userApi.save(user);
-            log.info("SecurityApplicationInternalUserPostProcessor. {} user created", saved.getUsername());
+            log.info("SecurityInternalUserRunnerProcessor. {} user created", saved.getUsername());
         }
     }
 

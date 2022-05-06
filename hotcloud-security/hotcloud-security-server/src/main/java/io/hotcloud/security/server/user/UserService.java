@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -49,10 +51,13 @@ public class UserService implements UserApi {
         Assert.hasText(user.getUsername(), "username is null");
         Assert.hasText(user.getPassword(), "password is null");
 
-        Assert.state(Validator.validUsername(user.getUsername()), "Start with a lowercase letter, can only contain lowercase letters and numbers, [5-16] characters");
+        Assert.state(Validator.validUsername(user.getUsername()), "username must be start with a lowercase letter and contain lowercase letters and numbers only! [5-16] characters");
+        Assert.isTrue(!exist(user.getUsername()), "username [" + user.getUsername() + "] already exist!");
+
         UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
 
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        entity.setCreatedAt(LocalDateTime.now());
         UserEntity saved = userRepository.save(entity);
 
         user = saved.toT(User.class);
@@ -82,9 +87,24 @@ public class UserService implements UserApi {
             existEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
+        existEntity.setModifiedAt(LocalDateTime.now());
         UserEntity updated = userRepository.save(existEntity);
 
         return buildUser(updated);
+    }
+
+    @Override
+    public void switchUser(String username, Boolean onOff) {
+        Assert.hasText(username, "username is null");
+        Assert.notNull(onOff, "user switch is null");
+        boolean exist = this.exist(username);
+        Assert.isTrue(exist, "user [" + username + "] can not be found");
+
+        UserEntity entity = userRepository.findByUsername(username);
+        entity.setEnabled(onOff);
+
+        userRepository.save(entity);
+        log.info("[{}] user switch [{}]", username, onOff ? "on" : "off");
     }
 
     @Override
@@ -140,6 +160,14 @@ public class UserService implements UserApi {
         return users;
     }
 
+    @Override
+    public Collection<User> usersLike(String username) {
+        return userRepository.findByUsernameLike(username)
+                .stream()
+                .map(this::buildUser)
+                .collect(Collectors.toList());
+    }
+
     private User buildUser(UserEntity entity) {
         return User.builder()
                 .id(entity.getId())
@@ -151,6 +179,8 @@ public class UserService implements UserApi {
                 .mobile(entity.getMobile())
                 .email(entity.getEmail())
                 .nickname(entity.getNickname())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
                 .build();
     }
 }

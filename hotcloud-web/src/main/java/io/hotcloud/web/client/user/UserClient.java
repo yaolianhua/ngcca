@@ -7,7 +7,7 @@ import io.hotcloud.web.client.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -17,6 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
         fallbackFactory = UserClientFallbackFactory.class, configuration = ErrorMessageConfiguration.class)
 public interface UserClient {
 
-    @GetMapping("/v1/security/users")
-    ResponseEntity<R<User>> user(@RequestParam("username") String username);
+    @GetMapping("/v1/security/users/{username}")
+    ResponseEntity<R<User>> user(@PathVariable("username") String username);
 }
