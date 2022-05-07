@@ -46,7 +46,7 @@ public class GitControllerTest {
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(PATH.concat("/clones")).params(params))
                 .andDo(print())
-                .andExpect(status().isAccepted());
+                .andExpect(status().isCreated());
         //was invoked one time
         verify(gitClonedService, times(1)).clone("https://github.com/GoogleContainerTools/kaniko.git",
                 null, null, null, null);

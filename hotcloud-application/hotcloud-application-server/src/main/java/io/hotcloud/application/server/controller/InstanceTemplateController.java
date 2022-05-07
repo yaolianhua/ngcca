@@ -7,6 +7,11 @@ import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
 import io.hotcloud.common.PageResult;
 import io.hotcloud.common.Pageable;
 import io.hotcloud.common.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +22,7 @@ import static io.hotcloud.common.WebResponse.*;
  **/
 @RestController
 @RequestMapping("/v1/application/instances")
+@Tag(name = "Instance template")
 public class InstanceTemplateController {
 
     private final InstanceTemplatePlayer instanceTemplatePlayer;
@@ -29,18 +35,42 @@ public class InstanceTemplateController {
     }
 
     @PostMapping
+    @Operation(
+            summary = "Deploy a instance template",
+            responses = {@ApiResponse(responseCode = "201")},
+            parameters = {
+                    @Parameter(name = "template", description = "template enums", required = true)
+            }
+    )
     public ResponseEntity<Result<InstanceTemplate>> apply(Template template) {
         InstanceTemplate instanceTemplate = instanceTemplatePlayer.play(template);
         return created(instanceTemplate);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Delete instance template",
+            responses = {@ApiResponse(responseCode = "202")},
+            parameters = {
+                    @Parameter(name = "id", description = "Instance template id")
+            }
+    )
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         instanceTemplatePlayer.delete(id);
         return accepted();
     }
 
     @GetMapping
+    @Operation(
+            summary = "Instance template paging query",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "user", description = "user queried"),
+                    @Parameter(name = "success", description = "instance template deployment status", schema = @Schema(allowableValues = {"true", "false"})),
+                    @Parameter(name = "page", description = "current page", schema = @Schema(defaultValue = "1")),
+                    @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
+            }
+    )
     public ResponseEntity<PageResult<InstanceTemplate>> page(@RequestParam(value = "user", required = false) String user,
                                                              @RequestParam(value = "success", required = false) Boolean success,
                                                              @RequestParam(value = "page", required = false) Integer page,
