@@ -31,8 +31,8 @@ public class UserLoginController {
             summary = "Basic login",
             responses = {@ApiResponse(responseCode = "201")},
             parameters = {
-                    @Parameter(name = "username", description = "basic user"),
-                    @Parameter(name = "password", description = "basic user password")
+                    @Parameter(name = "username", description = "basic user", required = true),
+                    @Parameter(name = "password", description = "basic user password", required = true)
             }
     )
     public ResponseEntity<Result<BearerToken>> login(String username, String password) {
