@@ -39,7 +39,7 @@ public class InstanceTemplateController {
             summary = "Deploy a instance template",
             responses = {@ApiResponse(responseCode = "201")},
             parameters = {
-                    @Parameter(name = "template", description = "template enums")
+                    @Parameter(name = "template", description = "template enums", required = true)
             }
     )
     public ResponseEntity<Result<InstanceTemplate>> apply(Template template) {
