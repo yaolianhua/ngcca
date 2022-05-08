@@ -64,7 +64,7 @@ public class GlobalSessionUserAspect {
             if (args[i] == null) {
                 continue;
             }
-            if (args[i].getClass().equals(User.class)) {
+            if (args[i].getClass().equals(User.class) && "user".equals(parameterNames[i])) {
                 Arrays.fill(args, i, i + 1, retrieve());
             }
         }

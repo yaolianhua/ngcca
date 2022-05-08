@@ -57,7 +57,7 @@ public class LoginService {
             return "redirect:/index";
         }
 
-        model.addAttribute("message", "invalid username or password");
+        model.addAttribute("message", Objects.requireNonNull(entity.getBody()).getMessage());
         return adminLogin ? "admin/login" : "login";
     }
 

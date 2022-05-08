@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>HotCloud | 用户管理</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+        rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+  <!-- Theme style -->
+  <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <div th:include="admin/navbar"></div>
+  <div th:include="admin/sidebar"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>用户管理</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/administrator/index}">Home</a></li>
+              <li class="breadcrumb-item active">用户管理</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">用户列表</h3>
+              </div>
+              <div class="card-header">
+                <div class="col-sm-1">
+                  <button class="btn btn-block btn-dark" data-target="#modal-new-user" data-toggle="modal"
+                          type="button">新建用户
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered table-hover" id="user-list">
+                  <thead>
+                  <tr>
+                    <th>用户名</th>
+                    <th>昵称</th>
+                    <th>手机号</th>
+                    <th>邮箱地址</th>
+                    <th>用户状态</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>用户操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="user: ${response.data}">
+                    <td th:text="${user.username}"/>
+                    <td th:text="${user.nickname}"/>
+                    <td th:text="${user.mobile}"/>
+                    <td th:text="${user.email}"/>
+                    <td th:text="${user.enabled} ? '激活' : '禁用'"/>
+                    <td th:text="${user.createdAt}"/>
+                    <td th:text="${user.modifiedAt}"/>
+                    <td class="project-actions text-center">
+                      <a class="btn btn-primary btn-sm" href="#">
+                        <i class="fas fa-folder">
+                        </i>
+                        详情
+                      </a>
+                      <a class="btn btn-info btn-sm" href="#">
+                        <i class="fas fa-pencil-alt">
+                        </i>
+                        编辑
+                      </a>
+                      <a class="btn btn-default btn-sm" href="#">
+                        <i class="fas fa-bell">
+                        </i>
+                        激活
+                      </a>
+                      <a class="btn btn-warning btn-sm" href="#">
+                        <i class="fas fa-bell-slash">
+                        </i>
+                        禁用
+                      </a>
+                      <a class="btn btn-danger btn-sm" href="#">
+                        <i class="fas fa-trash">
+                        </i>
+                        删除
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <div th:include="footer"></div>
+
+  <!-- new user modal -->
+  <div class="modal fade" id="modal-new-user">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新建用户</h4>
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="user-form">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="username">用户名</label>
+                  <input class="form-control" id="username" name="username" placeholder="5-16个字符,字母开头且只能包含小写字母和数字"
+                         type="text">
+                </div>
+                <div class="form-group">
+                  <label for="password">密码</label>
+                  <input class="form-control" id="password" name="password" placeholder="任意字符" type="password">
+                </div>
+                <div class="form-group">
+                  <label for="nickname">昵称</label>
+                  <input class="form-control" id="nickname" name="nickname" placeholder="用户昵称,可为空" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="mobile">手机号</label>
+                  <input class="form-control" id="mobile" name="mobile" placeholder="手机号,可为空" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="email">邮箱</label>
+                  <input class="form-control" id="email" name="email" placeholder="邮箱地址,可为空" type="email">
+                </div>
+
+                <div class="form-group">
+                  <label for="enable">用户状态</label>
+                  <select class="form-control custom-select" id="enable" name="enabled">
+                    <option disabled selected>请选择</option>
+                    <option value="true">激活</option>
+                    <option value="false">禁用</option>
+                  </select>
+                </div>
+
+
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button class="btn btn-default" data-dismiss="modal" type="button">关闭</button>
+          <button class="btn btn-primary" id="user-save" type="button">保存</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- DataTables  & Plugins -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $('#user-list').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+
+    //
+
+    $("#user-save").on("click",
+            function () {
+              let data = {};
+              let value = $('#user-form').serializeArray();
+              $.each(value, function (index, item) {
+                data[item.name] = item.value;
+              });
+              // Send a POST request
+              axios({
+                method: 'post',
+                url: '/administrator/users',
+                data: data
+              }).then(function (response) {
+                alert(response.data.message);
+              }).catch(function (error) {
+                alert(error.response.data.message);
+              });
+            }
+    )
+
+  });
+</script>
+</body>
+</html>
