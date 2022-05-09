@@ -69,29 +69,29 @@ public class UserController {
         return WebResponse.created(saved);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/{id}")
     @Operation(
             summary = "User delete, it will be deleted physically",
             responses = {@ApiResponse(responseCode = "202")},
             parameters = {
-                    @Parameter(name = "username", description = "which user will delete")
+                    @Parameter(name = "id", description = "user id")
             }
     )
-    public ResponseEntity<Result<Boolean>> delete(@PathVariable("username") String username) {
-        boolean deleted = userApi.delete(username, true);
-        return WebResponse.accepted(deleted);
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
+        userApi.deleteByUserid(id, true);
+        return WebResponse.accepted();
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/{id}")
     @Operation(
             summary = "User query",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
-                    @Parameter(name = "username", description = "username queried")
+                    @Parameter(name = "id", description = "user id")
             }
     )
-    public ResponseEntity<Result<User>> user(@PathVariable("username") String username) {
-        User user = userApi.retrieve(username);
+    public ResponseEntity<Result<User>> user(@PathVariable("id") String id) {
+        User user = userApi.find(id);
         return WebResponse.ok(user);
     }
 

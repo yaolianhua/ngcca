@@ -40,9 +40,16 @@ public interface UserApi {
      *
      * @param username   username
      * @param physically Whether to physically delete
-     * @return true/false
      */
-    boolean delete(String username, boolean physically);
+    void delete(String username, boolean physically);
+
+    /**
+     * Delete user with giving {@code username}
+     *
+     * @param id         user id
+     * @param physically Whether to physically delete
+     */
+    void deleteByUserid(String id, boolean physically);
 
     /**
      * Delete all users physically
@@ -66,6 +73,14 @@ public interface UserApi {
      * @return {@link  User}
      */
     User retrieve(String username);
+
+    /**
+     * Find user with the giving id
+     *
+     * @param id user id
+     * @return {@link  User}
+     */
+    User find(String id);
 
     /**
      * Retrieve current user

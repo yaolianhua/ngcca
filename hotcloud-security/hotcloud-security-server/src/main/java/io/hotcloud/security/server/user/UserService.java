@@ -1,6 +1,7 @@
 package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.Validator;
+import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.db.core.user.UserEntity;
 import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.user.User;
@@ -108,19 +109,36 @@ public class UserService implements UserApi {
     }
 
     @Override
-    public boolean delete(String username, boolean physically) {
+    public void delete(String username, boolean physically) {
         if (!StringUtils.hasText(username)) {
-            return false;
+            return;
         }
         if (physically) {
-            return userRepository.deleteByUsername(username);
+            userRepository.deleteByUsername(username);
+            return;
         }
 
         UserEntity entity = userRepository.findByUsername(username);
+        Assert.notNull(entity, "User not found [" + username + "]");
         entity.setEnabled(false);
 
         userRepository.save(entity);
-        return true;
+    }
+
+    @Override
+    public void deleteByUserid(String id, boolean physically) {
+        if (!StringUtils.hasText(id)) {
+            return;
+        }
+        if (physically) {
+            userRepository.deleteById(id);
+            return;
+        }
+
+        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new HotCloudException("User not found [" + id + "]"));
+        entity.setEnabled(false);
+
+        userRepository.save(entity);
     }
 
     @Override
@@ -138,6 +156,12 @@ public class UserService implements UserApi {
         UserEntity entity = userRepository.findByUsername(username);
         Assert.notNull(entity, "Retrieve user null [" + username + "]");
 
+        return buildUser(entity);
+    }
+
+    @Override
+    public User find(String id) {
+        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new HotCloudException("User not found [" + id + "]"));
         return buildUser(entity);
     }
 
