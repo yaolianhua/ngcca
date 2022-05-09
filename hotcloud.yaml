@@ -117,6 +117,9 @@ spec:
             - mountPath: /tmp/kaniko
               name: buildpack-storage
               readOnly: false
+            - mountPath: /tmp/app
+              name: app-storage
+              readOnly: false
       tolerations:
         - effect: NoSchedule
           operator: Exists
@@ -131,10 +134,12 @@ spec:
         - hostPath:
             path: /root/.kube/config
           name: kubeconfig
-        - nfs:
-            server: 10.0.20.6
+        - hostPath:
             path: /tmp/kaniko
           name: buildpack-storage
+        - hostPath:
+            path: /tmp/app
+          name: app-storage
 ---
 apiVersion: v1
 data:
@@ -171,9 +176,6 @@ data:
       secret-key: QbMufCD@9WVQ^Hv
       endpoint: "http://minio-release.middleware.svc.cluster.local:9000"
     buildpack:
-      storage:
-        type: nfs
-        nfs-server: 10.0.20.6
       registry:
         url: 119.91.214.25:5000
         project: build
