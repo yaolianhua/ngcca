@@ -17,8 +17,9 @@ public interface BuildPackPlayer {
     /**
      * Delete buildPack resource
      *
-     * @param id buildPack ID
+     * @param id         buildPack ID
+     * @param physically whether delete physically
      */
-    void delete(String id);
+    void delete(String id, boolean physically);
 
 }

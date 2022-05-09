@@ -56,10 +56,12 @@ public class BuildPackController {
             responses = {@ApiResponse(responseCode = "202")},
             parameters = {
                     @Parameter(name = "id", description = "BuildPack id"),
+                    @Parameter(name = "physically", description = "whether delete physically", schema = @Schema(allowableValues = {"true", "false"}))
             }
     )
-    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
-        buildPackPlayer.delete(id);
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id,
+                                               @RequestParam("physically") boolean physically) {
+        buildPackPlayer.delete(id, physically);
         return accepted();
     }
 
