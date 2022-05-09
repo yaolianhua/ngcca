@@ -78,18 +78,23 @@ public class BuildPackRabbitMQMessageSubscriber {
             }
     )
     public void userDeleted(String message) {
-        Message<User> messageBody = convertUserMessageBody(message);
-        User user = messageBody.getData();
-        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
-        List<BuildPack> buildPacks = buildPackService.findAll(user.getUsername());
-        for (BuildPack buildPack : buildPacks) {
-            buildPackPlayer.delete(buildPack.getId(), true);
-        }
-        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", user.getUsername(), buildPacks.size());
+        try {
+            Message<User> messageBody = convertUserMessageBody(message);
+            User user = messageBody.getData();
+            log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
+            List<BuildPack> buildPacks = buildPackService.findAll(user.getUsername());
+            for (BuildPack buildPack : buildPacks) {
+                buildPackPlayer.delete(buildPack.getId(), true);
+            }
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", user.getUsername(), buildPacks.size());
 
-        List<GitCloned> cloneds = gitClonedService.listCloned(user.getUsername());
-        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", user.getUsername(), cloneds.size());
-        gitClonedService.delete(user.getUsername());
+            List<GitCloned> cloneds = gitClonedService.listCloned(user.getUsername());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", user.getUsername(), cloneds.size());
+            gitClonedService.delete(user.getUsername());
+        } catch (Exception e) {
+            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+        }
+
 
     }
 
