@@ -125,6 +125,12 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
+    public void delete(String user) {
+        List<GitClonedEntity> clonedEntities = repository.findByUser(user);
+        repository.deleteAll(clonedEntities);
+    }
+
+    @Override
     public void clone(String gitUrl, String dockerfile, String branch, String username, String password) {
 
         Assert.hasText(gitUrl, "Git url is null");
