@@ -7,6 +7,7 @@ import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.api.user.event.UserCreatedEvent;
+import io.hotcloud.security.api.user.event.UserDeletedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
@@ -114,6 +115,11 @@ public class UserService implements UserApi {
             return;
         }
         if (physically) {
+            boolean exist = this.exist(username);
+            if (exist) {
+                User user = this.retrieve(username);
+                eventPublisher.publishEvent(new UserDeletedEvent(user));
+            }
             userRepository.deleteByUsername(username);
             return;
         }
@@ -131,6 +137,11 @@ public class UserService implements UserApi {
             return;
         }
         if (physically) {
+            User user = this.find(id);
+            if (user != null) {
+                eventPublisher.publishEvent(new UserDeletedEvent(user));
+            }
+
             userRepository.deleteById(id);
             return;
         }
