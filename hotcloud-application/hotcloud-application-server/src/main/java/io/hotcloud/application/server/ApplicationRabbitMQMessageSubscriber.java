@@ -55,14 +55,20 @@ public class ApplicationRabbitMQMessageSubscriber {
             }
     )
     public void userDeleted(String message) {
-        Message<User> messageBody = convertUserMessageBody(message);
-        User user = messageBody.getData();
-        log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
-        List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(user.getUsername());
-        for (InstanceTemplate template : instanceTemplates) {
-            instanceTemplatePlayer.delete(template.getId());
+
+        try {
+            Message<User> messageBody = convertUserMessageBody(message);
+            User user = messageBody.getData();
+            log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
+            List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(user.getUsername());
+            for (InstanceTemplate template : instanceTemplates) {
+                instanceTemplatePlayer.delete(template.getId());
+            }
+            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", user.getUsername(), instanceTemplates.size());
+        } catch (Exception e) {
+            log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
-        log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", user.getUsername(), instanceTemplates.size());
+
 
     }
 
