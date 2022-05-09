@@ -113,9 +113,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.hasText(id, "BuildPack ID is null");
         BuildPack existBuildPack = buildPackService.findOne(id);
         Assert.notNull(existBuildPack, "Can not found buildPack [" + id + "]");
-        if (existBuildPack.isDeleted()) {
-            return;
-        }
+
         buildPackService.delete(id, physically);
         log.info("[DefaultBuildPackPlayer] delete BuildPack '{}'", id);
 
