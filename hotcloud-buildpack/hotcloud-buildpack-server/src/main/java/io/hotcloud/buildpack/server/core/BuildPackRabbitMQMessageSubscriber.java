@@ -3,8 +3,11 @@ package io.hotcloud.buildpack.server.core;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.hotcloud.buildpack.api.clone.GitCloned;
+import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
@@ -12,6 +15,8 @@ import io.hotcloud.common.message.MessageProperties;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
+import io.hotcloud.security.api.SecurityConstant;
+import io.hotcloud.security.api.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -25,6 +30,7 @@ import org.springframework.util.unit.DataSize;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -43,18 +49,48 @@ public class BuildPackRabbitMQMessageSubscriber {
     private final MinioProperties minioProperties;
 
     private final BuildPackService buildPackService;
+    private final BuildPackPlayer buildPackPlayer;
+    private final GitClonedService gitClonedService;
     private final ObjectMapper objectMapper;
 
     public BuildPackRabbitMQMessageSubscriber(MinioObjectApi minioObjectApi,
                                               MinioBucketApi minioBucketApi,
                                               MinioProperties minioProperties,
                                               BuildPackService buildPackService,
+                                              BuildPackPlayer buildPackPlayer,
+                                              GitClonedService gitClonedService,
                                               ObjectMapper objectMapper) {
         this.minioObjectApi = minioObjectApi;
         this.minioBucketApi = minioBucketApi;
         this.minioProperties = minioProperties;
         this.buildPackService = buildPackService;
+        this.buildPackPlayer = buildPackPlayer;
+        this.gitClonedService = gitClonedService;
         this.objectMapper = objectMapper;
+    }
+
+    @RabbitListener(
+            bindings = {
+                    @QueueBinding(
+                            value = @Queue(value = SecurityConstant.QUEUE_BUILDPACK_SUBSCRIBE_SECURITY_USER_DELETE_MESSAGE),
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE)
+                    )
+            }
+    )
+    public void userDeleted(String message) {
+        Message<User> messageBody = convertUserMessageBody(message);
+        User user = messageBody.getData();
+        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
+        List<BuildPack> buildPacks = buildPackService.findAll(user.getUsername());
+        for (BuildPack buildPack : buildPacks) {
+            buildPackPlayer.delete(buildPack.getId(), true);
+        }
+        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", user.getUsername(), buildPacks.size());
+
+        List<GitCloned> cloneds = gitClonedService.listCloned(user.getUsername());
+        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", user.getUsername(), cloneds.size());
+        gitClonedService.delete(user.getUsername());
+
     }
 
     @RabbitListener(
@@ -102,6 +138,16 @@ public class BuildPackRabbitMQMessageSubscriber {
     }
 
     private Message<BuildPack> convertBuildPackMessageBody(String content) {
+        try {
+            return objectMapper.readValue(content, new TypeReference<>() {
+            });
+
+        } catch (JsonProcessingException e) {
+            throw new HotCloudException(e.getMessage());
+        }
+    }
+
+    private Message<User> convertUserMessageBody(String content) {
         try {
             return objectMapper.readValue(content, new TypeReference<>() {
             });
