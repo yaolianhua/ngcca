@@ -7,10 +7,6 @@ import java.util.Collection;
  **/
 public interface UserApi {
 
-    String CACHE_USER_KEY_PREFIX = "hotcloud:user:%s";
-    String CACHE_NAMESPACE_USER_KEY_PREFIX = "hotcloud:namespace:user:%s";
-    String CACHE_USERS_KEY_PREFIX = "hotcloud:user:all";
-
     /**
      * Save user
      *

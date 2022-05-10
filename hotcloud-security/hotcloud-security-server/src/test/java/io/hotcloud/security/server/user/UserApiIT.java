@@ -23,7 +23,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import static io.hotcloud.security.api.user.UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX;
+import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX;
+import static io.hotcloud.security.api.SecurityConstant.CACHE_USERS_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -84,7 +85,7 @@ public class UserApiIT {
         Assertions.assertFalse(CollectionUtils.isEmpty(users));
 
         //In order to test the data is in different database
-        cache.put(UserApi.CACHE_USERS_KEY_PREFIX, users);
+        cache.put(CACHE_USERS_KEY_PREFIX, users);
 
         for (User user : users) {
             log.info("{}", user);

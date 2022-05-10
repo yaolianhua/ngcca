@@ -13,6 +13,7 @@ import io.hotcloud.common.cache.Cache;
 import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         User current = userApi.current();
         Assert.notNull(current, "retrieve current user is null");
         //get user's namespace.
-        String namespace = cache.get(String.format(UserApi.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
+        String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null");
 
         String yaml = instanceTemplateProcessors.process(template, namespace);
