@@ -8,8 +8,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -47,7 +45,7 @@ public class FileUploadService {
 
         try {
             minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());
-            return Path.of(properties.getEndpoint(), bucket, filename).toString();
+            return String.format("%s/%s/%s", properties.getEndpoint(), bucket, filename);
         } catch (Exception e) {
             throw new HotCloudException(e.getMessage());
         }
