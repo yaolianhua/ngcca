@@ -118,7 +118,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         buildPackService.delete(id, physically);
         log.info("[DefaultBuildPackPlayer] delete BuildPack '{}'", id);
 
-        eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack));
+        eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack, physically));
     }
 
     @NotNull

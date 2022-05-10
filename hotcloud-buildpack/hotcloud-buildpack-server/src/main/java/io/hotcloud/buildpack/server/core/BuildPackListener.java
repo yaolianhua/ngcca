@@ -1,9 +1,6 @@
 package io.hotcloud.buildpack.server.core;
 
-import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
-import io.fabric8.kubernetes.api.model.Secret;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
@@ -16,6 +13,7 @@ import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +38,7 @@ public class BuildPackListener {
     private final JobApi jobApi;
 
     private final PersistentVolumeClaimApi persistentVolumeClaimApi;
+    private final PersistentVolumeApi persistentVolumeApi;
     private final SecretApi secretApi;
 
     private final ApplicationEventPublisher eventPublisher;
@@ -49,6 +48,7 @@ public class BuildPackListener {
                              ApplicationEventPublisher eventPublisher,
                              MessageBroadcaster messageBroadcaster,
                              PersistentVolumeClaimApi persistentVolumeClaimApi,
+                             PersistentVolumeApi persistentVolumeApi,
                              SecretApi secretApi,
                              PodApi podApi,
                              JobApi jobApi) {
@@ -56,6 +56,7 @@ public class BuildPackListener {
         this.eventPublisher = eventPublisher;
         this.messageBroadcaster = messageBroadcaster;
         this.persistentVolumeClaimApi = persistentVolumeClaimApi;
+        this.persistentVolumeApi = persistentVolumeApi;
         this.secretApi = secretApi;
         this.podApi = podApi;
         this.jobApi = jobApi;
@@ -76,6 +77,7 @@ public class BuildPackListener {
         String job = buildPack.getJobResource().getName();
         String namespace = buildPack.getJobResource().getNamespace();
         String persistentVolumeClaim = buildPack.getStorageResource().getPersistentVolumeClaim();
+        String persistentVolume = buildPack.getStorageResource().getPersistentVolume();
         String secretName = buildPack.getSecretResource().getName();
         try {
             Job read = jobApi.read(namespace, job);
@@ -88,6 +90,12 @@ public class BuildPackListener {
                 persistentVolumeClaimApi.delete(persistentVolumeClaim, namespace);
                 log.info("[BuildPackDeletedEvent] delete persistentVolumeClaim '{}'", persistentVolumeClaim);
             }
+            PersistentVolume volume = persistentVolumeApi.read(persistentVolume);
+            if (volume != null && deletedEvent.isPhysically()) {
+                persistentVolumeApi.delete(persistentVolume);
+                log.info("[BuildPackDeletedEvent] delete persistentVolume '{}'", persistentVolume);
+            }
+
             Secret secret = secretApi.read(namespace, secretName);
             if (secret != null) {
                 secretApi.delete(namespace, secretName);
