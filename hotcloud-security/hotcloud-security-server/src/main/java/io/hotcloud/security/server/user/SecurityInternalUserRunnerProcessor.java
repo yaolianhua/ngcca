@@ -27,6 +27,7 @@ public class SecurityInternalUserRunnerProcessor implements SecurityRunnerProces
                     .username(username)
                     .password("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea")
                     .nickname(username)
+                    .enabled(true)
                     .build();
             User saved = userApi.save(user);
             log.info("SecurityInternalUserRunnerProcessor. {} user created", saved.getUsername());
