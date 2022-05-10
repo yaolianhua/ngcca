@@ -93,13 +93,17 @@ public class BuildPackRabbitMQMessageSubscriber {
 
             //remove git cloned record
             List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
             gitClonedService.delete(pair.getUsername());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
 
-            //remove persistent data
-            FileHelper.deleteRecursively(Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
             //remove minio data
             minioBucketApi.remove(pair.getNamespace());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' object storage has been deleted", pair.getUsername(), pair.getNamespace());
+
+            //remove persistent data
+            Path localPath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace());
+            FileHelper.deleteRecursively(localPath);
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' local storage has been deleted", pair.getUsername(), localPath);
         } catch (Exception e) {
             log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
