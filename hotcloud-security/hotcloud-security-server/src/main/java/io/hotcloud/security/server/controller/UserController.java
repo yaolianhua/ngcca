@@ -95,6 +95,19 @@ public class UserController {
         return WebResponse.ok(user);
     }
 
+    @GetMapping("/{username}/user")
+    @Operation(
+            summary = "User query",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "username", description = "username queried")
+            }
+    )
+    public ResponseEntity<Result<User>> username(@PathVariable("username") String username) {
+        User user = userApi.retrieve(username);
+        return WebResponse.ok(user);
+    }
+
     @GetMapping
     @Operation(
             summary = "User paging query",

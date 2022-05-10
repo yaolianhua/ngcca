@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
         fallbackFactory = UserClientFallbackFactory.class, configuration = ErrorMessageConfiguration.class)
 public interface UserClient {
 
-    @GetMapping("/v1/security/users/{username}")
+    @GetMapping("/v1/security/users/{username}/user")
     ResponseEntity<R<User>> user(@PathVariable("username") String username);
 
     @GetMapping("/v1/security/users")
