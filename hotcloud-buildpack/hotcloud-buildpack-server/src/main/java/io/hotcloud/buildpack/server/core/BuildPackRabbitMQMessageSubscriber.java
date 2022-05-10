@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.server.core;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPack;
@@ -16,6 +17,7 @@ import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +56,7 @@ public class BuildPackRabbitMQMessageSubscriber {
     private final BuildPackService buildPackService;
     private final BuildPackPlayer buildPackPlayer;
     private final GitClonedService gitClonedService;
+    private final NamespaceApi namespaceApi;
     private final ObjectMapper objectMapper;
 
     public BuildPackRabbitMQMessageSubscriber(MinioObjectApi minioObjectApi,
@@ -62,6 +65,7 @@ public class BuildPackRabbitMQMessageSubscriber {
                                               BuildPackService buildPackService,
                                               BuildPackPlayer buildPackPlayer,
                                               GitClonedService gitClonedService,
+                                              NamespaceApi namespaceApi,
                                               ObjectMapper objectMapper) {
         this.minioObjectApi = minioObjectApi;
         this.minioBucketApi = minioBucketApi;
@@ -69,6 +73,7 @@ public class BuildPackRabbitMQMessageSubscriber {
         this.buildPackService = buildPackService;
         this.buildPackPlayer = buildPackPlayer;
         this.gitClonedService = gitClonedService;
+        this.namespaceApi = namespaceApi;
         this.objectMapper = objectMapper;
     }
 
@@ -99,7 +104,7 @@ public class BuildPackRabbitMQMessageSubscriber {
         try {
             buildPacks.forEach(e -> buildPackPlayer.delete(e.getId(), true));
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+            log.info("[BuildPackRabbitMQMessageSubscriber] delete buildPack error. {}", e.getMessage());
         }
         log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
 
@@ -121,7 +126,7 @@ public class BuildPackRabbitMQMessageSubscriber {
             minioBucketApi.remove(pair.getNamespace());
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' object storage has been deleted", pair.getUsername(), pair.getNamespace());
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+            log.info("[BuildPackRabbitMQMessageSubscriber] delete object storage error. {}", e.getMessage());
         }
 
         try {
@@ -130,7 +135,17 @@ public class BuildPackRabbitMQMessageSubscriber {
             FileHelper.deleteRecursively(localPath);
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' local storage has been deleted", pair.getUsername(), localPath);
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+            log.info("[BuildPackRabbitMQMessageSubscriber] delete local storage error. {}", e.getMessage());
+        }
+
+        try {
+            Namespace namespace = namespaceApi.read(pair.getNamespace());
+            if (namespace != null) {
+                namespaceApi.delete(pair.getNamespace());
+            }
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user namespace [{}] has been deleted", pair.getUsername(), pair.getNamespace());
+        } catch (Exception e) {
+            log.info("[BuildPackRabbitMQMessageSubscriber] delete namespace error. {}", e.getMessage());
         }
 
     }
@@ -146,7 +161,7 @@ public class BuildPackRabbitMQMessageSubscriber {
     public void subscribe(String message) {
         Message<BuildPack> messageBody = convertBuildPackMessageBody(message);
         BuildPack buildPack = messageBody.getData();
-        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user's BuildPack '{}' message", buildPack.getUser(), buildPack.getId());
+        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user's BuildPack '{}' done message", buildPack.getUser(), buildPack.getId());
 
         StopWatch watch = new StopWatch();
         watch.start();
@@ -175,7 +190,7 @@ public class BuildPackRabbitMQMessageSubscriber {
             buildPack.setArtifact(String.format("%s/%s/%s", minioProperties.getEndpoint(), namespace, objectname));
             buildPackService.saveOrUpdate(buildPack);
         } catch (Exception ex) {
-            log.error("[BuildPackRabbitMQMessageSubscriber] error. {}", ex.getMessage());
+            log.error("[BuildPackRabbitMQMessageSubscriber] handle buildPack done error. {}", ex.getMessage());
         }
 
     }
