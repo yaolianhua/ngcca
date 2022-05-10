@@ -7,6 +7,7 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
@@ -15,7 +16,6 @@ import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
@@ -52,24 +52,23 @@ public class BuildPackRabbitMQMessageSubscriber {
     private final MinioProperties minioProperties;
 
     private final BuildPackService buildPackService;
+    private final BuildPackPlayer buildPackPlayer;
     private final GitClonedService gitClonedService;
-
-    private final NamespaceApi namespaceApi;
     private final ObjectMapper objectMapper;
 
     public BuildPackRabbitMQMessageSubscriber(MinioObjectApi minioObjectApi,
                                               MinioBucketApi minioBucketApi,
                                               MinioProperties minioProperties,
                                               BuildPackService buildPackService,
+                                              BuildPackPlayer buildPackPlayer,
                                               GitClonedService gitClonedService,
-                                              NamespaceApi namespaceApi,
                                               ObjectMapper objectMapper) {
         this.minioObjectApi = minioObjectApi;
         this.minioBucketApi = minioBucketApi;
         this.minioProperties = minioProperties;
         this.buildPackService = buildPackService;
+        this.buildPackPlayer = buildPackPlayer;
         this.gitClonedService = gitClonedService;
-        this.namespaceApi = namespaceApi;
         this.objectMapper = objectMapper;
     }
 
@@ -97,20 +96,17 @@ public class BuildPackRabbitMQMessageSubscriber {
 
         //remove buildPack record
         List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
-        buildPackService.deleteAll(pair.getUsername());
+        try {
+            buildPacks.forEach(e -> buildPackPlayer.delete(e.getId(), true));
+        } catch (Exception e) {
+            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+        }
         log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
 
         //remove git cloned record
         List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
         gitClonedService.delete(pair.getUsername());
         log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
-
-        try {
-            //remove namespace
-            namespaceApi.delete(pair.getNamespace());
-        } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
-        }
 
         //remove minio data
         List<String> objectnames = buildPacks.stream()
