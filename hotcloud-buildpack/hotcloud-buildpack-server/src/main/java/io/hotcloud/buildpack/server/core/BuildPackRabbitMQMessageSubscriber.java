@@ -12,6 +12,7 @@ import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageProperties;
+import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
@@ -91,6 +92,8 @@ public class BuildPackRabbitMQMessageSubscriber {
             List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
             gitClonedService.delete(pair.getUsername());
+
+            FileHelper.deleteRecursively(Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
         } catch (Exception e) {
             log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
