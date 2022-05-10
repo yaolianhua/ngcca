@@ -3,6 +3,7 @@ package io.hotcloud.application.server;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
@@ -11,6 +12,7 @@ import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageProperties;
 import io.hotcloud.common.storage.FileHelper;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +41,17 @@ public class ApplicationRabbitMQMessageSubscriber {
     private final InstanceTemplatePlayer instanceTemplatePlayer;
     private final InstanceTemplateService instanceTemplateService;
 
+    private final NamespaceApi namespaceApi;
+
     private final ObjectMapper objectMapper;
 
     public ApplicationRabbitMQMessageSubscriber(InstanceTemplatePlayer instanceTemplatePlayer,
                                                 InstanceTemplateService instanceTemplateService,
+                                                NamespaceApi namespaceApi,
                                                 ObjectMapper objectMapper) {
         this.instanceTemplatePlayer = instanceTemplatePlayer;
         this.instanceTemplateService = instanceTemplateService;
+        this.namespaceApi = namespaceApi;
         this.objectMapper = objectMapper;
     }
 
@@ -70,13 +76,23 @@ public class ApplicationRabbitMQMessageSubscriber {
             }
             log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", pair.getUsername(), instanceTemplates.size());
         } catch (Exception e) {
-            log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
+            log.info("[ApplicationRabbitMQMessageSubscriber] delete instance template error. {}", e.getMessage());
         }
 
         try {
             FileHelper.deleteRecursively(Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
         } catch (Exception e) {
-            log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
+            log.info("[ApplicationRabbitMQMessageSubscriber] delete local storage error. {}", e.getMessage());
+        }
+
+        try {
+            Namespace namespace = namespaceApi.read(pair.getNamespace());
+            if (namespace != null) {
+                namespaceApi.delete(pair.getNamespace());
+            }
+            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user namespace [{}] has been deleted", pair.getUsername(), pair.getNamespace());
+        } catch (Exception e) {
+            log.info("[ApplicationRabbitMQMessageSubscriber] delete namespace error. {}", e.getMessage());
         }
 
     }
