@@ -10,7 +10,7 @@ import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageProperties;
 import io.hotcloud.security.api.SecurityConstant;
-import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -57,14 +57,14 @@ public class ApplicationRabbitMQMessageSubscriber {
     public void userDeleted(String message) {
 
         try {
-            Message<User> messageBody = convertUserMessageBody(message);
-            User user = messageBody.getData();
-            log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
-            List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(user.getUsername());
+            Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
+            UserNamespacePair pair = messageBody.getData();
+            log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+            List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(pair.getUsername());
             for (InstanceTemplate template : instanceTemplates) {
                 instanceTemplatePlayer.delete(template.getId());
             }
-            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", user.getUsername(), instanceTemplates.size());
+            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", pair.getUsername(), instanceTemplates.size());
         } catch (Exception e) {
             log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
@@ -72,7 +72,7 @@ public class ApplicationRabbitMQMessageSubscriber {
 
     }
 
-    private Message<User> convertUserMessageBody(String content) {
+    private Message<UserNamespacePair> convertUserMessageBody(String content) {
         try {
             return objectMapper.readValue(content, new TypeReference<>() {
             });

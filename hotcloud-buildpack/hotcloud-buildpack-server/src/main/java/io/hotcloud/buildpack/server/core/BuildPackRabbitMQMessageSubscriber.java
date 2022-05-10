@@ -16,7 +16,7 @@ import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
 import io.hotcloud.security.api.SecurityConstant;
-import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -79,18 +79,18 @@ public class BuildPackRabbitMQMessageSubscriber {
     )
     public void userDeleted(String message) {
         try {
-            Message<User> messageBody = convertUserMessageBody(message);
-            User user = messageBody.getData();
-            log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", user.getUsername());
-            List<BuildPack> buildPacks = buildPackService.findAll(user.getUsername());
+            Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
+            UserNamespacePair pair = messageBody.getData();
+            log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+            List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
             for (BuildPack buildPack : buildPacks) {
                 buildPackPlayer.delete(buildPack.getId(), true);
             }
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", user.getUsername(), buildPacks.size());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
 
-            List<GitCloned> cloneds = gitClonedService.listCloned(user.getUsername());
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", user.getUsername(), cloneds.size());
-            gitClonedService.delete(user.getUsername());
+            List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
+            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
+            gitClonedService.delete(pair.getUsername());
         } catch (Exception e) {
             log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
@@ -152,7 +152,7 @@ public class BuildPackRabbitMQMessageSubscriber {
         }
     }
 
-    private Message<User> convertUserMessageBody(String content) {
+    private Message<UserNamespacePair> convertUserMessageBody(String content) {
         try {
             return objectMapper.readValue(content, new TypeReference<>() {
             });

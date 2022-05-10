@@ -6,6 +6,7 @@ import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
+import io.hotcloud.security.api.user.UserNamespacePair;
 import io.hotcloud.security.api.user.event.UserCreatedEvent;
 import io.hotcloud.security.api.user.event.UserDeletedEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,6 @@ public class UserEventListener {
         cache.evict(namespace);
         log.info("UserEventListener. user '{}' namespace '{}' deleted", user.getUsername(), namespace);
         //
-        messageBroadcaster.broadcast(SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE, Message.of(user));
+        messageBroadcaster.broadcast(SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE, Message.of(new UserNamespacePair(user.getUsername(), namespace)));
     }
 }
