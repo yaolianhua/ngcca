@@ -118,6 +118,12 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     @Override
+    public void deleteAll(String user) {
+        List<BuildPackEntity> entities = buildPackRepository.findByUser(user);
+        buildPackRepository.deleteAll(entities);
+    }
+
+    @Override
     public void delete(String id, boolean physically) {
         if (!StringUtils.hasText(id)) {
             return;

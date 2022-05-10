@@ -65,9 +65,16 @@ public interface BuildPackService {
     BuildPack findOneOrNullWithNoDone(String user, String clonedId);
 
     /**
-     * Delete all
+     * Delete all buildPack physically
      */
     void deleteAll();
+
+    /**
+     * Delete all user's buildPack physically with the giving {@code user}
+     *
+     * @param user user's username
+     */
+    void deleteAll(String user);
 
     /**
      * Delete buildPack with giving id
