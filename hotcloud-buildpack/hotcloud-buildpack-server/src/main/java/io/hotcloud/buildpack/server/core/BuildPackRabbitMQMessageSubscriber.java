@@ -7,7 +7,6 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
@@ -16,6 +15,7 @@ import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.common.storage.minio.MinioBucketApi;
 import io.hotcloud.common.storage.minio.MinioObjectApi;
 import io.hotcloud.common.storage.minio.MinioProperties;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import org.springframework.util.StringUtils;
 import org.springframework.util.unit.DataSize;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -50,24 +52,33 @@ public class BuildPackRabbitMQMessageSubscriber {
     private final MinioProperties minioProperties;
 
     private final BuildPackService buildPackService;
-    private final BuildPackPlayer buildPackPlayer;
     private final GitClonedService gitClonedService;
+
+    private final NamespaceApi namespaceApi;
     private final ObjectMapper objectMapper;
 
     public BuildPackRabbitMQMessageSubscriber(MinioObjectApi minioObjectApi,
                                               MinioBucketApi minioBucketApi,
                                               MinioProperties minioProperties,
                                               BuildPackService buildPackService,
-                                              BuildPackPlayer buildPackPlayer,
                                               GitClonedService gitClonedService,
+                                              NamespaceApi namespaceApi,
                                               ObjectMapper objectMapper) {
         this.minioObjectApi = minioObjectApi;
         this.minioBucketApi = minioBucketApi;
         this.minioProperties = minioProperties;
         this.buildPackService = buildPackService;
-        this.buildPackPlayer = buildPackPlayer;
         this.gitClonedService = gitClonedService;
+        this.namespaceApi = namespaceApi;
         this.objectMapper = objectMapper;
+    }
+
+    /*
+    http://120.78.225.168:9009/10908e84eee54ee88e473da577080f5a/devops-thymeleaf-20220422190103.tar
+     */
+    private static String retrieveMinioObjectname(String artifact) {
+        int index = artifact.lastIndexOf("/");
+        return artifact.substring(index + 1);
     }
 
     @RabbitListener(
@@ -79,27 +90,45 @@ public class BuildPackRabbitMQMessageSubscriber {
             }
     )
     public void userDeleted(String message) {
+
+        Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
+        UserNamespacePair pair = messageBody.getData();
+        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+
+        //remove buildPack record
+        List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
+        buildPackService.deleteAll(pair.getUsername());
+        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
+
+        //remove git cloned record
+        List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
+        gitClonedService.delete(pair.getUsername());
+        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
+
         try {
-            Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
-            UserNamespacePair pair = messageBody.getData();
-            log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+            //remove namespace
+            namespaceApi.delete(pair.getNamespace());
+        } catch (Exception e) {
+            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+        }
 
-            //remove buildPack record
-            List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
-            for (BuildPack buildPack : buildPacks) {
-                buildPackPlayer.delete(buildPack.getId(), true);
+        //remove minio data
+        List<String> objectnames = buildPacks.stream()
+                .map(BuildPack::getArtifact)
+                .filter(StringUtils::hasText)
+                .map(BuildPackRabbitMQMessageSubscriber::retrieveMinioObjectname)
+                .collect(Collectors.toList());
+        try {
+            for (String objectname : objectnames) {
+                minioObjectApi.removed(pair.getNamespace(), objectname);
             }
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
-
-            //remove git cloned record
-            List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
-            gitClonedService.delete(pair.getUsername());
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
-
-            //remove minio data
             minioBucketApi.remove(pair.getNamespace());
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' object storage has been deleted", pair.getUsername(), pair.getNamespace());
+        } catch (Exception e) {
+            log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
+        }
 
+        try {
             //remove persistent data
             Path localPath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace());
             FileHelper.deleteRecursively(localPath);
@@ -107,7 +136,6 @@ public class BuildPackRabbitMQMessageSubscriber {
         } catch (Exception e) {
             log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
-
 
     }
 
@@ -147,7 +175,8 @@ public class BuildPackRabbitMQMessageSubscriber {
             watch.stop();
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' upload success. takes '{}s'", buildPack.getUser(), tarball, watch.getTotalTimeSeconds());
 
-            buildPack.setArtifact(Path.of(minioProperties.getEndpoint(), namespace, objectname).toString());
+
+            buildPack.setArtifact(String.format("%s/%s/%s", minioProperties.getEndpoint(), namespace, objectname));
             buildPackService.saveOrUpdate(buildPack);
         } catch (Exception ex) {
             log.error("[BuildPackRabbitMQMessageSubscriber] error. {}", ex.getMessage());
