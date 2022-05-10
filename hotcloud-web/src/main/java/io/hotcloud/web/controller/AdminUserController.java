@@ -33,7 +33,7 @@ public class AdminUserController {
                         @RequestParam(value = "enabled", required = false) Boolean enabled,
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        RP<User> rp = userClient.paging(username, enabled, page, pageSize).getBody();
+        RP<User> rp = userClient.paging(username, enabled, page, pageSize == null ? Integer.MAX_VALUE : pageSize).getBody();
         model.addAttribute("user", user);
         model.addAttribute("authorization", authorization);
         model.addAttribute("response", rp);
