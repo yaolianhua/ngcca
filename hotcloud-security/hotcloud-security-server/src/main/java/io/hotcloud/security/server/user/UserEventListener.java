@@ -48,7 +48,7 @@ public class UserEventListener {
         User user = event.getUser();
         String namespace = cache.get(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
         cache.evict(namespace);
-        log.info("UserEventListener. user '{}' namespace '{}' deleted", user.getUsername(), namespace);
+        log.info("UserEventListener. user '{}' namespace '{}' evicted", user.getUsername(), namespace);
         //
         messageBroadcaster.broadcast(SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE, Message.of(new UserNamespacePair(user.getUsername(), namespace)));
     }
