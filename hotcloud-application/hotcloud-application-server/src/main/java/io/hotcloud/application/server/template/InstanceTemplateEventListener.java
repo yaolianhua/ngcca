@@ -9,6 +9,7 @@ import io.hotcloud.application.api.template.event.*;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
+import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class InstanceTemplateEventListener {
     private final ServiceApi serviceApi;
     private final ConfigMapApi configMapApi;
     private final PersistentVolumeClaimApi persistentVolumeClaimApi;
+    private final PersistentVolumeApi persistentVolumeApi;
     private final KubectlApi kubectlApi;
 
     public InstanceTemplateEventListener(InstanceTemplateService instanceTemplateService,
@@ -46,7 +48,8 @@ public class InstanceTemplateEventListener {
                                          ServiceApi serviceApi,
                                          ConfigMapApi configMapApi,
                                          KubectlApi kubectlApi,
-                                         PersistentVolumeClaimApi persistentVolumeClaimApi) {
+                                         PersistentVolumeClaimApi persistentVolumeClaimApi,
+                                         PersistentVolumeApi persistentVolumeApi) {
         this.instanceTemplateService = instanceTemplateService;
         this.eventPublisher = eventPublisher;
         this.deploymentApi = deploymentApi;
@@ -54,6 +57,7 @@ public class InstanceTemplateEventListener {
         this.configMapApi = configMapApi;
         this.kubectlApi = kubectlApi;
         this.persistentVolumeClaimApi = persistentVolumeClaimApi;
+        this.persistentVolumeApi = persistentVolumeApi;
     }
 
     private void sleep(int seconds) {
@@ -202,8 +206,15 @@ public class InstanceTemplateEventListener {
                 log.info("[InstanceTemplateDeleteEvent] Delete persistentVolumeClaim '{}'", pvc);
             }
 
+            String pv = String.format("pv-%s-%s", name, namespace);
+            PersistentVolume persistentVolume = persistentVolumeApi.read(pv);
+            if (persistentVolume != null) {
+                persistentVolumeApi.delete(pv);
+                log.info("[InstanceTemplateDeleteEvent] Delete persistentVolume '{}'", pv);
+            }
+
             ConfigMap configMap = configMapApi.read(namespace, name);
-            if (configMap  != null){
+            if (configMap != null) {
                 configMapApi.delete(namespace, name);
                 log.info("[InstanceTemplateDeleteEvent] Delete configMap '{}'", name);
             }
