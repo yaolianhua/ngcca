@@ -1,4 +1,4 @@
-package io.hotcloud.buildpack.api.core;
+package io.hotcloud.security.api.user;
 
 import lombok.Data;
 
