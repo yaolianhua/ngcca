@@ -83,17 +83,23 @@ public class BuildPackRabbitMQMessageSubscriber {
             Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
             UserNamespacePair pair = messageBody.getData();
             log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+
+            //remove buildPack record
             List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
             for (BuildPack buildPack : buildPacks) {
                 buildPackPlayer.delete(buildPack.getId(), true);
             }
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
 
+            //remove git cloned record
             List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
             log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
             gitClonedService.delete(pair.getUsername());
 
+            //remove persistent data
             FileHelper.deleteRecursively(Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
+            //remove minio data
+            minioBucketApi.remove(pair.getNamespace());
         } catch (Exception e) {
             log.info("[BuildPackRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
