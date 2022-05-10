@@ -59,21 +59,25 @@ public class ApplicationRabbitMQMessageSubscriber {
     )
     public void userDeleted(String message) {
 
+        Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
+        UserNamespacePair pair = messageBody.getData();
+        log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
+
+        List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(pair.getUsername());
         try {
-            Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
-            UserNamespacePair pair = messageBody.getData();
-            log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
-            List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(pair.getUsername());
             for (InstanceTemplate template : instanceTemplates) {
                 instanceTemplatePlayer.delete(template.getId());
             }
             log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", pair.getUsername(), instanceTemplates.size());
-
-            FileHelper.deleteRecursively(Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
         } catch (Exception e) {
             log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
         }
 
+        try {
+            FileHelper.deleteRecursively(Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
+        } catch (Exception e) {
+            log.info("[ApplicationRabbitMQMessageSubscriber] error. {}", e.getMessage());
+        }
 
     }
 
