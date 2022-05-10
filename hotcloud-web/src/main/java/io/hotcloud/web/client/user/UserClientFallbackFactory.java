@@ -23,19 +23,19 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
         return new UserClient() {
             @Override
             public ResponseEntity<R<User>> user(String username) {
-                log.error("{}", cause.getCause().getMessage());
+                log.error("{}", cause.getMessage());
                 return ResponseEntity.ok(R.ok(404, "not found", new User()));
             }
 
             @Override
             public ResponseEntity<RP<User>> paging(String username, Boolean enabled, Integer page, Integer pageSize) {
-                log.error("{}", cause.getCause().getMessage());
+                log.error("{}", cause.getMessage());
                 return ResponseEntity.ok(RP.ofSingle(Collections.emptyList()));
             }
 
             @Override
             public ResponseEntity<R<User>> create(User user) {
-                log.error("{}", cause.getCause().getMessage());
+                log.error("{}", cause.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error(500, cause.getCause().getMessage()));
             }
         };

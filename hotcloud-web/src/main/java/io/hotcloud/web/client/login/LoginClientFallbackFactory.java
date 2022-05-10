@@ -22,13 +22,13 @@ public class LoginClientFallbackFactory implements FallbackFactory<LoginClient> 
             @Override
             public ResponseEntity<R<BearerToken>> login(String username, String password) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error(500, cause.getMessage()));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error(500, cause.getCause().getMessage()));
             }
 
             @Override
             public ResponseEntity<R<User>> retrieveUser() {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error(500, cause.getMessage()));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error(500, cause.getCause().getMessage()));
             }
         };
 
