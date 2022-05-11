@@ -29,12 +29,9 @@ import java.util.Objects;
 public class GlobalSessionUserAspect {
 
     private final LoginClient loginClient;
-    private final ClientAuthorizationManager authorizationManager;
 
-    public GlobalSessionUserAspect(LoginClient loginClient,
-                                   ClientAuthorizationManager authorizationManager) {
+    public GlobalSessionUserAspect(LoginClient loginClient) {
         this.loginClient = loginClient;
-        this.authorizationManager = authorizationManager;
     }
 
     @Pointcut(value = "@annotation(io.hotcloud.web.SessionUser)")
@@ -45,9 +42,9 @@ public class GlobalSessionUserAspect {
     private Object around(ProceedingJoinPoint point) throws Throwable {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        String authorization = authorizationManager.getAuthorization(Objects.requireNonNull(requestAttributes).getSessionId());
+        String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
         if (!StringUtils.hasText(authorization)) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
             if (request.getRequestURI().startsWith("/administrator")) {
                 return "redirect:/administrator/login";
             }
@@ -57,14 +54,10 @@ public class GlobalSessionUserAspect {
         String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
         for (int i = 0; i < args.length; i++) {
-            if ("authorization".equalsIgnoreCase(parameterNames[i])) {
-                Arrays.fill(args, i, i + 1, authorization);
-            }
-
             if (args[i] == null) {
                 continue;
             }
-            if (args[i].getClass().equals(User.class) && "user".equals(parameterNames[i])) {
+            if (args[i].getClass().equals(User.class) && WebConstant.USER.equals(parameterNames[i])) {
                 Arrays.fill(args, i, i + 1, retrieve());
             }
         }
