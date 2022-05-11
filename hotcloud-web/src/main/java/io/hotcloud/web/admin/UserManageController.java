@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Controller
 @RequestMapping("/administrator")
-public class AdminUserController {
+public class UserManageController {
 
     private final UserClient userClient;
 
-    public AdminUserController(UserClient userClient) {
+    public UserManageController(UserClient userClient) {
         this.userClient = userClient;
     }
 
