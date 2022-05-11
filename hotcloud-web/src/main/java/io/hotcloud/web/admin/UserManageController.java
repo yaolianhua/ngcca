@@ -27,14 +27,12 @@ public class UserManageController {
 
     @RequestMapping(value = {"/user-manage"})
     @WebUser
-    public String users(User user,
-                        Model model,
+    public String users(Model model,
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled,
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "page_size", required = false) Integer pageSize) {
         RP<User> rp = userClient.paging(username, enabled, page, pageSize == null ? Integer.MAX_VALUE : pageSize).getBody();
-        model.addAttribute(WebConstant.USER, user);
         model.addAttribute(WebConstant.RESPONSE, rp);
         return "admin/user-manage";
     }
