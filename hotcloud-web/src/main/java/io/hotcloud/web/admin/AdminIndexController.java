@@ -1,4 +1,4 @@
-package io.hotcloud.web.controller;
+package io.hotcloud.web.admin;
 
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.SessionUser;
@@ -10,15 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author yaolianhua789@gmail.com
  **/
 @Controller
-@RequestMapping
-public class IndexController {
-    @RequestMapping(value = {"/index", "/"})
+@RequestMapping("/administrator")
+public class AdminIndexController {
+
+    @RequestMapping(value = {"/index", "/", ""})
     @SessionUser
     public String indexPage(String authorization,
                             User user,
                             Model model) {
         model.addAttribute("user", user);
         model.addAttribute("authorization", authorization);
-        return "index";
+        return "admin/index";
     }
 }

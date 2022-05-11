@@ -1,6 +1,5 @@
-package io.hotcloud.web.controller;
+package io.hotcloud.web.login;
 
-import io.hotcloud.web.login.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package io.hotcloud.web.controller;
+package io.hotcloud.web.admin;
 
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.R;
