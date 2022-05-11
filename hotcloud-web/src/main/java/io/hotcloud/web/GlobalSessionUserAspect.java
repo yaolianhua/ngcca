@@ -10,8 +10,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -51,6 +53,7 @@ public class GlobalSessionUserAspect {
             return "redirect:/login";
         }
 
+        User user = retrieve();
         String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
         for (int i = 0; i < args.length; i++) {
@@ -58,7 +61,11 @@ public class GlobalSessionUserAspect {
                 continue;
             }
             if (args[i].getClass().equals(User.class) && WebConstant.USER.equals(parameterNames[i])) {
-                Arrays.fill(args, i, i + 1, retrieve());
+                Arrays.fill(args, i, i + 1, user);
+            }
+            if (args[i].getClass().equals(BindingAwareModelMap.class)) {
+                Model model = (BindingAwareModelMap) args[i];
+                model.addAttribute(WebConstant.USER, user);
             }
         }
 

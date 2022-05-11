@@ -1,6 +1,5 @@
 package io.hotcloud.web;
 
-import io.hotcloud.security.api.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
     @RequestMapping(value = {"/index", "/"})
     @SessionUser
-    public String indexPage(User user,
-                            Model model) {
-        model.addAttribute(WebConstant.USER, user);
+    public String indexPage(Model model) {
         return "index";
     }
 }
