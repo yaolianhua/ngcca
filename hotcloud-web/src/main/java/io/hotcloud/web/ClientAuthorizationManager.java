@@ -1,4 +1,4 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import org.springframework.stereotype.Component;
 
