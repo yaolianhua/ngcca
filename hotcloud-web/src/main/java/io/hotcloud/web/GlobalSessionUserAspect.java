@@ -1,7 +1,7 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.login.LoginClient;
+import io.hotcloud.web.login.LoginClient;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,8 +10,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,15 +31,12 @@ import java.util.Objects;
 public class GlobalSessionUserAspect {
 
     private final LoginClient loginClient;
-    private final ClientAuthorizationManager authorizationManager;
 
-    public GlobalSessionUserAspect(LoginClient loginClient,
-                                   ClientAuthorizationManager authorizationManager) {
+    public GlobalSessionUserAspect(LoginClient loginClient) {
         this.loginClient = loginClient;
-        this.authorizationManager = authorizationManager;
     }
 
-    @Pointcut(value = "@annotation(SessionUser)")
+    @Pointcut(value = "@annotation(io.hotcloud.web.WebUser)")
     public void cut() {
     }
 
@@ -45,27 +44,28 @@ public class GlobalSessionUserAspect {
     private Object around(ProceedingJoinPoint point) throws Throwable {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        String authorization = authorizationManager.getAuthorization(Objects.requireNonNull(requestAttributes).getSessionId());
+        String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
         if (!StringUtils.hasText(authorization)) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
             if (request.getRequestURI().startsWith("/administrator")) {
                 return "redirect:/administrator/login";
             }
             return "redirect:/login";
         }
 
+        User user = retrieve();
         String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
         for (int i = 0; i < args.length; i++) {
-            if ("authorization".equalsIgnoreCase(parameterNames[i])) {
-                Arrays.fill(args, i, i + 1, authorization);
-            }
-
             if (args[i] == null) {
                 continue;
             }
-            if (args[i].getClass().equals(User.class) && "user".equals(parameterNames[i])) {
-                Arrays.fill(args, i, i + 1, retrieve());
+            if (args[i].getClass().equals(User.class) && WebConstant.USER.equals(parameterNames[i])) {
+                Arrays.fill(args, i, i + 1, user);
+            }
+            if (args[i].getClass().equals(BindingAwareModelMap.class)) {
+                Model model = (BindingAwareModelMap) args[i];
+                model.addAttribute(WebConstant.USER, user);
             }
         }
 

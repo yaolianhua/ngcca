@@ -1,10 +1,10 @@
-package io.hotcloud.web.client.login;
+package io.hotcloud.web.login;
 
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.ErrorMessageConfiguration;
-import io.hotcloud.web.client.HotCloudServerProperties;
-import io.hotcloud.web.client.R;
+import io.hotcloud.web.ErrorMessageConfiguration;
+import io.hotcloud.web.HotCloudServerProperties;
+import io.hotcloud.web.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
