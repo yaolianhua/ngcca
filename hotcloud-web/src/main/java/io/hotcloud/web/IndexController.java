@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
     @RequestMapping(value = {"/index", "/"})
     @SessionUser
-    public String indexPage(String authorization,
-                            User user,
+    public String indexPage(User user,
                             Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("authorization", authorization);
+        model.addAttribute(WebConstant.USER, user);
         return "index";
     }
 }
