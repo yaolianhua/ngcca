@@ -1,10 +1,10 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.R;
-import io.hotcloud.web.client.RP;
-import io.hotcloud.web.client.SessionUser;
-import io.hotcloud.web.client.user.UserClient;
+import io.hotcloud.web.R;
+import io.hotcloud.web.RP;
+import io.hotcloud.web.SessionUser;
+import io.hotcloud.web.user.UserClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

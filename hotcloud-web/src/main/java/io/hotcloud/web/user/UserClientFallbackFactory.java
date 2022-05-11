@@ -1,8 +1,8 @@
-package io.hotcloud.web.client.user;
+package io.hotcloud.web.user;
 
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.R;
-import io.hotcloud.web.client.RP;
+import io.hotcloud.web.R;
+import io.hotcloud.web.RP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.HttpStatus;

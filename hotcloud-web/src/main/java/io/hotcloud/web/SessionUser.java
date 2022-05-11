@@ -1,4 +1,4 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

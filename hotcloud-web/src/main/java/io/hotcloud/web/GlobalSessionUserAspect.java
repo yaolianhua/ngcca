@@ -1,7 +1,7 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.login.LoginClient;
+import io.hotcloud.web.login.LoginClient;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,7 +37,7 @@ public class GlobalSessionUserAspect {
         this.authorizationManager = authorizationManager;
     }
 
-    @Pointcut(value = "@annotation(SessionUser)")
+    @Pointcut(value = "@annotation(io.hotcloud.web.SessionUser)")
     public void cut() {
     }
 

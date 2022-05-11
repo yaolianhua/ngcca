@@ -1,4 +1,4 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

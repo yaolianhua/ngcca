@@ -1,4 +1,4 @@
-package io.hotcloud.web.client;
+package io.hotcloud.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;

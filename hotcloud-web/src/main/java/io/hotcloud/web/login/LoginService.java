@@ -1,10 +1,10 @@
-package io.hotcloud.web.client.login;
+package io.hotcloud.web.login;
 
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.client.ClientAuthorizationManager;
-import io.hotcloud.web.client.R;
-import io.hotcloud.web.client.user.UserClient;
+import io.hotcloud.web.ClientAuthorizationManager;
+import io.hotcloud.web.R;
+import io.hotcloud.web.user.UserClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
