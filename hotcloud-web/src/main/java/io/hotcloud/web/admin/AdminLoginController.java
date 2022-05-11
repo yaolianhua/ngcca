@@ -4,6 +4,7 @@ import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.ClientAuthorizationManager;
 import io.hotcloud.web.R;
+import io.hotcloud.web.WebConstant;
 import io.hotcloud.web.login.LoginClient;
 import io.hotcloud.web.user.UserClient;
 import org.springframework.http.ResponseEntity;
@@ -55,11 +56,11 @@ public class AdminLoginController {
             authorizationManager.add(request.getSession().getId(), bearerToken.getAuthorization());
 
             R<User> body = userClient.user(username).getBody();
-            redirect.addFlashAttribute("user", Objects.requireNonNull(body).getData());
-            redirect.addFlashAttribute("authorization", Objects.requireNonNull(entity.getBody()).getData().getAuthorization());
+            redirect.addFlashAttribute(WebConstant.USER, Objects.requireNonNull(body).getData());
+            redirect.addFlashAttribute(WebConstant.AUTHORIZATION, Objects.requireNonNull(entity.getBody()).getData().getAuthorization());
 
             if (!isAdmin(username)) {
-                model.addAttribute("message", "non-admin account");
+                model.addAttribute(WebConstant.MESSAGE, "non-admin account");
                 return "admin/login";
             } else {
                 return "redirect:/administrator/index";

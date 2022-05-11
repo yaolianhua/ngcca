@@ -4,6 +4,7 @@ import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.ClientAuthorizationManager;
 import io.hotcloud.web.R;
+import io.hotcloud.web.WebConstant;
 import io.hotcloud.web.user.UserClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -54,12 +55,12 @@ public class LoginController {
             authorizationManager.add(request.getSession().getId(), bearerToken.getAuthorization());
 
             R<User> body = userClient.user(username).getBody();
-            redirect.addFlashAttribute("user", Objects.requireNonNull(body).getData());
-            redirect.addFlashAttribute("authorization", Objects.requireNonNull(entity.getBody()).getData().getAuthorization());
+            redirect.addFlashAttribute(WebConstant.USER, Objects.requireNonNull(body).getData());
+            redirect.addFlashAttribute(WebConstant.AUTHORIZATION, Objects.requireNonNull(entity.getBody()).getData().getAuthorization());
             return "redirect:/index";
         }
 
-        model.addAttribute("message", Objects.requireNonNull(entity.getBody()).getMessage());
+        model.addAttribute(WebConstant.MESSAGE, Objects.requireNonNull(entity.getBody()).getMessage());
         return "login";
     }
 
