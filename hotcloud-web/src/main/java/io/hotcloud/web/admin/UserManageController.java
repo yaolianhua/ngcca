@@ -3,8 +3,8 @@ package io.hotcloud.web.admin;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.R;
 import io.hotcloud.web.RP;
-import io.hotcloud.web.SessionUser;
 import io.hotcloud.web.WebConstant;
+import io.hotcloud.web.WebUser;
 import io.hotcloud.web.user.UserClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class UserManageController {
     }
 
     @RequestMapping(value = {"/user-manage"})
-    @SessionUser
+    @WebUser
     public String users(User user,
                         Model model,
                         @RequestParam(value = "username", required = false) String username,

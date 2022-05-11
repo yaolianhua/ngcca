@@ -36,7 +36,7 @@ public class GlobalSessionUserAspect {
         this.loginClient = loginClient;
     }
 
-    @Pointcut(value = "@annotation(io.hotcloud.web.SessionUser)")
+    @Pointcut(value = "@annotation(io.hotcloud.web.WebUser)")
     public void cut() {
     }
 
