@@ -1,9 +1,9 @@
 package io.hotcloud.web.user;
 
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.web.CodeMessage;
-import io.hotcloud.web.R;
-import io.hotcloud.web.RP;
+import io.hotcloud.web.feign.CodeMessage;
+import io.hotcloud.web.mvc.R;
+import io.hotcloud.web.mvc.RP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
-import static io.hotcloud.web.CodeMessage.codeMessage;
+import static io.hotcloud.web.feign.CodeMessage.codeMessage;
 
 /**
  * @author yaolianhua789@gmail.com

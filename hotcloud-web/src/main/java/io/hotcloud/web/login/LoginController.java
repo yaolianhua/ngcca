@@ -1,9 +1,9 @@
 package io.hotcloud.web.login;
 
 import io.hotcloud.security.api.login.BearerToken;
-import io.hotcloud.web.R;
-import io.hotcloud.web.WebConstant;
-import io.hotcloud.web.WebCookie;
+import io.hotcloud.web.mvc.R;
+import io.hotcloud.web.mvc.WebConstant;
+import io.hotcloud.web.mvc.WebCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

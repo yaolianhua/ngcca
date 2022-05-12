@@ -1,8 +1,9 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import io.hotcloud.web.mvc.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 

@@ -1,4 +1,4 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
 /**
  * @author yaolianhua789@gmail.com

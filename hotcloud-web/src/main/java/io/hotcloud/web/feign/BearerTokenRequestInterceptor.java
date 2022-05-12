@@ -1,7 +1,8 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import io.hotcloud.web.mvc.WebCookie;
 import org.springframework.util.StringUtils;
 
 /**
