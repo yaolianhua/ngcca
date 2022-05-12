@@ -1,5 +1,6 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
+import io.hotcloud.web.HotCloudWebApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -12,7 +13,7 @@ import javax.annotation.PostConstruct;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@EnableFeignClients
+@EnableFeignClients(basePackageClasses = HotCloudWebApplication.class)
 @EnableHystrix
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(HotCloudServerProperties.class)

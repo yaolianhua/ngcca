@@ -1,4 +1,4 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

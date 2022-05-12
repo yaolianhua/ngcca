@@ -1,8 +1,9 @@
-package io.hotcloud.web;
+package io.hotcloud.web.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import io.hotcloud.web.mvc.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 
@@ -29,10 +30,10 @@ public class ErrorMessageConfiguration {
         public Exception decode(String methodKey, Response response) {
             try {
                 R<?> r = objectMapper.readValue(response.body().asInputStream(), R.class);
-                return new Exception(r.getMessage());
+                return new HotCloudWebException(r.getCode(), r.getMessage());
             } catch (Exception e) {
                 log.error("RawErrorDecoder error. {}", e.getMessage());
-                return new Exception(e);
+                return new HotCloudWebException(500, e.getMessage());
             }
 
         }

@@ -1,4 +1,4 @@
-package io.hotcloud.web;
+package io.hotcloud.web.mvc;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package io.hotcloud.web;
+package io.hotcloud.web.mvc;
 
 /**
  * @author yaolianhua789@gmail.com
