@@ -39,7 +39,35 @@ public class UserManageController {
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<R<User>> users(@RequestBody User newUser) {
+    public ResponseEntity<R<User>> create(@RequestBody User newUser) {
         return userClient.create(newUser);
+    }
+
+    @PutMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<R<User>> update(@RequestBody User updateUser) {
+        return userClient.update(updateUser);
+    }
+
+    @PutMapping(value = "/users/{username}/{enable}")
+    @ResponseBody
+    public ResponseEntity<R<Void>> update(@PathVariable("username") String username,
+                                          @PathVariable("enable") Boolean enable) {
+        return userClient.onOff(username, enable);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<R<Void>> delete(@PathVariable("id") String id) {
+        return userClient.delete(id);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<R<User>> findByUserid(@PathVariable("id") String id) {
+        return userClient.findUserById(id);
+    }
+
+    @GetMapping("/{username}/user")
+    public ResponseEntity<R<User>> findByUsername(@PathVariable("username") String username) {
+        return userClient.findUserByUsername(username);
     }
 }
