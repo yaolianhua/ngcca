@@ -29,10 +29,10 @@ public class ErrorMessageConfiguration {
         public Exception decode(String methodKey, Response response) {
             try {
                 R<?> r = objectMapper.readValue(response.body().asInputStream(), R.class);
-                return new Exception(r.getMessage());
+                return new HotCloudWebException(r.getCode(), r.getMessage());
             } catch (Exception e) {
                 log.error("RawErrorDecoder error. {}", e.getMessage());
-                return new Exception(e);
+                return new HotCloudWebException(500, e.getMessage());
             }
 
         }
