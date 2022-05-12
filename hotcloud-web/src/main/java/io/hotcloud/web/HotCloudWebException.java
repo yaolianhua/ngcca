@@ -3,7 +3,7 @@ package io.hotcloud.web;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class HotCloudWebException extends RuntimeException {
+public class HotCloudWebException extends Exception {
 
     private final int code;
 
