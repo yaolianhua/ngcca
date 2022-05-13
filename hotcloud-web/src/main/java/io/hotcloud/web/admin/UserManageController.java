@@ -56,17 +56,20 @@ public class UserManageController {
         return userClient.onOff(username, enable);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
+    @ResponseBody
     public ResponseEntity<R<Void>> delete(@PathVariable("id") String id) {
         return userClient.delete(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
+    @ResponseBody
     public ResponseEntity<R<User>> findByUserid(@PathVariable("id") String id) {
         return userClient.findUserById(id);
     }
 
-    @GetMapping("/{username}/user")
+    @GetMapping("/users/{username}/user")
+    @ResponseBody
     public ResponseEntity<R<User>> findByUsername(@PathVariable("username") String username) {
         return userClient.findUserByUsername(username);
     }
