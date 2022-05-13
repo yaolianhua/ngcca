@@ -80,15 +80,21 @@
                     <td th:text="${user.nickname}"/>
                     <td th:text="${user.mobile}"/>
                     <td th:text="${user.email}"/>
-                    <td th:text="${user.enabled} ? '激活' : '禁用'"/>
+                    <td th:text="${user.enabled} ? '已激活' : '已禁用'"/>
                     <td th:text="${user.createdAt}"/>
                     <td th:text="${user.modifiedAt}"/>
                     <td class="project-actions text-center">
-                      <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-folder"></i>详情</a>
-                      <a class="btn btn-info btn-sm" href="#"><i class="fas fa-pencil-alt"></i>编辑</a>
-                      <a class="btn btn-default btn-sm" href="#"><i class="fas fa-bell"></i>激活</a>
-                      <a class="btn btn-warning btn-sm" href="#"><i class="fas fa-bell-slash"></i>禁用</a>
-                      <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i>删除</a>
+                      <button class="btn btn-primary btn-sm" href="#"><i class="fas fa-folder"></i>详情</button>
+                      <button class="btn btn-info btn-sm" href="#"><i class="fas fa-pencil-alt"></i>编辑</button>
+                      <button class="btn btn-default btn-sm" th:attr="onclick=|userOn('${user.username}')|"
+                              th:style="${user.enabled} ? 'display: none' : ''"><i class="fas fa-bell"></i>激活
+                      </button>
+                      <button class="btn btn-warning btn-sm" th:attr="onclick=|userOff('${user.username}')|"
+                              th:style="${user.enabled} ? '' : 'display: none'"><i class="fas fa-bell-slash"></i>禁用
+                      </button>
+                      <button class="btn btn-danger btn-sm" th:attr="onclick=|userD('${user.id}')|"><i
+                              class="fas fa-trash"></i>删除
+                      </button>
                     </td>
                   </tr>
                   </tbody>
@@ -206,6 +212,42 @@
     )
 
   });
+
+  //user delete
+  function userD(id) {
+    alert(id);
+    axios.delete('/administrator/users/' + id)
+            .then(response => {
+              location.reload();
+            })
+            .catch(error => {
+              alert(error.response.data.message);
+            });
+  }
+
+  //user on
+  function userOn(user) {
+    alert(user);
+    axios.put('/administrator/users/' + user + '/true')
+            .then(response => {
+              location.reload();
+            })
+            .catch(error => {
+              alert(error.response.data.message);
+            });
+  }
+
+  //user off
+  function userOff(user) {
+    alert(user);
+    axios.put('/administrator/users/' + user + '/false')
+            .then(response => {
+              location.reload();
+            })
+            .catch(error => {
+              alert(error.response.data.message);
+            });
+  }
 </script>
 </body>
 </html>
