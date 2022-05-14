@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -28,11 +30,22 @@ public class UserManageController {
     @RequestMapping(value = {"/user-manage"})
     @WebUser
     public String users(Model model,
+                        @RequestParam(value = "action", required = false) String action,
+                        @RequestParam(value = "id", required = false) String userid,
                         @RequestParam(value = "username", required = false) String username,
-                        @RequestParam(value = "enabled", required = false) Boolean enabled,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        RP<User> rp = userClient.paging(username, enabled, page, pageSize == null ? Integer.MAX_VALUE : pageSize).getBody();
+                        @RequestParam(value = "enabled", required = false) Boolean enabled) {
+        if (Objects.equals("list", action)) {
+            RP<User> rp = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
+            model.addAttribute(WebConstant.RESPONSE, rp);
+            return "admin/user-list::content";
+        }
+        if (Objects.equals("edit", action)) {
+            R<User> userR = userClient.findUserById(userid).getBody();
+            model.addAttribute(WebConstant.RESPONSE, userR);
+            return "admin/user-edit::content";
+        }
+
+        RP<User> rp = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
         model.addAttribute(WebConstant.RESPONSE, rp);
         return "admin/user-manage";
     }
