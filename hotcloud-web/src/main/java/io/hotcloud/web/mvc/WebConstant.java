@@ -10,4 +10,7 @@ public final class WebConstant {
     public static final String AUTHORIZATION = "authorization";
     public static final String MESSAGE = "message";
 
+    public static final String VIEW_LIST = "list";
+    public static final String VIEW_EDIT = "edit";
+
 }
