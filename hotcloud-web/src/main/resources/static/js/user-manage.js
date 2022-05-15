@@ -1,3 +1,18 @@
+$(function () {
+    userPaging();
+    toastr.options = {
+        "timeOut": "3000"
+    };
+});
+
+const swal = Swal.mixin({
+    customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+})
+
 //dataTable init
 function userPaging() {
     $('#user-list').DataTable({
@@ -10,13 +25,6 @@ function userPaging() {
         "responsive": true,
     });
 }
-
-$(function () {
-    userPaging();
-    toastr.options = {
-        "timeOut": "3000"
-    };
-});
 
 function ok(response) {
     toastr.success('操作成功!')
@@ -91,16 +99,30 @@ function users() {
 
 //user delete
 function userD(id) {
-    axios.delete('/administrator/users/' + id)
-        .then(response => {
-            $('#users-fragment').load('/administrator/user-manage?action=list', function () {
-                userPaging();
-            });
-            ok(response);
-        })
-        .catch(error => {
-            fail(error);
-        });
+    swal.fire({
+        title: '确认删除?',
+        text: '删除用户会删除所有与此用户相关的数据和资源，谨慎操作!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete('/administrator/users/' + id)
+                .then(response => {
+                    $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+                        userPaging();
+                    });
+                    ok(response);
+                })
+                .catch(error => {
+                    fail(error);
+                });
+        } else {
+            //
+        }
+    })
 }
 
 //user on
