@@ -1,0 +1,421 @@
+<section class="content" th:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img alt="User profile picture"
+                                 class="profile-user-img img-fluid img-circle"
+                                 th:src="${response.data.avatar}">
+                        </div>
+
+                        <h3 class="profile-username text-center" th:text="${response.data.username}"></h3>
+
+                        <p class="text-muted text-center" th:text="${response.data.nickname}"></p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>联系方式</b> <a class="float-right" th:text="${response.data.mobile}"></a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>邮箱</b> <a class="float-right" th:text="${response.data.email}"></a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>用户状态</b> <a class="float-right" th:text="${response.data.enabled} ? '正常' : '禁用'"></a>
+                            </li>
+                        </ul>
+
+                        <a class="btn btn-primary btn-block" href="#"><b>Follow</b></a>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- About Me Box -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">上传头像</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="actions">
+                            <div class="col-lg-6">
+                                <div class="btn-group w-100">
+                    <span class="btn btn-success col fileinput-button">
+                      <i class="fas fa-plus"></i>
+                      <span>Add files</span>
+                    </span>
+                                    <button class="btn btn-primary col start" type="submit">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Start upload</span>
+                                    </button>
+                                    <button class="btn btn-warning col cancel" type="reset">
+                                        <i class="fas fa-times-circle"></i>
+                                        <span>Cancel upload</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <div class="fileupload-process w-100">
+                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0"
+                                         class="progress progress-striped active" id="total-progress"
+                                         role="progressbar">
+                                        <div class="progress-bar progress-bar-success" data-dz-uploadprogress
+                                             style="width:0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table table-striped files" id="previews">
+                            <div class="row mt-2" id="template">
+                                <div class="col-auto">
+                                    <span class="preview"><img alt="" data-dz-thumbnail src="data:,"/></span>
+                                </div>
+                                <div class="col d-flex align-items-center">
+                                    <p class="mb-0">
+                                        <span class="lead" data-dz-name></span>
+                                        (<span data-dz-size></span>)
+                                    </p>
+                                    <strong class="error text-danger" data-dz-errormessage></strong>
+                                </div>
+                                <div class="col-4 d-flex align-items-center">
+                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0"
+                                         class="progress progress-striped active w-100" role="progressbar">
+                                        <div class="progress-bar progress-bar-success" data-dz-uploadprogress
+                                             style="width:0%;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary start">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Start</span>
+                                        </button>
+                                        <button class="btn btn-warning cancel" data-dz-remove>
+                                            <i class="fas fa-times-circle"></i>
+                                            <span>Cancel</span>
+                                        </button>
+                                        <button class="btn btn-danger delete" data-dz-remove>
+                                            <i class="fas fa-trash"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        Visit <a href="https://www.dropzonejs.com">dropzone.js documentation</a> for more examples and
+                        information about the plugin.
+                    </div>
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab"
+                                                    href="#activity">Activity</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#timeline">Timeline</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#settings">Settings</a>
+                            </li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
+                                <!-- Post -->
+                                <div class="post">
+                                    <div class="user-block">
+                                        <img alt="user image" class="img-circle img-bordered-sm"
+                                             src="../../dist/img/user1-128x128.jpg">
+                                        <span class="username">
+                          <a href="#">Jonathan Burke Jr.</a>
+                          <a class="float-right btn-tool" href="#"><i class="fas fa-times"></i></a>
+                        </span>
+                                        <span class="description">Shared publicly - 7:30 PM today</span>
+                                    </div>
+                                    <!-- /.user-block -->
+                                    <p>
+                                        Lorem ipsum represents a long-held tradition for designers,
+                                        typographers and the like. Some people hate it and argue for
+                                        its demise, but others ignore the hate as they create awesome
+                                        tools to help create filler text for everyone from bacon lovers
+                                        to Charlie Sheen fans.
+                                    </p>
+
+                                    <p>
+                                        <a class="link-black text-sm mr-2" href="#"><i class="fas fa-share mr-1"></i>
+                                            Share</a>
+                                        <a class="link-black text-sm" href="#"><i class="far fa-thumbs-up mr-1"></i>
+                                            Like</a>
+                                        <span class="float-right">
+                          <a class="link-black text-sm" href="#">
+                            <i class="far fa-comments mr-1"></i> Comments (5)
+                          </a>
+                        </span>
+                                    </p>
+
+                                    <input class="form-control form-control-sm" placeholder="Type a comment"
+                                           type="text">
+                                </div>
+                                <!-- /.post -->
+
+                                <!-- Post -->
+                                <div class="post clearfix">
+                                    <div class="user-block">
+                                        <img alt="User Image" class="img-circle img-bordered-sm"
+                                             src="../../dist/img/user7-128x128.jpg">
+                                        <span class="username">
+                          <a href="#">Sarah Ross</a>
+                          <a class="float-right btn-tool" href="#"><i class="fas fa-times"></i></a>
+                        </span>
+                                        <span class="description">Sent you a message - 3 days ago</span>
+                                    </div>
+                                    <!-- /.user-block -->
+                                    <p>
+                                        Lorem ipsum represents a long-held tradition for designers,
+                                        typographers and the like. Some people hate it and argue for
+                                        its demise, but others ignore the hate as they create awesome
+                                        tools to help create filler text for everyone from bacon lovers
+                                        to Charlie Sheen fans.
+                                    </p>
+
+                                    <form class="form-horizontal">
+                                        <div class="input-group input-group-sm mb-0">
+                                            <input class="form-control form-control-sm" placeholder="Response">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="submit">Send</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.post -->
+
+                                <!-- Post -->
+                                <div class="post">
+                                    <div class="user-block">
+                                        <img alt="User Image" class="img-circle img-bordered-sm"
+                                             src="../../dist/img/user6-128x128.jpg">
+                                        <span class="username">
+                          <a href="#">Adam Jones</a>
+                          <a class="float-right btn-tool" href="#"><i class="fas fa-times"></i></a>
+                        </span>
+                                        <span class="description">Posted 5 photos - 5 days ago</span>
+                                    </div>
+                                    <!-- /.user-block -->
+                                    <div class="row mb-3">
+                                        <div class="col-sm-6">
+                                            <img alt="Photo" class="img-fluid" src="../../dist/img/photo1.png">
+                                        </div>
+                                        <!-- /.col -->
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <img alt="Photo" class="img-fluid mb-3"
+                                                         src="../../dist/img/photo2.png">
+                                                    <img alt="Photo" class="img-fluid" src="../../dist/img/photo3.jpg">
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col-sm-6">
+                                                    <img alt="Photo" class="img-fluid mb-3"
+                                                         src="../../dist/img/photo4.jpg">
+                                                    <img alt="Photo" class="img-fluid" src="../../dist/img/photo1.png">
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <!-- /.row -->
+
+                                    <p>
+                                        <a class="link-black text-sm mr-2" href="#"><i class="fas fa-share mr-1"></i>
+                                            Share</a>
+                                        <a class="link-black text-sm" href="#"><i class="far fa-thumbs-up mr-1"></i>
+                                            Like</a>
+                                        <span class="float-right">
+                          <a class="link-black text-sm" href="#">
+                            <i class="far fa-comments mr-1"></i> Comments (5)
+                          </a>
+                        </span>
+                                    </p>
+
+                                    <input class="form-control form-control-sm" placeholder="Type a comment"
+                                           type="text">
+                                </div>
+                                <!-- /.post -->
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="timeline">
+                                <!-- The timeline -->
+                                <div class="timeline timeline-inverse">
+                                    <!-- timeline time label -->
+                                    <div class="time-label">
+                        <span class="bg-danger">
+                          10 Feb. 2014
+                        </span>
+                                    </div>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <div>
+                                        <i class="fas fa-envelope bg-primary"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="far fa-clock"></i> 12:05</span>
+
+                                            <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email
+                                            </h3>
+
+                                            <div class="timeline-body">
+                                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                                                weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                                                jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                                                quora plaxo ideeli hulu weebly balihoo...
+                                            </div>
+                                            <div class="timeline-footer">
+                                                <a class="btn btn-primary btn-sm" href="#">Read more</a>
+                                                <a class="btn btn-danger btn-sm" href="#">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <div>
+                                        <i class="fas fa-user bg-info"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
+
+                                            <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted
+                                                your friend request
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <!-- END timeline item -->
+                                    <!-- timeline item -->
+                                    <div>
+                                        <i class="fas fa-comments bg-warning"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
+
+                                            <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post
+                                            </h3>
+
+                                            <div class="timeline-body">
+                                                Take me to your leader!
+                                                Switzerland is small and neutral!
+                                                We are more like Germany, ambitious and misunderstood!
+                                            </div>
+                                            <div class="timeline-footer">
+                                                <a class="btn btn-warning btn-flat btn-sm" href="#">View comment</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END timeline item -->
+                                    <!-- timeline time label -->
+                                    <div class="time-label">
+                        <span class="bg-success">
+                          3 Jan. 2014
+                        </span>
+                                    </div>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <div>
+                                        <i class="fas fa-camera bg-purple"></i>
+
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+
+                                            <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos
+                                            </h3>
+
+                                            <div class="timeline-body">
+                                                <img alt="..." src="https://placehold.it/150x100">
+                                                <img alt="..." src="https://placehold.it/150x100">
+                                                <img alt="..." src="https://placehold.it/150x100">
+                                                <img alt="..." src="https://placehold.it/150x100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END timeline item -->
+                                    <div>
+                                        <i class="far fa-clock bg-gray"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="settings">
+                                <form class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="inputName">Name</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" id="inputName" placeholder="Name" type="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="inputEmail">Email</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" id="inputEmail" placeholder="Email"
+                                                   type="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="inputName2">Name</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" id="inputName2" placeholder="Name" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="inputExperience">Experience</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" id="inputExperience"
+                                                      placeholder="Experience"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" for="inputSkills">Skills</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" id="inputSkills" placeholder="Skills"
+                                                   type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox"> I agree to the <a href="#">terms and
+                                                    conditions</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button class="btn btn-danger" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>

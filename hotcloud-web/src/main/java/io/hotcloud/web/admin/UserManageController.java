@@ -44,6 +44,11 @@ public class UserManageController {
             model.addAttribute(WebConstant.RESPONSE, userR);
             return "admin/user-edit::content";
         }
+        if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
+            R<User> userR = userClient.findUserById(userid).getBody();
+            model.addAttribute(WebConstant.RESPONSE, userR);
+            return "admin/user-detail::content";
+        }
 
         RP<User> rp = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
         model.addAttribute(WebConstant.RESPONSE, rp);

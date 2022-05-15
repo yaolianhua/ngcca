@@ -90,6 +90,13 @@ function userEP(id) {
     });
 }
 
+//user detail view
+function userDP(id) {
+    $('#users-fragment').load('/administrator/user-manage?action=detail&id=' + id, function () {
+
+    });
+}
+
 //user list
 function users() {
     $('#users-fragment').load('/administrator/user-manage?action=list', function () {

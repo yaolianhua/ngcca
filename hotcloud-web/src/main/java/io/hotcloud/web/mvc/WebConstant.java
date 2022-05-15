@@ -13,4 +13,6 @@ public final class WebConstant {
     public static final String VIEW_LIST = "list";
     public static final String VIEW_EDIT = "edit";
 
+    public static final String VIEW_DETAIL = "detail";
+
 }
