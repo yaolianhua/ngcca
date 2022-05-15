@@ -84,7 +84,9 @@ function userEP(id) {
 
 //user list
 function users() {
-    $('#users-fragment').load('/administrator/user-manage?action=list');
+    $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+        userPaging();
+    });
 }
 
 //user delete
