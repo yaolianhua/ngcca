@@ -63,6 +63,13 @@ public interface GitClonedService {
     void delete(String user);
 
     /**
+     * Delete {@link GitCloned} with the giving {@code id}
+     *
+     * @param id git cloned id
+     */
+    void deleteById(String id);
+
+    /**
      * Step with git clone
      *
      * @param gitUrl     remote git url. protocol supported http(s) only

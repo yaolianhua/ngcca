@@ -1,12 +1,10 @@
 package io.hotcloud.buildpack.server.clone;
 
-import io.hotcloud.buildpack.api.clone.GitApi;
-import io.hotcloud.buildpack.api.clone.GitCloned;
-import io.hotcloud.buildpack.api.clone.GitClonedEvent;
-import io.hotcloud.buildpack.api.clone.GitClonedService;
+import io.hotcloud.buildpack.api.clone.*;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.cache.Cache;
+import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.security.api.user.User;
@@ -133,6 +131,16 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
+    public void deleteById(String id) {
+
+        GitClonedEntity one = repository.findById(id).orElseThrow(() -> new HotCloudException("Git repository not found [" + id + "]"));
+        repository.delete(one);
+
+        GitCloned cloned = one.toT(GitCloned.class);
+        eventPublisher.publishEvent(new GitClonedDeleteEvent(cloned));
+    }
+
+    @Override
     public void clone(String gitUrl, String dockerfile, String branch, String username, String password) {
 
         Assert.hasText(gitUrl, "Git url is null");
@@ -154,7 +162,7 @@ public class GitClonedServiceImpl implements GitClonedService {
             cloned.setUser(current.getUsername());
             cloned.setProject(gitProject);
             cloned.setDockerfile(StringUtils.hasText(dockerfile) ? dockerfile : "Dockerfile");
-            eventPublisher.publishEvent(new GitClonedEvent(cloned));
+            eventPublisher.publishEvent(new GitClonedCreateEvent(cloned));
         });
 
     }

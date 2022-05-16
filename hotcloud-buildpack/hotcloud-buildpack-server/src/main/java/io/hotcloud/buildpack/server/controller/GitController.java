@@ -14,8 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.hotcloud.common.WebResponse.created;
-import static io.hotcloud.common.WebResponse.okPage;
+import static io.hotcloud.common.WebResponse.*;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -72,5 +71,18 @@ public class GitController {
                                                       @RequestParam(value = "page_size", required = false) Integer pageSize) {
         PageResult<GitCloned> pageResult = gitClonedCollectionQuery.pagingQuery(user, success, Pageable.of(page, pageSize));
         return okPage(pageResult);
+    }
+
+    @DeleteMapping("/clones/{id}")
+    @Operation(
+            summary = "Git cloned repository delete",
+            responses = {@ApiResponse(responseCode = "202")},
+            parameters = {
+                    @Parameter(name = "id", description = "git repository id")
+            }
+    )
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
+        gitClonedService.deleteById(id);
+        return accepted();
     }
 }
