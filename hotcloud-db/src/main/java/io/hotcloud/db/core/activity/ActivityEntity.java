@@ -23,6 +23,8 @@ public class ActivityEntity extends AbstractEntity {
     @Indexed
     @org.springframework.data.redis.core.index.Indexed
     private String target;
+    @Indexed
+    @org.springframework.data.redis.core.index.Indexed
     private String action;
     private String description;
     @Indexed
