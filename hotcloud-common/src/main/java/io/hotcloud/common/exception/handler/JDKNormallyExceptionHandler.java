@@ -25,14 +25,8 @@ public class JDKNormallyExceptionHandler {
 
     @ExceptionHandler(value = IllegalStateException.class)
     public ResponseEntity<Result<Void>> handle(IllegalStateException ex, HttpServletRequest request) {
-        Result<Void> error = Result.error(403, ex.getMessage());
-        return ResponseEntity.status(403).body(error);
-    }
-
-    @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<Result<Void>> handle(NullPointerException ex, HttpServletRequest request) {
-        Result<Void> error = Result.error(404, ex.getMessage());
-        return ResponseEntity.status(404).body(error);
+        Result<Void> error = Result.error(500, ex.getMessage());
+        return ResponseEntity.status(500).body(error);
     }
 
     @ExceptionHandler(value = UnsupportedOperationException.class)

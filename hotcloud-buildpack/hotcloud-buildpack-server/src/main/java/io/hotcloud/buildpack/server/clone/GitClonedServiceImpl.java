@@ -4,7 +4,7 @@ import io.hotcloud.buildpack.api.clone.*;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.Validator;
 import io.hotcloud.common.cache.Cache;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.security.api.user.User;
@@ -133,7 +133,7 @@ public class GitClonedServiceImpl implements GitClonedService {
     @Override
     public void deleteById(String id) {
 
-        GitClonedEntity one = repository.findById(id).orElseThrow(() -> new HotCloudException("Git repository not found [" + id + "]"));
+        GitClonedEntity one = repository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Git repository not found [" + id + "]"));
         repository.delete(one);
 
         GitCloned cloned = one.toT(GitCloned.class);

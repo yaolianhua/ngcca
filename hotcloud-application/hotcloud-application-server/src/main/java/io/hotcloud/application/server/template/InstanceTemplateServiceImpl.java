@@ -2,6 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.common.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.InstanceTemplateEntity;
 import io.hotcloud.db.core.application.InstanceTemplateRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class InstanceTemplateServiceImpl implements InstanceTemplateService {
         Assert.notNull(instance, "Application instance body is null");
 
         if (StringUtils.hasText(instance.getId())) {
-            InstanceTemplateEntity find = instanceTemplateRepository.findById(instance.getId()).orElseThrow(() -> new NullPointerException("instance template not found [" + instance.getId() + "]"));
+            InstanceTemplateEntity find = instanceTemplateRepository.findById(instance.getId()).orElseThrow(() -> new HotCloudResourceNotFoundException("instance template not found [" + instance.getId() + "]"));
 
             find.setModifiedAt(LocalDateTime.now());
             find.setSuccess(instance.isSuccess());
