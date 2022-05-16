@@ -9,6 +9,8 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
+import io.hotcloud.common.activity.ActivityAction;
+import io.hotcloud.common.activity.ActivityLog;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -33,6 +35,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     private final InstanceTemplateProcessors instanceTemplateProcessors;
     private final ApplicationEventPublisher eventPublisher;
     private final InstanceTemplateService instanceTemplateService;
+    private final InstanceTemplateActivityLogger activityLogger;
     private final KubectlApi kubectlApi;
     private final NamespaceApi namespaceApi;
     private final UserApi userApi;
@@ -41,6 +44,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     public DefaultInstanceTemplatePlayer(InstanceTemplateProcessors instanceTemplateProcessors,
                                          ApplicationEventPublisher eventPublisher,
                                          InstanceTemplateService instanceTemplateService,
+                                         InstanceTemplateActivityLogger activityLogger,
                                          KubectlApi kubectlApi,
                                          NamespaceApi namespaceApi,
                                          UserApi userApi,
@@ -48,6 +52,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         this.instanceTemplateProcessors = instanceTemplateProcessors;
         this.eventPublisher = eventPublisher;
         this.instanceTemplateService = instanceTemplateService;
+        this.activityLogger = activityLogger;
         this.kubectlApi = kubectlApi;
         this.namespaceApi = namespaceApi;
         this.userApi = userApi;
@@ -78,6 +83,9 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
         log.info("[DefaultInstanceTemplatePlayer] Saved [{}] user's instance template [{}]", current.getUsername(), saved.getId());
 
+        ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
+        log.info("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
+
         try {
             Path userPath = Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, namespace, name);
             if (!FileHelper.exists(userPath)) {
@@ -105,6 +113,9 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
 
         instanceTemplateService.delete(id);
         log.info("[DefaultInstanceTemplatePlayer] Delete instance template '{}'", id);
+
+        ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
+        log.info("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
 
         eventPublisher.publishEvent(new InstanceTemplateDeleteEvent(find));
     }
