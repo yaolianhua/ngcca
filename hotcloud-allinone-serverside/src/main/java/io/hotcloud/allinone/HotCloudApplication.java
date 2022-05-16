@@ -13,7 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 "io.hotcloud.buildpack",
                 "io.hotcloud.security",
                 "io.hotcloud.kubernetes",
-                "io.hotcloud.application"
+                "io.hotcloud.application",
+                "io.hotcloud.allinone"
         }
 )
 public class HotCloudApplication {
