@@ -2,8 +2,8 @@ FROM openjdk:11.0.12-jre-slim-buster AS builder
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
-COPY hotcloud-starter/target/hotcloud-starter.jar .
-RUN java -Djarmode=layertools -jar hotcloud-starter.jar extract
+COPY hotcloud-allinone-serverside/target/hotcloud-allinone.jar .
+RUN java -Djarmode=layertools -jar hotcloud-allinone.jar extract
 
 FROM openjdk:11.0.12-jre-slim-buster
 WORKDIR /hotcloud/

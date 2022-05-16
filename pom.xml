@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>hotcloud-starter</module>
+        <module>hotcloud-allinone-serverside</module>
         <module>hotcloud-kubernetes</module>
         <module>hotcloud-common</module>
         <module>hotcloud-buildpack</module>
@@ -71,7 +71,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-starter</artifactId>
+                <artifactId>hotcloud-allinone-serverside</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -333,7 +333,7 @@
         <pluginRepository>
             <id>local-nexus</id>
             <name>Local Nexus Public</name>
-            <url>http://nexus.cloudtogo.local/repository/maven-public/</url>
+            <url>http://nexus.local/repository/maven-public/</url>
         </pluginRepository>
     </pluginRepositories>
 </project>

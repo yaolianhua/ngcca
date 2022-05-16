@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-starter</artifactId>
-    <name>Hot Cloud :: Starter</name>
+    <artifactId>hotcloud-allinone-serverside</artifactId>
+    <name>Hot Cloud :: allinone :: serverside</name>
 
     <dependencies>
 
@@ -52,7 +52,7 @@
     </dependencies>
 
     <build>
-        <finalName>hotcloud-starter</finalName>
+        <finalName>hotcloud-allinone</finalName>
 
         <plugins>
             <plugin>

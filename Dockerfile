@@ -4,8 +4,8 @@ WORKDIR /build/
 
 COPY . .
 RUN mvn clean package
-RUN cp hotcloud-starter/target/hotcloud-starter.jar .
-RUN java -Djarmode=layertools -jar hotcloud-starter.jar extract
+RUN cp hotcloud-allinone-serverside/target/hotcloud-allinone.jar .
+RUN java -Djarmode=layertools -jar hotcloud-allinone.jar extract
 
 FROM openjdk:11.0.12-jre-slim-buster
 
