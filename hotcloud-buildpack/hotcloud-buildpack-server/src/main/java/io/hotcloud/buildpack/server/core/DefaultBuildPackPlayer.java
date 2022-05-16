@@ -6,6 +6,8 @@ import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
+import io.hotcloud.common.activity.ActivityAction;
+import io.hotcloud.common.activity.ActivityLog;
 import io.hotcloud.common.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -43,6 +45,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
     private final GitClonedService gitClonedService;
     private final BuildPackService buildPackService;
+    private final BuildPackActivityLogger activityLogger;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -55,6 +58,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
                                   KubectlApi kubectlApi,
                                   GitClonedService gitClonedService,
                                   BuildPackService buildPackService,
+                                  BuildPackActivityLogger activityLogger,
                                   ApplicationEventPublisher eventPublisher) {
         this.abstractBuildPackApi = abstractBuildPackApi;
         this.userApi = userApi;
@@ -65,6 +69,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         this.kubectlApi = kubectlApi;
         this.gitClonedService = gitClonedService;
         this.buildPackService = buildPackService;
+        this.activityLogger = activityLogger;
         this.eventPublisher = eventPublisher;
     }
 
@@ -95,6 +100,9 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
         log.info("[DefaultBuildPackPlayer] saved [{}] user's BuildPack '{}'", savedBuildPack.getUser(), savedBuildPack.getId());
 
+        ActivityLog activityLog = activityLogger.log(ActivityAction.Create, savedBuildPack);
+        log.info("[DefaultBuildPackPlayer] activity [{}] saved", activityLog.getId());
+
         String namespace = savedBuildPack.getJobResource().getNamespace();
         //create user's namespace
         try {
@@ -119,6 +127,9 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
         buildPackService.delete(id, physically);
         log.info("[DefaultBuildPackPlayer] delete BuildPack '{}'", id);
+
+        ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, existBuildPack);
+        log.info("[DefaultBuildPackPlayer] activity [{}] saved", activityLog.getId());
 
         eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack, physically));
     }
