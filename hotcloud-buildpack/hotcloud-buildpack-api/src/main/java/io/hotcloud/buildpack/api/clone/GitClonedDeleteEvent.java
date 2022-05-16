@@ -5,9 +5,9 @@ import org.springframework.context.ApplicationEvent;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class GitClonedEvent extends ApplicationEvent {
+public class GitClonedDeleteEvent extends ApplicationEvent {
 
-    public GitClonedEvent(GitCloned cloned) {
+    public GitClonedDeleteEvent(GitCloned cloned) {
         super(cloned);
     }
 
