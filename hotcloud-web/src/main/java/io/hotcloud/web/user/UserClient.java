@@ -1,10 +1,10 @@
 package io.hotcloud.web.user;
 
-import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.feign.ErrorMessageConfiguration;
 import io.hotcloud.web.feign.HotCloudServerProperties;
 import io.hotcloud.web.mvc.R;
 import io.hotcloud.web.mvc.RP;
+import io.hotcloud.web.mvc.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

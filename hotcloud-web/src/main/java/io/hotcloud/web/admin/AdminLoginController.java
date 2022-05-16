@@ -1,7 +1,7 @@
 package io.hotcloud.web.admin;
 
-import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.web.login.LoginClient;
+import io.hotcloud.web.mvc.BearerToken;
 import io.hotcloud.web.mvc.R;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;

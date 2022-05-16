@@ -1,9 +1,9 @@
 package io.hotcloud.web.user;
 
-import io.hotcloud.security.api.user.User;
 import io.hotcloud.web.feign.CodeMessage;
 import io.hotcloud.web.mvc.R;
 import io.hotcloud.web.mvc.RP;
+import io.hotcloud.web.mvc.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.HttpStatus;
