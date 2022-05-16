@@ -3,7 +3,7 @@ package io.hotcloud.web.login;
 import io.hotcloud.web.feign.ErrorMessageConfiguration;
 import io.hotcloud.web.feign.HotCloudServerProperties;
 import io.hotcloud.web.mvc.BearerToken;
-import io.hotcloud.web.mvc.R;
+import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface LoginClient {
 
     @PostMapping("/v1/security/login")
-    ResponseEntity<R<BearerToken>> login(@RequestParam String username,
-                                         @RequestParam String password);
+    ResponseEntity<Result<BearerToken>> login(@RequestParam String username,
+                                              @RequestParam String password);
 
     @GetMapping("/v1/security/login")
-    ResponseEntity<R<User>> retrieveUser();
+    ResponseEntity<Result<User>> retrieveUser();
 
 }

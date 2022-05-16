@@ -31,60 +31,60 @@ public class UserManageController {
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            RP<User> rp = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
-            model.addAttribute(WebConstant.RESPONSE, rp);
+            PageResult<User> pageResult = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
+            model.addAttribute(WebConstant.RESPONSE, pageResult);
             return "admin/user-list::content";
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
-            R<User> userR = userClient.findUserById(userid).getBody();
-            model.addAttribute(WebConstant.RESPONSE, userR);
+            Result<User> userResult = userClient.findUserById(userid).getBody();
+            model.addAttribute(WebConstant.RESPONSE, userResult);
             return "admin/user-edit::content";
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            R<User> userR = userClient.findUserById(userid).getBody();
-            model.addAttribute(WebConstant.RESPONSE, userR);
+            Result<User> userResult = userClient.findUserById(userid).getBody();
+            model.addAttribute(WebConstant.RESPONSE, userResult);
             return "admin/user-detail::content";
         }
 
-        RP<User> rp = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
-        model.addAttribute(WebConstant.RESPONSE, rp);
+        PageResult<User> pageResult = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
+        model.addAttribute(WebConstant.RESPONSE, pageResult);
         return "admin/user-manage";
     }
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<R<User>> create(@RequestBody User newUser) {
+    public ResponseEntity<Result<User>> create(@RequestBody User newUser) {
         return userClient.create(newUser);
     }
 
     @PutMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<R<User>> update(@RequestBody User updateUser) {
+    public ResponseEntity<Result<User>> update(@RequestBody User updateUser) {
         return userClient.update(updateUser);
     }
 
     @PutMapping(value = "/users/{username}/{enable}")
     @ResponseBody
-    public ResponseEntity<R<Void>> update(@PathVariable("username") String username,
-                                          @PathVariable("enable") Boolean enable) {
+    public ResponseEntity<Result<Void>> update(@PathVariable("username") String username,
+                                               @PathVariable("enable") Boolean enable) {
         return userClient.onOff(username, enable);
     }
 
     @DeleteMapping("/users/{id}")
     @ResponseBody
-    public ResponseEntity<R<Void>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         return userClient.delete(id);
     }
 
     @GetMapping("/users/{id}")
     @ResponseBody
-    public ResponseEntity<R<User>> findByUserid(@PathVariable("id") String id) {
+    public ResponseEntity<Result<User>> findByUserid(@PathVariable("id") String id) {
         return userClient.findUserById(id);
     }
 
     @GetMapping("/users/{username}/user")
     @ResponseBody
-    public ResponseEntity<R<User>> findByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<Result<User>> findByUsername(@PathVariable("username") String username) {
         return userClient.findUserByUsername(username);
     }
 }

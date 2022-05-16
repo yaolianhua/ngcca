@@ -72,9 +72,9 @@ public class GlobalSessionUserAspect {
     }
 
     private User retrieve() {
-        ResponseEntity<R<User>> response = loginClient.retrieveUser();
+        ResponseEntity<Result<User>> response = loginClient.retrieveUser();
         if (response.getStatusCode().is2xxSuccessful()) {
-            R<User> body = response.getBody();
+            Result<User> body = response.getBody();
             Assert.notNull(body, "Response body is null");
             return body.getData();
         }

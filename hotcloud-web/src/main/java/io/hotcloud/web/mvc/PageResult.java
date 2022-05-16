@@ -13,21 +13,21 @@ import java.util.List;
  **/
 @Getter
 @Setter
-public class RP<E> extends R<Collection<E>> {
+public class PageResult<E> extends Result<Collection<E>> {
 
     private int total;
     private int page;
     private int pageSize;
 
-    public RP(int code, String message, Collection<E> data, int total, int page, int pageSize) {
+    public PageResult(int code, String message, Collection<E> data, int total, int page, int pageSize) {
         super(code, message, data);
         this.total = total;
         this.page = page;
         this.pageSize = pageSize;
     }
 
-    public static <E> RP<E> ofSingle(Collection<E> data) {
-        return new RP<>(200, "success", data, data.size(), 1, data.size());
+    public static <E> PageResult<E> ofSingle(Collection<E> data) {
+        return new PageResult<>(200, "success", data, data.size(), 1, data.size());
     }
 
     @JsonIgnore

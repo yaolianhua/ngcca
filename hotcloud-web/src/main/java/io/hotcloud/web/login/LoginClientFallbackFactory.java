@@ -2,7 +2,7 @@ package io.hotcloud.web.login;
 
 import io.hotcloud.web.feign.CodeMessage;
 import io.hotcloud.web.mvc.BearerToken;
-import io.hotcloud.web.mvc.R;
+import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -26,17 +26,17 @@ public class LoginClientFallbackFactory implements FallbackFactory<LoginClient> 
         String message = codeMessage.getMessage();
         return new LoginClient() {
             @Override
-            public ResponseEntity<R<BearerToken>> login(String username, String password) {
+            public ResponseEntity<Result<BearerToken>> login(String username, String password) {
                 log.error("{}", cause.getMessage());
                 return ResponseEntity.status(HttpStatus.valueOf(code))
-                        .body(R.error(code, message));
+                        .body(Result.error(code, message));
             }
 
             @Override
-            public ResponseEntity<R<User>> retrieveUser() {
+            public ResponseEntity<Result<User>> retrieveUser() {
                 log.error("{}", cause.getMessage());
                 return ResponseEntity.status(HttpStatus.valueOf(code))
-                        .body(R.error(code, message));
+                        .body(Result.error(code, message));
             }
         };
 

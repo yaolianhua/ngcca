@@ -1,8 +1,8 @@
 package io.hotcloud.web.user;
 
 import io.hotcloud.web.feign.CodeMessage;
-import io.hotcloud.web.mvc.R;
-import io.hotcloud.web.mvc.RP;
+import io.hotcloud.web.mvc.PageResult;
+import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -28,45 +28,45 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
         String message = codeMessage.getMessage();
         return new UserClient() {
             @Override
-            public ResponseEntity<R<User>> findUserByUsername(String username) {
+            public ResponseEntity<Result<User>> findUserByUsername(String username) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message, new User()));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message, new User()));
             }
 
             @Override
-            public ResponseEntity<RP<User>> paging(String username, Boolean enabled, Integer page, Integer pageSize) {
+            public ResponseEntity<PageResult<User>> paging(String username, Boolean enabled, Integer page, Integer pageSize) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(RP.ofSingle(Collections.emptyList()));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(PageResult.ofSingle(Collections.emptyList()));
             }
 
             @Override
-            public ResponseEntity<R<User>> create(User user) {
+            public ResponseEntity<Result<User>> create(User user) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message));
             }
 
             @Override
-            public ResponseEntity<R<User>> findUserById(String id) {
+            public ResponseEntity<Result<User>> findUserById(String id) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message, new User()));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message, new User()));
             }
 
             @Override
-            public ResponseEntity<R<Void>> delete(String id) {
+            public ResponseEntity<Result<Void>> delete(String id) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message));
             }
 
             @Override
-            public ResponseEntity<R<User>> update(User user) {
+            public ResponseEntity<Result<User>> update(User user) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message));
             }
 
             @Override
-            public ResponseEntity<R<Void>> onOff(String username, Boolean enable) {
+            public ResponseEntity<Result<Void>> onOff(String username, Boolean enable) {
                 log.error("{}", cause.getMessage());
-                return ResponseEntity.status(HttpStatus.valueOf(code)).body(R.error(code, message));
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message));
             }
         };
     }

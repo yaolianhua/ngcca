@@ -2,7 +2,7 @@ package io.hotcloud.web.admin;
 
 import io.hotcloud.web.login.LoginClient;
 import io.hotcloud.web.mvc.BearerToken;
-import io.hotcloud.web.mvc.R;
+import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
 import org.springframework.http.ResponseEntity;
@@ -40,21 +40,21 @@ public class AdminLoginController {
                              HttpServletResponse response,
                              @ModelAttribute("username") String username,
                              @ModelAttribute("password") String password) {
-        ResponseEntity<R<BearerToken>> entity = loginClient.login(username, password);
-        R<BearerToken> bearerTokenR = Objects.requireNonNull(entity.getBody());
+        ResponseEntity<Result<BearerToken>> entity = loginClient.login(username, password);
+        Result<BearerToken> bearerTokenResult = Objects.requireNonNull(entity.getBody());
         boolean successful = entity.getStatusCode().is2xxSuccessful();
         if (successful) {
             if (!isAdmin(username)) {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
                 return "admin/login";
             } else {
-                Cookie cookie = WebCookie.generate(bearerTokenR.getData().getAuthorization());
+                Cookie cookie = WebCookie.generate(bearerTokenResult.getData().getAuthorization());
                 response.addCookie(cookie);
                 return "redirect:/administrator/index";
             }
         }
 
-        model.addAttribute(WebConstant.MESSAGE, bearerTokenR.getMessage());
+        model.addAttribute(WebConstant.MESSAGE, bearerTokenResult.getMessage());
         return "admin/login";
     }
 
