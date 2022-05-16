@@ -9,6 +9,7 @@ import io.hotcloud.db.core.activity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -40,6 +41,8 @@ public class GitClonedActivityLogger {
                 .user(cloned.getUser())
                 .description(description)
                 .namespace("")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
         ActivityEntity entity = (ActivityEntity) new ActivityEntity().copyToEntity(activityLog);
         ActivityEntity saved = activityRepository.save(entity);
