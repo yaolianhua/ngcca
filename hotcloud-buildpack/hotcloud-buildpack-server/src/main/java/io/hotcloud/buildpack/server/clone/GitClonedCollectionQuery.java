@@ -37,9 +37,9 @@ public class GitClonedCollectionQuery {
     public PageResult<GitCloned> pagingQuery(String user, Boolean success, Pageable pageable) {
         List<GitCloned> cloneds;
         if (StringUtils.hasText(user)) {
-            cloneds = gitClonedService.listCloned(user);
+            cloneds = gitClonedService.findAll(user);
         } else {
-            cloneds = gitClonedService.listAll();
+            cloneds = gitClonedService.findAll();
         }
 
         List<GitCloned> filtered = filter(cloneds, success);

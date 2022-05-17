@@ -99,7 +99,7 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public List<GitCloned> listCloned(String user) {
+    public List<GitCloned> findAll(String user) {
         return repository.findByUser(user)
                 .stream()
                 .map(e -> e.toT(GitCloned.class))
@@ -107,7 +107,7 @@ public class GitClonedServiceImpl implements GitClonedService {
     }
 
     @Override
-    public List<GitCloned> listAll() {
+    public List<GitCloned> findAll() {
         Iterable<GitClonedEntity> all = repository.findAll();
         return StreamSupport.stream(all.spliterator(), false)
                 .map(e -> e.toT(GitCloned.class))

@@ -109,7 +109,7 @@ public class BuildPackRabbitMQMessageSubscriber {
         log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
 
         //remove git cloned record
-        List<GitCloned> cloneds = gitClonedService.listCloned(pair.getUsername());
+        List<GitCloned> cloneds = gitClonedService.findAll(pair.getUsername());
         gitClonedService.delete(pair.getUsername());
         log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
 

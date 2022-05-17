@@ -33,11 +33,11 @@ public class GitClonedStatisticsService {
         boolean hasUser = StringUtils.hasText(user);
 
         if (hasUser) {
-            List<GitCloned> list = gitClonedService.listCloned(user);
+            List<GitCloned> list = gitClonedService.findAll(user);
             return statistics(list);
         }
 
-        List<GitCloned> list = gitClonedService.listAll();
+        List<GitCloned> list = gitClonedService.findAll();
         return statistics(list);
     }
 

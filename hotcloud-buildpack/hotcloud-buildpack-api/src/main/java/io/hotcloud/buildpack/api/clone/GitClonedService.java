@@ -33,19 +33,19 @@ public interface GitClonedService {
     GitCloned findOne(String clonedId);
 
     /**
-     * List user's {@link GitCloned} with giving {@code user}
+     * Find user's {@link GitCloned} with giving {@code user}
      *
      * @param user user
      * @return {@link GitCloned}
      */
-    List<GitCloned> listCloned(String user);
+    List<GitCloned> findAll(String user);
 
     /**
-     * List all {@link GitCloned}
+     * Find all {@link GitCloned}
      *
      * @return {@link GitCloned}
      */
-    List<GitCloned> listAll();
+    List<GitCloned> findAll();
 
     /**
      * Delete {@link GitCloned} with giving {@code  user} and {@code gitProject}
