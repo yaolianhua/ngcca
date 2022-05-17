@@ -126,7 +126,7 @@ public class BuildPackListener {
 
             String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName());
 
-            buildPack.setMessage(success ? "success" : "failed");
+            buildPack.setMessage(success ? BuildPackConstant.SUCCESS_MESSAGE : BuildPackConstant.FAILED_MESSAGE);
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
