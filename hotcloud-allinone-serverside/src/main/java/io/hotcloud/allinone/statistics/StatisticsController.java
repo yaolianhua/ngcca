@@ -50,8 +50,8 @@ public class StatisticsController {
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
     )
-    public ResponseEntity<PageResult<Statistics>> page(@RequestParam(value = "page", required = false) Integer page,
-                                                       @RequestParam(value = "page_size", required = false) Integer pageSize) {
+    public ResponseEntity<PageResult<Statistics>> statistics(@RequestParam(value = "page", required = false) Integer page,
+                                                             @RequestParam(value = "page_size", required = false) Integer pageSize) {
         PageResult<Statistics> pageResult = statisticsService.statistics(Pageable.of(page, pageSize));
         return okPage(pageResult);
     }
