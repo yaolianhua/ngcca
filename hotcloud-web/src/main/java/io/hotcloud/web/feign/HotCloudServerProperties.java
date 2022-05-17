@@ -17,4 +17,7 @@ public class HotCloudServerProperties {
     private String host = "hotcloud";
     private Integer port = 8080;
 
+    public String resolvedHost() {
+        return String.format("http://%s:%s", host, port);
+    }
 }

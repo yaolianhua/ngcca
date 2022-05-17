@@ -91,9 +91,9 @@ function userEP(id) {
 }
 
 //user detail view
-function userDP(id) {
+function userDP(id, endpoint) {
     $('#users-fragment').load('/administrator/user-manage?action=detail&id=' + id, function () {
-        dropzone(id);
+        dropzone(id, endpoint);
     });
 }
 
@@ -181,9 +181,10 @@ function useravatarS() {
     let userid = $('#bind-userid').data("userid");
     alert(userid);
     alert(avatar);
+
 }
 
-function dropzone(id) {
+function dropzone(id, endpoint) {
     // DropzoneJS Demo Code Start
     Dropzone.autoDiscover = false;
 
@@ -193,7 +194,7 @@ function dropzone(id) {
     let previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);
     let myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: "http://localhost:8080/v1/storage/upload", // Set the url
+        url: endpoint + "/v1/storage/upload", // Set the url
         headers: {"Authorization": 'Bearer ' + getAuthorization()},
         acceptedFiles: "image/jpg, image/png, image/gif",
         success: function (file, response) {

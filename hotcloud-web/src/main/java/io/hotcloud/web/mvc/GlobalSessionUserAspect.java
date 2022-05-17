@@ -1,5 +1,6 @@
 package io.hotcloud.web.mvc;
 
+import io.hotcloud.web.feign.HotCloudServerProperties;
 import io.hotcloud.web.login.LoginClient;
 import io.hotcloud.web.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,12 @@ import java.util.Objects;
 public class GlobalSessionUserAspect {
 
     private final LoginClient loginClient;
+    private final HotCloudServerProperties hotCloudServerProperties;
 
-    public GlobalSessionUserAspect(LoginClient loginClient) {
+    public GlobalSessionUserAspect(LoginClient loginClient,
+                                   HotCloudServerProperties hotCloudServerProperties) {
         this.loginClient = loginClient;
+        this.hotCloudServerProperties = hotCloudServerProperties;
     }
 
     @Pointcut(value = "@annotation(io.hotcloud.web.mvc.WebUser)")
@@ -66,6 +70,7 @@ public class GlobalSessionUserAspect {
             if (args[i].getClass().equals(BindingAwareModelMap.class)) {
                 Model model = (BindingAwareModelMap) args[i];
                 model.addAttribute(WebConstant.USER, user);
+                model.addAttribute(WebConstant.HOTCLOUD_ENDPOINT, hotCloudServerProperties.resolvedHost());
             }
         }
 
