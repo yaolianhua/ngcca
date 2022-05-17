@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
         configuration = {ErrorMessageConfiguration.class})
 public interface StatisticsClient {
 
-    @GetMapping("/{username}")
-    ResponseEntity<Result<Statistics>> statistics(@PathVariable("username") String username);
+    @GetMapping("/{userid}")
+    ResponseEntity<Result<Statistics>> statistics(@PathVariable("userid") String userid);
 
     @GetMapping
     ResponseEntity<PageResult<Statistics>> statistics(@RequestParam(value = "page", required = false) Integer page,

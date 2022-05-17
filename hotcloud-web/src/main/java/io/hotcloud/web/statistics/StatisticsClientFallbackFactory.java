@@ -28,7 +28,7 @@ public class StatisticsClientFallbackFactory implements FallbackFactory<Statisti
 
         return new StatisticsClient() {
             @Override
-            public ResponseEntity<Result<Statistics>> statistics(String username) {
+            public ResponseEntity<Result<Statistics>> statistics(String userid) {
                 log.error("{}", cause.getMessage());
                 return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message, new Statistics()));
             }

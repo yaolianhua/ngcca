@@ -1,10 +1,8 @@
 package io.hotcloud.web.admin;
 
-import io.hotcloud.web.mvc.PageResult;
 import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebUser;
-import io.hotcloud.web.statistics.Statistics;
 import io.hotcloud.web.statistics.StatisticsClient;
 import io.hotcloud.web.user.User;
 import io.hotcloud.web.user.UserClient;
@@ -40,25 +38,19 @@ public class UserManageController {
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            PageResult<User> pageResult = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
-            model.addAttribute(WebConstant.RESPONSE, pageResult);
+            model.addAttribute(WebConstant.RESPONSE, userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody());
             return "admin/user-list::content";
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
-            Result<User> userResult = userClient.findUserById(userid).getBody();
-            model.addAttribute(WebConstant.RESPONSE, userResult);
+            model.addAttribute(WebConstant.RESPONSE, userClient.findUserById(userid).getBody());
             return "admin/user-edit::content";
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            Result<User> userResult = userClient.findUserById(userid).getBody();
-            Result<Statistics> statisticsResult = statisticsClient.statistics(Objects.requireNonNull(userResult).getData().getUsername()).getBody();
-            model.addAttribute(WebConstant.RESPONSE, userResult);
-            model.addAttribute("statistics", Objects.requireNonNull(statisticsResult).getData());
+            model.addAttribute(WebConstant.RESPONSE, statisticsClient.statistics(userid).getBody());
             return "admin/user-detail::content";
         }
 
-        PageResult<User> pageResult = userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody();
-        model.addAttribute(WebConstant.RESPONSE, pageResult);
+        model.addAttribute(WebConstant.RESPONSE, userClient.paging(username, enabled, 1, Integer.MAX_VALUE).getBody());
         return "admin/user-manage";
     }
 

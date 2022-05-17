@@ -1,5 +1,6 @@
 package io.hotcloud.web.statistics;
 
+import io.hotcloud.web.user.User;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class Statistics {
 
-    private String user;
+    private User user;
     private String namespace;
 
     private InstanceTemplateStatistics templates;
