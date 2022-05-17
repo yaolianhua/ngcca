@@ -50,7 +50,7 @@ public class StatisticsService {
         GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
 
-        String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, user), String.class);
+        String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
 
         return Statistics.builder()
                 .buildPacks(buildPackStatistics)
