@@ -2,7 +2,6 @@ package io.hotcloud.web.login;
 
 import io.hotcloud.web.feign.ErrorMessageConfiguration;
 import io.hotcloud.web.feign.HotCloudServerProperties;
-import io.hotcloud.web.mvc.BearerToken;
 import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.User;
 import org.springframework.cloud.openfeign.FeignClient;
