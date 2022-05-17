@@ -66,7 +66,7 @@ public class StatisticsService {
      * @param pageable {@link  Pageable}
      * @return paged statistics
      */
-    public PageResult<Statistics> statisticsAllUser(Pageable pageable) {
+    public PageResult<Statistics> statistics(Pageable pageable) {
         Collection<User> users = userApi.users();
 
         List<Statistics> statistics = users.stream()

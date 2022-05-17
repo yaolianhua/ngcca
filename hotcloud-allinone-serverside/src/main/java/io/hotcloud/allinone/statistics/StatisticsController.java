@@ -52,7 +52,7 @@ public class StatisticsController {
     )
     public ResponseEntity<PageResult<Statistics>> page(@RequestParam(value = "page", required = false) Integer page,
                                                        @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        PageResult<Statistics> pageResult = statisticsService.statisticsAllUser(Pageable.of(page, pageSize));
+        PageResult<Statistics> pageResult = statisticsService.statistics(Pageable.of(page, pageSize));
         return okPage(pageResult);
     }
 }
