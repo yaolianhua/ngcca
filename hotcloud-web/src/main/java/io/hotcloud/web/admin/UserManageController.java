@@ -4,6 +4,8 @@ import io.hotcloud.web.mvc.PageResult;
 import io.hotcloud.web.mvc.Result;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebUser;
+import io.hotcloud.web.statistics.Statistics;
+import io.hotcloud.web.statistics.StatisticsClient;
 import io.hotcloud.web.user.User;
 import io.hotcloud.web.user.UserClient;
 import org.springframework.http.MediaType;
@@ -22,9 +24,12 @@ import java.util.Objects;
 public class UserManageController {
 
     private final UserClient userClient;
+    private final StatisticsClient statisticsClient;
 
-    public UserManageController(UserClient userClient) {
+    public UserManageController(UserClient userClient,
+                                StatisticsClient statisticsClient) {
         this.userClient = userClient;
+        this.statisticsClient = statisticsClient;
     }
 
     @RequestMapping(value = {"/user-manage"})
@@ -46,7 +51,9 @@ public class UserManageController {
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
             Result<User> userResult = userClient.findUserById(userid).getBody();
+            Result<Statistics> statisticsResult = statisticsClient.statistics(Objects.requireNonNull(userResult).getData().getUsername()).getBody();
             model.addAttribute(WebConstant.RESPONSE, userResult);
+            model.addAttribute("statistics", Objects.requireNonNull(statisticsResult).getData());
             return "admin/user-detail::content";
         }
 
