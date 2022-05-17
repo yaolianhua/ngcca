@@ -28,16 +28,16 @@ public class StatisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/{userid}")
     @Operation(
             summary = "statistics query",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
-                    @Parameter(name = "username", description = "username queried")
+                    @Parameter(name = "userid", description = "userid queried")
             }
     )
-    public ResponseEntity<Result<Statistics>> statistics(@PathVariable("username") String username) {
-        Statistics statistics = statisticsService.statistics(username);
+    public ResponseEntity<Result<Statistics>> statistics(@PathVariable("userid") String userid) {
+        Statistics statistics = statisticsService.statistics(userid);
         return ok(statistics);
     }
 

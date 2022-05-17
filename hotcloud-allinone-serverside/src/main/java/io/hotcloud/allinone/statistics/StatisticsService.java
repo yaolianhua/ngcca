@@ -37,17 +37,18 @@ public class StatisticsService {
 
 
     /**
-     * Get statistics with the giving {@code user}
+     * Get statistics with the giving {@code userid}
      *
-     * @param user user's username
+     * @param userid user id
      * @return {@link Statistics}
      */
-    public Statistics statistics(String user) {
-        Assert.hasText(user, "username is null");
+    public Statistics statistics(String userid) {
+        Assert.hasText(userid, "user id is null");
+        User user = userApi.find(userid);
 
-        InstanceTemplateStatistics templateStatistics = instanceTemplateStatisticsService.statistics(user);
-        GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user);
-        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user, null);
+        InstanceTemplateStatistics templateStatistics = instanceTemplateStatisticsService.statistics(user.getUsername());
+        GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
+        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
 
         String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, user), String.class);
 
@@ -70,7 +71,7 @@ public class StatisticsService {
         Collection<User> users = userApi.users();
 
         List<Statistics> statistics = users.stream()
-                .map(User::getUsername)
+                .map(User::getId)
                 .map(this::statistics)
                 .collect(Collectors.toList());
         return PageResult.ofPage(statistics, pageable.getPage(), pageable.getPageSize());
