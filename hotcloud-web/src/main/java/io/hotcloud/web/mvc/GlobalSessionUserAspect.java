@@ -1,6 +1,7 @@
 package io.hotcloud.web.mvc;
 
 import io.hotcloud.web.login.LoginClient;
+import io.hotcloud.web.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

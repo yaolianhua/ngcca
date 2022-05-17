@@ -1,6 +1,10 @@
 package io.hotcloud.web.admin;
 
-import io.hotcloud.web.mvc.*;
+import io.hotcloud.web.mvc.PageResult;
+import io.hotcloud.web.mvc.Result;
+import io.hotcloud.web.mvc.WebConstant;
+import io.hotcloud.web.mvc.WebUser;
+import io.hotcloud.web.user.User;
 import io.hotcloud.web.user.UserClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

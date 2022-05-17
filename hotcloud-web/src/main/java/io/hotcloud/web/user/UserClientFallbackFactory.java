@@ -3,7 +3,6 @@ package io.hotcloud.web.user;
 import io.hotcloud.web.feign.CodeMessage;
 import io.hotcloud.web.mvc.PageResult;
 import io.hotcloud.web.mvc.Result;
-import io.hotcloud.web.mvc.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.HttpStatus;
