@@ -27,13 +27,12 @@ function userPaging() {
 }
 
 function ok(response) {
+    console.log(response);
     toastr.success('操作成功!')
 }
 
 function fail(error) {
-    console.log(error);
-    const message = error.response.data.message;
-    toastr.error('操作失败[' + message + ']');
+    toastr.error('操作失败[' + error + ']');
 }
 
 //user save
@@ -178,9 +177,27 @@ function getAuthorization() {
 let avatar;
 
 function useravatarS() {
+    if (avatar === '' || avatar === undefined || avatar === null || avatar === 'null') {
+        fail('请上传头像');
+        return;
+    }
     let userid = $('#bind-userid').data("userid");
-    alert(userid);
-    alert(avatar);
+    let data = {
+        "id": userid,
+        "avatar": avatar
+    };
+
+    // Send a PUT request
+    axios({
+        method: 'put',
+        url: '/administrator/users',
+        data: data
+    }).then(function (response) {
+        $('#modal-upload-avatar').modal('hide');
+        ok(response);
+    }).catch(function (error) {
+        fail(error);
+    });
 
 }
 
@@ -194,7 +211,7 @@ function dropzone(id, endpoint) {
     let previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);
     let myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: endpoint + "/v1/storage/upload", // Set the url
+        url: endpoint + "/v1/storage/upload?bucket=avatar", // Set the url
         headers: {"Authorization": 'Bearer ' + getAuthorization()},
         acceptedFiles: "image/jpg, image/png, image/gif",
         success: function (file, response) {
