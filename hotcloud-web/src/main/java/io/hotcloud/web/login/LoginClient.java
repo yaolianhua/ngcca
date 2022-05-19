@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author yaolianhua789@gmail.com
  **/
 @FeignClient(name = "loginClient",
+        path = "/v1/security/login",
         url = HotCloudServerProperties.HOTCLOUD_SERVER,
         fallbackFactory = LoginClientFallbackFactory.class,
         configuration = {ErrorMessageConfiguration.class})
 public interface LoginClient {
 
-    @PostMapping("/v1/security/login")
+    @PostMapping
     ResponseEntity<Result<BearerToken>> login(@RequestParam String username,
                                               @RequestParam String password);
 
-    @GetMapping("/v1/security/login")
+    @GetMapping
     ResponseEntity<Result<User>> retrieveUser();
 
 }

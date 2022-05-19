@@ -12,32 +12,33 @@ import org.springframework.web.bind.annotation.*;
  * @author yaolianhua789@gmail.com
  **/
 @FeignClient(name = "userClient",
+        path = "/v1/security/users",
         url = HotCloudServerProperties.HOTCLOUD_SERVER,
         fallbackFactory = UserClientFallbackFactory.class, configuration = ErrorMessageConfiguration.class)
 public interface UserClient {
 
-    @GetMapping("/v1/security/users/{username}/user")
+    @GetMapping("/{username}/user")
     ResponseEntity<Result<User>> findUserByUsername(@PathVariable("username") String username);
 
-    @GetMapping("/v1/security/users")
+    @GetMapping
     ResponseEntity<PageResult<User>> paging(@RequestParam(value = "username", required = false) String username,
                                             @RequestParam(value = "enabled", required = false) Boolean enabled,
                                             @RequestParam(value = "page", required = false) Integer page,
                                             @RequestParam(value = "page_size", required = false) Integer pageSize);
 
-    @GetMapping("/v1/security/users/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Result<User>> findUserById(@PathVariable String id);
 
-    @PostMapping("/v1/security/users")
+    @PostMapping
     ResponseEntity<Result<User>> create(@RequestBody User user);
 
-    @DeleteMapping("/v1/security/users/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Result<Void>> delete(@PathVariable String id);
 
-    @PutMapping("/v1/security/users")
+    @PutMapping
     ResponseEntity<Result<User>> update(@RequestBody User user);
 
-    @PutMapping("/v1/security/users/{username}/{enable}")
+    @PutMapping("/{username}/{enable}")
     ResponseEntity<Result<Void>> onOff(@PathVariable String username,
                                        @PathVariable Boolean enable);
 }
