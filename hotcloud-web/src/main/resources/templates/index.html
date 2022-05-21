@@ -62,7 +62,7 @@
               <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">构建</span>
+                <span class="info-box-text">构建面板</span>
                 <span class="info-box-number" th:text="${statistics.buildPacks.total}"></span>
               </div>
               <!-- /.info-box-content -->
@@ -261,12 +261,15 @@
                     <!-- /.col -->
                     <div class="col-md-4">
                       <ul class="chart-legend clearfix">
-                        <li><i class="far fa-circle text-danger"></i> Chrome</li>
-                        <li><i class="far fa-circle text-success"></i> IE</li>
-                        <li><i class="far fa-circle text-warning"></i> FireFox</li>
-                        <li><i class="far fa-circle text-info"></i> Safari</li>
-                        <li><i class="far fa-circle text-primary"></i> Opera</li>
-                        <li><i class="far fa-circle text-secondary"></i> Navigator</li>
+                        <li><i class="fas fa-wrench text-success"></i> 构建成功</li>
+                        <li><i class="fas fa-wrench text-danger"></i> 构建失败</li>
+                        <li><i class="fas fa-wrench text-warning"></i> 构建删除</li>
+                        <li><i class="fas fa-code-branch text-success"></i> 克隆成功</li>
+                        <li><i class="fas fa-code-branch text-danger"></i> 克隆失败</li>
+                        <li><i class="fas fa-cubes text-success"></i> 实例模板部署成功</li>
+                        <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
+                        <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
+                        <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
                       </ul>
                     </div>
                     <!-- /.col -->
@@ -334,17 +337,26 @@
     var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
     var pieData = {
       labels: [
-        'Chrome',
-        'IE',
-        'FireFox',
-        'Safari',
-        'Opera',
-        'Navigator'
+        '构建成功',
+        '构建失败',
+        '构建删除',
+        '克隆成功',
+        '克隆失败',
+        '实例模板部署成功',
+        '实例模板部署失败',
+        '应用发布成功',
+        '应用发布失败'
       ],
       datasets: [
         {
-          data: [700, 500, 400, 600, 300, 100],
-          backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de']
+          data: [700, 500, 400, 600, 300, 100, 200, 100, 100],
+          backgroundColor:
+                  [
+                    '#03f689', '#f56954', '#f39c12',
+                    '#03f689', '#f56954',
+                    '#03f689', '#f56954',
+                    '#03f689', '#f56954',
+                  ]
         }
       ]
     }
