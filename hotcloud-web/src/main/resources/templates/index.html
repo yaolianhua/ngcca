@@ -104,16 +104,136 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-          <!-- Left col -->
-          <section class="col-lg-7 connectedSortable">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- The time line -->
+              <div class="timeline">
+                <!-- timeline time label -->
+                <div class="time-label">
+                  <span class="bg-red">10 Feb. 2014</span>
+                </div>
+                <!-- /.timeline-label -->
+                <!-- timeline item -->
+                <div>
+                  <i class="fas fa-envelope bg-blue"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fas fa-clock"></i> 12:05</span>
+                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
 
-          </section>
-          <!-- /.Left col -->
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-5 connectedSortable">
+                    <div class="timeline-body">
+                      Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                      weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                      jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                      quora plaxo ideeli hulu weebly balihoo...
+                    </div>
+                    <div class="timeline-footer">
+                      <a class="btn btn-primary btn-sm">Read more</a>
+                      <a class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- END timeline item -->
+                <!-- timeline item -->
+                <div>
+                  <i class="fas fa-user bg-green"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                    <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+                  </div>
+                </div>
+                <!-- END timeline item -->
+                <!-- timeline item -->
+                <div>
+                  <i class="fas fa-comments bg-yellow"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fas fa-clock"></i> 27 mins ago</span>
+                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+                    <div class="timeline-body">
+                      Take me to your leader!
+                      Switzerland is small and neutral!
+                      We are more like Germany, ambitious and misunderstood!
+                    </div>
+                    <div class="timeline-footer">
+                      <a class="btn btn-warning btn-sm">View comment</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- END timeline item -->
+                <!-- timeline time label -->
+                <div class="time-label">
+                  <span class="bg-green">3 Jan. 2014</span>
+                </div>
+                <!-- /.timeline-label -->
 
-          </section>
-          <!-- right col -->
+                <!-- END timeline item -->
+                <div>
+                  <i class="fas fa-clock bg-gray"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card">
+
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="chart-responsive">
+                        <canvas height="150" id="pieChart"></canvas>
+                      </div>
+                      <!-- ./chart-responsive -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                      <ul class="chart-legend clearfix">
+                        <li><i class="far fa-circle text-danger"></i> Chrome</li>
+                        <li><i class="far fa-circle text-success"></i> IE</li>
+                        <li><i class="far fa-circle text-warning"></i> FireFox</li>
+                        <li><i class="far fa-circle text-info"></i> Safari</li>
+                        <li><i class="far fa-circle text-primary"></i> Opera</li>
+                        <li><i class="far fa-circle text-secondary"></i> Navigator</li>
+                      </ul>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer p-0">
+                  <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        United States of America
+                        <span class="float-right text-danger">
+                        <i class="fas fa-arrow-down text-sm"></i>
+                        12%</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        India
+                        <span class="float-right text-success">
+                        <i class="fas fa-arrow-up text-sm"></i> 4%
+                      </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        China
+                        <span class="float-right text-warning">
+                        <i class="fas fa-arrow-left text-sm"></i> 0%
+                      </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- /.footer -->
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
@@ -133,5 +253,44 @@
 
 <!-- jQuery -->
 <div th:include="global-script"></div>
+<script>
+  /* global Chart:false */
+
+  $(function () {
+    'use strict'
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData = {
+      labels: [
+        'Chrome',
+        'IE',
+        'FireFox',
+        'Safari',
+        'Opera',
+        'Navigator'
+      ],
+      datasets: [
+        {
+          data: [700, 500, 400, 600, 300, 100],
+          backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de']
+        }
+      ]
+    }
+    var pieOptions = {
+      legend: {
+        display: false
+      }
+    }
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    // eslint-disable-next-line no-unused-vars
+    var pieChart = new Chart(pieChartCanvas, {
+      type: 'doughnut',
+      data: pieData,
+      options: pieOptions
+    })
+
+  })
+
+</script>
 </body>
 </html>
