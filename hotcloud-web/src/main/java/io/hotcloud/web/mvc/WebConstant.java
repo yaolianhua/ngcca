@@ -9,6 +9,7 @@ public final class WebConstant {
 
     public static final String HOTCLOUD_ENDPOINT = "endpoint";
     public static final String RESPONSE = "response";
+    public static final String STATISTICS = "statistics";
     public static final String AUTHORIZATION = "authorization";
     public static final String MESSAGE = "message";
 
