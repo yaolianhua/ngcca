@@ -6,27 +6,7 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>HotCloud | Index</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-        rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
-  <!-- Ionicons -->
-  <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
-  <!-- iCheck -->
-  <link rel="stylesheet" th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
-  <!-- Theme style -->
-  <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" th:href="@{/plugins/daterangepicker/daterangepicker.css}">
-  <!-- summernote -->
-  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+  <link th:include="global-link">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -63,86 +43,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>150</h3>
 
-                <p>New Orders</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a class="small-box-footer" href="#">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a class="small-box-footer" href="#">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a class="small-box-footer" href="#">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a class="small-box-footer" href="#">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-        <!-- /.row -->
-        <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
-          <section class="col-lg-7 connectedSortable">
-
-          </section>
-          <!-- /.Left col -->
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-5 connectedSortable">
-
-          </section>
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -156,38 +57,8 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
-<!-- jQuery -->
-<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<!-- ChartJS -->
-<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
-<!-- Sparkline -->
-<script th:src="@{/plugins/sparklines/sparkline.js}"></script>
-<!-- JQVMap -->
-<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
-<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
-<!-- jQuery Knob Chart -->
-<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
-<!-- daterangepicker -->
-<script th:src="@{/plugins/moment/moment.min.js}"></script>
-<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
-<!-- Summernote -->
-<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
-<!-- overlayScrollbars -->
-<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-<!-- AdminLTE App -->
-<script th:src="@{/dist/js/adminlte.js}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script th:src="@{/dist/js/pages/dashboard.js}"></script>
+<div th:include="global-script"></div>
+
 </body>
 </html>
