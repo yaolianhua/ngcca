@@ -36,31 +36,33 @@ public class Activity {
 
     private String targetName;
 
+    //for web
+
     private String icon;
 
     private String display;
 
     public String getDisplay() {
-        if ("Git_Clone".equalsIgnoreCase(target)) {
-            if ("Delete".equals(action)) {
+        if (Target.Git_Clone.name().equalsIgnoreCase(target)) {
+            if (Action.Delete.name().equals(action)) {
                 return "【删除】代码仓库";
             }
             return "【新建】代码仓库";
         }
-        if ("BuildPack".equalsIgnoreCase(target)) {
-            if ("Delete".equals(action)) {
+        if (Target.BuildPack.name().equalsIgnoreCase(target)) {
+            if (Action.Delete.name().equals(action)) {
                 return "【删除】构建面板";
             }
             return "【新建】构建面板";
         }
-        if ("Instance_Template".equalsIgnoreCase(target)) {
-            if ("Delete".equals(action)) {
+        if (Target.Instance_Template.name().equalsIgnoreCase(target)) {
+            if (Action.Delete.name().equals(action)) {
                 return "【删除】模板实例";
             }
             return "【新建】模板实例";
         }
-        if ("Application".equalsIgnoreCase(target)) {
-            if ("Delete".equals(action)) {
+        if (Target.Application.name().equalsIgnoreCase(target)) {
+            if (Action.Delete.name().equals(action)) {
                 return "【删除】应用实例";
             }
             return "【新建】应用实例";
@@ -69,18 +71,33 @@ public class Activity {
     }
 
     public String getIcon() {
-        if ("Git_Clone".equalsIgnoreCase(target)) {
+        if (Target.Git_Clone.name().equalsIgnoreCase(target)) {
             return "fa-code-branch";
         }
-        if ("BuildPack".equalsIgnoreCase(target)) {
+        if (Target.BuildPack.name().equalsIgnoreCase(target)) {
             return "fa-wrench";
         }
-        if ("Instance_Template".equalsIgnoreCase(target)) {
+        if (Target.Instance_Template.name().equalsIgnoreCase(target)) {
             return "fa-cubes";
         }
-        if ("Application".equalsIgnoreCase(target)) {
+        if (Target.Application.name().equalsIgnoreCase(target)) {
             return "fa-cloud";
         }
         return "fa-circle";
+    }
+
+    public enum Target {
+        //
+        Git_Clone,
+        BuildPack,
+        Instance_Template,
+        Application
+    }
+
+    public enum Action {
+        //
+        Create,
+        Update,
+        Delete
     }
 }
