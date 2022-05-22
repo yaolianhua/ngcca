@@ -13,7 +13,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img alt="AdminLTELogo" class="animation__shake" height="60" th:src="@{/dist/img/HotCloudlogo.png}" width="60">
+    <img alt="HotCloudlogo" class="animation__shake" height="60" th:src="@{/dist/img/HotCloudlogo.png}" width="60">
   </div>
 
   <div th:include="navbar"></div>
@@ -45,7 +45,43 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
+          <div class="col-md-3">
+            <div class="card">
 
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="chart-responsive">
+                      <canvas height="150" id="pieChart"></canvas>
+                    </div>
+                    <!-- ./chart-responsive -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-4">
+                    <ul class="chart-legend clearfix">
+                      <li><i class="fas fa-wrench text-success"></i> 构建成功</li>
+                      <li><i class="fas fa-wrench text-danger"></i> 构建失败</li>
+                      <li><i class="fas fa-wrench text-warning"></i> 构建删除</li>
+                      <li><i class="fas fa-code-branch text-success"></i> 克隆成功</li>
+                      <li><i class="fas fa-code-branch text-danger"></i> 克隆失败</li>
+                      <li><i class="fas fa-cubes text-success"></i> 实例模板部署成功</li>
+                      <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
+                      <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
+                      <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
+                    </ul>
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer p-0">
+
+              </div>
+              <!-- /.footer -->
+            </div>
+            <!-- /.card -->
+          </div>
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
