@@ -35,7 +35,7 @@ public class UserIndexController {
     public String indexPage(Model model,
                             User user) {
         Result<Statistics> result = statisticsClient.statistics(user.getId()).getBody();
-        PageResult<Activity> pageResult = activityClient.activities(user.getUsername(), null, null, 1, 50).getBody();
+        PageResult<Activity> pageResult = activityClient.activities(user.getUsername(), null, null, 1, 20).getBody();
         model.addAttribute(WebConstant.STATISTICS, Objects.requireNonNull(result).getData());
         model.addAttribute(WebConstant.ACTIVITIES, Objects.requireNonNull(pageResult).getList());
         return "index";
