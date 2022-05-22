@@ -12,12 +12,20 @@ public class Statistics {
     private User user;
     private String namespace;
 
-    private InstanceTemplateStatistics templates;
-    private GitClonedStatistics repositories;
-    private BuildPackStatistics buildPacks;
+    private InstanceTemplateStatistics templates = new InstanceTemplateStatistics();
+    private GitClonedStatistics repositories = new GitClonedStatistics();
+    private BuildPackStatistics buildPacks = new BuildPackStatistics();
+    private ApplicationStatistics applications = new ApplicationStatistics();
 
     @Data
     public static class InstanceTemplateStatistics {
+        private int success;
+        private int failed;
+        private int total;
+    }
+
+    @Data
+    public static class ApplicationStatistics {
         private int success;
         private int failed;
         private int total;

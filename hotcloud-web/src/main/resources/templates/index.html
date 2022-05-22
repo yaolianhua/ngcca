@@ -93,7 +93,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">应用实例</span>
-                <span class="info-box-number">0</span>
+                <span class="info-box-number" th:text="${statistics.applications.total}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -329,13 +329,23 @@
 
 <!-- jQuery -->
 <div th:include="global-script"></div>
-<script>
+<script th:inline="javascript" type="text/javascript">
   /* global Chart:false */
-
   $(function () {
     'use strict'
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData = {
+    let pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+    let data = [];
+    data[0] = [[${statistics.buildPacks.success}]];
+    data[1] = [[${statistics.buildPacks.failed}]];
+    data[2] = [[${statistics.buildPacks.deleted}]];
+    data[3] = [[${statistics.repositories.success}]];
+    data[4] = [[${statistics.repositories.failed}]];
+    data[5] = [[${statistics.templates.success}]];
+    data[6] = [[${statistics.templates.failed}]];
+    data[7] = [[${statistics.applications.success}]];
+    data[8] = [[${statistics.applications.failed}]];
+
+    let pieData = {
       labels: [
         '构建成功',
         '构建失败',
@@ -349,7 +359,7 @@
       ],
       datasets: [
         {
-          data: [700, 500, 400, 600, 300, 100, 200, 100, 100],
+          data: data,
           backgroundColor:
                   [
                     '#03f689', '#f56954', '#f39c12',
@@ -360,15 +370,15 @@
         }
       ]
     }
-    var pieOptions = {
+    let pieOptions = {
       legend: {
-        display: false
+        display: true
       }
     }
     // Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
     // eslint-disable-next-line no-unused-vars
-    var pieChart = new Chart(pieChartCanvas, {
+    let pieChart = new Chart(pieChartCanvas, {
       type: 'doughnut',
       data: pieData,
       options: pieOptions
