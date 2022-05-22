@@ -30,10 +30,10 @@ public class InstanceTemplateActivityLogger {
         String namespace = template.getNamespace();
         String name = template.getName();
         if (Objects.equals(action, ActivityAction.Create) || Objects.equals(action, ActivityAction.Update)) {
-            description = String.format("Namespaced【%s】InstanceTemplate【%s】been created", namespace, name);
+            description = String.format("创建或更新命名空间【%s】下实例模板【%s】", namespace, name);
         }
         if (Objects.equals(action, ActivityAction.Delete)) {
-            description = String.format("Namespaced【%s】InstanceTemplate【%s】been deleted", namespace, name);
+            description = String.format("删除命名空间【%s】下实例模板【%s】", namespace, name);
         }
         ActivityLog activityLog = ActivityLog.builder()
                 .action(action.name())

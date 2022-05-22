@@ -28,10 +28,10 @@ public class GitClonedActivityLogger {
     public ActivityLog log(ActivityAction action, GitCloned cloned) {
         String description = "Unknown Activity";
         if (Objects.equals(action, ActivityAction.Create) || Objects.equals(action, ActivityAction.Update)) {
-            description = String.format("Git Repository【%s】been created", cloned.getProject());
+            description = String.format("创建或更新Git仓库【%s】", cloned.getProject());
         }
         if (Objects.equals(action, ActivityAction.Delete)) {
-            description = String.format("Git Repository【%s】been deleted", cloned.getProject());
+            description = String.format("删除Git仓库【%s】", cloned.getProject());
         }
         ActivityLog activityLog = ActivityLog.builder()
                 .action(action.name())
