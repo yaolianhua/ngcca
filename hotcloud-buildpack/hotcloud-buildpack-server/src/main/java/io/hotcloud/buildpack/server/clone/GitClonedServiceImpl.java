@@ -65,6 +65,12 @@ public class GitClonedServiceImpl implements GitClonedService {
         GitClonedEntity existed = repository.findByUserAndProject(cloned.getUser(), cloned.getProject());
         if (existed != null) {
             existed.setError(cloned.getError());
+            existed.setSuccess(cloned.isSuccess());
+            existed.setLocalPath(cloned.getLocalPath());
+            existed.setBranch(cloned.getBranch());
+            existed.setUsername(cloned.getUsername());
+            existed.setPassword(cloned.getPassword());
+            existed.setUrl(cloned.getUrl());
             existed.setModifiedAt(LocalDateTime.now());
             GitClonedEntity updated = repository.save(existed);
             return updated.toT(GitCloned.class);
