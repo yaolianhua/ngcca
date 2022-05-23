@@ -143,7 +143,7 @@ public class BuildPackListener {
             PodList read = podApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
             Pod pod = read.getItems().get(0);
 
-            String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName());
+            String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName(), 100);
 
             buildPack.setMessage(success ? BuildPackConstant.SUCCESS_MESSAGE : BuildPackConstant.FAILED_MESSAGE);
             buildPack.setLogs(logs);
