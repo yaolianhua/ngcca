@@ -5,12 +5,10 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
-import io.hotcloud.buildpack.api.core.event.BuildPackDoneEvent;
-import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
-import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
+import io.hotcloud.buildpack.api.core.event.*;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageBroadcaster;
+import io.hotcloud.common.storage.FileHelper;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
@@ -24,6 +22,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -68,6 +68,25 @@ public class BuildPackListener {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    @EventListener
+    @Async
+    public void artifactUploaded(BuildPackArtifactUploadedEvent event) {
+        try {
+            BuildPack buildPack = event.getBuildPack();
+            String clonedPath = buildPack.getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
+            String tarball = buildPack.getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
+
+            Path path = Path.of(clonedPath, tarball);
+            boolean deleted = FileHelper.deleteRecursively(path);
+            if (deleted) {
+                log.info("[BuildPackArtifactUploadedEvent] [{}] user's tarBall '{}' has been deleted", buildPack.getUser(), tarball);
+            }
+        } catch (IOException ex) {
+            log.error("[BuildPackArtifactUploadedEvent] error: {}", ex.getMessage(), ex);
+        }
+
     }
 
     @EventListener

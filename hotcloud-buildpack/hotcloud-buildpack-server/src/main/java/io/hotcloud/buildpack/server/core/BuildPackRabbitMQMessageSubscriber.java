@@ -10,6 +10,7 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.event.BuildPackArtifactUploadedEvent;
 import io.hotcloud.common.exception.HotCloudException;
 import io.hotcloud.common.message.Message;
 import io.hotcloud.common.message.MessageProperties;
@@ -20,6 +21,7 @@ import io.hotcloud.common.storage.minio.MinioProperties;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -27,6 +29,7 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
@@ -46,6 +49,7 @@ import java.util.stream.Collectors;
         havingValue = MessageProperties.RABBITMQ
 )
 @Slf4j
+@RequiredArgsConstructor
 public class BuildPackRabbitMQMessageSubscriber {
 
     private final MinioObjectApi minioObjectApi;
@@ -59,23 +63,7 @@ public class BuildPackRabbitMQMessageSubscriber {
     private final NamespaceApi namespaceApi;
     private final ObjectMapper objectMapper;
 
-    public BuildPackRabbitMQMessageSubscriber(MinioObjectApi minioObjectApi,
-                                              MinioBucketApi minioBucketApi,
-                                              MinioProperties minioProperties,
-                                              BuildPackService buildPackService,
-                                              BuildPackPlayer buildPackPlayer,
-                                              GitClonedService gitClonedService,
-                                              NamespaceApi namespaceApi,
-                                              ObjectMapper objectMapper) {
-        this.minioObjectApi = minioObjectApi;
-        this.minioBucketApi = minioBucketApi;
-        this.minioProperties = minioProperties;
-        this.buildPackService = buildPackService;
-        this.buildPackPlayer = buildPackPlayer;
-        this.gitClonedService = gitClonedService;
-        this.namespaceApi = namespaceApi;
-        this.objectMapper = objectMapper;
-    }
+    private final ApplicationEventPublisher eventPublisher;
 
     /*
     http://120.78.225.168:9009/10908e84eee54ee88e473da577080f5a/devops-thymeleaf-20220422190103.tar
@@ -189,6 +177,8 @@ public class BuildPackRabbitMQMessageSubscriber {
 
             buildPack.setArtifact(String.format("%s/%s/%s", minioProperties.getEndpoint(), namespace, objectname));
             buildPackService.saveOrUpdate(buildPack);
+
+            eventPublisher.publishEvent(new BuildPackArtifactUploadedEvent(buildPack));
         } catch (Exception ex) {
             log.error("[BuildPackRabbitMQMessageSubscriber] handle buildPack done error. {}", ex.getMessage());
         }
