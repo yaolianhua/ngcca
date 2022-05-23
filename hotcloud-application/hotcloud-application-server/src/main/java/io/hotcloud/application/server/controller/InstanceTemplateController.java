@@ -21,7 +21,7 @@ import static io.hotcloud.common.WebResponse.*;
  * @author yaolianhua789@gmail.com
  **/
 @RestController
-@RequestMapping("/v1/application/instances")
+@RequestMapping("/v1/instance/templates")
 @Tag(name = "Instance template")
 public class InstanceTemplateController {
 
