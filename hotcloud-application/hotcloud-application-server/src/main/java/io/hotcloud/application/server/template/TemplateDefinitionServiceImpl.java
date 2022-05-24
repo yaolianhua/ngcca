@@ -37,10 +37,9 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         }
         List<String> names = Arrays.stream(Template.values())
                 .map(Enum::name)
-                .map(String::toLowerCase)
                 .collect(Collectors.toList());
-        if (!names.contains(name.toLowerCase())) {
-            throw new HotCloudException("Unsupported template [" + name + "]");
+        if (!names.contains(name)) {
+            throw new HotCloudException("Supported template " + names);
         }
     }
 
