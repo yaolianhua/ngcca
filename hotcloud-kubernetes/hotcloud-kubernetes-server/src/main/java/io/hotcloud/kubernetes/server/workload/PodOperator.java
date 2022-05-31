@@ -52,7 +52,7 @@ public class PodOperator implements PodApi {
                 v1Pod,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create pod success \n '{}'", pod);
 
         return fabric8Client.pods()

@@ -50,7 +50,7 @@ public class CronJobOperator implements CronJobApi {
                 v1CronJob,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create cronjob success \n '{}'", cronJob);
 
         return fabric8Client.batch()

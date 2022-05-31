@@ -50,7 +50,7 @@ public class JobOperator implements JobApi {
                 v1Job,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create job success \n '{}'", job);
 
         return fabric8Client.batch()

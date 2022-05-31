@@ -8,7 +8,6 @@ import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Service;
-import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -51,7 +50,7 @@ public class ServiceOperator implements ServiceApi {
                 v1Service,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create service success \n '{}'", service);
 
         return fabric8Client.services()
@@ -64,7 +63,7 @@ public class ServiceOperator implements ServiceApi {
     public void delete(String namespace, String service) throws ApiException {
         Assert.hasText(namespace, () -> "namespace is null");
         Assert.hasText(service, () -> "delete resource name is null");
-        V1Status v1Status = coreV1Api.deleteNamespacedService(
+        V1Service v1Service = coreV1Api.deleteNamespacedService(
                 service,
                 namespace,
                 "true",
@@ -74,7 +73,7 @@ public class ServiceOperator implements ServiceApi {
                 null,
                 null
         );
-        log.debug("delete namespaced service success \n '{}'", v1Status);
+        log.debug("delete namespaced service success \n '{}'", v1Service);
     }
 
     @Override

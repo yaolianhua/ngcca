@@ -51,7 +51,7 @@ public class SecretOperator implements SecretApi {
                 v1Secret,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create secret success \n '{}'", cm);
 
         return fabric8client.secrets()

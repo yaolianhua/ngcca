@@ -68,7 +68,7 @@ public class NamespaceOperator implements NamespaceApi {
         namespace.setApiVersion("v1");
         namespace.setKind("Namespace");
 
-        V1Namespace v1Namespace = coreV1Api.createNamespace(namespace, "true", null, null);
+        V1Namespace v1Namespace = coreV1Api.createNamespace(namespace, "true", null, null, null);
         log.debug("Namespace '{}' created \n '{}'", name, v1Namespace);
     }
 

@@ -51,7 +51,7 @@ public class ConfigMapOperator implements ConfigMapApi {
                 v1ConfigMap,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create configMap success \n '{}'", cm);
 
         return fabric8client.configMaps()

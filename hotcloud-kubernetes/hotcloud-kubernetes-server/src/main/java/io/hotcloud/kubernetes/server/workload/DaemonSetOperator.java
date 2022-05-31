@@ -50,7 +50,7 @@ public class DaemonSetOperator implements DaemonSetApi {
                 v1DaemonSet,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create daemonSet success \n '{}'", created);
 
         return fabric8Client.apps()

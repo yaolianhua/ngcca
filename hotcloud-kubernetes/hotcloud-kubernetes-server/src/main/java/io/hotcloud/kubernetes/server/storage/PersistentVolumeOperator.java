@@ -45,7 +45,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
                 v1PersistentVolume,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create persistentVolume success \n '{}'", v1Pv);
 
         return fabric8Client.persistentVolumes()

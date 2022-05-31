@@ -53,7 +53,7 @@ public class DeploymentOperator implements DeploymentApi {
                 v1Deployment,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create deployment success \n '{}'", created);
 
         return fabric8Client.apps()

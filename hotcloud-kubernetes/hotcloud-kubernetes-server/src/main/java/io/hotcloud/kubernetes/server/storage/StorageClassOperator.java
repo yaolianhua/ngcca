@@ -45,7 +45,7 @@ public class StorageClassOperator implements StorageClassApi {
                 v1StorageClass,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create storageClass success \n '{}'", v1Sc);
 
         return fabric8Client.storage()

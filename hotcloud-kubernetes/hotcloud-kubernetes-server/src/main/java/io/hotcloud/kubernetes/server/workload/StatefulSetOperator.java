@@ -50,7 +50,7 @@ public class StatefulSetOperator implements StatefulSetApi {
                 v1StatefulSet,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create statefulSet success \n '{}'", created);
 
         return fabric8Client.apps()

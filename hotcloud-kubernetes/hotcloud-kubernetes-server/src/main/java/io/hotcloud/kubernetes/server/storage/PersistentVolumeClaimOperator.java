@@ -51,7 +51,7 @@ public class PersistentVolumeClaimOperator implements PersistentVolumeClaimApi {
                 v1PersistentVolumeClaim,
                 "true",
                 null,
-                null);
+                null, null);
         log.debug("create persistentVolumeClaim success \n '{}'", v1Pvc);
 
         return fabric8Client.persistentVolumeClaims()
