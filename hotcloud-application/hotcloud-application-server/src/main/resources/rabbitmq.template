@@ -17,6 +17,13 @@ spec:
       containers:
       - image: #{[rabbitmq_image]}
         imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         name: #{[rabbitmq]}
         env:
         - name: RABBITMQ_DEFAULT_PASS

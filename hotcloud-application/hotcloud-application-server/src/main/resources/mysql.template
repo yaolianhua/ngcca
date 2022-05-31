@@ -17,6 +17,13 @@ spec:
       containers:
       - image: #{[mysql_image]}
         imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         name: #{[mysql]}
         env:
         - name: MYSQL_ROOT_PASSWORD

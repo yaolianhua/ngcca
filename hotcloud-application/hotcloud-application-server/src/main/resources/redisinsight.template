@@ -72,6 +72,13 @@ spec:
         - name:  #{[redisinsight]}
           image: #{[redisinsight_image]}
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           volumeMounts:
           - name: db
             mountPath: /db

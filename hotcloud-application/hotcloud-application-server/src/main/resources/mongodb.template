@@ -33,6 +33,13 @@ spec:
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 6
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           readinessProbe:
             exec:
               command:
