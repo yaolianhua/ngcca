@@ -37,7 +37,7 @@ public class InstanceTemplateActivityLogger {
         }
         ActivityLog activityLog = ActivityLog.builder()
                 .action(action.name())
-                .target(ActivityTarget.BuildPack.name())
+                .target(ActivityTarget.Instance_Template.name())
                 .targetId(template.getId())
                 .targetName(name)
                 .user(template.getUser())
