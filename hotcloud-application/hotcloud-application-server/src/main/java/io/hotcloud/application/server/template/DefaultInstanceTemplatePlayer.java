@@ -81,10 +81,10 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 .yaml(yaml)
                 .build();
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
-        log.info("[DefaultInstanceTemplatePlayer] Saved [{}] user's instance template [{}]", current.getUsername(), saved.getId());
+        log.info("[DefaultInstanceTemplatePlayer] Saved [{}] user's [{}] instance template [{}]", current.getUsername(), name, saved.getId());
 
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
-        log.info("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
+        log.debug("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
 
         try {
             Path userPath = Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, namespace, name);
@@ -112,10 +112,10 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         Assert.notNull(find, "Can not found instance template [" + id + "]");
 
         instanceTemplateService.delete(id);
-        log.info("[DefaultInstanceTemplatePlayer] Delete instance template '{}'", id);
+        log.info("[DefaultInstanceTemplatePlayer] Delete [{}] instance template '{}'", find.getName(), id);
 
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
-        log.info("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
+        log.debug("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
 
         eventPublisher.publishEvent(new InstanceTemplateDeleteEvent(find));
     }
