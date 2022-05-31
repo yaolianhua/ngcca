@@ -16,6 +16,12 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>hotcloud-common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
