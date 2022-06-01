@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.StatefulSetApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
@@ -19,7 +20,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -45,7 +45,7 @@ public class StatefulSetOperator implements StatefulSetApi {
             throw new HotCloudException(String.format("load statefulSet yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1StatefulSet.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1StatefulSet created = appsV1Api.createNamespacedStatefulSet(namespace,
                 v1StatefulSet,
                 "true",

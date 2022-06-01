@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
+import io.hotcloud.common.api.Result;
+import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -42,8 +42,8 @@ public class KubectlController {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "kubernetes yaml body")
     )
-    public ResponseEntity<Result<List<HasMetadata>>> resourceListCreateOrReplace(@RequestParam(value = "namespace",required = false) String namespace,
-                                                         @RequestBody YamlBody yaml) {
+    public ResponseEntity<Result<List<HasMetadata>>> resourceListCreateOrReplace(@RequestParam(value = "namespace", required = false) String namespace,
+                                                                                 @RequestBody YamlBody yaml) {
         List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml.getYaml());
         return WebResponse.created(hasMetadata);
     }

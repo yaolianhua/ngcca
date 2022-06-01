@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
+import io.hotcloud.common.api.Result;
+import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import io.hotcloud.kubernetes.model.YamlBody;

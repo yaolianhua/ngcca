@@ -4,9 +4,9 @@ import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
-import io.hotcloud.common.Result;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
+import io.hotcloud.common.api.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.hotcloud.common.WebResponse.*;
+import static io.hotcloud.common.api.WebResponse.*;
+
 
 /**
  * @author yaolianhua789@gmail.com

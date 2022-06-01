@@ -2,8 +2,8 @@ package io.hotcloud.buildpack.server.clone;
 
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

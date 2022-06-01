@@ -1,9 +1,9 @@
 package io.hotcloud.security.server.controller;
 
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
-import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
+import io.hotcloud.common.api.Result;
+import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.server.user.UserCollectionQuery;

@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.DaemonSetApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
@@ -19,7 +20,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -45,7 +45,7 @@ public class DaemonSetOperator implements DaemonSetApi {
             throw new HotCloudException(String.format("load daemonSet yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1DaemonSet.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1DaemonSet created = appsV1Api.createNamespacedDaemonSet(namespace,
                 v1DaemonSet,
                 "true",

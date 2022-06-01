@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.message.MessageProperties;
+import io.hotcloud.common.server.message.MessageProperties;
 import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.SecurityConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
 
 /**
  * @author yaolianhua789@gmail.com

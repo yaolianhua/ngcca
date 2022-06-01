@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.WebResponse.created;
-import static io.hotcloud.common.WebResponse.ok;
+import static io.hotcloud.common.api.WebResponse.created;
+import static io.hotcloud.common.api.WebResponse.ok;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

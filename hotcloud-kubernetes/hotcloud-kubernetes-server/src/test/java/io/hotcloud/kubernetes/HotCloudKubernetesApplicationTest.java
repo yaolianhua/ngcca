@@ -1,7 +1,6 @@
 package io.hotcloud.kubernetes;
-
-import io.hotcloud.common.AsyncConfiguration;
-import io.hotcloud.common.message.MessageConfiguration;
+import io.hotcloud.common.server.AsyncConfiguration;
+import io.hotcloud.common.server.message.MessageConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**

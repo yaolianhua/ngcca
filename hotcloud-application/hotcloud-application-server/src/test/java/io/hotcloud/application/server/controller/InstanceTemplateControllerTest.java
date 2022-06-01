@@ -3,8 +3,8 @@ package io.hotcloud.application.server.controller;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -59,7 +59,7 @@ public class InstanceTemplateControllerTest {
             String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines()
                     .collect(Collectors.joining());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/application/instances")
+            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/instance/templates")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk())

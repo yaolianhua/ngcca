@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;

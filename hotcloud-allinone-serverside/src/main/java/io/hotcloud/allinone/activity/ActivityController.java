@@ -1,10 +1,10 @@
 package io.hotcloud.allinone.activity;
 
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
-import io.hotcloud.common.activity.ActivityAction;
-import io.hotcloud.common.activity.ActivityLog;
-import io.hotcloud.common.activity.ActivityTarget;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
+import io.hotcloud.common.api.activity.ActivityAction;
+import io.hotcloud.common.api.activity.ActivityLog;
+import io.hotcloud.common.api.activity.ActivityTarget;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static io.hotcloud.common.WebResponse.okPage;
+import static io.hotcloud.common.api.WebResponse.okPage;
+
 
 /**
  * @author yaolianhua789@gmail.com

@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.Validator;
-import io.hotcloud.common.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.api.Validator;
+import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.user.UserEntity;
 import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.user.User;

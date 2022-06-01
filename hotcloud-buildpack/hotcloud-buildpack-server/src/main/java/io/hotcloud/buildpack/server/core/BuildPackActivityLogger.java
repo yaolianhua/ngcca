@@ -1,9 +1,9 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.common.activity.ActivityAction;
-import io.hotcloud.common.activity.ActivityLog;
-import io.hotcloud.common.activity.ActivityTarget;
+import io.hotcloud.common.api.activity.ActivityAction;
+import io.hotcloud.common.api.activity.ActivityLog;
+import io.hotcloud.common.api.activity.ActivityTarget;
 import io.hotcloud.db.core.activity.ActivityEntity;
 import io.hotcloud.db.core.activity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;

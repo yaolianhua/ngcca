@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.PageResult;
-import io.hotcloud.common.Pageable;
+import io.hotcloud.common.api.PageResult;
+import io.hotcloud.common.api.Pageable;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import org.springframework.stereotype.Component;

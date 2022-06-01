@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.controller;
 
-import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
+import io.hotcloud.common.api.Result;
+import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
 import io.hotcloud.security.api.user.User;

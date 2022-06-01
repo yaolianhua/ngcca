@@ -15,7 +15,8 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-common</artifactId>
+            <artifactId>hotcloud-common-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
@@ -65,6 +66,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>hotcloud-common-server</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

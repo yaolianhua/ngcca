@@ -1,9 +1,9 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.UUIDGenerator;
-import io.hotcloud.common.cache.Cache;
-import io.hotcloud.common.message.Message;
-import io.hotcloud.common.message.MessageBroadcaster;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.server.cache.Cache;
+import io.hotcloud.common.server.message.Message;
+import io.hotcloud.common.server.message.MessageBroadcaster;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserNamespacePair;

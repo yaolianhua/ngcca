@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -18,7 +19,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -45,7 +45,7 @@ public class PersistentVolumeClaimOperator implements PersistentVolumeClaimApi {
         }
 
         String namespace = Objects.requireNonNull(v1PersistentVolumeClaim.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1PersistentVolumeClaim v1Pvc = coreV1Api.createNamespacedPersistentVolumeClaim(
                 namespace,
                 v1PersistentVolumeClaim,

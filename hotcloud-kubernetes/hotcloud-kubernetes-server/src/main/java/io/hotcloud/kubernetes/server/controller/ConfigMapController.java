@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.common.Result;
-import io.hotcloud.common.WebResponse;
+import io.hotcloud.common.api.Result;
+import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;

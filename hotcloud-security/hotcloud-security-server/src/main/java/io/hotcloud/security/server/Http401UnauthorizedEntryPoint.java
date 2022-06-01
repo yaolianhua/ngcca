@@ -1,7 +1,7 @@
 package io.hotcloud.security.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.Result;
+import io.hotcloud.common.api.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;

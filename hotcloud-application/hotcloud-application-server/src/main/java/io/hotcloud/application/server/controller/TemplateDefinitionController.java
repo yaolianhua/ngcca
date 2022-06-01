@@ -2,7 +2,7 @@ package io.hotcloud.application.server.controller;
 
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
-import io.hotcloud.common.Result;
+import io.hotcloud.common.api.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.hotcloud.common.WebResponse.*;
+import static io.hotcloud.common.api.WebResponse.*;
+
 
 /**
  * @author yaolianhua789@gmail.com

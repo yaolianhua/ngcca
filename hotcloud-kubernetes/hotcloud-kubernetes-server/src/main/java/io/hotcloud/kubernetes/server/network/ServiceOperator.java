@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.network;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -18,7 +19,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -45,7 +45,7 @@ public class ServiceOperator implements ServiceApi {
             throw new HotCloudException(String.format("load service yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Service.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1Service service = coreV1Api.createNamespacedService(namespace,
                 v1Service,
                 "true",

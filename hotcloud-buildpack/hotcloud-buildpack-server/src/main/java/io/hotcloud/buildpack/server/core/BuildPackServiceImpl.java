@@ -3,7 +3,7 @@ package io.hotcloud.buildpack.server.core;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.buildpack.api.core.*;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
 import lombok.extern.slf4j.Slf4j;

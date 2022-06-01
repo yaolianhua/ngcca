@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;

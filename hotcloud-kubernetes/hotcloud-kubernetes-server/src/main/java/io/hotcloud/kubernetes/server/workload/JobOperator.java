@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.JobApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
@@ -18,8 +19,6 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -45,7 +44,7 @@ public class JobOperator implements JobApi {
             throw new HotCloudException(String.format("load job yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Job.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1Job job = batchV1Api.createNamespacedJob(namespace,
                 v1Job,
                 "true",

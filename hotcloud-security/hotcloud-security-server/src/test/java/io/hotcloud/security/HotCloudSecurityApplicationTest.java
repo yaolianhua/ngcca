@@ -1,6 +1,6 @@
 package io.hotcloud.security;
 
-import io.hotcloud.common.cache.CacheConfiguration;
+import io.hotcloud.common.server.cache.CacheConfiguration;
 import io.hotcloud.db.DatabaseProperties;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

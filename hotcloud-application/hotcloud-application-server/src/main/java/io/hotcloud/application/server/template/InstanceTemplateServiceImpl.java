@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
-import io.hotcloud.common.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.InstanceTemplateEntity;
 import io.hotcloud.db.core.application.InstanceTemplateRepository;
 import lombok.extern.slf4j.Slf4j;

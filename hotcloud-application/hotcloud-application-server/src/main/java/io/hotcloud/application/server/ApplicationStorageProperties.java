@@ -1,7 +1,7 @@
 package io.hotcloud.application.server;
 
 import io.hotcloud.application.api.ApplicationConstant;
-import io.hotcloud.common.Log;
+import io.hotcloud.common.api.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;

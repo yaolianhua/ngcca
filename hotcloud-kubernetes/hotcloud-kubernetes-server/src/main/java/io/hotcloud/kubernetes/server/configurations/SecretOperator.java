@@ -3,7 +3,8 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -18,8 +19,6 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-
-import static io.hotcloud.common.UUIDGenerator.DEFAULT;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -46,7 +45,7 @@ public class SecretOperator implements SecretApi {
             throw new HotCloudException(String.format("load secret yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Secret.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
         V1Secret cm = coreV1Api.createNamespacedSecret(namespace,
                 v1Secret,
                 "true",

@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.jwt;
 
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;

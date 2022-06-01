@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
 import io.hotcloud.security.api.user.User;

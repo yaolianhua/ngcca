@@ -3,7 +3,7 @@ package io.hotcloud.application.server.template;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.InstanceTemplateResourceManager;
 import io.hotcloud.application.api.template.Template;
-import io.hotcloud.common.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
