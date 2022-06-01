@@ -1,6 +1,7 @@
 package io.hotcloud.application.server;
 
 import io.hotcloud.application.api.ApplicationConstant;
+import io.hotcloud.common.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,7 +31,7 @@ public class ApplicationStorageProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load Application Storage Properties】type = '{}', mount path = '{}'", type, retrieveStoragePath());
+        Log.info(ApplicationStorageProperties.class.getName(), String.format("【Load Application Storage Properties】type = '%s', mount path = '%s'", type, retrieveStoragePath()));
     }
 
     public String retrieveStoragePath() {
