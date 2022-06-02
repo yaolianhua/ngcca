@@ -7,7 +7,6 @@ import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.server.jwt.JwtSigner;
 import io.hotcloud.security.server.jwt.JwtVerifier;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +18,6 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 @Service
 public class HotCloudLoginService implements LoginApi {
 

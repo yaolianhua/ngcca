@@ -8,7 +8,6 @@ import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.api.user.event.UserCreatedEvent;
 import io.hotcloud.security.api.user.event.UserDeletedEvent;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class UserService implements UserApi {
 
     private final UserRepository userRepository;
@@ -106,7 +104,6 @@ public class UserService implements UserApi {
         entity.setEnabled(onOff);
 
         userRepository.save(entity);
-        log.info("[{}] user switch [{}]", username, onOff ? "on" : "off");
     }
 
     @Override

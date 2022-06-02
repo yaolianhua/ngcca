@@ -3,7 +3,6 @@ package io.hotcloud.security.server.user;
 import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.SecurityConstant;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
-@Slf4j
 class SecurityUserRabbitMqRunnerProcessor implements SecurityRunnerProcessor {
 
     private final RabbitAdmin rabbitAdmin;

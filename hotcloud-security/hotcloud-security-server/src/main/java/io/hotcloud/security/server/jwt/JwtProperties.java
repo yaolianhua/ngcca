@@ -3,7 +3,6 @@ package io.hotcloud.security.server.jwt;
 import io.hotcloud.common.api.Log;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,6 @@ import javax.annotation.PostConstruct;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 @ConfigurationProperties("security.jwt")
 @Data
 public class JwtProperties {

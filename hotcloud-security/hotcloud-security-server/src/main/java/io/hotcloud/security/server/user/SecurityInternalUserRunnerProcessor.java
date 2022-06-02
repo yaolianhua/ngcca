@@ -1,9 +1,9 @@
 package io.hotcloud.security.server.user;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
@@ -12,7 +12,6 @@ import java.util.stream.Stream;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class SecurityInternalUserRunnerProcessor implements SecurityRunnerProcessor {
 
     private final UserApi userApi;
@@ -30,7 +29,7 @@ public class SecurityInternalUserRunnerProcessor implements SecurityRunnerProces
                     .enabled(true)
                     .build();
             User saved = userApi.save(user);
-            log.info("SecurityInternalUserRunnerProcessor. {} user created", saved.getUsername());
+            Log.info(SecurityInternalUserRunnerProcessor.class.getName(), String.format("%s user created", saved.getUsername()));
         }
     }
 

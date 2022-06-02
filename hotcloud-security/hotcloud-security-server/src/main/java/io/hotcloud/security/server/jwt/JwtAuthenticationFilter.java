@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.jwt;
 
-import lombok.extern.slf4j.Slf4j;
+import io.hotcloud.common.api.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,6 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtVerifier jwtVerifier;
@@ -47,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String sign = authorization.substring(7);
             if (!jwtVerifier.valid(sign)) {
-                log.warn("Authorization [Bearer Token] invalid ");
+                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization [Bearer Token] invalid ");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -55,21 +54,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> attributes = jwtVerifier.retrieveAttributes(sign);
             String username = (String) attributes.get("username");
             if (!StringUtils.hasText(username)) {
-                log.warn("Authorization [username null] invalid");
+                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization invalid [username null] ");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null) {
-                log.info("Authenticated successfully");
+                Log.debug(JwtAuthenticationFilter.class.getName(), "Authenticated successfully");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (userDetails == null) {
-                log.warn("Authorization failed [retrieve user null]");
+                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization failed [retrieve user null]");
                 filterChain.doFilter(request, response);
                 return;
             }

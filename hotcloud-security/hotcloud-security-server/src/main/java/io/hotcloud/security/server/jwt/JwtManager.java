@@ -3,7 +3,6 @@ package io.hotcloud.security.server.jwt;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 import javax.crypto.SecretKey;
@@ -15,7 +14,6 @@ import java.util.List;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 public class JwtManager implements JwtSigner, JwtVerifier {
 
     private final JwtProperties properties;
