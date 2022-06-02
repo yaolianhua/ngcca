@@ -25,15 +25,15 @@ class ApplicationStorageRunnerProcessor implements ApplicationRunnerProcessor {
 
             if (exists) {
                 Log.debug(ApplicationStorageRunnerProcessor.class.getName(),
-                        String.format("ApplicationStorageRunnerProcessor. storage path '%s' already exist ", ApplicationConstant.STORAGE_VOLUME_PATH));
+                        String.format("storage path '%s' already exist ", ApplicationConstant.STORAGE_VOLUME_PATH));
                 return;
             }
             Path directories = Files.createDirectories(volumePath);
             Log.info(ApplicationStorageRunnerProcessor.class.getName(),
-                    String.format("ApplicationStorageRunnerProcessor. storage path '%s' created ", directories));
+                    String.format("storage path '%s' created ", directories));
         } catch (IOException e) {
             Log.error(ApplicationStorageRunnerProcessor.class.getName(),
-                    String.format("ApplicationStorageRunnerProcessor error: %s", e.getCause().getMessage()));
+                    String.format("%s", e.getCause().getMessage()));
         }
     }
 }

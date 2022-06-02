@@ -38,15 +38,15 @@ class ApplicationStorageClassRunnerProcessor implements ApplicationRunnerProcess
             StorageClass existedStorageClass = storageClassApi.read(ApplicationConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
                 Log.debug(ApplicationStorageClassRunnerProcessor.class.getName(),
-                        String.format("ApplicationStorageClassRunnerProcessor. storageClass '%s' already exist ", ApplicationConstant.STORAGE_CLASS));
+                        String.format("storageClass '%s' already exist ", ApplicationConstant.STORAGE_CLASS));
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
             Log.info(ApplicationStorageClassRunnerProcessor.class.getName(),
-                    String.format("ApplicationStorageClassRunnerProcessor. storageClass '%s' created ", storageClass.getMetadata().getName()));
+                    String.format("storageClass '%s' created ", storageClass.getMetadata().getName()));
         } catch (ApiException e) {
             Log.error(ApplicationStorageClassRunnerProcessor.class.getName(),
-                    String.format("ApplicationStorageClassRunnerProcessor error: %s", e.getMessage()));
+                    String.format("%s", e.getMessage()));
         }
     }
 }
