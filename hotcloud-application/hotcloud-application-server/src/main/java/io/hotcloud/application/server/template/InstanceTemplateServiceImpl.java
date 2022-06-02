@@ -5,7 +5,6 @@ import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.InstanceTemplateEntity;
 import io.hotcloud.db.core.application.InstanceTemplateRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -19,7 +18,6 @@ import java.util.stream.StreamSupport;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class InstanceTemplateServiceImpl implements InstanceTemplateService {
 
     private final InstanceTemplateRepository instanceTemplateRepository;

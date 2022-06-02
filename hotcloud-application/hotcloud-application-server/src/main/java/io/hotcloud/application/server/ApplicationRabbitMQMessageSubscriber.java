@@ -8,6 +8,7 @@ import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
@@ -15,7 +16,6 @@ import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -35,7 +35,6 @@ import java.util.List;
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
-@Slf4j
 public class ApplicationRabbitMQMessageSubscriber {
 
     private final InstanceTemplatePlayer instanceTemplatePlayer;
@@ -67,22 +66,25 @@ public class ApplicationRabbitMQMessageSubscriber {
 
         Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
         UserNamespacePair pair = messageBody.getData();
-        log.info("[ApplicationRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
-
+        Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                String.format("[ApplicationRabbitMQMessageSubscriber] received [%s] user deleted message", pair.getUsername()));
         List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(pair.getUsername());
         try {
             for (InstanceTemplate template : instanceTemplates) {
                 instanceTemplatePlayer.delete(template.getId());
             }
-            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user {} instance template has been deleted", pair.getUsername(), instanceTemplates.size());
+            Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user %s instance template has been deleted", pair.getUsername(), instanceTemplates.size()));
         } catch (Exception e) {
-            log.info("[ApplicationRabbitMQMessageSubscriber] delete instance template error. {}", e.getMessage());
+            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[ApplicationRabbitMQMessageSubscriber] delete instance template error. %s", e.getMessage()));
         }
 
         try {
             FileHelper.deleteRecursively(Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
         } catch (Exception e) {
-            log.info("[ApplicationRabbitMQMessageSubscriber] delete local storage error. {}", e.getMessage());
+            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[ApplicationRabbitMQMessageSubscriber] delete local storage error. %s", e.getMessage()));
         }
 
         try {
@@ -90,9 +92,11 @@ public class ApplicationRabbitMQMessageSubscriber {
             if (namespace != null) {
                 namespaceApi.delete(pair.getNamespace());
             }
-            log.info("[ApplicationRabbitMQMessageSubscriber] [{}] user namespace [{}] has been deleted", pair.getUsername(), pair.getNamespace());
+            Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user namespace [%s] has been deleted", pair.getUsername(), pair.getNamespace()));
         } catch (Exception e) {
-            log.info("[ApplicationRabbitMQMessageSubscriber] delete namespace error. {}", e.getMessage());
+            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[ApplicationRabbitMQMessageSubscriber] delete namespace error. %s", e.getMessage()));
         }
 
     }

@@ -1,14 +1,12 @@
 package io.hotcloud.application.server.template;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 public final class InstanceTemplateDeploymentStatus {
 
     private InstanceTemplateDeploymentStatus() {

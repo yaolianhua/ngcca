@@ -2,8 +2,8 @@ package io.hotcloud.application.server.processor;
 
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.ApplicationRunnerProcessor;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.storage.FileHelper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.nio.file.Path;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 class ApplicationStorageRunnerProcessor implements ApplicationRunnerProcessor {
 
     @Override
@@ -25,13 +24,16 @@ class ApplicationStorageRunnerProcessor implements ApplicationRunnerProcessor {
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
-                log.debug("ApplicationStorageRunnerProcessor. storage path '{}' already exist ", ApplicationConstant.STORAGE_VOLUME_PATH);
+                Log.debug(ApplicationStorageRunnerProcessor.class.getName(),
+                        String.format("ApplicationStorageRunnerProcessor. storage path '%s' already exist ", ApplicationConstant.STORAGE_VOLUME_PATH));
                 return;
             }
             Path directories = Files.createDirectories(volumePath);
-            log.info("ApplicationStorageRunnerProcessor. storage path '{}' created ", directories);
+            Log.info(ApplicationStorageRunnerProcessor.class.getName(),
+                    String.format("ApplicationStorageRunnerProcessor. storage path '%s' created ", directories));
         } catch (IOException e) {
-            log.error("ApplicationStorageRunnerProcessor error: {}", e.getCause().getMessage());
+            Log.error(ApplicationStorageRunnerProcessor.class.getName(),
+                    String.format("ApplicationStorageRunnerProcessor error: %s", e.getCause().getMessage()));
         }
     }
 }

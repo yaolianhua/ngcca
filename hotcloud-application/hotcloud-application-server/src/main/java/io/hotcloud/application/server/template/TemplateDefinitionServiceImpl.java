@@ -7,7 +7,6 @@ import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.TemplateDefinitionEntity;
 import io.hotcloud.db.core.application.TemplateDefinitionRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -22,7 +21,6 @@ import java.util.stream.StreamSupport;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class TemplateDefinitionServiceImpl implements TemplateDefinitionService {
 
     private final TemplateDefinitionRepository templateDefinitionRepository;

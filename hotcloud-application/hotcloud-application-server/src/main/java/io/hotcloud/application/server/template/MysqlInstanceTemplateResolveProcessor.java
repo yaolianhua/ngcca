@@ -4,7 +4,6 @@ import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplateConstant;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.Template;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.Map;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 class MysqlInstanceTemplateResolveProcessor implements InstanceTemplateResolveProcessor {
 
     @Override

@@ -9,6 +9,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.cache.Cache;
@@ -18,7 +19,6 @@ import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -29,7 +29,6 @@ import java.nio.file.Path;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
 
     private final InstanceTemplateProcessors instanceTemplateProcessors;
@@ -81,10 +80,11 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 .yaml(yaml)
                 .build();
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
-        log.info("[DefaultInstanceTemplatePlayer] Saved [{}] user's [{}] instance template [{}]", current.getUsername(), name, saved.getId());
-
+        Log.info(DefaultInstanceTemplatePlayer.class.getName(),
+                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), name, saved.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
-        log.debug("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
+        Log.debug(DefaultInstanceTemplatePlayer.class.getName(),
+                String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
             Path userPath = Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, namespace, name);
@@ -112,11 +112,11 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         Assert.notNull(find, "Can not found instance template [" + id + "]");
 
         instanceTemplateService.delete(id);
-        log.info("[DefaultInstanceTemplatePlayer] Delete [{}] instance template '{}'", find.getName(), id);
-
+        Log.info(DefaultInstanceTemplatePlayer.class.getName(),
+                String.format("Delete [%s] instance template '%s'", find.getName(), id));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
-        log.debug("[DefaultInstanceTemplatePlayer] activity [{}] saved", activityLog.getId());
-
+        Log.debug(DefaultInstanceTemplatePlayer.class.getName(),
+                String.format("Activity [%s] saved", activityLog.getId()));
         eventPublisher.publishEvent(new InstanceTemplateDeleteEvent(find));
     }
 }

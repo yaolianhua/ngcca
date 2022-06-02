@@ -21,7 +21,11 @@ public class Log implements Serializable {
     @Builder.Default
     private String type = "server";
 
+    @Builder.Default
+    private String event = "normal";
+
     private String message;
+
 
     @Builder.Default
     private Level level = Level.INFO;
@@ -41,17 +45,27 @@ public class Log implements Serializable {
     }
 
     public static void info(String component, String message) {
+        info(component, "normal", message);
+    }
+
+    public static void info(String component, String event, String message) {
         Log msg = Log.builder()
                 .component(component)
                 .message(message)
+                .event(event)
                 .level(Level.INFO)
                 .build();
         log.info(writeAsString(msg));
     }
 
     public static void debug(String component, String message) {
+        debug(component, "normal", message);
+    }
+
+    public static void debug(String component, String event, String message) {
         Log msg = Log.builder()
                 .component(component)
+                .event(event)
                 .message(message)
                 .level(Level.DEBUG)
                 .build();
@@ -59,8 +73,13 @@ public class Log implements Serializable {
     }
 
     public static void warn(String component, String message) {
+        warn(component, "normal", message);
+    }
+
+    public static void warn(String component, String event, String message) {
         Log msg = Log.builder()
                 .component(component)
+                .event(event)
                 .message(message)
                 .level(Level.WARN)
                 .build();
@@ -68,8 +87,13 @@ public class Log implements Serializable {
     }
 
     public static void error(String component, String message) {
+        error(component, "normal", message);
+    }
+
+    public static void error(String component, String event, String message) {
         Log msg = Log.builder()
                 .component(component)
+                .event(event)
                 .message(message)
                 .level(Level.ERROR)
                 .build();

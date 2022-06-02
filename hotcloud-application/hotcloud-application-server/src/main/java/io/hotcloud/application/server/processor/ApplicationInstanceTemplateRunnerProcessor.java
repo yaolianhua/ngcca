@@ -4,7 +4,6 @@ import io.hotcloud.application.api.ApplicationRunnerProcessor;
 import io.hotcloud.application.api.template.InstanceTemplateResourceManager;
 import io.hotcloud.application.api.template.Template;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 @Import(InstanceTemplateResourceManager.class)
 class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerProcessor {
 

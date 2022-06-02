@@ -3,7 +3,6 @@ package io.hotcloud.application.server;
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.common.api.Log;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
@@ -16,7 +15,6 @@ import javax.annotation.PostConstruct;
 @Configuration
 @ConfigurationProperties(prefix = "app.storage")
 @Data
-@Slf4j
 public class ApplicationStorageProperties {
 
     /**
