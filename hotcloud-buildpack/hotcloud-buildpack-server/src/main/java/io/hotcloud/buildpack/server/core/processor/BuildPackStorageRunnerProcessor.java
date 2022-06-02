@@ -2,8 +2,8 @@ package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.storage.FileHelper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.nio.file.Path;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 class BuildPackStorageRunnerProcessor implements BuildPackRunnerProcessor {
 
     @Override
@@ -25,13 +24,16 @@ class BuildPackStorageRunnerProcessor implements BuildPackRunnerProcessor {
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
-                log.debug("BuildPackStorageRunnerProcessor. storage path '{}' already exist ", BuildPackConstant.STORAGE_VOLUME_PATH);
+                Log.debug(BuildPackStorageRunnerProcessor.class.getName(),
+                        String.format("storage path '%s' already exist ", BuildPackConstant.STORAGE_VOLUME_PATH));
                 return;
             }
             Path directories = Files.createDirectories(volumePath);
-            log.info("BuildPackStorageRunnerProcessor. storage path '{}' created ", directories);
+            Log.info(BuildPackStorageRunnerProcessor.class.getName(),
+                    String.format("storage path '%s' created ", directories));
         } catch (IOException e) {
-            log.error("BuildPackStorageRunnerProcessor error: {}", e.getCause().getMessage());
+            Log.error(BuildPackStorageRunnerProcessor.class.getName(),
+                    String.format("%s", e.getCause().getMessage()));
         }
     }
 }

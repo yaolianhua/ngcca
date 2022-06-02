@@ -6,7 +6,6 @@ import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.db.core.buildpack.BuildPackRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -21,7 +20,6 @@ import java.util.stream.StreamSupport;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class BuildPackServiceImpl implements BuildPackService {
 
     private final BuildPackRepository buildPackRepository;

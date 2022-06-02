@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.cache.Cache;
@@ -14,7 +15,6 @@ import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.api.user.UserNamespacePair;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -31,7 +31,6 @@ import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 @Component
 class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
@@ -98,10 +97,9 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null");
 
         BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
-        log.info("[DefaultBuildPackPlayer] saved [{}] user's BuildPack '{}'", savedBuildPack.getUser(), savedBuildPack.getId());
-
+        Log.info(DefaultBuildPackPlayer.class.getName(),
+                String.format("saved [%s] user's BuildPack '%s'", savedBuildPack.getUser(), savedBuildPack.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, savedBuildPack);
-        log.info("[DefaultBuildPackPlayer] activity [{}] saved", activityLog.getId());
 
         String namespace = savedBuildPack.getJobResource().getNamespace();
         //create user's namespace
@@ -126,10 +124,9 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.notNull(existBuildPack, "Can not found buildPack [" + id + "]");
 
         buildPackService.delete(id, physically);
-        log.info("[DefaultBuildPackPlayer] delete BuildPack '{}'", id);
-
+        Log.info(DefaultBuildPackPlayer.class.getName(),
+                String.format("delete BuildPack '%s'", id));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, existBuildPack);
-        log.info("[DefaultBuildPackPlayer] activity [{}] saved", activityLog.getId());
 
         eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack, physically));
     }

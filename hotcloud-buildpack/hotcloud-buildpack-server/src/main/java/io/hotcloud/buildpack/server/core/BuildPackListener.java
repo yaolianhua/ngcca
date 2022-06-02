@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.*;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.common.api.storage.FileHelper;
@@ -14,7 +15,6 @@ import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class BuildPackListener {
 
     private final BuildPackService buildPackService;
@@ -81,10 +80,14 @@ public class BuildPackListener {
             Path path = Path.of(clonedPath, tarball);
             boolean deleted = FileHelper.deleteRecursively(path);
             if (deleted) {
-                log.info("[BuildPackArtifactUploadedEvent] [{}] user's tarBall '{}' has been deleted", buildPack.getUser(), tarball);
+                Log.info(BuildPackListener.class.getName(),
+                        BuildPackArtifactUploadedEvent.class.getSimpleName(),
+                        String.format("[%s] user's tarBall '%s' has been deleted", buildPack.getUser(), tarball));
             }
         } catch (IOException ex) {
-            log.error("[BuildPackArtifactUploadedEvent] error: {}", ex.getMessage(), ex);
+            Log.error(BuildPackListener.class.getName(),
+                    BuildPackArtifactUploadedEvent.class.getSimpleName(),
+                    String.format("%s", ex.getMessage()));
         }
 
     }
@@ -102,27 +105,37 @@ public class BuildPackListener {
             Job read = jobApi.read(namespace, job);
             if (read != null) {
                 jobApi.delete(namespace, job);
-                log.info("[BuildPackDeletedEvent] delete job '{}'", job);
+                Log.info(BuildPackListener.class.getName(),
+                        BuildPackDeletedEvent.class.getSimpleName(),
+                        String.format("delete job '%s'", job));
             }
             PersistentVolumeClaim claim = persistentVolumeClaimApi.read(namespace, persistentVolumeClaim);
             if (claim != null) {
                 persistentVolumeClaimApi.delete(persistentVolumeClaim, namespace);
-                log.info("[BuildPackDeletedEvent] delete persistentVolumeClaim '{}'", persistentVolumeClaim);
+                Log.info(BuildPackListener.class.getName(),
+                        BuildPackDeletedEvent.class.getSimpleName(),
+                        String.format("delete persistentVolumeClaim '%s'", persistentVolumeClaim));
             }
             PersistentVolume volume = persistentVolumeApi.read(persistentVolume);
             if (volume != null && deletedEvent.isPhysically()) {
                 persistentVolumeApi.delete(persistentVolume);
-                log.info("[BuildPackDeletedEvent] delete persistentVolume '{}'", persistentVolume);
+                Log.info(BuildPackListener.class.getName(),
+                        BuildPackDeletedEvent.class.getSimpleName(),
+                        String.format("delete persistentVolume '%s'", persistentVolume));
             }
 
             Secret secret = secretApi.read(namespace, secretName);
             if (secret != null) {
                 secretApi.delete(namespace, secretName);
-                log.info("[BuildPackDeletedEvent] delete secret '{}'", secretName);
+                Log.info(BuildPackListener.class.getName(),
+                        BuildPackDeletedEvent.class.getSimpleName(),
+                        String.format("delete secret '%s'", secretName));
             }
 
         } catch (Exception ex) {
-            log.error("[BuildPackDeletedEvent] error: {}", ex.getMessage(), ex);
+            Log.error(BuildPackListener.class.getName(),
+                    BuildPackDeletedEvent.class.getSimpleName(),
+                    String.format("%s", ex.getMessage()));
         }
     }
 
@@ -133,7 +146,9 @@ public class BuildPackListener {
 
         buildPack = buildPackService.findOne(buildPack.getId());
         if (buildPack.isDeleted()) {
-            log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+            Log.warn(BuildPackListener.class.getName(),
+                    BuildPackDoneEvent.class.getSimpleName(),
+                    String.format("[%s] user's BuildPack [%s] has been deleted", buildPack.getUser(), buildPack.getId()));
             buildPack.setMessage("stopped by delete");
             updateBuildPackDone(buildPack);
             return;
@@ -149,11 +164,15 @@ public class BuildPackListener {
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);
-            log.info("[BuildPackDoneEvent] update [{}] user's BuildPack done [{}]", saveOrUpdate.getUser(), saveOrUpdate.getId());
+            Log.info(BuildPackListener.class.getName(),
+                    BuildPackDoneEvent.class.getSimpleName(),
+                    String.format("update [%s] user's BuildPack done [%s]", saveOrUpdate.getUser(), saveOrUpdate.getId()));
             //depends on rabbitmq
             messageBroadcaster.broadcast(BuildPackConstant.EXCHANGE_FANOUT_BUILDPACK_MESSAGE, Message.of(saveOrUpdate));
         } catch (Exception ex) {
-            log.error("[BuildPackDoneEvent] error: {}", ex.getMessage(), ex);
+            Log.error(BuildPackListener.class.getName(),
+                    BuildPackDoneEvent.class.getSimpleName(),
+                    String.format("%s", ex.getMessage()));
             buildPack.setMessage(ex.getMessage());
             updateBuildPackDone(buildPack);
         }
@@ -173,7 +192,9 @@ public class BuildPackListener {
 
                 buildPack = buildPackService.findOne(buildPack.getId());
                 if (buildPack.isDeleted()) {
-                    log.warn("[{}] user's BuildPack [{}] has been deleted", buildPack.getUser(), buildPack.getId());
+                    Log.warn(BuildPackListener.class.getName(),
+                            BuildPackStartedEvent.class.getSimpleName(),
+                            String.format("[%s] user's BuildPack [%s] has been deleted", buildPack.getUser(), buildPack.getId()));
                     buildPack.setMessage("stopped by delete");
                     updateBuildPackDone(buildPack);
                     break;
@@ -183,11 +204,15 @@ public class BuildPackListener {
                 BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);
 
                 if (jobStatus == BuildPackStatus.JobStatus.Active) {
-                    log.info("[{}] user's BuildPack [{}] is not done yet! job [{}] namespace [{}]", buildPack.getUser(), buildPack.getId(), jobName, namespace);
+                    Log.info(BuildPackListener.class.getName(),
+                            BuildPackStartedEvent.class.getSimpleName(),
+                            String.format("[%s] user's BuildPack [%s] is not done yet! job [%s] namespace [%s]", buildPack.getUser(), buildPack.getId(), jobName, namespace));
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Ready) {
-                    log.info("[{}] user's BuildPack [{}] is ready", buildPack.getUser(), buildPack.getId());
+                    Log.info(BuildPackListener.class.getName(),
+                            BuildPackStartedEvent.class.getSimpleName(),
+                            String.format("[%s] user's BuildPack [%s] is ready", buildPack.getUser(), buildPack.getId()));
                 }
 
                 if (jobStatus == BuildPackStatus.JobStatus.Succeeded || jobStatus == BuildPackStatus.JobStatus.Failed) {
@@ -197,7 +222,9 @@ public class BuildPackListener {
             }
 
         } catch (Exception e) {
-            log.error("[BuildPackStartedEvent] error: {}", e.getMessage(), e);
+            Log.error(BuildPackListener.class.getName(),
+                    BuildPackStartedEvent.class.getSimpleName(),
+                    String.format("%s", e.getMessage()));
             buildPack.setMessage(e.getMessage());
             updateBuildPackDone(buildPack);
         }
@@ -225,9 +252,13 @@ public class BuildPackListener {
 
             Assert.hasText(buildPack.getId(), "BuildPack ID is null");
             BuildPack saveOrUpdate = buildPackService.saveOrUpdate(buildPack);
-            log.info("[BuildPackStartFailureEvent] update buildPack [{}]", saveOrUpdate.getId());
+            Log.info(BuildPackListener.class.getName(),
+                    BuildPackStartFailureEvent.class.getSimpleName(),
+                    String.format("buildPack start failure. update buildPack [%s]", saveOrUpdate.getId()));
         } catch (Throwable e) {
-            log.error("[BuildPackStartFailureEvent] error {}", e.getMessage(), e);
+            Log.error(BuildPackListener.class.getName(),
+                    BuildPackStartFailureEvent.class.getSimpleName(),
+                    String.format("%s", e.getMessage()));
         }
     }
 }

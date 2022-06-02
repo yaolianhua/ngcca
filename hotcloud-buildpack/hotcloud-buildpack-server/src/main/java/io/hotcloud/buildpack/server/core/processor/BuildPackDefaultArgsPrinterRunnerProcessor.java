@@ -28,7 +28,7 @@ class BuildPackDefaultArgsPrinterRunnerProcessor implements BuildPackRunnerProce
         for (Map.Entry<String, String> entry : args.entrySet()) {
             builder.append("- --").append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
         }
-        log.debug("BuildPackDefaultArgsPrinterRunnerProcessor. logged kaniko flags \n {}", builder);
+        log.debug("logged kaniko args \n {}", builder);
 
     }
 }

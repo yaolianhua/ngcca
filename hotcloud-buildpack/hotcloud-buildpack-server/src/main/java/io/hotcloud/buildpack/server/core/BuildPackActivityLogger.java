@@ -6,7 +6,6 @@ import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.activity.ActivityTarget;
 import io.hotcloud.db.core.activity.ActivityEntity;
 import io.hotcloud.db.core.activity.ActivityRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,6 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class BuildPackActivityLogger {
 
     private final ActivityRepository activityRepository;

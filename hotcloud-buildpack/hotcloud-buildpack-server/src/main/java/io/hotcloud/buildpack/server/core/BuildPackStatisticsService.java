@@ -4,7 +4,6 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.BuildPackStatistics;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +15,6 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class BuildPackStatisticsService {
 
     private final BuildPackService buildPackService;

@@ -11,6 +11,7 @@ import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.BuildPackArtifactUploadedEvent;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
@@ -22,7 +23,6 @@ import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
-@Slf4j
 @RequiredArgsConstructor
 public class BuildPackRabbitMQMessageSubscriber {
 
@@ -85,22 +84,24 @@ public class BuildPackRabbitMQMessageSubscriber {
 
         Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
         UserNamespacePair pair = messageBody.getData();
-        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user deleted message", pair.getUsername());
 
+        Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                String.format("received [%s] user deleted message", pair.getUsername()));
         //remove buildPack record
         List<BuildPack> buildPacks = buildPackService.findAll(pair.getUsername());
         try {
             buildPacks.forEach(e -> buildPackPlayer.delete(e.getId(), true));
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] delete buildPack error. {}", e.getMessage());
+            Log.error(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("delete buildPack error. %s", e.getMessage()));
         }
-        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} buildPacks has been deleted", pair.getUsername(), buildPacks.size());
-
+        Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                String.format("[%s] user %s buildPacks has been deleted", pair.getUsername(), buildPacks.size()));
         //remove git cloned record
         List<GitCloned> cloneds = gitClonedService.findAll(pair.getUsername());
         gitClonedService.delete(pair.getUsername());
-        log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user {} cloned repositories has been deleted", pair.getUsername(), cloneds.size());
-
+        Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                String.format("[%s] user %s cloned repositories has been deleted", pair.getUsername(), cloneds.size()));
         //remove minio data
         List<String> objectnames = buildPacks.stream()
                 .map(BuildPack::getArtifact)
@@ -112,18 +113,23 @@ public class BuildPackRabbitMQMessageSubscriber {
                 minioObjectApi.removed(pair.getNamespace(), objectname);
             }
             minioBucketApi.remove(pair.getNamespace());
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' object storage has been deleted", pair.getUsername(), pair.getNamespace());
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[%s] user '%s' object storage has been deleted", pair.getUsername(), pair.getNamespace()));
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] delete object storage error. {}", e.getMessage());
+            Log.error(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("delete object storage error. %s", e.getMessage()));
         }
 
         try {
             //remove persistent data
             Path localPath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, pair.getNamespace());
             FileHelper.deleteRecursively(localPath);
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user '{}' local storage has been deleted", pair.getUsername(), localPath);
+
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[%s] user '%s' local storage has been deleted", pair.getUsername(), localPath));
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] delete local storage error. {}", e.getMessage());
+            Log.error(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("delete local storage error. %s", e.getMessage()));
         }
 
         try {
@@ -131,9 +137,11 @@ public class BuildPackRabbitMQMessageSubscriber {
             if (namespace != null) {
                 namespaceApi.delete(pair.getNamespace());
             }
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user namespace [{}] has been deleted", pair.getUsername(), pair.getNamespace());
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[%s] user namespace [%s] has been deleted", pair.getUsername(), pair.getNamespace()));
         } catch (Exception e) {
-            log.info("[BuildPackRabbitMQMessageSubscriber] delete namespace error. {}", e.getMessage());
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("delete namespace error. %s", e.getMessage()));
         }
 
     }
@@ -149,8 +157,8 @@ public class BuildPackRabbitMQMessageSubscriber {
     public void subscribe(String message) {
         Message<BuildPack> messageBody = convertBuildPackMessageBody(message);
         BuildPack buildPack = messageBody.getData();
-        log.info("[BuildPackRabbitMQMessageSubscriber] received [{}] user's BuildPack '{}' done message", buildPack.getUser(), buildPack.getId());
-
+        Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                String.format("received [%s] user's BuildPack '%s' done message", buildPack.getUser(), buildPack.getId()));
         StopWatch watch = new StopWatch();
         watch.start();
         try {
@@ -160,11 +168,13 @@ public class BuildPackRabbitMQMessageSubscriber {
 
             File file = Path.of(clonedPath, tarball).toFile();
             if (!file.exists()) {
-                log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' dose not exist!", buildPack.getUser(), tarball);
+                Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                        String.format("[%s] user's BuildPack tarBall '%s' dose not exist!", buildPack.getUser(), tarball));
                 return;
             }
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' size '{}MB'", buildPack.getUser(), tarball, DataSize.ofBytes(file.length()).toMegabytes());
 
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[%s] user's BuildPack tarBall '%s' size '%sMB'", buildPack.getUser(), tarball, DataSize.ofBytes(file.length()).toMegabytes()));
             if (!minioBucketApi.exist(namespace)) {
                 minioBucketApi.make(namespace);
             }
@@ -172,15 +182,16 @@ public class BuildPackRabbitMQMessageSubscriber {
             String objectname = minioObjectApi.uploadFile(namespace, tarball, file.getAbsolutePath());
 
             watch.stop();
-            log.info("[BuildPackRabbitMQMessageSubscriber] [{}] user's BuildPack tarBall '{}' upload success. takes '{}s'", buildPack.getUser(), tarball, watch.getTotalTimeSeconds());
-
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("[%s] user's BuildPack tarBall '%s' upload success. takes '%ss'", buildPack.getUser(), tarball, watch.getTotalTimeSeconds()));
 
             buildPack.setArtifact(String.format("%s/%s/%s", minioProperties.getEndpoint(), namespace, objectname));
             buildPackService.saveOrUpdate(buildPack);
 
             eventPublisher.publishEvent(new BuildPackArtifactUploadedEvent(buildPack));
         } catch (Exception ex) {
-            log.error("[BuildPackRabbitMQMessageSubscriber] handle buildPack done error. {}", ex.getMessage());
+            Log.info(BuildPackRabbitMQMessageSubscriber.class.getName(),
+                    String.format("handle buildPack done error. %s", ex.getMessage()));
         }
 
     }

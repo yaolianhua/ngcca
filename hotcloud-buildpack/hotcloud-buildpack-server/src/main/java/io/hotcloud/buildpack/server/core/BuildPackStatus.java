@@ -1,15 +1,14 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 public final class BuildPackStatus {
 
     private BuildPackStatus() {
@@ -34,11 +33,13 @@ public final class BuildPackStatus {
         }
 
         if (failed != null) {
-            log.error("JobStatus: {}", job.getStatus());
+            Log.error(BuildPackStatus.class.getName(),
+                    String.format("JobStatus: %s", job.getStatus()));
             return JobStatus.Failed;
         }
 
-        log.error("JobStatus: {}", job.getStatus());
+        Log.error(BuildPackStatus.class.getName(),
+                String.format("JobStatus: %s", job.getStatus()));
         throw new HotCloudException("Unknown job status!");
     }
 

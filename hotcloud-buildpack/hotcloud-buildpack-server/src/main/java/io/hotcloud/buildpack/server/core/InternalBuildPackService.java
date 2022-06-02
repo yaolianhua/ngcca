@@ -17,7 +17,6 @@ import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.hotcloud.kubernetes.model.workload.JobTemplate;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 @Service
 class InternalBuildPackService extends AbstractBuildPackApi {
 
