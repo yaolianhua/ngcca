@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.server.network;
 
+import com.google.gson.JsonSyntaxException;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -10,7 +11,6 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -24,7 +24,6 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class ServiceOperator implements ServiceApi {
 
     private final CoreV1Api coreV1Api;
@@ -51,7 +50,6 @@ public class ServiceOperator implements ServiceApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create service success \n '{}'", service);
 
         return fabric8Client.services()
                 .inNamespace(namespace)
@@ -63,17 +61,20 @@ public class ServiceOperator implements ServiceApi {
     public void delete(String namespace, String service) throws ApiException {
         Assert.hasText(namespace, () -> "namespace is null");
         Assert.hasText(service, () -> "delete resource name is null");
-        V1Service v1Service = coreV1Api.deleteNamespacedService(
-                service,
-                namespace,
-                "true",
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-        log.debug("delete namespaced service success \n '{}'", v1Service);
+        try {
+            coreV1Api.deleteNamespacedService(
+                    service,
+                    namespace,
+                    "true",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        } catch (JsonSyntaxException e) {
+            //https://github.com/kubernetes-client/java/issues/86
+        }
     }
 
     @Override
