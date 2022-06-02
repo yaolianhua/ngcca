@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.cache;
+package io.hotcloud.common.api.cache;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
