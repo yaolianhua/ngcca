@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.common.api.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,7 +31,7 @@ public class BuildPackStorageProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load BuildPack Storage Properties】type = '{}', mount path = '{}'", type, retrieveStoragePath());
+        Log.info(BuildPackStorageProperties.class.getName(), String.format("【Load BuildPack Storage Properties】type = '%s', mount path = '%s'", type, retrieveStoragePath()));
     }
 
     public String retrieveStoragePath() {

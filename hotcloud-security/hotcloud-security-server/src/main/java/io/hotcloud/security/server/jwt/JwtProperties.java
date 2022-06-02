@@ -1,5 +1,6 @@
 package io.hotcloud.security.server.jwt;
 
+import io.hotcloud.common.api.Log;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,6 @@ public class JwtProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Load Jwt Properties】using JWA algorithm name '{}', sign-key '{}'", algorithm, signKey);
+        Log.info(JwtProperties.class.getName(), String.format("【Load Jwt Properties】using JWA algorithm name '%s', sign-key '%s'", algorithm, signKey));
     }
 }

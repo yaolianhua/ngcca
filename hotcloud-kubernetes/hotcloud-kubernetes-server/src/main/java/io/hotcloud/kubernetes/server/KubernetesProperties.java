@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.server;
 
+import io.hotcloud.common.api.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -39,16 +40,13 @@ public class KubernetesProperties {
     @PostConstruct
     public void log() {
         if (this.enableWorkloadsWatcher) {
-            log.info("【Load Kubernetes Properties】enable global event watch for workloads ");
+            Log.info(KubernetesProperties.class.getName(), "【Load Kubernetes Properties】enable global event watch for workloads ");
         }
         if (this.inCluster) {
-            log.info("【Load Kubernetes Properties】using in-cluster mode ");
+            Log.info(KubernetesProperties.class.getName(), "【Load Kubernetes Properties】using in-cluster mode ");
             return;
         }
-
-        log.info("【Load Kubernetes Properties】using kubeconfig path '{}'", kubeConfigPath);
-
-
+        Log.info(KubernetesProperties.class.getName(), String.format(KubernetesProperties.class.getName(), "【Load Kubernetes Properties】using kubeconfig path '%s'", kubeConfigPath));
     }
 
 

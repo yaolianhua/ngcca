@@ -1,5 +1,6 @@
 package io.hotcloud.common.server;
 
+import io.hotcloud.common.api.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -24,27 +25,27 @@ public class AsyncConfiguration {
 
     @PostConstruct
     public void print() {
-        log.info("【Enable spring async scheduling configuration】");
+        Log.info(AsyncConfiguration.class.getName(), "【Enable spring async scheduling configuration】");
     }
 
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("hotcloud-").build();
         threadPoolTaskExecutor.initialize();
-        log.info("【Initialed ThreadPoolTaskExecutor】");
+        Log.info(AsyncConfiguration.class.getName(), "【Initialed ThreadPoolTaskExecutor】");
         return threadPoolTaskExecutor;
     }
 
     @Bean
     public ExecutorService executorService(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("【Initialed ExecutorService】");
+        Log.info(AsyncConfiguration.class.getName(), "【Initialed ExecutorService】");
         return threadPoolTaskExecutor.getThreadPoolExecutor();
     }
 
     @Primary
     @Bean
     public Executor executor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("【Initialed Executor】");
+        Log.info(AsyncConfiguration.class.getName(), "【Initialed Executor】");
         return threadPoolTaskExecutor;
     }
 }

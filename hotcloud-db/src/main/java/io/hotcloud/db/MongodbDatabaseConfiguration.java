@@ -1,5 +1,6 @@
 package io.hotcloud.db;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.db.core.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -45,8 +46,8 @@ public class MongodbDatabaseConfiguration {
     public void print() {
         final DatabaseProperties.MongodbProperties mongodb = properties.getMongodb();
         Assert.notNull(mongodb, "Mongodb properties is null");
-        log.info("【Load DB Configuration. implementation using mongodb. url='{}'】",
-                String.format("mongodb://%s:%s/%s", mongodb.getHost(), mongodb.getPort(), mongodb.getDatabase()));
+        String mongoUrl = String.format("mongodb://%s:%s/%s", mongodb.getHost(), mongodb.getPort(), mongodb.getDatabase());
+        Log.info(MongodbDatabaseConfiguration.class.getName(), String.format("【Load DB Configuration. implementation using mongodb. url='%s'】", mongoUrl));
     }
 
     @Bean

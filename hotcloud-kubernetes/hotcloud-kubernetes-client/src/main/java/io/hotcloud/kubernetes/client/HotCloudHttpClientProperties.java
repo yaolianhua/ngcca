@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.client;
 
+import io.hotcloud.common.api.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,7 +25,12 @@ public class HotCloudHttpClientProperties {
 
     @PostConstruct
     public void print() {
-        log.info("【Hot Cloud server address '{}', basic auth user '{}', basic password '{}'】", obtainUrl(), basicUsername, basicPassword);
+        Log.info(HotCloudHttpClientProperties.class.getName(),
+                String.format("【Hot Cloud server address '%s', basic auth user '%s', basic password '%s'】",
+                        obtainUrl(),
+                        basicUsername,
+                        basicPassword)
+        );
     }
 
     public String obtainUrl() {

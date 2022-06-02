@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.server.core;
 
+import io.hotcloud.common.api.Log;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -49,8 +50,10 @@ public class BuildPackRegistryProperties {
         Assert.hasText(username, "registry credential with username is null");
         Assert.hasText(password, "registry credential with password is null");
 
-        log.info("【Load BuildPack Registry Properties】destination='{}' registry-username='{}' registry-password='{}'",
-                String.format("%s/%s", url, project), username, password);
+        Log.info(BuildPackRegistryProperties.class.getName(),
+                String.format("【Load BuildPack Registry Properties】destination='%s' registry-username='%s' registry-password='%s'",
+                        String.format("%s/%s", url, project)
+                        , username, password));
     }
 
 }

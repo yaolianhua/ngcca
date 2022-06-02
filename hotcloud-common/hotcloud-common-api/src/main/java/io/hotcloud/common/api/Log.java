@@ -21,15 +21,15 @@ public class Log implements Serializable {
     @Builder.Default
     private String type = "server";
 
-    @Builder.Default
-    private long timestamp = System.currentTimeMillis();
+    private String message;
 
     @Builder.Default
     private Level level = Level.INFO;
 
-    private String component;
+    @Builder.Default
+    private long timestamp = System.currentTimeMillis();
 
-    private String message;
+    private String component;
 
     private static String writeAsString(Log message) {
         ObjectMapper mapper = new ObjectMapper();

@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.storage.minio;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.storage.minio.MinioProperties;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -29,9 +30,8 @@ public class MinioConfiguration {
 
     @PostConstruct
     public void print() {
-        log.info("【Load Minio Configuration. endpoint = '{}' default-bucket = '{}'】",
-                properties.getEndpoint(),
-                properties.getDefaultBucket());
+        Log.info(MinioConfiguration.class.getName(), String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s'】", properties.getEndpoint(),
+                properties.getDefaultBucket()));
     }
 
     @Bean

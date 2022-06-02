@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.cache;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.cache.CacheProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +33,12 @@ public class CacheConfiguration {
         CacheProperties.Type type = properties.getType();
         CacheProperties.RedisProperties redis = properties.getRedis();
         if (type == CacheProperties.Type.local) {
-            log.info("【Load Cache Configuration. implementation using Caffeine Cache】");
+            Log.info(CacheConfiguration.class.getName(), "【Load Cache Configuration. implementation using Caffeine Cache】");
         }
         if (type == CacheProperties.Type.redis) {
             Assert.notNull(redis, "Redis configuration is null");
-            log.info("【Load Cache Configuration. implementation using Redis Cache. url='{}', using database '{}'】",
-                    String.format("redis://%s:%s", redis.getHost(), redis.getPort()), redis.getDatabase());
+            String redisUrl = String.format("redis://%s:%s", redis.getHost(), redis.getPort());
+            Log.info(CacheConfiguration.class.getName(), String.format("【Load Cache Configuration. implementation using Redis Cache. url='%s', using database '%s'】", redisUrl, redis.getDatabase()));
         }
     }
 

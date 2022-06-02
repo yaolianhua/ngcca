@@ -1,5 +1,6 @@
 package io.hotcloud.security.server.configure;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.security.server.Http401UnauthorizedEntryPoint;
 import io.hotcloud.security.server.jwt.JwtAuthenticationFilter;
 import io.hotcloud.security.server.jwt.JwtVerifier;
@@ -55,7 +56,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     public void print() {
-        log.info("【Spring security enabled. if you want to disable, you need configure the environment 'security.enabled=false'】");
+        Log.info(SecurityConfigurer.class.getName(), "【Spring security enabled. if you want to disable, you need configure the environment 'security.enabled=false'】");
     }
 
     @Override
