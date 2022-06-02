@@ -3,7 +3,6 @@ package io.hotcloud.buildpack.server.clone;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.buildpack.api.clone.GitClonedStatistics;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +13,6 @@ import java.util.List;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class GitClonedStatisticsService {
 
     private final GitClonedService gitClonedService;

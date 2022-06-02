@@ -4,16 +4,15 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedCreateEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedDeleteEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 @Component
 public class GitClonedListener {
 
@@ -30,12 +29,15 @@ public class GitClonedListener {
     public void cloned(GitClonedCreateEvent event) {
         try {
             GitCloned gitCloned = gitClonedService.saveOrUpdate(event.getGitCloned());
-            log.info("[GitClonedListener] save or update git repository '{}'", gitCloned.getId());
-
+            Log.info(GitClonedListener.class.getName(),
+                    GitClonedCreateEvent.class.getSimpleName(),
+                    String.format("save or update git repository '%s'", gitCloned.getId()));
             ActivityLog activityLog = activityLogger.log(ActivityAction.Create, gitCloned);
-            log.info("[GitClonedListener] activity [{}] saved", activityLog.getId());
+
         } catch (Exception e) {
-            log.error("[GitClonedListener] error. {}", e.getCause().getMessage());
+            Log.error(GitClonedListener.class.getName(),
+                    GitClonedCreateEvent.class.getSimpleName(),
+                    String.format("%s", e.getCause().getMessage()));
         }
     }
 
@@ -43,12 +45,15 @@ public class GitClonedListener {
     public void deleted(GitClonedDeleteEvent event) {
         GitCloned gitCloned = event.getGitCloned();
         try {
-            log.info("[GitClonedListener] git repository '{}' deleted", gitCloned.getId());
-
+            Log.info(GitClonedListener.class.getName(),
+                    GitClonedDeleteEvent.class.getSimpleName(),
+                    String.format("git repository '%s' deleted", gitCloned.getId()));
             ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, gitCloned);
-            log.info("[GitClonedListener] activity [{}] saved", activityLog.getId());
+
         } catch (Exception e) {
-            log.error("[GitClonedListener] error. {}", e.getCause().getMessage());
+            Log.error(GitClonedListener.class.getName(),
+                    GitClonedDeleteEvent.class.getSimpleName(),
+                    String.format("%s", e.getCause().getMessage()));
         }
     }
 }

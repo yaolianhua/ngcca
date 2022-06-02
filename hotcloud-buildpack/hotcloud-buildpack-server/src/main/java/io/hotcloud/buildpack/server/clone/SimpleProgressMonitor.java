@@ -1,22 +1,23 @@
 package io.hotcloud.buildpack.server.clone;
 
-import lombok.extern.slf4j.Slf4j;
+import io.hotcloud.common.api.Log;
 import org.eclipse.jgit.lib.ProgressMonitor;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Slf4j
 public class SimpleProgressMonitor implements ProgressMonitor {
 
     @Override
     public void start(int totalTasks) {
-        log.debug("Starting work on '{}' tasks", totalTasks);
+        Log.debug(SimpleProgressMonitor.class.getName(),
+                String.format("Starting work on '%s' tasks", totalTasks));
     }
 
     @Override
     public void beginTask(String title, int totalWork) {
-        log.debug("Start '{}': '{}'", title, totalWork);
+        Log.debug(SimpleProgressMonitor.class.getName(),
+                String.format("Start '%s': '%s'", title, totalWork));
     }
 
     @Override
@@ -26,7 +27,7 @@ public class SimpleProgressMonitor implements ProgressMonitor {
 
     @Override
     public void endTask() {
-        log.debug("Task done!");
+        Log.debug(SimpleProgressMonitor.class.getName(), "Task done!");
     }
 
     @Override

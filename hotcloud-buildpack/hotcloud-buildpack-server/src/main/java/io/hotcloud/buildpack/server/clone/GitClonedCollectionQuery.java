@@ -4,7 +4,6 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-@Slf4j
 public class GitClonedCollectionQuery {
 
     private final GitClonedService gitClonedService;

@@ -2,6 +2,7 @@ package io.hotcloud.buildpack.server.clone;
 
 import io.hotcloud.buildpack.api.clone.*;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
@@ -9,7 +10,6 @@ import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -29,7 +29,6 @@ import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY
  * @author yaolianhua789@gmail.com
  **/
 @Service
-@Slf4j
 public class GitClonedServiceImpl implements GitClonedService {
 
     private final GitClonedRepository repository;
@@ -124,7 +123,8 @@ public class GitClonedServiceImpl implements GitClonedService {
     public void deleteOne(String user, String gitProject) {
         GitClonedEntity one = repository.findByUserAndProject(user, gitProject);
         if (one == null) {
-            log.debug("Git cloned record not found. user='{}', project='{}'", user, gitProject);
+            Log.debug(GitClonedServiceImpl.class.getName(),
+                    String.format("Git cloned record not found. user='%s', project='%s'", user, gitProject));
             return;
         }
         repository.delete(one);
