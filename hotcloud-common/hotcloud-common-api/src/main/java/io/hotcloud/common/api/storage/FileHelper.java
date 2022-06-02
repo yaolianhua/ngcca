@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.storage;
+package io.hotcloud.common.api.storage;
 
 import org.springframework.util.Assert;
 

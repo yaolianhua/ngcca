@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.message.websocket;
 
-import io.hotcloud.common.server.message.Message;
+import io.hotcloud.common.api.message.Message;
 
 import javax.websocket.Session;
 

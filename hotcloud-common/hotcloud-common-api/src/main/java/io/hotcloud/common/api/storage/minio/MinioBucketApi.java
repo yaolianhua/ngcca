@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.storage.minio;
+package io.hotcloud.common.api.storage.minio;
 
 /**
  * @author yaolianhua789@gmail.com

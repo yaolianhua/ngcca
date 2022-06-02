@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.server.message.MessageProperties;
+import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.SecurityConstant;
 import lombok.extern.slf4j.Slf4j;

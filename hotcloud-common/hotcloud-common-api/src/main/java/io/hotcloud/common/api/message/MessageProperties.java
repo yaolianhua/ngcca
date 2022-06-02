@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.message;
+package io.hotcloud.common.api.message;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

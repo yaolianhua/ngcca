@@ -1,6 +1,9 @@
 package io.hotcloud.common.server.storage.minio;
 
 import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.api.storage.minio.MinioBucketApi;
+import io.hotcloud.common.api.storage.minio.MinioObjectApi;
+import io.hotcloud.common.api.storage.minio.MinioProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

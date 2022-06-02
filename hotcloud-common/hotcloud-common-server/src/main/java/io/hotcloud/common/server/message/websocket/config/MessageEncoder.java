@@ -2,7 +2,7 @@ package io.hotcloud.common.server.message.websocket.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.server.message.Message;
+import io.hotcloud.common.api.message.Message;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;

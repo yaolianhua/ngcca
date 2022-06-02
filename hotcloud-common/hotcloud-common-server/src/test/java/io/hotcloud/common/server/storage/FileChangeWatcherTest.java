@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.storage;
 
+import io.hotcloud.common.api.storage.FileChangeWatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Disabled;
@@ -32,7 +33,7 @@ public class FileChangeWatcherTest {
         Files.createDirectories(kanikoPath);
         log.info("Path '{}' created", kanikoPath);
 
-        FileChangeWatcher watcher = new FileChangeWatcher(kanikoPath, event -> {
+        io.hotcloud.common.api.storage.FileChangeWatcher watcher = new FileChangeWatcher(kanikoPath, event -> {
             log.info("context = '{}', event = '{}', type = '{}'", event.context(), event.kind().name(), event.kind().type());
 
             if ("4.txt".equals(event.context().toString())) {

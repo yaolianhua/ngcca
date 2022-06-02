@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.server.cache.Cache;
+import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.security.HotCloudSecurityApplicationTest;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;

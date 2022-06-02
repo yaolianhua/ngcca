@@ -8,7 +8,7 @@ import io.hotcloud.buildpack.server.clone.GitClonedStatisticsService;
 import io.hotcloud.buildpack.server.core.BuildPackStatisticsService;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
-import io.hotcloud.common.server.cache.Cache;
+import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;

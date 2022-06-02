@@ -1,6 +1,7 @@
 package io.hotcloud.common.server.storage.minio;
 
 import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.api.storage.minio.MinioBucketApi;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;

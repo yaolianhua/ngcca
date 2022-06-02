@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.message.rabbitmq;
 
-import io.hotcloud.common.server.message.MessageProperties;
+import io.hotcloud.common.api.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;

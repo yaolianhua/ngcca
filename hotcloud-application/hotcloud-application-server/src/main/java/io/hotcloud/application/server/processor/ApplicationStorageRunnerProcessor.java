@@ -2,7 +2,7 @@ package io.hotcloud.application.server.processor;
 
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.ApplicationRunnerProcessor;
-import io.hotcloud.common.server.storage.FileHelper;
+import io.hotcloud.common.api.storage.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

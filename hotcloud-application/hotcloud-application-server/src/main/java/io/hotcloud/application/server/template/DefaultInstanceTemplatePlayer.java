@@ -11,8 +11,8 @@ import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEv
 import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.server.cache.Cache;
-import io.hotcloud.common.server.storage.FileHelper;
+import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;

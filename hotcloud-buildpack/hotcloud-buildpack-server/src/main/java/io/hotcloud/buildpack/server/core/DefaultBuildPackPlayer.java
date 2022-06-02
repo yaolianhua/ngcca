@@ -8,7 +8,7 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartFailureEvent;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.server.cache.Cache;
+import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;

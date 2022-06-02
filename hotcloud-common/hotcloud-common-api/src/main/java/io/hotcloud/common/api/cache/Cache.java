@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.cache;
+package io.hotcloud.common.api.cache;
 
 import java.util.concurrent.Callable;
 

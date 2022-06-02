@@ -1,5 +1,7 @@
 package io.hotcloud.common.server.storage.minio;
 
+import io.hotcloud.common.api.storage.minio.MinioObjectApi;
+import io.hotcloud.common.api.storage.minio.MinioProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
