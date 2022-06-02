@@ -108,7 +108,7 @@ public class InstanceTemplateEventListener {
                 if (template == null) {
                     Log.warn(InstanceTemplateEventListener.class.getName(),
                             InstanceTemplateStartedEvent.class.getSimpleName(),
-                            String.format("[%s] user's template [%s] has been deleted", instance.getUser(), instance.getId()));
+                            String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                     break;
                 }
 
@@ -173,7 +173,7 @@ public class InstanceTemplateEventListener {
             InstanceTemplate updated = updateTemplate(instance, throwable.getMessage(), false);
             Log.info(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateStartFailureEvent.class.getSimpleName(),
-                    String.format("instance template start failure. update instance template [%s]", updated.getId()));
+                    String.format("instance template [%s] start failure. update instance template [%s]", updated.getName(), updated.getId()));
         } catch (Exception ex) {
             Log.error(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateStartFailureEvent.class.getSimpleName(),
@@ -260,7 +260,7 @@ public class InstanceTemplateEventListener {
             if (template == null) {
                 Log.warn(InstanceTemplateEventListener.class.getName(),
                         InstanceTemplateDoneEvent.class.getSimpleName(),
-                        String.format("[%s] user's template [%s] has been deleted", instance.getUser(), instance.getId()));
+                        String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                 return;
             }
 
@@ -270,7 +270,7 @@ public class InstanceTemplateEventListener {
             InstanceTemplate update = updateTemplate(template, "success", true);
             Log.info(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateDoneEvent.class.getSimpleName(),
-                    String.format("update [%s] user's template [%s] success. nodePorts [%s]", update.getUser(), update.getId(), update.getNodePorts()));
+                    String.format("[%s] user's [%s] template [%s] success. nodePorts [%s]", update.getUser(), update.getName(), update.getId(), update.getNodePorts()));
         } catch (Exception e) {
             Log.error(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateDoneEvent.class.getSimpleName(),
