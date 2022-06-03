@@ -33,7 +33,7 @@ class ApplicationStorageRunnerProcessor implements ApplicationRunnerProcessor {
                     String.format("storage path '%s' created ", directories));
         } catch (IOException e) {
             Log.error(ApplicationStorageRunnerProcessor.class.getName(),
-                    String.format("%s", e.getCause().getMessage()));
+                    String.format("%s", e.getMessage()));
         }
     }
 }

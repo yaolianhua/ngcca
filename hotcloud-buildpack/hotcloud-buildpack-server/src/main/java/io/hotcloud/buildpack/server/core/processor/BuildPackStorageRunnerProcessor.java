@@ -33,7 +33,7 @@ class BuildPackStorageRunnerProcessor implements BuildPackRunnerProcessor {
                     String.format("storage path '%s' created ", directories));
         } catch (IOException e) {
             Log.error(BuildPackStorageRunnerProcessor.class.getName(),
-                    String.format("%s", e.getCause().getMessage()));
+                    String.format("%s", e.getMessage()));
         }
     }
 }
