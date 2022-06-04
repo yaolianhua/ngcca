@@ -30,6 +30,9 @@ public class ErrorMessageConfiguration {
         public Exception decode(String methodKey, Response response) {
             try {
                 Result<?> result = objectMapper.readValue(response.body().asInputStream(), Result.class);
+                if (result == null || result.getMessage() == null || result.getCode() == 0) {
+                    return new HotCloudWebException(500, "系统内部错误");
+                }
                 return new HotCloudWebException(result.getCode(), result.getMessage());
             } catch (Exception e) {
                 log.error("RawErrorDecoder error. {}", e.getMessage());
