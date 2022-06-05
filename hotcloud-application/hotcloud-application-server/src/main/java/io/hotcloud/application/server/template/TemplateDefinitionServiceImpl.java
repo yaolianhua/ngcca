@@ -4,6 +4,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
 import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.TemplateDefinitionEntity;
 import io.hotcloud.db.core.application.TemplateDefinitionRepository;
@@ -14,6 +15,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -75,8 +77,14 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         Assert.hasText(definition.getName(), "Template definition name is null");
         templateDefinitionNameVerified(definition.getName());
 
+        TemplateDefinition templateDefinition = this.findByName(definition.getName());
+        if (Objects.nonNull(templateDefinition)) {
+            throw new HotCloudResourceConflictException("Template definition already exist [" + definition.getName() + "]");
+        }
+
         TemplateDefinitionEntity saveEntity = (TemplateDefinitionEntity) new TemplateDefinitionEntity().copyToEntity(definition);
         saveEntity.setCreatedAt(LocalDateTime.now());
+        saveEntity.setModifiedAt(LocalDateTime.now());
         TemplateDefinitionEntity saved = templateDefinitionRepository.save(saveEntity);
 
         return saved.toT(TemplateDefinition.class);
