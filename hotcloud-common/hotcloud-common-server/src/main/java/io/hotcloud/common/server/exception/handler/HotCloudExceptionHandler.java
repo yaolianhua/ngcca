@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.exception.handler;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Result;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
@@ -34,6 +35,9 @@ public class HotCloudExceptionHandler {
 
     @ExceptionHandler(value = HotCloudResourceConflictException.class)
     public ResponseEntity<Result<Void>> handle(HotCloudResourceConflictException ex, HttpServletRequest request) {
+        Log.error(HotCloudExceptionHandler.class.getName(),
+                "ExceptionHandler",
+                String.format("%s", ex.getMessage()));
         Result<Void> error = Result.error(409, ex.getMessage());
         return ResponseEntity.status(409).body(error);
     }
