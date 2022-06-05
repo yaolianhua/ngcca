@@ -77,8 +77,8 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         Assert.hasText(definition.getName(), "Template definition name is null");
         templateDefinitionNameVerified(definition.getName());
 
-        TemplateDefinition templateDefinition = this.findByName(definition.getName());
-        if (Objects.nonNull(templateDefinition)) {
+        TemplateDefinitionEntity entity = templateDefinitionRepository.findByName(definition.getName());
+        if (Objects.nonNull(entity)) {
             throw new HotCloudResourceConflictException("Template definition already exist [" + definition.getName() + "]");
         }
 
