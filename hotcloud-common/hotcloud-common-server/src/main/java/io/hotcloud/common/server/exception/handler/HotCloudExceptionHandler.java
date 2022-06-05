@@ -2,6 +2,7 @@ package io.hotcloud.common.server.exception.handler;
 
 import io.hotcloud.common.api.Result;
 import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -31,4 +32,9 @@ public class HotCloudExceptionHandler {
         return ResponseEntity.status(404).body(error);
     }
 
+    @ExceptionHandler(value = HotCloudResourceConflictException.class)
+    public ResponseEntity<Result<Void>> handle(HotCloudResourceConflictException ex, HttpServletRequest request) {
+        Result<Void> error = Result.error(409, ex.getMessage());
+        return ResponseEntity.status(409).body(error);
+    }
 }
