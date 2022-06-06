@@ -32,6 +32,7 @@ public class TemplateManageController {
                             @RequestParam(value = "action", required = false) String action,
                             @RequestParam(value = "name", required = false) String name,
                             @RequestParam(value = "id", required = false) String id) {
+        model.addAttribute(WebConstant.TEMPLATES, templateDefinitionClient.classification().getBody());
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.RESPONSE, templateDefinitionClient.findAll(name).getBody());
             return "admin/template/template-list::content";

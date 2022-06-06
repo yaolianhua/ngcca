@@ -31,6 +31,9 @@ public interface TemplateDefinitionClient {
     @GetMapping
     ResponseEntity<Result<List<TemplateDefinition>>> findAll(@RequestParam(value = "name", required = false) String name);
 
+    @GetMapping("/classification")
+    ResponseEntity<Result<List<String>>> classification();
+
     @DeleteMapping("/{id}")
     ResponseEntity<Result<Void>> delete(@PathVariable("id") String id);
 }
