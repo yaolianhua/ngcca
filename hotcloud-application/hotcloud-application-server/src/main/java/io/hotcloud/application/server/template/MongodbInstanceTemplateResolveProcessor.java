@@ -23,7 +23,7 @@ class MongodbInstanceTemplateResolveProcessor implements InstanceTemplateResolve
     public Map<String, String> resolve(String namespace) {
         return Map.of("mongo", Template.Mongodb.name().toLowerCase(),
                 "namespace", namespace,
-                "mongo_image", InstanceTemplateConstant.MONGO_IMAGE,
+                "mongo_image", Template.Mongodb.getTag(),
                 "mongo_root_username", InstanceTemplateConstant.MONGO_ROOT_USERNAME,
                 "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD,
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,

@@ -23,7 +23,7 @@ class RabbitmqInstanceTemplateResolveProcessor implements InstanceTemplateResolv
     public Map<String, String> resolve(String namespace) {
         return Map.of("rabbitmq", Template.Rabbitmq.name().toLowerCase(),
                 "namespace", namespace,
-                "rabbitmq_image", InstanceTemplateConstant.RABBITMQ_IMAGE,
+                "rabbitmq_image", Template.Rabbitmq.getTag(),
                 "rabbitmq_default_password", InstanceTemplateConstant.RABBITMQ_DEFAULT_PASSWORD,
                 "rabbitmq_default_user", InstanceTemplateConstant.RABBITMQ_DEFAULT_USER,
                 "rabbitmq_management", InstanceTemplateConstant.RABBITMQ_MANAGEMENT,

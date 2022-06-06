@@ -23,7 +23,7 @@ class MysqlInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
     public Map<String, String> resolve(String namespace) {
         return Map.of("mysql", Template.Mysql.name().toLowerCase(),
                 "namespace", namespace,
-                "mysql_image", InstanceTemplateConstant.MYSQL_IMAGE,
+                "mysql_image", Template.Mysql.getTag(),
                 "mysql_root_password", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD,
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,
                 "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);

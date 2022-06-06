@@ -23,7 +23,7 @@ class RedisInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
     public Map<String, String> resolve(String namespace) {
         return Map.of("redis", Template.Redis.name().toLowerCase(),
                 "namespace", namespace,
-                "redis_image", InstanceTemplateConstant.REDIS_IMAGE,
+                "redis_image", Template.Redis.getTag(),
                 "redis_password", InstanceTemplateConstant.REDIS_PASSWORD,
                 "storage_class_application", ApplicationConstant.STORAGE_CLASS,
                 "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
