@@ -53,6 +53,12 @@ public class TemplateDefinitionClientFallbackFactory implements FallbackFactory<
             }
 
             @Override
+            public ResponseEntity<Result<List<String>>> classification() {
+                log.error("{}", cause.getMessage());
+                return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message, Collections.emptyList()));
+            }
+
+            @Override
             public ResponseEntity<Result<Void>> delete(String id) {
                 log.error("{}", cause.getMessage());
                 return ResponseEntity.status(HttpStatus.valueOf(code)).body(Result.error(code, message));
