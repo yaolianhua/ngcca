@@ -1,5 +1,6 @@
 package io.hotcloud.application.server.controller;
 
+import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
 import io.hotcloud.common.api.Result;
@@ -10,7 +11,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.hotcloud.common.api.WebResponse.*;
 
@@ -75,6 +78,18 @@ public class TemplateDefinitionController {
     public ResponseEntity<Result<List<TemplateDefinition>>> findAll(@RequestParam(value = "name", required = false) String name) {
         List<TemplateDefinition> templateDefinitions = templateDefinitionService.findAll(name);
         return ok(templateDefinitions);
+    }
+
+    @GetMapping("/classification")
+    @Operation(
+            summary = "Query the classification of templates",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<Result<List<String>>> classification() {
+        List<String> names = Arrays.stream(Template.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+        return ok(names);
     }
 
     @GetMapping("/{id}")
