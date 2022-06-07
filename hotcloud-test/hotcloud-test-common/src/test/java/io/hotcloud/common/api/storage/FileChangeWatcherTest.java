@@ -22,7 +22,7 @@ public class FileChangeWatcherTest {
     Path kanikoPath = Path.of("/tmp", "kaniko", "025070bae0ef4668a96f2d0a712203af");
 
     /**
-     * Run this Test before {@link FileChangeWatcherTest#trigger()} ()}
+     * Run this Test before {@link FileChangeWatcherTest#trigger()}
      */
     @Disabled
     @Test
