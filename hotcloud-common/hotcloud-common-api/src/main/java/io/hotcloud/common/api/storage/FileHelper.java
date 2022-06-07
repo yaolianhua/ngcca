@@ -1,5 +1,6 @@
 package io.hotcloud.common.api.storage;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -15,6 +16,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 public final class FileHelper {
 
     private FileHelper() {
+    }
+
+    public static String getUserHome() {
+        return FileUtils.getUserDirectoryPath();
     }
 
     public static boolean exists(String path) {
