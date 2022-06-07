@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.storage.minio;
 
+import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.common.api.storage.minio.MinioObjectApi;
 import io.hotcloud.common.api.storage.minio.MinioProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +25,26 @@ public class MinioObjectApiIT extends MinioIT {
     @Autowired
     private MinioProperties minioProperties;
 
+    static Path file = Path.of(FileHelper.getUserHome(), "devops-thymeleaf-20220413175715.tar");
+
+    {
+        try {
+            if (FileHelper.exists(file)) {
+                Files.delete(file);
+            }
+            Files.createFile(file);
+            log.info("file '{}' created", file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void uploadFileInputStream_then_removed() throws IOException {
         String bucket = minioProperties.getDefaultBucket();
         StopWatch uploadWatch = new StopWatch();
         uploadWatch.start();
-        Path filePath = Path.of("/tmp/kaniko/6f83d4d1c8ad40fdaa4bd9649088a9d8/devops-thymeleaf/devops-thymeleaf-20220413175715.tar");
-        try (InputStream inputStream = Files.newInputStream(filePath)) {
+        try (InputStream inputStream = Files.newInputStream(file)) {
             minioObjectApi.uploadFile(bucket, "devops-thymeleaf", inputStream, "application/x-tar");
         }
         uploadWatch.stop();
@@ -46,13 +60,17 @@ public class MinioObjectApiIT extends MinioIT {
         removeWatch.stop();
         double removeWatchTotalTimeSeconds = removeWatch.getTotalTimeSeconds();
         log.info("Removed succeed. Takes '{}s'", removeWatchTotalTimeSeconds);
+
+        boolean exists = Files.deleteIfExists(file);
+        log.info("file {} deleted {}", file, exists);
     }
+
     @Test
-    public void upload_then_removed() {
+    public void upload_then_removed() throws IOException {
         String bucket = minioProperties.getDefaultBucket();
         StopWatch uploadWatch = new StopWatch();
         uploadWatch.start();
-        minioObjectApi.uploadFile(bucket, "devops-thymeleaf", "/tmp/kaniko/6f83d4d1c8ad40fdaa4bd9649088a9d8/devops-thymeleaf/devops-thymeleaf-20220413175715.tar");
+        minioObjectApi.uploadFile(bucket, "devops-thymeleaf", file.toFile().getAbsolutePath());
         uploadWatch.stop();
         double seconds = uploadWatch.getTotalTimeSeconds();
         log.info("Upload succeed. Takes '{}s'", seconds);
@@ -63,5 +81,8 @@ public class MinioObjectApiIT extends MinioIT {
         removeWatch.stop();
         double removeWatchTotalTimeSeconds = removeWatch.getTotalTimeSeconds();
         log.info("Removed succeed. Takes '{}s'", removeWatchTotalTimeSeconds);
+
+        boolean exists = Files.deleteIfExists(file);
+        log.info("file {} deleted {}", file, exists);
     }
 }
