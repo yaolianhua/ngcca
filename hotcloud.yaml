@@ -114,10 +114,10 @@ spec:
             - mountPath: /root/.kube/config
               name: kubeconfig
               readOnly: true
-            - mountPath: /tmp/kaniko
+            - mountPath: /root/hotcloud/kaniko
               name: buildpack-storage
               readOnly: false
-            - mountPath: /tmp/app
+            - mountPath: /root/hotcloud/app
               name: app-storage
               readOnly: false
       tolerations:
@@ -135,10 +135,10 @@ spec:
             path: /root/.kube/config
           name: kubeconfig
         - hostPath:
-            path: /tmp/kaniko
+            path: /root/hotcloud/kaniko
           name: buildpack-storage
         - hostPath:
-            path: /tmp/app
+            path: /root/hotcloud/app
           name: app-storage
 ---
 apiVersion: v1
