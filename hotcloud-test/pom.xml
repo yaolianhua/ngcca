@@ -15,6 +15,7 @@
     <modules>
         <module>hotcloud-test-common</module>
         <module>hotcloud-test-buildpack</module>
+        <module>hotcloud-test-application</module>
     </modules>
 
     <dependencyManagement>
