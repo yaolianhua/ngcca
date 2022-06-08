@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class FileChangeWatcherTest {
 
     CountDownLatch latch = new CountDownLatch(1);
-    Path kanikoPath = Path.of("/tmp", "kaniko", "025070bae0ef4668a96f2d0a712203af");
+    Path kanikoPath = Path.of(FileHelper.getUserHome(), "watch_test");
 
     /**
      * Run this Test before {@link FileChangeWatcherTest#trigger()}
