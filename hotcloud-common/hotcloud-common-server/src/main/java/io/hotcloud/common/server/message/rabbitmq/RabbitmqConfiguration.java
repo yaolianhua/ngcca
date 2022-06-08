@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.message.rabbitmq;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.MessageProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  * @author yaolianhua789@gmail.com
  **/
 @Configuration(proxyBeanMethods = false)
-@Slf4j
 @ConditionalOnProperty(
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
@@ -53,9 +52,9 @@ public class RabbitmqConfiguration {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         rabbitAdmin.setAutoStartup(true);
         rabbitAdmin.declareQueue(messageSubscribeQueue);
-        log.info("Created default queue: {}", QUEUE_SUBSCRIBE_MESSAGE);
+        Log.info(RabbitmqConfiguration.class.getName(), String.format("Created default queue [%s]", QUEUE_SUBSCRIBE_MESSAGE));
         rabbitAdmin.declareExchange(messageBroadcastExchange);
-        log.info("Created default exchange: {}", EXCHANGE_FANOUT_BROADCAST_MESSAGE);
+        Log.info(RabbitmqConfiguration.class.getName(), String.format("Created default exchange [%s]", EXCHANGE_FANOUT_BROADCAST_MESSAGE));
         return rabbitAdmin;
     }
 
