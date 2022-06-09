@@ -20,13 +20,4 @@
         <module>hotcloud-test-db</module>
     </modules>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-test-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>
