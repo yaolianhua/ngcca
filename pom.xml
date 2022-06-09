@@ -30,7 +30,7 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <springdoc.version>1.6.6</springdoc.version>
+        <springdoc.version>1.6.9</springdoc.version>
         <kubernetes.client-version>15.0.1</kubernetes.client-version>
         <fabric8.kubernetes.client-version>5.12.2</fabric8.kubernetes.client-version>
         <lombok.version>1.18.22</lombok.version>
