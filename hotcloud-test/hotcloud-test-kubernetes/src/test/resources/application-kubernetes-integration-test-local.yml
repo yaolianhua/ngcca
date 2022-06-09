@@ -12,3 +12,7 @@ hotcloud:
     basic-password: e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea
 message:
   type: websocket
+minio:
+  access-key: admin
+  secret-key: QbMufCD@9WVQ^Hv
+  endpoint: "http://120.78.225.168:9009"
