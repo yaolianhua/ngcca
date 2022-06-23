@@ -46,7 +46,7 @@ public class KubernetesProperties {
             Log.info(KubernetesProperties.class.getName(), "【Load Kubernetes Properties】using in-cluster mode ");
             return;
         }
-        Log.info(KubernetesProperties.class.getName(), String.format(KubernetesProperties.class.getName(), "【Load Kubernetes Properties】using kubeconfig path '%s'", kubeConfigPath));
+        Log.info(KubernetesProperties.class.getName(), String.format("【Load Kubernetes Properties】using kubeconfig path '%s'", kubeConfigPath));
     }
 
 
