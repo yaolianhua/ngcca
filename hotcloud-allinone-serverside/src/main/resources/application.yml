@@ -28,10 +28,3 @@ spring:
       max-file-size: 1024MB
 server:
   max-http-header-size: 40KB
-logging:
-  level:
-    io.hotcloud.kubernetes.server: info
-    io.hotcloud.buildpack.server: info
-    io.hotcloud.security.admin: info
-    io.hotcloud.db.server: info
-    io.hotcloud.common: info
