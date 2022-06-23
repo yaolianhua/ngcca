@@ -21,9 +21,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
             %n是换行符
         -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%white(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%green(%thread)] %highlight(%-5level) %yellow(%logger{50}) -
-                %msg%n
-            </pattern>
+            <pattern>%white(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%green(%thread)] %highlight(%-5level) %yellow(%logger{50}) - %msg%n</pattern>
         </layout>
     </appender>
 
