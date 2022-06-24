@@ -4,21 +4,21 @@ kubernetes:
 message:
   type: rabbitmq
   rabbitmq:
-    host: 120.78.225.168
+    host: localhost
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672
 cache:
   type: redis
   redis:
-    host: 120.78.225.168
+    host: localhost
     port: 6379
     password: QbMufCD@9WVQ^Hv
     database: 15
 db:
   type: mongodb
   mongodb:
-    host: 120.78.225.168
+    host: localhost
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 27017
@@ -26,15 +26,15 @@ db:
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: 120.78.225.168
+    host: localhost
     port: 6379
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://120.78.225.168:9009"
+  endpoint: "http://localhost:9009"
 buildpack:
   registry:
-    url: 119.91.214.25:5000
+    url: localhost:5000
     project: dev
     username: admin
     password: QbMufCD@9WVQ^Hv
