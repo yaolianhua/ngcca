@@ -1,7 +1,7 @@
 message:
   type: rabbitmq
   rabbitmq:
-    host: 120.78.225.168
+    host: localhost
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672

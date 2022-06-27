@@ -15,4 +15,4 @@ message:
 minio:
   access-key: admin
   secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://120.78.225.168:9009"
+  endpoint: "http://localhost:9009"

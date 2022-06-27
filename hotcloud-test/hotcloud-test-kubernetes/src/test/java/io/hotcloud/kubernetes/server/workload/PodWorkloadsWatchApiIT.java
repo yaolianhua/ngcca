@@ -42,7 +42,7 @@ public class PodWorkloadsWatchApiIT {
         while (!connected.get()) {
 
             TimeUnit.SECONDS.sleep(5);
-            new WebSocketClient(new URI("ws://localhost:8079/pub")) {
+            new WebSocketClient(new URI("ws://localhost:8002/pub")) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     log.info("client opened: {}", serverHandshake);

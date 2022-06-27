@@ -2,4 +2,4 @@ spring:
   application:
     name: hotcloud
 server:
-  port: 8066
+  port: 8006

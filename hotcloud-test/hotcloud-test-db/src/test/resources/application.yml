@@ -11,4 +11,4 @@ spring:
       auto-index-creation: true
       authentication-database: admin
 server:
-  port: 8075
+  port: 8003

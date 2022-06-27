@@ -1,5 +1,5 @@
 spring:
   application:
-    name: hotcloud
+    name: hotcloud-kubernetes
 server:
-  port: 8079
+  port: 8002
