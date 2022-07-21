@@ -18,7 +18,7 @@ ENV PATH $PATH:$CATALINA_HOME/bin
 
 RUN mkdir -p /home/admin
 
-RUN wget -q http://192.168.146.128:28080/yaolianhua/docker/dockerfile/apache-tomcat-9.0.64.tar.gz -O /tmp/apache-tomcat-9.0.64.tar.gz && \
+RUN wget -q http://120.78.225.168:28080/files/java/apache-tomcat-9.0.64.tar.gz -O /tmp/apache-tomcat-9.0.64.tar.gz && \
     mkdir -p /home/admin/tomcat && tar -xf /tmp/apache-tomcat-9.0.64.tar.gz -C /home/admin/tomcat --strip-components 1 && \
     rm /tmp/apache-tomcat-9.0.64.tar.gz && \
     chmod +x $CATALINA_HOME/bin/*sh
