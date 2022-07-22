@@ -101,6 +101,22 @@ public class PodOperator implements PodApi {
     }
 
     @Override
+    public String logs(String namespace, String pod, String container, Integer tailingLine) {
+        Assert.hasText(namespace, () -> "namespace is null");
+        Assert.hasText(pod, () -> "pod name is null");
+        Assert.hasText(container, () -> "container name is null");
+
+        tailingLine = tailingLine == null ? Integer.MAX_VALUE : tailingLine;
+
+        return fabric8Client.pods()
+                .inNamespace(namespace)
+                .withName(pod)
+                .inContainer(container)
+                .tailingLines(tailingLine)
+                .getLog(true);
+    }
+
+    @Override
     public PodList read(String namespace, Map<String, String> labelSelector) {
         labelSelector = Objects.isNull(labelSelector) ? Collections.emptyMap() : labelSelector;
         if (StringUtils.hasText(namespace)) {
