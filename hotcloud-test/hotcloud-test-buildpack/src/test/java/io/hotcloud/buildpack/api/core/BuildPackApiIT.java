@@ -41,7 +41,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
     public final String namespace = UUIDGenerator.uuidNoDash();
     @Before
     public void before() throws ApiException {
-        namespaceApi.namespace(namespace);
+        namespaceApi.create(namespace);
     }
 
     @After

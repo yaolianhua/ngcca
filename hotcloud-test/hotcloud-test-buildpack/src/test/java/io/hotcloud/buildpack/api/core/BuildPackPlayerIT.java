@@ -204,7 +204,7 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
         log.info("BuildPack yaml \n {}", buildpack.getYaml());
         String namespace = buildpack.getJobResource().getNamespace();
-        namespaceApi.namespace(namespace);
+        namespaceApi.create(namespace);
 
         String job = buildpack.getJobResource().getName();
 
