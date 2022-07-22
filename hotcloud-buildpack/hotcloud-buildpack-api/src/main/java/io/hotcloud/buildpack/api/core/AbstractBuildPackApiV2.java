@@ -25,6 +25,11 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
         buildPack.setYaml(yaml);
         buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+        buildPack.setHttpGitUrl(httpGitUrl);
+        buildPack.setGitBranch(branch);
+        buildPack.setDeleted(false);
+        buildPack.setDone(false);
+
         return buildPack;
     }
 

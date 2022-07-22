@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
-interface BuildPackApiV2 {
+public interface BuildPackApiV2 {
 
     /**
      * Deploy a kaniko job from source
@@ -25,6 +25,14 @@ interface BuildPackApiV2 {
      * @param job kaniko job name
      */
     String fetchLog(String namespace, String job);
+
+    /**
+     * Fetch Kaniko init container log
+     * @param namespace user's k8s namespace
+     * @param job kaniko job name
+     * @param container init container name
+     */
+    String fetchInitContainerLog(String namespace, String job, String container);
 
     enum KanikoStatus {
         //
