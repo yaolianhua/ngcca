@@ -152,6 +152,8 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .done(entity.isDone())
                 .deleted(entity.isDeleted())
                 .clonedId(entity.getClonedId())
+                .httpGitUrl(entity.getHttpGitUrl())
+                .gitBranch(entity.getGitBranch())
                 .message(entity.getMessage())
                 .logs(entity.getLogs())
                 .artifact(entity.getArtifact())

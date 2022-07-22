@@ -22,6 +22,7 @@ public interface BuildPackService {
      * @param clonedId git cloned id
      * @return {@link BuildPack}
      */
+    @Deprecated(since = "BuildPackApiV2")
     List<BuildPack> findAll(String user, String clonedId);
 
     /**
@@ -38,6 +39,7 @@ public interface BuildPackService {
      * @param clonedId git cloned id
      * @return {@link BuildPack}
      */
+    @Deprecated(since = "BuildPackApiV2")
     List<BuildPack> findByClonedId(String clonedId);
 
     /**
@@ -62,6 +64,7 @@ public interface BuildPackService {
      * @param clonedId git cloned id
      * @return {@link BuildPack}
      */
+    @Deprecated(since = "BuildPackApiV2")
     BuildPack findOneOrNullWithNoDone(String user, String clonedId);
 
     /**

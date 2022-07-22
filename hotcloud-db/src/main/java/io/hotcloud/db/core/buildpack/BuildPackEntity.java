@@ -19,9 +19,14 @@ public class BuildPackEntity extends AbstractEntity {
     @Indexed(unique = false)
     @org.springframework.data.redis.core.index.Indexed
     private String user;
+
+    @Deprecated(since = "BuildPackApiV2")
     @Indexed(unique = false)
     @org.springframework.data.redis.core.index.Indexed
     private String clonedId;
+
+    private String httpGitUrl;
+    private String gitBranch;
 
     private String job;
     private String storage;

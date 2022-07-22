@@ -25,7 +25,12 @@ public class BuildPack {
 
     private String user;
 
-    private String clonedId;
+    @Deprecated(since = "BuildPackApiV2")
+    private String clonedId = "Deprecated";
+
+    private String httpGitUrl;
+
+    private String gitBranch;
 
     private boolean done;
 
