@@ -114,6 +114,7 @@ public class TemplateRender {
         renders.put(Kaniko.GIT_BRANCH, gitBranch);
         renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
         renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
+        renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
 
         return apply(template, renders);
     }
@@ -147,6 +148,7 @@ public class TemplateRender {
         String GIT_BRANCH = "GIT_BRANCH";
         String HTTP_GIT_URL = "HTTP_GIT_URL";
         String KANIKO_IMAGE = "KANIKO_IMAGE";
+        String KANIKO_CONTAINER_NAME = "KANIKO_CONTAINER_NAME";
         String INIT_CONTAINER_IMAGE = "INIT_CONTAINER_IMAGE";
         String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
         String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";

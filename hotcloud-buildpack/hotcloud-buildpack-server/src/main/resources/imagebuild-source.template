@@ -32,7 +32,7 @@ spec:
             - --verbosity=info
           image: #{[ KANIKO_IMAGE ]}
           imagePullPolicy: IfNotPresent
-          name: kaniko
+          name: #{[ KANIKO_CONTAINER_NAME ]}
           ports: [ ]
           volumeMounts:
             - mountPath: /kaniko/.docker
