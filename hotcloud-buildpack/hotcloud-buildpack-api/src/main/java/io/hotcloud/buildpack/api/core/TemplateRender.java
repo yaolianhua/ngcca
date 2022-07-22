@@ -113,6 +113,7 @@ public class TemplateRender {
         renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
         renders.put(Kaniko.GIT_BRANCH, gitBranch);
         renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
+        renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
 
         return apply(template, renders);
     }
@@ -139,6 +140,7 @@ public class TemplateRender {
     interface Kaniko {
         String NAMESPACE = "NAMESPACE";
         String JOB_NAME = "JOB_NAME";
+        String INIT_CONTAINER_NAME = "INIT_CONTAINER_NAME";
         String LABEL_NAME = "LABEL_NAME";
         String SECRET_NAME = "SECRET_NAME";
         String DESTINATION = "DESTINATION";

@@ -29,6 +29,7 @@ public final class BuildPackConstant {
     public static final String FAILED_MESSAGE = "failed";
 
     public static final String KANIKO_CONTAINER = "kaniko";
+    public static final String KANIKO_INIT_CONTAINER = "init";
 
     public static final String DOCKER_CONFIG_JSON = ".dockerconfigjson";
 
