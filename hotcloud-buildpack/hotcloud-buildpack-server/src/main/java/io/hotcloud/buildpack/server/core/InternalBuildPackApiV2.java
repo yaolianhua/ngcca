@@ -165,10 +165,34 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         Pod pod = pods.get(0);
         try {
-            return podApi.logs(namespace, pod.getMetadata().getName(), 100);
+            return podApi.logs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_CONTAINER,100);
+        } catch (Exception e) {
+            return fetchInitContainerLog(namespace, job, BuildPackConstant.KANIKO_INIT_CONTAINER);
+        }
+    }
+
+    @Override
+    public String fetchInitContainerLog(String namespace, String job, String container) {
+        Job kanikoJob = jobApi.read(namespace, job);
+        if (Objects.isNull(kanikoJob)) {
+            Log.info(InternalBuildPackApiV2.class.getName(),
+                    String.format("Fetch kaniko init container log error. job is null namespace:%s job:%s", namespace, job));
+            return "";
+        }
+
+        List<Pod> pods = podApi.read(namespace, kanikoJob.getMetadata().getLabels()).getItems();
+        if (CollectionUtils.isEmpty(pods)) {
+            Log.info(InternalBuildPackApiV2.class.getName(),
+                    String.format("Fetch kaniko init container log error. list pods is empty namespace:%s job:%s", namespace, job));
+            return "";
+        }
+
+        Pod pod = pods.get(0);
+        try {
+            return podApi.logs(namespace, pod.getMetadata().getName(), container, 100);
         } catch (Exception e) {
             Log.error(InternalBuildPackApiV2.class.getName(),
-                    String.format("Fetch kaniko log error. %s", e.getMessage()));
+                    String.format("Fetch kaniko init container log error. %s", e.getMessage()));
             return "";
         }
     }

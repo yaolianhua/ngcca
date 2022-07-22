@@ -52,6 +52,7 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
+                return;
             } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n", buildPack.getArtifact());
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
@@ -73,7 +74,6 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
         System.out.println(buildPackApiV2.fetchLog(namespace, job));
         System.out.println("\n***************************** Print Kaniko Job log End ******************************\n");
     }
-
     private void cleared(BuildPack buildPack) throws ApiException {
         Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
         System.out.printf("Delete kaniko job [%s]%n", delete);
