@@ -35,7 +35,7 @@ public class NamespaceOperator implements NamespaceApi {
     }
 
     @Override
-    public void namespace(NamespaceCreateRequest namespaceCreateRequest) throws ApiException {
+    public void create(NamespaceCreateRequest namespaceCreateRequest) throws ApiException {
 
         List<V1Namespace> namespaceList = coreV1Api.listNamespace("true",
                 null,

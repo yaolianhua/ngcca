@@ -92,7 +92,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 FileHelper.createDirectories(userPath);
             }
             if (namespaceApi.read(namespace) == null) {
-                namespaceApi.namespace(namespace);
+                namespaceApi.create(namespace);
             }
             kubectlApi.apply(namespace, yaml);
         } catch (Exception ex) {

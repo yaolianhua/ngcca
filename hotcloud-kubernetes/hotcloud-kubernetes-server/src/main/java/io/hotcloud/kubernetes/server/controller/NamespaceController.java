@@ -38,7 +38,7 @@ public class NamespaceController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Namespace request body")
     )
     public ResponseEntity<Result<Void>> namespace(@Validated @RequestBody NamespaceCreateRequest params) throws ApiException {
-        namespaceApi.namespace(params);
+        namespaceApi.create(params);
         return WebResponse.created();
     }
 

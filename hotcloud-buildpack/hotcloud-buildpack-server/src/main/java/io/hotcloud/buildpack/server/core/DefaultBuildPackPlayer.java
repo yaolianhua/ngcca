@@ -105,7 +105,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         //create user's namespace
         try {
             if (namespaceApi.read(namespace) == null) {
-                namespaceApi.namespace(namespace);
+                namespaceApi.create(namespace);
             }
             kubectlApi.apply(namespace, savedBuildPack.getYaml());
         } catch (Exception e) {
