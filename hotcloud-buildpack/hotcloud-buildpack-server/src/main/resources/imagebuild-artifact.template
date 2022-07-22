@@ -1,0 +1,76 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations: { }
+  labels:
+    k8s-app: #{[ LABEL_NAME ]}
+  name: #{[ JOB_NAME ]}
+  namespace: #{[ NAMESPACE ]}
+spec:
+  activeDeadlineSeconds: 1800
+  backoffLimit: 3
+  template:
+    metadata:
+      annotations: { }
+      labels:
+        k8s-app: #{[ LABEL_NAME ]}
+    spec:
+      containers:
+        - args:
+            - --destination=#{[ DESTINATION ]}
+            - --skip-tls-verify=true
+            - --insecure=true
+            - --context=/workspace
+            - --skip-tls-verify-registry=true
+            - --skip-tls-verify-pull=true
+            - --no-push=false
+            - --insecure-pull=true
+            - --push-retry=3
+            - --dockerfile=/workspace/Dockerfile
+            - --log-format=color
+            - --force=false
+            - --verbosity=info
+          image: #{[ KANIKO_IMAGE ]}
+          imagePullPolicy: IfNotPresent
+          name: kaniko
+          ports: [ ]
+          volumeMounts:
+            - mountPath: /kaniko/.docker
+              name: docker-registry-secret
+              readOnly: true
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets: [ ]
+      initContainers:
+        - name: init
+          image: #{[ INIT_CONTAINER_IMAGE ]}
+          imagePullPolicy: IfNotPresent
+          command:
+            - 'sh'
+            - '-c'
+            - "echo -e '#{[ DOCKERFILE_ENCODED ]}' |base64 -d > /workspace/Dockerfile"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          volumeMounts:
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      restartPolicy: Never
+      volumes:
+        - name: docker-registry-secret
+          secret:
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+            optional: false
+            secretName: #{[ SECRET_NAME ]}
+        - name: workspace-volume
+          emptyDir: { }
+  ttlSecondsAfterFinished: 120

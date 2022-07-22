@@ -1,0 +1,72 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations: { }
+  labels:
+    k8s-app: kaniko-test
+  name: kaniko-test
+  namespace: kaniko-test
+spec:
+  activeDeadlineSeconds: 1800
+  backoffLimit: 3
+  template:
+    metadata:
+      annotations: { }
+      labels:
+        k8s-app: kaniko-test
+    spec:
+      containers:
+        - args:
+            - --destination=192.168.146.128:5000/kaniko-test/devops:latest
+            - --skip-tls-verify=true
+            - --insecure=true
+            - --context=/workspace
+            - --skip-tls-verify-registry=true
+            - --skip-tls-verify-pull=true
+            - --no-push=false
+            - --insecure-pull=true
+            - --push-retry=3
+            - --dockerfile=/workspace/Dockerfile
+            - --log-format=color
+            - --force=false
+            - --verbosity=info
+          image: gcr.io/kaniko-project/executor:latest
+          imagePullPolicy: IfNotPresent
+          name: kaniko
+          ports: [ ]
+          volumeMounts:
+            - mountPath: /kaniko/.docker
+              name: docker-registry-secret
+              readOnly: true
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets: [ ]
+      initContainers:
+        - image: alpine/git:latest
+          imagePullPolicy: IfNotPresent
+          name: git-clone
+          command:
+          - git
+          - clone
+          - --branch=master
+          - --depth=1
+          - https://gitee.com/yannanshan/devops-thymeleaf.git
+          - /workspace
+          - --verbose
+          volumeMounts:
+          - name: workspace-volume
+            mountPath: /workspace
+      restartPolicy: Never
+      volumes:
+        - name: docker-registry-secret
+          secret:
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+            optional: false
+            secretName: kaniko-test
+        - name: workspace-volume
+          emptyDir: { }
+  ttlSecondsAfterFinished: 120

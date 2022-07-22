@@ -34,7 +34,9 @@ minio:
   endpoint: "http://localhost:9009"
 buildpack:
   registry:
-    url: localhost:5000
-    project: dev
+    url: 192.168.146.128:5000
+    project: image-build-dev
     username: admin
     password: QbMufCD@9WVQ^Hv
+    kaniko-image-url: 192.168.146.128:5000/base/imagebuild:latest
+    git-init-container-image-url: 192.168.146.128:5000/base/git:latest

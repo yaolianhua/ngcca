@@ -14,6 +14,7 @@ public final class BuildPackConstant {
     public static final String GIT_PROJECT_TARBALL = "git:project:tarball";
     public static final String GIT_PROJECT_IMAGE = "git:project:image";
     public static final String GIT_PROJECT_PATH = "git:project:path";
+    public static final String IMAGEBUILD_ARTIFACT = "imagebuild:artifact";
 
     public static final String DOCKER_SECRET_VOLUME = "docker-registry-secret-volume";
     public static final String WORKSPACE_VOLUME = "workspace-volume";

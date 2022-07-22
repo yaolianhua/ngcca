@@ -32,6 +32,7 @@ public class BuildPackJobResource {
     /**
      * Kaniko args mapping
      */
+    @Deprecated(since = "BuildPackApiV2")
     @Builder.Default
     private Map<String, String> args = new HashMap<>();
 

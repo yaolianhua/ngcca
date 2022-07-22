@@ -27,7 +27,7 @@ public class BuildPackRegistryProperties {
     private String url;
 
     /**
-     * Registry project name.
+     * Image build registry project name.
      */
     private String project;
 
@@ -41,17 +41,25 @@ public class BuildPackRegistryProperties {
      */
     private String password;
 
+    private String kanikoImageUrl;
+
+    private String gitInitContainerImageUrl;
+
     @PostConstruct
     public void print() {
         Assert.hasText(url, "registry url is null");
-        Assert.hasText(project, "registry project name is null");
+        Assert.hasText(project, "image build registry project name is null");
         Assert.hasText(username, "registry credential with username is null");
         Assert.hasText(password, "registry credential with password is null");
 
         Log.info(BuildPackRegistryProperties.class.getName(),
-                String.format("【Load BuildPack Registry Properties】destination='%s' registry-username='%s' registry-password='%s'",
-                        String.format("%s/%s", url, project)
-                        , username, password));
+                String.format("【Load BuildPack Registry Properties】registry-url='%s' registry-username='%s' registry-password='%s' kaniko-image='%s' git-image='%s'",
+                        url,
+                        username,
+                        password,
+                        kanikoImageUrl,
+                        gitInitContainerImageUrl)
+        );
     }
 
 }

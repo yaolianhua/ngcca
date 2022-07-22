@@ -1,0 +1,154 @@
+package io.hotcloud.buildpack.api.core;
+
+import lombok.SneakyThrows;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.expression.common.TemplateParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class TemplateRender {
+    public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
+    public static final String IMAGEBUILD_ARTIFACT_TEMPLATE = "imagebuild-artifact.template";
+    public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
+
+    /**
+     * 渲染固定模板  {@code #{[ 此值将被替换 ]}}
+     *
+     * @param template 给定模板 e.g.
+     *                 <pre>{@code
+     *                                 FROM #{[ BASE_IMAGE ]}
+     *
+     *                                 LABEL BUILD_INFO = EDAS_BUILD
+     *
+     *                                 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+     *                                 RUN echo 'Asia/Shanghai' > /etc/timezone
+     *
+     *                                 ENV LANG="en_US.UTF-8"
+     *                                 ENV TERM=xterm
+     *                                 ENV EDAS_TIMESTAMP currentTime
+     *
+     *                                 RUN mkdir -p /home/admin/app/
+     *                                 RUN wget -q '#{[ PACKAGE_URL ]}' -O /home/admin/app/app.jar
+     *                                 RUN echo 'exec java  $CATALINA_OPTS  -jar /home/admin/app/app.jar' > /home/admin/start.sh && chmod +x /home/admin/start.sh
+     *
+     *                                 WORKDIR $ADMIN_HOME
+     *
+     *                                 CMD ["/bin/bash", "/home/admin/start.sh"]
+     *                                 }
+     *                                 </pre>
+     * @param render   模板参数映射
+     */
+    public static String apply(String template, Map<String, String> render) {
+        if (!StringUtils.hasText(template) || CollectionUtils.isEmpty(render)) {
+            return "";
+        }
+
+        return new SpelExpressionParser()
+                .parseExpression(template, new TemplateParserContext())
+                .getValue(render, String.class);
+
+    }
+
+    /**
+     * 获取仓库凭证
+     *
+     * @param registry         仓库地址 e.g. 192.168.146.128:5000
+     * @param registryUser     授权用户
+     * @param registryPassword 授权用户访问密码
+     * @param base64           返回文本是否base64
+     */
+    public static String dockerconfigjson(String registry, String registryUser, String registryPassword, boolean base64) {
+
+        String registryUrl;
+        if (Objects.equals(registry, "index.docker.io")) {
+            registryUrl = "https://index.docker.io/v1/";
+        } else {
+            registryUrl = registry;
+        }
+        String plainAuth = String.format("%s:%s", registryUser, registryPassword);
+        String base64Auth = Base64.getEncoder().encodeToString(plainAuth.getBytes(StandardCharsets.UTF_8));
+        String plainDockerconfigjson = "{\"auths\":{\"" + registryUrl + "\":{\"username\":\"" + registryUser + "\",\"password\":\"" + registryPassword + "\",\"auth\":\"" + base64Auth + "\"}}}";
+
+        return base64 ? Base64.getEncoder().encodeToString(plainDockerconfigjson.getBytes(StandardCharsets.UTF_8)) : plainDockerconfigjson;
+    }
+
+    private final static String K8S_NAME = String.format("kaniko-%s", UUID.randomUUID().toString().replace("-", ""));
+
+    /**
+     * 从模板创建job
+     */
+    @SneakyThrows
+    public static String kanikoJob(String namespace,
+                                   String jobName,
+                                   String labelName,
+                                   String secretName,
+                                   String destination,
+                                   String kanikoImage,
+                                   String gitBranch,
+                                   String httpGitUrl,
+                                   String initContainerImage) {
+
+        Assert.hasText(destination, "kaniko args missing [--destination]");
+        Assert.hasText(destination, "kaniko init container args missing [--branch]");
+        Assert.hasText(destination, "kaniko init container args missing [http git url]");
+        InputStream inputStream = new ClassPathResource(IMAGEBUILD_SOURCE_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
+        HashMap<String, String> renders = new HashMap<>(16);
+        renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
+        renders.put(Kaniko.JOB_NAME, StringUtils.hasText(jobName) ? jobName : K8S_NAME);
+        renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(labelName) ? labelName : K8S_NAME);
+        renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
+        renders.put(Kaniko.DESTINATION, destination);
+        renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
+        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
+        renders.put(Kaniko.GIT_BRANCH, gitBranch);
+        renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
+
+        return apply(template, renders);
+    }
+
+    /**
+     * 从模板创建secret
+     */
+    @SneakyThrows
+    public static String secretOfDockerconfigjson(String namespace, String label, String secret, String dockerconfigjson) {
+        InputStream inputStream = new ClassPathResource(IMAGEBUILD_SECRET_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        Map<String, String> renders = new HashMap<>(8);
+        renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
+        renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secret) ? secret : K8S_NAME);
+        renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(label) ? label : K8S_NAME);
+        renders.put(Kaniko.DOCKER_CONFIG_JSON, dockerconfigjson);
+
+        return apply(template, renders);
+    }
+
+    /**
+     * Kaniko 模板变量名
+     */
+    interface Kaniko {
+        String NAMESPACE = "NAMESPACE";
+        String JOB_NAME = "JOB_NAME";
+        String LABEL_NAME = "LABEL_NAME";
+        String SECRET_NAME = "SECRET_NAME";
+        String DESTINATION = "DESTINATION";
+        String GIT_BRANCH = "GIT_BRANCH";
+        String HTTP_GIT_URL = "HTTP_GIT_URL";
+        String KANIKO_IMAGE = "KANIKO_IMAGE";
+        String INIT_CONTAINER_IMAGE = "INIT_CONTAINER_IMAGE";
+        String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
+        String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";
+
+    }
+
+}

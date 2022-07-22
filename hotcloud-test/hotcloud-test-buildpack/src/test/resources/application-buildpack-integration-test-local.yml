@@ -35,7 +35,9 @@ buildpack:
   kaniko:
     verbosity: info
   registry:
-    url: localhost:5000
-    project: test
+    url: 192.168.146.128:5000
+    project: image-build-test
     username: admin
     password: QbMufCD@9WVQ^Hv
+    kaniko-image-url: 192.168.146.128:5000/base/imagebuild:latest
+    git-init-container-image-url: 192.168.146.128:5000/base/git:latest
