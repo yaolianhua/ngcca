@@ -23,6 +23,7 @@ import static io.hotcloud.common.api.WebResponse.*;
 @RestController
 @RequestMapping("/v1/buildpacks")
 @Tag(name = "BuildPack")
+@Deprecated(since = "BuildPackApiV2")
 public class BuildPackController {
 
     private final BuildPackPlayer buildPackPlayer;

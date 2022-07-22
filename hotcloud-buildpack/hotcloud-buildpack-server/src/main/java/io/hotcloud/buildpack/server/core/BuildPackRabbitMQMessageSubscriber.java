@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
         havingValue = MessageProperties.RABBITMQ
 )
 @RequiredArgsConstructor
+@Deprecated(since = "BuildPackApiV2")
 public class BuildPackRabbitMQMessageSubscriber {
 
     private final MinioObjectApi minioObjectApi;

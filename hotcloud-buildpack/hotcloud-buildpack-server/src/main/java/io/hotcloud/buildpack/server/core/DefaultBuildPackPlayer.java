@@ -32,6 +32,7 @@ import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY
  * @author yaolianhua789@gmail.com
  **/
 @Component
+@Deprecated(since = "BuildPackApiV2")
 class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
     private final AbstractBuildPackApi abstractBuildPackApi;

@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.api.core;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@Deprecated(since = "BuildPackApiV2")
 public abstract class AbstractBuildPackPlayer implements BuildPackPlayer {
 
     /**

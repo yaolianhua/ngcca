@@ -5,6 +5,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@Deprecated(since = "BuildPackApiV2")
 interface BuildPackApi {
 
     /**

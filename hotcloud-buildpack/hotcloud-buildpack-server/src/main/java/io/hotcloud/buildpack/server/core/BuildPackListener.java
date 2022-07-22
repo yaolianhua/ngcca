@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Component
+@Deprecated(since = "BuildPackApiV2")
 public class BuildPackListener {
 
     private final BuildPackService buildPackService;

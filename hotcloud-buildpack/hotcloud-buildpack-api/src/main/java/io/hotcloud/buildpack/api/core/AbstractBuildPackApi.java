@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@Deprecated(since = "BuildPackApiV2")
 public abstract class AbstractBuildPackApi implements BuildPackApi {
 
 
