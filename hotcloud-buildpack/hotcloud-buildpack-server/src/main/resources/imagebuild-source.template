@@ -44,7 +44,7 @@ spec:
       dnsPolicy: ClusterFirst
       imagePullSecrets: [ ]
       initContainers:
-        - image: alpine/git:latest
+        - image: #{[ INIT_CONTAINER_IMAGE ]}
           imagePullPolicy: IfNotPresent
           name: #{[ INIT_CONTAINER_NAME ]}
           command:

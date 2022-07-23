@@ -25,7 +25,7 @@ public class TemplateRenderUnitTest {
                 "gcr.io/kaniko-project/executor:latest",
                 "master",
                 "https://gitee.com/yannanshan/devops-thymeleaf.git",
-                "alpine/git");
+                "alpine/git:latest");
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-source.yaml")) {
             assert inputStream != null;
