@@ -26,14 +26,6 @@ public interface BuildPackApiV2 {
      */
     String fetchLog(String namespace, String job);
 
-    /**
-     * Fetch Kaniko init container log
-     * @param namespace user's k8s namespace
-     * @param job kaniko job name
-     * @param container init container name
-     */
-    String fetchInitContainerLog(String namespace, String job, String container);
-
     enum KanikoStatus {
         //
         Ready,

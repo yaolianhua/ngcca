@@ -37,15 +37,16 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
         System.out.println(buildPack.getYaml());
         System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
 
-        while (loopCount.get() < 20){
+        while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
             BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Unknown)) {
+            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Ready)) {
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
                 System.out.println("Kaniko status is [Ready]");
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Active)) {
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
             } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
@@ -72,7 +73,6 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
     private void printKanikoLog(String namespace, String job){
         System.out.println("\n***************************** Print Kaniko Job log Start ******************************\n");
         System.out.println(buildPackApiV2.fetchLog(namespace, job));
-        System.out.println("\n***************************** Print Kaniko Job log End ******************************\n");
     }
     private void cleared(BuildPack buildPack) throws ApiException {
         Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
