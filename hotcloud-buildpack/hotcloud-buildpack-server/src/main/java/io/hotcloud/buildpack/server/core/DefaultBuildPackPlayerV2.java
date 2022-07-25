@@ -1,9 +1,6 @@
 package io.hotcloud.buildpack.server.core;
 
-import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackApiV2;
-import io.hotcloud.buildpack.api.core.BuildPackPlayerV2;
-import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.cache.Cache;
@@ -58,6 +55,12 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         BuildPack buildPack = buildPackApiV2.apply(userNamespacePair.getNamespace(), httpGitUrl, branch);
 
         buildPack.setUser(userNamespacePair.getUsername());
+        buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+        buildPack.setHttpGitUrl(httpGitUrl);
+        buildPack.setGitBranch(branch);
+        buildPack.setDeleted(false);
+        buildPack.setDone(false);
+
         BuildPack saved = buildPackService.saveOrUpdate(buildPack);
 
         eventPublisher.publishEvent(new BuildPackStartedEventV2(saved));
