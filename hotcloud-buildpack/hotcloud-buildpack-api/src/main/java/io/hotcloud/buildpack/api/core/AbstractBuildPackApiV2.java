@@ -18,17 +18,7 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
                 .secretResource(secretResource)
                 .build();
 
-        String yaml = buildPack.getJobResource().getJobResourceYaml()
-                + "\n---\n" +
-                buildPack.getSecretResource().getSecretResourceYaml();
-        doApply(yaml);
-
-        buildPack.setYaml(yaml);
-        buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
-        buildPack.setHttpGitUrl(httpGitUrl);
-        buildPack.setGitBranch(branch);
-        buildPack.setDeleted(false);
-        buildPack.setDone(false);
+        doApply(buildPack.getYaml());
 
         return buildPack;
     }

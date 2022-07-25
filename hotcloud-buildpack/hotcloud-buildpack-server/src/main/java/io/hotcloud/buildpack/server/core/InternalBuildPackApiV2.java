@@ -112,7 +112,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         List<HasMetadata> metadataList = kubectlApi.apply(null, yaml);
         for (HasMetadata hasMetadata : metadataList) {
             Log.info(InternalBuildPackApiV2.class.getName(),
-                    String.format("%s '%s'", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
+                    String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
         }
     }
 

@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.api.core;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -19,7 +20,9 @@ public class BuildPack {
 
     private BuildPackJobResource jobResource;
 
-    private BuildPackStorageResourceList storageResource;
+    @Deprecated(since = "BuildPackApiV2")
+    @Builder.Default
+    private BuildPackStorageResourceList storageResource = new BuildPackStorageResourceList();
 
     private BuildPackDockerSecretResource secretResource;
 
@@ -48,6 +51,16 @@ public class BuildPack {
     private LocalDateTime createdAt;
 
     public BuildPack() {
+    }
+
+    public String getYaml() {
+        return this.jobResource.getJobResourceYaml() +
+                "\n---\n" +
+                this.secretResource.getSecretResourceYaml();
+    }
+
+    public String getClonedId() {
+        return StringUtils.hasText(this.clonedId) ? clonedId : "Deprecated";
     }
 
     public Map<String, String> getAlternative() {
