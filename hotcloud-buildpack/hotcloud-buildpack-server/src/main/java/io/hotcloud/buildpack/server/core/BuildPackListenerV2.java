@@ -42,7 +42,7 @@ public class BuildPackListenerV2 {
                     Log.warn(BuildPackListenerV2.class.getName(),
                             BuildPackStartedEventV2.class.getSimpleName(),
                             "[ImageBuild] BuildPack has been deleted");
-                    break;
+                    return;
                 }
 
                 BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, job);
