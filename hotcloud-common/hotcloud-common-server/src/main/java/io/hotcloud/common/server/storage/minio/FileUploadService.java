@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.storage.minio;
 
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.storage.minio.MinioBucketApi;
 import io.hotcloud.common.api.storage.minio.MinioObjectApi;
@@ -7,6 +8,7 @@ import io.hotcloud.common.api.storage.minio.MinioProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +50,13 @@ public class FileUploadService {
                 "Max upload megabytes is " + properties.getMaxUploadMegabytes() + "MB");
 
         try {
+            StopWatch watch = new StopWatch();
+            watch.start();
             minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());
+
+            watch.stop();
+            Log.info(FileUploadService.class.getName(),
+                    String.format("File [%s] upload success. spend time [%ss]", filename, watch.getTotalTimeSeconds()));
             return String.format("%s/%s/%s", properties.getEndpoint(), bucket, filename);
         } catch (Exception e) {
             throw new HotCloudException(e.getMessage());
