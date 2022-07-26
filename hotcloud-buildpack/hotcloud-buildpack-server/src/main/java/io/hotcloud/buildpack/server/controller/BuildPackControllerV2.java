@@ -57,7 +57,7 @@ public class BuildPackControllerV2 {
             }
     )
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id,
-                                               @RequestParam("physically") boolean physically) {
+                                               @RequestParam(value = "physically", required = false) boolean physically) {
         buildPackPlayerV2.delete(id, physically);
         return accepted();
     }
