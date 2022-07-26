@@ -85,7 +85,7 @@ public class BuildPackListenerV2 {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
-                        break;
+                        return;
 
                     case Succeeded:
                         Log.info(BuildPackListenerV2.class.getName(),
@@ -98,7 +98,7 @@ public class BuildPackListenerV2 {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
-                        break;
+                        return;
 
                     default:
 
