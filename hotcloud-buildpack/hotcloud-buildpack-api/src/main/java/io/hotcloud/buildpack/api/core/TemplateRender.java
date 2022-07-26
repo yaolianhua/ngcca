@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class TemplateRender {
     public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
     public static final String IMAGEBUILD_ARTIFACT_TEMPLATE = "imagebuild-artifact.template";
+    public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
     public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
 
     /**
@@ -110,13 +111,64 @@ public class TemplateRender {
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
         renders.put(Kaniko.DESTINATION, destination);
         renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
-        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
+        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine/git:latest");
         renders.put(Kaniko.GIT_BRANCH, gitBranch);
         renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
         renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
 
         return apply(template, renders);
+    }
+
+    @SneakyThrows
+    public static String kanikoJob(String namespace,
+                                   String jobName,
+                                   String labelName,
+                                   String secretName,
+                                   String destination,
+                                   String kanikoImage,
+                                   String initContainerImage,
+                                   String dockerfileEncoded) {
+
+        Assert.hasText(destination, "kaniko args missing [--destination]");
+        Assert.hasText(dockerfileEncoded, "kaniko init container param missing [base64 dockerfile is null]");
+        InputStream inputStream = new ClassPathResource(IMAGEBUILD_ARTIFACT_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
+        HashMap<String, String> renders = new HashMap<>(16);
+        renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
+        renders.put(Kaniko.JOB_NAME, StringUtils.hasText(jobName) ? jobName : K8S_NAME);
+        renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(labelName) ? labelName : K8S_NAME);
+        renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
+        renders.put(Kaniko.DESTINATION, destination);
+        renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
+        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
+        renders.put(Kaniko.DOCKERFILE_ENCODED, dockerfileEncoded);
+        renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
+        renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
+
+        return apply(template, renders);
+    }
+
+    /**
+     * 从模板返回构建jar的Dockerfile
+     *
+     * @param base64 返回文本值是否base64
+     */
+    @SneakyThrows
+    public static String jarDockerfile(String baseImage, String jarUrl, String jarStartOptions, String jarStartArgs, boolean base64) {
+        InputStream inputStream = new ClassPathResource(DOCKERFILE_JAR_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
+        Map<String, String> renders = new HashMap<>(8);
+        renders.put(Dockerfile.BASE_IMAGE, baseImage);
+        renders.put(Dockerfile.PACKAGE_URL, jarUrl);
+        renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(jarStartOptions) ? jarStartOptions : "");
+        renders.put(Dockerfile.JAR_START_ARGS, StringUtils.hasText(jarStartArgs) ? jarStartArgs : "");
+
+        String dockerfile = apply(template, renders);
+        return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
+                : dockerfile;
     }
 
     /**
@@ -133,6 +185,18 @@ public class TemplateRender {
         renders.put(Kaniko.DOCKER_CONFIG_JSON, dockerconfigjson);
 
         return apply(template, renders);
+    }
+
+    /**
+     * Dockerfile 模板变量名
+     */
+    interface Dockerfile {
+        String BASE_IMAGE = "BASE_IMAGE";
+        String PACKAGE_URL = "PACKAGE_URL";
+        String JAR_START_OPTIONS = "JAR_START_OPTIONS";
+        String JAR_START_ARGS = "JAR_START_ARGS";
+
+
     }
 
     /**
