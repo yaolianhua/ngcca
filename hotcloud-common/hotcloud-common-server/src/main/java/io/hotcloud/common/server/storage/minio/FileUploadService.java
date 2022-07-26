@@ -44,7 +44,8 @@ public class FileUploadService {
         Assert.hasText(filename, "Filename is null");
 
         long mega = DataSize.ofBytes(file.getSize()).toMegabytes();
-        Assert.state(mega < 1, "Data size need to less than 1MB. current " + mega + "MB");
+        Assert.state(mega < properties.getMaxUploadMegabytes(),
+                "Max upload megabytes is " + properties.getMaxUploadMegabytes() + "MB");
 
         try {
             minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());

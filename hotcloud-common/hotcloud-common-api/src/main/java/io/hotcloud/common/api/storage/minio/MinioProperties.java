@@ -28,4 +28,9 @@ public class MinioProperties {
      * Minio default bucket
      */
     private String defaultBucket = "default";
+
+    /**
+     * File upload max megabytes
+     */
+    private Integer maxUploadMegabytes = 500;
 }
