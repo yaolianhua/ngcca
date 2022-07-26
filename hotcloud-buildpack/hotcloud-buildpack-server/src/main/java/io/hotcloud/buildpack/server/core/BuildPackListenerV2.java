@@ -13,6 +13,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,6 +36,15 @@ public class BuildPackListenerV2 {
         try{
             while (loopCount.get() < 60){
                 TimeUnit.SECONDS.sleep(20);
+
+                buildPack = buildPackService.findOne(buildPack.getId());
+                if (Objects.isNull(buildPack) || buildPack.isDeleted()) {
+                    Log.warn(BuildPackListenerV2.class.getName(),
+                            BuildPackStartedEventV2.class.getSimpleName(),
+                            "[ImageBuild] BuildPack has been deleted");
+                    break;
+                }
+
                 BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, job);
                 switch (status){
                     case Unknown:
