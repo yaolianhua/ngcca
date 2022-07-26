@@ -1,8 +1,11 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.*;
+import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
+import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
@@ -30,6 +33,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final BuildPackService buildPackService;
+    private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
     @SneakyThrows
@@ -70,7 +74,16 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
 
     @Override
     public void delete(String id, boolean physically) {
+        Assert.hasText(id, "BuildPack ID is null");
+        BuildPack existBuildPack = buildPackService.findOne(id);
+        Assert.notNull(existBuildPack, "Can not found buildPack [" + id + "]");
 
+        buildPackService.delete(id, physically);
+        Log.info(DefaultBuildPackPlayerV2.class.getName(),
+                String.format("Delete BuildPack physically [%s]. id:[%s]",physically, id));
+        activityLogger.log(ActivityAction.Delete, existBuildPack);
+
+        eventPublisher.publishEvent(new BuildPackDeletedEventV2(existBuildPack));
     }
 
     @NotNull

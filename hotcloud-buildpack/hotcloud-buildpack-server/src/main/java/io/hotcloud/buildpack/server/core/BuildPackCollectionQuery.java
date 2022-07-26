@@ -35,6 +35,7 @@ public class BuildPackCollectionQuery {
      * @param pageable {@link Pageable}
      * @return {@link BuildPack}
      */
+    @Deprecated(since = "BuildPackApiV2")
     public PageResult<BuildPack> pagingQuery(@Nullable String user, @Nullable String clonedId, @Nullable Boolean done, @Nullable Boolean deleted, Pageable pageable) {
 
         List<BuildPack> buildPacks;
@@ -51,6 +52,28 @@ public class BuildPackCollectionQuery {
             throw new HotCloudException("Unsupported query condition", 400);
         }
 
+        List<BuildPack> filtered = filter(buildPacks, done, deleted);
+        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+
+    }
+
+    /**
+     * Paging query all {@link BuildPack} with giving parameter
+     *
+     * @param user     user's username
+     * @param done     whether is done
+     * @param deleted  whether is deleted
+     * @param pageable {@link Pageable}
+     * @return {@link BuildPack}
+     */
+    public PageResult<BuildPack> pagingQueryV2(@Nullable String user, @Nullable Boolean done, @Nullable Boolean deleted, Pageable pageable) {
+
+        List<BuildPack> buildPacks;
+        if (StringUtils.hasText(user)) {
+            buildPacks = buildPackService.findAll(user);
+        } else {
+            buildPacks = buildPackService.findAll();
+        }
         List<BuildPack> filtered = filter(buildPacks, done, deleted);
         return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
 

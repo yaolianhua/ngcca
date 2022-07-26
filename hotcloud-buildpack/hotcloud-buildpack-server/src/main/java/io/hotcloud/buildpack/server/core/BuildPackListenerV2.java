@@ -4,6 +4,7 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackApiV2;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -118,6 +119,22 @@ public class BuildPackListenerV2 {
             buildPack.setDone(true);
             buildPack.setMessage(ex.getMessage());
             buildPackService.saveOrUpdate(buildPack);
+        }
+    }
+
+    @Async
+    @EventListener
+    public void deleted(BuildPackDeletedEventV2 deletedEventV2){
+        BuildPack buildPack = deletedEventV2.getBuildPack();
+        try {
+            Boolean delete = kubectlApi.delete(buildPack.getJobResource().getNamespace(), buildPack.getYaml());
+            Log.info(BuildPackListenerV2.class.getName(),
+                    BuildPackDeletedEventV2.class.getSimpleName(),
+                    String.format("Deleted BuildPack k8s resources [%s]", delete));
+        } catch (Exception ex) {
+            Log.error(BuildPackListenerV2.class.getName(),
+                    BuildPackDeletedEventV2.class.getSimpleName(),
+                    String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
     }
 
