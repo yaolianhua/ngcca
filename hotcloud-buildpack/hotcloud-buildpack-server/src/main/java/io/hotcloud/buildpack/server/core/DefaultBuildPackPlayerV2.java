@@ -7,6 +7,7 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
@@ -36,8 +37,15 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
+    /**
+     * Deploy buildPack from source code
+     * <p>this repository(branch) must contain a Dockerfile that can be built directly
+     *
+     * @param httpGitUrl Http git url
+     * @param branch Git repository branch
+     * @return {@link BuildPack}
+     */
     @SneakyThrows
-    @Override
     public BuildPack play(String httpGitUrl, String branch) {
 
         Assert.state(Validator.validHTTPGitAddress(httpGitUrl), "Http git url invalid");
@@ -70,6 +78,18 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         eventPublisher.publishEvent(new BuildPackStartedEventV2(saved));
 
         return saved;
+    }
+
+    @Override
+    public BuildPack play(BuildImage build) {
+        if (build.isSourceCode()) {
+            Assert.hasText(build.getSource().getHttpGitUrl(), "Http git url is null");
+            Assert.hasText(build.getSource().getBranch(), "Git repository branch is null");
+            return play(build.getSource().getHttpGitUrl(), build.getSource().getBranch());
+        }
+
+
+        throw new HotCloudException("Unsupported operation");
     }
 
     @Override

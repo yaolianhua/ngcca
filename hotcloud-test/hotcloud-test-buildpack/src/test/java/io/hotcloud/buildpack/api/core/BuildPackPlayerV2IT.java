@@ -30,10 +30,10 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void play() throws InterruptedException {
+    public void playFromSourceCode() throws InterruptedException {
         BuildPack buildPack = buildPackPlayerV2.play(
-                "https://gitee.com/yannanshan/devops-thymeleaf.git",
-                "master"
+                BuildImage.of("https://gitee.com/yannanshan/devops-thymeleaf.git",
+                        "master")
         );
 
         while (true) {

@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.server.controller;
 
+import io.hotcloud.buildpack.api.core.BuildImage;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackPlayerV2;
 import io.hotcloud.buildpack.server.core.BuildPackCollectionQuery;
@@ -43,7 +44,7 @@ public class BuildPackControllerV2 {
             @RequestParam("http_git_url") String httpGitUrl,
             @RequestParam(value = "branch") String branch
     ) {
-        BuildPack buildpack = buildPackPlayerV2.play(httpGitUrl, branch);
+        BuildPack buildpack = buildPackPlayerV2.play(BuildImage.of(httpGitUrl, branch));
         return created(buildpack);
     }
 
