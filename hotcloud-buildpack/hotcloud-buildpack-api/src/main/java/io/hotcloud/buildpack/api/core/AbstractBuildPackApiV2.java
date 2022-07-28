@@ -4,6 +4,10 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
     protected abstract BuildPackJobResource prepareJob(String namespace, String httpGitUrl, String branch);
 
+    protected abstract BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs);
+
+    protected abstract BuildPackJobResource prepareJob(String namespace, String httpUrl);
+
     protected abstract BuildPackDockerSecretResource prepareSecret(String namespace);
 
     @Override
@@ -12,6 +16,39 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
         BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
 
         BuildPackJobResource jobResource = prepareJob(namespace, httpGitUrl, branch);
+
+        BuildPack buildPack = BuildPack.builder()
+                .jobResource(jobResource)
+                .secretResource(secretResource)
+                .build();
+
+        doApply(buildPack.getYaml());
+
+        return buildPack;
+    }
+
+    @Override
+    public BuildPack apply(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
+
+        BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
+
+        BuildPackJobResource jobResource = prepareJob(namespace, httpUrl, jarStartOptions, jarStartArgs);
+
+        BuildPack buildPack = BuildPack.builder()
+                .jobResource(jobResource)
+                .secretResource(secretResource)
+                .build();
+
+        doApply(buildPack.getYaml());
+
+        return buildPack;
+    }
+
+    @Override
+    public BuildPack apply(String namespace, String httpUrl) {
+        BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
+
+        BuildPackJobResource jobResource = prepareJob(namespace, httpUrl);
 
         BuildPack buildPack = BuildPack.builder()
                 .jobResource(jobResource)

@@ -23,7 +23,102 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
     public final String namespace = UUIDGenerator.uuidNoDash();
 
     @Test
-    public void apply() throws InterruptedException, ApiException {
+    public void jarArtifactApply() throws ApiException, InterruptedException {
+        AtomicInteger loopCount = new AtomicInteger(0);
+
+        namespaceApi.create(namespace);
+        BuildPack buildPack = buildPackApiV2.apply(
+                namespace,
+                "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar",
+                "-Xms128m -Xmx512m",
+                "-Dspring.profiles.active=production");
+
+        System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
+        System.out.println(buildPack.getYaml());
+        System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
+
+        while (loopCount.get() < 60) {
+            TimeUnit.SECONDS.sleep(6);
+            BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
+
+            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
+                System.out.println("Kaniko status is [Unknown]");
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
+                System.out.println("Kaniko status is [Ready]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
+                System.out.println("Kaniko status is [Active]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
+                System.out.println("Kaniko status is [Failed]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+                cleared(buildPack);
+                return;
+            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
+                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
+                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+
+                cleared(buildPack);
+                return;
+            }
+
+            loopCount.incrementAndGet();
+        }
+
+        System.out.println("Kaniko job has been timeout.");
+        printKanikoLog(namespace, buildPack.getJobResource().getName());
+        cleared(buildPack);
+    }
+
+    @Test
+    public void warArtifactApply() throws ApiException, InterruptedException {
+        AtomicInteger loopCount = new AtomicInteger(0);
+
+        namespaceApi.create(namespace);
+        BuildPack buildPack = buildPackApiV2.apply(
+                namespace,
+                "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war");
+
+        System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
+        System.out.println(buildPack.getYaml());
+        System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
+
+        while (loopCount.get() < 60) {
+            TimeUnit.SECONDS.sleep(6);
+            BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
+
+            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
+                System.out.println("Kaniko status is [Unknown]");
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
+                System.out.println("Kaniko status is [Ready]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
+                System.out.println("Kaniko status is [Active]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
+                System.out.println("Kaniko status is [Failed]");
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+                cleared(buildPack);
+                return;
+            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
+                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
+                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+                printKanikoLog(namespace, buildPack.getJobResource().getName());
+
+                cleared(buildPack);
+                return;
+            }
+
+            loopCount.incrementAndGet();
+        }
+
+        System.out.println("Kaniko job has been timeout.");
+        printKanikoLog(namespace, buildPack.getJobResource().getName());
+        cleared(buildPack);
+    }
+    @Test
+    public void sourceApply() throws InterruptedException, ApiException {
         AtomicInteger loopCount = new AtomicInteger(0);
 
         namespaceApi.create(namespace);
@@ -55,7 +150,8 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
                 cleared(buildPack);
                 return;
             } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
-                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n", buildPack.getArtifact());
+                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
+                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
 
                 cleared(buildPack);

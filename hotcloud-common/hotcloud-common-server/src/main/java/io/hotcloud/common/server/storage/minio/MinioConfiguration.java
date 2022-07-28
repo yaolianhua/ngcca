@@ -30,8 +30,9 @@ public class MinioConfiguration {
 
     @PostConstruct
     public void print() {
-        Log.info(MinioConfiguration.class.getName(), String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s'】", properties.getEndpoint(),
-                properties.getDefaultBucket()));
+        Log.info(MinioConfiguration.class.getName(),
+                String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s' max-upload-megabytes = '%sMB'】",
+                        properties.getEndpoint(), properties.getDefaultBucket(), properties.getMaxUploadMegabytes()));
     }
 
     @Bean

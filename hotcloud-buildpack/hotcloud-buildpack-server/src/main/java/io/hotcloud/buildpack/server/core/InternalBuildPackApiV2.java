@@ -83,6 +83,75 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     }
 
     @Override
+    protected BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
+
+        Assert.hasText(httpUrl, "Binary package url is null");
+
+        String k8sName = String.format("%s-%s-%s", namespace, "appjar", System.currentTimeMillis());
+
+        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String image = String.format("%s:%s", k8sName, date);
+
+        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getProject(), image);
+        String job = kanikoJob(
+                namespace,
+                k8sName,
+                k8sName,
+                retrieveSecretName(namespace),
+                artifactUrl,
+                registryProperties.getKanikoImageUrl(),
+                registryProperties.getAlpineInitContainerImageUrl(),
+                jarDockerfile(registryProperties.getJavaBaseImage(), httpUrl, jarStartOptions, jarStartArgs, true));
+
+
+        BuildPackJobResource jobResource = BuildPackJobResource.builder()
+                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .jobResourceYaml(job)
+                .name(k8sName)
+                .namespace(namespace)
+                .build();
+
+        Map<String, String> alternative = jobResource.getAlternative();
+        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, artifactUrl);
+
+        return jobResource;
+    }
+
+    @Override
+    protected BuildPackJobResource prepareJob(String namespace, String httpUrl) {
+        Assert.hasText(httpUrl, "Binary package url is null");
+
+        String k8sName = String.format("%s-%s-%s", namespace, "appwar", System.currentTimeMillis());
+
+        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String image = String.format("%s:%s", k8sName, date);
+
+        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getProject(), image);
+        String job = kanikoJob(
+                namespace,
+                k8sName,
+                k8sName,
+                retrieveSecretName(namespace),
+                artifactUrl,
+                registryProperties.getKanikoImageUrl(),
+                registryProperties.getAlpineInitContainerImageUrl(),
+                warDockerfile(registryProperties.getJavaBaseImage(), httpUrl,true));
+
+
+        BuildPackJobResource jobResource = BuildPackJobResource.builder()
+                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .jobResourceYaml(job)
+                .name(k8sName)
+                .namespace(namespace)
+                .build();
+
+        Map<String, String> alternative = jobResource.getAlternative();
+        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, artifactUrl);
+
+        return jobResource;
+    }
+
+    @Override
     protected BuildPackDockerSecretResource prepareSecret(String namespace) {
         String dockerconfigjson = dockerconfigjson(
                 registryProperties.getUrl(),

@@ -12,6 +12,22 @@ public interface BuildPackApiV2 {
     BuildPack apply(String namespace, String httpGitUrl, String branch);
 
     /**
+     * Deploy a kaniko job from binary jar package
+     * @param namespace user's k8s namespace
+     * @param httpUrl http(s) binary package url
+     * @param jarStartOptions e.g. "-Xms128m -Xmx512m"
+     * @param jarStartArgs e.g. -Dspring.profiles.active=production
+     */
+    BuildPack apply(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs);
+
+    /**
+     * Deploy a kaniko job from binary war package
+     * @param namespace user's k8s namespace
+     * @param httpUrl http(s) binary package url
+     */
+    BuildPack apply(String namespace, String httpUrl);
+
+    /**
      * Get kaniko job status
      * @param namespace user's k8s namespace
      * @param job kaniko job name

@@ -3,14 +3,11 @@ package io.hotcloud.buildpack.api.core;
 public interface BuildPackPlayerV2 {
 
     /**
-     * Deploy buildPack resource
-     * * <p>this repository(branch) must contain a Dockerfile that can be built directly
-     *
-     * @param httpGitUrl Http git url
-     * @param branch Git repository branch
+     * Deploy buildPack
+     * @param build {@link BuildImage}
      * @return {@link BuildPack}
      */
-    BuildPack play(String httpGitUrl, String branch);
+    BuildPack play(BuildImage build);
 
     /**
      * Delete buildPack resource

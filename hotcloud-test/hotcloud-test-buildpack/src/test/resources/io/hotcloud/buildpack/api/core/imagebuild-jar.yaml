@@ -3,9 +3,9 @@ kind: Job
 metadata:
   annotations: { }
   labels:
-    k8s-app: #{[ LABEL_NAME ]}
-  name: #{[ JOB_NAME ]}
-  namespace: #{[ NAMESPACE ]}
+    k8s-app: kaniko-test
+  name: kaniko-test
+  namespace: kaniko-test
 spec:
   activeDeadlineSeconds: 1800
   backoffLimit: 3
@@ -13,11 +13,11 @@ spec:
     metadata:
       annotations: { }
       labels:
-        k8s-app: #{[ LABEL_NAME ]}
+        k8s-app: kaniko-test
     spec:
       containers:
         - args:
-            - --destination=#{[ DESTINATION ]}
+            - --destination=192.168.146.128:5000/kaniko-test/app-jar:latest
             - --skip-tls-verify=true
             - --insecure=true
             - --context=/workspace
@@ -30,7 +30,7 @@ spec:
             - --log-format=color
             - --force=false
             - --verbosity=info
-          image: #{[ KANIKO_IMAGE ]}
+          image: gcr.io/kaniko-project/executor:latest
           imagePullPolicy: IfNotPresent
           name: kaniko
           ports: [ ]
@@ -45,12 +45,12 @@ spec:
       imagePullSecrets: [ ]
       initContainers:
         - name: init
-          image: #{[ INIT_CONTAINER_IMAGE ]}
+          image: alpine:latest
           imagePullPolicy: IfNotPresent
           command:
             - 'sh'
             - '-c'
-            - "echo -e '#{[ DOCKERFILE_ENCODED ]}' |base64 -d > /workspace/Dockerfile"
+            - "echo -e 'RlJPTSAxOTIuMTY4LjE0Ni4xMjg6NTAwMC9iYXNlL2phdmExMTp0b21jYXQ5LjAtb3BlbmpkazExCgpSVU4gbG4gLXNmIC91c3Ivc2hhcmUvem9uZWluZm8vQXNpYS9TaGFuZ2hhaSAvZXRjL2xvY2FsdGltZQpSVU4gZWNobyAnQXNpYS9TaGFuZ2hhaScgPiAvZXRjL3RpbWV6b25lCgpFTlYgTEFORz0iZW5fVVMuVVRGLTgiCkVOViBURVJNPXh0ZXJtCkVOViBUSU1FU1RBTVAgY3VycmVudFRpbWUKClJVTiBta2RpciAtcCAvaG9tZS9hZG1pbi9hcHAvClJVTiB3Z2V0IC1xICdodHRwOi8vMTIwLjc4LjIyNS4xNjg6MjgwODAvZmlsZXMvamF2YS9kZW1vLmphcicgLU8gL2hvbWUvYWRtaW4vYXBwL2FwcC5qYXIKUlVOIGVjaG8gLWUgJ2V4ZWMgamF2YSAtWG1zMTI4bSAtWG14NTEybSAtamFyICAvaG9tZS9hZG1pbi9hcHAvYXBwLmphcicgPiAvaG9tZS9hZG1pbi9zdGFydC5zaCAmJiBjaG1vZCAreCAvaG9tZS9hZG1pbi9zdGFydC5zaAoKV09SS0RJUiAkQURNSU5fSE9NRQoKQ01EIFsiL2Jpbi9iYXNoIiwgIi9ob21lL2FkbWluL3N0YXJ0LnNoIl0=' |base64 -d > /workspace/Dockerfile"
           resources:
             requests:
               memory: "256Mi"
@@ -70,7 +70,7 @@ spec:
               - key: .dockerconfigjson
                 path: config.json
             optional: false
-            secretName: #{[ SECRET_NAME ]}
+            secretName: kaniko-test
         - name: workspace-volume
           emptyDir: { }
   ttlSecondsAfterFinished: 120
