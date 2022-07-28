@@ -9,7 +9,7 @@ ENV TIMESTAMP currentTime
 
 RUN mkdir -p /home/admin/app/
 RUN wget -q '#{[ PACKAGE_URL ]}' -O /home/admin/app/app.jar
-RUN echo -e 'exec java #{[ JAR_START_OPTIONS ]} -jar /home/admin/app/app.jar #{[ JAR_START_ARGS ]}' > /home/admin/start.sh && chmod +x /home/admin/start.sh
+RUN echo -e 'exec java #{[ JAR_START_OPTIONS ]} -jar #{[ JAR_START_ARGS ]} /home/admin/app/app.jar' > /home/admin/start.sh && chmod +x /home/admin/start.sh
 
 WORKDIR $ADMIN_HOME
 
