@@ -40,4 +40,5 @@ public class BuildPackEntity extends AbstractEntity {
 
     private String logs;
     private String artifact;
+    private String packageUrl;
 }

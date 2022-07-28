@@ -45,7 +45,14 @@ public class BuildPack {
 
     private String yaml;
 
+    /**
+     * imagebuild artifact e.g. 127.0.0.1:5000/image-build/imagebuild:v1
+     */
     private String artifact;
+    /**
+     * Binary package url e.g. <a href="http://127.0.0.1:9009/bucket/java.jar">http://127.0.0.1:9009/bucket/java.jar</a>
+     */
+    private String packageUrl;
 
     private LocalDateTime modifiedAt;
     private LocalDateTime createdAt;
