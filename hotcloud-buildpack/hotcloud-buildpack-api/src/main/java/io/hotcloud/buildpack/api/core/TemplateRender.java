@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 
 public class TemplateRender {
     public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
-    public static final String IMAGEBUILD_JAR_TEMPLATE = "imagebuild-jar.template";
+    public static final String IMAGEBUILD_JAR_WAR_TEMPLATE = "imagebuild-jar-war.template";
     public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
+    public static final String DOCKERFILE_WAR_TEMPLATE = "Dockerfile-war.template";
     public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
 
     /**
@@ -85,7 +86,7 @@ public class TemplateRender {
     private final static String K8S_NAME = String.format("kaniko-%s", UUID.randomUUID().toString().replace("-", ""));
 
     /**
-     * 从模板创建job
+     * 从源码构建模板创建job
      */
     @SneakyThrows
     public static String kanikoJob(String namespace,
@@ -120,6 +121,9 @@ public class TemplateRender {
         return apply(template, renders);
     }
 
+    /**
+     * 从jar/war制品模板创建job
+     */
     @SneakyThrows
     public static String kanikoJob(String namespace,
                                    String jobName,
@@ -132,7 +136,7 @@ public class TemplateRender {
 
         Assert.hasText(destination, "kaniko args missing [--destination]");
         Assert.hasText(dockerfileEncoded, "kaniko init container param missing [base64 dockerfile is null]");
-        InputStream inputStream = new ClassPathResource(IMAGEBUILD_JAR_TEMPLATE).getInputStream();
+        InputStream inputStream = new ClassPathResource(IMAGEBUILD_JAR_WAR_TEMPLATE).getInputStream();
         String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         HashMap<String, String> renders = new HashMap<>(16);
@@ -165,6 +169,25 @@ public class TemplateRender {
         renders.put(Dockerfile.PACKAGE_URL, jarUrl);
         renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(jarStartOptions) ? jarStartOptions : "");
         renders.put(Dockerfile.JAR_START_ARGS, StringUtils.hasText(jarStartArgs) ? jarStartArgs : "");
+
+        String dockerfile = apply(template, renders);
+        return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
+                : dockerfile;
+    }
+
+    /**
+     * 从模板返回构建war的Dockerfile
+     *
+     * @param base64 返回文本值是否base64
+     */
+    @SneakyThrows
+    public static String warDockerfile(String baseImage, String warUrl, boolean base64) {
+        InputStream inputStream = new ClassPathResource(DOCKERFILE_WAR_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
+        Map<String, String> renders = new HashMap<>(8);
+        renders.put(Dockerfile.BASE_IMAGE, baseImage);
+        renders.put(Dockerfile.PACKAGE_URL, warUrl);
 
         String dockerfile = apply(template, renders);
         return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
