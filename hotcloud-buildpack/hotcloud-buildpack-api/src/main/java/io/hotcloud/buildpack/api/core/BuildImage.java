@@ -15,13 +15,23 @@ public class BuildImage {
     private Jar jar;
     private War war;
 
-    public static BuildImage of(String httpGitUrl, String branch){
+    public static BuildImage ofSource(String httpGitUrl, String branch){
         return BuildImage.builder().source(
                         SourceCode.builder()
                                 .httpGitUrl(httpGitUrl)
                                 .branch(branch)
                                 .build()
                 ).build();
+    }
+
+    public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs){
+        return BuildImage.builder().jar(
+                Jar.builder()
+                        .packageUrl(httpUrl)
+                        .startOptions(startOptions)
+                        .startArgs(startArgs)
+                        .build()
+        ).build();
     }
     public boolean isSourceCode(){
         return source != null;
@@ -59,7 +69,7 @@ public class BuildImage {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class War{
-
+        private String packageUrl;
     }
 
 }

@@ -80,12 +80,58 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         return saved;
     }
 
+    /**
+     * Deploy buildPack from binary jar package
+     *
+     * @param httpUrl http(s) binary package url
+     * @param startOptions e.g. "-Xms128m -Xmx512m"
+     * @param startArgs e.g. -Dspring.profiles.active=production
+     */
+    @SneakyThrows
+    public BuildPack play(String httpUrl, String startOptions, String startArgs) {
+        Assert.hasText(httpUrl, "Jar package http(s) url is null");
+
+        UserNamespacePair userNamespacePair = retrievedUserNamespacePair();
+        List<BuildPack> buildPacks = buildPackService.findAll(userNamespacePair.getUsername());
+        boolean buildTaskExisted = buildPacks.stream()
+                .filter(e -> Objects.equals(httpUrl, e.getPackageUrl()))
+                .anyMatch(e -> Objects.equals(false, e.isDone()));
+        Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s packageUrl:%s",
+                userNamespacePair.getUsername(), httpUrl));
+
+        if (Objects.isNull(namespaceApi.read(userNamespacePair.getNamespace()))){
+            namespaceApi.create(userNamespacePair.getNamespace());
+        }
+
+        BuildPack buildPack = buildPackApiV2.apply(userNamespacePair.getNamespace(), httpUrl, startOptions, startArgs);
+
+        buildPack.setUser(userNamespacePair.getUsername());
+        buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+        buildPack.setPackageUrl(httpUrl);
+        buildPack.setDeleted(false);
+        buildPack.setDone(false);
+
+        BuildPack saved = buildPackService.saveOrUpdate(buildPack);
+
+        eventPublisher.publishEvent(new BuildPackStartedEventV2(saved));
+
+        return saved;
+    }
     @Override
     public BuildPack play(BuildImage build) {
         if (build.isSourceCode()) {
-            Assert.hasText(build.getSource().getHttpGitUrl(), "Http git url is null");
-            Assert.hasText(build.getSource().getBranch(), "Git repository branch is null");
-            return play(build.getSource().getHttpGitUrl(), build.getSource().getBranch());
+            return play(
+                    build.getSource().getHttpGitUrl(),
+                    build.getSource().getBranch()
+            );
+        }
+
+        if (build.isJar()){
+            return play(
+                    build.getJar().getPackageUrl(),
+                    build.getJar().getStartOptions(),
+                    build.getJar().getStartArgs()
+            );
         }
 
 

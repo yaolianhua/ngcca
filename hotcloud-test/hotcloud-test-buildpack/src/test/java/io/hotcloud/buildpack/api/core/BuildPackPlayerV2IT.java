@@ -30,9 +30,37 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
     }
 
     @Test
+    public void playFromJarArtifact() throws InterruptedException {
+        BuildPack buildPack = buildPackPlayerV2.play(
+                BuildImage.ofJar("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar",
+                        "-Xms128m -Xmx512m",
+                        "-Dspring.profiles.active=production")
+        );
+
+        while (true) {
+            TimeUnit.SECONDS.sleep(10);
+            BuildPack one = buildPackService.findOne(buildPack.getId());
+            if (one.isDone() && BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Jar package [%s] build successful. artifact url [%s]%n",
+                        one.getPackageUrl(), one.getArtifact());
+                System.out.println("Kaniko logs print: \n" + one.getLogs());
+
+                break;
+            }
+
+            if (one.isDone() && !BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Jar package [%s] build failed%n",
+                        one.getPackageUrl());
+                System.out.println("Build message: \n" + one.getLogs());
+
+                break;
+            }
+        }
+    }
+    @Test
     public void playFromSourceCode() throws InterruptedException {
         BuildPack buildPack = buildPackPlayerV2.play(
-                BuildImage.of("https://gitee.com/yannanshan/devops-thymeleaf.git",
+                BuildImage.ofSource("https://gitee.com/yannanshan/devops-thymeleaf.git",
                         "master")
         );
 

@@ -44,7 +44,7 @@ public class BuildPackControllerV2 {
             @RequestParam("http_git_url") String httpGitUrl,
             @RequestParam(value = "branch") String branch
     ) {
-        BuildPack buildpack = buildPackPlayerV2.play(BuildImage.of(httpGitUrl, branch));
+        BuildPack buildpack = buildPackPlayerV2.play(BuildImage.ofSource(httpGitUrl, branch));
         return created(buildpack);
     }
 
