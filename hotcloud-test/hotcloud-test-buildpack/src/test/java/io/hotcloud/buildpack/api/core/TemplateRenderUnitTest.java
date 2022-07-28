@@ -63,7 +63,7 @@ public class TemplateRenderUnitTest {
                 "alpine:latest",
                 dockerfileEncoded);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-artifact.yaml")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-jar.yaml")) {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class TemplateRender {
     public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
-    public static final String IMAGEBUILD_ARTIFACT_TEMPLATE = "imagebuild-artifact.template";
+    public static final String IMAGEBUILD_JAR_TEMPLATE = "imagebuild-jar.template";
     public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
     public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
 
@@ -132,7 +132,7 @@ public class TemplateRender {
 
         Assert.hasText(destination, "kaniko args missing [--destination]");
         Assert.hasText(dockerfileEncoded, "kaniko init container param missing [base64 dockerfile is null]");
-        InputStream inputStream = new ClassPathResource(IMAGEBUILD_ARTIFACT_TEMPLATE).getInputStream();
+        InputStream inputStream = new ClassPathResource(IMAGEBUILD_JAR_TEMPLATE).getInputStream();
         String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         HashMap<String, String> renders = new HashMap<>(16);
