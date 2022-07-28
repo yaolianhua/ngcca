@@ -41,9 +41,20 @@ public class BuildPackRegistryProperties {
      */
     private String password;
 
+    /**
+     * Kaniko image url
+     */
     private String kanikoImageUrl;
 
+    /**
+     * Git image url
+     */
     private String gitInitContainerImageUrl;
+    private String alpineInitContainerImageUrl;
+    /**
+     * java application base image
+     */
+    private String javaBaseImage;
 
     @PostConstruct
     public void print() {
@@ -51,14 +62,20 @@ public class BuildPackRegistryProperties {
         Assert.hasText(project, "image build registry project name is null");
         Assert.hasText(username, "registry credential with username is null");
         Assert.hasText(password, "registry credential with password is null");
+        Assert.hasText(kanikoImageUrl, "kaniko image url is null");
+        Assert.hasText(gitInitContainerImageUrl, "git image url is null");
+        Assert.hasText(alpineInitContainerImageUrl, "alpine image url is null");
+        Assert.hasText(javaBaseImage, "java base image is null");
 
         Log.info(BuildPackRegistryProperties.class.getName(),
-                String.format("【Load BuildPack Registry Properties】registry-url='%s' registry-username='%s' registry-password='%s' kaniko-image='%s' git-image='%s'",
+                String.format("【Load BuildPack Registry Properties】registry-url='%s' registry-username='%s' registry-password='%s' kaniko-image='%s' git-image='%s' java-base-image='%s' alpine-image='%s'",
                         url,
                         username,
                         password,
                         kanikoImageUrl,
-                        gitInitContainerImageUrl)
+                        gitInitContainerImageUrl,
+                        javaBaseImage,
+                        alpineInitContainerImageUrl)
         );
     }
 
