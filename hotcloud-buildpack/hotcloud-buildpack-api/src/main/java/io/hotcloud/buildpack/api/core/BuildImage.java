@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,15 +41,14 @@ public class BuildImage {
                         .build()
         ).build();
     }
-    @JsonIgnore
     public boolean isSourceCode(){
         return source != null;
     }
-    @JsonIgnore
+
     public boolean isJar(){
         return jar != null;
     }
-    @JsonIgnore
+
     public boolean isWar(){
         return war != null;
     }
