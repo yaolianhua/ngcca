@@ -117,6 +117,42 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
 
         return saved;
     }
+
+    /**
+     * Deploy buildPack from binary war package
+     *
+     * @param httpUrl http(s) binary package url
+     */
+    @SneakyThrows
+    public BuildPack play(String httpUrl) {
+        Assert.hasText(httpUrl, "War package http(s) url is null");
+
+        UserNamespacePair userNamespacePair = retrievedUserNamespacePair();
+        List<BuildPack> buildPacks = buildPackService.findAll(userNamespacePair.getUsername());
+        boolean buildTaskExisted = buildPacks.stream()
+                .filter(e -> Objects.equals(httpUrl, e.getPackageUrl()))
+                .anyMatch(e -> Objects.equals(false, e.isDone()));
+        Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s packageUrl:%s",
+                userNamespacePair.getUsername(), httpUrl));
+
+        if (Objects.isNull(namespaceApi.read(userNamespacePair.getNamespace()))){
+            namespaceApi.create(userNamespacePair.getNamespace());
+        }
+
+        BuildPack buildPack = buildPackApiV2.apply(userNamespacePair.getNamespace(), httpUrl);
+
+        buildPack.setUser(userNamespacePair.getUsername());
+        buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+        buildPack.setPackageUrl(httpUrl);
+        buildPack.setDeleted(false);
+        buildPack.setDone(false);
+
+        BuildPack saved = buildPackService.saveOrUpdate(buildPack);
+
+        eventPublisher.publishEvent(new BuildPackStartedEventV2(saved));
+
+        return saved;
+    }
     @Override
     public BuildPack play(BuildImage build) {
         if (build.isSourceCode()) {
@@ -132,6 +168,10 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
                     build.getJar().getStartOptions(),
                     build.getJar().getStartArgs()
             );
+        }
+
+        if (build.isWar()){
+            return play(build.getWar().getPackageUrl());
         }
 
 

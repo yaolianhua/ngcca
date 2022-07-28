@@ -33,6 +33,14 @@ public class BuildImage {
                         .build()
         ).build();
     }
+
+    public static BuildImage ofWar(String httpUrl){
+        return BuildImage.builder().war(
+                War.builder()
+                        .packageUrl(httpUrl)
+                        .build()
+        ).build();
+    }
     public boolean isSourceCode(){
         return source != null;
     }
