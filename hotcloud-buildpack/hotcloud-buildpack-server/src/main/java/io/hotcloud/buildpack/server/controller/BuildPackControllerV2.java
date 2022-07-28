@@ -35,16 +35,10 @@ public class BuildPackControllerV2 {
     @Operation(
             summary = "Deploy a buildPack job",
             responses = {@ApiResponse(responseCode = "201")},
-            parameters = {
-                    @Parameter(name = "http_git_url", description = "Http git repository url", required = true),
-                    @Parameter(name = "branch", description = "The git repository branch", required = true)
-            }
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Build image body params")
     )
-    public ResponseEntity<Result<BuildPack>> play(
-            @RequestParam("http_git_url") String httpGitUrl,
-            @RequestParam(value = "branch") String branch
-    ) {
-        BuildPack buildpack = buildPackPlayerV2.play(BuildImage.ofSource(httpGitUrl, branch));
+    public ResponseEntity<Result<BuildPack>> play(@RequestBody BuildImage buildImage) {
+        BuildPack buildpack = buildPackPlayerV2.play(buildImage);
         return created(buildpack);
     }
 
