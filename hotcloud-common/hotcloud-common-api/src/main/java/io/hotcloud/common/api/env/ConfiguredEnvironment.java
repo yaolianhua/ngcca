@@ -12,6 +12,6 @@ public interface ConfiguredEnvironment {
 
     boolean contains(String property);
 
-    String getProperty(String property);
+    Object getProperty(String property);
 
 }

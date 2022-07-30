@@ -67,7 +67,7 @@ public class SystemConfiguredEnvironment extends AbstractConfiguredEnvironment i
                 if (!StringUtils.hasText(name)) {
                     continue;
                 }
-                super.environmentProperties.add(EnvironmentProperty.of(name, String.valueOf(field.get(entry.getValue())), false));
+                super.environmentProperties.add(EnvironmentProperty.of(name, field.get(entry.getValue()), false));
             }
         }
 

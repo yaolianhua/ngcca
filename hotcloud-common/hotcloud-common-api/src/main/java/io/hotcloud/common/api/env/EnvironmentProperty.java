@@ -9,15 +9,16 @@ import java.util.Objects;
 public class EnvironmentProperty {
 
     private final String name;
-    private final String value;
-    private final  boolean system;
-    public EnvironmentProperty(String name, String value, boolean system) {
+    private final Object value;
+    private final boolean system;
+
+    public EnvironmentProperty(String name, Object value, boolean system) {
         this.name = name;
         this.value = value;
         this.system = system;
     }
 
-    public static EnvironmentProperty of(String name, String value, boolean system) {
+    public static EnvironmentProperty of(String name, Object value, boolean system) {
         Assert.hasText(name, "Property name is null");
 
         return new EnvironmentProperty(name, value, system);
@@ -27,8 +28,8 @@ public class EnvironmentProperty {
         return Objects.equals(property, name);
     }
 
-    public String getProperty(String property) {
-        if (matches(property)){
+    public Object getProperty(String property) {
+        if (matches(property)) {
             return value;
         }
 

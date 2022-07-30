@@ -37,12 +37,12 @@ public abstract class AbstractConfiguredEnvironment implements ConfiguredEnviron
     }
 
     @Override
-    public synchronized String getProperty(String property) {
+    public synchronized Object getProperty(String property) {
         EnvironmentProperty environmentProperty = environmentProperties.stream().filter(e -> e.matches(property))
                 .findFirst()
                 .orElse(null);
 
-        if (Objects.isNull(environmentProperty)){
+        if (Objects.isNull(environmentProperty)) {
             return null;
         }
         return environmentProperty.getProperty(property);
