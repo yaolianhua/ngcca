@@ -1,6 +1,7 @@
 package io.hotcloud.kubernetes.server;
 
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,10 +12,11 @@ import javax.annotation.PostConstruct;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "kubernetes")
 @Slf4j
 @Data
+@Properties(prefix = "kubernetes")
 public class KubernetesProperties {
 
     public static final String ENABLE_WORKLOADS_WATCHER = "kubernetes.enable-workloads-watcher";

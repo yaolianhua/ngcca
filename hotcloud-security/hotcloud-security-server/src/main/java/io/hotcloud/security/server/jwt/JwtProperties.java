@@ -1,6 +1,7 @@
 package io.hotcloud.security.server.jwt;
 
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct;
  **/
 @ConfigurationProperties("security.jwt")
 @Data
+@Properties(prefix = "security.jwt")
 public class JwtProperties {
 
     private String signKey = Jwt.SECRET;

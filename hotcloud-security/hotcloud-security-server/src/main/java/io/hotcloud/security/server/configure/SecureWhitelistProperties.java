@@ -1,6 +1,7 @@
 package io.hotcloud.security.server.configure;
 
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -13,6 +14,7 @@ import java.util.List;
  **/
 @Data
 @ConfigurationProperties("security.ignored")
+@Properties(prefix = "security.ignored")
 public class SecureWhitelistProperties {
 
     private List<String> urls = new LinkedList<>();

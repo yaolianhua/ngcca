@@ -1,5 +1,6 @@
 package io.hotcloud.common.api.cache;
 
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,11 +11,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "cache")
 @Slf4j
 @Data
+@Properties(prefix = "cache")
 public class CacheProperties {
 
     public static final String PROPERTIES_TYPE_NAME = "cache.type";
     private Type type = Type.local;
 
+    @Properties(prefix = "redis")
     private RedisProperties redis;
 
     public enum Type {

@@ -19,7 +19,6 @@ public class EnvironmentProperty {
 
     public static EnvironmentProperty of(String name, String value, boolean system) {
         Assert.hasText(name, "Property name is null");
-        Assert.hasText(value, "Property value is null");
 
         return new EnvironmentProperty(name, value, system);
     }

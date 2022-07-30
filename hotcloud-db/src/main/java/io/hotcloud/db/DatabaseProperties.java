@@ -1,5 +1,6 @@
 package io.hotcloud.db;
 
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -8,12 +9,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  **/
 @ConfigurationProperties(prefix = "db")
 @Data
+@Properties(prefix = "db")
 public class DatabaseProperties {
 
     public static final String PROPERTIES_TYPE_NAME = "db.type";
     private Type type = Type.redis;
 
+    @Properties(prefix = "mongodb")
     private MongodbProperties mongodb;
+    @Properties(prefix = "redis")
     private RedisProperties redis;
 
     public enum Type {

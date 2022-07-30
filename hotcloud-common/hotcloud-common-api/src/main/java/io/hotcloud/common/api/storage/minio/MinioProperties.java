@@ -1,5 +1,6 @@
 package io.hotcloud.common.api.storage.minio;
 
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "minio")
 @Slf4j
+@Properties(prefix = "minio")
 public class MinioProperties {
 
     /**

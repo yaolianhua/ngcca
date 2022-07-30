@@ -2,6 +2,7 @@ package io.hotcloud.application.server;
 
 import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,10 @@ import javax.annotation.PostConstruct;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "app.storage")
 @Data
+@Properties(prefix = "app.storage")
 public class ApplicationStorageProperties {
 
     /**

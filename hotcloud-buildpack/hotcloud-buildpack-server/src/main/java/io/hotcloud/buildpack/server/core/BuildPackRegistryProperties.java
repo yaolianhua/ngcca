@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import javax.annotation.PostConstruct;
 @Data
 @ConfigurationProperties("buildpack.registry")
 @Configuration(proxyBeanMethods = false)
+@Properties(prefix = "buildpack.registry")
 public class BuildPackRegistryProperties {
     /**
      * Registry address. you can set this value e.g.

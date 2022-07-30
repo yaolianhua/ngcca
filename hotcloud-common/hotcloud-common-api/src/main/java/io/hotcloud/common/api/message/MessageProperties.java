@@ -1,5 +1,6 @@
 package io.hotcloud.common.api.message;
 
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "message")
 @Data
 @Slf4j
+@Properties(prefix = "message")
 public class MessageProperties {
 
     public static final String PROPERTIES_TYPE_NAME = "message.type";
@@ -24,6 +26,7 @@ public class MessageProperties {
      * </ul>
      */
     private Type type = Type.websocket;
+    @Properties(prefix = "rabbitmq")
     private RabbitmqProperties rabbitmq;
 
     public enum Type {

@@ -1,6 +1,7 @@
 package io.hotcloud.kubernetes.client;
 
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,6 +15,7 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties("hotcloud.server")
 @Slf4j
 @Data
+@Properties(prefix = "hotcloud.server")
 public class HotCloudHttpClientProperties {
 
     private String host = "localhost";
