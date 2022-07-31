@@ -41,4 +41,30 @@ public class SystemConfiguredEnvironmentController {
         return ok(properties);
     }
 
+    @GetMapping("/propertynames")
+    @Operation(
+            summary = "List system configured property name",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "system", description = "Is it system environment")
+            }
+    )
+    public ResponseEntity<Result<Collection<String>>> queryProperties(@RequestParam(value = "system", required = false) Boolean system) {
+        Collection<String> properties = configuredEnvironmentQuery.getPropertyNames(system);
+        return ok(properties);
+    }
+
+    @GetMapping("/property")
+    @Operation(
+            summary = "Fetch system configured environment",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "property", description = "queried property name")
+            }
+    )
+    public ResponseEntity<Result<EnvironmentProperty>> queryProperty(@RequestParam(value = "property") String property) {
+        EnvironmentProperty environmentProperty = configuredEnvironmentQuery.fetch(property);
+        return ok(environmentProperty);
+    }
+
 }

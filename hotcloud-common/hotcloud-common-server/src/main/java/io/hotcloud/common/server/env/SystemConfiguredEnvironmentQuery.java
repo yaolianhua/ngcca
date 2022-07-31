@@ -31,6 +31,19 @@ public class SystemConfiguredEnvironmentQuery implements ConfiguredEnvironmentQu
     }
 
     @Override
+    public Collection<String> getPropertyNames(Boolean system) {
+        if (Objects.isNull(system)) {
+            return getPropertyNames();
+        }
+        return configuredEnvironment.getPropertyNames(system);
+    }
+
+    @Override
+    public Collection<String> getPropertyNames() {
+        return configuredEnvironment.getPropertyNames();
+    }
+
+    @Override
     public EnvironmentProperty fetch(String property) {
         return configuredEnvironment.list()
                 .stream()

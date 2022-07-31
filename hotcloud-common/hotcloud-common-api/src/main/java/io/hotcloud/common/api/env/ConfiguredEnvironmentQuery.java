@@ -4,7 +4,11 @@ import java.util.Collection;
 
 public interface ConfiguredEnvironmentQuery {
 
-    Collection<EnvironmentProperty> list (Boolean system);
+    Collection<EnvironmentProperty> list(Boolean system);
 
-    EnvironmentProperty fetch (String property);
+    Collection<String> getPropertyNames(Boolean system);
+
+    Collection<String> getPropertyNames();
+
+    EnvironmentProperty fetch(String property);
 }
