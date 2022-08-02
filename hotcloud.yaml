@@ -114,11 +114,8 @@ spec:
             - mountPath: /root/.kube/config
               name: kubeconfig
               readOnly: true
-            - mountPath: /root/hotcloud/kaniko
-              name: buildpack-storage
-              readOnly: false
-            - mountPath: /root/hotcloud/app
-              name: app-storage
+            - mountPath: /root/hotcloud
+              name: hotcloud-storage
               readOnly: false
       tolerations:
         - effect: NoSchedule
@@ -135,11 +132,8 @@ spec:
             path: /root/.kube/config
           name: kubeconfig
         - hostPath:
-            path: /root/hotcloud/kaniko
-          name: buildpack-storage
-        - hostPath:
-            path: /root/hotcloud/app
-          name: app-storage
+            path: /root/hotcloud
+          name: hotcloud-storage
 ---
 apiVersion: v1
 data:
@@ -181,6 +175,10 @@ data:
         project: build
         username: admin
         password: QbMufCD@9WVQ^Hv
+        kaniko-image-url: 119.91.214.25:5000/base/imagebuild:latest
+        git-init-container-image-url: 119.91.214.25:5000/base/git:latest
+        alpine-init-container-image-url: 119.91.214.25:5000/base/alpine:latest
+        java-base-image: 119.91.214.25:5000/base/java11:tomcat9.0-openjdk11
 kind: ConfigMap
 metadata:
   name: hotcloud-config
