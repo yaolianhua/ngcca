@@ -15,7 +15,7 @@ spec:
     path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/redisinsight
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: storage-class-application
+  storageClassName: storage_class_application
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -29,12 +29,13 @@ spec:
     requests:
       storage: 10Gi
   volumeName: pv-redisinsight-5b2378dc5d2f4eedb55ed9217255c8cd
-  storageClassName: storage-class-application
+  storageClassName: storage_class_application
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redisinsight
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
   labels:
     app: redisinsight
 spec:
@@ -59,8 +60,10 @@ spec:
           command:
             - /bin/sh
             - '-c'
-            - |
-                          chown -R 1001 /db
+            - 'chown'
+            - '-R'
+            - '1001'
+            - '/db'
           resources: {}
           volumeMounts:
             - name: db
@@ -71,6 +74,13 @@ spec:
         - name:  redisinsight
           image: redislabs/redisinsight:latest
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           volumeMounts:
           - name: db
             mountPath: /db

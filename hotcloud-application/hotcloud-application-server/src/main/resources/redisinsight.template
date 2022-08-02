@@ -60,8 +60,10 @@ spec:
           command:
             - /bin/sh
             - '-c'
-            - |
-                            chown -R 1001 /db
+            - 'chown'
+            - '-R'
+            - '1001'
+            - '/db'
           resources: {}
           volumeMounts:
             - name: db

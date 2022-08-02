@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static io.hotcloud.application.api.template.InstanceTemplateConstant.*;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -21,48 +23,41 @@ public class TemplateResolverTest {
 
     @Test
     public void mongoTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("mongo.template")) {
-            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
-
             Map<String, String> mongo = Map.of("mongo", "mongo",
+                    "mongo_image", "mongo:5.0",
                     "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
                     "mongo_root_username", "admin",
                     "mongo_root_password", "password",
                     "nfs_path", "/tmp/app",
+                    "storage_class_application", "storage_class_application",
                     "nfs_server", "10.0.20.6");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
-            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mongo, String.class);
+            String parsed = parser.parseExpression(MONGODB_TEMPLATE_YAML, templateParserContext).getValue(mongo, String.class);
 
             try (InputStream resourceAsStream = getClass().getResourceAsStream("mongo.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, parsed);
-            }
+                Assertions.assertEquals(parsed, collect);
+
         }
     }
 
     @Test
     public void mysqlTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("mysql.template")) {
-            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
-
             Map<String, String> mysql = Map.of("mysql", "mysql",
+                    "mysql_image", "mysql:8.0",
                     "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
                     "mysql_root_password", "password",
                     "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage-class-application");
+                    "storage_class_application", "storage_class_application");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
-            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
+            String parsed = parser.parseExpression(MYSQL_TEMPLATE_YAML, templateParserContext).getValue(mysql, String.class);
 
             try (InputStream resourceAsStream = getClass().getResourceAsStream("mysql.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
@@ -71,15 +66,10 @@ public class TemplateResolverTest {
 
                 Assertions.assertEquals(collect, parsed);
             }
-        }
     }
 
     @Test
     public void rabbitmqTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("rabbitmq.template")) {
-            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
 
             Map<String, String> mysql = Map.of("rabbitmq", "rabbitmq",
                     "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
@@ -88,39 +78,33 @@ public class TemplateResolverTest {
                     "rabbitmq_image","rabbitmq:3.9-management",
                     "nfs_path", "/tmp/app",
                     "rabbitmq_management", "management",
-                    "storage_class_application", "storage-class-application");
+                    "storage_class_application", "storage_class_application");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
-            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
+            String parsed = parser.parseExpression(RABBITMQ_TEMPLATE_YAML, templateParserContext).getValue(mysql, String.class);
 
             try (InputStream resourceAsStream = getClass().getResourceAsStream("rabbitmq.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, parsed);
+                Assertions.assertEquals(parsed, collect);
             }
-        }
     }
 
     @Test
     public void redisTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("redis.template")) {
-            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
-
             Map<String, String> mysql = Map.of("redis", "redis",
                     "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
                     "redis_password", "password",
                     "redis_image","bitnami/redis:6.2",
                     "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage-class-application");
+                    "storage_class_application", "storage_class_application");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
-            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
+            String parsed = parser.parseExpression(REDIS_TEMPLATE_YAML, templateParserContext).getValue(mysql, String.class);
 
             try (InputStream resourceAsStream = getClass().getResourceAsStream("redis.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
@@ -129,25 +113,19 @@ public class TemplateResolverTest {
 
                 Assertions.assertEquals(collect, parsed);
             }
-        }
     }
 
     @Test
     public void redisInsightTemplate() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("redisinsight.template")) {
-            String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                    .lines()
-                    .collect(Collectors.joining("\n"));
-
             Map<String, String> mysql = Map.of("redisinsight", "redisinsight",
                     "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
                     "redisinsight_image","redislabs/redisinsight:latest",
                     "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage-class-application");
+                    "storage_class_application", "storage_class_application");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
-            String parsed = parser.parseExpression(yaml, templateParserContext).getValue(mysql, String.class);
+            String parsed = parser.parseExpression(REDISINSIGHT_TEMPLATE_YAML, templateParserContext).getValue(mysql, String.class);
 
             try (InputStream resourceAsStream = getClass().getResourceAsStream("redisinsight.yaml")) {
                 String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
@@ -156,7 +134,6 @@ public class TemplateResolverTest {
 
                 Assertions.assertEquals(collect, parsed);
             }
-        }
     }
 
 }

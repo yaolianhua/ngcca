@@ -4,12 +4,13 @@ metadata:
   labels:
     app: mongo
   name: mongo
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: mongo
-  strategy: { }
+  strategy: {}
   template:
     metadata:
       labels:
@@ -17,8 +18,9 @@ spec:
     spec:
       containers:
         - image: mongo:5.0
+          imagePullPolicy: IfNotPresent
           name: mongo
-          args: [ "--dbpath","/data/db" ]
+          args: ["--dbpath","/data/db"]
           livenessProbe:
             exec:
               command:
@@ -31,6 +33,13 @@ spec:
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 6
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           readinessProbe:
             exec:
               command:
@@ -64,18 +73,16 @@ spec:
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 1Gi
+    storage: 10Gi
   claimRef:
     kind: PersistentVolumeClaim
     name: pvc-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
     namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
-  nfs:
+  hostPath:
     path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/mongo
-    readOnly: false
-    server: 10.0.20.6
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: storage-class-application
+  storageClassName: storage_class_application
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -87,8 +94,9 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
   volumeName: pv-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
+  storageClassName: storage_class_application
 ---
 apiVersion: v1
 kind: Service
@@ -102,7 +110,6 @@ spec:
     - port: 27017
       protocol: TCP
       targetPort: 27017
-      nodePort: 30117
   selector:
     app: mongo
   type: NodePort

@@ -16,6 +16,14 @@ spec:
     spec:
       containers:
       - image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -48,7 +56,7 @@ spec:
     path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/mysql
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: storage-class-application
+  storageClassName: storage_class_application
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -62,7 +70,7 @@ spec:
     requests:
       storage: 10Gi
   volumeName: pv-mysql-5b2378dc5d2f4eedb55ed9217255c8cd
-  storageClassName: storage-class-application
+  storageClassName: storage_class_application
 ---
 apiVersion: v1
 kind: Service
