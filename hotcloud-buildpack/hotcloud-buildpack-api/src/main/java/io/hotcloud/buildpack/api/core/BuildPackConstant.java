@@ -1,8 +1,8 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.common.api.storage.FileHelper;
-
 import java.nio.file.Path;
+
+import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -19,7 +19,7 @@ public final class BuildPackConstant {
     public static final String DOCKER_SECRET_VOLUME = "docker-registry-secret-volume";
     public static final String WORKSPACE_VOLUME = "workspace-volume";
     public static final String STORAGE_CLASS = "storage-class-buildpack";
-    public static final String STORAGE_VOLUME_PATH = Path.of(FileHelper.getUserHome(), "hotcloud", "kaniko").toString();
+    public static final String STORAGE_VOLUME_PATH = Path.of(ROOT_PATH, "buildpack").toString();
 
     public static final String KANIKO_IMAGE = "gcr.io/kaniko-project/executor:latest";
 

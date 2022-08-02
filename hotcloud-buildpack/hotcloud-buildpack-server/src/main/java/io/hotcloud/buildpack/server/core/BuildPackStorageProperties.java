@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties(prefix = "buildpack.storage")
 @Data
 @Properties(prefix = "buildpack.storage")
+@Deprecated(since = "BuildPackApiV2")
 public class BuildPackStorageProperties {
 
     /**

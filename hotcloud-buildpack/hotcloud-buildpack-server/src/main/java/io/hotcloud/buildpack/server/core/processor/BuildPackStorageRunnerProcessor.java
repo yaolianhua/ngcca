@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
+import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.storage.FileHelper;
 import org.springframework.stereotype.Component;
@@ -8,8 +9,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -22,7 +21,7 @@ class BuildPackStorageRunnerProcessor implements BuildPackRunnerProcessor {
     public void process() {
 
         try {
-            Path volumePath = Path.of(ROOT_PATH, "buildpack");
+            Path volumePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH);
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
