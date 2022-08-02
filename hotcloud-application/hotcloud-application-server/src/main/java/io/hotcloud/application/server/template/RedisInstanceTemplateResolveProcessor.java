@@ -1,6 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplateConstant;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.Template;
@@ -24,8 +23,6 @@ class RedisInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
         return Map.of("redis", Template.Redis.name().toLowerCase(),
                 "namespace", namespace,
                 "redis_image", Template.Redis.getTag(),
-                "redis_password", InstanceTemplateConstant.REDIS_PASSWORD,
-                "storage_class_application", ApplicationConstant.STORAGE_CLASS,
-                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
+                "redis_password", InstanceTemplateConstant.REDIS_PASSWORD);
     }
 }

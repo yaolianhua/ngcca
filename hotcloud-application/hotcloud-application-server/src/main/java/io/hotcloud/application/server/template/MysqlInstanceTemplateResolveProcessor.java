@@ -1,6 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplateConstant;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.Template;
@@ -24,8 +23,6 @@ class MysqlInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
         return Map.of("mysql", Template.Mysql.name().toLowerCase(),
                 "namespace", namespace,
                 "mysql_image", Template.Mysql.getTag(),
-                "mysql_root_password", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD,
-                "storage_class_application", ApplicationConstant.STORAGE_CLASS,
-                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
+                "mysql_root_password", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD);
     }
 }

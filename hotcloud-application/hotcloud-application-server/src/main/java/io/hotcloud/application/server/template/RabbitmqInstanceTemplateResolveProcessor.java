@@ -1,6 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplateConstant;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.Template;
@@ -26,8 +25,6 @@ class RabbitmqInstanceTemplateResolveProcessor implements InstanceTemplateResolv
                 "rabbitmq_image", Template.Rabbitmq.getTag(),
                 "rabbitmq_default_password", InstanceTemplateConstant.RABBITMQ_DEFAULT_PASSWORD,
                 "rabbitmq_default_user", InstanceTemplateConstant.RABBITMQ_DEFAULT_USER,
-                "rabbitmq_management", InstanceTemplateConstant.RABBITMQ_MANAGEMENT,
-                "storage_class_application", ApplicationConstant.STORAGE_CLASS,
-                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
+                "rabbitmq_management", InstanceTemplateConstant.RABBITMQ_MANAGEMENT);
     }
 }

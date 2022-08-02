@@ -1,6 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplateConstant;
 import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
 import io.hotcloud.application.api.template.Template;
@@ -25,8 +24,6 @@ class MongodbInstanceTemplateResolveProcessor implements InstanceTemplateResolve
                 "namespace", namespace,
                 "mongo_image", Template.Mongodb.getTag(),
                 "mongo_root_username", InstanceTemplateConstant.MONGO_ROOT_USERNAME,
-                "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD,
-                "storage_class_application", ApplicationConstant.STORAGE_CLASS,
-                "nfs_path", ApplicationConstant.STORAGE_VOLUME_PATH);
+                "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD);
     }
 }
