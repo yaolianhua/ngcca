@@ -20,10 +20,10 @@ class MongodbInstanceTemplateResolveProcessor implements InstanceTemplateResolve
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("mongo", Template.Mongodb.name().toLowerCase(),
-                "namespace", namespace,
-                "mongo_image", Template.Mongodb.getTag(),
-                "mongo_root_username", InstanceTemplateConstant.MONGO_ROOT_USERNAME,
-                "mongo_root_password", InstanceTemplateConstant.MONGO_ROOT_PASSWORD);
+        return Map.of("MONGO", Template.Mongodb.name().toLowerCase(),
+                "NAMESPACE", namespace,
+                "MONGO_IMAGE", Template.Mongodb.getTag(),
+                "MONGO_ROOT_USERNAME", InstanceTemplateConstant.MONGO_ROOT_USERNAME,
+                "MONGO_ROOT_PASSWORD", InstanceTemplateConstant.MONGO_ROOT_PASSWORD);
     }
 }

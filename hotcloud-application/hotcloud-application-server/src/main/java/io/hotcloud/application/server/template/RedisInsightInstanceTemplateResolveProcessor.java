@@ -19,8 +19,8 @@ class RedisInsightInstanceTemplateResolveProcessor implements InstanceTemplateRe
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("redisinsight", Template.RedisInsight.name().toLowerCase(),
-                "namespace", namespace,
-                "redisinsight_image", Template.RedisInsight.getTag());
+        return Map.of("REDISINSIGHT", Template.RedisInsight.name().toLowerCase(),
+                "NAMESPACE", namespace,
+                "REDISINSIGHT_IMAGE", Template.RedisInsight.getTag());
     }
 }

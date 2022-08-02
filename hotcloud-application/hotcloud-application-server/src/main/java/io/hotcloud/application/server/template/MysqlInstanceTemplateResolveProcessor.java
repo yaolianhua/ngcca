@@ -20,9 +20,9 @@ class MysqlInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("mysql", Template.Mysql.name().toLowerCase(),
-                "namespace", namespace,
-                "mysql_image", Template.Mysql.getTag(),
-                "mysql_root_password", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD);
+        return Map.of("MYSQL", Template.Mysql.name().toLowerCase(),
+                "NAMESPACE", namespace,
+                "MYSQL_IMAGE", Template.Mysql.getTag(),
+                "MYSQL_ROOT_PASSWORD", InstanceTemplateConstant.MYSQL_ROOT_PASSWORD);
     }
 }

@@ -20,11 +20,11 @@ class RabbitmqInstanceTemplateResolveProcessor implements InstanceTemplateResolv
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("rabbitmq", Template.Rabbitmq.name().toLowerCase(),
-                "namespace", namespace,
-                "rabbitmq_image", Template.Rabbitmq.getTag(),
-                "rabbitmq_default_password", InstanceTemplateConstant.RABBITMQ_DEFAULT_PASSWORD,
-                "rabbitmq_default_user", InstanceTemplateConstant.RABBITMQ_DEFAULT_USER,
-                "rabbitmq_management", InstanceTemplateConstant.RABBITMQ_MANAGEMENT);
+        return Map.of("RABBITMQ", Template.Rabbitmq.name().toLowerCase(),
+                "NAMESPACE", namespace,
+                "RABBITMQ_IMAGE", Template.Rabbitmq.getTag(),
+                "RABBITMQ_DEFAULT_PASSWORD", InstanceTemplateConstant.RABBITMQ_DEFAULT_PASSWORD,
+                "RABBITMQ_DEFAULT_USER", InstanceTemplateConstant.RABBITMQ_DEFAULT_USER,
+                "RABBITMQ_MANAGEMENT", InstanceTemplateConstant.RABBITMQ_MANAGEMENT);
     }
 }

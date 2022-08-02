@@ -20,9 +20,9 @@ class RedisInstanceTemplateResolveProcessor implements InstanceTemplateResolvePr
 
     @Override
     public Map<String, String> resolve(String namespace) {
-        return Map.of("redis", Template.Redis.name().toLowerCase(),
-                "namespace", namespace,
-                "redis_image", Template.Redis.getTag(),
-                "redis_password", InstanceTemplateConstant.REDIS_PASSWORD);
+        return Map.of("REDIS", Template.Redis.name().toLowerCase(),
+                "NAMESPACE", namespace,
+                "REDIS_IMAGE", Template.Redis.getTag(),
+                "REDIS_PASSWORD", InstanceTemplateConstant.REDIS_PASSWORD);
     }
 }
