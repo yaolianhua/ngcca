@@ -16,6 +16,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Component
+@Deprecated(since = "BuildPackApiV2")
 class BuildPackStorageClassRunnerProcessor implements BuildPackRunnerProcessor {
 
     private final StorageClassApi storageClassApi;
@@ -38,12 +39,12 @@ class BuildPackStorageClassRunnerProcessor implements BuildPackRunnerProcessor {
             StorageClass existedStorageClass = storageClassApi.read(BuildPackConstant.STORAGE_CLASS);
             if (Objects.nonNull(existedStorageClass)) {
                 Log.debug(BuildPackStorageClassRunnerProcessor.class.getName(),
-                        String.format("storageClass '%s' already exist ", BuildPackConstant.STORAGE_CLASS));
+                        String.format("BuildPack storageClass '%s' already exist ", BuildPackConstant.STORAGE_CLASS));
                 return;
             }
             StorageClass storageClass = storageClassApi.storageClass(createRequest);
             Log.info(BuildPackStorageClassRunnerProcessor.class.getName(),
-                    String.format("storageClass '%s' created ", storageClass.getMetadata().getName()));
+                    String.format("Buildpack storageClass '%s' created ", storageClass.getMetadata().getName()));
         } catch (ApiException e) {
             Log.error(BuildPackStorageClassRunnerProcessor.class.getName(),
                     String.format("%s", e.getMessage()));

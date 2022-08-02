@@ -12,6 +12,7 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
+@Deprecated(since = "BuildPackApiV2")
 class BuildPackDefaultArgsPrinterRunnerProcessor implements BuildPackRunnerProcessor {
 
     private final KanikoFlag kanikoFlag;
