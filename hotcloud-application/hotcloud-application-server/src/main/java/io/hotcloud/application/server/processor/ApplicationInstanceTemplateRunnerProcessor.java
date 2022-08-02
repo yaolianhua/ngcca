@@ -29,6 +29,6 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
         resourceManager.put(Template.Mysql, MYSQL_TEMPLATE_YAML);
         resourceManager.put(Template.Rabbitmq, RABBITMQ_TEMPLATE_YAML);
         resourceManager.put(Template.Redis, REDIS_TEMPLATE_YAML);
-        resourceManager.put(Template.RedisInsight, REDIS_TEMPLATE_YAML);
+        resourceManager.put(Template.RedisInsight, REDISINSIGHT_TEMPLATE_YAML);
     }
 }
