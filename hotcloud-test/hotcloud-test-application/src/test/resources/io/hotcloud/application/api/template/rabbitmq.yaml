@@ -40,41 +40,7 @@ spec:
           mountPath: /var/lib/rabbitmq
       volumes:
       - name: rabbitmq-persistent-storage
-        persistentVolumeClaim:
-          claimName: pvc-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  claimRef:
-    kind: PersistentVolumeClaim
-    name: pvc-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
-    namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
-  hostPath:
-    path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/rabbitmq
-  volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: storage_class_application
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
-  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  volumeName: pv-rabbitmq-5b2378dc5d2f4eedb55ed9217255c8cd
-  storageClassName: storage_class_application
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

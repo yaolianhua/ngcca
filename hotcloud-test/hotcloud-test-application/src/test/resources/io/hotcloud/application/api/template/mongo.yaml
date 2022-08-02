@@ -62,41 +62,7 @@ spec:
               mountPath: /data/db
       volumes:
         - name: mongo-data-dir
-          persistentVolumeClaim:
-            claimName: pvc-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  claimRef:
-    kind: PersistentVolumeClaim
-    name: pvc-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
-    namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
-  hostPath:
-    path: /tmp/app/5b2378dc5d2f4eedb55ed9217255c8cd/mongo
-  volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: storage_class_application
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
-  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  volumeName: pv-mongo-5b2378dc5d2f4eedb55ed9217255c8cd
-  storageClassName: storage_class_application
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

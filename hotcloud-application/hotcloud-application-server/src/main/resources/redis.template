@@ -47,41 +47,7 @@ spec:
           - key: redis-config
             path: redis.conf
       - name: redis-persistent-storage
-        persistentVolumeClaim:
-          claimName: pvc-#{[redis]}-#{[namespace]}
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-#{[redis]}-#{[namespace]}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  claimRef:
-    kind: PersistentVolumeClaim
-    name: pvc-#{[redis]}-#{[namespace]}
-    namespace: #{[namespace]}
-  hostPath:
-    path: #{[nfs_path]}/#{[namespace]}/#{[redis]}
-  volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: #{[storage_class_application]}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-#{[redis]}-#{[namespace]}
-  namespace: #{[namespace]}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  volumeName: pv-#{[redis]}-#{[namespace]}
-  storageClassName: #{[storage_class_application]}
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
