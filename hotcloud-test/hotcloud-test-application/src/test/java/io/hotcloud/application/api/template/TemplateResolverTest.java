@@ -23,14 +23,11 @@ public class TemplateResolverTest {
 
     @Test
     public void mongoTemplate() throws IOException {
-            Map<String, String> mongo = Map.of("mongo", "mongo",
-                    "mongo_image", "mongo:5.0",
-                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
-                    "mongo_root_username", "admin",
-                    "mongo_root_password", "password",
-                    "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage_class_application",
-                    "nfs_server", "10.0.20.6");
+            Map<String, String> mongo = Map.of("MONGO", "mongo",
+                    "MONGO_IMAGE", "mongo:5.0",
+                    "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "MONGO_ROOT_USERNAME", "admin",
+                    "MONGO_ROOT_PASSWORD", "password");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
@@ -48,12 +45,10 @@ public class TemplateResolverTest {
 
     @Test
     public void mysqlTemplate() throws IOException {
-            Map<String, String> mysql = Map.of("mysql", "mysql",
-                    "mysql_image", "mysql:8.0",
-                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
-                    "mysql_root_password", "password",
-                    "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage_class_application");
+            Map<String, String> mysql = Map.of("MYSQL", "mysql",
+                    "MYSQL_IMAGE", "mysql:8.0",
+                    "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "MYSQL_ROOT_PASSWORD", "password");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
@@ -71,14 +66,12 @@ public class TemplateResolverTest {
     @Test
     public void rabbitmqTemplate() throws IOException {
 
-            Map<String, String> mysql = Map.of("rabbitmq", "rabbitmq",
-                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
-                    "rabbitmq_default_password", "password",
-                    "rabbitmq_default_user","admin",
-                    "rabbitmq_image","rabbitmq:3.9-management",
-                    "nfs_path", "/tmp/app",
-                    "rabbitmq_management", "management",
-                    "storage_class_application", "storage_class_application");
+            Map<String, String> mysql = Map.of("RABBITMQ", "rabbitmq",
+                    "RABBITMQ_MANAGEMENT", "management",
+                    "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "RABBITMQ_DEFAULT_PASSWORD", "password",
+                    "RABBITMQ_DEFAULT_USER","admin",
+                    "RABBITMQ_IMAGE","rabbitmq:3.9-management");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
@@ -95,12 +88,10 @@ public class TemplateResolverTest {
 
     @Test
     public void redisTemplate() throws IOException {
-            Map<String, String> mysql = Map.of("redis", "redis",
-                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
-                    "redis_password", "password",
-                    "redis_image","bitnami/redis:6.2",
-                    "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage_class_application");
+            Map<String, String> mysql = Map.of("REDIS", "redis",
+                    "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "REDIS_PASSWORD", "password",
+                    "REDIS_IMAGE","bitnami/redis:6.2");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();
@@ -117,11 +108,9 @@ public class TemplateResolverTest {
 
     @Test
     public void redisInsightTemplate() throws IOException {
-            Map<String, String> mysql = Map.of("redisinsight", "redisinsight",
-                    "namespace", "5b2378dc5d2f4eedb55ed9217255c8cd",
-                    "redisinsight_image","redislabs/redisinsight:latest",
-                    "nfs_path", "/tmp/app",
-                    "storage_class_application", "storage_class_application");
+            Map<String, String> mysql = Map.of("REDISINSIGHT", "redisinsight",
+                    "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                    "REDISINSIGHT_IMAGE","redislabs/redisinsight:latest");
 
             TemplateParserContext templateParserContext = new TemplateParserContext();
             SpelExpressionParser parser = new SpelExpressionParser();

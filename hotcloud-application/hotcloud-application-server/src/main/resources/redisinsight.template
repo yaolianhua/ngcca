@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: #{[redisinsight]}
-  namespace: #{[namespace]}
+  name: #{[REDISINSIGHT]}
+  namespace: #{[NAMESPACE]}
   labels:
-    app: #{[redisinsight]}
+    app: #{[REDISINSIGHT]}
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: #{[redisinsight]}
+      app: #{[REDISINSIGHT]}
   template:
     metadata:
       labels:
-        app: #{[redisinsight]}
+        app: #{[REDISINSIGHT]}
     spec:
       volumes:
         - name: db
@@ -34,8 +34,8 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       containers:
-        - name:  #{[redisinsight]}
-          image: #{[redisinsight_image]}
+        - name:  #{[REDISINSIGHT]}
+          image: #{[REDISINSIGHT_IMAGE]}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -54,12 +54,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: #{[redisinsight]}-service
-  namespace: #{[namespace]}
+  name: #{[REDISINSIGHT]}-service
+  namespace: #{[NAMESPACE]}
 spec:
   type: NodePort
   ports:
     - port: 8001
       targetPort: 8001
   selector:
-    app: #{[redisinsight]}
+    app: #{[REDISINSIGHT]}

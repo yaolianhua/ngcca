@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: #{[redis]}
-  namespace: #{[namespace]}
+  name: #{[REDIS]}
+  namespace: #{[NAMESPACE]}
 spec:
   selector:
     matchLabels:
-      app: #{[redis]}
+      app: #{[REDIS]}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: #{[redis]}
+        app: #{[REDIS]}
     spec:
       containers:
-      - image: #{[redis_image]}
+      - image: #{[REDIS_IMAGE]}
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -24,7 +24,7 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "250m"
-        name: #{[redis]}
+        name: #{[REDIS]}
         command:
         - redis-server
         - "/redis-master/redis.conf"
@@ -33,7 +33,7 @@ spec:
           value: "true"
         ports:
         - containerPort: 6379
-          name: #{[redis]}
+          name: #{[REDIS]}
         volumeMounts:
         - mountPath: /redis-master
           name: config
@@ -42,7 +42,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: #{[redis]}
+          name: #{[REDIS]}
           items:
           - key: redis-config
             path: redis.conf
@@ -52,26 +52,26 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: #{[redis]}
-  namespace: #{[namespace]}
+  name: #{[REDIS]}
+  namespace: #{[NAMESPACE]}
 spec:
   ports:
   - port: 6379
     protocol: TCP
     targetPort: 6379
-    name: #{[redis]}
+    name: #{[REDIS]}
   selector:
-    app: #{[redis]}
+    app: #{[REDIS]}
   type: NodePort
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #{[redis]}
-  namespace: #{[namespace]}
+  name: #{[REDIS]}
+  namespace: #{[NAMESPACE]}
 data:
   redis-config: |
-    requirepass #{[redis_password]}
+    requirepass #{[REDIS_PASSWORD]}
     bind 0.0.0.0
     pidfile "/var/run/redis_6379.pid"
     dbfilename "dump.rdb"

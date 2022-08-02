@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: #{[rabbitmq]}
-  namespace: #{[namespace]}
+  name: #{[RABBITMQ]}
+  namespace: #{[NAMESPACE]}
 spec:
   selector:
     matchLabels:
-      app: #{[rabbitmq]}
+      app: #{[RABBITMQ]}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: #{[rabbitmq]}
+        app: #{[RABBITMQ]}
     spec:
       containers:
-      - image: #{[rabbitmq_image]}
+      - image: #{[RABBITMQ_IMAGE]}
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -24,17 +24,17 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "250m"
-        name: #{[rabbitmq]}
+        name: #{[RABBITMQ]}
         env:
         - name: RABBITMQ_DEFAULT_PASS
-          value: #{[rabbitmq_default_password]}
+          value: #{[RABBITMQ_DEFAULT_PASSWORD]}
         - name: RABBITMQ_DEFAULT_USER
-          value: #{[rabbitmq_default_user]}
+          value: #{[RABBITMQ_DEFAULT_USER]}
         ports:
         - containerPort: 5672
-          name: #{[rabbitmq]}
+          name: #{[RABBITMQ]}
         - containerPort: 15672
-          name: #{[rabbitmq_management]}
+          name: #{[RABBITMQ_MANAGEMENT]}
         volumeMounts:
         - name: rabbitmq-persistent-storage
           mountPath: /var/lib/rabbitmq
@@ -45,18 +45,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: #{[rabbitmq]}
-  namespace: #{[namespace]}
+  name: #{[RABBITMQ]}
+  namespace: #{[NAMESPACE]}
 spec:
   ports:
   - port: 5672
     protocol: TCP
     targetPort: 5672
-    name: #{[rabbitmq]}
+    name: #{[RABBITMQ]}
   - port: 15672
     protocol: TCP
     targetPort: 15672
-    name: #{[rabbitmq_management]}
+    name: #{[RABBITMQ_MANAGEMENT]}
   selector:
-    app: #{[rabbitmq]}
+    app: #{[RABBITMQ]}
   type: NodePort

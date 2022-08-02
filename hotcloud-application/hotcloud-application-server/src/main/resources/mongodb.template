@@ -2,24 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: #{[mongo]}
-  name: #{[mongo]}
-  namespace: #{[namespace]}
+    app: #{[MONGO]}
+  name: #{[MONGO]}
+  namespace: #{[NAMESPACE]}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: #{[mongo]}
+      app: #{[MONGO]}
   strategy: {}
   template:
     metadata:
       labels:
-        app: #{[mongo]}
+        app: #{[MONGO]}
     spec:
       containers:
-        - image: #{[mongo_image]}
+        - image: #{[MONGO_IMAGE]}
           imagePullPolicy: IfNotPresent
-          name: #{[mongo]}
+          name: #{[MONGO]}
           args: ["--dbpath","/data/db"]
           livenessProbe:
             exec:
@@ -54,9 +54,9 @@ spec:
             failureThreshold: 6
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: #{[mongo_root_username]}
+              value: #{[MONGO_ROOT_USERNAME]}
             - name: MONGO_INITDB_ROOT_PASSWORD
-              value: #{[mongo_root_password]}
+              value: #{[MONGO_ROOT_PASSWORD]}
           volumeMounts:
             - name: mongo-data-dir
               mountPath: /data/db
@@ -68,14 +68,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: #{[mongo]}
-  name: #{[mongo]}
-  namespace: #{[namespace]}
+    app: #{[MONGO]}
+  name: #{[MONGO]}
+  namespace: #{[NAMESPACE]}
 spec:
   ports:
     - port: 27017
       protocol: TCP
       targetPort: 27017
   selector:
-    app: #{[mongo]}
+    app: #{[MONGO]}
   type: NodePort
