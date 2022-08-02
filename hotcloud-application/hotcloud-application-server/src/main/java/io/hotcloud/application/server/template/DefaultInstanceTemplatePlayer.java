@@ -1,6 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.Endpoint;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
@@ -13,7 +12,6 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.cache.Cache;
-import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
@@ -22,8 +20,6 @@ import io.hotcloud.security.api.user.UserApi;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
-import java.nio.file.Path;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -87,10 +83,6 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
-            Path userPath = Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, namespace, name);
-            if (!FileHelper.exists(userPath)) {
-                FileHelper.createDirectories(userPath);
-            }
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.create(namespace);
             }

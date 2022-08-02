@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Namespace;
-import io.hotcloud.application.api.ApplicationConstant;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.InstanceTemplateService;
@@ -26,6 +25,8 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.util.List;
+
+import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -81,7 +82,7 @@ public class ApplicationRabbitMQMessageSubscriber {
         }
 
         try {
-            FileHelper.deleteRecursively(Path.of(ApplicationConstant.STORAGE_VOLUME_PATH, pair.getNamespace()));
+            FileHelper.deleteRecursively(Path.of(ROOT_PATH, pair.getNamespace()));
         } catch (Exception e) {
             Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
                     String.format("[ApplicationRabbitMQMessageSubscriber] delete local storage error. %s", e.getMessage()));
