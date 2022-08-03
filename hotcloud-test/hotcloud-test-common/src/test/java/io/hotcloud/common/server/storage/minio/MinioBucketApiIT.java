@@ -23,4 +23,16 @@ public class MinioBucketApiIT extends MinioIT {
 
         minioBucketApi.remove("example-bucket");
     }
+
+    @Test
+    public void make_setPolicy_removed(){
+        String bucket = "custom-policy";
+        if (!minioBucketApi.exist(bucket)){
+            minioBucketApi.make(bucket);
+        }
+
+        minioBucketApi.setGetObjectPolicy(bucket);
+
+        minioBucketApi.remove(bucket);
+    }
 }

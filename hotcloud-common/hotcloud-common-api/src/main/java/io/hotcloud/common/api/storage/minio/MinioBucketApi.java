@@ -26,4 +26,11 @@ public interface MinioBucketApi {
      * @return true/false
      */
     boolean exist(String bucket);
+
+    /**
+     * Set {@code GetObject} bucket policy
+     * <p/> e.g. <a href="https://minio-api.docker.local/bucket/your-file">download your-file</a>
+     * @param bucket bucket name
+     */
+    void setGetObjectPolicy(String bucket);
 }
