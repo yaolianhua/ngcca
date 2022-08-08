@@ -20,15 +20,18 @@ public class InstanceTemplate {
     private String user;
     private String name;
 
+    private String host;
     private String namespace;
 
     private String service;
 
     private String ports;
+    private String httpPort;
 
     private String nodePorts;
 
     private String yaml;
+    private String ingress;
 
     private boolean success;
 

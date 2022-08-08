@@ -1,0 +1,23 @@
+package io.hotcloud.application.api;
+
+import io.hotcloud.common.api.env.Properties;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
+
+@ConfigurationProperties(prefix = "app")
+@Properties(prefix = "app")
+@Data
+@Configuration
+public class ApplicationProperties {
+
+    private String domainSuffix = ".k8s-cluster.local";
+
+    public String getDomainSuffix() {
+        if (StringUtils.hasText(domainSuffix) && !domainSuffix.startsWith(".")){
+            return "." + domainSuffix;
+        }
+        return domainSuffix;
+    }
+}

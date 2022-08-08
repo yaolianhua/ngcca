@@ -21,21 +21,22 @@ public interface InstanceTemplatePlayer {
      *
      * @param template  {@link Template}
      * @param namespace user's k8s namespace
+     * @param host Ingress rules host
      * @return {@link Endpoint}
      */
-    default Endpoint retrieveEndpoint(Template template, String namespace) {
+    default Endpoint retrieveEndpoint(Template template, String namespace, String host) {
         Assert.hasText(namespace, "namespace is null");
         switch (template) {
             case Mongodb:
-                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "27017");
+                return Endpoint.of(template.name().toLowerCase(), null,"27017", null);
             case Mysql:
-                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "3306");
+                return Endpoint.of(template.name().toLowerCase(), null, "3306", null);
             case Redis:
-                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "6379");
+                return Endpoint.of(template.name().toLowerCase(),  null, "6379", null);
             case RedisInsight:
-                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "8001");
+                return Endpoint.of(template.name().toLowerCase(),  host, "8001", "8001");
             case Rabbitmq:
-                return Endpoint.of(String.format("%s.%s.svc.cluster.local", template.name().toLowerCase(), namespace), "5672,15672");
+                return Endpoint.of(template.name().toLowerCase(),  host, "5672,15672", "15672");
 
             default:
                 throw new IllegalStateException("Unsupported instance template [" + template + "]");

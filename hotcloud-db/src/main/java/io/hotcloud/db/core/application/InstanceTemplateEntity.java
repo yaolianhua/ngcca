@@ -30,16 +30,19 @@ public class InstanceTemplateEntity extends AbstractEntity {
     private String name;
 
     private String namespace;
+    private String host;
 
     private String protocol;
 
     private String service;
 
     private String ports;
+    private String httpPort;
 
     private String nodePorts;
 
     private String yaml;
+    private String ingress;
 
     private boolean success;
 

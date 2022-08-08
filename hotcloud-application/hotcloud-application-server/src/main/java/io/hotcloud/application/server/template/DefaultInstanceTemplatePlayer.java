@@ -1,5 +1,6 @@
 package io.hotcloud.application.server.template;
 
+import io.hotcloud.application.api.ApplicationProperties;
 import io.hotcloud.application.api.Endpoint;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
@@ -17,14 +18,18 @@ import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
 @Component
+@RequiredArgsConstructor
 public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
 
     private final InstanceTemplateProcessors instanceTemplateProcessors;
@@ -35,24 +40,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     private final NamespaceApi namespaceApi;
     private final UserApi userApi;
     private final Cache cache;
-
-    public DefaultInstanceTemplatePlayer(InstanceTemplateProcessors instanceTemplateProcessors,
-                                         ApplicationEventPublisher eventPublisher,
-                                         InstanceTemplateService instanceTemplateService,
-                                         InstanceTemplateActivityLogger activityLogger,
-                                         KubectlApi kubectlApi,
-                                         NamespaceApi namespaceApi,
-                                         UserApi userApi,
-                                         Cache cache) {
-        this.instanceTemplateProcessors = instanceTemplateProcessors;
-        this.eventPublisher = eventPublisher;
-        this.instanceTemplateService = instanceTemplateService;
-        this.activityLogger = activityLogger;
-        this.kubectlApi = kubectlApi;
-        this.namespaceApi = namespaceApi;
-        this.userApi = userApi;
-        this.cache = cache;
-    }
+    private final ApplicationProperties applicationProperties;
 
     @Override
     public InstanceTemplate play(Template template) {
@@ -64,17 +52,25 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         Assert.hasText(namespace, "namespace is null");
 
         String yaml = instanceTemplateProcessors.process(template, namespace);
-        Endpoint endpoint = this.retrieveEndpoint(template, namespace);
+        String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDomainSuffix();
+        Endpoint endpoint = this.retrieveEndpoint(template, namespace, host);
         String name = template.name().toLowerCase();
         InstanceTemplate instanceTemplate = InstanceTemplate.builder()
                 .success(false)
                 .name(name)
                 .namespace(namespace)
+                .host(endpoint.getHost())
+                .httpPort(endpoint.getHttpPort())
                 .user(current.getUsername())
-                .service(endpoint.getHost())
+                .service(endpoint.getService())
                 .ports(endpoint.getPorts())
                 .yaml(yaml)
                 .build();
+        if (StringUtils.hasText(endpoint.getHost())){
+            String ingressYaml = NginxIngressTemplateRender.render(name, String.format("%s-%s", name, endpoint.getHost()),
+                    endpoint.getHost(), "/",endpoint.getService(), endpoint.getHttpPort());
+            instanceTemplate.setIngress(ingressYaml);
+        }
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
         Log.info(DefaultInstanceTemplatePlayer.class.getName(),
                 String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), name, saved.getId()));

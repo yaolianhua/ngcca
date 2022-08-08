@@ -1,23 +1,23 @@
 package io.hotcloud.application.server.template;
 
-import io.fabric8.kubernetes.api.model.*;
+import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.Service;
+import io.fabric8.kubernetes.api.model.ServicePort;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.*;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
-import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
-import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -36,27 +36,18 @@ public class InstanceTemplateEventListener {
     private final ApplicationEventPublisher eventPublisher;
     private final DeploymentApi deploymentApi;
     private final ServiceApi serviceApi;
-    private final ConfigMapApi configMapApi;
-    private final PersistentVolumeClaimApi persistentVolumeClaimApi;
-    private final PersistentVolumeApi persistentVolumeApi;
     private final KubectlApi kubectlApi;
 
     public InstanceTemplateEventListener(InstanceTemplateService instanceTemplateService,
                                          ApplicationEventPublisher eventPublisher,
                                          DeploymentApi deploymentApi,
                                          ServiceApi serviceApi,
-                                         ConfigMapApi configMapApi,
-                                         KubectlApi kubectlApi,
-                                         PersistentVolumeClaimApi persistentVolumeClaimApi,
-                                         PersistentVolumeApi persistentVolumeApi) {
+                                         KubectlApi kubectlApi) {
         this.instanceTemplateService = instanceTemplateService;
         this.eventPublisher = eventPublisher;
         this.deploymentApi = deploymentApi;
         this.serviceApi = serviceApi;
-        this.configMapApi = configMapApi;
         this.kubectlApi = kubectlApi;
-        this.persistentVolumeClaimApi = persistentVolumeClaimApi;
-        this.persistentVolumeApi = persistentVolumeApi;
     }
 
     private void sleep(int seconds) {
@@ -190,56 +181,16 @@ public class InstanceTemplateEventListener {
         String name = instance.getName();
 
         try {
-            Deployment deployment = deploymentApi.read(namespace, name);
-            if (deployment != null) {
-                deploymentApi.delete(namespace, name);
+            Boolean delete = kubectlApi.delete(namespace, instance.getYaml());
+            Log.info(InstanceTemplateEventListener.class.getName(),
+                    InstanceTemplateDeleteEvent.class.getSimpleName(),
+                    String.format("Delete instance template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
+
+            if (StringUtils.hasText(instance.getIngress())){
+                Boolean deleteIngress = kubectlApi.delete(namespace, instance.getIngress());
                 Log.info(InstanceTemplateEventListener.class.getName(),
                         InstanceTemplateDeleteEvent.class.getSimpleName(),
-                        String.format("Delete deployment '%s'", name));
-            }
-            if (Objects.equals(name, Template.RedisInsight.name().toLowerCase())) {
-                Service service = serviceApi.read(namespace, String.format("%s-service", name));
-                if (service != null) {
-                    serviceApi.delete(namespace, String.format("%s-service", name));
-                    Log.info(InstanceTemplateEventListener.class.getName(),
-                            InstanceTemplateDeleteEvent.class.getSimpleName(),
-                            String.format("Delete service '%s'", String.format("%s-service", name)));
-                }
-            } else {
-                Service service = serviceApi.read(namespace, name);
-                if (service != null) {
-                    serviceApi.delete(namespace, name);
-                    Log.info(InstanceTemplateEventListener.class.getName(),
-                            InstanceTemplateDeleteEvent.class.getSimpleName(),
-                            String.format("Delete service '%s'", name));
-                }
-            }
-
-
-            String pvc = String.format("pvc-%s-%s", name, namespace);
-            PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimApi.read(namespace, pvc);
-            if (persistentVolumeClaim != null) {
-                persistentVolumeClaimApi.delete(pvc, namespace);
-                Log.info(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDeleteEvent.class.getSimpleName(),
-                        String.format("Delete persistentVolumeClaim '%s'", pvc));
-            }
-
-            String pv = String.format("pv-%s-%s", name, namespace);
-            PersistentVolume persistentVolume = persistentVolumeApi.read(pv);
-            if (persistentVolume != null) {
-                persistentVolumeApi.delete(pv);
-                Log.info(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDeleteEvent.class.getSimpleName(),
-                        String.format("Delete persistentVolume '%s'", pv));
-            }
-
-            ConfigMap configMap = configMapApi.read(namespace, name);
-            if (configMap != null) {
-                configMapApi.delete(namespace, name);
-                Log.info(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDeleteEvent.class.getSimpleName(),
-                        String.format("Delete configMap '%s'", name));
+                        String.format("Delete instance template ingress success [%s], namespace:%s, name:%s", deleteIngress, namespace, name));
             }
 
         } catch (Exception e) {
@@ -271,6 +222,11 @@ public class InstanceTemplateEventListener {
             Log.info(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateDoneEvent.class.getSimpleName(),
                     String.format("[%s] user's [%s] template [%s] success. nodePorts [%s]", update.getUser(), update.getName(), update.getId(), update.getNodePorts()));
+
+            if (StringUtils.hasText(template.getIngress())) {
+                kubectlApi.apply(template.getNamespace(), template.getIngress());
+            }
+
         } catch (Exception e) {
             Log.error(InstanceTemplateEventListener.class.getName(),
                     InstanceTemplateDoneEvent.class.getSimpleName(),
