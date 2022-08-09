@@ -67,7 +67,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
                 .yaml(yaml)
                 .build();
         if (StringUtils.hasText(endpoint.getHost())){
-            String ingressYaml = NginxIngressTemplateRender.render(name, String.format("%s-%s", name, endpoint.getHost()),
+            String ingressYaml = IngressTemplateRender.render(name, String.format("%s-%s", name, endpoint.getHost()),
                     endpoint.getHost(), "/",endpoint.getService(), endpoint.getHttpPort());
             instanceTemplate.setIngress(ingressYaml);
         }

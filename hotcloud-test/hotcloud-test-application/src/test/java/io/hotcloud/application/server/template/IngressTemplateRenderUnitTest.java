@@ -10,15 +10,15 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class NginxIngressTemplateRenderUnitTest {
+public class IngressTemplateRenderUnitTest {
 
     @Test
     public void nginxIngressTemplateRenderTest() throws IOException {
 
-        try (InputStream inputStream = NginxIngressTemplateRenderUnitTest.class.getResourceAsStream("nginx-ingress.yaml")) {
+        try (InputStream inputStream = IngressTemplateRenderUnitTest.class.getResourceAsStream("ingress.yaml")) {
             String template = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
-            String render = NginxIngressTemplateRender.render(
+            String render = IngressTemplateRender.render(
                     "namespace",
                     "ingress",
                     "nginx-ingress.local",

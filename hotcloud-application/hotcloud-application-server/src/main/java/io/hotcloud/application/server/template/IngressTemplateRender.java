@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class NginxIngressTemplateRender {
+public class IngressTemplateRender {
 
     @SneakyThrows
     public static String render (String namespace, String ingress, String host, String path, String service, String port){
