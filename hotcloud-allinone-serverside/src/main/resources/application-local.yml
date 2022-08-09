@@ -42,3 +42,5 @@ buildpack:
     git-init-container-image-url: 192.168.146.128:5000/base/git:latest
     alpine-init-container-image-url: 192.168.146.128:5000/base/alpine:latest
     java-base-image: 192.168.146.128:5000/base/java11:tomcat9.0-openjdk11
+app:
+  dot-suffix-domain: .k8s-cluster.com

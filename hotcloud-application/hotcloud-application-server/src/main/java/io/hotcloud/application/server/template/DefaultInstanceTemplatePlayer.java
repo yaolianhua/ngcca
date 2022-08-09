@@ -52,8 +52,8 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         Assert.hasText(namespace, "namespace is null");
 
         String yaml = instanceTemplateProcessors.process(template, namespace);
-        String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDomainSuffix();
-        Endpoint endpoint = this.retrieveEndpoint(template, namespace, host);
+        String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
+        Endpoint endpoint = this.retrieveEndpoint(template, host);
         String name = template.name().toLowerCase();
         InstanceTemplate instanceTemplate = InstanceTemplate.builder()
                 .success(false)

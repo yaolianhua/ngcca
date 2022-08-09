@@ -1,7 +1,6 @@
 package io.hotcloud.application.api.template;
 
 import io.hotcloud.application.api.Endpoint;
-import org.springframework.util.Assert;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -20,12 +19,10 @@ public interface InstanceTemplatePlayer {
      * Retrieve endpoint
      *
      * @param template  {@link Template}
-     * @param namespace user's k8s namespace
      * @param host Ingress rules host
      * @return {@link Endpoint}
      */
-    default Endpoint retrieveEndpoint(Template template, String namespace, String host) {
-        Assert.hasText(namespace, "namespace is null");
+    default Endpoint retrieveEndpoint(Template template, String host) {
         switch (template) {
             case Mongodb:
                 return Endpoint.of(template.name().toLowerCase(), null,"27017", null);
@@ -34,7 +31,7 @@ public interface InstanceTemplatePlayer {
             case Redis:
                 return Endpoint.of(template.name().toLowerCase(),  null, "6379", null);
             case RedisInsight:
-                return Endpoint.of(template.name().toLowerCase(),  host, "8001", "8001");
+                return Endpoint.of(template.name().toLowerCase() + "-service",  host, "8001", "8001");
             case Rabbitmq:
                 return Endpoint.of(template.name().toLowerCase(),  host, "5672,15672", "15672");
 

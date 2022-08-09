@@ -1,12 +1,12 @@
 package io.hotcloud.application.server.template;
 
 import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServicePort;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateService;
-import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.*;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -17,12 +17,12 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -138,15 +138,11 @@ public class InstanceTemplateEventListener {
 
     @NotNull
     private String retrieveServiceNodePort(InstanceTemplate template) {
-        Service service;
-        if (Objects.equals(template.getName(), Template.RedisInsight.name().toLowerCase())) {
-            service = serviceApi.read(template.getNamespace(), String.format("%s-service", template.getName()));
-        } else {
-            service = serviceApi.read(template.getNamespace(), template.getName());
-        }
-        Assert.notNull(service, "k8s service is null");
+        Service service = serviceApi.read(template.getNamespace(), template.getService());
+        Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
+
         List<ServicePort> ports = service.getSpec().getPorts();
-        if (Objects.equals(template.getName(), Template.Rabbitmq.name().toLowerCase())) {
+        if (!CollectionUtils.isEmpty(ports) && ports.size() > 1){
             return ports.stream()
                     .map(e -> String.valueOf(e.getNodePort()))
                     .collect(Collectors.joining(","));
@@ -224,7 +220,13 @@ public class InstanceTemplateEventListener {
                     String.format("[%s] user's [%s] template [%s] success. nodePorts [%s]", update.getUser(), update.getName(), update.getId(), update.getNodePorts()));
 
             if (StringUtils.hasText(template.getIngress())) {
-                kubectlApi.apply(template.getNamespace(), template.getIngress());
+                List<HasMetadata> metadataList = kubectlApi.apply(template.getNamespace(), template.getIngress());
+                String ingress = metadataList.stream()
+                        .map(e -> e.getMetadata().getName())
+                        .findFirst().orElse(null);
+                Log.info(InstanceTemplateEventListener.class.getName(),
+                        InstanceTemplateDoneEvent.class.getSimpleName(),
+                        String.format("[%s] user's [%s] template ingress [%s] create success.", update.getUser(), update.getName(), ingress));
             }
 
         } catch (Exception e) {

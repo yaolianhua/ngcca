@@ -12,12 +12,12 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class ApplicationProperties {
 
-    private String domainSuffix = ".k8s-cluster.local";
+    private String dotSuffixDomain = ".k8s-cluster.local";
 
-    public String getDomainSuffix() {
-        if (StringUtils.hasText(domainSuffix) && !domainSuffix.startsWith(".")){
-            return "." + domainSuffix;
+    public String getDotSuffixDomain() {
+        if (StringUtils.hasText(dotSuffixDomain) && !dotSuffixDomain.startsWith(".")){
+            return "." + dotSuffixDomain;
         }
-        return domainSuffix;
+        return dotSuffixDomain;
     }
 }
