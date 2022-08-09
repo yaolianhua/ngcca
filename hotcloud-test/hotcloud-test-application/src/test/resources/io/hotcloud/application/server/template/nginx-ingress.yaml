@@ -4,10 +4,8 @@ metadata:
   name: ingress
   namespace: namespace
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
-  ingressClassName: nginx
   rules:
     - host: nginx-ingress.local
       http:
