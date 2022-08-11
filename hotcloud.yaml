@@ -43,23 +43,23 @@ spec:
       targetPort: http
   selector:
     k8s-app: hotcloud
-  type: LoadBalancer
+  type: ClusterIP
+  sessionAffinity: None
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hotcloud-ingress
+  name: api-hotcloud$DOT_SUFFIX_DOMAIN
   namespace: hotcloud
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   rules:
-    - host: api-hotcloud.yaolianhua.cn
+    - host: api-hotcloud$DOT_SUFFIX_DOMAIN
       http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: hotcloud
@@ -109,13 +109,13 @@ spec:
             privileged: true
           volumeMounts:
             - mountPath: /hotcloud/config
-              name: hotcloud-volume
-              readOnly: true
+              name: hotcloud-config-volume
+              readOnly: false
             - mountPath: /root/.kube/config
               name: kubeconfig
               readOnly: true
             - mountPath: /root/hotcloud
-              name: hotcloud-storage
+              name: hotcloud-data
               readOnly: false
       tolerations:
         - effect: NoSchedule
@@ -127,58 +127,65 @@ spec:
             items:
               - key: config
                 path: application.yml
-          name: hotcloud-volume
+          name: hotcloud-config-volume
         - hostPath:
-            path: /root/.kube/config
+            path: $KUBE_CONFIG_PATH
           name: kubeconfig
-        - hostPath:
-            path: /root/hotcloud
-          name: hotcloud-storage
+        - nfs:
+            server: $NFS_SERVER
+            path: $NFS_PATH
+            readOnly: false
+          name: hotcloud-data
 ---
 apiVersion: v1
 data:
   config: |
+    kubernetes:
+      in-cluster: true
+      enable-workloads-watcher: true
     cache:
-      type: redis
+      type: $CACHE_MIDDLEWARE
       redis:
-        host: redis-release-master.middleware.svc.cluster.local
-        port: 6379
-        password: QbMufCD@9WVQ^Hv
-        database: 10
+        host: $REDIS_HOST
+        port: $REDIS_PORT
+        password: $REDIS_PASSWORD
+        database: $CACHE_REDIS_DATABASE
     db:
-      type: mongodb
+      type: $DB_MIDDLEWARE
       redis:
-        database: 9
-        host: redis-release-master.middleware.svc.cluster.local
-        port: 6379
-        password: QbMufCD@9WVQ^Hv
+        database: $DB_REDIS_DATABASE
+        host: $REDIS_HOST
+        port: $REDIS_PORT
+        password: $REDIS_PASSWORD
       mongodb:
-          host: mongo-release-mongodb.middleware.svc.cluster.local
-          username: root
-          password: QbMufCD@9WVQ^Hv
-          port: 27017
-          database: hotcloud
+          host: $MONGO_HOST
+          username: $MONGO_USER
+          password: $MONGO_PASSWORD
+          port: $MONGO_PORT
+          database: $MONGO_DATABASE
     message:
-      type: rabbitmq
+      type: $MESSAGE_MIDDLEWARE
       rabbitmq:
-        host: rabbitmq-release-headless.middleware.svc.cluster.local
-        username: admin
-        password: QbMufCD@9WVQ^Hv
-        port: 5672
+        host: $RABBITMQ_HOST
+        username: $RABBITMQ_USER
+        password: $RABBITMQ_PASSWORD
+        port: $RABBITMQ_PORT
     minio:
-      access-key: admin
-      secret-key: QbMufCD@9WVQ^Hv
-      endpoint: "http://minio-release.middleware.svc.cluster.local:9000"
+      access-key: $MINIO_ACCESS_KEY
+      secret-key: $MINIO_SECRET_KEY
+      endpoint: $MINIO_ENDPOINT
     buildpack:
       registry:
-        url: 119.91.214.25:5000
-        project: build
-        username: admin
-        password: QbMufCD@9WVQ^Hv
-        kaniko-image-url: 119.91.214.25:5000/base/imagebuild:latest
-        git-init-container-image-url: 119.91.214.25:5000/base/git:latest
-        alpine-init-container-image-url: 119.91.214.25:5000/base/alpine:latest
-        java-base-image: 119.91.214.25:5000/base/java11:tomcat9.0-openjdk11
+        url: $REGISTRY_URL
+        project: $REGISTRY_BUILD_NAMESPACE
+        username: $REGISTRY_USERNAME
+        password: $REGISTRY_PASSWORD
+        kaniko-image-url: $KANIKO_IMAGE_URL
+        git-init-container-image-url: $GIT_INIT_CONTAINER_IMAGE_URL
+        alpine-init-container-image-url: $ALPINE_INIT_CONTAINER_IMAGE_URL
+        java-base-image: $JAVA_BASE_IMAGE
+    app:
+      dot-suffix-domain: $DOT_SUFFIX_DOMAIN
 kind: ConfigMap
 metadata:
   name: hotcloud-config
