@@ -1,25 +1,10 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    k8s-app: hotcloud-web
-  name: hotcloud-web
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    k8s-app: hotcloud-web
-  name: hotcloud-web
-  namespace: hotcloud-web
----
-apiVersion: v1
 kind: Service
 metadata:
   labels:
     k8s-app: hotcloud-web
   name: hotcloud-web
-  namespace: hotcloud-web
+  namespace: hotcloud-system
 spec:
   ports:
     - name: http
@@ -35,7 +20,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: web-hotcloud$DOT_SUFFIX_DOMAIN
-  namespace: hotcloud-web
+  namespace: hotcloud-system
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
@@ -57,7 +42,7 @@ metadata:
   labels:
     k8s-app: hotcloud-web
   name: hotcloud-web
-  namespace: hotcloud-web
+  namespace: hotcloud-system
 spec:
   replicas: 1
   selector:
@@ -93,9 +78,9 @@ spec:
           securityContext:
             privileged: true
           env:
-            - name: hotcloud_host
-              value: hotcloud.hotcloud.svc.cluster.local
-            - name: hotcloud_port
+            - name: HOTCLOUD_HOST
+              value: "hotcloud"
+            - name: HOTCLOUD_PORT
               value: "8080"
       tolerations:
         - effect: NoSchedule
