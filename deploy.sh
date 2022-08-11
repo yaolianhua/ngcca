@@ -23,22 +23,30 @@ function loadEnv() {
 }
 
 function apply() {
+    echo "deploy hotcloud server ..."
     envsubst < hotcloud.yaml | kubectl apply -f -
+    sleep 3
+
+    echo "deploy hotcloud web ..."
+    envsubst < hotcloud-web.yaml | kubectl apply -f -
 }
 
 function delete() {
+  echo "delete hotcloud server ..."
   envsubst < hotcloud.yaml | kubectl delete -f -
+  sleep 3
+
+  echo "delete hotcloud web ..."
+  envsubst < hotcloud-web.yaml | kubectl delete -f -
 }
 
 function deploy() {
     loadEnv
 
-    echo "******************** delete all ********************"
     delete
 
     sleep 3
 
-    echo "******************** apply all ********************"
     apply
 }
 

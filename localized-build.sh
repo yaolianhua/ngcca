@@ -11,8 +11,9 @@ if [ -z "$2" ]; then
     REPOSITORY_WEB="yaolianhua/hotcloud-web"
 fi
 
-BUILD_TIMESTAMP=$(date '+%Y%m%d%H%M%S')
-TAG="${BUILD_TIMESTAMP}"
+#BUILD_TIMESTAMP=$(date '+%Y%m%d%H%M%S')
+#TAG="${BUILD_TIMESTAMP}"
+TAG="latest"
 echo "Using tag: ${TAG}"
 
 SERVER_IMAGE="$REPOSITORY_SERVER:${TAG}"
