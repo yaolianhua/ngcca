@@ -29,7 +29,7 @@ public interface MinioBucketApi {
 
     /**
      * Set {@code GetObject} bucket policy
-     * <p/> e.g. <a href="https://minio-api.docker.local/bucket/your-file">download your-file</a>
+     * <p> e.g. <a href="https://minio-api.docker.local/bucket/your-file">download your-file</a>
      * @param bucket bucket name
      */
     void setGetObjectPolicy(String bucket);
