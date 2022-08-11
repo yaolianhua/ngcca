@@ -23,31 +23,89 @@ function loadEnv() {
 }
 
 function apply() {
-    echo "deploy hotcloud server ..."
-    envsubst < hotcloud.yaml | kubectl apply -f -
-    sleep 3
+    SERVICE=$1
+    if [ -z "$SERVICE" ]; then
+        echo "deploy hotcloud server ..."
+        envsubst < hotcloud.yaml | kubectl apply -f -
+        sleep 3
 
-    echo "deploy hotcloud web ..."
-    envsubst < hotcloud-web.yaml | kubectl apply -f -
+        echo "deploy hotcloud web ..."
+        envsubst < hotcloud-web.yaml | kubectl apply -f -
+        sleep 3
+
+        return
+    fi
+
+    if [ "$SERVICE" = "server" ]; then
+        echo "deploy hotcloud server ..."
+        envsubst < hotcloud.yaml | kubectl apply -f -
+        sleep 3
+
+        return
+    fi
+
+    if [ "$SERVICE" = "web" ]; then
+        echo "deploy hotcloud web ..."
+        envsubst < hotcloud-web.yaml | kubectl apply -f -
+        sleep 3
+
+        return
+    fi
+
+    echo "[deploy service] wrong service param [server|web]"
 }
 
 function delete() {
-  echo "delete hotcloud server ..."
-  envsubst < hotcloud.yaml | kubectl delete -f -
-  sleep 3
+  SERVICE=$1
+  if [ -z "$SERVICE" ]; then
+      echo "delete hotcloud server ..."
+      envsubst < hotcloud.yaml | kubectl delete -f -
+      sleep 3
 
-  echo "delete hotcloud web ..."
-  envsubst < hotcloud-web.yaml | kubectl delete -f -
+      echo "delete hotcloud web ..."
+      envsubst < hotcloud-web.yaml | kubectl delete -f -
+      sleep 3
+
+      return
+  fi
+
+  if [ "$SERVICE" = "server" ]; then
+      echo "delete hotcloud server ..."
+      envsubst < hotcloud.yaml | kubectl delete -f -
+      sleep 3
+
+      return
+  fi
+
+  if [ "$SERVICE" = "web" ]; then
+      echo "delete hotcloud web ..."
+      envsubst < hotcloud-web.yaml | kubectl delete -f -
+      sleep 3
+
+      return
+  fi
+
+  echo "[delete service] wrong service param [server|web]"
 }
 
 function deploy() {
+    SERVICE=$1
     loadEnv
 
-    delete
+    createNamespace
+
+    delete "$SERVICE"
 
     sleep 3
 
-    apply
+    apply "$SERVICE"
 }
 
-deploy
+function createNamespace() {
+    V=$(kubectl get ns |grep "hotcloud-system"|awk '{print $1}')
+    if [ -z "$V" ]; then
+        kubectl create ns 'hotcloud-system'
+    fi
+}
+
+deploy "$2"
