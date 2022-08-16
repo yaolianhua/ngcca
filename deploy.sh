@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ENV_FILE=$1
-
+NAMESPACE="hotcloud-system"
 if [ -z "$ENV_FILE" ]; then
     echo "no env file specified. use default env file hotcloud.env"
     ENV_FILE="hotcloud.env"
@@ -25,11 +25,10 @@ function loadEnv() {
 function apply() {
     SERVICE=$1
     if [ -z "$SERVICE" ]; then
-        echo "deploy hotcloud server ..."
+        print "deploy all"
         envsubst < hotcloud.yaml | kubectl apply -f -
         sleep 3
 
-        echo "deploy hotcloud web ..."
         envsubst < hotcloud-web.yaml | kubectl apply -f -
         sleep 3
 
@@ -37,7 +36,7 @@ function apply() {
     fi
 
     if [ "$SERVICE" = "server" ]; then
-        echo "deploy hotcloud server ..."
+        print "deploy $SERVICE"
         envsubst < hotcloud.yaml | kubectl apply -f -
         sleep 3
 
@@ -45,7 +44,7 @@ function apply() {
     fi
 
     if [ "$SERVICE" = "web" ]; then
-        echo "deploy hotcloud web ..."
+        print "deploy $SERVICE"
         envsubst < hotcloud-web.yaml | kubectl apply -f -
         sleep 3
 
@@ -54,15 +53,20 @@ function apply() {
 
     echo "[deploy service] wrong service param [server|web]"
 }
+function print() {
+    V=$1
+    echo "*************************************************"
+    echo "** $V **"
+    echo "*************************************************"
+}
 
 function delete() {
   SERVICE=$1
   if [ -z "$SERVICE" ]; then
-      echo "delete hotcloud server ..."
+      print "delete all"
       envsubst < hotcloud.yaml | kubectl delete -f -
       sleep 3
 
-      echo "delete hotcloud web ..."
       envsubst < hotcloud-web.yaml | kubectl delete -f -
       sleep 3
 
@@ -70,7 +74,7 @@ function delete() {
   fi
 
   if [ "$SERVICE" = "server" ]; then
-      echo "delete hotcloud server ..."
+      print "delete $SERVICE"
       envsubst < hotcloud.yaml | kubectl delete -f -
       sleep 3
 
@@ -78,7 +82,7 @@ function delete() {
   fi
 
   if [ "$SERVICE" = "web" ]; then
-      echo "delete hotcloud web ..."
+      print "delete $SERVICE"
       envsubst < hotcloud-web.yaml | kubectl delete -f -
       sleep 3
 
@@ -102,9 +106,9 @@ function deploy() {
 }
 
 function createNamespace() {
-    V=$(kubectl get ns |grep "hotcloud-system"|awk '{print $1}')
+    V=$(kubectl get ns |grep "$NAMESPACE"|awk '{print $1}')
     if [ -z "$V" ]; then
-        kubectl create ns 'hotcloud-system'
+        kubectl create ns "$NAMESPACE"
     fi
 }
 
