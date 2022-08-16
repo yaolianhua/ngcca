@@ -1,36 +1,39 @@
 #!/bin/bash
 
-REPOSITORY_SERVER=$1
-REPOSITORY_WEB=$2
-
-if [ -z "$1" ]; then
-    REPOSITORY_SERVER="yaolianhua/hotcloud"
+REPOSITORY=$1
+if [ -z "$REPOSITORY" ]; then
+    echo "please specify the repository e.g. 127.0.0.1:5000/app"
+    exit 0
 fi
 
-if [ -z "$2" ]; then
-    REPOSITORY_WEB="yaolianhua/hotcloud-web"
-fi
+echo -e "********************************************************"
+echo -e "**                     mvn package                    **"
+echo -e "********************************************************"
+mvn clean package -Dmaven.test.skip=true
 
 #BUILD_TIMESTAMP=$(date '+%Y%m%d%H%M%S')
 #TAG="${BUILD_TIMESTAMP}"
 TAG="latest"
-echo "Using tag: ${TAG}"
+SERVER_IMAGE="$REPOSITORY/hotcloud:$TAG"
+WEB_IMAGE="$REPOSITORY/hotcloud-web:$TAG"
 
-SERVER_IMAGE="$REPOSITORY_SERVER:${TAG}"
 
-echo "start build server image ..."
+echo -e "********************************************************"
+echo -e "**                  build server image                **"
+echo -e "********************************************************"
 docker build -f localized.Dockerfile  -t "${SERVER_IMAGE}" .
 
-echo "build server image end ..."
-echo "start push server image ..."
+echo -e "********************************************************"
+echo -e "**                   push server image                **"
+echo -e "********************************************************"
 docker push "${SERVER_IMAGE}"
 
-# ----------------------------------------------
-WEB_IMAGE="$REPOSITORY_WEB:${TAG}"
-
-echo "start build web image ..."
+echo -e "********************************************************"
+echo -e "**                   build web image                  **"
+echo -e "********************************************************"
 docker build -f hotcloud-web/Dockerfile  -t "${WEB_IMAGE}" .
 
-echo "build web image end ..."
-echo "start push web image ..."
+echo -e "********************************************************"
+echo -e "**                   push web image                **"
+echo -e "********************************************************"
 docker push "${WEB_IMAGE}"
