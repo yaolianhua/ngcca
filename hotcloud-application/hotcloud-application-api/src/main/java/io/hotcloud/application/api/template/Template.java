@@ -6,6 +6,7 @@ package io.hotcloud.application.api.template;
 public enum Template {
     //
     Mongodb("mongo:5.0"),
+    Minio("minio/minio:latest"),
     Redis("redis:7.0"),
     RedisInsight("redislabs/redisinsight:latest"),
     Mysql("mysql:8.0"),

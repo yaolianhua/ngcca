@@ -26,6 +26,7 @@ class ApplicationInstanceTemplateRunnerProcessor implements ApplicationRunnerPro
     @Override
     public void process() {
         resourceManager.put(Template.Mongodb, MONGODB_TEMPLATE_YAML);
+        resourceManager.put(Template.Minio, MINIO_TEMPLATE_YAML);
         resourceManager.put(Template.Mysql, MYSQL_TEMPLATE_YAML);
         resourceManager.put(Template.Rabbitmq, RABBITMQ_TEMPLATE_YAML);
         resourceManager.put(Template.Redis, REDIS_TEMPLATE_YAML);
