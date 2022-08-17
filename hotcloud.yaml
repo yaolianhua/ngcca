@@ -84,8 +84,8 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: yaolianhua/hotcloud
-          imagePullPolicy: Always
+        - image: $SERVER_IMAGE
+          imagePullPolicy: IfNotPresent
           name: hotcloud
           ports:
             - containerPort: 8080
