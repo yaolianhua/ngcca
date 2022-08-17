@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - image: minio/minio:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        name: minio
+        args:
+        - server
+        - /data
+        - "--console-address"
+        - ":9001"
+        env:
+        - name: MINIO_ROOT_USER
+          value: admin
+        - name: MINIO_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 9000
+          name: minio-api
+        - containerPort: 9001
+          name: minio-console
+        volumeMounts:
+        - name: minio-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: minio-persistent-storage
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
+spec:
+  ports:
+  - port: 9000
+    protocol: TCP
+    targetPort: minio-api
+    name: minio-api
+  - port: 9001
+    protocol: TCP
+    targetPort: minio-console
+    name: minio-console
+  selector:
+    app: minio
+  type: NodePort
