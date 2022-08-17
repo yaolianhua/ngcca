@@ -22,6 +22,27 @@ public class TemplateResolverTest {
 
 
     @Test
+    public void minioTemplate() throws IOException {
+        Map<String, String> minio = Map.of("MINIO", "minio",
+                "NAMESPACE", "5b2378dc5d2f4eedb55ed9217255c8cd",
+                "MINIO_ROOT_USER", "admin",
+                "MINIO_IMAGE", "minio/minio:latest",
+                "MINIO_ROOT_PASSWORD","password");
+
+        TemplateParserContext templateParserContext = new TemplateParserContext();
+        SpelExpressionParser parser = new SpelExpressionParser();
+        String parsed = parser.parseExpression(MINIO_TEMPLATE_YAML, templateParserContext).getValue(minio, String.class);
+
+        try (InputStream resourceAsStream = getClass().getResourceAsStream("minio.yaml")) {
+            String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+
+            Assertions.assertEquals(parsed, collect);
+
+        }
+    }
+    @Test
     public void mongoTemplate() throws IOException {
             Map<String, String> mongo = Map.of("MONGO", "mongo",
                     "MONGO_IMAGE", "mongo:5.0",

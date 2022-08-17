@@ -34,7 +34,8 @@ public interface InstanceTemplatePlayer {
                 return Endpoint.of(template.name().toLowerCase() + "-service",  host, "8001", "8001");
             case Rabbitmq:
                 return Endpoint.of(template.name().toLowerCase(),  host, "5672,15672", "15672");
-
+            case Minio:
+                return Endpoint.of(template.name().toLowerCase(), host, "9000,9001", "9001");
             default:
                 throw new IllegalStateException("Unsupported instance template [" + template + "]");
         }
