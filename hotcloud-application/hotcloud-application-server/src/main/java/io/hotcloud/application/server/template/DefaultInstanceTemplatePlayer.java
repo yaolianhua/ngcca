@@ -7,6 +7,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
 import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
+import io.hotcloud.application.server.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;

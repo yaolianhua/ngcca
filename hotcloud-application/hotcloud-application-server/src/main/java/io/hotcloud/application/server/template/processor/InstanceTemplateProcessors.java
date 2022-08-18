@@ -1,4 +1,4 @@
-package io.hotcloud.application.server.template;
+package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateProcessor;

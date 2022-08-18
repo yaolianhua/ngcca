@@ -1,10 +1,10 @@
-package io.hotcloud.application.server.template;
+package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.ApplicationProperties;
 import io.hotcloud.application.api.IngressDefinition;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateProcessor;
-import io.hotcloud.application.api.template.RedisInsightTemplate;
+import io.hotcloud.application.api.template.RabbitmqTemplate;
 import io.hotcloud.application.api.template.Template;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
@@ -15,17 +15,17 @@ import java.util.Objects;
 import static io.hotcloud.application.api.IngressTemplateRender.render;
 
 @Component
-class RedisInsightInstanceTemplateProcessor implements InstanceTemplateProcessor {
+class RabbitmqInstanceTemplateProcessor implements InstanceTemplateProcessor {
 
     private final ApplicationProperties applicationProperties;
 
-    public RedisInsightInstanceTemplateProcessor(ApplicationProperties applicationProperties) {
+    public RabbitmqInstanceTemplateProcessor(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;
     }
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.RedisInsight);
+        return Objects.equals(template, Template.Rabbitmq);
     }
 
     @Override
@@ -34,28 +34,28 @@ class RedisInsightInstanceTemplateProcessor implements InstanceTemplateProcessor
         if (!support(template)){
             return null;
         }
-        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(namespace);
+        RabbitmqTemplate rabbitmqTemplate = new RabbitmqTemplate(namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
                 .namespace(namespace)
                 .name(host)
                 .rules(List.of(IngressDefinition.Rule.builder()
-                                .service(redisInsightTemplate.getService())
-                                .port("8001")
+                                .service(rabbitmqTemplate.getService())
+                                .port("15672")
                                 .host(host)
                                 .build())
                 ).build();
 
         return InstanceTemplate.builder()
-                .name(redisInsightTemplate.getName())
-                .namespace(redisInsightTemplate.getNamespace())
+                .name(rabbitmqTemplate.getName())
+                .namespace(rabbitmqTemplate.getNamespace())
                 .success(false)
                 .host(host)
-                .ports("8001")
-                .httpPort("8001")
-                .service(redisInsightTemplate.getService())
+                .ports("5672,15672")
+                .httpPort("15672")
+                .service(rabbitmqTemplate.getService())
                 .user(user)
-                .yaml(redisInsightTemplate.getYaml())
+                .yaml(rabbitmqTemplate.getYaml())
                 .ingress(render(ingressDefinition))
                 .build();
     }

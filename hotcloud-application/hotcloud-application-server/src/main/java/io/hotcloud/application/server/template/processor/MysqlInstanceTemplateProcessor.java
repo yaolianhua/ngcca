@@ -1,19 +1,19 @@
-package io.hotcloud.application.server.template;
+package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateProcessor;
-import io.hotcloud.application.api.template.RedisTemplate;
+import io.hotcloud.application.api.template.MysqlTemplate;
 import io.hotcloud.application.api.template.Template;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
-class RedisInstanceTemplateProcessor implements InstanceTemplateProcessor {
+class MysqlInstanceTemplateProcessor implements InstanceTemplateProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Redis);
+        return Objects.equals(template, Template.Mysql);
     }
 
     @Override
@@ -22,16 +22,16 @@ class RedisInstanceTemplateProcessor implements InstanceTemplateProcessor {
         if (!support(template)){
             return null;
         }
-        RedisTemplate redisTemplate = new RedisTemplate(namespace);
+        MysqlTemplate mysqlTemplate = new MysqlTemplate(namespace);
         
         return InstanceTemplate.builder()
-                .name(redisTemplate.getName())
-                .namespace(redisTemplate.getNamespace())
+                .name(mysqlTemplate.getName())
+                .namespace(mysqlTemplate.getNamespace())
                 .success(false)
-                .ports("6379")
-                .service(redisTemplate.getService())
+                .ports("3306")
+                .service(mysqlTemplate.getService())
                 .user(user)
-                .yaml(redisTemplate.getYaml())
+                .yaml(mysqlTemplate.getYaml())
                 .build();
     }
 }

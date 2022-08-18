@@ -1,4 +1,4 @@
-package io.hotcloud.application.server.template;
+package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.ApplicationProperties;
 import io.hotcloud.application.api.IngressDefinition;
