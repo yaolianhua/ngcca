@@ -1,9 +1,8 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.InstanceTemplateResolveProcessor;
-import io.hotcloud.application.api.template.InstanceTemplateResourceManager;
+import io.hotcloud.application.api.template.InstanceTemplate;
+import io.hotcloud.application.api.template.InstanceTemplateProcessor;
 import io.hotcloud.application.api.template.Template;
-import io.hotcloud.common.api.exception.HotCloudException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,21 +14,20 @@ import java.util.Objects;
 @Component
 public class InstanceTemplateProcessors {
 
-    private final List<InstanceTemplateResolveProcessor> resolveProcessors;
-    private final InstanceTemplateResourceManager instanceTemplateResourceManager;
+    private final List<InstanceTemplateProcessor> processors;
 
-    public InstanceTemplateProcessors(List<InstanceTemplateResolveProcessor> resolveProcessors,
-                                      InstanceTemplateResourceManager instanceTemplateResourceManager) {
-        this.resolveProcessors = resolveProcessors;
-        this.instanceTemplateResourceManager = instanceTemplateResourceManager;
+    public InstanceTemplateProcessors(List<InstanceTemplateProcessor> processors) {
+        this.processors = processors;
     }
 
-    public String process(Template template, String namespace) {
-        for (InstanceTemplateResolveProcessor resolveProcessor : resolveProcessors) {
-            if (Objects.equals(template, resolveProcessor.support())) {
-                return resolveProcessor.process(instanceTemplateResourceManager.get(template), namespace);
+    public InstanceTemplate process(Template template, String user, String namespace) {
+        for (InstanceTemplateProcessor processor : processors) {
+            InstanceTemplate instanceTemplate = processor.process(template, user, namespace);
+            if (Objects.nonNull(instanceTemplate)){
+                return instanceTemplate;
             }
         }
-        throw new HotCloudException("Unsupported instance template [" + template + "]");
+
+        throw new UnsupportedOperationException("Unsupported template [" + template.name() + "]");
     }
 }

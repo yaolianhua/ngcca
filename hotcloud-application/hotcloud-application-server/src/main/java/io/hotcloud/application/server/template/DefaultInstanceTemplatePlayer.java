@@ -1,7 +1,5 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.ApplicationProperties;
-import io.hotcloud.application.api.Endpoint;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.InstanceTemplateService;
@@ -19,11 +17,9 @@ import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -40,7 +36,6 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     private final NamespaceApi namespaceApi;
     private final UserApi userApi;
     private final Cache cache;
-    private final ApplicationProperties applicationProperties;
 
     @Override
     public InstanceTemplate play(Template template) {
@@ -51,29 +46,11 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null");
 
-        String yaml = instanceTemplateProcessors.process(template, namespace);
-        String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
-        Endpoint endpoint = this.retrieveEndpoint(template, host);
-        String name = template.name().toLowerCase();
-        InstanceTemplate instanceTemplate = InstanceTemplate.builder()
-                .success(false)
-                .name(name)
-                .namespace(namespace)
-                .host(endpoint.getHost())
-                .httpPort(endpoint.getHttpPort())
-                .user(current.getUsername())
-                .service(endpoint.getService())
-                .ports(endpoint.getPorts())
-                .yaml(yaml)
-                .build();
-        if (StringUtils.hasText(endpoint.getHost())){
-            String ingressYaml = IngressTemplateRender.render(name, String.format("%s-%s", name, endpoint.getHost()),
-                    endpoint.getHost(), "/",endpoint.getService(), endpoint.getHttpPort());
-            instanceTemplate.setIngress(ingressYaml);
-        }
+        InstanceTemplate instanceTemplate = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
+
         InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
         Log.info(DefaultInstanceTemplatePlayer.class.getName(),
-                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), name, saved.getId()));
+                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), instanceTemplate.getName(), saved.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
         Log.debug(DefaultInstanceTemplatePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
@@ -82,7 +59,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.create(namespace);
             }
-            kubectlApi.apply(namespace, yaml);
+            kubectlApi.apply(namespace, instanceTemplate.getYaml());
         } catch (Exception ex) {
             eventPublisher.publishEvent(new InstanceTemplateStartFailureEvent(saved, ex));
             return saved;

@@ -1,0 +1,24 @@
+kubernetes:
+  in-cluster: false
+  enable-workloads-watcher: false
+cache:
+  type: redis
+  redis:
+    host: localhost
+    port: 6379
+    password: QbMufCD@9WVQ^Hv
+    database: 11
+db:
+  type: mongodb
+  mongodb:
+    host: localhost
+    username: admin
+    password: QbMufCD@9WVQ^Hv
+    port: 27017
+    database: hotcloud-test
+minio:
+  access-key: admin
+  secret-key: QbMufCD@9WVQ^Hv
+  endpoint: "http://localhost:9009"
+app:
+  dot-suffix-domain: .k8s-cluster.com
