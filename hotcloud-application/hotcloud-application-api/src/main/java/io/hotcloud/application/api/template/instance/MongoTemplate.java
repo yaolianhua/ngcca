@@ -1,5 +1,6 @@
-package io.hotcloud.application.api.template;
+package io.hotcloud.application.api.template.instance;
 
+import io.hotcloud.application.api.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -12,21 +13,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class RabbitmqTemplate {
+public class MongoTemplate {
 
-    public RabbitmqTemplate(String namespace ) {
+    public MongoTemplate(String namespace) {
         this.namespace = namespace;
     }
 
-    public RabbitmqTemplate(String image, String namespace) {
+    public MongoTemplate(String image, String namespace) {
         this.image = image;
         this.namespace = namespace;
     }
 
-    private String name = Template.Rabbitmq.name().toLowerCase();
-    private String image = "rabbitmq:3.9-management";
+    private String name = Template.Mongodb.name().toLowerCase();
+    private String image = "mongo:5.0";
     private String namespace;
-    private String service = Template.Rabbitmq.name().toLowerCase();
+    private String service = Template.Mongodb.name().toLowerCase();
     private String username = "admin";
     private String password = "passw0rd";
 
@@ -34,12 +35,11 @@ public class RabbitmqTemplate {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("RABBITMQ", name,
+                        Map.of("MONGO", name,
                                 "NAMESPACE", namespace,
-                                "RABBITMQ_IMAGE", image,
-                                "RABBITMQ_DEFAULT_PASSWORD", password,
-                                "RABBITMQ_DEFAULT_USER", username,
-                                "RABBITMQ_MANAGEMENT", "management"),
+                                "MONGO_IMAGE", image,
+                                "MONGO_ROOT_USERNAME", username,
+                                "MONGO_ROOT_PASSWORD", password),
                         String.class
                 );
     }
@@ -47,7 +47,7 @@ public class RabbitmqTemplate {
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("rabbitmq.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("mongodb.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

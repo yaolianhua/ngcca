@@ -2,8 +2,8 @@ package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateProcessor;
-import io.hotcloud.application.api.template.RedisTemplate;
 import io.hotcloud.application.api.template.Template;
+import io.hotcloud.application.api.template.instance.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

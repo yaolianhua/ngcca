@@ -1,5 +1,6 @@
-package io.hotcloud.application.api.template;
+package io.hotcloud.application.api.template.instance;
 
+import io.hotcloud.application.api.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;

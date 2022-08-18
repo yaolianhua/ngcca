@@ -1,5 +1,6 @@
-package io.hotcloud.application.api.template;
+package io.hotcloud.application.api.template.instance;
 
+import io.hotcloud.application.api.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -12,33 +13,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class MinioTemplate {
+public class RedisTemplate {
 
-    public MinioTemplate(String namespace) {
+    public RedisTemplate(String namespace ) {
         this.namespace = namespace;
     }
 
-    public MinioTemplate(String image, String namespace) {
+    public RedisTemplate(String image, String namespace ) {
         this.image = image;
         this.namespace = namespace;
     }
 
-    private String name = Template.Minio.name().toLowerCase();
-    private String image = "quay.io/minio/minio:latest";
+    private String name = Template.Redis.name().toLowerCase();
+    private String image = "redis:7.0";
     private String namespace;
-    private String service = Template.Minio.name().toLowerCase();
-    private String accessKey = "admin";
-    private String accessSecret = "passw0rd";
+    private String service = Template.Redis.name().toLowerCase();
+
+    private String password = "passw0rd";
 
     public String getYaml() {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("MINIO", name,
+                        Map.of("REDIS", name,
                                 "NAMESPACE", namespace,
-                                "MINIO_IMAGE", image,
-                                "MINIO_ROOT_USER", accessKey,
-                                "MINIO_ROOT_PASSWORD", accessSecret),
+                                "REDIS_IMAGE", image,
+                                "REDIS_PASSWORD", password),
                         String.class
                 );
     }
@@ -46,7 +46,7 @@ public class MinioTemplate {
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("minio.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("redis.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

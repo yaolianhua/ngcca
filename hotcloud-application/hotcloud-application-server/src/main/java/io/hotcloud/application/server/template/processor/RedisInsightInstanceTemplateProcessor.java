@@ -4,8 +4,8 @@ import io.hotcloud.application.api.ApplicationProperties;
 import io.hotcloud.application.api.IngressDefinition;
 import io.hotcloud.application.api.template.InstanceTemplate;
 import io.hotcloud.application.api.template.InstanceTemplateProcessor;
-import io.hotcloud.application.api.template.RedisInsightTemplate;
 import io.hotcloud.application.api.template.Template;
+import io.hotcloud.application.api.template.instance.RedisInsightTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
