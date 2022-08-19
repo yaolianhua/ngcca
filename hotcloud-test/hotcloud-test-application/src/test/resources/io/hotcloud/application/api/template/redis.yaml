@@ -15,7 +15,7 @@ spec:
         app: redis
     spec:
       containers:
-      - image: bitnami/redis:6.2
+      - image: redis:7.0
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -71,7 +71,7 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 data:
   redis-config: |
-    requirepass password
+    requirepass passw0rd
     bind 0.0.0.0
     pidfile "/var/run/redis_6379.pid"
     dbfilename "dump.rdb"
