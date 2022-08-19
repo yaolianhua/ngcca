@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 @ConfigurationProperties(prefix = "app")
 @Properties(prefix = "app")
 @Data
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ApplicationProperties {
 
     private String dotSuffixDomain = ".k8s-cluster.local";

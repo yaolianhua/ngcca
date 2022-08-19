@@ -3,11 +3,13 @@ package io.hotcloud.buildpack.server.core;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.buildpack.api.core.AbstractBuildPackApiV2;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackDockerSecretResource;
-import io.hotcloud.buildpack.api.core.BuildPackJobResource;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.Validator;
+import io.hotcloud.common.api.registry.RegistryProperties;
+import io.hotcloud.common.api.storage.FileHelper;
+import io.hotcloud.db.core.registry.RegistryImageEntity;
+import io.hotcloud.db.core.registry.RegistryImageRepository;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
@@ -34,7 +36,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     private final KubectlApi kubectlApi;
     private final JobApi jobApi;
     private final PodApi podApi;
-    private final BuildPackRegistryProperties registryProperties;
+    private final RegistryProperties registryProperties;
+    private final RegistryImageRepository registryImageRepository;
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
 
     @Override
@@ -50,22 +53,33 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String project = originString.toLowerCase().replaceAll("_", "-");
         String resolvedBranch = branch.toLowerCase().replaceAll("_", "-");
 
-        String k8sName = String.format("%s-%s-%s", namespace, project, resolvedBranch);
+
+        Assert.isTrue(Validator.validK8sName(project), "git project name is illegal [" + project + "]");
+        String k8sName = String.format("%s-%s-%s", project, resolvedBranch, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
 
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getProject(), image);
+        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
+
+        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
+
+        RegistryImageEntity gitImageEntity = registryImageRepository.findByName(BuildPackImages.Git.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Git image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Git image is null");
+
         String job = kanikoJob(
                 namespace,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                registryProperties.getKanikoImageUrl(),
+                kanikoImageEntity.getValue(),
                 branch,
                 httpGitUrl,
-                registryProperties.getGitInitContainerImageUrl());
+                gitImageEntity.getValue());
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
@@ -86,22 +100,37 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     protected BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
 
         Assert.hasText(httpUrl, "Binary package url is null");
+        String filename = FileHelper.getFilename(httpUrl);
+        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
 
-        String k8sName = String.format("%s-%s-%s", namespace, "appjar", System.currentTimeMillis());
+        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
 
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getProject(), image);
+        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
+
+        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
+
+        RegistryImageEntity alpineImageEntity = registryImageRepository.findByName(BuildPackImages.Alpine.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Alpine image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Alpine image is null");
+
+        RegistryImageEntity javaImageEntity = registryImageRepository.findByName(BuildPackImages.Java11.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
+
         String job = kanikoJob(
                 namespace,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                registryProperties.getKanikoImageUrl(),
-                registryProperties.getAlpineInitContainerImageUrl(),
-                jarDockerfile(registryProperties.getJavaBaseImage(), httpUrl, jarStartOptions, jarStartArgs, true));
+                kanikoImageEntity.getValue(),
+                alpineImageEntity.getValue(),
+                jarDockerfile(javaImageEntity.getValue(), httpUrl, jarStartOptions, jarStartArgs, true));
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
@@ -120,22 +149,36 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     @Override
     protected BuildPackJobResource prepareJob(String namespace, String httpUrl) {
         Assert.hasText(httpUrl, "Binary package url is null");
-
-        String k8sName = String.format("%s-%s-%s", namespace, "appwar", System.currentTimeMillis());
+        String filename = FileHelper.getFilename(httpUrl);
+        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
+        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
 
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getProject(), image);
+        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
+
+        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
+
+        RegistryImageEntity alpineImageEntity = registryImageRepository.findByName(BuildPackImages.Alpine.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Alpine image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Alpine image is null");
+
+        RegistryImageEntity javaImageEntity = registryImageRepository.findByName(BuildPackImages.Java11.name().toLowerCase());
+        Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
+        Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
+
         String job = kanikoJob(
                 namespace,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                registryProperties.getKanikoImageUrl(),
-                registryProperties.getAlpineInitContainerImageUrl(),
-                warDockerfile(registryProperties.getJavaBaseImage(), httpUrl,true));
+                kanikoImageEntity.getValue(),
+                alpineImageEntity.getValue(),
+                warDockerfile(javaImageEntity.getValue(), httpUrl,true));
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()

@@ -89,4 +89,31 @@ public class ValidatorTest {
         invalidUsernameProvider().forEach(e -> Assertions.assertFalse(Validator.validUsername(e)));
     }
 
+    static Stream<String> validK8sNameProvider() {
+        return Stream.of(
+                "admin",
+                "jason-hello",
+                "smith12344444444444444444444444444444444",
+                "jason12354stanth",
+                "123abcdefg"
+        );
+    }
+
+    static Stream<String> invalidK8sNameProvider() {
+        return Stream.of(
+                "Jack",
+                "-123adminjasonsmihthy",
+                "admin_",
+                "jason@",
+                "smith123-",
+                "admin.123",
+                "admin管理员"
+        );
+    }
+    @Test
+    public void k8sName(){
+        validK8sNameProvider().forEach(e -> Assertions.assertTrue(Validator.validK8sName(e)));
+        invalidK8sNameProvider().forEach(e -> Assertions.assertFalse(Validator.validK8sName(e)));
+    }
+
 }

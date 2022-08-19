@@ -47,3 +47,8 @@ security:
 buildpack:
   kaniko:
     verbosity: info
+registry:
+  url:
+  username:
+  password:
+  imagebuild-namespace:
