@@ -51,3 +51,4 @@ registry:
   url:
   username:
   password:
+  imagebuild-namespace:

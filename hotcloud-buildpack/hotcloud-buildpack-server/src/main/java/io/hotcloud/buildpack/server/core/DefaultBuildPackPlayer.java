@@ -10,6 +10,7 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
@@ -38,7 +39,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
-    private final BuildPackRegistryProperties registryProperties;
+    private final RegistryProperties registryProperties;
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
@@ -52,7 +53,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
                                   UserApi userApi,
                                   KanikoFlag kanikoFlag,
-                                  BuildPackRegistryProperties registryProperties,
+                                  RegistryProperties registryProperties,
                                   Cache cache,
                                   NamespaceApi namespaceApi,
                                   KubectlApi kubectlApi,
@@ -197,7 +198,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         args.put("tarPath", Path.of(kanikoFlag.getTarPath(), alternative.get(BuildPackConstant.GIT_PROJECT_TARBALL)).toString());
 
         //index.docker.io/example/image-name:latest
-        String destination = Path.of(registryProperties.getUrl(), registryProperties.getProject(), alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString();
+        String destination = Path.of(registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString();
         //must provide at least one destination when tarPath is specified
         args.put("destination", destination);
 

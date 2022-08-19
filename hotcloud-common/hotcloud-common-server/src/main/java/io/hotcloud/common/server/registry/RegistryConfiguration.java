@@ -22,6 +22,8 @@ public class RegistryConfiguration {
     public void print(){
         Assert.notNull(registryProperties, "Registry properties is null");
         Assert.hasText(registryProperties.getUrl(), "Registry url is null");
-        Log.info(RegistryConfiguration.class.getName(), String.format("【Load Registry Configuration. registry='%s'】", registryProperties.getUrl()));
+        Assert.hasText(registryProperties.getImagebuildNamespace(), "Registry imagebuild namespace is null");
+        Log.info(RegistryConfiguration.class.getName(), String.format("【Load Registry Configuration. registry='%s' imagebuild-namespace='%s'】",
+                registryProperties.getUrl(), registryProperties.getImagebuildNamespace()));
     }
 }

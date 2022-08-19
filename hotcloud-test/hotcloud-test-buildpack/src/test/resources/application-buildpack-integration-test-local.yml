@@ -34,12 +34,8 @@ minio:
 buildpack:
   kaniko:
     verbosity: info
-  registry:
-    url: 192.168.146.128:5000
-    project: image-build-test
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    kaniko-image-url: 192.168.146.128:5000/base/imagebuild:latest
-    git-init-container-image-url: 192.168.146.128:5000/base/git:latest
-    alpine-init-container-image-url: 192.168.146.128:5000/base/alpine:latest
-    java-base-image: 192.168.146.128:5000/base/java11:tomcat9.0-openjdk11
+registry:
+  url: 192.168.146.128:5000
+  username: admin
+  password: QbMufCD@9WVQ^Hv
+  imagebuild-namespace: image-build-test

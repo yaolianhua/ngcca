@@ -19,6 +19,11 @@ public class RegistryProperties {
      * </ul>
      */
     private String url;
+
+    /**
+     * Image build registry namespace
+     */
+    private String imagebuildNamespace;
     /**
      * Registry credential with username
      */
