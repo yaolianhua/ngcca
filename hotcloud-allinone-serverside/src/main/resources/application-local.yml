@@ -44,3 +44,7 @@ buildpack:
     java-base-image: 192.168.146.128:5000/base/java11:tomcat9.0-openjdk11
 app:
   dot-suffix-domain: .k8s-cluster.com
+registry:
+  url: 192.168.146.128:5000
+  username: admin
+  password: QbMufCD@9WVQ^Hv
