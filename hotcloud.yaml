@@ -167,16 +167,11 @@ data:
       access-key: $MINIO_ACCESS_KEY
       secret-key: $MINIO_SECRET_KEY
       endpoint: $MINIO_ENDPOINT
-    buildpack:
-      registry:
-        url: $REGISTRY_URL
-        project: $REGISTRY_BUILD_NAMESPACE
-        username: $REGISTRY_USERNAME
-        password: $REGISTRY_PASSWORD
-        kaniko-image-url: $KANIKO_IMAGE_URL
-        git-init-container-image-url: $GIT_INIT_CONTAINER_IMAGE_URL
-        alpine-init-container-image-url: $ALPINE_INIT_CONTAINER_IMAGE_URL
-        java-base-image: $JAVA_BASE_IMAGE
+    registry:
+      url: $REGISTRY_URL
+      imagebuild-namespace: $IMAGEBUILD_NAMESPACE
+      username: $REGISTRY_USERNAME
+      password: $REGISTRY_PASSWORD
     app:
       dot-suffix-domain: $DOT_SUFFIX_DOMAIN
 kind: ConfigMap
