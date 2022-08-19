@@ -16,9 +16,5 @@ public class RegistryImageEntity extends AbstractEntity {
     @Indexed(unique = true)
     @org.springframework.data.redis.core.index.Indexed
     private String name;
-    private String registry;
-    private String namespace;
-    private String image;
-    private String tag;
-    private String registryImage;
+    private String value;
 }
