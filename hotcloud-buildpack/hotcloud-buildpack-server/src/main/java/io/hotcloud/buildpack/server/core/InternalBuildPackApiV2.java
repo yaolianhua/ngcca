@@ -5,7 +5,9 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.registry.RegistryProperties;
+import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -51,7 +53,9 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String project = originString.toLowerCase().replaceAll("_", "-");
         String resolvedBranch = branch.toLowerCase().replaceAll("_", "-");
 
-        String k8sName = String.format("%s-%s-%s", namespace, project, resolvedBranch);
+
+        Assert.isTrue(Validator.validK8sName(project), "git project name is illegal [" + project + "]");
+        String k8sName = String.format("%s-%s-%s", project, resolvedBranch, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
@@ -96,8 +100,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     protected BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
 
         Assert.hasText(httpUrl, "Binary package url is null");
+        String filename = FileHelper.getFilename(httpUrl);
+        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
 
-        String k8sName = String.format("%s-%s-%s", namespace, "appjar", System.currentTimeMillis());
+        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
@@ -143,8 +149,9 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     @Override
     protected BuildPackJobResource prepareJob(String namespace, String httpUrl) {
         Assert.hasText(httpUrl, "Binary package url is null");
-
-        String k8sName = String.format("%s-%s-%s", namespace, "appwar", System.currentTimeMillis());
+        String filename = FileHelper.getFilename(httpUrl);
+        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
+        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
 
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String image = String.format("%s:%s", k8sName, date);
