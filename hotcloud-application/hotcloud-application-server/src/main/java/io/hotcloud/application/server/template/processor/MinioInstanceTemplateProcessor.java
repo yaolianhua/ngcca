@@ -30,12 +30,12 @@ class MinioInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String user, String namespace) {
+    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
-        MinioTemplate minioTemplate = new MinioTemplate(namespace);
+        MinioTemplate minioTemplate = new MinioTemplate(imageUrl, namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
                 .namespace(namespace)

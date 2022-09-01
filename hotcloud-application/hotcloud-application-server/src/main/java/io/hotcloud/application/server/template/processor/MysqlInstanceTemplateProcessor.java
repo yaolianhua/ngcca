@@ -17,12 +17,12 @@ class MysqlInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String user, String namespace) {
+    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
-        MysqlTemplate mysqlTemplate = new MysqlTemplate(namespace);
+        MysqlTemplate mysqlTemplate = new MysqlTemplate(imageUrl, namespace);
         
         return InstanceTemplate.builder()
                 .name(mysqlTemplate.getName())

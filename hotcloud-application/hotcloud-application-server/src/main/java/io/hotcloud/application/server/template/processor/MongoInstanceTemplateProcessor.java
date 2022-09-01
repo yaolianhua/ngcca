@@ -17,12 +17,12 @@ class MongoInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String user, String namespace) {
+    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
-        MongoTemplate mongoTemplate = new MongoTemplate(namespace);
+        MongoTemplate mongoTemplate = new MongoTemplate(imageUrl, namespace);
         
         return InstanceTemplate.builder()
                 .name(mongoTemplate.getName())

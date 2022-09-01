@@ -29,12 +29,12 @@ class RabbitmqInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String user, String namespace) {
+    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
-        RabbitmqTemplate rabbitmqTemplate = new RabbitmqTemplate(namespace);
+        RabbitmqTemplate rabbitmqTemplate = new RabbitmqTemplate(imageUrl, namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
                 .namespace(namespace)
