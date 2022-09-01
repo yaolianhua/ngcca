@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +21,9 @@ public class MongoTemplate {
     }
 
     public MongoTemplate(String image, String namespace) {
-        this.image = image;
+        if (StringUtils.hasText(image)) {
+            this.image = image;
+        }
         this.namespace = namespace;
     }
 

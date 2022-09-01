@@ -17,12 +17,12 @@ class RedisInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String user, String namespace) {
+    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
-        RedisTemplate redisTemplate = new RedisTemplate(namespace);
+        RedisTemplate redisTemplate = new RedisTemplate(imageUrl, namespace);
         
         return InstanceTemplate.builder()
                 .name(redisTemplate.getName())
