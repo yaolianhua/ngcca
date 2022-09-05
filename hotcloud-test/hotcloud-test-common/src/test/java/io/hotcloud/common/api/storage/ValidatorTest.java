@@ -101,6 +101,7 @@ public class ValidatorTest {
 
     static Stream<String> invalidK8sNameProvider() {
         return Stream.of(
+                "",
                 "Jack",
                 "-123adminjasonsmihthy",
                 "admin_",
