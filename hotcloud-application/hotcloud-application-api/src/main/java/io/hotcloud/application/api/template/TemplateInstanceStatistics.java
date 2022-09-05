@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstanceTemplateStatistics {
+public class TemplateInstanceStatistics {
 
     private int success;
     private int failed;

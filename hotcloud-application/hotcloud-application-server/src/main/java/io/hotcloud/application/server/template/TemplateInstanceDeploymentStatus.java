@@ -7,9 +7,9 @@ import java.util.Objects;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public final class InstanceTemplateDeploymentStatus {
+public final class TemplateInstanceDeploymentStatus {
 
-    private InstanceTemplateDeploymentStatus() {
+    private TemplateInstanceDeploymentStatus() {
     }
 
     public static boolean isReady(Deployment deployment) {

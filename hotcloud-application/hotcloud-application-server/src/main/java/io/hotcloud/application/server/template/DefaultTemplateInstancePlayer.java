@@ -1,12 +1,12 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplatePlayer;
-import io.hotcloud.application.api.template.InstanceTemplateService;
 import io.hotcloud.application.api.template.Template;
-import io.hotcloud.application.api.template.event.InstanceTemplateDeleteEvent;
-import io.hotcloud.application.api.template.event.InstanceTemplateStartFailureEvent;
-import io.hotcloud.application.api.template.event.InstanceTemplateStartedEvent;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstancePlayer;
+import io.hotcloud.application.api.template.TemplateInstanceService;
+import io.hotcloud.application.api.template.event.TemplateInstanceDeleteEvent;
+import io.hotcloud.application.api.template.event.TemplateInstanceStartFailureEvent;
+import io.hotcloud.application.api.template.event.TemplateInstanceStartedEvent;
 import io.hotcloud.application.server.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
@@ -27,11 +27,11 @@ import org.springframework.util.Assert;
  **/
 @Component
 @RequiredArgsConstructor
-public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
+public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
     private final InstanceTemplateProcessors instanceTemplateProcessors;
     private final ApplicationEventPublisher eventPublisher;
-    private final InstanceTemplateService instanceTemplateService;
+    private final TemplateInstanceService templateInstanceService;
     private final InstanceTemplateActivityLogger activityLogger;
     private final KubectlApi kubectlApi;
     private final NamespaceApi namespaceApi;
@@ -39,7 +39,7 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     private final Cache cache;
 
     @Override
-    public InstanceTemplate play(Template template) {
+    public TemplateInstance play(Template template) {
 
         User current = userApi.current();
         Assert.notNull(current, "retrieve current user is null");
@@ -47,26 +47,26 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
         String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null");
 
-        InstanceTemplate instanceTemplate = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
+        TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 
-        InstanceTemplate saved = instanceTemplateService.saveOrUpdate(instanceTemplate);
-        Log.info(DefaultInstanceTemplatePlayer.class.getName(),
-                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), instanceTemplate.getName(), saved.getId()));
+        TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
+        Log.info(DefaultTemplateInstancePlayer.class.getName(),
+                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
-        Log.debug(DefaultInstanceTemplatePlayer.class.getName(),
+        Log.debug(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.create(namespace);
             }
-            kubectlApi.apply(namespace, instanceTemplate.getYaml());
+            kubectlApi.apply(namespace, templateInstance.getYaml());
         } catch (Exception ex) {
-            eventPublisher.publishEvent(new InstanceTemplateStartFailureEvent(saved, ex));
+            eventPublisher.publishEvent(new TemplateInstanceStartFailureEvent(saved, ex));
             return saved;
         }
 
-        eventPublisher.publishEvent(new InstanceTemplateStartedEvent(saved));
+        eventPublisher.publishEvent(new TemplateInstanceStartedEvent(saved));
         return saved;
 
     }
@@ -74,15 +74,15 @@ public class DefaultInstanceTemplatePlayer implements InstanceTemplatePlayer {
     @Override
     public void delete(String id) {
         Assert.hasText(id, "Instance template id is null");
-        InstanceTemplate find = instanceTemplateService.findOne(id);
+        TemplateInstance find = templateInstanceService.findOne(id);
         Assert.notNull(find, "Can not found instance template [" + id + "]");
 
-        instanceTemplateService.delete(id);
-        Log.info(DefaultInstanceTemplatePlayer.class.getName(),
+        templateInstanceService.delete(id);
+        Log.info(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Delete [%s] instance template '%s'", find.getName(), id));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
-        Log.debug(DefaultInstanceTemplatePlayer.class.getName(),
+        Log.debug(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
-        eventPublisher.publishEvent(new InstanceTemplateDeleteEvent(find));
+        eventPublisher.publishEvent(new TemplateInstanceDeleteEvent(find));
     }
 }

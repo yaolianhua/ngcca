@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class InstanceTemplatePlayerIT extends ApplicationIntegrationTestBase {
+public class TemplateInstancePlayerIT extends ApplicationIntegrationTestBase {
 
     @Autowired
-    private InstanceTemplatePlayer player;
+    private TemplateInstancePlayer player;
     @Autowired
     private UserApi userApi;
     @Autowired
-    private InstanceTemplateService templateService;
+    private TemplateInstanceService templateService;
 
     @Before
     public void before() {
@@ -40,9 +40,9 @@ public class InstanceTemplatePlayerIT extends ApplicationIntegrationTestBase {
 
         while (downLatch.getCount() != 0){
             TimeUnit.SECONDS.sleep(10);
-            List<InstanceTemplate> admins = templateService.findAll("admin");
+            List<TemplateInstance> admins = templateService.findAll("admin");
             long success = admins.stream()
-                    .filter(InstanceTemplate::isSuccess)
+                    .filter(TemplateInstance::isSuccess)
                     .count();
             if (Template.values().length == success) {
                 downLatch.countDown();
@@ -55,9 +55,9 @@ public class InstanceTemplatePlayerIT extends ApplicationIntegrationTestBase {
 
     @Test
     public void  delete () throws InterruptedException {
-        List<InstanceTemplate> admins = templateService.findAll("admin");
-        for (InstanceTemplate instanceTemplate : admins) {
-            player.delete(instanceTemplate.getId());
+        List<TemplateInstance> admins = templateService.findAll("admin");
+        for (TemplateInstance templateInstance : admins) {
+            player.delete(templateInstance.getId());
         }
 
         TimeUnit.SECONDS.sleep(10);

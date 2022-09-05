@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface InstanceTemplateService {
+public interface TemplateInstanceService {
 
     /**
      * Save or update instance template
      * @param instance instance template
      * @return saved or updated template object
      */
-    InstanceTemplate saveOrUpdate(InstanceTemplate instance);
+    TemplateInstance saveOrUpdate(TemplateInstance instance);
 
     /**
      * Find instance template with the giving id
@@ -20,14 +20,14 @@ public interface InstanceTemplateService {
      * @param id instance template id
      * @return instance template
      */
-    InstanceTemplate findOne(String id);
+    TemplateInstance findOne(String id);
 
     /**
      * Find all instance template
      *
      * @return instance template collection
      */
-    List<InstanceTemplate> findAll();
+    List<TemplateInstance> findAll();
 
     /**
      * Find all user's insatnce template
@@ -35,7 +35,7 @@ public interface InstanceTemplateService {
      * @param user user's username
      * @return instance template collection
      */
-    List<InstanceTemplate> findAll(String user);
+    List<TemplateInstance> findAll(String user);
 
     /**
      * Delete instance template with the giving id

@@ -1,6 +1,6 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
+import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.activity.ActivityTarget;
@@ -23,7 +23,7 @@ public class InstanceTemplateActivityLogger {
         this.activityRepository = activityRepository;
     }
 
-    public ActivityLog log(ActivityAction action, InstanceTemplate template) {
+    public ActivityLog log(ActivityAction action, TemplateInstance template) {
         String description = "Unknown Activity";
         String namespace = template.getNamespace();
         String name = template.getName();

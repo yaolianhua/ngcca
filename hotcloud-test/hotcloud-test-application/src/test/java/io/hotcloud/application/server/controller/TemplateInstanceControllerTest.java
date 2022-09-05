@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplatePlayer;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
@@ -35,13 +35,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBeans(value = {
         @MockBean(
                 classes = {
-                        InstanceTemplatePlayer.class,
+                        TemplateInstancePlayer.class,
                         InstanceTemplateCollectionQuery.class
                 })
 }
 )
 @ActiveProfiles("application-mvc-test")
-public class InstanceTemplateControllerTest {
+public class TemplateInstanceControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,8 +50,8 @@ public class InstanceTemplateControllerTest {
 
     @Test
     public void templates() throws Exception {
-        List<InstanceTemplate> templates = buildTemplates();
-        PageResult<InstanceTemplate> pageResult = PageResult.ofSingle(templates);
+        List<TemplateInstance> templates = buildTemplates();
+        PageResult<TemplateInstance> pageResult = PageResult.ofSingle(templates);
         when(collectionQuery.pagingQuery(null, null, Pageable.of(1, 10)))
                 .thenReturn(pageResult);
 
@@ -67,8 +67,8 @@ public class InstanceTemplateControllerTest {
         }
     }
 
-    private List<InstanceTemplate> buildTemplates() {
-        InstanceTemplate instanceTemplate = InstanceTemplate.builder()
+    private List<TemplateInstance> buildTemplates() {
+        TemplateInstance templateInstance = TemplateInstance.builder()
                 .id("62736396d6ebfb102ce2701b")
                 .user("admin")
                 .name("rabbitmq")
@@ -82,6 +82,6 @@ public class InstanceTemplateControllerTest {
                 .createdAt(LocalDateTime.of(2022, 5, 5, 13, 41, 42))
                 .yaml("apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: rabbitmq\n  namespace: 3b24fe96f5f14d53b67e0082f776047d\nspec:\n  selector:\n    matchLabels:\n      app: rabbitmq\n  strategy:\n    type: Recreate\n  template:\n    metadata:\n      labels:\n        app: rabbitmq\n    spec:\n      containers:\n      - image: rabbitmq:3.9-management\n        name: rabbitmq\n        env:\n        - name: RABBITMQ_DEFAULT_PASS\n          value: password\n        - name: RABBITMQ_DEFAULT_USER\n          value: admin\n        ports:\n        - containerPort: 5672\n          name: rabbitmq\n        - containerPort: 15672\n          name: management\n        volumeMounts:\n        - name: rabbitmq-persistent-storage\n          mountPath: /var/lib/rabbitmq\n      volumes:\n      - name: rabbitmq-persistent-storage\n        persistentVolumeClaim:\n          claimName: pvc-rabbitmq-3b24fe96f5f14d53b67e0082f776047d\n---\napiVersion: v1\nkind: PersistentVolume\nmetadata:\n  name: pv-rabbitmq-3b24fe96f5f14d53b67e0082f776047d\nspec:\n  accessModes:\n    - ReadWriteOnce\n  capacity:\n    storage: 10Gi\n  claimRef:\n    kind: PersistentVolumeClaim\n    name: pvc-rabbitmq-3b24fe96f5f14d53b67e0082f776047d\n    namespace: 3b24fe96f5f14d53b67e0082f776047d\n  hostPath:\n    path: /tmp/app/3b24fe96f5f14d53b67e0082f776047d/rabbitmq\n  volumeMode: Filesystem\n  persistentVolumeReclaimPolicy: Retain\n  storageClassName: storage-class-application\n---\napiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: pvc-rabbitmq-3b24fe96f5f14d53b67e0082f776047d\n  namespace: 3b24fe96f5f14d53b67e0082f776047d\nspec:\n  accessModes:\n    - ReadWriteOnce\n  resources:\n    requests:\n      storage: 10Gi\n  volumeName: pv-rabbitmq-3b24fe96f5f14d53b67e0082f776047d\n  storageClassName: storage-class-application\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: rabbitmq\n  namespace: 3b24fe96f5f14d53b67e0082f776047d\nspec:\n  ports:\n  - port: 5672\n    protocol: TCP\n    targetPort: 5672\n    name: rabbitmq\n  - port: 15672\n    protocol: TCP\n    targetPort: 15672\n    name: management\n  selector:\n    app: rabbitmq\n  type: NodePort")
                 .build();
-        return List.of(instanceTemplate);
+        return List.of(templateInstance);
     }
 }

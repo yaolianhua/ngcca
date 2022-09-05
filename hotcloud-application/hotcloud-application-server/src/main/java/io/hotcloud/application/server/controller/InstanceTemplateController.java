@@ -1,8 +1,8 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplatePlayer;
 import io.hotcloud.application.api.template.Template;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
@@ -26,12 +26,12 @@ import static io.hotcloud.common.api.WebResponse.*;
 @Tag(name = "Instance template")
 public class InstanceTemplateController {
 
-    private final InstanceTemplatePlayer instanceTemplatePlayer;
+    private final TemplateInstancePlayer templateInstancePlayer;
     private final InstanceTemplateCollectionQuery collectionQuery;
 
-    public InstanceTemplateController(InstanceTemplatePlayer instanceTemplatePlayer,
+    public InstanceTemplateController(TemplateInstancePlayer templateInstancePlayer,
                                       InstanceTemplateCollectionQuery collectionQuery) {
-        this.instanceTemplatePlayer = instanceTemplatePlayer;
+        this.templateInstancePlayer = templateInstancePlayer;
         this.collectionQuery = collectionQuery;
     }
 
@@ -43,9 +43,9 @@ public class InstanceTemplateController {
                     @Parameter(name = "template", description = "template enums", required = true)
             }
     )
-    public ResponseEntity<Result<InstanceTemplate>> apply(Template template) {
-        InstanceTemplate instanceTemplate = instanceTemplatePlayer.play(template);
-        return created(instanceTemplate);
+    public ResponseEntity<Result<TemplateInstance>> apply(Template template) {
+        TemplateInstance templateInstance = templateInstancePlayer.play(template);
+        return created(templateInstance);
     }
 
     @DeleteMapping("/{id}")
@@ -57,7 +57,7 @@ public class InstanceTemplateController {
             }
     )
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
-        instanceTemplatePlayer.delete(id);
+        templateInstancePlayer.delete(id);
         return accepted();
     }
 
@@ -72,11 +72,11 @@ public class InstanceTemplateController {
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
     )
-    public ResponseEntity<PageResult<InstanceTemplate>> page(@RequestParam(value = "user", required = false) String user,
+    public ResponseEntity<PageResult<TemplateInstance>> page(@RequestParam(value = "user", required = false) String user,
                                                              @RequestParam(value = "success", required = false) Boolean success,
                                                              @RequestParam(value = "page", required = false) Integer page,
                                                              @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        PageResult<InstanceTemplate> pageResult = collectionQuery.pagingQuery(user, success, Pageable.of(page, pageSize));
+        PageResult<TemplateInstance> pageResult = collectionQuery.pagingQuery(user, success, Pageable.of(page, pageSize));
         return okPage(pageResult);
     }
 }

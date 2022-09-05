@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstanceTemplate {
+public class TemplateInstance {
     private String id;
 
     private String user;

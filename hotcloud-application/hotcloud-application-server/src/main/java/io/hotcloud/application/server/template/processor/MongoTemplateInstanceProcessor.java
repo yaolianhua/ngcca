@@ -1,15 +1,15 @@
 package io.hotcloud.application.server.template.processor;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplateProcessor;
 import io.hotcloud.application.api.template.Template;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
-class MongoInstanceTemplateProcessor implements InstanceTemplateProcessor {
+class MongoTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
@@ -17,14 +17,14 @@ class MongoInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
+    public TemplateInstance process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
         }
         MongoTemplate mongoTemplate = new MongoTemplate(imageUrl, namespace);
         
-        return InstanceTemplate.builder()
+        return TemplateInstance.builder()
                 .name(mongoTemplate.getName())
                 .namespace(mongoTemplate.getNamespace())
                 .success(false)

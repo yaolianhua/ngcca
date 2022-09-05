@@ -5,8 +5,8 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServicePort;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.application.api.template.event.*;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
@@ -32,18 +32,18 @@ import java.util.stream.Collectors;
 @Component
 public class InstanceTemplateEventListener {
 
-    private final InstanceTemplateService instanceTemplateService;
+    private final TemplateInstanceService templateInstanceService;
     private final ApplicationEventPublisher eventPublisher;
     private final DeploymentApi deploymentApi;
     private final ServiceApi serviceApi;
     private final KubectlApi kubectlApi;
 
-    public InstanceTemplateEventListener(InstanceTemplateService instanceTemplateService,
+    public InstanceTemplateEventListener(TemplateInstanceService templateInstanceService,
                                          ApplicationEventPublisher eventPublisher,
                                          DeploymentApi deploymentApi,
                                          ServiceApi serviceApi,
                                          KubectlApi kubectlApi) {
-        this.instanceTemplateService = instanceTemplateService;
+        this.templateInstanceService = templateInstanceService;
         this.eventPublisher = eventPublisher;
         this.deploymentApi = deploymentApi;
         this.serviceApi = serviceApi;
@@ -60,8 +60,8 @@ public class InstanceTemplateEventListener {
 
     @EventListener
     @Async
-    public void timeout(InstanceTemplateTimeoutEvent event) {
-        InstanceTemplate template = event.getInstance();
+    public void timeout(TemplateInstanceTimeoutEvent event) {
+        TemplateInstance template = event.getInstance();
         String namespace = template.getNamespace();
         try {
             String events = kubectlApi.events(namespace).stream()
@@ -83,9 +83,9 @@ public class InstanceTemplateEventListener {
 
     @EventListener
     @Async
-    public void started(InstanceTemplateStartedEvent event) {
+    public void started(TemplateInstanceStartedEvent event) {
 
-        InstanceTemplate instance = event.getInstance();
+        TemplateInstance instance = event.getInstance();
         String namespace = instance.getNamespace();
         String name = instance.getName();
 
@@ -94,11 +94,11 @@ public class InstanceTemplateEventListener {
             while (true) {
 
                 sleep(10);
-                InstanceTemplate template = instanceTemplateService.findOne(instance.getId());
+                TemplateInstance template = templateInstanceService.findOne(instance.getId());
                 //if deleted
                 if (template == null) {
                     Log.warn(InstanceTemplateEventListener.class.getName(),
-                            InstanceTemplateStartedEvent.class.getSimpleName(),
+                            TemplateInstanceStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                     break;
                 }
@@ -106,23 +106,23 @@ public class InstanceTemplateEventListener {
                 //if timeout
                 int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(600L));
                 if (timeout > 0) {
-                    eventPublisher.publishEvent(new InstanceTemplateTimeoutEvent(template));
+                    eventPublisher.publishEvent(new TemplateInstanceTimeoutEvent(template));
                     break;
                 }
 
                 //deploying
                 Deployment deployment = deploymentApi.read(namespace, name);
-                boolean ready = InstanceTemplateDeploymentStatus.isReady(deployment);
+                boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
                     Log.info(InstanceTemplateEventListener.class.getName(),
-                            InstanceTemplateStartedEvent.class.getSimpleName(),
+                            TemplateInstanceStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]",
                                     template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 }
 
                 //deployment success
                 if (ready) {
-                    eventPublisher.publishEvent(new InstanceTemplateDoneEvent(template, true));
+                    eventPublisher.publishEvent(new TemplateInstanceDoneEvent(template, true));
                     break;
                 }
 
@@ -130,14 +130,14 @@ public class InstanceTemplateEventListener {
 
         } catch (Exception e) {
             Log.error(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateStartedEvent.class.getSimpleName(),
+                    TemplateInstanceStartedEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
             updateTemplate(instance, e.getMessage(), false);
         }
     }
 
     @NotNull
-    private String retrieveServiceNodePort(InstanceTemplate template) {
+    private String retrieveServiceNodePort(TemplateInstance template) {
         Service service = serviceApi.read(template.getNamespace(), template.getService());
         Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
 
@@ -152,61 +152,61 @@ public class InstanceTemplateEventListener {
 
     @EventListener
     @Async
-    public void startFailure(InstanceTemplateStartFailureEvent event) {
-        InstanceTemplate instance = event.getInstance();
+    public void startFailure(TemplateInstanceStartFailureEvent event) {
+        TemplateInstance instance = event.getInstance();
         Throwable throwable = event.getThrowable();
 
         try {
-            InstanceTemplate updated = updateTemplate(instance, throwable.getMessage(), false);
+            TemplateInstance updated = updateTemplate(instance, throwable.getMessage(), false);
             Log.info(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateStartFailureEvent.class.getSimpleName(),
+                    TemplateInstanceStartFailureEvent.class.getSimpleName(),
                     String.format("instance template [%s] start failure. update instance template [%s]", updated.getName(), updated.getId()));
         } catch (Exception ex) {
             Log.error(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateStartFailureEvent.class.getSimpleName(),
+                    TemplateInstanceStartFailureEvent.class.getSimpleName(),
                     String.format("%s", ex.getMessage()));
         }
     }
 
     @EventListener
     @Async
-    public void delete(InstanceTemplateDeleteEvent event) {
+    public void delete(TemplateInstanceDeleteEvent event) {
 
-        InstanceTemplate instance = event.getInstance();
+        TemplateInstance instance = event.getInstance();
         String namespace = instance.getNamespace();
         String name = instance.getName();
 
         try {
             Boolean delete = kubectlApi.delete(namespace, instance.getYaml());
             Log.info(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateDeleteEvent.class.getSimpleName(),
+                    TemplateInstanceDeleteEvent.class.getSimpleName(),
                     String.format("Delete instance template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
 
             if (StringUtils.hasText(instance.getIngress())){
                 Boolean deleteIngress = kubectlApi.delete(namespace, instance.getIngress());
                 Log.info(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDeleteEvent.class.getSimpleName(),
+                        TemplateInstanceDeleteEvent.class.getSimpleName(),
                         String.format("Delete instance template ingress success [%s], namespace:%s, name:%s", deleteIngress, namespace, name));
             }
 
         } catch (Exception e) {
             Log.error(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateDeleteEvent.class.getSimpleName(),
+                    TemplateInstanceDeleteEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
         }
     }
 
     @EventListener
     @Async
-    public void done(InstanceTemplateDoneEvent event) {
+    public void done(TemplateInstanceDoneEvent event) {
 
-        InstanceTemplate instance = event.getInstance();
+        TemplateInstance instance = event.getInstance();
 
         try {
-            InstanceTemplate template = instanceTemplateService.findOne(instance.getId());
+            TemplateInstance template = templateInstanceService.findOne(instance.getId());
             if (template == null) {
                 Log.warn(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDoneEvent.class.getSimpleName(),
+                        TemplateInstanceDoneEvent.class.getSimpleName(),
                         String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                 return;
             }
@@ -214,9 +214,9 @@ public class InstanceTemplateEventListener {
             String nodePorts = retrieveServiceNodePort(instance);
             template.setNodePorts(nodePorts);
 
-            InstanceTemplate update = updateTemplate(template, "success", true);
+            TemplateInstance update = updateTemplate(template, "success", true);
             Log.info(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateDoneEvent.class.getSimpleName(),
+                    TemplateInstanceDoneEvent.class.getSimpleName(),
                     String.format("[%s] user's [%s] template [%s] success. nodePorts [%s]", update.getUser(), update.getName(), update.getId(), update.getNodePorts()));
 
             if (StringUtils.hasText(template.getIngress())) {
@@ -225,23 +225,23 @@ public class InstanceTemplateEventListener {
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
                 Log.info(InstanceTemplateEventListener.class.getName(),
-                        InstanceTemplateDoneEvent.class.getSimpleName(),
+                        TemplateInstanceDoneEvent.class.getSimpleName(),
                         String.format("[%s] user's [%s] template ingress [%s] create success.", update.getUser(), update.getName(), ingress));
             }
 
         } catch (Exception e) {
             Log.error(InstanceTemplateEventListener.class.getName(),
-                    InstanceTemplateDoneEvent.class.getSimpleName(),
+                    TemplateInstanceDoneEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
         }
 
     }
 
     @NotNull
-    private InstanceTemplate updateTemplate(InstanceTemplate template, String message, boolean success) {
+    private TemplateInstance updateTemplate(TemplateInstance template, String message, boolean success) {
         template.setMessage(message);
         template.setSuccess(success);
         Assert.hasText(template.getId(), "Instance template id is null");
-        return instanceTemplateService.saveOrUpdate(template);
+        return templateInstanceService.saveOrUpdate(template);
     }
 }

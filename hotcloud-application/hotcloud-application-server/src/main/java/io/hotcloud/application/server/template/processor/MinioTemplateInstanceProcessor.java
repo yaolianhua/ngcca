@@ -2,9 +2,9 @@ package io.hotcloud.application.server.template.processor;
 
 import io.hotcloud.application.api.ApplicationProperties;
 import io.hotcloud.application.api.IngressDefinition;
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplateProcessor;
 import io.hotcloud.application.api.template.Template;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.MinioTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 import static io.hotcloud.application.api.IngressTemplateRender.render;
 
 @Component
-class MinioInstanceTemplateProcessor implements InstanceTemplateProcessor {
+class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     private final ApplicationProperties applicationProperties;
 
-    public MinioInstanceTemplateProcessor(ApplicationProperties applicationProperties) {
+    public MinioTemplateInstanceProcessor(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;
     }
 
@@ -30,7 +30,7 @@ class MinioInstanceTemplateProcessor implements InstanceTemplateProcessor {
     }
 
     @Override
-    public InstanceTemplate process(Template template, String imageUrl, String user, String namespace) {
+    public TemplateInstance process(Template template, String imageUrl, String user, String namespace) {
 
         if (!support(template)){
             return null;
@@ -57,7 +57,7 @@ class MinioInstanceTemplateProcessor implements InstanceTemplateProcessor {
         String ports = ingressDefinition.getRules().stream().map(IngressDefinition.Rule::getPort).collect(Collectors.joining(","));
 
 
-        return InstanceTemplate.builder()
+        return TemplateInstance.builder()
                 .name(minioTemplate.getName())
                 .namespace(minioTemplate.getNamespace())
                 .success(false)
