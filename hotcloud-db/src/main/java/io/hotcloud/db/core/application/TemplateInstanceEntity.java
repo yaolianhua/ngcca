@@ -11,16 +11,16 @@ import org.springframework.data.redis.core.index.Indexed;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@Document(collection = "instance_template")
+@Document(collection = "template_instance")
 @CompoundIndex(
         name = "user_name_idx",
         def = "{'user': 1, 'name': 1}",
         unique = true
 )
-@RedisHash("instance_template")
+@RedisHash("template_instance")
 @Getter
 @Setter
-public class InstanceTemplateEntity extends AbstractEntity {
+public class TemplateInstanceEntity extends AbstractEntity {
 
     @Indexed
     @org.springframework.data.mongodb.core.index.Indexed
