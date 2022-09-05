@@ -76,7 +76,7 @@ public class TemplateInstanceControllerTest {
                 .message("success")
                 .nodePorts("30573,30984")
                 .modifiedAt(LocalDateTime.of(2022, 5, 5, 13, 41, 52))
-                .ports("5672,15672")
+                .targetPorts("5672,15672")
                 .service("rabbitmq.3b24fe96f5f14d53b67e0082f776047d.svc.cluster.local")
                 .success(true)
                 .createdAt(LocalDateTime.of(2022, 5, 5, 13, 41, 42))

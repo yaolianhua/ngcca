@@ -28,7 +28,7 @@ class MysqlTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .name(mysqlTemplate.getName())
                 .namespace(mysqlTemplate.getNamespace())
                 .success(false)
-                .ports("3306")
+                .targetPorts("3306")
                 .service(mysqlTemplate.getService())
                 .user(user)
                 .yaml(mysqlTemplate.getYaml())

@@ -28,7 +28,7 @@ class RedisTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .name(redisTemplate.getName())
                 .namespace(redisTemplate.getNamespace())
                 .success(false)
-                .ports("6379")
+                .targetPorts("6379")
                 .service(redisTemplate.getService())
                 .user(user)
                 .yaml(redisTemplate.getYaml())

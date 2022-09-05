@@ -51,7 +51,7 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
                 .namespace(redisInsightTemplate.getNamespace())
                 .success(false)
                 .host(host)
-                .ports("8001")
+                .targetPorts("8001")
                 .httpPort("8001")
                 .service(redisInsightTemplate.getService())
                 .user(user)

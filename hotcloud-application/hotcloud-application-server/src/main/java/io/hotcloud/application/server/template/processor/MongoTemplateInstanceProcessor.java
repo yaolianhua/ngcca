@@ -28,7 +28,7 @@ class MongoTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .name(mongoTemplate.getName())
                 .namespace(mongoTemplate.getNamespace())
                 .success(false)
-                .ports("27017")
+                .targetPorts("27017")
                 .service(mongoTemplate.getService())
                 .user(user)
                 .yaml(mongoTemplate.getYaml())

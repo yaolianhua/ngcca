@@ -51,7 +51,7 @@ class RabbitmqTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .namespace(rabbitmqTemplate.getNamespace())
                 .success(false)
                 .host(host)
-                .ports("5672,15672")
+                .targetPorts("5672,15672")
                 .httpPort("15672")
                 .service(rabbitmqTemplate.getService())
                 .user(user)

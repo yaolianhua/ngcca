@@ -25,7 +25,7 @@ public class TemplateInstance {
 
     private String service;
 
-    private String ports;
+    private String targetPorts;
     private String httpPort;
 
     private String nodePorts;

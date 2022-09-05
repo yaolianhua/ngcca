@@ -62,7 +62,7 @@ class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .namespace(minioTemplate.getNamespace())
                 .success(false)
                 .host(hosts)
-                .ports(ports)
+                .targetPorts(ports)
                 .httpPort(ports)
                 .service(minioTemplate.getService())
                 .user(user)

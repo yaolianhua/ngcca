@@ -36,7 +36,7 @@ public class TemplateInstanceEntity extends AbstractEntity {
 
     private String service;
 
-    private String ports;
+    private String targetPorts;
     private String httpPort;
 
     private String nodePorts;
