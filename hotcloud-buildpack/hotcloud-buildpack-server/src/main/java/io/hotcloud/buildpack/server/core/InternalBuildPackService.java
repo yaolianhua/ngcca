@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.hotcloud.common.api.CommonConstant.K8S_APP;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -71,7 +73,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
         Map<String, String> alternative = resource.getAlternative();
         String project = alternative.get(BuildPackConstant.GIT_PROJECT_NAME);
 
-        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, project + "-" + resource.getNamespace());
+        Map<String, String> labels = Map.of(K8S_APP, project + "-" + resource.getNamespace());
         String jobName = String.format("%s-job-buildpack-%s", project, resource.getNamespace());
 
         JobCreateRequest request = new JobCreateRequest();
@@ -236,7 +238,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
 
         String gitProject = resource.getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
         String name = StringUtils.hasText(resource.getName()) ? resource.getName() : "secret-" + gitProject + "-" + resource.getNamespace();
-        Map<String, String> labels = Map.of(BuildPackConstant.K8S_APP, gitProject + "-" + resource.getNamespace());
+        Map<String, String> labels = Map.of(K8S_APP, gitProject + "-" + resource.getNamespace());
 
         SecretCreateRequest request = new SecretCreateRequest();
         request.setImmutable(false);

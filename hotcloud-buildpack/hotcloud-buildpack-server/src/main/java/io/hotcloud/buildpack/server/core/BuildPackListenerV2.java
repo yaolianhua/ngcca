@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackApiV2;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static io.hotcloud.common.api.CommonConstant.*;
 
 @Component
 @RequiredArgsConstructor
@@ -81,7 +82,7 @@ public class BuildPackListenerV2 {
                                         namespace, job, buildPack.getId()));
 
                         buildPack.setDone(true);
-                        buildPack.setMessage(BuildPackConstant.FAILED_MESSAGE);
+                        buildPack.setMessage(FAILED_MESSAGE);
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
@@ -94,7 +95,7 @@ public class BuildPackListenerV2 {
                                         namespace, job, buildPack.getId()));
 
                         buildPack.setDone(true);
-                        buildPack.setMessage(BuildPackConstant.SUCCESS_MESSAGE);
+                        buildPack.setMessage(SUCCESS_MESSAGE);
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
@@ -109,7 +110,7 @@ public class BuildPackListenerV2 {
             }
 
             buildPack.setDone(true);
-            buildPack.setMessage(BuildPackConstant.TIMEOUT_MESSAGE);
+            buildPack.setMessage(TIMEOUT_MESSAGE);
             buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
             buildPackService.saveOrUpdate(buildPack);
