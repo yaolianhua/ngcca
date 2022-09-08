@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         while (true) {
             TimeUnit.SECONDS.sleep(10);
             BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("War package [%s] build successful. artifact url [%s]%n",
                         one.getPackageUrl(), one.getArtifact());
                 System.out.println("Kaniko logs print: \n" + one.getLogs());
@@ -46,7 +47,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
                 break;
             }
 
-            if (one.isDone() && !BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("War package [%s] build failed%n",
                         one.getPackageUrl());
                 System.out.println("Build message: \n" + one.getLogs());
@@ -67,7 +68,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         while (true) {
             TimeUnit.SECONDS.sleep(10);
             BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("Jar package [%s] build successful. artifact url [%s]%n",
                         one.getPackageUrl(), one.getArtifact());
                 System.out.println("Kaniko logs print: \n" + one.getLogs());
@@ -75,7 +76,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
                 break;
             }
 
-            if (one.isDone() && !BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("Jar package [%s] build failed%n",
                         one.getPackageUrl());
                 System.out.println("Build message: \n" + one.getLogs());
@@ -94,7 +95,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         while (true) {
             TimeUnit.SECONDS.sleep(10);
             BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("Git repository [%s][%s] build successful. artifact url [%s]%n",
                         one.getHttpGitUrl(), one.getGitBranch(), one.getArtifact());
                 System.out.println("Kaniko logs print: \n" + one.getLogs());
@@ -102,7 +103,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
                 break;
             }
 
-            if (one.isDone() && !BuildPackConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
                 System.out.printf("Git repository [%s][%s] build failed%n",
                         one.getHttpGitUrl(), one.getGitBranch());
                 System.out.println("Build message: \n" + one.getLogs());
