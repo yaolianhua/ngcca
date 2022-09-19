@@ -3,6 +3,7 @@ package io.hotcloud.common.server.cache;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.cache.CacheProperties;
+import io.hotcloud.common.api.cache.RedisCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -67,6 +68,23 @@ public class CacheConfiguration {
         );
         RedisTemplate<String, Object> jdkSerializedRedisTemplate = RedisHelper.createJdkSerializedRedisTemplate(redisConnectionFactory);
         return new RedisCache(jdkSerializedRedisTemplate);
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+            name = CacheProperties.PROPERTIES_TYPE_NAME,
+            havingValue = "redis"
+    )
+    public RedisCommand<String, Object> redisCommand() {
+        CacheProperties.RedisProperties redis = properties.getRedis();
+        RedisConnectionFactory redisConnectionFactory = RedisHelper.creatStandaloneLettuceConnectionFactory(
+                redis.getDatabase(),
+                redis.getHost(),
+                redis.getPort(),
+                redis.getPassword()
+        );
+        RedisTemplate<String, Object> jdkSerializedRedisTemplate = RedisHelper.createJdkSerializedRedisTemplate(redisConnectionFactory);
+        return new RedisCommandUtil<>(jdkSerializedRedisTemplate);
     }
 
 }
