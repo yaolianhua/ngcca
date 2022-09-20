@@ -14,4 +14,6 @@ public final class CommonConstant {
 
     public static final String TIMEOUT_MESSAGE = "timeout";
     public static final String FAILED_MESSAGE = "failed";
+    public static final String IMAGEBUILD_TIMEOUT_SECONDS = "imagebuild:timeout:seconds";
+    public static final String DEPLOYMENT_TIMEOUT_SECONDS = "deployment:timeout:seconds";
 }
