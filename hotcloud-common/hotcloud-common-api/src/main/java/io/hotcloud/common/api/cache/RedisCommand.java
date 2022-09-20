@@ -3,9 +3,12 @@ package io.hotcloud.common.api.cache;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public interface RedisCommand<K,V> {
 
+    void ttlKey (K key, V value, TimeUnit timeUnit, long ttl);
+    Boolean hasKey (K key);
     <HK> Set<HK> hKeys (K key);
     <HK, HV> void hSet (K key, HK hashKey, HV value);
 

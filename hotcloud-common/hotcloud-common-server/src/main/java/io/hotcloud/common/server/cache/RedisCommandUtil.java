@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class RedisCommandUtil<K,V> implements RedisCommand<K,V> {
@@ -17,6 +18,16 @@ public class RedisCommandUtil<K,V> implements RedisCommand<K,V> {
 
     public RedisCommandUtil(RedisTemplate<K, V> redisTemplate) {
         this.redisTemplate = redisTemplate;
+    }
+
+    @Override
+    public void ttlKey(K key, V value, TimeUnit timeUnit, long ttl) {
+        redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
+    }
+
+    @Override
+    public Boolean hasKey(K key) {
+        return redisTemplate.hasKey(key);
     }
 
     @SuppressWarnings("unchecked")

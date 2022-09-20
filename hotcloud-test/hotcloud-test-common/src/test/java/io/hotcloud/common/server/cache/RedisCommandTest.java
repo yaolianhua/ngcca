@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.cache;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -9,7 +10,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.concurrent.TimeUnit;
+@Slf4j
 public class RedisCommandTest {
 
     private final CacheObjectTest cacheData = new CacheObjectTest();
@@ -25,7 +27,7 @@ public class RedisCommandTest {
 
     @Disabled
     @Test
-    public void redisCommand() {
+    public void redisCommand() throws InterruptedException {
 
         RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("localhost", 6379, "QbMufCD@9WVQ^Hv", 14);
         Assertions.assertTrue(connectionValidBind.isValid());
@@ -33,6 +35,12 @@ public class RedisCommandTest {
         RedisTemplate<String, Object> redisTemplate = RedisConnectionHelper.getRedisTemplate(connectionValidBind.getRedisConnectionFactory());
 
         RedisCommandUtil<String, Object> commandUtil = new RedisCommandUtil<>(redisTemplate);
+
+        commandUtil.ttlKey("TTL-KEY", "TTL-VALUE", TimeUnit.SECONDS, 2);
+        log.info("sleep 3 seconds ...");
+        TimeUnit.SECONDS.sleep(3);
+        Boolean hasTtlKey = commandUtil.hasKey("TTL-KEY");
+        Assertions.assertFalse(hasTtlKey);
 
         commandUtil.hSet("H-KEY", "MK1", "MV1");
         commandUtil.hmSet("HM-KEY", cacheData.getMap());
