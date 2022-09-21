@@ -6,6 +6,7 @@ import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -25,6 +26,7 @@ public class BuildPackListenerV2 {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
     private final KubectlApi kubectlApi;
+    private final Cache cache;
 
     @Async
     @EventListener
@@ -34,8 +36,10 @@ public class BuildPackListenerV2 {
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
 
+        Integer timeout = cache.get(IMAGEBUILD_TIMEOUT_SECONDS, Integer.class);
+
         try{
-            while (loopCount.get() < 60){
+            while (loopCount.get() < timeout / 20){
                 TimeUnit.SECONDS.sleep(20);
 
                 buildPack = buildPackService.findOne(buildPack.getId());
