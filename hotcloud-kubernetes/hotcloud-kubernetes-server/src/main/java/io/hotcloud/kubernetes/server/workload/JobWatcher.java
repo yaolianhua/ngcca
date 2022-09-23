@@ -34,10 +34,9 @@ public class JobWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.batch()
+        return fabric8Client.batch()
                     .v1()
                     .jobs()
                     .watch(new Watcher<>() {
@@ -76,8 +75,5 @@ public class JobWatcher implements WorkloadsWatchApi {
                             return true;
                         }
                     });
-        }
-
-        return watch;
     }
 }

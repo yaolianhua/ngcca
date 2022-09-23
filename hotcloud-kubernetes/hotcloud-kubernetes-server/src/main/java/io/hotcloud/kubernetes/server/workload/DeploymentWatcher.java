@@ -34,50 +34,47 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.apps()
-                    .deployments()
-                    .watch(new Watcher<>() {
-                        @Override
-                        public void eventReceived(Action action, Deployment resource) {
-                            String namespace = resource.getMetadata().getNamespace();
-                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Deployment.name(), resource.getMetadata().getName(), action.name());
-                            Message<WatchMessageBody> message = Message.of(
-                                    watchMessageBody,
-                                    Message.Level.INFO,
-                                    null,
-                                    "Deployment Watch Event Push"
-                            );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
-                        }
+       return fabric8Client.apps()
+                .deployments()
+                .watch(new Watcher<>() {
+                    @Override
+                    public void eventReceived(Action action, Deployment resource) {
+                        String namespace = resource.getMetadata().getNamespace();
+                        WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Deployment.name(), resource.getMetadata().getName(), action.name());
+                        Message<WatchMessageBody> message = Message.of(
+                                watchMessageBody,
+                                Message.Level.INFO,
+                                null,
+                                "Deployment Watch Event Push"
+                        );
+                        messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
+                    }
 
-                        @Override
-                        public void onClose(WatcherException e) {
-                            WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Deployment.name(), null, null);
-                            Message<WatchMessageBody> message = Message.of(
-                                    watchMessageBody,
-                                    Message.Level.ERROR,
-                                    e.getMessage(),
-                                    "Deployment Watch Event Push"
-                            );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
-                        }
+                    @Override
+                    public void onClose(WatcherException e) {
+                        WatchMessageBody watchMessageBody = WatchMessageBody.of(null, WorkloadsType.Deployment.name(), null, null);
+                        Message<WatchMessageBody> message = Message.of(
+                                watchMessageBody,
+                                Message.Level.ERROR,
+                                e.getMessage(),
+                                "Deployment Watch Event Push"
+                        );
+                        messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
+                    }
 
-                        @Override
-                        public void onClose() {
-                            log.info("Watch Deployment gracefully closed");
-                        }
+                    @Override
+                    public void onClose() {
+                        log.info("Watch Deployment gracefully closed");
+                    }
 
-                        @Override
-                        public boolean reconnecting() {
-                            log.info("Deployment watcher reconnecting");
-                            return true;
-                        }
-                    });
-        }
+                    @Override
+                    public boolean reconnecting() {
+                        log.info("Deployment watcher reconnecting");
+                        return true;
+                    }
+                });
 
-        return watch;
     }
 }

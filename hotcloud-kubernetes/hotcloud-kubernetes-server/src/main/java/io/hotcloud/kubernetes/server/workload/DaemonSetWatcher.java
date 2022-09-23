@@ -34,10 +34,10 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-            watch = fabric8Client.apps()
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+
+        return fabric8Client.apps()
                     .daemonSets()
                     .watch(new Watcher<>() {
                         @Override
@@ -75,8 +75,6 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                             return true;
                         }
                     });
-        }
 
-        return watch;
     }
 }

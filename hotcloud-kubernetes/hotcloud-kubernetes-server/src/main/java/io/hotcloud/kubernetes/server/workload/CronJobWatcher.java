@@ -34,10 +34,9 @@ public class CronJobWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.batch()
+        return fabric8Client.batch()
                     .v1()
                     .cronjobs()
                     .watch(new Watcher<>() {
@@ -77,8 +76,6 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                             return true;
                         }
                     });
-        }
 
-        return watch;
     }
 }

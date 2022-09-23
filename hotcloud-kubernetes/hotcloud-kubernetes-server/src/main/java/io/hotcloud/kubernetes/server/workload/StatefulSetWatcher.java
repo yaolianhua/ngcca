@@ -34,10 +34,9 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.apps()
+        return fabric8Client.apps()
                     .statefulSets()
                     .watch(new Watcher<>() {
                         @Override
@@ -75,8 +74,5 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                             return true;
                         }
                     });
-        }
-
-        return watch;
     }
 }
