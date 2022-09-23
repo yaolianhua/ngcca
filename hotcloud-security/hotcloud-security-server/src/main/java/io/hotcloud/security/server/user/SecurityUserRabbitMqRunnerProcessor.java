@@ -1,8 +1,8 @@
 package io.hotcloud.security.server.user;
 
+import io.hotcloud.common.api.CommonConstant;
+import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.message.MessageProperties;
-import io.hotcloud.security.SecurityRunnerProcessor;
-import io.hotcloud.security.api.SecurityConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
-class SecurityUserRabbitMqRunnerProcessor implements SecurityRunnerProcessor {
+class SecurityUserRabbitMqRunnerProcessor implements CommonRunnerProcessor {
 
     private final RabbitAdmin rabbitAdmin;
 
@@ -27,17 +27,17 @@ class SecurityUserRabbitMqRunnerProcessor implements SecurityRunnerProcessor {
 
     @Override
     public void execute() {
-        Queue applicationQueue = QueueBuilder.durable(SecurityConstant.QUEUE_APPLICATION_SUBSCRIBE_SECURITY_USER_DELETE_MESSAGE).build();
-        Queue buildPackQueue = QueueBuilder.durable(SecurityConstant.QUEUE_BUILDPACK_SUBSCRIBE_SECURITY_USER_DELETE_MESSAGE).build();
-        FanoutExchange exchange = ExchangeBuilder.fanoutExchange(SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE).build();
-        Binding applicationBinding = BindingBuilder.bind(applicationQueue).to(exchange);
-        Binding buildPackBinding = BindingBuilder.bind(buildPackQueue).to(exchange);
+        Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_SECURITY_USER_DELETE).build();
+
+        FanoutExchange exchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_SECURITY_MODULE).build();
+
+        Binding binding = BindingBuilder.bind(queue).to(exchange);
 
         rabbitAdmin.declareExchange(exchange);
-        rabbitAdmin.declareQueue(applicationQueue);
-        rabbitAdmin.declareQueue(buildPackQueue);
-        rabbitAdmin.declareBinding(applicationBinding);
-        rabbitAdmin.declareBinding(buildPackBinding);
+
+        rabbitAdmin.declareQueue(queue);
+
+        rabbitAdmin.declareBinding(binding);
 
     }
 }

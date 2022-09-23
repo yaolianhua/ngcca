@@ -9,7 +9,6 @@ import io.hotcloud.buildpack.server.core.BuildPackStatisticsService;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
 import io.hotcloud.common.api.cache.Cache;
-import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,8 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -50,7 +51,7 @@ public class StatisticsService {
         GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
 
-        String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
+        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
 
         return Statistics.builder()
                 .buildPacks(buildPackStatistics)

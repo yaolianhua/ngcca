@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -33,10 +34,10 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
 
-            watch = fabric8Client.apps()
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
+
+        return fabric8Client.apps()
                     .daemonSets()
                     .watch(new Watcher<>() {
                         @Override
@@ -49,7 +50,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     null,
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override
@@ -61,16 +62,19 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override
                         public void onClose() {
                             log.info("Watch DaemonSet gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("DaemonSet watcher reconnecting");
+                            return true;
+                        }
                     });
-        }
 
-        return watch;
     }
 }

@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -33,10 +34,9 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.apps()
+        return fabric8Client.apps()
                     .statefulSets()
                     .watch(new Watcher<>() {
                         @Override
@@ -49,7 +49,7 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                                     null,
                                     "StatefulSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET,message);
                         }
 
                         @Override
@@ -61,16 +61,18 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "StatefulSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET,message);
                         }
 
                         @Override
                         public void onClose() {
                             log.info("Watch StatefulSet gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("StatefulSet watcher reconnecting");
+                            return true;
+                        }
                     });
-        }
-
-        return watch;
     }
 }

@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.PodList;
+import io.fabric8.kubernetes.api.model.StatusDetails;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.exception.HotCloudException;
@@ -18,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -79,11 +81,11 @@ public class PodOperator implements PodApi {
     public void delete(String namespace, Map<String, String> label) {
         Assert.hasText(namespace, () -> "namespace is null");
         label = label == null ? Map.of() : label;
-        Boolean delete = fabric8Client.pods()
+        List<StatusDetails> details = fabric8Client.pods()
                 .inNamespace(namespace)
                 .withLabels(label)
                 .delete();
-        log.debug("delete labeled '{}' pod success '{}'", label, delete);
+        log.debug("delete labeled '{}' pod success '{}'", label, details.size());
     }
 
     @Override

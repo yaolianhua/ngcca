@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -33,10 +34,9 @@ public class JobWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.batch()
+        return fabric8Client.batch()
                     .v1()
                     .jobs()
                     .watch(new Watcher<>() {
@@ -50,7 +50,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override
@@ -62,16 +62,18 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override
                         public void onClose() {
                             log.info("Watch Job gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("Job watcher reconnecting");
+                            return true;
+                        }
                     });
-        }
-
-        return watch;
     }
 }

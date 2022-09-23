@@ -30,6 +30,47 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
         SecurityContextHolder.getContext().setAuthentication(adminUsernamePasswordAuthenticationToken);
 
     }
+
+    @Test
+    public void playWarDeployment() throws InterruptedException {
+        ApplicationForm form = ApplicationForm.builder()
+                .name("jenkins")
+                .canHttp(true)
+                .replicas(1)
+                .serverPort(8080)
+                .source(
+                        ApplicationInstanceSource.builder()
+                                .url("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war")
+                                .origin(ApplicationInstanceSource.Origin.WAR)
+                                .build()
+                ).build();
+
+        ApplicationInstance one = applicationInstanceService.findActiveSucceed("admin", "jenkins");
+        if (one != null){
+            player.delete(one.getId());
+        }
+
+        ApplicationInstance instance = player.play(form);
+
+        while (true) {
+            TimeUnit.SECONDS.sleep(3);
+            ApplicationInstance fetched = applicationInstanceService.findOne(instance.getId());
+            if (fetched.isSuccess()){
+                System.out.println("Application instance [" + fetched.getName() + "] create success");
+                break;
+            }
+            if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
+                System.out.println("Application instance [" + fetched.getName() + "] create failed");
+                break;
+            }
+
+        }
+
+        TimeUnit.SECONDS.sleep(3);
+        System.out.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
+
+        player.delete(instance.getId());
+    }
     @Test
     public void playJarDeployment() throws InterruptedException {
         ApplicationForm form = ApplicationForm.builder()

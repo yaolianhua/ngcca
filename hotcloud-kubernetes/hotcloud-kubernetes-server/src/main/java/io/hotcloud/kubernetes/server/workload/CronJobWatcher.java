@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -33,10 +34,9 @@ public class CronJobWatcher implements WorkloadsWatchApi {
     @Override
     public Watch watch() {
         //create new one client
-        Watch watch;
-        try (KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient()) {
+        KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
-            watch = fabric8Client.batch()
+        return fabric8Client.batch()
                     .v1()
                     .cronjobs()
                     .watch(new Watcher<>() {
@@ -50,7 +50,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override
@@ -62,16 +62,20 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override
                         public void onClose() {
                             log.info("Watch CronJob gracefully closed");
                         }
-                    });
-        }
 
-        return watch;
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("CronJob watcher reconnecting");
+                            return true;
+                        }
+                    });
+
     }
 }
