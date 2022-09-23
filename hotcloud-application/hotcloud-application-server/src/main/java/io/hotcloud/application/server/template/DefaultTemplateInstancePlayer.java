@@ -14,13 +14,14 @@ import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
-import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -44,7 +45,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         User current = userApi.current();
         Assert.notNull(current, "retrieve current user is null");
         //get user's namespace.
-        String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
+        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null");
 
         TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);

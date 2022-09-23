@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX;
+import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 @Component
 @RequiredArgsConstructor
@@ -199,7 +199,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         Assert.notNull(current, "Retrieve current user null");
 
         //get user's namespace.
-        String namespace = cache.get(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
+        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
         Assert.hasText(namespace, "namespace is null");
         return new UserNamespacePair(current.getUsername(), namespace);
     }

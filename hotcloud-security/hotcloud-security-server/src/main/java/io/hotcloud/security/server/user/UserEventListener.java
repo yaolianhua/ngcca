@@ -14,7 +14,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import static io.hotcloud.security.api.SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX;
+import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -36,7 +36,7 @@ public class UserEventListener {
     public void userCreated(UserCreatedEvent event) {
         User user = event.getUser();
         String namespace = UUIDGenerator.uuidNoDash();
-        Object o = cache.putIfAbsent(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), namespace);
+        Object o = cache.putIfAbsent(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), namespace);
         Log.info(UserEventListener.class.getName(),
                 UserCreatedEvent.class.getSimpleName(),
                 String.format("user '%s' namespace '%s' cached", user.getUsername(), o == null ? namespace : o));
@@ -47,7 +47,7 @@ public class UserEventListener {
     @Async
     public void userDeleted(UserDeletedEvent event) {
         User user = event.getUser();
-        String namespace = cache.get(String.format(CACHE_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
+        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
         cache.evict(namespace);
 
         Log.info(UserEventListener.class.getName(),
