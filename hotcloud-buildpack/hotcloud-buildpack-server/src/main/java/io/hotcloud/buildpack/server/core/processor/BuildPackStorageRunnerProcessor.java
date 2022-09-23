@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
-import io.hotcloud.buildpack.api.BuildPackRunnerProcessor;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
+import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.storage.FileHelper;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import java.nio.file.Path;
  **/
 @Component
 @Deprecated(since = "BuildPackApiV2")
-class BuildPackStorageRunnerProcessor implements BuildPackRunnerProcessor {
+class BuildPackStorageRunnerProcessor implements CommonRunnerProcessor {
 
     @Override
-    public void process() {
+    public void execute() {
 
         try {
             Path volumePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH);
