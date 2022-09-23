@@ -69,6 +69,11 @@ public class JobWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch Job gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("Job watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 

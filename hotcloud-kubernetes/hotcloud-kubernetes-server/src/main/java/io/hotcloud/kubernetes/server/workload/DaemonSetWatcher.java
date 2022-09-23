@@ -68,6 +68,11 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch DaemonSet gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("DaemonSet watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 

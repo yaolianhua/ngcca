@@ -69,6 +69,12 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch CronJob gracefully closed");
                         }
+
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("CronJob watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 

@@ -67,6 +67,11 @@ public class PodWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch Pod gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("Pod watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 

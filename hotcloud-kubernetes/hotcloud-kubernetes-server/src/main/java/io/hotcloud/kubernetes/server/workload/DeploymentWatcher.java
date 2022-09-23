@@ -68,6 +68,12 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch Deployment gracefully closed");
                         }
+
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("Deployment watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 

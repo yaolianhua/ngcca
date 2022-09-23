@@ -68,6 +68,11 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                         public void onClose() {
                             log.info("Watch StatefulSet gracefully closed");
                         }
+                        @Override
+                        public boolean reconnecting() {
+                            log.info("StatefulSet watcher reconnecting");
+                            return true;
+                        }
                     });
         }
 
