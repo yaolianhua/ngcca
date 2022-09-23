@@ -7,13 +7,13 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.api.template.TemplateInstanceService;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
-import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -58,8 +58,8 @@ public class ApplicationRabbitMQMessageSubscriber {
     @RabbitListener(
             bindings = {
                     @QueueBinding(
-                            value = @Queue(value = SecurityConstant.QUEUE_APPLICATION_SUBSCRIBE_SECURITY_USER_DELETE_MESSAGE),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE)
+                            value = @Queue(value = CommonConstant.MQ_QUEUE_SECURITY_USER_DELETE),
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_SECURITY_MODULE)
                     )
             }
     )

@@ -1,11 +1,11 @@
 package io.hotcloud.security.server.user;
 
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
-import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import io.hotcloud.security.api.user.event.UserCreatedEvent;
@@ -54,6 +54,6 @@ public class UserEventListener {
                 UserDeletedEvent.class.getSimpleName(),
                 String.format("user '%s' namespace '%s' evicted", user.getUsername(), namespace));
         //
-        messageBroadcaster.broadcast(SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE, Message.of(new UserNamespacePair(user.getUsername(), namespace)));
+        messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_SECURITY_MODULE, Message.of(new UserNamespacePair(user.getUsername(), namespace)));
     }
 }
