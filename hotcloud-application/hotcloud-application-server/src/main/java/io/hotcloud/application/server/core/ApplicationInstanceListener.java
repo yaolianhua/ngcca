@@ -5,6 +5,8 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessors;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.application.api.core.event.ApplicationInstanceCreateEvent;
+import io.hotcloud.buildpack.api.core.BuildPack;
+import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.cache.Cache;
@@ -14,8 +16,10 @@ import lombok.SneakyThrows;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -24,6 +28,7 @@ public class ApplicationInstanceListener {
 
     private final DeploymentApi deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
+    private final BuildPackService buildPackService;
     private final ApplicationInstanceProcessors processors;
     private final Cache cache;
 
@@ -62,6 +67,16 @@ public class ApplicationInstanceListener {
 
                 //deploying
                 Deployment deployment = deploymentApi.read(applicationInstance.getNamespace(), applicationInstance.getName());
+                if (Objects.isNull(deployment)){
+                    applicationInstance.setMessage(CommonConstant.FAILED_MESSAGE);
+                    applicationInstance.setSuccess(false);
+                    if (StringUtils.hasText(applicationInstance.getBuildPackId())){
+                        BuildPack fetched = buildPackService.findOne(applicationInstance.getBuildPackId());
+                        applicationInstance.setMessage(fetched.getLogs());
+                    }
+                    applicationInstanceService.saveOrUpdate(applicationInstance);
+                    break;
+                }
                 boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, instance.getReplicas());
                 if (!ready) {
                     Log.info(ApplicationInstanceListener.class.getName(),
