@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.server.equivalent;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.StatusDetails;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
 import io.hotcloud.common.api.Validator;
@@ -13,6 +14,7 @@ import io.hotcloud.kubernetes.api.pod.PodApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
@@ -72,9 +74,11 @@ public class KubectlEquivalent implements KubectlApi {
 
         InputStream inputStream = new ByteArrayInputStream(yaml.getBytes());
 
-        return StringUtils.hasText(namespace) ?
+        List<StatusDetails> details = StringUtils.hasText(namespace) ?
                 fabric8Client.load(inputStream).inNamespace(namespace).delete() :
                 fabric8Client.load(inputStream).delete();
+
+        return !CollectionUtils.isEmpty(details);
     }
 
     @Override
