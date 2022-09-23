@@ -175,6 +175,7 @@ public class UserService implements UserApi {
 
     @Override
     public User current() {
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Assert.notNull(authentication, "Authentication is null");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

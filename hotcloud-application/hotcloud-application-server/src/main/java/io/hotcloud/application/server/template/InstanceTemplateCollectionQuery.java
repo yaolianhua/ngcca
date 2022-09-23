@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
 import org.springframework.stereotype.Component;
@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @Component
 public class InstanceTemplateCollectionQuery {
 
-    private final InstanceTemplateService templateService;
+    private final TemplateInstanceService templateService;
 
-    public InstanceTemplateCollectionQuery(InstanceTemplateService templateService) {
+    public InstanceTemplateCollectionQuery(TemplateInstanceService templateService) {
         this.templateService = templateService;
     }
 
@@ -32,21 +32,21 @@ public class InstanceTemplateCollectionQuery {
      * @param pageable {@link Pageable}
      * @return paged instance template collection
      */
-    public PageResult<InstanceTemplate> pagingQuery(@Nullable String user, @Nullable Boolean success, Pageable pageable) {
+    public PageResult<TemplateInstance> pagingQuery(@Nullable String user, @Nullable Boolean success, Pageable pageable) {
 
-        List<InstanceTemplate> templates;
+        List<TemplateInstance> templates;
         if (StringUtils.hasText(user)) {
             templates = templateService.findAll(user);
         } else {
             templates = templateService.findAll();
         }
 
-        List<InstanceTemplate> filtered = filter(templates, success);
+        List<TemplateInstance> filtered = filter(templates, success);
         return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
 
     }
 
-    public List<InstanceTemplate> filter(List<InstanceTemplate> templates, Boolean success) {
+    public List<TemplateInstance> filter(List<TemplateInstance> templates, Boolean success) {
         if (success == null) {
             return templates;
         }

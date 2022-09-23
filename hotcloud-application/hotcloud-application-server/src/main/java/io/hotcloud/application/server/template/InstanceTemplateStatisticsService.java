@@ -1,8 +1,8 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplateService;
-import io.hotcloud.application.api.template.InstanceTemplateStatistics;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstanceService;
+import io.hotcloud.application.api.template.TemplateInstanceStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,43 +15,43 @@ import java.util.List;
 @Service
 public class InstanceTemplateStatisticsService {
 
-    private final InstanceTemplateService instanceTemplateService;
+    private final TemplateInstanceService templateInstanceService;
 
-    public InstanceTemplateStatisticsService(InstanceTemplateService instanceTemplateService) {
-        this.instanceTemplateService = instanceTemplateService;
+    public InstanceTemplateStatisticsService(TemplateInstanceService templateInstanceService) {
+        this.templateInstanceService = templateInstanceService;
     }
 
     /**
      * Get InstanceTemplateStatistics
      *
      * @param user user's username
-     * @return {@link InstanceTemplateStatistics}
+     * @return {@link TemplateInstanceStatistics}
      */
-    public InstanceTemplateStatistics statistics(@Nullable String user) {
+    public TemplateInstanceStatistics statistics(@Nullable String user) {
         boolean hasUser = StringUtils.hasText(user);
 
         if (hasUser) {
-            List<InstanceTemplate> list = instanceTemplateService.findAll(user);
+            List<TemplateInstance> list = templateInstanceService.findAll(user);
             return statistics(list);
         }
 
-        List<InstanceTemplate> list = instanceTemplateService.findAll();
+        List<TemplateInstance> list = templateInstanceService.findAll();
         return statistics(list);
     }
 
-    public InstanceTemplateStatistics statistics(List<InstanceTemplate> instanceTemplates) {
+    public TemplateInstanceStatistics statistics(List<TemplateInstance> templateInstances) {
 
-        int success = (int) instanceTemplates.stream()
-                .filter(InstanceTemplate::isSuccess)
+        int success = (int) templateInstances.stream()
+                .filter(TemplateInstance::isSuccess)
                 .count();
 
-        int failed = (int) instanceTemplates.stream()
+        int failed = (int) templateInstances.stream()
                 .filter(e -> !e.isSuccess())
                 .count();
 
-        int total = instanceTemplates.size();
+        int total = templateInstances.size();
 
-        return InstanceTemplateStatistics.builder()
+        return TemplateInstanceStatistics.builder()
                 .success(success)
                 .failed(failed)
                 .total(total)

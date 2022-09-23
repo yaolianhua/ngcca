@@ -1,7 +1,9 @@
 package io.hotcloud.application;
 
+import io.hotcloud.buildpack.NamedBuildPackPackage;
 import io.hotcloud.common.server.AsyncConfiguration;
 import io.hotcloud.common.server.cache.CacheConfiguration;
+import io.hotcloud.common.server.message.MessageConfiguration;
 import io.hotcloud.db.DatabaseProperties;
 import io.hotcloud.kubernetes.server.KubernetesApiConfiguration;
 import io.hotcloud.security.NamedSecurityPackage;
@@ -16,7 +18,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 NamedSecurityPackage.class,
                 KubernetesApiConfiguration.class,
                 AsyncConfiguration.class,
-//                MessageConfiguration.class,
+                MessageConfiguration.class,
+                NamedBuildPackPackage.class,
                 CacheConfiguration.class,
                 DatabaseProperties.class,
                 NamedSecurityPackage.class

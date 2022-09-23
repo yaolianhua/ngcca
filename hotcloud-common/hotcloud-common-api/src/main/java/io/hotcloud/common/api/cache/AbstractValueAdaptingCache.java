@@ -12,8 +12,7 @@ public abstract class AbstractValueAdaptingCache implements Cache {
     public <T> T get(String key, Class<T> type) {
         Assert.hasText(key, "Key is null");
         Assert.notNull(type, "Class type is null");
-        Object lookupValue = lookup(key);
-        Object value = fromStoreValue(lookupValue);
+        Object value = lookup(key);
         Assert.state(type.isInstance(value), "Cached value is not of required type [" + type.getName() + "]: " + value);
 
         return ((T) value);

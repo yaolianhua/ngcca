@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.cache;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.resource.ClientResources;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -8,6 +9,7 @@ import org.springframework.data.redis.connection.RedisStaticMasterReplicaConfigu
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -72,6 +74,25 @@ public final class RedisHelper {
 
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
+
+        redisTemplate.afterPropertiesSet();
+
+        return redisTemplate;
+    }
+
+    public static RedisTemplate<String, Object> createJsonSerializedRedisTemplate(RedisConnectionFactory redisConnectionFactory, ObjectMapper objectMapper) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
 
         redisTemplate.afterPropertiesSet();
 

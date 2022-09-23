@@ -1,7 +1,6 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.BuildPackStatistics;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,8 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+
+import static io.hotcloud.common.api.CommonConstant.SUCCESS_MESSAGE;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -58,12 +59,12 @@ public class BuildPackStatisticsService {
         int deleted = ((int) buildPacks.stream().filter(BuildPack::isDeleted).count());
         int success = (int) buildPacks.stream().filter(e -> !e.isDeleted())
                 .filter(BuildPack::isDone)
-                .filter(e -> Objects.equals(BuildPackConstant.SUCCESS_MESSAGE, e.getMessage()))
+                .filter(e -> Objects.equals(SUCCESS_MESSAGE, e.getMessage()))
                 .count();
 
         int failed = (int) buildPacks.stream().filter(e -> !e.isDeleted())
                 .filter(BuildPack::isDone)
-                .filter(e -> !Objects.equals(BuildPackConstant.SUCCESS_MESSAGE, e.getMessage()))
+                .filter(e -> !Objects.equals(SUCCESS_MESSAGE, e.getMessage()))
                 .count();
 
         int total = buildPacks.size();

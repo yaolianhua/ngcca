@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Namespace;
-import io.hotcloud.application.api.template.InstanceTemplate;
-import io.hotcloud.application.api.template.InstanceTemplatePlayer;
-import io.hotcloud.application.api.template.InstanceTemplateService;
+import io.hotcloud.application.api.template.TemplateInstance;
+import io.hotcloud.application.api.template.TemplateInstancePlayer;
+import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
@@ -38,19 +38,19 @@ import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
 )
 public class ApplicationRabbitMQMessageSubscriber {
 
-    private final InstanceTemplatePlayer instanceTemplatePlayer;
-    private final InstanceTemplateService instanceTemplateService;
+    private final TemplateInstancePlayer templateInstancePlayer;
+    private final TemplateInstanceService templateInstanceService;
 
     private final NamespaceApi namespaceApi;
 
     private final ObjectMapper objectMapper;
 
-    public ApplicationRabbitMQMessageSubscriber(InstanceTemplatePlayer instanceTemplatePlayer,
-                                                InstanceTemplateService instanceTemplateService,
+    public ApplicationRabbitMQMessageSubscriber(TemplateInstancePlayer templateInstancePlayer,
+                                                TemplateInstanceService templateInstanceService,
                                                 NamespaceApi namespaceApi,
                                                 ObjectMapper objectMapper) {
-        this.instanceTemplatePlayer = instanceTemplatePlayer;
-        this.instanceTemplateService = instanceTemplateService;
+        this.templateInstancePlayer = templateInstancePlayer;
+        this.templateInstanceService = templateInstanceService;
         this.namespaceApi = namespaceApi;
         this.objectMapper = objectMapper;
     }
@@ -69,13 +69,13 @@ public class ApplicationRabbitMQMessageSubscriber {
         UserNamespacePair pair = messageBody.getData();
         Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
                 String.format("[ApplicationRabbitMQMessageSubscriber] received [%s] user deleted message", pair.getUsername()));
-        List<InstanceTemplate> instanceTemplates = instanceTemplateService.findAll(pair.getUsername());
+        List<TemplateInstance> templateInstances = templateInstanceService.findAll(pair.getUsername());
         try {
-            for (InstanceTemplate template : instanceTemplates) {
-                instanceTemplatePlayer.delete(template.getId());
+            for (TemplateInstance template : templateInstances) {
+                templateInstancePlayer.delete(template.getId());
             }
             Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
-                    String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user %s instance template has been deleted", pair.getUsername(), instanceTemplates.size()));
+                    String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user %s instance template has been deleted", pair.getUsername(), templateInstances.size()));
         } catch (Exception e) {
             Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
                     String.format("[ApplicationRabbitMQMessageSubscriber] delete instance template error. %s", e.getMessage()));

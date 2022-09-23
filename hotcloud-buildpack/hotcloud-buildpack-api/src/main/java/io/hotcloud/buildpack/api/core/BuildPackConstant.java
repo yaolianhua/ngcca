@@ -20,16 +20,7 @@ public final class BuildPackConstant {
     public static final String WORKSPACE_VOLUME = "workspace-volume";
     public static final String STORAGE_CLASS = "storage-class-buildpack";
     public static final String STORAGE_VOLUME_PATH = Path.of(ROOT_PATH, "buildpack").toString();
-
     public static final String KANIKO_IMAGE = "gcr.io/kaniko-project/executor:latest";
-
-    public static final String K8S_APP = "k8s-app";
-
-    public static final String SUCCESS_MESSAGE = "success";
-
-    public static final String TIMEOUT_MESSAGE = "timeout";
-    public static final String FAILED_MESSAGE = "failed";
-
     public static final String KANIKO_CONTAINER = "kaniko";
     public static final String KANIKO_INIT_CONTAINER = "init";
 

@@ -22,3 +22,8 @@ minio:
   endpoint: "http://localhost:9009"
 app:
   dot-suffix-domain: .k8s-cluster.com
+registry:
+  url: 192.168.146.128:5000
+  username: admin
+  password: QbMufCD@9WVQ^Hv
+  imagebuild-namespace: image-build-test

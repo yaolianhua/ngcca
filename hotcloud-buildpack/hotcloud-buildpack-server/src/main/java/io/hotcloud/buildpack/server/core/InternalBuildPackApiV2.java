@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static io.hotcloud.buildpack.api.core.TemplateRender.*;
+import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 
 @Service
 @RequiredArgsConstructor
@@ -83,7 +84,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
@@ -134,7 +135,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
@@ -182,7 +183,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
@@ -208,7 +209,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         return BuildPackDockerSecretResource.builder()
                 .namespace(namespace)
-                .labels(Map.of(BuildPackConstant.K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName))
                 .data(Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, dockerconfigjson))
                 .name(k8sName)
                 .secretResourceYaml(secret)

@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
+import static io.hotcloud.common.api.CommonConstant.FAILED_MESSAGE;
+import static io.hotcloud.common.api.CommonConstant.SUCCESS_MESSAGE;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -161,7 +164,7 @@ public class BuildPackListener {
 
             String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName(), 100);
 
-            buildPack.setMessage(success ? BuildPackConstant.SUCCESS_MESSAGE : BuildPackConstant.FAILED_MESSAGE);
+            buildPack.setMessage(success ? SUCCESS_MESSAGE : FAILED_MESSAGE);
             buildPack.setLogs(logs);
 
             BuildPack saveOrUpdate = updateBuildPackDone(buildPack);

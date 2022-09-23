@@ -94,6 +94,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         UserNamespacePair userNamespacePair = retrievedUserNamespacePair();
         List<BuildPack> buildPacks = buildPackService.findAll(userNamespacePair.getUsername());
         boolean buildTaskExisted = buildPacks.stream()
+                .filter(e -> !e.isDeleted())
                 .filter(e -> Objects.equals(httpUrl, e.getPackageUrl()))
                 .anyMatch(e -> Objects.equals(false, e.isDone()));
         Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s packageUrl:%s",
