@@ -14,14 +14,13 @@ import org.springframework.data.redis.core.index.Indexed;
 @CompoundIndex(
         name = "user_name_idx",
         def = "{'user': 1, 'name': 1}",
-        unique = true
+        unique = false
 )
 @RedisHash("application_instance")
 @Getter
 @Setter
 public class ApplicationInstanceEntity extends AbstractEntity {
 
-    private String id;
     private String buildPackId;
     @Indexed
     @org.springframework.data.mongodb.core.index.Indexed
@@ -37,6 +36,8 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private String servicePorts;
     private String nodePorts;
 
+    private boolean deleted;
+    private boolean canHttp;
     private String host;
     private String ingress;
 

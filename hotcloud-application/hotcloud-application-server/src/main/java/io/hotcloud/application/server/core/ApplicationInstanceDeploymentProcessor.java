@@ -1,5 +1,6 @@
 package io.hotcloud.application.server.core;
 
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
@@ -18,9 +19,8 @@ import io.hotcloud.kubernetes.model.pod.container.*;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.hotcloud.kubernetes.model.workload.DeploymentSpec;
 import io.hotcloud.kubernetes.model.workload.DeploymentTemplate;
-import io.kubernetes.client.openapi.ApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -31,12 +31,21 @@ import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor
-@Order(10)
-class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProcessor <ApplicationInstance, Void> {
+class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProcessor <ApplicationInstance> {
 
     private final DeploymentApi deploymentApi;
     private final BuildPackService buildPackService;
     private final ApplicationInstanceService applicationInstanceService;
+
+    @Override
+    public int order() {
+        return DEFAULT_ORDER + 10;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.Deployment;
+    }
 
     private ObjectMetadata buildDeploymentMetadata(ApplicationInstance applicationInstance){
         ObjectMetadata metadata = new ObjectMetadata();
@@ -54,16 +63,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
         PodTemplateSpec podTemplateSpec = new PodTemplateSpec();
 
-        String imageUrl;
-        if (ApplicationInstanceSource.Origin.IMAGE.equals(applicationInstance.getSource().getOrigin())) {
-            imageUrl = applicationInstance.getSource().getUrl();
-        }else {
-            BuildPack buildPack = buildPackService.findOne(applicationInstance.getBuildPackId());
-            Assert.notNull(buildPack, "Can not found buildPack object [" + applicationInstance.getBuildPackId() + "]");
-            Assert.isTrue(buildPack.isDone() && Objects.equals(buildPack.getMessage(), CommonConstant.SUCCESS_MESSAGE), "BuildPack status is wrong. it does not done or not success");
-            Assert.hasText(buildPack.getArtifact(), "Get image url is null. [" + buildPack.getId() + "]");
-            imageUrl = buildPack.getArtifact();
-        }
+        String imageUrl = retrieveApplicationInstanceImageUrl(applicationInstance);
         Container container = this.buildContainer(applicationInstance, imageUrl);
 
         podTemplateSpec.setContainers(List.of(container));
@@ -72,6 +72,18 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         return template;
     }
 
+    private String retrieveApplicationInstanceImageUrl (ApplicationInstance applicationInstance){
+
+        if (ApplicationInstanceSource.Origin.IMAGE.equals(applicationInstance.getSource().getOrigin())) {
+            return applicationInstance.getSource().getUrl();
+        }else {
+            BuildPack buildPack = buildPackService.findOne(applicationInstance.getBuildPackId());
+            Assert.notNull(buildPack, "Can not found buildPack object [" + applicationInstance.getBuildPackId() + "]");
+            Assert.isTrue(buildPack.isDone() && Objects.equals(buildPack.getMessage(), CommonConstant.SUCCESS_MESSAGE), "BuildPack status is wrong. it does not done or not success");
+            Assert.hasText(buildPack.getArtifact(), "BuildPack is success, but get image url is null. [" + buildPack.getId() + "]");
+            return buildPack.getArtifact();
+        }
+    }
     private DeploymentSpec buildDeploymentSpec (ApplicationInstance applicationInstance){
         DeploymentSpec deploymentSpec = new DeploymentSpec();
 
@@ -83,23 +95,36 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
         return deploymentSpec;
     }
+    @SneakyThrows
     @Override
-    public Void process(ApplicationInstance applicationInstance) {
-
-        DeploymentCreateRequest request = new DeploymentCreateRequest();
-
-        request.setMetadata(buildDeploymentMetadata(applicationInstance));
-        request.setSpec(buildDeploymentSpec(applicationInstance));
+    public void processCreate(ApplicationInstance applicationInstance) {
 
         try {
+            DeploymentCreateRequest request = new DeploymentCreateRequest();
+
+            request.setMetadata(buildDeploymentMetadata(applicationInstance));
+            request.setSpec(buildDeploymentSpec(applicationInstance));
             deploymentApi.deployment(request);
-        } catch (ApiException e) {
+            Log.info(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
+        } catch (Exception e) {
+            Log.error(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
             applicationInstance.setMessage(e.getMessage());
+            applicationInstanceService.saveOrUpdate(applicationInstance);
+            throw e;
         }
 
-        ApplicationInstance saved = applicationInstanceService.saveOrUpdate(applicationInstance);
-        Log.info(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance [%s] created, id [%s]", saved.getUser(), saved.getName(), saved.getId()));
-        return null;
+    }
+
+    @SneakyThrows
+    @Override
+    public void processDelete(ApplicationInstance input) {
+        Deployment deployment = deploymentApi.read(input.getNamespace(), input.getName());
+        if (Objects.nonNull(deployment)) {
+            deploymentApi.delete(input.getNamespace(), input.getName());
+            Log.info(ApplicationInstanceDeploymentProcessor.class.getName(),
+                    String.format("[%s] user's application instance  k8s deployment [%s] deleted", input.getUser(), input.getName()));
+        }
+
     }
 
     private Container buildContainer(ApplicationInstance applicationInstance, String imageUrl){

@@ -3,34 +3,46 @@ package io.hotcloud.application.server.core;
 import io.fabric8.kubernetes.api.model.Service;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.application.api.core.ApplicationInstanceService;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
 import io.hotcloud.kubernetes.model.network.ServiceSpec;
-import io.kubernetes.client.openapi.ApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor
-@Order(3)
-class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcessor <ApplicationInstance, Void> {
+class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcessor <ApplicationInstance> {
 
     private final ServiceApi serviceApi;
+    private final ApplicationInstanceService applicationInstanceService;
 
     @Override
-    public Void process(ApplicationInstance applicationInstance) {
+    public int order() {
+        return DEFAULT_ORDER + 2;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.Ingress;
+    }
+
+    @SneakyThrows
+    @Override
+    public void processCreate(ApplicationInstance applicationInstance) {
 
         ServiceCreateRequest request = new ServiceCreateRequest();
         try {
@@ -48,6 +60,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
             for (String port : applicationInstance.getTargetPorts().split(",")) {
                 ServicePort servicePort = new ServicePort();
                 servicePort.setPort(Integer.parseInt(port));
+                servicePort.setTargetPort(port);
                 servicePorts.add(servicePort);
             }
             spec.setPorts(servicePorts);
@@ -64,11 +77,26 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
                     .map(String::valueOf)
                     .collect(Collectors.joining(","));
             applicationInstance.setServicePorts(svcPorts);
-        } catch (ApiException e) {
+
+            applicationInstanceService.saveOrUpdate(applicationInstance);
+            Log.info(ApplicationInstanceServiceProcessor.class.getName(), String.format("[%s] user's application instance k8s service [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
+        } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
-            throw new HotCloudException("Create application service exception: " + e.getMessage());
+            applicationInstanceService.saveOrUpdate(applicationInstance);
+            Log.error(ApplicationInstanceServiceProcessor.class.getName(),
+                    String.format("[%s] user's application instance k8s service [%s] created error: %s", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
+            throw e;
         }
 
-        return null;
+    }
+
+    @SneakyThrows
+    @Override
+    public void processDelete(ApplicationInstance input) {
+        Service service = serviceApi.read(input.getNamespace(), input.getName());
+        if (Objects.nonNull(service)){
+            serviceApi.delete(input.getNamespace(), input.getName());
+            Log.info(ApplicationInstanceServiceProcessor.class.getName(), String.format("[%s] user's application instance k8s service [%s] deleted",input.getUser(), input.getName()));
+        }
     }
 }

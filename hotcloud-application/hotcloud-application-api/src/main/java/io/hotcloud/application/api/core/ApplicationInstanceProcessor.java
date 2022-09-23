@@ -1,6 +1,24 @@
 package io.hotcloud.application.api.core;
 
-public interface ApplicationInstanceProcessor <I, O>{
+public interface ApplicationInstanceProcessor <I> {
 
-    O process (I input);
+    Integer DEFAULT_ORDER = 0;
+    void processCreate(I input);
+
+    void processDelete(I input);
+
+    int order();
+
+    Type getType ();
+
+    enum Type {
+        //
+        Service,
+        //
+        Ingress,
+        //
+        ImageBuild,
+        //
+        Deployment
+    }
 }

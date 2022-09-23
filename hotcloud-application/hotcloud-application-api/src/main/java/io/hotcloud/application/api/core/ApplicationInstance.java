@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -26,6 +27,8 @@ public class ApplicationInstance {
     private String servicePorts;
     private String nodePorts;
 
+    private boolean deleted;
+    private boolean canHttp;
     private String host;
     private String ingress;
 
@@ -33,7 +36,8 @@ public class ApplicationInstance {
 
     @Builder.Default
     private Integer replicas = 1;
-    private Map<String,String> envs;
+    @Builder.Default
+    private Map<String,String> envs = new HashMap<>();
 
     private boolean success;
     private String message;

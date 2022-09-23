@@ -17,9 +17,9 @@ public class CacheRunnerProcessor implements CommonRunnerProcessor {
 
     @Override
     public void execute() {
-        cache.put(CommonConstant.IMAGEBUILD_TIMEOUT_SECONDS, 1200);
+        cache.put(CommonConstant.CK_IMAGEBUILD_TIMEOUT_SECONDS, 1200);
         Log.info(CacheRunnerProcessor.class.getName(), "Cached imagebuild-timeout-seconds. value='1200s'");
-        cache.put(CommonConstant.DEPLOYMENT_TIMEOUT_SECONDS, 600);
+        cache.put(CommonConstant.CK_DEPLOYMENT_TIMEOUT_SECONDS, 600);
         Log.info(CacheRunnerProcessor.class.getName(), "Cached deployment-timeout-seconds. value='600s'");
     }
 }

@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApplicationCreate {
+public class ApplicationForm {
 
     @Builder.Default
     private String name = "";
+    private boolean canHttp;
 
     @Builder.Default
     private Integer serverPort = 8080;
@@ -24,6 +26,7 @@ public class ApplicationCreate {
 
     @Builder.Default
     private Integer replicas = 1;
-    private Map<String,String> envs;
+    @Builder.Default
+    private Map<String,String> envs = new HashMap<>();
 
 }

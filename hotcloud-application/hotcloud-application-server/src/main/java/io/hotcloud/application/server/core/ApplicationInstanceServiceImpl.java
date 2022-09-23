@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +27,36 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
     private final ObjectMapper objectMapper;
 
     @Override
-    public ApplicationInstance findOne(String user, String name) {
-        ApplicationInstanceEntity entity = applicationInstanceRepository.findByNameAndUser(name, user);
+    public List<ApplicationInstance> find(String user, String name) {
+        List<ApplicationInstanceEntity> entities = applicationInstanceRepository.findByNameAndUser(name, user);
+        return entities.stream().map(this::toApplicationInstance).collect(Collectors.toList());
+    }
+
+    @Override
+    public ApplicationInstance findActiveSucceed(String user, String name) {
+        List<ApplicationInstance> applicationInstances = find(user, name);
+        return applicationInstances.stream().filter(ApplicationInstance::isSuccess)
+                .filter(e -> !e.isDeleted())
+                .findFirst()
+                .orElse(null);
+
+    }
+
+    @Override
+    public ApplicationInstance findOne(String id) {
+        ApplicationInstanceEntity entity = applicationInstanceRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Can not found application instance [" + id + "]"));
         return toApplicationInstance(entity);
+    }
+
+    @Override
+    public void delete(String id) {
+        ApplicationInstanceEntity fetched = applicationInstanceRepository.findById(id).orElse(null);
+        if (Objects.isNull(fetched)){
+            return;
+        }
+
+        fetched.setDeleted(true);
+        applicationInstanceRepository.save(fetched);
     }
 
     @Override
@@ -38,6 +68,16 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setNodePorts(applicationInstance.getNodePorts());
             fetched.setIngress(applicationInstance.getIngress());
             fetched.setSuccess(applicationInstance.isSuccess());
+            fetched.setDeleted(applicationInstance.isDeleted());
+            fetched.setService(applicationInstance.getService());
+            fetched.setServicePorts(applicationInstance.getServicePorts());
+            fetched.setTargetPorts(applicationInstance.getTargetPorts());
+            fetched.setBuildPackId(applicationInstance.getBuildPackId());
+            fetched.setHost(applicationInstance.getHost());
+            fetched.setName(applicationInstance.getName());
+            fetched.setCanHttp(applicationInstance.isCanHttp());
+            fetched.setReplicas(applicationInstance.getReplicas());
+
             fetched.setModifiedAt(LocalDateTime.now());
 
             ApplicationInstanceEntity updated = applicationInstanceRepository.save(fetched);
@@ -56,8 +96,12 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
 
     @SuppressWarnings("unchecked")
     private ApplicationInstance toApplicationInstance(ApplicationInstanceEntity entity) {
+        if (Objects.isNull(entity)){
+            return null;
+        }
         return ApplicationInstance.builder()
                 .id(entity.getId())
+                .buildPackId(entity.getBuildPackId())
                 .user(entity.getUser())
                 .name(entity.getName())
                 .namespace(entity.getNamespace())
@@ -68,6 +112,8 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
                 .ingress(entity.getIngress())
                 .nodePorts(entity.getNodePorts())
                 .success(entity.isSuccess())
+                .canHttp(entity.isCanHttp())
+                .deleted(entity.isDeleted())
                 .replicas(entity.getReplicas())
                 .source(readT(entity.getSource(), ApplicationInstanceSource.class))
                 .envs(readT(entity.getEnvs(), Map.class))

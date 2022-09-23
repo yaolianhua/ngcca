@@ -1,14 +1,18 @@
 package io.hotcloud.application.server.core;
 
+import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.core.*;
+import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
+import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
+import io.kubernetes.client.openapi.ApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -17,18 +21,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Component
-@Order(1)
 @RequiredArgsConstructor
-class ApplicationInstanceParameterValidityCheckProcessor implements ApplicationInstanceProcessor<ApplicationCreate, ApplicationInstance> {
+public class ApplicationInstanceParameterCheckerImpl implements ApplicationInstanceParameterChecker {
 
     private final ApplicationInstanceService applicationInstanceService;
     private final UserApi userApi;
     private final Cache cache;
-
-
+    private final NamespaceApi namespaceApi;
     @Override
-    public ApplicationInstance process(ApplicationCreate applicationForm) {
-
+    public ApplicationInstance check(ApplicationForm applicationForm) {
         ApplicationInstanceSource applicationInstanceSource = applicationForm.getSource();
         if (Objects.isNull(applicationInstanceSource)) {
             throw new IllegalArgumentException("Application instance source object is null");
@@ -50,9 +51,20 @@ class ApplicationInstanceParameterValidityCheckProcessor implements ApplicationI
         }
         User current = userApi.current();
         String namespace = cache.get(String.format(SecurityConstant.CACHE_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "User's k8s namespace is null");
+        Assert.hasText(namespace, String.format("[%s] user cached k8s namespace is null", current.getUsername()));
 
-        ApplicationInstance applicationInstance = applicationInstanceService.findOne(current.getUsername(), applicationForm.getName());
+        Namespace readNamespace = namespaceApi.read(namespace);
+        if (Objects.isNull(readNamespace)) {
+            try {
+                namespaceApi.create(namespace);
+                Log.info(ApplicationInstanceParameterCheckerImpl.class.getName(),
+                        String.format("[%s] user's k8s namespace create success [%s]", current.getUsername(), namespace));
+            } catch (ApiException e) {
+                throw new HotCloudException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());
+            }
+        }
+
+        ApplicationInstance applicationInstance = applicationInstanceService.findActiveSucceed(current.getUsername(), applicationForm.getName());
         if (Objects.nonNull(applicationInstance)){
             throw new HotCloudResourceConflictException("Application name [" + applicationForm.getName() + "] is already exist for current user [" + current.getUsername() + "]");
         }
@@ -64,6 +76,7 @@ class ApplicationInstanceParameterValidityCheckProcessor implements ApplicationI
                 .namespace(namespace)
                 .user(current.getUsername())
                 .name(applicationForm.getName())
+                .canHttp(applicationForm.isCanHttp())
                 .createdAt(LocalDateTime.now())
                 .targetPorts(String.valueOf(applicationForm.getServerPort()))
                 .envs(applicationForm.getEnvs())
