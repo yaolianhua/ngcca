@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -50,7 +51,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override
@@ -62,7 +63,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override

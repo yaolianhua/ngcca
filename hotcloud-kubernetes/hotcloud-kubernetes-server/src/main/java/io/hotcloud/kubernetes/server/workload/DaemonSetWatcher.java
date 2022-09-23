@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -49,7 +50,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     null,
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override
@@ -61,7 +62,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override

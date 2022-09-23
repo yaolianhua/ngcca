@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
@@ -50,7 +51,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override
@@ -62,7 +63,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override
