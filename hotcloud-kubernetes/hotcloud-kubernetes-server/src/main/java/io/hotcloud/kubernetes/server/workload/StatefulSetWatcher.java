@@ -50,7 +50,7 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                                     null,
                                     "StatefulSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_STATEFULSET,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET,message);
                         }
 
                         @Override
@@ -62,7 +62,7 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "StatefulSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_STATEFULSET,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET,message);
                         }
 
                         @Override

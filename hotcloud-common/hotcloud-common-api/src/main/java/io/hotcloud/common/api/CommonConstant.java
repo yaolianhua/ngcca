@@ -21,10 +21,10 @@ public final class CommonConstant {
     public static final String MQ_EXCHANGE_FANOUT_SECURITY_MODULE = "exchange-hotcloud.message.security.module";
 
     public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS = "queue-hotcloud.message.kubernetes.workloads.events";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_DEPLOYMENT = "exchange-hotcloud.message.workloads.deployment";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_JOB = "exchange-hotcloud.message.workloads.job";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_DAEMONSET = "exchange-hotcloud.message.workloads.daemonset";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_CRONJOB = "exchange-hotcloud.message.workloads.cronjob";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_STATEFULSET = "exchange-hotcloud.message.workloads.statefulset";
-    public static final String MQ_EXCHANGE_KUBERNETES_WORKLOADS_POD = "exchange-hotcloud.message.workloads.pod";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT = "exchange-hotcloud.message.workloads.deployment";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB = "exchange-hotcloud.message.workloads.job";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET = "exchange-hotcloud.message.workloads.daemonset";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB = "exchange-hotcloud.message.workloads.cronjob";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET = "exchange-hotcloud.message.workloads.statefulset";
+    public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_POD = "exchange-hotcloud.message.workloads.pod";
 }

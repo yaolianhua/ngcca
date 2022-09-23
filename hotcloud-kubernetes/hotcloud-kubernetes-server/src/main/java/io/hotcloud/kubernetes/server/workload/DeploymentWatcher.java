@@ -50,7 +50,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                                     null,
                                     "Deployment Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
                         }
 
                         @Override
@@ -62,7 +62,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "Deployment Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT,message);
                         }
 
                         @Override

@@ -49,7 +49,7 @@ public class PodWatcher implements WorkloadsWatchApi {
                                     null,
                                     "Pod Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_POD,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_POD,message);
                         }
 
                         @Override
@@ -61,7 +61,7 @@ public class PodWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "Pod Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_POD,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_POD,message);
                         }
 
                         @Override

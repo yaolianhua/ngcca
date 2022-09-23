@@ -50,7 +50,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     null,
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DAEMONSET,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override
@@ -62,7 +62,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "DaemonSet Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_DAEMONSET,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET,message);
                         }
 
                         @Override

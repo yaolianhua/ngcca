@@ -51,7 +51,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_CRONJOB,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override
@@ -63,7 +63,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "CronJob Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_CRONJOB,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB,message);
                         }
 
                         @Override

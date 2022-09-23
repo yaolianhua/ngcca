@@ -51,7 +51,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     null,
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_JOB,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override
@@ -63,7 +63,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                                     e.getMessage(),
                                     "Job Watch Event Push"
                             );
-                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_KUBERNETES_WORKLOADS_JOB,message);
+                            messageBroadcaster.broadcast(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB,message);
                         }
 
                         @Override
