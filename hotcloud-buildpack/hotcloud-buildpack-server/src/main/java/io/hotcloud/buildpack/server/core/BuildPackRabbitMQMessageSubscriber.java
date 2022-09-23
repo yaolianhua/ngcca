@@ -11,6 +11,7 @@ import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackPlayer;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.buildpack.api.core.event.BuildPackArtifactUploadedEvent;
+import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
@@ -20,7 +21,6 @@ import io.hotcloud.common.api.storage.minio.MinioBucketApi;
 import io.hotcloud.common.api.storage.minio.MinioObjectApi;
 import io.hotcloud.common.api.storage.minio.MinioProperties;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
-import io.hotcloud.security.api.SecurityConstant;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -76,8 +76,8 @@ public class BuildPackRabbitMQMessageSubscriber {
     @RabbitListener(
             bindings = {
                     @QueueBinding(
-                            value = @Queue(value = SecurityConstant.QUEUE_BUILDPACK_SUBSCRIBE_SECURITY_USER_DELETE_MESSAGE),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = SecurityConstant.EXCHANGE_FANOUT_SECURITY_MESSAGE)
+                            value = @Queue(value = CommonConstant.MQ_QUEUE_SECURITY_USER_DELETE),
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_SECURITY_MODULE)
                     )
             }
     )

@@ -17,4 +17,6 @@ public final class CommonConstant {
     public static final String CK_IMAGEBUILD_TIMEOUT_SECONDS = "imagebuild:timeout:seconds";
     public static final String CK_IMAGEBUILD_STATUS = "imagebuild:status:%s";
     public static final String CK_DEPLOYMENT_TIMEOUT_SECONDS = "deployment:timeout:seconds";
+    public static final String MQ_QUEUE_SECURITY_USER_DELETE = "queue-hotcloud.message.security.user.delete";
+    public static final String MQ_EXCHANGE_FANOUT_SECURITY_MODULE = "exchange-hotcloud.message.security.module";
 }

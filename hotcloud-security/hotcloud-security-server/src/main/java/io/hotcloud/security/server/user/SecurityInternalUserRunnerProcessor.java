@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.user;
 
+import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.security.SecurityRunnerProcessor;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-public class SecurityInternalUserRunnerProcessor implements SecurityRunnerProcessor {
+public class SecurityInternalUserRunnerProcessor implements CommonRunnerProcessor {
 
     private final UserApi userApi;
 
