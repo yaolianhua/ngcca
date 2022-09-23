@@ -36,11 +36,11 @@ public class BuildPackListenerV2 {
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
 
-        Integer timeout = cache.get(IMAGEBUILD_TIMEOUT_SECONDS, Integer.class);
-
+        Integer timeout = cache.get(CK_IMAGEBUILD_TIMEOUT_SECONDS, Integer.class);
+        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Unknown.name());
         try{
-            while (loopCount.get() < timeout / 20){
-                TimeUnit.SECONDS.sleep(20);
+            while (loopCount.get() < timeout / 3){
+                TimeUnit.SECONDS.sleep(3);
 
                 buildPack = buildPackService.findOne(buildPack.getId());
                 if (Objects.isNull(buildPack) || buildPack.isDeleted()) {
@@ -57,6 +57,7 @@ public class BuildPackListenerV2 {
                                 BuildPackStartedEventV2.class.getSimpleName(),
                                 String.format("[ImageBuild] Kaniko status is [Unknown]. namespace:%s | job:%s | buildPack:%s",
                                         namespace, job, buildPack.getId()));
+                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Unknown.name());
                         break;
 
                     case Ready:
@@ -67,6 +68,7 @@ public class BuildPackListenerV2 {
 
                         System.out.println("***************************** Print Kaniko Job log ******************************");
                         System.out.println(buildPackApiV2.fetchLog(namespace, job));
+                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Ready.name());
                         break;
 
                     case Active:
@@ -77,6 +79,7 @@ public class BuildPackListenerV2 {
 
                         System.out.println("***************************** Print Kaniko Job log ******************************");
                         System.out.println(buildPackApiV2.fetchLog(namespace, job));
+                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Active.name());
                         break;
 
                     case Failed:
@@ -90,6 +93,7 @@ public class BuildPackListenerV2 {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
+                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Failed.name());
                         return;
 
                     case Succeeded:
@@ -103,6 +107,7 @@ public class BuildPackListenerV2 {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
+                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Succeeded.name());
                         return;
 
                     default:
@@ -118,6 +123,7 @@ public class BuildPackListenerV2 {
             buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
             buildPackService.saveOrUpdate(buildPack);
+            cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Failed.name());
 
             Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
             Log.warn(BuildPackListenerV2.class.getName(),
@@ -134,6 +140,7 @@ public class BuildPackListenerV2 {
             buildPack.setDone(true);
             buildPack.setMessage(ex.getMessage());
             buildPackService.saveOrUpdate(buildPack);
+            cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Failed.name());
         }
     }
 
