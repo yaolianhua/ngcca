@@ -39,3 +39,6 @@ registry:
   username: admin
   password: QbMufCD@9WVQ^Hv
   imagebuild-namespace: image-build-dev
+buildpack:
+  imagebuild:
+    notify-mode: rabbitmq

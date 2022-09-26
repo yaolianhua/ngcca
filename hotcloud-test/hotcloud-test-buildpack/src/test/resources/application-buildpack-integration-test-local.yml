@@ -1,8 +1,8 @@
 logging:
   level:
-    io.hotcloud.buildpack: debug
-    io.hotcloud.kubernetes: debug
-    io.hotcloud.common: debug
+    io.hotcloud.buildpack: info
+    io.hotcloud.kubernetes: info
+    io.hotcloud.common: info
 kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
@@ -14,7 +14,13 @@ cache:
     password: QbMufCD@9WVQ^Hv
     port: 6379
 db:
-  type: redis
+  type: mongodb
+  mongodb:
+    host: localhost
+    username: admin
+    password: QbMufCD@9WVQ^Hv
+    port: 27017
+    database: hotcloud-test
   redis:
     database: 5
     host: localhost
@@ -34,8 +40,11 @@ minio:
 buildpack:
   kaniko:
     verbosity: info
+  imagebuild:
+    notify-mode: rabbitmq
 registry:
   url: 192.168.146.128:5000
   username: admin
   password: QbMufCD@9WVQ^Hv
   imagebuild-namespace: image-build-test
+
