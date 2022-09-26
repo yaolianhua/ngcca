@@ -16,6 +16,10 @@ import org.springframework.data.redis.core.RedisHash;
 @Setter
 public class BuildPackEntity extends AbstractEntity {
 
+    @Indexed(unique = true)
+    @org.springframework.data.redis.core.index.Indexed
+    private String uuid;
+
     @Indexed(unique = false)
     @org.springframework.data.redis.core.index.Indexed
     private String user;
