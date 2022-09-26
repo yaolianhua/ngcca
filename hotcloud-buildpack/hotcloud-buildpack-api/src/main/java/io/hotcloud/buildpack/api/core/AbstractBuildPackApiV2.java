@@ -20,9 +20,11 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
         BuildPackJobResource jobResource = prepareJob(namespace, httpGitUrl, branch);
 
+        String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
         BuildPack buildPack = BuildPack.builder()
                 .jobResource(jobResource)
                 .secretResource(secretResource)
+                .uuid(businessId)
                 .build();
 
         doApply(buildPack.getYaml());
@@ -55,10 +57,11 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
         BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
 
         BuildPackJobResource jobResource = prepareJob(namespace, httpUrl);
-
+        String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
         BuildPack buildPack = BuildPack.builder()
                 .jobResource(jobResource)
                 .secretResource(secretResource)
+                .uuid(businessId)
                 .build();
 
         doApply(buildPack.getYaml());
