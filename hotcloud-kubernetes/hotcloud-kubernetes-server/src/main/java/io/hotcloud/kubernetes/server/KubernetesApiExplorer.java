@@ -1,8 +1,8 @@
 package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.hotcloud.kubernetes.api.AbstractKubernetesApi;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.util.ClientBuilder;
@@ -68,7 +68,7 @@ public class KubernetesApiExplorer extends AbstractKubernetesApi {
         boolean inCluster = kubernetesProperties.isInCluster();
         if (inCluster) {
             Config config = Config.autoConfigure(null);
-            return new DefaultKubernetesClient(config);
+            return new KubernetesClientBuilder().withConfig(config).build();
         }
         String kubeConfigPath = kubernetesProperties.getKubeConfigPath();
         String kubeconfig;
@@ -80,7 +80,7 @@ public class KubernetesApiExplorer extends AbstractKubernetesApi {
         }
         Config config = Config.fromKubeconfig(kubeconfig);
 
-        return new DefaultKubernetesClient(config);
+        return new KubernetesClientBuilder().withConfig(config).build();
 
     }
 }
