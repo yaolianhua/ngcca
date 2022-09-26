@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @ConditionalOnProperty(
         name = BuildPackImagebuildProperties.PROPERTIES_TYPE_NAME,
-        havingValue = BuildPackImagebuildProperties.IN_PROCESS
+        havingValue = BuildPackImagebuildProperties.IN_PROCESS,
+        matchIfMissing = true
 )
 public class BuildPackListenerV2 {
     private final BuildPackWatchService buildPackWatchService;
