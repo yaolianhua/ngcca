@@ -1,5 +1,8 @@
 package io.hotcloud.buildpack.api.core;
 
+import io.hotcloud.common.api.CommonConstant;
+import io.hotcloud.common.api.UUIDGenerator;
+
 public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
     protected abstract BuildPackJobResource prepareJob(String namespace, String httpGitUrl, String branch);
@@ -34,9 +37,12 @@ public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
         BuildPackJobResource jobResource = prepareJob(namespace, httpUrl, jarStartOptions, jarStartArgs);
 
+        String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
+
         BuildPack buildPack = BuildPack.builder()
                 .jobResource(jobResource)
                 .secretResource(secretResource)
+                .uuid(businessId)
                 .build();
 
         doApply(buildPack.getYaml());
