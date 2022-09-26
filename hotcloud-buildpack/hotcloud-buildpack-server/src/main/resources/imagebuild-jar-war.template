@@ -4,6 +4,7 @@ metadata:
   annotations: { }
   labels:
     k8s-app: #{[ LABEL_NAME ]}
+    app.business.data/id: #{[ ID ]}
   name: #{[ JOB_NAME ]}
   namespace: #{[ NAMESPACE ]}
 spec:

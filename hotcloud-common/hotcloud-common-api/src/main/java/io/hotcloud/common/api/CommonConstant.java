@@ -9,6 +9,7 @@ public final class CommonConstant {
     public static final String ROOT_PATH = Path.of(FileHelper.getUserHome(), "hotcloud").toString();
 
     public static final String K8S_APP = "k8s-app";
+    public static final String K8S_APP_BUSINESS_DATA_ID = "app.business.data/id";
 
     public static final String SUCCESS_MESSAGE = "success";
 
@@ -25,6 +26,7 @@ public final class CommonConstant {
 
     public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS = "queue-hotcloud.message.kubernetes.workloads.events";
     public static final String MQ_QUEUE_TEMPLATE_INSTANCE_DEPLOYMENT_EVENTS = "queue-hotcloud.message.template.instance.deployment.events";
+    public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_JOB = "queue-hotcloud.message.kubernetes.workloads.job";
     public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT = "exchange-hotcloud.message.workloads.deployment";
     public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB = "exchange-hotcloud.message.workloads.job";
     public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET = "exchange-hotcloud.message.workloads.daemonset";

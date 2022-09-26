@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.common.api.storage.FileHelper;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
 
 import static io.hotcloud.buildpack.api.core.TemplateRender.*;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP;
+import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 
 @Service
 @RequiredArgsConstructor
@@ -71,8 +73,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         Assert.notNull(kanikoImageEntity, "Git image entity is null");
         Assert.hasText(kanikoImageEntity.getValue(), "Git image is null");
 
+        String businessId = UUIDGenerator.uuidNoDash();
         String job = kanikoJob(
                 namespace,
+                businessId,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
@@ -84,7 +88,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName,
+                        K8S_APP_BUSINESS_DATA_ID, businessId))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
@@ -123,8 +128,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
         Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
 
+        String businessId = UUIDGenerator.uuidNoDash();
         String job = kanikoJob(
                 namespace,
+                businessId,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
@@ -135,7 +142,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
@@ -171,8 +178,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
         Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
 
+        String businessId = UUIDGenerator.uuidNoDash();
         String job = kanikoJob(
                 namespace,
+                businessId,
                 k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
@@ -183,7 +192,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName))
+                .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
                 .jobResourceYaml(job)
                 .name(k8sName)
                 .namespace(namespace)
