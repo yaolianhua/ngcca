@@ -55,7 +55,7 @@ public class TemplateInstanceControllerTest {
         when(collectionQuery.pagingQuery(null, null, Pageable.of(1, 10)))
                 .thenReturn(pageResult);
 
-        try (InputStream inputStream = getClass().getResourceAsStream("instance-template-list.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("template-instance-list.json")) {
             String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines()
                     .collect(Collectors.joining());
 
