@@ -15,6 +15,7 @@ spec:
       annotations: { }
       labels:
         k8s-app: #{[ LABEL_NAME ]}
+        app.business.data/id: #{[ ID ]}
     spec:
       containers:
         - args:
