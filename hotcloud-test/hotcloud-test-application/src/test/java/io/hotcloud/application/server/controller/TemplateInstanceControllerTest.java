@@ -59,7 +59,7 @@ public class TemplateInstanceControllerTest {
             String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines()
                     .collect(Collectors.joining());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/instance/templates")
+            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/templates/instance")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk())
