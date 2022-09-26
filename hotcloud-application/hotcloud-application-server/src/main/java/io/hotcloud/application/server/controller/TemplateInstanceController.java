@@ -22,8 +22,8 @@ import static io.hotcloud.common.api.WebResponse.*;
  * @author yaolianhua789@gmail.com
  **/
 @RestController
-@RequestMapping("/v1/instance/templates")
-@Tag(name = "Instance template")
+@RequestMapping("/v1/templates/instance")
+@Tag(name = "Template instance")
 public class TemplateInstanceController {
 
     private final TemplateInstancePlayer templateInstancePlayer;
@@ -37,7 +37,7 @@ public class TemplateInstanceController {
 
     @PostMapping
     @Operation(
-            summary = "Deploy a instance template",
+            summary = "Deploy a template instance",
             responses = {@ApiResponse(responseCode = "201")},
             parameters = {
                     @Parameter(name = "template", description = "template enums", required = true)
@@ -50,10 +50,10 @@ public class TemplateInstanceController {
 
     @DeleteMapping("/{id}")
     @Operation(
-            summary = "Delete instance template",
+            summary = "Delete template instance",
             responses = {@ApiResponse(responseCode = "202")},
             parameters = {
-                    @Parameter(name = "id", description = "Instance template id")
+                    @Parameter(name = "id", description = "template instance id")
             }
     )
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
@@ -63,11 +63,11 @@ public class TemplateInstanceController {
 
     @GetMapping
     @Operation(
-            summary = "Instance template paging query",
+            summary = "template instance paging query",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
                     @Parameter(name = "user", description = "user queried"),
-                    @Parameter(name = "success", description = "instance template deployment status", schema = @Schema(allowableValues = {"true", "false"})),
+                    @Parameter(name = "success", description = "template instance deployment status", schema = @Schema(allowableValues = {"true", "false"})),
                     @Parameter(name = "page", description = "current page", schema = @Schema(defaultValue = "1")),
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
