@@ -26,6 +26,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         UserDetails adminUserDetails = userApi.retrieve("admin");
         UsernamePasswordAuthenticationToken adminUsernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(adminUserDetails, null, adminUserDetails.getAuthorities());
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
         SecurityContextHolder.getContext().setAuthentication(adminUsernamePasswordAuthenticationToken);
 
     }

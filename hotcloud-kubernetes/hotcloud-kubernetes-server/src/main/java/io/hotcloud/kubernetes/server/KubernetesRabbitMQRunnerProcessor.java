@@ -24,6 +24,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
     @Override
     public void execute() {
         Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
+        Queue jobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB).build();
 
         FanoutExchange cronjobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB).build();
         FanoutExchange jobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB).build();
@@ -39,6 +40,8 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         Binding statefulsetBinding = BindingBuilder.bind(queue).to(statefulsetExchange);
         Binding podBinding = BindingBuilder.bind(queue).to(podExchange);
 
+        Binding jobQueueBinding = BindingBuilder.bind(jobQueue).to(jobExchange);
+
         rabbitAdmin.declareExchange(cronjobExchange);
         rabbitAdmin.declareExchange(jobExchange);
         rabbitAdmin.declareExchange(deploymentExchange);
@@ -47,6 +50,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         rabbitAdmin.declareExchange(podExchange);
 
         rabbitAdmin.declareQueue(queue);
+        rabbitAdmin.declareQueue(jobQueue);
 
         rabbitAdmin.declareBinding(cronjobBinding);
         rabbitAdmin.declareBinding(jobBinding);
@@ -54,6 +58,8 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         rabbitAdmin.declareBinding(daemonsetBinding);
         rabbitAdmin.declareBinding(statefulsetBinding);
         rabbitAdmin.declareBinding(podBinding);
+
+        rabbitAdmin.declareBinding(jobQueueBinding);
 
 
     }
