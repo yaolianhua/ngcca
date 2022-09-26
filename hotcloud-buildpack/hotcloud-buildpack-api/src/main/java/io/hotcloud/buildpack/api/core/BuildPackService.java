@@ -58,6 +58,14 @@ public interface BuildPackService {
     BuildPack findOne(String id);
 
     /**
+     * Find one with giving buildPack business id
+     *
+     * @param uuid buildPack business id
+     * @return {@link BuildPack}
+     */
+    BuildPack findByUuid(String uuid);
+
+    /**
      * Find un-done {@link BuildPack} with giving {@code user} and {@code clonedId}
      *
      * @param user     user's username

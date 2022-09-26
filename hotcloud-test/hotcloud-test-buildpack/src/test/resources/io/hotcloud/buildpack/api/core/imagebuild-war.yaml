@@ -4,6 +4,7 @@ metadata:
   annotations: { }
   labels:
     k8s-app: kaniko-test
+    app.business.data/id: 985b8ff6-09e1-4226-891e-5c9dc7bbd155
   name: kaniko-test
   namespace: kaniko-test
 spec:
@@ -14,6 +15,7 @@ spec:
       annotations: { }
       labels:
         k8s-app: kaniko-test
+        app.business.data/id: 985b8ff6-09e1-4226-891e-5c9dc7bbd155
     spec:
       containers:
         - args:
@@ -73,4 +75,3 @@ spec:
             secretName: kaniko-test
         - name: workspace-volume
           emptyDir: { }
-  ttlSecondsAfterFinished: 120

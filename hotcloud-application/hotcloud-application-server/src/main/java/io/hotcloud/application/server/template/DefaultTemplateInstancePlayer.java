@@ -33,7 +33,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final InstanceTemplateProcessors instanceTemplateProcessors;
     private final ApplicationEventPublisher eventPublisher;
     private final TemplateInstanceService templateInstanceService;
-    private final InstanceTemplateActivityLogger activityLogger;
+    private final TemplateInstanceActivityLogger activityLogger;
     private final KubectlApi kubectlApi;
     private final NamespaceApi namespaceApi;
     private final UserApi userApi;

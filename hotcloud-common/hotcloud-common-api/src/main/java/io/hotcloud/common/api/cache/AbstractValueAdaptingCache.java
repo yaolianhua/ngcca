@@ -2,6 +2,8 @@ package io.hotcloud.common.api.cache;
 
 import org.springframework.util.Assert;
 
+import java.util.Objects;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -13,6 +15,9 @@ public abstract class AbstractValueAdaptingCache implements Cache {
         Assert.hasText(key, "Key is null");
         Assert.notNull(type, "Class type is null");
         Object value = lookup(key);
+        if (Objects.isNull(value)){
+            return null;
+        }
         Assert.state(type.isInstance(value), "Cached value is not of required type [" + type.getName() + "]: " + value);
 
         return ((T) value);

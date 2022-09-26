@@ -18,6 +18,8 @@ public class BuildPack {
 
     private String id;
 
+    private String uuid;
+
     private BuildPackJobResource jobResource;
 
     @Deprecated(since = "BuildPackApiV2")

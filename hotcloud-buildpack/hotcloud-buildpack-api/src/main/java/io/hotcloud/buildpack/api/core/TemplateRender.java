@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
+import io.hotcloud.common.api.UUIDGenerator;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -90,6 +91,7 @@ public class TemplateRender {
      */
     @SneakyThrows
     public static String kanikoJob(String namespace,
+                                   String uuid,
                                    String jobName,
                                    String labelName,
                                    String secretName,
@@ -107,6 +109,7 @@ public class TemplateRender {
 
         HashMap<String, String> renders = new HashMap<>(16);
         renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
+        renders.put(Kaniko.ID, StringUtils.hasText(uuid) ? uuid : UUIDGenerator.uuidNoDash());
         renders.put(Kaniko.JOB_NAME, StringUtils.hasText(jobName) ? jobName : K8S_NAME);
         renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(labelName) ? labelName : K8S_NAME);
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
@@ -126,6 +129,7 @@ public class TemplateRender {
      */
     @SneakyThrows
     public static String kanikoJob(String namespace,
+                                   String uuid,
                                    String jobName,
                                    String labelName,
                                    String secretName,
@@ -141,6 +145,7 @@ public class TemplateRender {
 
         HashMap<String, String> renders = new HashMap<>(16);
         renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
+        renders.put(Kaniko.ID, StringUtils.hasText(uuid) ? uuid : UUIDGenerator.uuidNoDash());
         renders.put(Kaniko.JOB_NAME, StringUtils.hasText(jobName) ? jobName : K8S_NAME);
         renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(labelName) ? labelName : K8S_NAME);
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
@@ -227,6 +232,7 @@ public class TemplateRender {
      */
     interface Kaniko {
         String NAMESPACE = "NAMESPACE";
+        String ID = "ID";
         String JOB_NAME = "JOB_NAME";
         String INIT_CONTAINER_NAME = "INIT_CONTAINER_NAME";
         String LABEL_NAME = "LABEL_NAME";

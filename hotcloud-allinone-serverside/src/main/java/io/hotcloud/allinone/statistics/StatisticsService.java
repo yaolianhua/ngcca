@@ -1,7 +1,7 @@
 package io.hotcloud.allinone.statistics;
 
 import io.hotcloud.application.api.template.TemplateInstanceStatistics;
-import io.hotcloud.application.server.template.InstanceTemplateStatisticsService;
+import io.hotcloud.application.server.template.TemplateInstanceStatisticsService;
 import io.hotcloud.buildpack.api.clone.GitClonedStatistics;
 import io.hotcloud.buildpack.api.core.BuildPackStatistics;
 import io.hotcloud.buildpack.server.clone.GitClonedStatisticsService;
@@ -32,7 +32,7 @@ public class StatisticsService {
 
     private final UserApi userApi;
     private final Cache cache;
-    private final InstanceTemplateStatisticsService instanceTemplateStatisticsService;
+    private final TemplateInstanceStatisticsService templateInstanceStatisticsService;
     private final GitClonedStatisticsService gitClonedStatisticsService;
     private final BuildPackStatisticsService buildPackStatisticsService;
 
@@ -47,7 +47,7 @@ public class StatisticsService {
         Assert.hasText(userid, "user id is null");
         User user = userApi.find(userid);
 
-        TemplateInstanceStatistics templateStatistics = instanceTemplateStatisticsService.statistics(user.getUsername());
+        TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
         GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
 

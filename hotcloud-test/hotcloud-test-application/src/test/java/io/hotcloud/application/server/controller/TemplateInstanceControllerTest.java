@@ -2,7 +2,7 @@ package io.hotcloud.application.server.controller;
 
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
-import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
+import io.hotcloud.application.server.template.TemplateInstanceCollectionQuery;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
 import org.junit.jupiter.api.Test;
@@ -31,12 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author yaolianhua789@gmail.com
  **/
-@WebMvcTest(value = InstanceTemplateController.class)
+@WebMvcTest(value = TemplateInstanceController.class)
 @MockBeans(value = {
         @MockBean(
                 classes = {
                         TemplateInstancePlayer.class,
-                        InstanceTemplateCollectionQuery.class
+                        TemplateInstanceCollectionQuery.class
                 })
 }
 )
@@ -46,7 +46,7 @@ public class TemplateInstanceControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private InstanceTemplateCollectionQuery collectionQuery;
+    private TemplateInstanceCollectionQuery collectionQuery;
 
     @Test
     public void templates() throws Exception {
@@ -55,11 +55,11 @@ public class TemplateInstanceControllerTest {
         when(collectionQuery.pagingQuery(null, null, Pageable.of(1, 10)))
                 .thenReturn(pageResult);
 
-        try (InputStream inputStream = getClass().getResourceAsStream("instance-template-list.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("template-instance-list.json")) {
             String readJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines()
                     .collect(Collectors.joining());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/instance/templates")
+            this.mockMvc.perform(MockMvcRequestBuilders.get("/v1/templates/instance")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isOk())

@@ -20,6 +20,7 @@ public class TemplateRenderUnitTest {
     public void kanikoJobTemplateSource() throws IOException {
 
         String kanikoJob = kanikoJob("kaniko-test",
+                "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
                 "kaniko-test",
@@ -54,6 +55,7 @@ public class TemplateRenderUnitTest {
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
         String kanikoJob = kanikoJob("kaniko-test",
+                "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
                 "kaniko-test",
@@ -85,6 +87,7 @@ public class TemplateRenderUnitTest {
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
         String kanikoJob = kanikoJob("kaniko-test",
+                "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
                 "kaniko-test",

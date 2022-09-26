@@ -33,4 +33,11 @@ public interface BuildPackRepository extends PagingAndSortingRepository<BuildPac
      * @return {@link BuildPackEntity}
      */
     List<BuildPackEntity> findByClonedId(String clonedId);
+
+    /**
+     * Find entity with giving {@code uuid}
+     * @param uuid business id
+     * @return {@link BuildPackEntity}
+     */
+    BuildPackEntity findByUuid(String uuid);
 }

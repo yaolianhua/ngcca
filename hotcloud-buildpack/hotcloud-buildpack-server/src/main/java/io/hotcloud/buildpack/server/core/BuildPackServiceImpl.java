@@ -101,6 +101,12 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     @Override
+    public BuildPack findByUuid(String uuid) {
+        BuildPackEntity entity = buildPackRepository.findByUuid(uuid);
+        return entity == null ? null : toBuildPack(entity);
+    }
+
+    @Override
     public BuildPack findOneOrNullWithNoDone(String user, String clonedId) {
         List<BuildPackEntity> entities = buildPackRepository.findByUserAndClonedId(user, clonedId);
         return entities.stream()
@@ -144,6 +150,7 @@ public class BuildPackServiceImpl implements BuildPackService {
     private BuildPack toBuildPack(BuildPackEntity entity) {
         return BuildPack.builder()
                 .id(entity.getId())
+                .uuid(entity.getUuid())
                 .jobResource(readT(entity.getJob(), BuildPackJobResource.class))
                 .storageResource(readT(entity.getStorage(), BuildPackStorageResourceList.class))
                 .secretResource(readT(entity.getSecret(), BuildPackDockerSecretResource.class))
