@@ -24,13 +24,13 @@ import static io.hotcloud.common.api.WebResponse.*;
 @RestController
 @RequestMapping("/v1/instance/templates")
 @Tag(name = "Instance template")
-public class ApplicationInstanceController {
+public class TemplateInstanceController {
 
     private final TemplateInstancePlayer templateInstancePlayer;
     private final TemplateInstanceCollectionQuery collectionQuery;
 
-    public ApplicationInstanceController(TemplateInstancePlayer templateInstancePlayer,
-                                         TemplateInstanceCollectionQuery collectionQuery) {
+    public TemplateInstanceController(TemplateInstancePlayer templateInstancePlayer,
+                                      TemplateInstanceCollectionQuery collectionQuery) {
         this.templateInstancePlayer = templateInstancePlayer;
         this.collectionQuery = collectionQuery;
     }
