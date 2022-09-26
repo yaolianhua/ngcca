@@ -3,7 +3,7 @@ package io.hotcloud.application.server.controller;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
-import io.hotcloud.application.server.template.InstanceTemplateCollectionQuery;
+import io.hotcloud.application.server.template.TemplateInstanceCollectionQuery;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
 import io.hotcloud.common.api.Result;
@@ -24,13 +24,13 @@ import static io.hotcloud.common.api.WebResponse.*;
 @RestController
 @RequestMapping("/v1/instance/templates")
 @Tag(name = "Instance template")
-public class InstanceTemplateController {
+public class ApplicationInstanceController {
 
     private final TemplateInstancePlayer templateInstancePlayer;
-    private final InstanceTemplateCollectionQuery collectionQuery;
+    private final TemplateInstanceCollectionQuery collectionQuery;
 
-    public InstanceTemplateController(TemplateInstancePlayer templateInstancePlayer,
-                                      InstanceTemplateCollectionQuery collectionQuery) {
+    public ApplicationInstanceController(TemplateInstancePlayer templateInstancePlayer,
+                                         TemplateInstanceCollectionQuery collectionQuery) {
         this.templateInstancePlayer = templateInstancePlayer;
         this.collectionQuery = collectionQuery;
     }

@@ -13,11 +13,11 @@ import java.util.List;
  * @author yaolianhua789@gmail.com
  **/
 @Service
-public class InstanceTemplateStatisticsService {
+public class TemplateInstanceStatisticsService {
 
     private final TemplateInstanceService templateInstanceService;
 
-    public InstanceTemplateStatisticsService(TemplateInstanceService templateInstanceService) {
+    public TemplateInstanceStatisticsService(TemplateInstanceService templateInstanceService) {
         this.templateInstanceService = templateInstanceService;
     }
 

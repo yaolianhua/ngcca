@@ -15,11 +15,11 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-public class InstanceTemplateActivityLogger {
+public class TemplateInstanceActivityLogger {
 
     private final ActivityRepository activityRepository;
 
-    public InstanceTemplateActivityLogger(ActivityRepository activityRepository) {
+    public TemplateInstanceActivityLogger(ActivityRepository activityRepository) {
         this.activityRepository = activityRepository;
     }
 

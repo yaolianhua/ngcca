@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-public class InstanceTemplateEventListener {
+public class TemplateInstanceEventListener {
 
     private final TemplateInstanceService templateInstanceService;
     private final ApplicationEventPublisher eventPublisher;
@@ -38,7 +38,7 @@ public class InstanceTemplateEventListener {
     private final ServiceApi serviceApi;
     private final KubectlApi kubectlApi;
 
-    public InstanceTemplateEventListener(TemplateInstanceService templateInstanceService,
+    public TemplateInstanceEventListener(TemplateInstanceService templateInstanceService,
                                          ApplicationEventPublisher eventPublisher,
                                          DeploymentApi deploymentApi,
                                          ServiceApi serviceApi,
@@ -70,11 +70,11 @@ public class InstanceTemplateEventListener {
                     .distinct()
                     .collect(Collectors.joining("\n"));
             updateTemplate(template, events, false);
-            Log.info(InstanceTemplateEventListener.class.getName(),
+            Log.info(TemplateInstanceEventListener.class.getName(),
                     String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]",
                             template.getUser(), template.getId(), template.getName(), template.getNamespace()));
         } catch (Exception e) {
-            Log.error(InstanceTemplateEventListener.class.getName(),
+            Log.error(TemplateInstanceEventListener.class.getName(),
                     String.format("%s", e.getMessage()));
             updateTemplate(template, e.getMessage(), false);
         }
@@ -97,7 +97,7 @@ public class InstanceTemplateEventListener {
                 TemplateInstance template = templateInstanceService.findOne(instance.getId());
                 //if deleted
                 if (template == null) {
-                    Log.warn(InstanceTemplateEventListener.class.getName(),
+                    Log.warn(TemplateInstanceEventListener.class.getName(),
                             TemplateInstanceStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                     break;
@@ -114,7 +114,7 @@ public class InstanceTemplateEventListener {
                 Deployment deployment = deploymentApi.read(namespace, name);
                 boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
-                    Log.info(InstanceTemplateEventListener.class.getName(),
+                    Log.info(TemplateInstanceEventListener.class.getName(),
                             TemplateInstanceStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]",
                                     template.getUser(), template.getId(), template.getName(), template.getNamespace()));
@@ -129,7 +129,7 @@ public class InstanceTemplateEventListener {
             }
 
         } catch (Exception e) {
-            Log.error(InstanceTemplateEventListener.class.getName(),
+            Log.error(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceStartedEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
             updateTemplate(instance, e.getMessage(), false);
@@ -158,11 +158,11 @@ public class InstanceTemplateEventListener {
 
         try {
             TemplateInstance updated = updateTemplate(instance, throwable.getMessage(), false);
-            Log.info(InstanceTemplateEventListener.class.getName(),
+            Log.info(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceStartFailureEvent.class.getSimpleName(),
                     String.format("instance template [%s] start failure. update instance template [%s]", updated.getName(), updated.getId()));
         } catch (Exception ex) {
-            Log.error(InstanceTemplateEventListener.class.getName(),
+            Log.error(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceStartFailureEvent.class.getSimpleName(),
                     String.format("%s", ex.getMessage()));
         }
@@ -178,19 +178,19 @@ public class InstanceTemplateEventListener {
 
         try {
             Boolean delete = kubectlApi.delete(namespace, instance.getYaml());
-            Log.info(InstanceTemplateEventListener.class.getName(),
+            Log.info(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceDeleteEvent.class.getSimpleName(),
                     String.format("Delete instance template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
 
             if (StringUtils.hasText(instance.getIngress())){
                 Boolean deleteIngress = kubectlApi.delete(namespace, instance.getIngress());
-                Log.info(InstanceTemplateEventListener.class.getName(),
+                Log.info(TemplateInstanceEventListener.class.getName(),
                         TemplateInstanceDeleteEvent.class.getSimpleName(),
                         String.format("Delete instance template ingress success [%s], namespace:%s, name:%s", deleteIngress, namespace, name));
             }
 
         } catch (Exception e) {
-            Log.error(InstanceTemplateEventListener.class.getName(),
+            Log.error(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceDeleteEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
         }
@@ -205,7 +205,7 @@ public class InstanceTemplateEventListener {
         try {
             TemplateInstance template = templateInstanceService.findOne(instance.getId());
             if (template == null) {
-                Log.warn(InstanceTemplateEventListener.class.getName(),
+                Log.warn(TemplateInstanceEventListener.class.getName(),
                         TemplateInstanceDoneEvent.class.getSimpleName(),
                         String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                 return;
@@ -215,7 +215,7 @@ public class InstanceTemplateEventListener {
             template.setNodePorts(nodePorts);
 
             TemplateInstance update = updateTemplate(template, "success", true);
-            Log.info(InstanceTemplateEventListener.class.getName(),
+            Log.info(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceDoneEvent.class.getSimpleName(),
                     String.format("[%s] user's [%s] template [%s] success. nodePorts [%s]", update.getUser(), update.getName(), update.getId(), update.getNodePorts()));
 
@@ -224,13 +224,13 @@ public class InstanceTemplateEventListener {
                 String ingress = metadataList.stream()
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
-                Log.info(InstanceTemplateEventListener.class.getName(),
+                Log.info(TemplateInstanceEventListener.class.getName(),
                         TemplateInstanceDoneEvent.class.getSimpleName(),
                         String.format("[%s] user's [%s] template ingress [%s] create success.", update.getUser(), update.getName(), ingress));
             }
 
         } catch (Exception e) {
-            Log.error(InstanceTemplateEventListener.class.getName(),
+            Log.error(TemplateInstanceEventListener.class.getName(),
                     TemplateInstanceDoneEvent.class.getSimpleName(),
                     String.format("%s", e.getMessage()));
         }

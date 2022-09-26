@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Component
-public class InstanceTemplateCollectionQuery {
+public class TemplateInstanceCollectionQuery {
 
     private final TemplateInstanceService templateService;
 
-    public InstanceTemplateCollectionQuery(TemplateInstanceService templateService) {
+    public TemplateInstanceCollectionQuery(TemplateInstanceService templateService) {
         this.templateService = templateService;
     }
 
