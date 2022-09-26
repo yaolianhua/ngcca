@@ -15,6 +15,8 @@ import io.hotcloud.kubernetes.model.WatchMessageBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -43,7 +45,13 @@ public class JobWatcher implements WorkloadsWatchApi {
                         @Override
                         public void eventReceived(Action action, Job resource) {
                             String namespace = resource.getMetadata().getNamespace();
-                            WatchMessageBody watchMessageBody = WatchMessageBody.of(namespace, WorkloadsType.Job.name(), resource.getMetadata().getName(), action.name());
+                            Map<String, String> labels = resource.getMetadata().getLabels();
+                            WatchMessageBody watchMessageBody = WatchMessageBody.of(
+                                    namespace,
+                                    WorkloadsType.Job.name(),
+                                    resource.getMetadata().getName(),
+                                    action.name(),
+                                    labels);
                             Message<WatchMessageBody> message = Message.of(
                                     watchMessageBody,
                                     Message.Level.INFO,
