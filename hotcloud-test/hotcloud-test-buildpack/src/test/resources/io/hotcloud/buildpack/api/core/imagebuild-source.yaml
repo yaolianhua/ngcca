@@ -69,4 +69,3 @@ spec:
             secretName: kaniko-test
         - name: workspace-volume
           emptyDir: { }
-  ttlSecondsAfterFinished: 120

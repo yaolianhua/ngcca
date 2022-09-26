@@ -73,4 +73,3 @@ spec:
             secretName: #{[ SECRET_NAME ]}
         - name: workspace-volume
           emptyDir: { }
-  ttlSecondsAfterFinished: 120
