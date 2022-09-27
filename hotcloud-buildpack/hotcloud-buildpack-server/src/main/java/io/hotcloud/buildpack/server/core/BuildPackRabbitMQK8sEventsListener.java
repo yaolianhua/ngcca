@@ -8,7 +8,6 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.kubernetes.api.WorkloadsType;
@@ -34,9 +33,8 @@ import java.util.Objects;
 @Slf4j
 public class BuildPackRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
-    private final BuildPackWatchService buildPackWatchService;
+    private final BuildPackK8sService buildPackK8sService;
     private final BuildPackService buildPackService;
-    private final Cache cache;
 
     @RabbitListener(
             bindings = {
@@ -63,7 +61,7 @@ public class BuildPackRabbitMQK8sEventsListener {
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
                 log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.processBuildPackDeleted(fetched);
+                buildPackK8sService.processBuildPackDeleted(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
@@ -73,7 +71,7 @@ public class BuildPackRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.processBuildPackCreatedBlocked(fetched);
+                buildPackK8sService.processBuildPackCreatedBlocked(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){

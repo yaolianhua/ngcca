@@ -19,7 +19,7 @@ import static io.hotcloud.common.api.CommonConstant.*;
 
 @Component
 @RequiredArgsConstructor
-public class BuildPackWatchService {
+public class BuildPackK8sService {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
     private final KubectlApi kubectlApi;

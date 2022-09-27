@@ -16,18 +16,18 @@ import org.springframework.stereotype.Component;
         matchIfMissing = true
 )
 public class BuildPackListenerV2 {
-    private final BuildPackWatchService buildPackWatchService;
+    private final BuildPackK8sService buildPackK8sService;
 
     @Async
     @EventListener
     public void started(BuildPackStartedEventV2 startedEvent) {
-       buildPackWatchService.processBuildPackCreatedBlocked(startedEvent.getBuildPack());
+       buildPackK8sService.processBuildPackCreatedBlocked(startedEvent.getBuildPack());
     }
 
     @Async
     @EventListener
     public void deleted(BuildPackDeletedEventV2 deletedEventV2){
-        buildPackWatchService.processBuildPackDeleted(deletedEventV2.getBuildPack());
+        buildPackK8sService.processBuildPackDeleted(deletedEventV2.getBuildPack());
     }
 
 }
