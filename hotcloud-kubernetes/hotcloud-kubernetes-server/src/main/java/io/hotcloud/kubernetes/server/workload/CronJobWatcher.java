@@ -41,6 +41,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
         return fabric8Client.batch()
                     .v1()
                     .cronjobs()
+                    .inAnyNamespace()
                     .watch(new Watcher<>() {
                         @Override
                         public void eventReceived(Action action, CronJob resource) {

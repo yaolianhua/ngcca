@@ -41,6 +41,7 @@ public class JobWatcher implements WorkloadsWatchApi {
         return fabric8Client.batch()
                     .v1()
                     .jobs()
+                    .inAnyNamespace()
                     .watch(new Watcher<>() {
                         @Override
                         public void eventReceived(Action action, Job resource) {

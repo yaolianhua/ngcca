@@ -40,6 +40,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
 
        return fabric8Client.apps()
                 .deployments()
+                .inAnyNamespace()
                 .watch(new Watcher<>() {
                     @Override
                     public void eventReceived(Action action, Deployment resource) {
