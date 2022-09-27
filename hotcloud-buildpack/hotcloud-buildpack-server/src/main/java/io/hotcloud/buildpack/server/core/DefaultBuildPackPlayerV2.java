@@ -1,7 +1,6 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.*;
-import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
@@ -34,8 +33,10 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final BuildPackService buildPackService;
+    private final BuildPackK8sService buildPackK8sService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
+
 
     /**
      * Deploy buildPack from source code
@@ -190,7 +191,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
                 String.format("Delete BuildPack physically [%s]. id:[%s]",physically, id));
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
-        eventPublisher.publishEvent(new BuildPackDeletedEventV2(existBuildPack));
+        buildPackK8sService.processBuildPackDeleted(existBuildPack);
     }
 
     @NotNull

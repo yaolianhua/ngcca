@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.server.core;
 
-import io.hotcloud.buildpack.api.core.event.BuildPackDeletedEventV2;
 import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,12 +21,6 @@ public class BuildPackListenerV2 {
     @EventListener
     public void started(BuildPackStartedEventV2 startedEvent) {
        buildPackK8sService.processBuildPackCreatedBlocked(startedEvent.getBuildPack());
-    }
-
-    @Async
-    @EventListener
-    public void deleted(BuildPackDeletedEventV2 deletedEventV2){
-        buildPackK8sService.processBuildPackDeleted(deletedEventV2.getBuildPack());
     }
 
 }
