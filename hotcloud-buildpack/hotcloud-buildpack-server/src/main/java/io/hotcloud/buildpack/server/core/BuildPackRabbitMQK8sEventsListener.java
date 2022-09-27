@@ -10,7 +10,6 @@ import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.model.WatchMessageBody;
@@ -58,7 +57,8 @@ public class BuildPackRabbitMQK8sEventsListener {
             String businessId = messageBody.getLabels().get(CommonConstant.K8S_APP_BUSINESS_DATA_ID);
             BuildPack fetched = buildPackService.findByUuid(businessId);
             if (Objects.isNull(fetched)) {
-                throw new HotCloudResourceNotFoundException("Get buildPack null with uuid [" + businessId + "]");
+                Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
+                return;
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
@@ -69,9 +69,10 @@ public class BuildPackRabbitMQK8sEventsListener {
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
                     Objects.equals(Watcher.Action.MODIFIED.name(), messageBody.getAction())){
                 if (fetched.isDone()) {
+                    log.info("BuildPack [{}] {} events: {}/{}/{} ignore already done event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
                     return;
                 }
-                log.info("BuildPack added/modified events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
                 buildPackWatchService.processBuildPackCreatedBlocked(fetched);
             }
 
