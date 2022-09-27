@@ -69,8 +69,8 @@ public class BuildPackK8sService {
                                 String.format("[ImageBuild] Kaniko status is [Ready]. namespace:%s | job:%s | buildPack:%s",
                                         namespace, job, buildPack.getId()));
 
-                        System.out.println("***************************** Print Kaniko Job log ******************************");
-                        System.out.println(buildPackApiV2.fetchLog(namespace, job));
+                        /*System.out.println("***************************** Print Kaniko Job log ******************************");
+                        System.out.println(buildPackApiV2.fetchLog(namespace, job));*/
                         cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Ready.name());
                         break;
 
@@ -80,8 +80,8 @@ public class BuildPackK8sService {
                                 String.format("[ImageBuild] Kaniko status is [Active]. namespace:%s | job:%s | buildPack:%s",
                                         namespace, job, buildPack.getId()));
 
-                        System.out.println("***************************** Print Kaniko Job log ******************************");
-                        System.out.println(buildPackApiV2.fetchLog(namespace, job));
+                        /*System.out.println("***************************** Print Kaniko Job log ******************************");
+                        System.out.println(buildPackApiV2.fetchLog(namespace, job));*/
                         cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), BuildPackApiV2.KanikoStatus.Active.name());
                         break;
 
