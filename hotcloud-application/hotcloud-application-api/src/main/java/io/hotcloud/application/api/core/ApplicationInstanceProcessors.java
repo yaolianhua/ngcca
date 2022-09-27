@@ -37,7 +37,7 @@ public class ApplicationInstanceProcessors {
                         TimeUnit.SECONDS.sleep(1);
                         String status = cache.get(String.format(CommonConstant.CK_IMAGEBUILD_STATUS, instance.getBuildPackId()), String.class);
                         if (Objects.equals("Succeeded", status)){
-                            Log.error(ApplicationInstanceProcessors.class.getName(),
+                            Log.info(ApplicationInstanceProcessors.class.getName(),
                                     String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
                         }
