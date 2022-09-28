@@ -2,7 +2,6 @@ package io.hotcloud.application.server.core;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.core.ApplicationInstance;
-import io.hotcloud.application.api.core.ApplicationInstanceProcessors;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.application.api.core.event.ApplicationInstanceCreateEvent;
 import io.hotcloud.buildpack.api.core.BuildPack;

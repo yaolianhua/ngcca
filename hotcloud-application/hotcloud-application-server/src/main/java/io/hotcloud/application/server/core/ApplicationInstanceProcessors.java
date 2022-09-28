@@ -1,5 +1,7 @@
-package io.hotcloud.application.api.core;
+package io.hotcloud.application.server.core;
 
+import io.hotcloud.application.api.core.ApplicationInstance;
+import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.cache.Cache;
