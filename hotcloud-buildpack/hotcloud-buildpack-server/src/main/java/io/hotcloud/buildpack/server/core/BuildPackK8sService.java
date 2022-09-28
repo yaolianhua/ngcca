@@ -1,11 +1,7 @@
 package io.hotcloud.buildpack.server.core;
 
-import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackApiV2;
-import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.ImageBuildStatus;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,22 +18,20 @@ public class BuildPackK8sService {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
     private final KubectlApi kubectlApi;
-    private final Cache cache;
+    private final ImageBuildCacheApi imageBuildCacheApi;
 
     public void processBuildPackCreatedBlocked(BuildPack buildPack) {
         AtomicInteger loopCount = new AtomicInteger();
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
 
-        Object o = cache.get(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
-        if (Objects.nonNull(o)){
+        if (!imageBuildCacheApi.tryLock(buildPack.getId())){
             return;
         }
-        cache.put(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()), Boolean.TRUE);
-        Integer timeout = cache.get(CK_IMAGEBUILD_TIMEOUT_SECONDS, Integer.class);
-        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()),ImageBuildStatus.Unknown.name());
+
+        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
         try{
-            while (loopCount.get() < timeout / 3){
+            while (loopCount.get() < imageBuildCacheApi.getTimeoutSeconds() / 3){
                 TimeUnit.SECONDS.sleep(3);
 
                 buildPack = buildPackService.findOne(buildPack.getId());
@@ -45,7 +39,7 @@ public class BuildPackK8sService {
                     Log.warn(BuildPackK8sService.class.getName(), "[ImageBuild] BuildPack has been deleted");
 
                     if (Objects.nonNull(buildPack)){
-                        cache.evict(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
+                        imageBuildCacheApi.unLock(buildPack.getId());
                     }
                     return;
                 }
@@ -54,17 +48,17 @@ public class BuildPackK8sService {
                 switch (status){
                     case Unknown:
                         Log.warn(BuildPackK8sService.class.getName(), String.format("[ImageBuild] Kaniko status is [Unknown]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
-                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), ImageBuildStatus.Unknown.name());
+                        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
                         break;
 
                     case Ready:
                         Log.info(BuildPackK8sService.class.getName(), String.format("[ImageBuild] Kaniko status is [Ready]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
-                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), ImageBuildStatus.Ready.name());
+                        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Ready);
                         break;
 
                     case Active:
                         Log.info(BuildPackK8sService.class.getName(), String.format("[ImageBuild] Kaniko status is [Active]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
-                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), ImageBuildStatus.Active.name());
+                        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Active);
                         break;
 
                     case Failed:
@@ -75,8 +69,8 @@ public class BuildPackK8sService {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
-                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()), ImageBuildStatus.Failed.name());
-                        cache.evict(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
+                        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+                        imageBuildCacheApi.unLock(buildPack.getId());
                         return;
 
                     case Succeeded:
@@ -87,8 +81,8 @@ public class BuildPackK8sService {
                         buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
                         buildPackService.saveOrUpdate(buildPack);
-                        cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()),ImageBuildStatus.Succeeded.name());
-                        cache.evict(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
+                        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Succeeded);
+                        imageBuildCacheApi.unLock(buildPack.getId());
                         return;
 
                     default:
@@ -104,8 +98,8 @@ public class BuildPackK8sService {
             buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
 
             buildPackService.saveOrUpdate(buildPack);
-            cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()),ImageBuildStatus.Failed.name());
-            cache.evict(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
+            imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+            imageBuildCacheApi.unLock(buildPack.getId());
 
             Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
             Log.warn(BuildPackK8sService.class.getName(), String.format("[ImageBuild] Kaniko job has been timeout, Deleted kaniko job [%s]. namespace:%s | job:%s | buildPack:%s", delete, namespace, job, buildPack.getId()));
@@ -116,8 +110,8 @@ public class BuildPackK8sService {
             buildPack.setDone(true);
             buildPack.setMessage(ex.getMessage());
             buildPackService.saveOrUpdate(buildPack);
-            cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPack.getId()),ImageBuildStatus.Failed.name());
-            cache.evict(String.format(CK_IMAGEBUILD_WATCHED, buildPack.getId()));
+            imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+            imageBuildCacheApi.unLock(buildPack.getId());
         }
     }
 
