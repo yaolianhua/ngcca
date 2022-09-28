@@ -39,22 +39,22 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
-            BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
+            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
+            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Failed)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Succeeded)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
@@ -86,22 +86,22 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
-            BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
+            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
+            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Failed)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Succeeded)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
@@ -134,22 +134,22 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
-            BuildPackApiV2.KanikoStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
+            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Unknown)) {
+            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Ready)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, BuildPackApiV2.KanikoStatus.Active)) {
+            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Failed)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Failed)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status,BuildPackApiV2.KanikoStatus.Succeeded)) {
+            } else if (Objects.equals(status,ImageBuildStatus.Succeeded)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());

@@ -239,10 +239,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     }
 
     @Override
-    public KanikoStatus getStatus(String namespace, String job) {
+    public ImageBuildStatus getStatus(String namespace, String job) {
         Job readJob = jobApi.read(namespace, job);
         if (Objects.isNull(readJob)) {
-            return KanikoStatus.Unknown;
+            return ImageBuildStatus.Unknown;
         }
         Integer active = readJob.getStatus().getActive();
         Integer failed = readJob.getStatus().getFailed();
@@ -250,22 +250,22 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         Integer succeeded = readJob.getStatus().getSucceeded();
 
         if (ready != null && Objects.equals(ready, 1)) {
-            return KanikoStatus.Ready;
+            return ImageBuildStatus.Ready;
         }
 
         if (active != null && Objects.equals(active, 1)) {
-            return KanikoStatus.Active;
+            return ImageBuildStatus.Active;
         }
 
         if (succeeded != null && Objects.equals(succeeded, 1)) {
-            return KanikoStatus.Succeeded;
+            return ImageBuildStatus.Succeeded;
         }
 
         if (failed != null) {
-            return KanikoStatus.Failed;
+            return ImageBuildStatus.Failed;
         }
 
-        return KanikoStatus.Unknown;
+        return ImageBuildStatus.Unknown;
     }
 
     @Override
