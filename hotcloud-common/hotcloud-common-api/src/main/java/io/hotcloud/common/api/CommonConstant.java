@@ -27,7 +27,7 @@ public final class CommonConstant {
 
     public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS = "queue-hotcloud.message.kubernetes.workloads.events";
     public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_TEMPLATE = "queue-hotcloud.message.template.instance.deployment";
-    public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_JOB = "queue-hotcloud.message.kubernetes.workloads.job";
+    public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK = "queue-hotcloud.message.buildpack.job";
     public static final String MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION = "queue-hotcloud.message.application.instance.deployment";
     public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT = "exchange-hotcloud.message.workloads.deployment";
     public static final String MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB = "exchange-hotcloud.message.workloads.job";

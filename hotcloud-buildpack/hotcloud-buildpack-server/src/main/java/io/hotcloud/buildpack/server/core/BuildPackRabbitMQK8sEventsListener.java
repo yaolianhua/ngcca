@@ -39,7 +39,7 @@ public class BuildPackRabbitMQK8sEventsListener {
     @RabbitListener(
             bindings = {
                     @QueueBinding(
-                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB),
+                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK),
                             exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB)
                     )
             }
