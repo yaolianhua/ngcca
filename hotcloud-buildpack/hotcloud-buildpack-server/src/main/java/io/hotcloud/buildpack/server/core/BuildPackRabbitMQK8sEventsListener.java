@@ -21,6 +21,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -53,6 +54,9 @@ public class BuildPackRabbitMQK8sEventsListener {
             }
 
             String businessId = messageBody.getLabels().get(CommonConstant.K8S_APP_BUSINESS_DATA_ID);
+            if (!StringUtils.hasText(businessId)){
+                return;
+            }
             BuildPack fetched = buildPackService.findByUuid(businessId);
             if (Objects.isNull(fetched)) {
                 Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
