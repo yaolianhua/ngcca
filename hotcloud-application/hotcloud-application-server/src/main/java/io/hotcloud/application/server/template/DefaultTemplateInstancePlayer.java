@@ -21,8 +21,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -44,9 +42,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
         User current = userApi.current();
         Assert.notNull(current, "retrieve current user is null");
-        //get user's namespace.
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "namespace is null");
+        String namespace = current.getNamespace();
 
         TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 

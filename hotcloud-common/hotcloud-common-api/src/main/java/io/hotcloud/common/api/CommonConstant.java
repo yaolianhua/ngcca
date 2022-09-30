@@ -15,9 +15,6 @@ public final class CommonConstant {
 
     public static final String TIMEOUT_MESSAGE = "timeout";
     public static final String FAILED_MESSAGE = "failed";
-    public static final String CK_USER_KEY_PREFIX = "hotcloud:user:%s";
-    public static final String CK_NAMESPACE_USER_KEY_PREFIX = "security:namespace:user:%s";
-    public static final String CK_USERS_KEY_PREFIX = "security:user:all";
     public static final String CK_IMAGEBUILD_TIMEOUT_SECONDS = "imagebuild:timeout:seconds";
     public static final String CK_IMAGEBUILD_STATUS = "imagebuild:status:%s";
     public static final String CK_IMAGEBUILD_WATCHED = "imagebuild:watched:%s";

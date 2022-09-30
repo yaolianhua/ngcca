@@ -8,7 +8,6 @@ import io.hotcloud.buildpack.server.clone.GitClonedStatisticsService;
 import io.hotcloud.buildpack.server.core.BuildPackStatisticsService;
 import io.hotcloud.common.api.PageResult;
 import io.hotcloud.common.api.Pageable;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -31,7 +28,6 @@ import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX
 public class StatisticsService {
 
     private final UserApi userApi;
-    private final Cache cache;
     private final TemplateInstanceStatisticsService templateInstanceStatisticsService;
     private final GitClonedStatisticsService gitClonedStatisticsService;
     private final BuildPackStatisticsService buildPackStatisticsService;
@@ -51,13 +47,11 @@ public class StatisticsService {
         GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
 
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
-
         return Statistics.builder()
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .repositories(clonedStatistics)
-                .namespace(namespace)
+                .namespace(user.getNamespace())
                 .user(user)
                 .build();
     }

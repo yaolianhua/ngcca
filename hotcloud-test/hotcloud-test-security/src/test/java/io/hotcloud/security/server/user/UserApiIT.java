@@ -23,8 +23,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
-
 /**
  * @author yaolianhua789@gmail.com
  **/
@@ -66,8 +64,8 @@ public class UserApiIT {
         Assertions.assertNotNull(saved.getId());
 
         TimeUnit.SECONDS.sleep(1);
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
-        Assertions.assertNotNull(namespace);
+
+        Assertions.assertNotNull(saved.getNamespace());
 
         saved.setEmail("example.com");
         userApi.update(saved);
@@ -84,7 +82,6 @@ public class UserApiIT {
         Assertions.assertFalse(CollectionUtils.isEmpty(users));
 
         //In order to test the data is in different database
-        cache.put(CK_NAMESPACE_USER_KEY_PREFIX, users);
 
         for (User user : users) {
             log.info("{}", user);

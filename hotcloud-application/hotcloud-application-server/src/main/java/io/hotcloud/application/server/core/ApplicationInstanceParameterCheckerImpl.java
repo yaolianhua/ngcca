@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.core.*;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
@@ -19,15 +18,12 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
-
 @Component
 @RequiredArgsConstructor
 public class ApplicationInstanceParameterCheckerImpl implements ApplicationInstanceParameterChecker {
 
     private final ApplicationInstanceService applicationInstanceService;
     private final UserApi userApi;
-    private final Cache cache;
     private final NamespaceApi namespaceApi;
     @Override
     public ApplicationInstance check(ApplicationForm applicationForm) {
@@ -51,7 +47,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
             throw new IllegalArgumentException("Application name is illegal");
         }
         User current = userApi.current();
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
+        String namespace = current.getNamespace();
         Assert.hasText(namespace, String.format("[%s] user cached k8s namespace is null", current.getUsername()));
 
         Namespace readNamespace = namespaceApi.read(namespace);
