@@ -67,7 +67,7 @@ public class BuildPackRabbitMQK8sEventsListener {
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
                     Objects.equals(Watcher.Action.MODIFIED.name(), messageBody.getAction())){
                 if (fetched.isDone()) {
-                    log.info("BuildPack [{}] {} events: {}/{}/{} ignore already done event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+//                    log.info("BuildPack [{}] {} events: {}/{}/{} ignore already done event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
                     return;
                 }
                 log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
