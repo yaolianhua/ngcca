@@ -1,6 +1,6 @@
 kubernetes:
   in-cluster: false
-  enable-workloads-watcher: false
+  enable-workloads-watcher: true
 cache:
   type: redis
   redis:
@@ -8,6 +8,13 @@ cache:
     port: 6379
     password: QbMufCD@9WVQ^Hv
     database: 11
+message:
+  type: rabbitmq
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: QbMufCD@9WVQ^Hv
+    port: 5672
 db:
   type: mongodb
   mongodb:
@@ -22,6 +29,10 @@ minio:
   endpoint: "http://localhost:9009"
 app:
   dot-suffix-domain: .k8s-cluster.com
+  deployment-notify-mode: rabbitmq
+buildpack:
+  imagebuild:
+    notify-mode: rabbitmq
 registry:
   url: 192.168.146.128:5000
   username: admin

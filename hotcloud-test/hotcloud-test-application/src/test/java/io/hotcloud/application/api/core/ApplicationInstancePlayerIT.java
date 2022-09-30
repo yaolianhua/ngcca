@@ -56,18 +56,17 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
             TimeUnit.SECONDS.sleep(3);
             ApplicationInstance fetched = applicationInstanceService.findOne(instance.getId());
             if (fetched.isSuccess()){
-                System.out.println("Application instance [" + fetched.getName() + "] create success");
+                System.err.println("Application instance [" + fetched.getName() + "] create success");
                 break;
             }
             if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
-                System.out.println("Application instance [" + fetched.getName() + "] create failed");
+                System.err.println("Application instance [" + fetched.getName() + "] create failed");
                 break;
             }
-
         }
 
         TimeUnit.SECONDS.sleep(3);
-        System.out.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
+        System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
 
         player.delete(instance.getId());
     }
@@ -98,18 +97,18 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
             TimeUnit.SECONDS.sleep(3);
             ApplicationInstance fetched = applicationInstanceService.findOne(instance.getId());
             if (fetched.isSuccess()){
-                System.out.println("Application instance [" + fetched.getName() + "] create success");
+                System.err.println("Application instance [" + fetched.getName() + "] create success");
                 break;
             }
             if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
-                System.out.println("Application instance [" + fetched.getName() + "] create failed");
+                System.err.println("Application instance [" + fetched.getName() + "] create failed");
                 break;
             }
 
         }
 
         TimeUnit.SECONDS.sleep(3);
-        System.out.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
+        System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
 
         player.delete(instance.getId());
     }
