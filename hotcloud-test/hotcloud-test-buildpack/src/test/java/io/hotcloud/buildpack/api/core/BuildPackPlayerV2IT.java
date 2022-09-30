@@ -10,7 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
 
@@ -33,6 +35,14 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
 
     @Test
     public void playFromWarArtifact() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayerV2.delete(buildPackId, false);
+        }
         BuildPack buildPack = buildPackPlayerV2.play(
                 BuildImage.ofWar("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war")
         );
@@ -60,6 +70,15 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
 
     @Test
     public void playFromJarArtifact() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayerV2.delete(buildPackId, false);
+        }
+
         BuildPack buildPack = buildPackPlayerV2.play(
                 BuildImage.ofJar("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar",
                         "-Xms128m -Xmx512m",
@@ -88,6 +107,14 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
     }
     @Test
     public void playFromSourceCode() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayerV2.delete(buildPackId, false);
+        }
         BuildPack buildPack = buildPackPlayerV2.play(
                 BuildImage.ofSource("https://gitee.com/yannanshan/devops-thymeleaf.git",
                         "master")

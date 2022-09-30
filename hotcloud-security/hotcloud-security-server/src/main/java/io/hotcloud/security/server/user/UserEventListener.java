@@ -2,7 +2,6 @@ package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
@@ -13,8 +12,6 @@ import io.hotcloud.security.api.user.event.UserDeletedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -34,12 +31,6 @@ public class UserEventListener {
     @EventListener
     @Async
     public void userCreated(UserCreatedEvent event) {
-        User user = event.getUser();
-        String namespace = UUIDGenerator.uuidNoDash();
-        Object o = cache.putIfAbsent(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), namespace);
-        Log.info(UserEventListener.class.getName(),
-                UserCreatedEvent.class.getSimpleName(),
-                String.format("user '%s' namespace '%s' cached", user.getUsername(), o == null ? namespace : o));
 
     }
 
@@ -47,7 +38,7 @@ public class UserEventListener {
     @Async
     public void userDeleted(UserDeletedEvent event) {
         User user = event.getUser();
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, user.getUsername()), String.class);
+        String namespace = user.getNamespace();
         cache.evict(namespace);
 
         Log.info(UserEventListener.class.getName(),

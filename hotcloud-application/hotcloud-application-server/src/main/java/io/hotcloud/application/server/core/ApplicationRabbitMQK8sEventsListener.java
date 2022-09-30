@@ -1,11 +1,13 @@
-package io.hotcloud.buildpack.server.core;
+package io.hotcloud.application.server.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
-import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.application.api.ApplicationProperties;
+import io.hotcloud.application.api.core.ApplicationInstance;
+import io.hotcloud.application.api.core.ApplicationInstancePlayer;
+import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
@@ -27,21 +29,22 @@ import java.util.Objects;
 
 @Component
 @ConditionalOnProperty(
-        name = BuildPackImagebuildProperties.PROPERTIES_TYPE_NAME,
-        havingValue = BuildPackImagebuildProperties.RABBITMQ
+        name = ApplicationProperties.PROPERTIES_TYPE_NAME,
+        havingValue = ApplicationProperties.RABBITMQ
 )
 @RequiredArgsConstructor
 @Slf4j
-public class BuildPackRabbitMQK8sEventsListener {
+public class ApplicationRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
-    private final BuildPackK8sService buildPackK8sService;
-    private final BuildPackService buildPackService;
+    private final ApplicationInstanceK8sService applicationInstanceK8sService;
+    private final ApplicationInstanceService applicationInstanceService;
+    private final ApplicationInstancePlayer applicationInstancePlayer;
 
     @RabbitListener(
             bindings = {
                     @QueueBinding(
-                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB)
+                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION),
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION)
                     )
             }
     )
@@ -49,7 +52,7 @@ public class BuildPackRabbitMQK8sEventsListener {
 
         try {
             WatchMessageBody messageBody = convertWatchMessageBody(message).getData();
-            if (!Objects.equals(WorkloadsType.Job.name(), messageBody.getKind())){
+            if (!Objects.equals(WorkloadsType.Deployment.name(), messageBody.getKind())){
                 return;
             }
 
@@ -57,32 +60,32 @@ public class BuildPackRabbitMQK8sEventsListener {
             if (!StringUtils.hasText(businessId)){
                 return;
             }
-            BuildPack fetched = buildPackService.findByUuid(businessId);
+            ApplicationInstance fetched = applicationInstanceService.findOne(businessId);
             if (Objects.isNull(fetched)) {
-//                Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
+//                Log.warn(ApplicationRabbitMQK8sEventsListener.class.getName(), "Get application null with id [" + businessId + "]. ignore this event");
                 return;
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
-                log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackK8sService.processBuildPackDeleted(fetched);
+                log.info("Application Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                applicationInstancePlayer.delete(businessId);
             }
 
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
                     Objects.equals(Watcher.Action.MODIFIED.name(), messageBody.getAction())){
-                if (fetched.isDone()) {
-//                    log.info("BuildPack [{}] {} events: {}/{}/{} ignore already done event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                if (fetched.isSuccess()) {
+//                    log.info("Application [{}] {} events: {}/{}/{} ignore already success event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
                     return;
                 }
-                log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackK8sService.processBuildPackCreatedBlocked(fetched);
+                log.info("Application [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                applicationInstanceK8sService.processApplicationCreatedBlocked(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
-                log.info("BuildPack error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                log.info("Application error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
             }
         }catch (Exception e){
-            Log.error(BuildPackRabbitMQK8sEventsListener.class.getName(), e.getMessage());
+            Log.error(ApplicationRabbitMQK8sEventsListener.class.getName(), e.getMessage());
         }
 
     }

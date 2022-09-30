@@ -35,6 +35,12 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    private String namespace;
+
+    public String getNamespace() {
+        return this.username + "-" + this.id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

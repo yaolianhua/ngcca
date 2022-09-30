@@ -15,7 +15,6 @@ import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import io.hotcloud.security.api.user.UserNamespacePair;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -26,8 +25,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -83,10 +80,10 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]");
         Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()));
 
-        UserNamespacePair pair = retrievedUserNamespacePair();
-        Assert.state(Objects.equals(pair.getUsername(), gitCloned.getUser()), "Git cloned repository [" + gitCloned.getProject() + "] not found for current user [" + pair.getUsername() + "]");
+        User current = userApi.current();
+        Assert.state(Objects.equals(current.getUsername(), gitCloned.getUser()), "Git cloned repository [" + gitCloned.getProject() + "] not found for current user [" + current.getUsername() + "]");
 
-        BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(pair.getUsername(), clonedId);
+        BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(current.getUsername(), clonedId);
 
         Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
                 gitCloned.getUser(),
@@ -133,17 +130,6 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack, physically));
     }
 
-    @NotNull
-    private UserNamespacePair retrievedUserNamespacePair() {
-        User current = userApi.current();
-        Assert.notNull(current, "Retrieve current user null");
-
-        //get user's namespace.
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "namespace is null");
-        return new UserNamespacePair(current.getUsername(), namespace);
-    }
-
     @Override
     protected BuildPack buildpack(String clonedId, Boolean noPush) {
 
@@ -158,9 +144,9 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
         //handle kaniko args
         Map<String, String> args = resolvedArgs(cloned.getDockerfile(), noPush, alternative);
 
-        UserNamespacePair pair = retrievedUserNamespacePair();
+        User current = userApi.current();
         BuildPack buildpack = abstractBuildPackApi.buildpack(
-                pair.getNamespace(),
+                current.getNamespace(),
                 cloned.getProject(),
                 registryProperties.getUrl(),
                 registryProperties.getUsername(),
@@ -171,7 +157,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
         buildpack.setClonedId(clonedId);
         buildpack.setDone(false);
-        buildpack.setUser(pair.getUsername());
+        buildpack.setUser(current.getUsername());
 
         return buildpack;
     }

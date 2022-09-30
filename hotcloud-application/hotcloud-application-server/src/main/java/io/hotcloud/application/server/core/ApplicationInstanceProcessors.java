@@ -1,8 +1,10 @@
-package io.hotcloud.application.api.core;
+package io.hotcloud.application.server.core;
 
-import io.hotcloud.common.api.CommonConstant;
+import io.hotcloud.application.api.core.ApplicationInstance;
+import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
+import io.hotcloud.buildpack.api.core.ImageBuildCacheApi;
+import io.hotcloud.buildpack.api.core.ImageBuildStatus;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.cache.Cache;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationInstanceProcessors {
 
     private final List<ApplicationInstanceProcessor<ApplicationInstance>> processors;
-    private final Cache cache;
+    private final ImageBuildCacheApi imageBuildCacheApi;
 
-    public ApplicationInstanceProcessors(List<ApplicationInstanceProcessor<ApplicationInstance>> processors, Cache cache) {
+    public ApplicationInstanceProcessors(List<ApplicationInstanceProcessor<ApplicationInstance>> processors, ImageBuildCacheApi imageBuildCacheApi) {
         this.processors = processors;
-        this.cache = cache;
+        this.imageBuildCacheApi = imageBuildCacheApi;
     }
 
     @SneakyThrows
@@ -35,23 +37,20 @@ public class ApplicationInstanceProcessors {
                 if (StringUtils.hasText(instance.getBuildPackId())) {
                     while (true){
                         TimeUnit.SECONDS.sleep(1);
-                        String status = cache.get(String.format(CommonConstant.CK_IMAGEBUILD_STATUS, instance.getBuildPackId()), String.class);
-                        if (Objects.equals("Succeeded", status)){
-                            Log.error(ApplicationInstanceProcessors.class.getName(),
-                                    String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                        ImageBuildStatus status = imageBuildCacheApi.getStatus(instance.getBuildPackId());
+                        if (Objects.equals(ImageBuildStatus.Succeeded, status)){
+                            Log.info(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
                         }
-                        if (Objects.equals("Failed", status)){
-                            Log.error(ApplicationInstanceProcessors.class.getName(),
-                                    String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                        if (Objects.equals(ImageBuildStatus.Failed, status)){
+                            Log.error(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             return;
                         }
                     }
                 }
+                continue;
             }
-            else {
-                processor.processCreate(instance);
-            }
+            processor.processCreate(instance);
 
         }
 

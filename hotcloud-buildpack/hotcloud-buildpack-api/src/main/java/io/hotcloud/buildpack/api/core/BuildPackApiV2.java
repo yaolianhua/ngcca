@@ -31,9 +31,9 @@ public interface BuildPackApiV2 {
      * Get kaniko job status
      * @param namespace user's k8s namespace
      * @param job kaniko job name
-     * @return {@link KanikoStatus}
+     * @return {@link ImageBuildStatus}
      */
-    KanikoStatus getStatus(String namespace, String job);
+    ImageBuildStatus getStatus(String namespace, String job);
 
     /**
      * Fetch Kaniko build logs
@@ -41,13 +41,4 @@ public interface BuildPackApiV2 {
      * @param job kaniko job name
      */
     String fetchLog(String namespace, String job);
-
-    enum KanikoStatus {
-        //
-        Ready,
-        Active,
-        Succeeded,
-        Failed,
-        Unknown
-    }
 }

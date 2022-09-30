@@ -33,7 +33,8 @@ minio:
   secret-key: QbMufCD@9WVQ^Hv
   endpoint: "http://localhost:9009"
 app:
-  dot-suffix-domain: .k8s-cluster.local
+  dot-suffix-domain: .k8s-cluster.com
+  deployment-notify-mode: rabbitmq
 registry:
   url: 192.168.146.128:5000
   username: admin

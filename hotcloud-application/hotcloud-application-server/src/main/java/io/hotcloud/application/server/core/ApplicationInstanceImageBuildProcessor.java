@@ -10,6 +10,7 @@ import io.hotcloud.buildpack.api.core.BuildPackPlayerV2;
 import io.hotcloud.common.api.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -72,8 +73,10 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
 
     @Override
     public void processDelete(ApplicationInstance input) {
-        Log.info(ApplicationInstanceImageBuildProcessor.class.getName(),
-                String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
-        buildPackPlayerV2.delete(input.getBuildPackId(), false);
+        Log.info(ApplicationInstanceImageBuildProcessor.class.getName(), String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
+        if (StringUtils.hasText(input.getBuildPackId())) {
+            buildPackPlayerV2.delete(input.getBuildPackId(), false);
+        }
+
     }
 }

@@ -23,8 +23,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static io.hotcloud.common.api.CommonConstant.CK_NAMESPACE_USER_KEY_PREFIX;
-
 
 /**
  * @author yaolianhua789@gmail.com
@@ -155,13 +153,9 @@ public class GitClonedServiceImpl implements GitClonedService {
         User current = userApi.current();
         Assert.notNull(current, "Retrieve current user null");
 
-        //get user's namespace.
-        String namespace = cache.get(String.format(CK_NAMESPACE_USER_KEY_PREFIX, current.getUsername()), String.class);
-        Assert.hasText(namespace, "namespace is null");
-
         Assert.state(Validator.validHTTPGitAddress(gitUrl), "http(s) git url support only");
         String gitProject = GitCloned.retrieveGitProject(gitUrl);
-        String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, namespace, gitProject).toString();
+        String clonePath = Path.of(BuildPackConstant.STORAGE_VOLUME_PATH, current.getNamespace(), gitProject).toString();
 
         executorService.execute(() -> {
             GitCloned cloned = gitApi.clone(gitUrl, branch, clonePath, true, username, password);

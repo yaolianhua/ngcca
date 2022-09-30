@@ -39,6 +39,7 @@ public class PodWatcher implements WorkloadsWatchApi {
         KubernetesClient fabric8Client = kubernetesApi.fabric8KubernetesClient();
 
         return fabric8Client.pods()
+                    .inAnyNamespace()
                     .watch(new Watcher<>() {
                         @Override
                         public void eventReceived(Action action, Pod resource) {

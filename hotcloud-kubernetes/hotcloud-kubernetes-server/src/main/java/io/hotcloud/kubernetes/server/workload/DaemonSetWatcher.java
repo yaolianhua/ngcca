@@ -41,6 +41,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
 
         return fabric8Client.apps()
                     .daemonSets()
+                    .inAnyNamespace()
                     .watch(new Watcher<>() {
                         @Override
                         public void eventReceived(Action action, DaemonSet resource) {

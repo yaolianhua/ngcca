@@ -40,6 +40,7 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
 
         return fabric8Client.apps()
                     .statefulSets()
+                    .inAnyNamespace()
                     .watch(new Watcher<>() {
                         @Override
                         public void eventReceived(Action action, StatefulSet resource) {

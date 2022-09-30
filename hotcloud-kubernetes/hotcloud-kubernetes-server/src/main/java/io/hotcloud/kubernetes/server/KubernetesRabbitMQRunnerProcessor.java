@@ -24,7 +24,8 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
     @Override
     public void execute() {
         Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
-        Queue jobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB).build();
+        Queue buildPackJobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK).build();
+        Queue applicationDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION).build();
 
         FanoutExchange cronjobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB).build();
         FanoutExchange jobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB).build();
@@ -40,7 +41,8 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         Binding statefulsetBinding = BindingBuilder.bind(queue).to(statefulsetExchange);
         Binding podBinding = BindingBuilder.bind(queue).to(podExchange);
 
-        Binding jobQueueBinding = BindingBuilder.bind(jobQueue).to(jobExchange);
+        Binding jobQueueBinding = BindingBuilder.bind(buildPackJobQueue).to(jobExchange);
+        Binding deploymentQueueBinding = BindingBuilder.bind(applicationDeploymentQueue).to(deploymentExchange);
 
         rabbitAdmin.declareExchange(cronjobExchange);
         rabbitAdmin.declareExchange(jobExchange);
@@ -50,7 +52,8 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         rabbitAdmin.declareExchange(podExchange);
 
         rabbitAdmin.declareQueue(queue);
-        rabbitAdmin.declareQueue(jobQueue);
+        rabbitAdmin.declareQueue(buildPackJobQueue);
+        rabbitAdmin.declareQueue(applicationDeploymentQueue);
 
         rabbitAdmin.declareBinding(cronjobBinding);
         rabbitAdmin.declareBinding(jobBinding);
@@ -60,6 +63,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         rabbitAdmin.declareBinding(podBinding);
 
         rabbitAdmin.declareBinding(jobQueueBinding);
+        rabbitAdmin.declareBinding(deploymentQueueBinding);
 
 
     }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ExecutorService;
+
 @Component
 @RequiredArgsConstructor
 public class DefaultApplicationInstancePlayer implements ApplicationInstancePlayer {
@@ -14,6 +16,7 @@ public class DefaultApplicationInstancePlayer implements ApplicationInstancePlay
     private final ApplicationInstanceProcessors applicationInstanceProcessors;
     private final ApplicationInstanceParameterChecker parameterChecker;
     private final ApplicationInstanceService applicationInstanceService;
+    private final ExecutorService executorService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
@@ -25,6 +28,7 @@ public class DefaultApplicationInstancePlayer implements ApplicationInstancePlay
 
         Log.info(DefaultApplicationInstancePlayer.class.getName(), String.format("[%s] user's application instance [%s] created, id [%s]", saved.getUser(), saved.getName(), saved.getId()));
 
+        executorService.execute(() -> applicationInstanceProcessors.processCreate(saved));
         eventPublisher.publishEvent(new ApplicationInstanceCreateEvent(saved));
         return saved;
     }
