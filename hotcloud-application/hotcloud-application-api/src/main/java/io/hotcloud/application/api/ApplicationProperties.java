@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 @Configuration(proxyBeanMethods = false)
 public class ApplicationProperties {
 
-    public static final String PROPERTIES_TYPE_NAME = "app.deployment.notify-mode";
+    public static final String PROPERTIES_TYPE_NAME = "app.deployment-notify-mode";
     public static final String RABBITMQ = "rabbitmq";
     public static final String IN_PROCESS = "inProcess";
 
