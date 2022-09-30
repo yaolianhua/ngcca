@@ -1,12 +1,12 @@
 cache:
-  type: local
+  type: redis
   redis:
     host:
     password:
     port:
     database:
 db:
-  type: redis
+  type: mongodb
   redis:
     database: 0
     host:
@@ -23,7 +23,7 @@ minio:
   secret-key:
   endpoint:
 message:
-  type: websocket
+  type: rabbitmq
   rabbitmq:
     host:
     username:
@@ -45,10 +45,13 @@ security:
       - /pub
       - /**/login
 buildpack:
-  kaniko:
-    verbosity: info
+  imagebuild:
+    notify-mode: rabbitmq
 registry:
   url:
   username:
   password:
   imagebuild-namespace:
+app:
+  dot-suffix-domain:
+  deployment-notify-mode: rabbitmq
