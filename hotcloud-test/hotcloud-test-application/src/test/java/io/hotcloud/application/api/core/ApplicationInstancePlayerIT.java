@@ -32,6 +32,46 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
     }
 
     @Test
+    public void playImageDeployment() throws InterruptedException {
+        ApplicationForm form = ApplicationForm.builder()
+                .name("nginx")
+                .canHttp(true)
+                .replicas(3)
+                .serverPort(80)
+                .source(
+                        ApplicationInstanceSource.builder()
+                                .url("192.168.146.128:5000/library/nginx:v1")
+                                .origin(ApplicationInstanceSource.Origin.IMAGE)
+                                .build()
+                ).build();
+
+        ApplicationInstance one = applicationInstanceService.findActiveSucceed("admin", "nginx");
+        if (one != null){
+            player.delete(one.getId());
+        }
+
+        ApplicationInstance instance = player.play(form);
+
+        while (true) {
+            TimeUnit.SECONDS.sleep(3);
+            ApplicationInstance fetched = applicationInstanceService.findOne(instance.getId());
+            if (fetched.isSuccess()){
+                System.err.println("Application instance [" + fetched.getName() + "] create success");
+                break;
+            }
+            if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
+                System.err.println("Application instance [" + fetched.getName() + "] create failed");
+                break;
+            }
+        }
+
+        TimeUnit.SECONDS.sleep(3);
+        System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
+
+        player.delete(instance.getId());
+    }
+
+    @Test
     public void playWarDeployment() throws InterruptedException {
         ApplicationForm form = ApplicationForm.builder()
                 .name("jenkins")
