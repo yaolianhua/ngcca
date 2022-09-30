@@ -59,7 +59,7 @@ public class BuildPackRabbitMQK8sEventsListener {
             }
             BuildPack fetched = buildPackService.findByUuid(businessId);
             if (Objects.isNull(fetched)) {
-                Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
+//                Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
                 return;
             }
 
