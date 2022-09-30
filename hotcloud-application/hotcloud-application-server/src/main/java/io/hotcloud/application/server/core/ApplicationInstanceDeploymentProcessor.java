@@ -51,6 +51,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setName(applicationInstance.getName());
         metadata.setNamespace(applicationInstance.getNamespace());
+        metadata.setLabels(Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, applicationInstance.getId(), K8S_APP, applicationInstance.getName()));
 
         return metadata;
     }
@@ -58,7 +59,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
     private DeploymentTemplate buildDeploymentTemplate(ApplicationInstance applicationInstance){
         DeploymentTemplate template = new DeploymentTemplate();
         ObjectMetadata templateMetadata = new ObjectMetadata();
-        templateMetadata.setLabels(Map.of(K8S_APP, applicationInstance.getName()));
+        templateMetadata.setLabels(Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, applicationInstance.getId(), K8S_APP, applicationInstance.getName()));
         template.setMetadata(templateMetadata);
 
         PodTemplateSpec podTemplateSpec = new PodTemplateSpec();
@@ -89,7 +90,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
         deploymentSpec.setReplicas(applicationInstance.getReplicas());
         deploymentSpec.setStrategy(new Strategy());
-        deploymentSpec.setSelector(new LabelSelector(Map.of(K8S_APP, applicationInstance.getName()), Collections.emptyList()));
+        deploymentSpec.setSelector(new LabelSelector(Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, applicationInstance.getId(), K8S_APP, applicationInstance.getName()), Collections.emptyList()));
 
         deploymentSpec.setTemplate(buildDeploymentTemplate(applicationInstance));
 
