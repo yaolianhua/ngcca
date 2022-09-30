@@ -57,6 +57,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         boolean buildTaskExisted = buildPacks.stream()
                 .filter(e -> Objects.equals(httpGitUrl, e.getHttpGitUrl()))
                 .filter(e -> Objects.equals(branch, e.getGitBranch()))
+                .filter(e -> !e.isDeleted())
                 .anyMatch(e -> Objects.equals(false, e.isDone()));
         Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s gitUrl:%s branch:%s",
                 userNamespacePair.getUsername(), httpGitUrl, branch));
@@ -133,6 +134,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         List<BuildPack> buildPacks = buildPackService.findAll(userNamespacePair.getUsername());
         boolean buildTaskExisted = buildPacks.stream()
                 .filter(e -> Objects.equals(httpUrl, e.getPackageUrl()))
+                .filter(e -> !e.isDeleted())
                 .anyMatch(e -> Objects.equals(false, e.isDone()));
         Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s packageUrl:%s",
                 userNamespacePair.getUsername(), httpUrl));
