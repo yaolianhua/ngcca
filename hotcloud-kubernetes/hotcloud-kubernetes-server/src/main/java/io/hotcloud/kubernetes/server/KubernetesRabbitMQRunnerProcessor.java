@@ -26,6 +26,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
         Queue buildPackJobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK).build();
         Queue applicationDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION).build();
+        Queue templateDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_TEMPLATE).build();
 
         FanoutExchange cronjobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB).build();
         FanoutExchange jobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB).build();
@@ -43,6 +44,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
 
         Binding jobQueueBinding = BindingBuilder.bind(buildPackJobQueue).to(jobExchange);
         Binding deploymentQueueBinding = BindingBuilder.bind(applicationDeploymentQueue).to(deploymentExchange);
+        Binding templateDeploymentQueueBinding = BindingBuilder.bind(templateDeploymentQueue).to(deploymentExchange);
 
         rabbitAdmin.declareExchange(cronjobExchange);
         rabbitAdmin.declareExchange(jobExchange);
@@ -54,6 +56,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
         rabbitAdmin.declareQueue(queue);
         rabbitAdmin.declareQueue(buildPackJobQueue);
         rabbitAdmin.declareQueue(applicationDeploymentQueue);
+        rabbitAdmin.declareQueue(templateDeploymentQueue);
 
         rabbitAdmin.declareBinding(cronjobBinding);
         rabbitAdmin.declareBinding(jobBinding);
@@ -64,6 +67,7 @@ public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor 
 
         rabbitAdmin.declareBinding(jobQueueBinding);
         rabbitAdmin.declareBinding(deploymentQueueBinding);
+        rabbitAdmin.declareBinding(templateDeploymentQueueBinding);
 
 
     }
