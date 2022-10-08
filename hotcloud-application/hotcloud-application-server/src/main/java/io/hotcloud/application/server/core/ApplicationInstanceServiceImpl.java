@@ -44,8 +44,8 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
 
     @Override
     public ApplicationInstance findOne(String id) {
-        ApplicationInstanceEntity entity = applicationInstanceRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Can not found application instance [" + id + "]"));
-        return toApplicationInstance(entity);
+        ApplicationInstanceEntity entity = applicationInstanceRepository.findById(id).orElse(null);
+        return entity == null ? null : toApplicationInstance(entity);
     }
 
     @Override
