@@ -44,7 +44,7 @@ public class ApplicationRabbitMQK8sEventsListener {
             bindings = {
                     @QueueBinding(
                             value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION)
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT)
                     )
             }
     )
