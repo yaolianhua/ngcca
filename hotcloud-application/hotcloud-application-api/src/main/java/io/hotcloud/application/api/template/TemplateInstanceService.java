@@ -23,6 +23,14 @@ public interface TemplateInstanceService {
     TemplateInstance findOne(String id);
 
     /**
+     * Find template with the giving {@code uuid}
+     *
+     * @param uuid business id
+     * @return {@link TemplateInstance}
+     */
+    TemplateInstance findByUuid(String uuid);
+
+    /**
      * Find all instance template
      *
      * @return instance template collection

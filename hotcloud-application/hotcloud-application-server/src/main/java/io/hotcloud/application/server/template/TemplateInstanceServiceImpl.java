@@ -62,6 +62,12 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
     }
 
     @Override
+    public TemplateInstance findByUuid(String uuid) {
+        TemplateInstanceEntity entity = templateInstanceRepository.findByUuid(uuid);
+        return entity == null ? null : entity.toT(TemplateInstance.class);
+    }
+
+    @Override
     public List<TemplateInstance> findAll() {
         Iterable<TemplateInstanceEntity> entityIterable = templateInstanceRepository.findAll();
         return StreamSupport.stream(entityIterable.spliterator(), false)
