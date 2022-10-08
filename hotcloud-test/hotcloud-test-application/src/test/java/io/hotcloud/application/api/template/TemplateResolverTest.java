@@ -27,7 +27,7 @@ public class TemplateResolverTest {
                     .lines()
                     .collect(Collectors.joining("\n"));
 
-            Assertions.assertEquals(collect, minioTemplate.getYaml());
+            Assertions.assertEquals(collect, minioTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
 
         }
     }
@@ -39,7 +39,7 @@ public class TemplateResolverTest {
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, mongoTemplate.getYaml());
+                Assertions.assertEquals(collect, mongoTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
 
         }
     }
@@ -52,7 +52,7 @@ public class TemplateResolverTest {
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, mysqlTemplate.getYaml());
+                Assertions.assertEquals(collect, mysqlTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
             }
     }
 
@@ -64,7 +64,7 @@ public class TemplateResolverTest {
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, rabbitmqTemplate.getYaml());
+                Assertions.assertEquals(collect, rabbitmqTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
             }
     }
 
@@ -76,7 +76,7 @@ public class TemplateResolverTest {
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, redisTemplate.getYaml());
+                Assertions.assertEquals(collect, redisTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
             }
     }
 
@@ -89,7 +89,7 @@ public class TemplateResolverTest {
                         .lines()
                         .collect(Collectors.joining("\n"));
 
-                Assertions.assertEquals(collect, redisInsightTemplate.getYaml());
+                Assertions.assertEquals(collect, redisInsightTemplate.getYaml("5b2378dc5d2f4eedb55ed9217255c8cd"));
             }
     }
 

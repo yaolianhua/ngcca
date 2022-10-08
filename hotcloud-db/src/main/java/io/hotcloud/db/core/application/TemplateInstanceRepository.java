@@ -25,4 +25,11 @@ public interface TemplateInstanceRepository extends PagingAndSortingRepository<T
      * @return InstanceTemplateEntity collection
      */
     List<TemplateInstanceEntity> findByUser(String user);
+
+    /**
+     * Find enitty with the giving {@code uuid}
+     * @param uuid business id
+     * @return {@link TemplateInstanceEntity}
+     */
+    TemplateInstanceEntity findByUuid(String uuid);
 }

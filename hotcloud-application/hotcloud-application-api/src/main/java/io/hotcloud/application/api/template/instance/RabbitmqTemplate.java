@@ -34,11 +34,12 @@ public class RabbitmqTemplate {
     private String username = "admin";
     private String password = "passw0rd";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
                         Map.of("RABBITMQ", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
                                 "RABBITMQ_IMAGE", image,
                                 "RABBITMQ_DEFAULT_PASSWORD", password,

@@ -6,6 +6,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.MinioTemplate;
+import io.hotcloud.common.api.UUIDGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -56,17 +57,18 @@ class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
         String hosts = ingressDefinition.getRules().stream().map(IngressDefinition.Rule::getHost).collect(Collectors.joining(","));
         String ports = ingressDefinition.getRules().stream().map(IngressDefinition.Rule::getPort).collect(Collectors.joining(","));
 
-
+        String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
                 .name(minioTemplate.getName())
                 .namespace(minioTemplate.getNamespace())
+                .uuid(uuid)
                 .success(false)
                 .host(hosts)
                 .targetPorts(ports)
                 .httpPort(ports)
                 .service(minioTemplate.getService())
                 .user(user)
-                .yaml(minioTemplate.getYaml())
+                .yaml(minioTemplate.getYaml(uuid))
                 .ingress(render(ingressDefinition))
                 .build();
     }

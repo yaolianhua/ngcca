@@ -6,6 +6,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.RabbitmqTemplate;
+import io.hotcloud.common.api.UUIDGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -46,16 +47,18 @@ class RabbitmqTemplateInstanceProcessor implements TemplateInstanceProcessor {
                                 .build())
                 ).build();
 
+        String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
                 .name(rabbitmqTemplate.getName())
                 .namespace(rabbitmqTemplate.getNamespace())
+                .uuid(uuid)
                 .success(false)
                 .host(host)
                 .targetPorts("5672,15672")
                 .httpPort("15672")
                 .service(rabbitmqTemplate.getService())
                 .user(user)
-                .yaml(rabbitmqTemplate.getYaml())
+                .yaml(rabbitmqTemplate.getYaml(uuid))
                 .ingress(render(ingressDefinition))
                 .build();
     }

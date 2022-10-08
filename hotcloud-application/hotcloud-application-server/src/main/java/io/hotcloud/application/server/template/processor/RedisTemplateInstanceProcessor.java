@@ -4,6 +4,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.RedisTemplate;
+import io.hotcloud.common.api.UUIDGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -23,15 +24,17 @@ class RedisTemplateInstanceProcessor implements TemplateInstanceProcessor {
             return null;
         }
         RedisTemplate redisTemplate = new RedisTemplate(imageUrl, namespace);
-        
+
+        String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
                 .name(redisTemplate.getName())
                 .namespace(redisTemplate.getNamespace())
+                .uuid(uuid)
                 .success(false)
                 .targetPorts("6379")
                 .service(redisTemplate.getService())
                 .user(user)
-                .yaml(redisTemplate.getYaml())
+                .yaml(redisTemplate.getYaml(uuid))
                 .build();
     }
 }

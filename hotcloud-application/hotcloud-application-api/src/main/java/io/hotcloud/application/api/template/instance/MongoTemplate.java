@@ -34,11 +34,12 @@ public class MongoTemplate {
     private String username = "admin";
     private String password = "passw0rd";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
                         Map.of("MONGO", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
                                 "MONGO_IMAGE", image,
                                 "MONGO_ROOT_USERNAME", username,

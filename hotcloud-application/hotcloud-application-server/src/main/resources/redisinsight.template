@@ -5,6 +5,7 @@ metadata:
   namespace: #{[NAMESPACE]}
   labels:
     app: #{[REDISINSIGHT]}
+    app.business.data/id: #{[ ID ]}
 spec:
   replicas: 1
   strategy:

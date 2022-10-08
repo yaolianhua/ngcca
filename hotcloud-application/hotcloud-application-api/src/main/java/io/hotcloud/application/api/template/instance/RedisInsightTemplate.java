@@ -32,11 +32,12 @@ public class RedisInsightTemplate {
     private String namespace;
     private String service = Template.RedisInsight.name().toLowerCase() + "-service";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
                         Map.of("REDISINSIGHT", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
                                 "REDISINSIGHT_IMAGE", image),
                         String.class

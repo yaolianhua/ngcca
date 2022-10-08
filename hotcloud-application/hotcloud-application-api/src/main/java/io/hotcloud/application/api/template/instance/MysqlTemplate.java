@@ -33,11 +33,12 @@ public class MysqlTemplate {
     private String service = Template.Mysql.name().toLowerCase();
     private String password = "passw0rd";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
                         Map.of("MYSQL", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
                                 "MYSQL_IMAGE", image,
                                 "MYSQL_ROOT_PASSWORD", password),

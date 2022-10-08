@@ -6,6 +6,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.RedisInsightTemplate;
+import io.hotcloud.common.api.UUIDGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -46,16 +47,18 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
                                 .build())
                 ).build();
 
+        String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
                 .name(redisInsightTemplate.getName())
                 .namespace(redisInsightTemplate.getNamespace())
+                .uuid(uuid)
                 .success(false)
                 .host(host)
                 .targetPorts("8001")
                 .httpPort("8001")
                 .service(redisInsightTemplate.getService())
                 .user(user)
-                .yaml(redisInsightTemplate.getYaml())
+                .yaml(redisInsightTemplate.getYaml(uuid))
                 .ingress(render(ingressDefinition))
                 .build();
     }

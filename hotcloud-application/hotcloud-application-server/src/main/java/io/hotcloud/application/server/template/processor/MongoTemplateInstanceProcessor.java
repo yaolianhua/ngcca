@@ -4,6 +4,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.MongoTemplate;
+import io.hotcloud.common.api.UUIDGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -23,15 +24,17 @@ class MongoTemplateInstanceProcessor implements TemplateInstanceProcessor {
             return null;
         }
         MongoTemplate mongoTemplate = new MongoTemplate(imageUrl, namespace);
-        
+
+        String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
                 .name(mongoTemplate.getName())
                 .namespace(mongoTemplate.getNamespace())
+                .uuid(uuid)
                 .success(false)
                 .targetPorts("27017")
                 .service(mongoTemplate.getService())
                 .user(user)
-                .yaml(mongoTemplate.getYaml())
+                .yaml(mongoTemplate.getYaml(uuid))
                 .build();
     }
 }

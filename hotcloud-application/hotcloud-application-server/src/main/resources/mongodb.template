@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: #{[MONGO]}
+    app.business.data/id: #{[ ID ]}
   name: #{[MONGO]}
   namespace: #{[NAMESPACE]}
 spec:

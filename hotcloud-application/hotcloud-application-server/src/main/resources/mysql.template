@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: #{[MYSQL]}
   namespace: #{[NAMESPACE]}
+  labels:
+    app.business.data/id: #{[ ID ]}
 spec:
   selector:
     matchLabels:

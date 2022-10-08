@@ -5,6 +5,7 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
   labels:
     app: redisinsight
+    app.business.data/id: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   replicas: 1
   strategy:

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: mongodb
+    app.business.data/id: 5b2378dc5d2f4eedb55ed9217255c8cd
   name: mongodb
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:

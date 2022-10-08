@@ -28,6 +28,9 @@ public class TemplateInstanceEntity extends AbstractEntity {
     @Indexed
     @org.springframework.data.mongodb.core.index.Indexed
     private String name;
+    @Indexed
+    @org.springframework.data.mongodb.core.index.Indexed(unique = true)
+    private String uuid;
 
     private String namespace;
     private String host;

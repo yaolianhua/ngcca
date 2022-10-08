@@ -34,11 +34,12 @@ public class RedisTemplate {
 
     private String password = "passw0rd";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
                         Map.of("REDIS", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
                                 "REDIS_IMAGE", image,
                                 "REDIS_PASSWORD", password),

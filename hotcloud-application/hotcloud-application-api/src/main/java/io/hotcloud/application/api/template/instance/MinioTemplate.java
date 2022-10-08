@@ -34,11 +34,12 @@ public class MinioTemplate {
     private String accessKey = "admin";
     private String accessSecret = "passw0rd";
 
-    public String getYaml() {
+    public String getYaml(String id) {
         return  new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("MINIO", name,
+                        Map.of("ID",id,
+                                "MINIO", name,
                                 "NAMESPACE", namespace,
                                 "MINIO_IMAGE", image,
                                 "MINIO_ROOT_USER", accessKey,

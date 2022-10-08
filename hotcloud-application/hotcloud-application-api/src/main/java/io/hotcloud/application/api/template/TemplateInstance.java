@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TemplateInstance {
     private String id;
-
+    private String uuid;
     private String user;
     private String name;
 
