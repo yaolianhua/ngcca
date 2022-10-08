@@ -4,13 +4,11 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.api.template.TemplateInstanceService;
-import io.hotcloud.application.api.template.event.TemplateInstanceDeleteEvent;
 import io.hotcloud.application.api.template.event.TemplateInstanceStartedEvent;
 import io.hotcloud.application.server.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
@@ -34,7 +32,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final KubectlApi kubectlApi;
     private final NamespaceApi namespaceApi;
     private final UserApi userApi;
-    private final Cache cache;
+    private final TemplateInstanceK8sService templateInstanceK8sService;
 
     @Override
     public TemplateInstance play(Template template) {
@@ -79,6 +77,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
         Log.debug(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
-        eventPublisher.publishEvent(new TemplateInstanceDeleteEvent(find));
+
+        templateInstanceK8sService.processTemplateDelete(find);
     }
 }

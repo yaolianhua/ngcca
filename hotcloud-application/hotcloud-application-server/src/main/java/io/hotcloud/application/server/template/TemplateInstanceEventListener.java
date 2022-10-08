@@ -1,7 +1,6 @@
 package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.ApplicationProperties;
-import io.hotcloud.application.api.template.event.TemplateInstanceDeleteEvent;
 import io.hotcloud.application.api.template.event.TemplateInstanceStartedEvent;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.event.EventListener;
@@ -28,12 +27,6 @@ public class TemplateInstanceEventListener {
     @Async
     public void create(TemplateInstanceStartedEvent event) {
         templateInstanceK8sService.processTemplateCreateBlocked(event.getInstance());
-    }
-
-    @EventListener
-    @Async
-    public void delete(TemplateInstanceDeleteEvent event) {
-        templateInstanceK8sService.processTemplateDelete(event.getInstance());
     }
 
 }
