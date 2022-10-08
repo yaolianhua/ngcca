@@ -5,7 +5,6 @@ import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.application.api.template.event.TemplateInstanceDeleteEvent;
-import io.hotcloud.application.api.template.event.TemplateInstanceStartFailureEvent;
 import io.hotcloud.application.api.template.event.TemplateInstanceStartedEvent;
 import io.hotcloud.application.server.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.common.api.Log;
@@ -47,11 +46,9 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
-        Log.info(DefaultTemplateInstancePlayer.class.getName(),
-                String.format("Saved [%s] user's [%s] instance template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
+        Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
-        Log.debug(DefaultTemplateInstancePlayer.class.getName(),
-                String.format("Activity [%s] saved", activityLog.getId()));
+        Log.debug(DefaultTemplateInstancePlayer.class.getName(), String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
             if (namespaceApi.read(namespace) == null) {
@@ -59,7 +56,9 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
             }
             kubectlApi.apply(namespace, templateInstance.getYaml());
         } catch (Exception ex) {
-            eventPublisher.publishEvent(new TemplateInstanceStartFailureEvent(saved, ex));
+            saved.setMessage(ex.getMessage());
+            templateInstanceService.saveOrUpdate(saved);
+            Log.error(DefaultTemplateInstancePlayer.class.getName(), String.format("template [%s] start failure.", saved.getName()));
             return saved;
         }
 
@@ -70,13 +69,13 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
     @Override
     public void delete(String id) {
-        Assert.hasText(id, "Instance template id is null");
+        Assert.hasText(id, "Template instance id is null");
         TemplateInstance find = templateInstanceService.findOne(id);
-        Assert.notNull(find, "Can not found instance template [" + id + "]");
+        Assert.notNull(find, "Can not found template [" + id + "]");
 
         templateInstanceService.delete(id);
         Log.info(DefaultTemplateInstancePlayer.class.getName(),
-                String.format("Delete [%s] instance template '%s'", find.getName(), id));
+                String.format("Delete [%s] template '%s'", find.getName(), id));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
         Log.debug(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
