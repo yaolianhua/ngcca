@@ -47,6 +47,7 @@ public class HotCloudLoginService implements LoginApi {
             Assert.isTrue(matches, "Invalid password");
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(retrieved, null, retrieved.getAuthorities());
+            SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
             String token = jwtSigner.sign(Map.of("username", retrieved.getUsername()));
