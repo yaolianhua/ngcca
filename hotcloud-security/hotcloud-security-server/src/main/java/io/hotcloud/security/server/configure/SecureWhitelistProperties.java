@@ -4,14 +4,13 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@Configuration(proxyBeanMethods = false)
 @Data
 @ConfigurationProperties("security.ignored")
 @Properties(prefix = "security.ignored")

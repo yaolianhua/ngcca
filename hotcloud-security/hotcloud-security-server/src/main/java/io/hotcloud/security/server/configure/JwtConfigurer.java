@@ -6,10 +6,9 @@ import io.hotcloud.security.server.jwt.JwtSigner;
 import io.hotcloud.security.server.jwt.JwtVerifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(JwtProperties.class)
 public class JwtConfigurer {
 
