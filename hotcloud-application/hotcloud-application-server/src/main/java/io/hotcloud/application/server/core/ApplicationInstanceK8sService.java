@@ -1,18 +1,27 @@
 package io.hotcloud.application.server.core;
 
+import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.core.ApplicationDeploymentCacheApi;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -21,8 +30,10 @@ public class ApplicationInstanceK8sService {
     private final DeploymentApi deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationDeploymentCacheApi applicationDeploymentCacheApi;
+    private final PodApi podApi;
+    private final KubectlApi kubectlApi;
 
-    public void processApplicationCreatedBlocked (ApplicationInstance instance){
+    public void processApplicationCreatedBlocked(ApplicationInstance instance) {
 
         if (!applicationDeploymentCacheApi.tryLock(instance.getId())) {
             return;
@@ -46,7 +57,25 @@ public class ApplicationInstanceK8sService {
                 //if timeout
                 int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationDeploymentCacheApi.getTimeoutSeconds()));
                 if (timeout > 0) {
-                    applicationInstance.setMessage(CommonConstant.TIMEOUT_MESSAGE);
+                    String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
+                    PodList podList = podApi.read(applicationInstance.getNamespace(),
+                            Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, instance.getId(), CommonConstant.K8S_APP, applicationInstance.getName())
+                    );
+                    if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
+                        List<String> podNameList = podList.getItems()
+                                .stream()
+                                .map(e -> e.getMetadata().getName())
+                                .collect(Collectors.toList());
+
+                        timeoutMessage = podNameList.stream()
+                                .map(pod -> kubectlApi.namespacedPodEvents(applicationInstance.getNamespace(), pod))
+                                .flatMap(Collection::stream)
+                                .filter(event -> Objects.equals("Warning", event.getType()))
+                                .map(Event::getMessage)
+                                .distinct()
+                                .collect(Collectors.joining("\n"));
+                    }
+                    applicationInstance.setMessage(timeoutMessage);
                     applicationInstanceService.saveOrUpdate(applicationInstance);
                     applicationDeploymentCacheApi.unLock(applicationInstance.getId());
                     return;
@@ -57,7 +86,7 @@ public class ApplicationInstanceK8sService {
                 if (Objects.nonNull(deployment)) {
                     boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, instance.getReplicas());
                     if (!ready) {
-                        Log.info(ApplicationInstanceK8sService.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
+                        Log.debug(ApplicationInstanceK8sService.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
                     }
 
                     //deployment success
