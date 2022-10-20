@@ -149,6 +149,29 @@ public class KubectlController {
         return WebResponse.ok(kubectlApi.events(namespace));
     }
 
+    @GetMapping("/events")
+    @Operation(
+            summary = "Events collection read",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<Result<List<Event>>> events() {
+        return WebResponse.ok(kubectlApi.events());
+    }
+
+    @GetMapping("/{namespace}/{pod}/events")
+    @Operation(
+            summary = "Namespaced pod events read",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "namespace", description = "kubernetes namespace"),
+                    @Parameter(name = "pod", description = "pod name")
+            }
+    )
+    public ResponseEntity<Result<List<Event>>> namespacedPodEvents(@PathVariable(value = "namespace") String namespace,
+                                                                   @PathVariable(value = "pod") String pod) {
+        return WebResponse.ok(kubectlApi.namespacedPodEvents(namespace, pod));
+    }
+
     @GetMapping("/{namespace}/events/{event}")
     @Operation(
             summary = "Events read",

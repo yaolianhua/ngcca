@@ -90,6 +90,22 @@ public interface KubectlHttpClient {
     Result<List<Event>> events(String namespace);
 
     /**
+     * List events in any namespace
+     *
+     * @return {@link Event}
+     */
+    Result<List<Event>> events();
+
+    /**
+     * List namespaced pod events
+     *
+     * @param namespace k8s namespace
+     * @param pod       pod name
+     * @return {@link Event}
+     */
+    Result<List<Event>> namespacedPodEvents(String namespace, String pod);
+
+    /**
      * Get namespaced events. Equivalent to using kubectl get events {@code name} -n {@code namespace}
      *
      * @param namespace namespace

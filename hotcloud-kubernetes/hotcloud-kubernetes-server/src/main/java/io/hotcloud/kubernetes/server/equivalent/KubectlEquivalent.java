@@ -258,4 +258,12 @@ public class KubectlEquivalent implements KubectlApi {
                 .list()
                 .getItems();
     }
+
+    @Override
+    public List<Event> events() {
+        return fabric8Client.v1().events()
+                .inAnyNamespace()
+                .list()
+                .getItems();
+    }
 }

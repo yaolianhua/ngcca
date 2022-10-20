@@ -105,6 +105,37 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
     }
 
     @Override
+    public Result<List<Event>> events() {
+
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/events", uri)).build().toUri();
+
+        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Result<List<Event>> namespacedPodEvents(String namespace, String pod) {
+        Assert.hasText(namespace, "namespace is null");
+        Assert.hasText(pod, "pod name is null");
+
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Result<Event> events(String namespace, String name) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(name, "name is null");

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -86,6 +87,30 @@ public interface KubectlApi {
     List<Event> events(String namespace);
 
     /**
+     * List events in any namespace
+     *
+     * @return {@link Event}
+     */
+    List<Event> events();
+
+    /**
+     * List namespaced pod events
+     *
+     * @param namespace k8s namespace
+     * @param pod       pod name
+     * @return {@link Event}
+     */
+    default List<Event> namespacedPodEvents(String namespace, String pod) {
+        Assert.hasText(pod, "Pod name is null");
+        Assert.hasText(namespace, "namespace is null");
+        return this.events(namespace)
+                .parallelStream()
+                .filter(e -> Objects.equals(e.getInvolvedObject().getKind(), "Pod"))
+                .filter(e -> Objects.equals(e.getInvolvedObject().getName(), pod))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Get namespaced events. Equivalent to using kubectl get events {@code name} -n {@code namespace}
      *
      * @param namespace namespace
@@ -100,4 +125,6 @@ public interface KubectlApi {
                 .findFirst()
                 .orElse(null);
     }
+
+
 }
