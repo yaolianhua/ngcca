@@ -40,7 +40,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 .serverPort(80)
                 .source(
                         ApplicationInstanceSource.builder()
-                                .url("192.168.146.128:5000/library/nginx:v1")
+                                .url("harbor.local:5000/library/nginx:latest")
                                 .origin(ApplicationInstanceSource.Origin.IMAGE)
                                 .build()
                 ).build();
@@ -60,7 +60,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 break;
             }
             if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
-                System.err.println("Application instance [" + fetched.getName() + "] create failed");
+                System.err.println("Application instance [" + fetched.getName() + "] create failed \n" + fetched.getMessage());
                 break;
             }
         }
@@ -69,6 +69,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
         System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
 
         player.delete(instance.getId());
+        TimeUnit.SECONDS.sleep(10);
     }
 
     @Test
