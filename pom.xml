@@ -313,7 +313,7 @@
         <!-- Add your profile here -->
     </developers>
 
-    <distributionManagement>
+    <!--<distributionManagement>
         <repository>
             <id>local-nexus</id>
             <name>Local Nexus Releases</name>
@@ -341,5 +341,5 @@
             <name>Local Nexus Public</name>
             <url>http://nexus.local/repository/maven-public/</url>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories>-->
 </project>
