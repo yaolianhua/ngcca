@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunnerProcessor {
@@ -32,6 +32,7 @@ public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunn
 
     @Override
     public void execute() {
+        List<String> prints = new ArrayList<>();
         for (BuildPackImages image : BuildPackImages.values()) {
             String key = image.name().toLowerCase();
             String repo = buildPackImagesProperties.getRepos().get(key);
@@ -43,15 +44,15 @@ public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunn
                 saveEntity.setName(key);
                 saveEntity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 registryImageRepository.save(saveEntity);
-            }
-            else {
+            } else {
                 entity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 entity.setModifiedAt(LocalDateTime.now());
                 registryImageRepository.save(entity);
             }
+
+            prints.add(repo);
         }
 
-        String images = Arrays.stream(BuildPackImages.values()).map(Enum::name).collect(Collectors.joining(","));
-        Log.info(BuildPackDatabaseRegistryImageRunnerProcessor.class.getName(), String.format("BuildPack images init success. items [%s]", images));
+        Log.info(BuildPackDatabaseRegistryImageRunnerProcessor.class.getName(), String.format("BuildPack images init success. items '%s'", prints));
     }
 }
