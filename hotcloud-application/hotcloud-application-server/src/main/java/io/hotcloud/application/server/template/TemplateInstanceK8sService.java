@@ -73,7 +73,7 @@ public class TemplateInstanceK8sService {
                 Deployment deployment = deploymentApi.read(instance.getNamespace(), instance.getName());
                 boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
-                    Log.debug(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                    Log.info(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 }
 
                 //deployment success
@@ -127,6 +127,7 @@ public class TemplateInstanceK8sService {
         String name = instance.getName();
 
         try {
+            templateDeploymentCacheApi.unLock(instance.getId());
             Boolean delete = kubectlApi.delete(namespace, instance.getYaml());
             Log.info(TemplateInstanceK8sService.class.getName(), String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
 
