@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class TemplateDatabaseRegistryImageRunnerProcessor implements CommonRunnerProcessor {
@@ -31,6 +31,7 @@ public class TemplateDatabaseRegistryImageRunnerProcessor implements CommonRunne
 
     @Override
     public void execute() {
+        List<String> prints = new ArrayList<>();
         for (Template image : Template.values()) {
             String key = image.name().toLowerCase();
             String repo = templateImagesProperties.getRepos().get(key);
@@ -42,15 +43,15 @@ public class TemplateDatabaseRegistryImageRunnerProcessor implements CommonRunne
                 saveEntity.setName(key);
                 saveEntity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 registryImageRepository.save(saveEntity);
-            }
-            else {
+            } else {
                 entity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 entity.setModifiedAt(LocalDateTime.now());
                 registryImageRepository.save(entity);
             }
+
+            prints.add(repo);
         }
 
-        String images = Arrays.stream(Template.values()).map(Enum::name).collect(Collectors.joining(","));
-        Log.info(TemplateDatabaseRegistryImageRunnerProcessor.class.getName(), String.format("Template images init success. items [%s]", images));
+        Log.info(TemplateDatabaseRegistryImageRunnerProcessor.class.getName(), String.format("Template images init success. items '%s'", prints));
     }
 }
