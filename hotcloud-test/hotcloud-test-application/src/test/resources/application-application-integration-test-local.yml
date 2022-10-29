@@ -34,7 +34,7 @@ buildpack:
   imagebuild:
     notify-mode: rabbitmq
 registry:
-  url: 192.168.146.128:5000
+  url: harbor.local:5000
   username: admin
   password: QbMufCD@9WVQ^Hv
   imagebuild-namespace: image-build-test
