@@ -99,7 +99,8 @@ public class TemplateRender {
                                    String kanikoImage,
                                    String gitBranch,
                                    String httpGitUrl,
-                                   String initContainerImage) {
+                                   String initContainerImage,
+                                   Map<String, List<String>> hostAliases) {
 
         Assert.hasText(destination, "kaniko args missing [--destination]");
         Assert.hasText(destination, "kaniko init container args missing [--branch]");
@@ -121,7 +122,40 @@ public class TemplateRender {
         renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
 
+        renders.put(Kaniko.HOST_ALIASES, buildHostAliases(hostAliases));
+
         return apply(template, renders);
+    }
+
+    /**
+     * <pre>
+     *     {@code hostAliases:
+     *   - ip: "127.0.0.1"
+     *     hostnames:
+     *     - "foo.local"
+     *     - "bar.local"
+     *   - ip: "10.1.2.3"
+     *     hostnames:
+     *     - "foo.remote"
+     *     - "bar.remote"}
+     * </pre>
+     */
+    private static String buildHostAliases (Map<String, List<String>> hostAliases) {
+        StringBuilder builder = new StringBuilder();
+        if (CollectionUtils.isEmpty(hostAliases)) {
+            return builder.append("hostAliases: [ ]").toString();
+        }
+
+        builder.append("hostAliases:").append("\n");
+        for (Map.Entry<String, List<String>> entry : hostAliases.entrySet()) {
+            builder.append("      - ip: ").append(entry.getKey()).append("\n");
+            builder.append("        hostnames:").append("\n");
+            for (String hostname : entry.getValue()) {
+                builder.append("        - ").append(hostname).append("\n");
+            }
+        }
+
+        return builder.toString().stripTrailing();
     }
 
     /**
@@ -136,7 +170,8 @@ public class TemplateRender {
                                    String destination,
                                    String kanikoImage,
                                    String initContainerImage,
-                                   String dockerfileEncoded) {
+                                   String dockerfileEncoded,
+                                   Map<String, List<String>> hostAliases) {
 
         Assert.hasText(destination, "kaniko args missing [--destination]");
         Assert.hasText(dockerfileEncoded, "kaniko init container param missing [base64 dockerfile is null]");
@@ -155,6 +190,7 @@ public class TemplateRender {
         renders.put(Kaniko.DOCKERFILE_ENCODED, dockerfileEncoded);
         renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
+        renders.put(Kaniko.HOST_ALIASES, buildHostAliases(hostAliases));
 
         return apply(template, renders);
     }
@@ -246,6 +282,7 @@ public class TemplateRender {
         String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
         String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";
 
+        String HOST_ALIASES = "HOST_ALIASES";
     }
 
 }

@@ -44,6 +44,11 @@ spec:
               name: workspace-volume
               readOnly: false
       dnsPolicy: ClusterFirst
+      hostAliases:
+      - ip: 10.0.0.159
+        hostnames:
+        - harbor.local
+        - gitlab.docker.local
       imagePullSecrets: [ ]
       initContainers:
         - name: init

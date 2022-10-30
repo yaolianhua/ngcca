@@ -44,6 +44,7 @@ spec:
               name: workspace-volume
               readOnly: false
       dnsPolicy: ClusterFirst
+      #{[ HOST_ALIASES ]}
       imagePullSecrets: [ ]
       initContainers:
         - name: #{[ INIT_CONTAINER_NAME ]}

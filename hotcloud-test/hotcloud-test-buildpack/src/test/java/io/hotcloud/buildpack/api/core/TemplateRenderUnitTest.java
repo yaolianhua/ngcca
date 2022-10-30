@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.buildpack.api.core.TemplateRender.*;
@@ -28,7 +30,8 @@ public class TemplateRenderUnitTest {
                 "gcr.io/kaniko-project/executor:latest",
                 "master",
                 "https://gitee.com/yannanshan/devops-thymeleaf.git",
-                "alpine/git:latest");
+                "alpine/git:latest",
+                Map.of());
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-source.yaml")) {
             assert inputStream != null;
@@ -62,7 +65,8 @@ public class TemplateRenderUnitTest {
                 "192.168.146.128:5000/kaniko-test/app-jar:latest",
                 "gcr.io/kaniko-project/executor:latest",
                 "alpine:latest",
-                dockerfileEncoded);
+                dockerfileEncoded,
+                Map.of("10.0.0.159", List.of("harbor.local","gitlab.docker.local")));
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-jar.yaml")) {
             assert inputStream != null;
@@ -94,7 +98,8 @@ public class TemplateRenderUnitTest {
                 "192.168.146.128:5000/kaniko-test/app-war:latest",
                 "gcr.io/kaniko-project/executor:latest",
                 "alpine:latest",
-                dockerfileEncoded);
+                dockerfileEncoded,
+                Map.of("10.0.0.159", List.of("harbor.local","gitlab.docker.local")));
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-war.yaml")) {
             assert inputStream != null;
