@@ -1,0 +1,27 @@
+package io.hotcloud.common.api;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class INetTest {
+
+    @Test
+    public void ipv4() {
+
+        String localhost = INet.getIPv4("localhost");
+        Assertions.assertEquals("127.0.0.1", localhost);
+
+        String us = INet.getIPv4("www.baidu.com");
+        System.out.println("www.baidu.com: " + us);
+
+        String local = INet.getLocalizedIPv4();
+        Assertions.assertNotEquals("127.0.0.1", local);
+
+    }
+
+    @Test
+    public void host() {
+        String host = INet.getHost("https://file.docker.local/Downloads/jenkins.war");
+        Assertions.assertEquals("file.docker.local", host);
+    }
+}
