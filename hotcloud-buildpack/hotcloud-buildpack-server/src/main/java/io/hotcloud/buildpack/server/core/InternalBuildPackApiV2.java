@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
+import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.Validator;
@@ -21,10 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.hotcloud.buildpack.api.core.TemplateRender.*;
@@ -42,6 +40,38 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     private final RegistryProperties registryProperties;
     private final RegistryImageRepository registryImageRepository;
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
+
+    private static Map<String, List<String>> resolvedHostAliases(String registry, String httpUrl) {
+        Map<String, List<String>> hostAliases = new HashMap<>(8);
+
+        String registryHost = INet.getHost("http://" + registry);
+        String httpUrlHost = INet.getHost(httpUrl);
+
+        String localizedIPv4 = INet.getLocalizedIPv4();
+        Assert.isTrue(!Objects.equals("127.0.0.1", localizedIPv4), "localized ip error");
+        Assert.isTrue(!Objects.equals(registryHost, httpUrlHost), "host is error");
+
+        String registryIpv4 = INet.getIPv4(registryHost);
+        String httpUrlIpv4 = INet.getIPv4(httpUrlHost);
+
+        if (Objects.equals(registryIpv4, httpUrlIpv4)) {
+            hostAliases.put(registryIpv4, List.of(registryHost, httpUrlHost));
+        } else {
+            hostAliases.put(registryIpv4, List.of(registryHost));
+            hostAliases.put(httpUrlIpv4, List.of(httpUrlHost));
+        }
+
+        Map<String, List<String>> resolvedHostAliases = new HashMap<>(8);
+        for (Map.Entry<String, List<String>> entry : hostAliases.entrySet()) {
+            if (Objects.equals("127.0.0.1", entry.getKey())) {
+                resolvedHostAliases.put(localizedIPv4, entry.getValue());
+                continue;
+            }
+            resolvedHostAliases.put(entry.getKey(), entry.getValue());
+        }
+
+        return resolvedHostAliases;
+    }
 
     @Override
     protected BuildPackJobResource prepareJob(String namespace, String httpGitUrl, String branch) {
@@ -84,7 +114,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 kanikoImageEntity.getValue(),
                 branch,
                 httpGitUrl,
-                gitImageEntity.getValue());
+                gitImageEntity.getValue(),
+                resolvedHostAliases(registryProperties.getUrl(), httpGitUrl));
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
@@ -138,7 +169,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 artifactUrl,
                 kanikoImageEntity.getValue(),
                 alpineImageEntity.getValue(),
-                jarDockerfile(javaImageEntity.getValue(), httpUrl, jarStartOptions, jarStartArgs, true));
+                jarDockerfile(javaImageEntity.getValue(), httpUrl, jarStartOptions, jarStartArgs, true),
+                resolvedHostAliases(registryProperties.getUrl(), httpUrl));
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
@@ -188,7 +220,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 artifactUrl,
                 kanikoImageEntity.getValue(),
                 alpineImageEntity.getValue(),
-                warDockerfile(javaImageEntity.getValue(), httpUrl,true));
+                warDockerfile(javaImageEntity.getValue(), httpUrl, true),
+                resolvedHostAliases(registryProperties.getUrl(), httpUrl));
 
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
