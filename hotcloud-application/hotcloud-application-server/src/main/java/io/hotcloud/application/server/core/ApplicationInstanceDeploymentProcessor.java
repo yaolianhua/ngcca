@@ -172,7 +172,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         container.setPorts(ports);
         Resources resources = new Resources();
         resources.setRequests(Map.of("cpu", "100m", "memory", "128Mi"));
-        resources.setLimits(Map.of("cpu", "1000m", "memory", "1024Mi"));
+        resources.setLimits(Map.of("cpu", "1000m", "memory", "4096Mi"));
         container.setResources(resources);
 
 
