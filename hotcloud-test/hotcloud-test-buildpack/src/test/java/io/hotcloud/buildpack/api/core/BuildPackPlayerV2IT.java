@@ -43,9 +43,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         for (String buildPackId : buildPackIds) {
             buildPackPlayerV2.delete(buildPackId, false);
         }
-        BuildPack buildPack = buildPackPlayerV2.play(
-                BuildImage.ofWar("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war")
-        );
+        BuildPack buildPack = buildPackPlayerV2.play(BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war"));
 
         while (true) {
             TimeUnit.SECONDS.sleep(10);
@@ -80,7 +78,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         }
 
         BuildPack buildPack = buildPackPlayerV2.play(
-                BuildImage.ofJar("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar",
+                BuildImage.ofJar("http://minio.docker.local:9009/files/web.jar",
                         "-Xms128m -Xmx512m",
                         "-Dspring.profiles.active=production")
         );
