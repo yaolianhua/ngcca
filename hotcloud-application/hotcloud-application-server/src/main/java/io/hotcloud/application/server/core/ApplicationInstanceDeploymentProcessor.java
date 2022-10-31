@@ -14,6 +14,7 @@ import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.Strategy;
+import io.hotcloud.kubernetes.model.pod.ImagePullSecret;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.pod.container.*;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,6 +70,10 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         Container container = this.buildContainer(applicationInstance, imageUrl);
 
         podTemplateSpec.setContainers(List.of(container));
+
+        String secret = retrieveApplicationInstanceImagePullSecret(applicationInstance);
+        podTemplateSpec.setImagePullSecrets(StringUtils.hasText(secret) ? List.of(new ImagePullSecret(secret)) : List.of());
+
         template.setSpec(podTemplateSpec);
 
         return template;
@@ -77,7 +83,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
         if (ApplicationInstanceSource.Origin.IMAGE.equals(applicationInstance.getSource().getOrigin())) {
             return applicationInstance.getSource().getUrl();
-        }else {
+        } else {
             BuildPack buildPack = buildPackService.findOne(applicationInstance.getBuildPackId());
             Assert.notNull(buildPack, "Can not found buildPack object [" + applicationInstance.getBuildPackId() + "]");
             Assert.isTrue(buildPack.isDone() && Objects.equals(buildPack.getMessage(), CommonConstant.SUCCESS_MESSAGE), "BuildPack status is wrong. it does not done or not success");
@@ -85,7 +91,19 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
             return buildPack.getArtifact();
         }
     }
-    private DeploymentSpec buildDeploymentSpec (ApplicationInstance applicationInstance){
+
+    private String retrieveApplicationInstanceImagePullSecret(ApplicationInstance applicationInstance) {
+
+        if (ApplicationInstanceSource.Origin.IMAGE.equals(applicationInstance.getSource().getOrigin())) {
+            return null;
+        } else {
+            BuildPack buildPack = buildPackService.findOne(applicationInstance.getBuildPackId());
+            Assert.notNull(buildPack, "Can not found buildPack object [" + applicationInstance.getBuildPackId() + "]");
+            return buildPack.getSecretResource().getName();
+        }
+    }
+
+    private DeploymentSpec buildDeploymentSpec(ApplicationInstance applicationInstance) {
         DeploymentSpec deploymentSpec = new DeploymentSpec();
 
         deploymentSpec.setReplicas(applicationInstance.getReplicas());
