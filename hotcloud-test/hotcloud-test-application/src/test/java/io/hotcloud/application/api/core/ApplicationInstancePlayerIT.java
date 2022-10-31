@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase {
@@ -81,7 +82,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 .serverPort(8080)
                 .source(
                         ApplicationInstanceSource.builder()
-                                .url("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war")
+                                .url("http://minio.docker.local:9009/files/jenkins.war")
                                 .origin(ApplicationInstanceSource.Origin.WAR)
                                 .build()
                 ).build();
@@ -101,7 +102,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 break;
             }
             if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
-                System.err.println("Application instance [" + fetched.getName() + "] create failed");
+                System.err.println("Application instance [" + fetched.getName() + "] create failed \n" + fetched.getMessage());
                 break;
             }
         }
@@ -110,6 +111,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
         System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
 
         player.delete(instance.getId());
+        TimeUnit.SECONDS.sleep(10);
     }
     @Test
     public void playJarDeployment() throws InterruptedException {
@@ -118,9 +120,11 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 .canHttp(true)
                 .replicas(1)
                 .serverPort(4000)
+                .envs(Map.of("hotcloud.host", "hotcloud",
+                        "hotcloud.port", "8080"))
                 .source(
                         ApplicationInstanceSource.builder()
-                                .url("http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar")
+                                .url("http://minio.docker.local:9009/files/web.jar")
                                 .startArgs("-Dspring.profiles.active=production")
                                 .startOptions("-Xms128m -Xmx512m")
                                 .origin(ApplicationInstanceSource.Origin.JAR)
@@ -142,7 +146,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
                 break;
             }
             if (!fetched.isSuccess() && StringUtils.hasText(fetched.getMessage())){
-                System.err.println("Application instance [" + fetched.getName() + "] create failed");
+                System.err.println("Application instance [" + fetched.getName() + "] create failed \n" + fetched.getMessage());
                 break;
             }
 
@@ -152,6 +156,7 @@ public class ApplicationInstancePlayerIT extends ApplicationIntegrationTestBase 
         System.err.println("after 3 seconds, application instance [" + instance.getName() + "] will be delete");
 
         player.delete(instance.getId());
+        TimeUnit.SECONDS.sleep(10);
     }
 
 }
