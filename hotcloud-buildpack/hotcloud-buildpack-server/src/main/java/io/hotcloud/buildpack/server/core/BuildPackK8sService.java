@@ -118,7 +118,7 @@ public class BuildPackK8sService {
     public void processBuildPackDeleted(BuildPack buildPack) {
         try {
             Boolean delete = kubectlApi.delete(buildPack.getJobResource().getNamespace(), buildPack.getYaml());
-            Log.info(BuildPackK8sService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]", delete));
+            Log.info(BuildPackK8sService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName()));
         } catch (Exception ex) {
             Log.error(BuildPackK8sService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
