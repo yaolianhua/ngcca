@@ -7,7 +7,7 @@ ENV LANG="en_US.UTF-8"
 ENV TERM=xterm
 ENV TIMESTAMP currentTime
 
-RUN wget -q '#{[ PACKAGE_URL ]}' -O /home/admin/tomcat/webapps/jenkins.war
+RUN wget -q '#{[ PACKAGE_URL ]}' -O /home/admin/tomcat/webapps/app.war
 
 WORKDIR $ADMIN_HOME
 
