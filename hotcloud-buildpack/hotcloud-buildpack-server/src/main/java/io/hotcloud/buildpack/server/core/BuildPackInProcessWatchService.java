@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,6 @@ import static io.hotcloud.common.api.CommonConstant.*;
 public class BuildPackInProcessWatchService {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
-    private final KubectlApi kubectlApi;
     private final ImageBuildCacheApi imageBuildCacheApi;
 
     public void watchCreated(BuildPack buildPack) {
@@ -80,15 +78,6 @@ public class BuildPackInProcessWatchService {
             buildPackService.saveOrUpdate(buildPack);
             imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
             imageBuildCacheApi.unLock(buildPack.getId());
-        }
-    }
-
-    public void watchDeleted(BuildPack buildPack) {
-        try {
-            Boolean delete = kubectlApi.delete(buildPack.getJobResource().getNamespace(), buildPack.getYaml());
-            Log.info(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName()));
-        } catch (Exception ex) {
-            Log.error(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
     }
 }

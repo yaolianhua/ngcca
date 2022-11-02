@@ -4,8 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
-import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudException;
@@ -23,7 +22,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static io.hotcloud.buildpack.api.core.ImageBuildStatus.Failed;
+import static io.hotcloud.buildpack.api.core.ImageBuildStatus.Succeeded;
+import static io.hotcloud.common.api.CommonConstant.*;
 
 @Component
 @ConditionalOnProperty(
@@ -34,8 +38,9 @@ import java.util.Objects;
 @Slf4j
 public class BuildPackRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
-    private final BuildPackWatchService buildPackWatchService;
     private final BuildPackService buildPackService;
+    private final BuildPackApiV2 buildPackApiV2;
+    private final ImageBuildCacheApi imageBuildCacheApi;
 
     @RabbitListener(
             bindings = {
@@ -59,23 +64,21 @@ public class BuildPackRabbitMQK8sEventsListener {
             }
             BuildPack fetched = buildPackService.findByUuid(businessId);
             if (Objects.isNull(fetched)) {
-//                Log.warn(BuildPackRabbitMQK8sEventsListener.class.getName(), "Get buildPack null with uuid [" + businessId + "]. ignore this event");
                 return;
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
                 log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.watchDeleted(fetched);
+                //ignore
             }
 
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
                     Objects.equals(Watcher.Action.MODIFIED.name(), messageBody.getAction())){
-                if (fetched.isDone()) {
-//                    log.info("BuildPack [{}] {} events: {}/{}/{} ignore already done event", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                if (fetched.isDone() || fetched.isDeleted()) {
                     return;
                 }
                 log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.watchCreated(fetched);
+                this.watch(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
@@ -94,6 +97,48 @@ public class BuildPackRabbitMQK8sEventsListener {
 
         } catch (JsonProcessingException e) {
             throw new HotCloudException(e.getMessage());
+        }
+    }
+
+    private void watch(BuildPack buildPack) {
+
+        String namespace = buildPack.getJobResource().getNamespace();
+        String job = buildPack.getJobResource().getName();
+        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
+        boolean timeout = LocalDateTime.now().compareTo(buildPack.getCreatedAt().plusSeconds(imageBuildCacheApi.getTimeoutSeconds())) > 0;
+        try {
+            if (timeout) {
+                buildPack.setDone(true);
+                buildPack.setMessage(TIMEOUT_MESSAGE);
+                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+
+                buildPackService.saveOrUpdate(buildPack);
+                imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+
+                return;
+            }
+
+            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, job);
+            if (Objects.equals(Succeeded, status) || Objects.equals(Failed, status)) {
+                buildPack.setDone(true);
+                buildPack.setMessage(Objects.equals(Succeeded, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
+                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+                buildPackService.saveOrUpdate(buildPack);
+
+                imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+                return;
+            }
+
+            Log.info(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
+            imageBuildCacheApi.setStatus(buildPack.getId(), status);
+
+        } catch (Exception ex) {
+            Log.error(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
+
+            buildPack.setDone(true);
+            buildPack.setMessage("exception occur: " + ex.getMessage());
+            buildPackService.saveOrUpdate(buildPack);
+            imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
         }
     }
 
