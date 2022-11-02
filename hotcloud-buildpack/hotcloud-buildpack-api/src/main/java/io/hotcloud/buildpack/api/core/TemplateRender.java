@@ -201,12 +201,12 @@ public class TemplateRender {
      * @param base64 返回文本值是否base64
      */
     @SneakyThrows
-    public static String jarDockerfile(String baseImage, String jarUrl, String jarStartOptions, String jarStartArgs, boolean base64) {
+    public static String jarDockerfile(String javaRuntime, String jarUrl, String jarStartOptions, String jarStartArgs, boolean base64) {
         InputStream inputStream = new ClassPathResource(DOCKERFILE_JAR_TEMPLATE).getInputStream();
         String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         Map<String, String> renders = new HashMap<>(8);
-        renders.put(Dockerfile.BASE_IMAGE, baseImage);
+        renders.put(Dockerfile.JAVA_RUNTIME, javaRuntime);
         renders.put(Dockerfile.PACKAGE_URL, jarUrl);
         renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(jarStartOptions) ? jarStartOptions : "");
         renders.put(Dockerfile.JAR_START_ARGS, StringUtils.hasText(jarStartArgs) ? jarStartArgs : "");
@@ -222,12 +222,12 @@ public class TemplateRender {
      * @param base64 返回文本值是否base64
      */
     @SneakyThrows
-    public static String warDockerfile(String baseImage, String warUrl, boolean base64) {
+    public static String warDockerfile(String javaRuntime, String warUrl, boolean base64) {
         InputStream inputStream = new ClassPathResource(DOCKERFILE_WAR_TEMPLATE).getInputStream();
         String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
         Map<String, String> renders = new HashMap<>(8);
-        renders.put(Dockerfile.BASE_IMAGE, baseImage);
+        renders.put(Dockerfile.JAVA_RUNTIME, javaRuntime);
         renders.put(Dockerfile.PACKAGE_URL, warUrl);
 
         String dockerfile = apply(template, renders);
@@ -255,7 +255,7 @@ public class TemplateRender {
      * Dockerfile 模板变量名
      */
     interface Dockerfile {
-        String BASE_IMAGE = "BASE_IMAGE";
+        String JAVA_RUNTIME = "JAVA_RUNTIME";
         String PACKAGE_URL = "PACKAGE_URL";
         String JAR_START_OPTIONS = "JAR_START_OPTIONS";
         String JAR_START_ARGS = "JAR_START_ARGS";
