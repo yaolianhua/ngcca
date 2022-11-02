@@ -29,7 +29,6 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
     private final NamespaceApi namespaceApi;
     private final KubectlApi kubectlApi;
     private final BuildPackService buildPackService;
-    private final BuildPackInProcessWatchService buildPackInProcessWatchService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
