@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
         matchIfMissing = true
 )
 public class BuildPackListenerV2 {
-    private final BuildPackWatchService buildPackWatchService;
+    private final BuildPackInProcessWatchService buildPackInProcessWatchService;
 
     @Async
     @EventListener
     public void started(BuildPackStartedEventV2 startedEvent) {
-        buildPackWatchService.watchCreated(startedEvent.getBuildPack());
+        buildPackInProcessWatchService.watchCreated(startedEvent.getBuildPack());
     }
 
 }

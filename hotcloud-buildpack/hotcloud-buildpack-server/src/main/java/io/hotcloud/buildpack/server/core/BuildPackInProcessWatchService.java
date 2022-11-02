@@ -14,7 +14,7 @@ import static io.hotcloud.common.api.CommonConstant.*;
 
 @Component
 @RequiredArgsConstructor
-public class BuildPackWatchService {
+public class BuildPackInProcessWatchService {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
     private final KubectlApi kubectlApi;
@@ -36,7 +36,7 @@ public class BuildPackWatchService {
 
                 buildPack = buildPackService.findOne(buildPack.getId());
                 if (Objects.isNull(buildPack) || buildPack.isDeleted()) {
-                    Log.warn(BuildPackWatchService.class.getName(), "[ImageBuild] BuildPack has been deleted");
+                    Log.warn(BuildPackInProcessWatchService.class.getName(), "[ImageBuild] BuildPack has been deleted");
 
                     if (Objects.nonNull(buildPack)){
                         imageBuildCacheApi.unLock(buildPack.getId());
@@ -47,22 +47,22 @@ public class BuildPackWatchService {
                 ImageBuildStatus status = buildPackApiV2.getStatus(namespace, job);
                 switch (status){
                     case Unknown:
-                        Log.warn(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Unknown]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
+                        Log.warn(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Unknown]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
                         imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
                         break;
 
                     case Ready:
-                        Log.info(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Ready]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
+                        Log.info(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Ready]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
                         imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Ready);
                         break;
 
                     case Active:
-                        Log.info(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Active]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
+                        Log.info(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Active]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
                         imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Active);
                         break;
 
                     case Failed:
-                        Log.info(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Failed]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
+                        Log.info(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Failed]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
 
                         buildPack.setDone(true);
                         buildPack.setMessage(FAILED_MESSAGE);
@@ -74,7 +74,7 @@ public class BuildPackWatchService {
                         return;
 
                     case Succeeded:
-                        Log.info(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Succeeded]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
+                        Log.info(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko status is [Succeeded]. namespace:%s | job:%s | buildPack:%s", namespace, job, buildPack.getId()));
 
                         buildPack.setDone(true);
                         buildPack.setMessage(SUCCESS_MESSAGE);
@@ -102,10 +102,10 @@ public class BuildPackWatchService {
             imageBuildCacheApi.unLock(buildPack.getId());
 
             Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
-            Log.warn(BuildPackWatchService.class.getName(), String.format("[ImageBuild] Kaniko job has been timeout, Deleted kaniko job [%s]. namespace:%s | job:%s | buildPack:%s", delete, namespace, job, buildPack.getId()));
+            Log.warn(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] Kaniko job has been timeout, Deleted kaniko job [%s]. namespace:%s | job:%s | buildPack:%s", delete, namespace, job, buildPack.getId()));
         }catch (Exception ex){
             Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
-            Log.error(BuildPackWatchService.class.getName(), String.format("[ImageBuild] exception occur, Deleted kaniko job [%s]. namespace:%s | job:%s | buildPack:%s | message:%s", delete, namespace, job, buildPack.getId(), ex.getMessage()));
+            Log.error(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] exception occur, Deleted kaniko job [%s]. namespace:%s | job:%s | buildPack:%s | message:%s", delete, namespace, job, buildPack.getId(), ex.getMessage()));
 
             buildPack.setDone(true);
             buildPack.setMessage(ex.getMessage());
@@ -118,9 +118,9 @@ public class BuildPackWatchService {
     public void watchDeleted(BuildPack buildPack) {
         try {
             Boolean delete = kubectlApi.delete(buildPack.getJobResource().getNamespace(), buildPack.getYaml());
-            Log.info(BuildPackWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName()));
+            Log.info(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName()));
         } catch (Exception ex) {
-            Log.error(BuildPackWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
+            Log.error(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
     }
 }

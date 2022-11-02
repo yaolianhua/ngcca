@@ -5,7 +5,6 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.activity.ActivityAction;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.security.api.user.User;
@@ -26,10 +25,9 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
 
     private final BuildPackApiV2 buildPackApiV2;
     private final UserApi userApi;
-    private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final BuildPackService buildPackService;
-    private final BuildPackWatchService buildPackWatchService;
+    private final BuildPackInProcessWatchService buildPackInProcessWatchService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -186,7 +184,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
                 String.format("Delete BuildPack physically [%s]. id:[%s]",physically, id));
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
-        buildPackWatchService.watchDeleted(existBuildPack);
+        buildPackInProcessWatchService.watchDeleted(existBuildPack);
     }
 
 }
