@@ -47,8 +47,8 @@ spec:
       #{[ HOST_ALIASES ]}
       imagePullSecrets: [ ]
       initContainers:
-        - name: #{[ INIT_CONTAINER_NAME ]}
-          image: #{[ INIT_CONTAINER_IMAGE ]}
+        - name: #{[ INIT_ALPINE_CONTAINER_NAME ]}
+          image: #{[ INIT_ALPINE_CONTAINER_IMAGE ]}
           imagePullPolicy: IfNotPresent
           command:
             - 'sh'

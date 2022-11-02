@@ -79,17 +79,17 @@ public class TemplateRenderUnitTest {
     @Test
     public void kanikoJobTemplateWarArtifact() throws IOException {
 
-        String jarDockerfile = warDockerfile("192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
+        String warDockerfile = warDockerfile("192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
                 "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war",
                 false);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-war")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-            Assert.assertEquals(dockerfile, jarDockerfile);
+            Assert.assertEquals(dockerfile, warDockerfile);
         }
 
-        String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
+        String dockerfileEncoded = Base64.getEncoder().encodeToString(warDockerfile.getBytes(StandardCharsets.UTF_8));
         String kanikoJob = kanikoJob("kaniko-test",
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
@@ -99,7 +99,7 @@ public class TemplateRenderUnitTest {
                 "gcr.io/kaniko-project/executor:latest",
                 "alpine:latest",
                 dockerfileEncoded,
-                Map.of("10.0.0.159", List.of("harbor.local","gitlab.docker.local")));
+                Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local")));
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-war.yaml")) {
             assert inputStream != null;

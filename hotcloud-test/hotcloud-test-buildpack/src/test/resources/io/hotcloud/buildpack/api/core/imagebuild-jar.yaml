@@ -51,7 +51,7 @@ spec:
         - gitlab.docker.local
       imagePullSecrets: [ ]
       initContainers:
-        - name: init
+        - name: alpine
           image: alpine:latest
           imagePullPolicy: IfNotPresent
           command:

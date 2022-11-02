@@ -51,13 +51,13 @@ spec:
         - gitlab.docker.local
       imagePullSecrets: [ ]
       initContainers:
-        - name: init
+        - name: alpine
           image: alpine:latest
           imagePullPolicy: IfNotPresent
           command:
             - 'sh'
             - '-c'
-            - "echo -e 'RlJPTSAxOTIuMTY4LjE0Ni4xMjg6NTAwMC9iYXNlL2phdmExMTp0b21jYXQ5LjAtb3BlbmpkazExCgpSVU4gbG4gLXNmIC91c3Ivc2hhcmUvem9uZWluZm8vQXNpYS9TaGFuZ2hhaSAvZXRjL2xvY2FsdGltZQpSVU4gZWNobyAnQXNpYS9TaGFuZ2hhaScgPiAvZXRjL3RpbWV6b25lCgpFTlYgTEFORz0iZW5fVVMuVVRGLTgiCkVOViBURVJNPXh0ZXJtCkVOViBUSU1FU1RBTVAgY3VycmVudFRpbWUKClJVTiB3Z2V0IC1xICdodHRwOi8vMTkyLjE2OC4xNDYuMTI4OjI4MDgwL3lhb2xpYW5odWEvamF2YS9rYW5pa28tdGVzdC9qZW5raW5zLndhcicgLU8gL2hvbWUvYWRtaW4vdG9tY2F0L3dlYmFwcHMvamVua2lucy53YXIKCldPUktESVIgJEFETUlOX0hPTUUKCkNNRCBbImNhdGFsaW5hLnNoIiwgInJ1biJd' |base64 -d > /workspace/Dockerfile"
+            - "echo -e 'RlJPTSAxOTIuMTY4LjE0Ni4xMjg6NTAwMC9iYXNlL2phdmExMTp0b21jYXQ5LjAtb3BlbmpkazExCgpSVU4gbG4gLXNmIC91c3Ivc2hhcmUvem9uZWluZm8vQXNpYS9TaGFuZ2hhaSAvZXRjL2xvY2FsdGltZQpSVU4gZWNobyAnQXNpYS9TaGFuZ2hhaScgPiAvZXRjL3RpbWV6b25lCgpFTlYgTEFORz0iZW5fVVMuVVRGLTgiCkVOViBURVJNPXh0ZXJtCkVOViBUSU1FU1RBTVAgY3VycmVudFRpbWUKClJVTiB3Z2V0IC1xICdodHRwOi8vMTkyLjE2OC4xNDYuMTI4OjI4MDgwL3lhb2xpYW5odWEvamF2YS9rYW5pa28tdGVzdC9qZW5raW5zLndhcicgLU8gL2hvbWUvYWRtaW4vdG9tY2F0L3dlYmFwcHMvYXBwLndhcgoKV09SS0RJUiAkQURNSU5fSE9NRQoKQ01EIFsiY2F0YWxpbmEuc2giLCAicnVuIl0=' |base64 -d > /workspace/Dockerfile"
           resources:
             requests:
               memory: "256Mi"

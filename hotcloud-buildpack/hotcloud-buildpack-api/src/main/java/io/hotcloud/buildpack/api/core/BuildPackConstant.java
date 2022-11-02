@@ -22,7 +22,8 @@ public final class BuildPackConstant {
     public static final String STORAGE_VOLUME_PATH = Path.of(ROOT_PATH, "buildpack").toString();
     public static final String KANIKO_IMAGE = "gcr.io/kaniko-project/executor:latest";
     public static final String KANIKO_CONTAINER = "kaniko";
-    public static final String KANIKO_INIT_CONTAINER = "init";
+    public static final String KANIKO_INIT_GIT_CONTAINER = "git";
+    public static final String KANIKO_INIT_ALPINE_CONTAINER = "alpine";
 
     public static final String DOCKER_CONFIG_JSON = ".dockerconfigjson";
 

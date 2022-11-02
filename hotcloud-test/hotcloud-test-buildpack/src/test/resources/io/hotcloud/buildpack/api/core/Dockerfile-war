@@ -7,7 +7,7 @@ ENV LANG="en_US.UTF-8"
 ENV TERM=xterm
 ENV TIMESTAMP currentTime
 
-RUN wget -q 'http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war' -O /home/admin/tomcat/webapps/jenkins.war
+RUN wget -q 'http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war' -O /home/admin/tomcat/webapps/app.war
 
 WORKDIR $ADMIN_HOME
 

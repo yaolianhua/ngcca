@@ -47,9 +47,9 @@ spec:
       #{[ HOST_ALIASES ]}
       imagePullSecrets: [ ]
       initContainers:
-        - image: #{[ INIT_CONTAINER_IMAGE ]}
+        - image: #{[ INIT_GIT_CONTAINER_IMAGE ]}
           imagePullPolicy: IfNotPresent
-          name: #{[ INIT_CONTAINER_NAME ]}
+          name: #{[ INIT_GIT_CONTAINER_NAME ]}
           command:
           - git
           - clone

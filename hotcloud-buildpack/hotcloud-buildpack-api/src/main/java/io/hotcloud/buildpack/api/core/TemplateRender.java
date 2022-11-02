@@ -116,10 +116,10 @@ public class TemplateRender {
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
         renders.put(Kaniko.DESTINATION, destination);
         renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
-        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine/git:latest");
+        renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine/git:latest");
         renders.put(Kaniko.GIT_BRANCH, gitBranch);
         renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
-        renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
+        renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_GIT_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
 
         renders.put(Kaniko.HOST_ALIASES, buildHostAliases(hostAliases));
@@ -186,9 +186,9 @@ public class TemplateRender {
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
         renders.put(Kaniko.DESTINATION, destination);
         renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
-        renders.put(Kaniko.INIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
+        renders.put(Kaniko.INIT_ALPINE_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine:latest");
         renders.put(Kaniko.DOCKERFILE_ENCODED, dockerfileEncoded);
-        renders.put(Kaniko.INIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_CONTAINER);
+        renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
         renders.put(Kaniko.HOST_ALIASES, buildHostAliases(hostAliases));
 
@@ -270,7 +270,8 @@ public class TemplateRender {
         String NAMESPACE = "NAMESPACE";
         String ID = "ID";
         String JOB_NAME = "JOB_NAME";
-        String INIT_CONTAINER_NAME = "INIT_CONTAINER_NAME";
+        String INIT_GIT_CONTAINER_NAME = "INIT_GIT_CONTAINER_NAME";
+        String INIT_ALPINE_CONTAINER_NAME = "INIT_ALPINE_CONTAINER_NAME";
         String LABEL_NAME = "LABEL_NAME";
         String SECRET_NAME = "SECRET_NAME";
         String DESTINATION = "DESTINATION";
@@ -278,7 +279,8 @@ public class TemplateRender {
         String HTTP_GIT_URL = "HTTP_GIT_URL";
         String KANIKO_IMAGE = "KANIKO_IMAGE";
         String KANIKO_CONTAINER_NAME = "KANIKO_CONTAINER_NAME";
-        String INIT_CONTAINER_IMAGE = "INIT_CONTAINER_IMAGE";
+        String INIT_GIT_CONTAINER_IMAGE = "INIT_GIT_CONTAINER_IMAGE";
+        String INIT_ALPINE_CONTAINER_IMAGE = "INIT_ALPINE_CONTAINER_IMAGE";
         String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
         String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";
 

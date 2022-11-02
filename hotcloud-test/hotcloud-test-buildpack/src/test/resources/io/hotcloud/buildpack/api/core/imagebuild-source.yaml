@@ -49,7 +49,7 @@ spec:
       initContainers:
         - image: alpine/git:latest
           imagePullPolicy: IfNotPresent
-          name: init
+          name: git
           command:
           - git
           - clone
