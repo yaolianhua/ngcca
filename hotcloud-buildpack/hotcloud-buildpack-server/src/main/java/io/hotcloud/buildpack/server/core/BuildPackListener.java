@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.buildpack.api.core.BuildPackService;
+import io.hotcloud.buildpack.api.core.ImageBuildStatus;
 import io.hotcloud.buildpack.api.core.event.*;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.Message;
@@ -205,22 +206,22 @@ public class BuildPackListener {
                 }
 
                 Job job = jobApi.read(namespace, jobName);
-                BuildPackStatus.JobStatus jobStatus = BuildPackStatus.status(job);
+                ImageBuildStatus jobStatus = BuildPackStatus.status(job);
 
-                if (jobStatus == BuildPackStatus.JobStatus.Active) {
+                if (jobStatus == ImageBuildStatus.Active) {
                     Log.info(BuildPackListener.class.getName(),
                             BuildPackStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's BuildPack [%s] is not done yet! job [%s] namespace [%s]", buildPack.getUser(), buildPack.getId(), jobName, namespace));
                 }
 
-                if (jobStatus == BuildPackStatus.JobStatus.Ready) {
+                if (jobStatus == ImageBuildStatus.Ready) {
                     Log.info(BuildPackListener.class.getName(),
                             BuildPackStartedEvent.class.getSimpleName(),
                             String.format("[%s] user's BuildPack [%s] is ready", buildPack.getUser(), buildPack.getId()));
                 }
 
-                if (jobStatus == BuildPackStatus.JobStatus.Succeeded || jobStatus == BuildPackStatus.JobStatus.Failed) {
-                    eventPublisher.publishEvent(new BuildPackDoneEvent(buildPack, jobStatus == BuildPackStatus.JobStatus.Succeeded));
+                if (jobStatus == ImageBuildStatus.Succeeded || jobStatus == ImageBuildStatus.Failed) {
+                    eventPublisher.publishEvent(new BuildPackDoneEvent(buildPack, jobStatus == ImageBuildStatus.Succeeded));
                     break;
                 }
             }
