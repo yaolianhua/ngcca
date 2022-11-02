@@ -29,7 +29,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
     private final Cache cache;
     private final NamespaceApi namespaceApi;
     private final BuildPackService buildPackService;
-    private final BuildPackK8sService buildPackK8sService;
+    private final BuildPackWatchService buildPackWatchService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -186,7 +186,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
                 String.format("Delete BuildPack physically [%s]. id:[%s]",physically, id));
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
-        buildPackK8sService.processBuildPackDeleted(existBuildPack);
+        buildPackWatchService.processBuildPackDeleted(existBuildPack);
     }
 
 }

@@ -34,7 +34,7 @@ import java.util.Objects;
 @Slf4j
 public class BuildPackRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
-    private final BuildPackK8sService buildPackK8sService;
+    private final BuildPackWatchService buildPackWatchService;
     private final BuildPackService buildPackService;
 
     @RabbitListener(
@@ -65,7 +65,7 @@ public class BuildPackRabbitMQK8sEventsListener {
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
                 log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackK8sService.processBuildPackDeleted(fetched);
+                buildPackWatchService.processBuildPackDeleted(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
@@ -75,7 +75,7 @@ public class BuildPackRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackK8sService.processBuildPackCreatedBlocked(fetched);
+                buildPackWatchService.watch(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
