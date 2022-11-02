@@ -22,10 +22,10 @@ public interface DaemonSetApi {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default DaemonSet daemonSet(DaemonSetCreateRequest request) throws ApiException {
+    default DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
         V1DaemonSet v1DaemonSet = DaemonSetBuilder.build(request);
         String json = Yaml.dump(v1DaemonSet);
-        return this.daemonSet(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface DaemonSetApi {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    DaemonSet daemonSet(String yaml) throws ApiException;
+    DaemonSet create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced DaemonSet

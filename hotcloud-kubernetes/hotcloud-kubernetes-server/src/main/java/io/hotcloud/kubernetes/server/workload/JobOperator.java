@@ -36,7 +36,7 @@ public class JobOperator implements JobApi {
     }
 
     @Override
-    public Job job(String yaml) throws ApiException {
+    public Job create(String yaml) throws ApiException {
         V1Job v1Job;
         try {
             v1Job = Yaml.loadAs(yaml, V1Job.class);

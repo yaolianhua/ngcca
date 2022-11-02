@@ -66,7 +66,7 @@ public class ServiceControllerTest {
                 .collect(Collectors.joining());
 
         Service service = objectMapper.readValue(serviceReadJson, Service.class);
-        when(serviceApi.service(yaml)).thenReturn(service);
+        when(serviceApi.create(yaml)).thenReturn(service);
 
         String json = objectMapper.writeValueAsString(created(service).getBody());
 

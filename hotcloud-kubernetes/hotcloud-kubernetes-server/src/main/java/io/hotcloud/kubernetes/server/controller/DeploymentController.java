@@ -71,7 +71,7 @@ public class DeploymentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Deployment request body")
     )
     public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
-        Deployment deployment = deploymentApi.deployment(params);
+        Deployment deployment = deploymentApi.create(params);
         return WebResponse.created(deployment);
     }
 
@@ -82,7 +82,7 @@ public class DeploymentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Deployment kubernetes yaml")
     )
     public ResponseEntity<Result<Deployment>> deployment(@RequestBody YamlBody yaml) throws ApiException {
-        Deployment deployment = deploymentApi.deployment(yaml.getYaml());
+        Deployment deployment = deploymentApi.create(yaml.getYaml());
         return WebResponse.created(deployment);
     }
 

@@ -39,7 +39,7 @@ public class CronJobController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "CronJob request body")
     )
     public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateRequest params) throws ApiException {
-        CronJob cronjob = cronJobApi.cronjob(params);
+        CronJob cronjob = cronJobApi.create(params);
         return WebResponse.created(cronjob);
     }
 
@@ -50,7 +50,7 @@ public class CronJobController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "CronJob kubernetes yaml")
     )
     public ResponseEntity<Result<CronJob>> cronjob(@RequestBody YamlBody yaml) throws ApiException {
-        CronJob cronjob = cronJobApi.cronjob(yaml.getYaml());
+        CronJob cronjob = cronJobApi.create(yaml.getYaml());
         return WebResponse.created(cronjob);
     }
 

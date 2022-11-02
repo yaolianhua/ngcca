@@ -76,7 +76,7 @@ public class PodController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Pod request body")
     )
     public ResponseEntity<Result<Pod>> pod(@Validated @RequestBody PodCreateRequest params) throws ApiException {
-        Pod pod = podApi.pod(params);
+        Pod pod = podApi.create(params);
         return WebResponse.created(pod);
     }
 
@@ -87,7 +87,7 @@ public class PodController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Pod kubernetes yaml")
     )
     public ResponseEntity<Result<Pod>> pod(@RequestBody YamlBody yaml) throws ApiException {
-        Pod pod = podApi.pod(yaml.getYaml());
+        Pod pod = podApi.create(yaml.getYaml());
         return WebResponse.created(pod);
     }
 

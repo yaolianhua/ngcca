@@ -23,10 +23,10 @@ public interface DeploymentApi {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Deployment deployment(DeploymentCreateRequest request) throws ApiException {
+    default Deployment create(DeploymentCreateRequest request) throws ApiException {
         V1Deployment v1Deployment = DeploymentBuilder.build(request);
         String json = Yaml.dump(v1Deployment);
-        return this.deployment(json);
+        return this.create(json);
     }
 
     /**
@@ -36,7 +36,7 @@ public interface DeploymentApi {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Deployment deployment(String yaml) throws ApiException;
+    Deployment create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced Deployment

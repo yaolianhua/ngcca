@@ -65,7 +65,7 @@ public class StatefulSetControllerTest {
         String statefulSetReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(statefulSetReadInputStream))).lines().collect(Collectors.joining());
 
         StatefulSet statefulSet = objectMapper.readValue(statefulSetReadJson, StatefulSet.class);
-        when(statefulSetApi.statefulSet(yaml)).thenReturn(statefulSet);
+        when(statefulSetApi.create(yaml)).thenReturn(statefulSet);
 
         String json = objectMapper.writeValueAsString(created(statefulSet).getBody());
 

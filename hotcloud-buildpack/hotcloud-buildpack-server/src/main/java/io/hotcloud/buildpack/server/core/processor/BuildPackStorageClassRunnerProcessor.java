@@ -42,7 +42,7 @@ class BuildPackStorageClassRunnerProcessor implements CommonRunnerProcessor {
                         String.format("BuildPack storageClass '%s' already exist ", BuildPackConstant.STORAGE_CLASS));
                 return;
             }
-            StorageClass storageClass = storageClassApi.storageClass(createRequest);
+            StorageClass storageClass = storageClassApi.create(createRequest);
             Log.info(BuildPackStorageClassRunnerProcessor.class.getName(),
                     String.format("Buildpack storageClass '%s' created ", storageClass.getMetadata().getName()));
         } catch (ApiException e) {

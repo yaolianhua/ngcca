@@ -22,10 +22,10 @@ public interface ServiceApi {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Service service(ServiceCreateRequest request) throws ApiException {
+    default Service create(ServiceCreateRequest request) throws ApiException {
         V1Service v1Service = ServiceBuilder.build(request);
         String json = Yaml.dump(v1Service);
-        return this.service(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface ServiceApi {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Service service(String yaml) throws ApiException;
+    Service create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced Service

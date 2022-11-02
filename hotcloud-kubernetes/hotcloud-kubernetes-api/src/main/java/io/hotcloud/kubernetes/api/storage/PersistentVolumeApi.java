@@ -22,10 +22,10 @@ public interface PersistentVolumeApi {
      * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default PersistentVolume persistentVolume(PersistentVolumeCreateRequest request) throws ApiException {
+    default PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
         V1PersistentVolume v1PersistentVolume = PersistentVolumeBuilder.build(request);
         String json = Yaml.dump(v1PersistentVolume);
-        return this.persistentVolume(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface PersistentVolumeApi {
      * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    PersistentVolume persistentVolume(String yaml) throws ApiException;
+    PersistentVolume create(String yaml) throws ApiException;
 
     /**
      * Delete named PersistentVolume

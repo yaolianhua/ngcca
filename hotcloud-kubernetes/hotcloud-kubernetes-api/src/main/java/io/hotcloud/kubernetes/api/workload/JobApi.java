@@ -22,10 +22,10 @@ public interface JobApi {
      * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Job job(JobCreateRequest request) throws ApiException {
+    default Job create(JobCreateRequest request) throws ApiException {
         V1Job v1Job = JobBuilder.build(request);
         String json = Yaml.dump(v1Job);
-        return this.job(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface JobApi {
      * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Job job(String yaml) throws ApiException;
+    Job create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced Job

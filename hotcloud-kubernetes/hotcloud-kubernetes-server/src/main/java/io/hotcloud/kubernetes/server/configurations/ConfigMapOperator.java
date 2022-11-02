@@ -37,7 +37,7 @@ public class ConfigMapOperator implements ConfigMapApi {
     }
 
     @Override
-    public ConfigMap configMap(String yaml) throws ApiException {
+    public ConfigMap create(String yaml) throws ApiException {
 
         V1ConfigMap v1ConfigMap;
         try {

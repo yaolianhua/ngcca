@@ -65,7 +65,7 @@ public class CronJobControllerTest {
         String cronjobReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(cronjobReadInputStream))).lines().collect(Collectors.joining());
 
         CronJob cronjob = objectMapper.readValue(cronjobReadJson, CronJob.class);
-        when(cronJobApi.cronjob(yaml)).thenReturn(cronjob);
+        when(cronJobApi.create(yaml)).thenReturn(cronjob);
 
         String json = objectMapper.writeValueAsString(created(cronjob).getBody());
 

@@ -22,10 +22,10 @@ public interface SecretApi {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Secret secret(SecretCreateRequest request) throws ApiException {
+    default Secret create(SecretCreateRequest request) throws ApiException {
         V1Secret v1Secret = SecretBuilder.build(request);
         String json = Yaml.dump(v1Secret);
-        return this.secret(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface SecretApi {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Secret secret(String yaml) throws ApiException;
+    Secret create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced Secret

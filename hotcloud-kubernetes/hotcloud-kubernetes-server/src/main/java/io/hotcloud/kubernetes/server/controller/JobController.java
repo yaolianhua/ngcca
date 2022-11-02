@@ -39,7 +39,7 @@ public class JobController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Job request body")
     )
     public ResponseEntity<Result<Job>> job(@Validated @RequestBody JobCreateRequest params) throws ApiException {
-        Job job = jobApi.job(params);
+        Job job = jobApi.create(params);
         return WebResponse.created(job);
     }
 
@@ -50,7 +50,7 @@ public class JobController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Job kubernetes yaml")
     )
     public ResponseEntity<Result<Job>> job(@RequestBody YamlBody yaml) throws ApiException {
-        Job job = jobApi.job(yaml.getYaml());
+        Job job = jobApi.create(yaml.getYaml());
         return WebResponse.created(job);
     }
 

@@ -72,7 +72,7 @@ public class StorageClassControllerTest {
                 .collect(Collectors.joining());
 
         StorageClass storageClass = objectMapper.readValue(readJson, StorageClass.class);
-        when(storageClassApi.storageClass(yaml)).thenReturn(storageClass);
+        when(storageClassApi.create(yaml)).thenReturn(storageClass);
 
         String json = objectMapper.writeValueAsString(created(storageClass).getBody());
 

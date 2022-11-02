@@ -65,7 +65,7 @@ public class DaemonSetControllerTest {
         String daemonSetReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(daemonSetReadInputStream))).lines().collect(Collectors.joining());
 
         DaemonSet daemonSet = objectMapper.readValue(daemonSetReadJson, DaemonSet.class);
-        when(daemonSetApi.daemonSet(yaml)).thenReturn(daemonSet);
+        when(daemonSetApi.create(yaml)).thenReturn(daemonSet);
 
         String json = objectMapper.writeValueAsString(created(daemonSet).getBody());
 

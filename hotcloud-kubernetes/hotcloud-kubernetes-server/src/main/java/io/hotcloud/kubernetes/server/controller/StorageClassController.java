@@ -39,7 +39,7 @@ public class StorageClassController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StorageClass request body")
     )
     public ResponseEntity<Result<StorageClass>> storageClass(@Validated @RequestBody StorageClassCreateRequest params) throws ApiException {
-        StorageClass storageClass = storageClassApi.storageClass(params);
+        StorageClass storageClass = storageClassApi.create(params);
         return WebResponse.created(storageClass);
     }
 
@@ -50,7 +50,7 @@ public class StorageClassController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StorageClass kubernetes yaml")
     )
     public ResponseEntity<Result<StorageClass>> storageClass(@RequestBody YamlBody yaml) throws ApiException {
-        StorageClass storageClass = storageClassApi.storageClass(yaml.getYaml());
+        StorageClass storageClass = storageClassApi.create(yaml.getYaml());
         return WebResponse.created(storageClass);
     }
 

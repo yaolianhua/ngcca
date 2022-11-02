@@ -37,7 +37,7 @@ public class StatefulSetOperator implements StatefulSetApi {
     }
 
     @Override
-    public StatefulSet statefulSet(String yaml) throws ApiException {
+    public StatefulSet create(String yaml) throws ApiException {
         V1StatefulSet v1StatefulSet;
         try {
             v1StatefulSet = Yaml.loadAs(yaml, V1StatefulSet.class);

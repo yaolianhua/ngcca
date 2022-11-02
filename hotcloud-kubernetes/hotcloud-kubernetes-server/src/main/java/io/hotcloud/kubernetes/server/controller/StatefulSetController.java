@@ -69,7 +69,7 @@ public class StatefulSetController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StatefulSet request body")
     )
     public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateRequest params) throws ApiException {
-        StatefulSet statefulSet = statefulSetApi.statefulSet(params);
+        StatefulSet statefulSet = statefulSetApi.create(params);
         return WebResponse.created(statefulSet);
     }
 
@@ -80,7 +80,7 @@ public class StatefulSetController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StatefulSet kubernetes yaml")
     )
     public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody YamlBody yaml) throws ApiException {
-        StatefulSet statefulSet = statefulSetApi.statefulSet(yaml.getYaml());
+        StatefulSet statefulSet = statefulSetApi.create(yaml.getYaml());
         return WebResponse.created(statefulSet);
     }
 

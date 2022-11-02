@@ -72,7 +72,7 @@ public class PodWorkloadsWatchApiIT {
     @Test
     public void watch() throws ApiException, InterruptedException {
 
-        podApi.pod("apiVersion: v1\n" +
+        podApi.create("apiVersion: v1\n" +
                 "kind: Pod\n" +
                 "metadata:\n" +
                 "  name: nginx\n" +

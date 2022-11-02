@@ -36,7 +36,7 @@ public class CronJobOperator implements CronJobApi {
     }
 
     @Override
-    public CronJob cronjob(String yaml) throws ApiException {
+    public CronJob create(String yaml) throws ApiException {
         V1CronJob v1CronJob;
         try {
             v1CronJob = Yaml.loadAs(yaml, V1CronJob.class);

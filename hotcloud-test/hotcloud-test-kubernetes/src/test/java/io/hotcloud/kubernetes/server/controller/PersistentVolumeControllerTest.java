@@ -66,7 +66,7 @@ public class PersistentVolumeControllerTest {
                 .collect(Collectors.joining());
 
         PersistentVolume persistentVolume = objectMapper.readValue(persistentvolumeReadJson, PersistentVolume.class);
-        when(persistentVolumeApi.persistentVolume(yaml)).thenReturn(persistentVolume);
+        when(persistentVolumeApi.create(yaml)).thenReturn(persistentVolume);
 
         String json = objectMapper.writeValueAsString(created(persistentVolume).getBody());
 

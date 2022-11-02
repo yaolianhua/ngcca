@@ -22,10 +22,10 @@ public interface StorageClassApi {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default StorageClass storageClass(StorageClassCreateRequest request) throws ApiException {
+    default StorageClass create(StorageClassCreateRequest request) throws ApiException {
         V1StorageClass v1StorageClass = StorageClassBuilder.build(request);
         String json = Yaml.dump(v1StorageClass);
-        return this.storageClass(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface StorageClassApi {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    StorageClass storageClass(String yaml) throws ApiException;
+    StorageClass create(String yaml) throws ApiException;
 
     /**
      * Delete named StorageClass

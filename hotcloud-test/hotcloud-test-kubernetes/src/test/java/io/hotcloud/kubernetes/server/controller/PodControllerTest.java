@@ -89,7 +89,7 @@ public class PodControllerTest {
         String podReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(podReadInputStream))).lines().collect(Collectors.joining());
 
         Pod pod = objectMapper.readValue(podReadJson, Pod.class);
-        when(podApi.pod(yaml)).thenReturn(pod);
+        when(podApi.create(yaml)).thenReturn(pod);
 
         String json = objectMapper.writeValueAsString(created(pod).getBody());
 

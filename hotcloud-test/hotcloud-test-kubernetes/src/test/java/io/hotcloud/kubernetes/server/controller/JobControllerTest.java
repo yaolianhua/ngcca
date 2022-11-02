@@ -65,7 +65,7 @@ public class JobControllerTest {
         String jobReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(jobReadInputStream))).lines().collect(Collectors.joining());
 
         Job job = objectMapper.readValue(jobReadJson, Job.class);
-        when(jobApi.job(yaml)).thenReturn(job);
+        when(jobApi.create(yaml)).thenReturn(job);
 
         String json = objectMapper.writeValueAsString(created(job).getBody());
 

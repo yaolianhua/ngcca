@@ -57,7 +57,7 @@ public class ConfigMapControllerTest {
         String configMapReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(configMapReadInputStream))).lines().collect(Collectors.joining());
 
         ConfigMap configMap = objectMapper.readValue(configMapReadJson, ConfigMap.class);
-        when(configMapApi.configMap(yaml)).thenReturn(configMap);
+        when(configMapApi.create(yaml)).thenReturn(configMap);
 
         String json = objectMapper.writeValueAsString(created(configMap).getBody());
 

@@ -22,10 +22,10 @@ public interface StatefulSetApi {
      * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default StatefulSet statefulSet(StatefulSetCreateRequest request) throws ApiException {
+    default StatefulSet create(StatefulSetCreateRequest request) throws ApiException {
         V1StatefulSet v1StatefulSet = StatefulSetBuilder.build(request);
         String json = Yaml.dump(v1StatefulSet);
-        return this.statefulSet(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface StatefulSetApi {
      * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    StatefulSet statefulSet(String yaml) throws ApiException;
+    StatefulSet create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced StatefulSet

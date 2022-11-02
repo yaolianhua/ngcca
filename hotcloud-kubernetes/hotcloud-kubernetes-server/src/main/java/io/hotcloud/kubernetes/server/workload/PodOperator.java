@@ -40,7 +40,7 @@ public class PodOperator implements PodApi {
     }
 
     @Override
-    public Pod pod(String yaml) throws ApiException {
+    public Pod create(String yaml) throws ApiException {
         V1Pod v1Pod;
         try {
             v1Pod = Yaml.loadAs(yaml, V1Pod.class);

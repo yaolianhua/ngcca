@@ -39,7 +39,7 @@ public class ConfigMapController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "ConfigMap request body")
     )
     public ResponseEntity<Result<ConfigMap>> configMap(@Validated @RequestBody ConfigMapCreateRequest params) throws ApiException {
-        ConfigMap configMap = configMapApi.configMap(params);
+        ConfigMap configMap = configMapApi.create(params);
 
         return WebResponse.created(configMap);
     }
@@ -51,7 +51,7 @@ public class ConfigMapController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "ConfigMap kubernetes yaml")
     )
     public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody YamlBody yaml) throws ApiException {
-        ConfigMap configMap = configMapApi.configMap(yaml.getYaml());
+        ConfigMap configMap = configMapApi.create(yaml.getYaml());
         return WebResponse.created(configMap);
     }
 

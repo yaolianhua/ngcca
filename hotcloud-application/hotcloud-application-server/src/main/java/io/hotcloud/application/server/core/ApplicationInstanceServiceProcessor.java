@@ -71,7 +71,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
             if (Objects.nonNull(fetched)) {
                 throw new HotCloudResourceConflictException("kubernetes service [" + metadata.getName() + "] has been existed in namespace [" + metadata.getNamespace() + "]");
             }
-            Service svc = serviceApi.service(request);
+            Service svc = serviceApi.create(request);
 
             String nodePorts = svc.getSpec().getPorts().stream().map(io.fabric8.kubernetes.api.model.ServicePort::getNodePort)
                     .map(String::valueOf)

@@ -35,7 +35,7 @@ public class ServiceOperator implements ServiceApi {
     }
 
     @Override
-    public Service service(String yaml) throws ApiException {
+    public Service create(String yaml) throws ApiException {
 
         V1Service v1Service;
         try {

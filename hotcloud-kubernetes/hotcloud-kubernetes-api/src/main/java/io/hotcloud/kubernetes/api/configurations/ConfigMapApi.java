@@ -23,10 +23,10 @@ public interface ConfigMapApi {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default ConfigMap configMap(ConfigMapCreateRequest request) throws ApiException {
+    default ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
         V1ConfigMap v1ConfigMap = ConfigMapBuilder.build(request);
         String json = Yaml.dump(v1ConfigMap);
-        return this.configMap(json);
+        return this.create(json);
     }
 
     /**
@@ -36,7 +36,7 @@ public interface ConfigMapApi {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    ConfigMap configMap(String yaml) throws ApiException;
+    ConfigMap create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced ConfigMap

@@ -119,7 +119,7 @@ public class DeploymentControllerTest {
         String deploymentReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(deploymentReadInputStream))).lines().collect(Collectors.joining());
 
         Deployment deployment = objectMapper.readValue(deploymentReadJson, Deployment.class);
-        when(deploymentApi.deployment(yaml)).thenReturn(deployment);
+        when(deploymentApi.create(yaml)).thenReturn(deployment);
 
         String json = objectMapper.writeValueAsString(created(deployment).getBody());
 

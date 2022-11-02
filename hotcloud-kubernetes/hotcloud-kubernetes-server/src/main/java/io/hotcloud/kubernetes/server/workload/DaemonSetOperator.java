@@ -37,7 +37,7 @@ public class DaemonSetOperator implements DaemonSetApi {
     }
 
     @Override
-    public DaemonSet daemonSet(String yaml) throws ApiException {
+    public DaemonSet create(String yaml) throws ApiException {
         V1DaemonSet v1DaemonSet;
         try {
             v1DaemonSet = Yaml.loadAs(yaml, V1DaemonSet.class);

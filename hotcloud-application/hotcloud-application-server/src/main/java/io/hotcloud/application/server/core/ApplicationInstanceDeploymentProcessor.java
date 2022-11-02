@@ -123,7 +123,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
             request.setMetadata(buildDeploymentMetadata(applicationInstance));
             request.setSpec(buildDeploymentSpec(applicationInstance));
-            deploymentApi.deployment(request);
+            deploymentApi.create(request);
             Log.info(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
             Log.error(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));

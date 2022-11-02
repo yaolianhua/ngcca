@@ -40,7 +40,7 @@ public class ServiceController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Service request body")
     )
     public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateRequest params) throws ApiException {
-        Service service = serviceApi.service(params);
+        Service service = serviceApi.create(params);
         return WebResponse.created(service);
     }
 
@@ -51,7 +51,7 @@ public class ServiceController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Service kubernetes yaml")
     )
     public ResponseEntity<Result<Service>> service(@RequestBody YamlBody yaml) throws ApiException {
-        Service service = serviceApi.service(yaml.getYaml());
+        Service service = serviceApi.create(yaml.getYaml());
         return WebResponse.created(service);
     }
 

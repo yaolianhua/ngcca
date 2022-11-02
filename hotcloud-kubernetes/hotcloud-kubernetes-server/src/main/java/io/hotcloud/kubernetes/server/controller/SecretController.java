@@ -39,7 +39,7 @@ public class SecretController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Secret request body")
     )
     public ResponseEntity<Result<Secret>> secret(@RequestBody SecretCreateRequest params) throws ApiException {
-        Secret secret = secretApi.secret(params);
+        Secret secret = secretApi.create(params);
 
         return WebResponse.created(secret);
     }
@@ -51,7 +51,7 @@ public class SecretController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Secret kubernetes yaml")
     )
     public ResponseEntity<Result<Secret>> secret(@RequestBody YamlBody yaml) throws ApiException {
-        Secret secret = secretApi.secret(yaml.getYaml());
+        Secret secret = secretApi.create(yaml.getYaml());
         return WebResponse.created(secret);
     }
 

@@ -22,10 +22,10 @@ public interface CronJobApi {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default CronJob cronjob(CronJobCreateRequest request) throws ApiException {
+    default CronJob create(CronJobCreateRequest request) throws ApiException {
         V1CronJob v1CronJob = CronJobBuilder.build(request);
         String json = Yaml.dump(v1CronJob);
-        return this.cronjob(json);
+        return this.create(json);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface CronJobApi {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    CronJob cronjob(String yaml) throws ApiException;
+    CronJob create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced CronJob

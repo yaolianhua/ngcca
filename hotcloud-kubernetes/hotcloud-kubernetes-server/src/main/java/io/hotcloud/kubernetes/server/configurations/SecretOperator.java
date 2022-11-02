@@ -36,7 +36,7 @@ public class SecretOperator implements SecretApi {
     }
 
     @Override
-    public Secret secret(String yaml) throws ApiException {
+    public Secret create(String yaml) throws ApiException {
 
         V1Secret v1Secret;
         try {

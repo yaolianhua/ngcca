@@ -56,7 +56,7 @@ public class SecretControllerTest {
         String secretReadJson = new BufferedReader(new InputStreamReader(Objects.requireNonNull(secretReadInputStream))).lines().collect(Collectors.joining());
 
         Secret secret = objectMapper.readValue(secretReadJson, Secret.class);
-        when(secretApi.secret(yaml)).thenReturn(secret);
+        when(secretApi.create(yaml)).thenReturn(secret);
 
         String json = objectMapper.writeValueAsString(created(secret).getBody());
 

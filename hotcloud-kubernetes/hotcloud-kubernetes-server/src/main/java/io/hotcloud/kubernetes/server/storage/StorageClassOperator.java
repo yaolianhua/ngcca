@@ -33,7 +33,7 @@ public class StorageClassOperator implements StorageClassApi {
     }
 
     @Override
-    public StorageClass storageClass(String yaml) throws ApiException {
+    public StorageClass create(String yaml) throws ApiException {
         V1StorageClass v1StorageClass;
         try {
             v1StorageClass = Yaml.loadAs(yaml, V1StorageClass.class);

@@ -39,7 +39,7 @@ public class PersistentVolumeController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolume request body")
     )
     public ResponseEntity<Result<PersistentVolume>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateRequest params) throws ApiException {
-        PersistentVolume persistentVolume = persistentVolumeApi.persistentVolume(params);
+        PersistentVolume persistentVolume = persistentVolumeApi.create(params);
         return WebResponse.created(persistentVolume);
     }
 
@@ -50,7 +50,7 @@ public class PersistentVolumeController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolume kubernetes yaml")
     )
     public ResponseEntity<Result<PersistentVolume>> persistentvolume(@RequestBody YamlBody yaml) throws ApiException {
-        PersistentVolume persistentVolume = persistentVolumeApi.persistentVolume(yaml.getYaml());
+        PersistentVolume persistentVolume = persistentVolumeApi.create(yaml.getYaml());
         return WebResponse.created(persistentVolume);
     }
 

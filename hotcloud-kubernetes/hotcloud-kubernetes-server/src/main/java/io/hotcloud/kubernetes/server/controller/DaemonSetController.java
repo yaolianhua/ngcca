@@ -69,7 +69,7 @@ public class DaemonSetController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "DaemonSet request body")
     )
     public ResponseEntity<Result<DaemonSet>> daemonset(@Validated @RequestBody DaemonSetCreateRequest params) throws ApiException {
-        DaemonSet daemonset = daemonSetApi.daemonSet(params);
+        DaemonSet daemonset = daemonSetApi.create(params);
         return WebResponse.created(daemonset);
     }
 
@@ -80,7 +80,7 @@ public class DaemonSetController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "DaemonSet kubernetes yaml")
     )
     public ResponseEntity<Result<DaemonSet>> daemonset(@RequestBody YamlBody yaml) throws ApiException {
-        DaemonSet daemonset = daemonSetApi.daemonSet(yaml.getYaml());
+        DaemonSet daemonset = daemonSetApi.create(yaml.getYaml());
         return WebResponse.created(daemonset);
     }
 

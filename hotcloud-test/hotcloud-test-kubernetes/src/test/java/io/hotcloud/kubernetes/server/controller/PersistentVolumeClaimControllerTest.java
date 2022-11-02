@@ -66,7 +66,7 @@ public class PersistentVolumeClaimControllerTest {
                 .collect(Collectors.joining());
 
         PersistentVolumeClaim persistentVolumeClaim = objectMapper.readValue(persistentvolumeclaimReadJson, PersistentVolumeClaim.class);
-        when(persistentVolumeClaimApi.persistentVolumeClaim(yaml)).thenReturn(persistentVolumeClaim);
+        when(persistentVolumeClaimApi.create(yaml)).thenReturn(persistentVolumeClaim);
 
         String json = objectMapper.writeValueAsString(created(persistentVolumeClaim).getBody());
 

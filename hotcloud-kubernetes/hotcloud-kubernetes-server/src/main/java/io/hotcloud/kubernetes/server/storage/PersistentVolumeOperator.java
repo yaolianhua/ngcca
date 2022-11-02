@@ -33,7 +33,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
     }
 
     @Override
-    public PersistentVolume persistentVolume(String yaml) throws ApiException {
+    public PersistentVolume create(String yaml) throws ApiException {
         V1PersistentVolume v1PersistentVolume;
         try {
             v1PersistentVolume = Yaml.loadAs(yaml, V1PersistentVolume.class);

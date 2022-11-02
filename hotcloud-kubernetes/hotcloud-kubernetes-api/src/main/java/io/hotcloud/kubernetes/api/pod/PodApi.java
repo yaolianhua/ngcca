@@ -25,10 +25,10 @@ public interface PodApi {
      * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Pod pod(PodCreateRequest request) throws ApiException {
+    default Pod create(PodCreateRequest request) throws ApiException {
         V1Pod v1Pod = PodBuilder.build(request);
         String json = Yaml.dump(v1Pod);
-        return this.pod(json);
+        return this.create(json);
     }
 
     /**
@@ -38,7 +38,7 @@ public interface PodApi {
      * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Pod pod(String yaml) throws ApiException;
+    Pod create(String yaml) throws ApiException;
 
     /**
      * Delete namespaced Pod

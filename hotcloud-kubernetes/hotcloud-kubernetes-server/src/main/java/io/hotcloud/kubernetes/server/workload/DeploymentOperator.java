@@ -40,7 +40,7 @@ public class DeploymentOperator implements DeploymentApi {
     }
 
     @Override
-    public Deployment deployment(String yaml) throws ApiException {
+    public Deployment create(String yaml) throws ApiException {
         V1Deployment v1Deployment;
         try {
             v1Deployment = Yaml.loadAs(yaml, V1Deployment.class);
