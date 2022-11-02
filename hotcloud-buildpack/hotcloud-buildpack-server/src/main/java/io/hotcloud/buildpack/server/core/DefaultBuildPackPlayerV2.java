@@ -186,7 +186,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
                 String.format("Delete BuildPack physically [%s]. id:[%s]",physically, id));
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
-        buildPackWatchService.processBuildPackDeleted(existBuildPack);
+        buildPackWatchService.watchDeleted(existBuildPack);
     }
 
 }

@@ -20,7 +20,7 @@ public class BuildPackWatchService {
     private final KubectlApi kubectlApi;
     private final ImageBuildCacheApi imageBuildCacheApi;
 
-    public void watch(BuildPack buildPack) {
+    public void watchCreated(BuildPack buildPack) {
         AtomicInteger loopCount = new AtomicInteger();
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
@@ -115,7 +115,7 @@ public class BuildPackWatchService {
         }
     }
 
-    public void processBuildPackDeleted(BuildPack buildPack) {
+    public void watchDeleted(BuildPack buildPack) {
         try {
             Boolean delete = kubectlApi.delete(buildPack.getJobResource().getNamespace(), buildPack.getYaml());
             Log.info(BuildPackWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getName()));

@@ -20,7 +20,7 @@ public class BuildPackListenerV2 {
     @Async
     @EventListener
     public void started(BuildPackStartedEventV2 startedEvent) {
-        buildPackWatchService.watch(startedEvent.getBuildPack());
+        buildPackWatchService.watchCreated(startedEvent.getBuildPack());
     }
 
 }

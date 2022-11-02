@@ -65,7 +65,7 @@ public class BuildPackRabbitMQK8sEventsListener {
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())){
                 log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.processBuildPackDeleted(fetched);
+                buildPackWatchService.watchDeleted(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ADDED.name(), messageBody.getAction()) ||
@@ -75,7 +75,7 @@ public class BuildPackRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackWatchService.watch(fetched);
+                buildPackWatchService.watchCreated(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
