@@ -3,7 +3,7 @@ package io.hotcloud.application.server.template;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.registry.DatabaseRegistryImagesContainer;
+import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
@@ -23,7 +23,7 @@ public class TemplateDatabaseRegistryImageRunnerProcessor implements CommonRunne
     private final RegistryImageRepository registryImageRepository;
     private final RegistryProperties registryProperties;
     private final TemplateImagesProperties templateImagesProperties;
-    private final DatabaseRegistryImagesContainer registryImagesContainer;
+    private final DatabaseRegistryImages registryImagesContainer;
 
     @Override
     public void execute() {

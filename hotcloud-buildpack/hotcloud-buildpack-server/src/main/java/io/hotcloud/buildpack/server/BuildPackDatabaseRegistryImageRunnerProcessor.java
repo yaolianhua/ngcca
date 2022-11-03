@@ -4,7 +4,7 @@ import io.hotcloud.buildpack.api.core.BuildPackImages;
 import io.hotcloud.buildpack.server.core.BuildPackImagesProperties;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.registry.DatabaseRegistryImagesContainer;
+import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
@@ -24,7 +24,7 @@ public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunn
     private final RegistryImageRepository registryImageRepository;
     private final RegistryProperties registryProperties;
     private final BuildPackImagesProperties buildPackImagesProperties;
-    private final DatabaseRegistryImagesContainer registryImagesContainer;
+    private final DatabaseRegistryImages registryImagesContainer;
 
     @Override
     public void execute() {
