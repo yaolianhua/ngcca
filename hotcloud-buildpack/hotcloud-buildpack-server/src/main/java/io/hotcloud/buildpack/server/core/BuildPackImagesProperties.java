@@ -37,7 +37,7 @@ public class BuildPackImagesProperties {
      */
     private String java11;
     /**
-     * maven image name e.g. harbor.local:5000/library/maven:3.8-openjdk-11-slim
+     * maven image name e.g. library/maven:3.8-openjdk-11-slim
      */
     private String maven;
 
