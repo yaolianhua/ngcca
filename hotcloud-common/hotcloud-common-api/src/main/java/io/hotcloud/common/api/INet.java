@@ -25,6 +25,18 @@ public class INet {
         }
     }
 
+    public static String getLoopbackAddress() {
+        return InetAddress.getLoopbackAddress().getHostAddress();
+    }
+
+    public static String getLocalhostAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new HotCloudException(e.getMessage());
+        }
+    }
+
     public static String getHost(String url) {
         URL address;
         try {

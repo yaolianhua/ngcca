@@ -17,6 +17,11 @@ public class INetTest {
         String local = INet.getLocalizedIPv4();
         Assertions.assertNotEquals("127.0.0.1", local);
 
+        String loopbackAddress = INet.getLoopbackAddress();
+        Assertions.assertEquals("127.0.0.1", loopbackAddress);
+
+        String localhostAddress = INet.getLocalhostAddress();
+        System.out.println("localhost address: " + localhostAddress);
     }
 
     @Test
