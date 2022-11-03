@@ -61,6 +61,7 @@ public class ValidatorTest {
         Assertions.assertTrue(Validator.validHTTPGitAddress("https://github.com/GoogleContainerTools/kaniko.git"));
         Assertions.assertTrue(Validator.validHTTPGitAddress("http://github.com/GoogleContainerTools/kaniko.git"));
         Assertions.assertFalse(Validator.validHTTPGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
+        Assertions.assertTrue(Validator.validHTTPGitAddress("https://git.docker.local/self-host/thymeleaf-fragments.git"));
     }
 
     static Stream<String> validUsernameProvider() {

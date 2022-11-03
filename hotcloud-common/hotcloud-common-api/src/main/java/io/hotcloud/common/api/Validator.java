@@ -4,6 +4,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.util.Assert;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -21,8 +22,20 @@ public final class Validator {
 
     public static boolean validHTTPGitAddress(String url) {
         Assert.hasText(url, "url is null");
+        boolean endsWithGit = url.endsWith(".git");
+        if (!endsWithGit) {
+            return false;
+        }
+
         boolean valid = new UrlValidator(new String[]{"https", "http"}).isValid(url);
-        return url.endsWith(".git") && valid;
+        if (!valid && (url.startsWith("http://") || url.startsWith("https://"))) {
+            String host = INet.getHost(url);
+            if (Objects.equals(INet.getLoopbackAddress(), INet.getIPv4(host)) ||
+                    Objects.equals(INet.getLocalizedIPv4(), INet.getIPv4(host))) {
+                return true;
+            }
+        }
+        return valid;
     }
 
     final static Pattern USERNAME_PATTERN = Pattern.compile("^[a-z][a-z0-9]{4,15}$");
