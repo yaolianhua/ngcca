@@ -8,6 +8,8 @@ public enum BuildPackImages {
     //
     Alpine,
     //
-    Java11
+    Java11,
+    //
+    Maven
 
 }

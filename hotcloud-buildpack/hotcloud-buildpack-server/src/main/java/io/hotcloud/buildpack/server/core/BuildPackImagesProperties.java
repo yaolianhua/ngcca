@@ -33,9 +33,13 @@ public class BuildPackImagesProperties {
      */
     private String alpine;
     /**
-     * java11 image name e.g. namespace/java11:tomcat9.0-openjdk11
+     * java11 image name e.g. namespace/java11-runtime:latest
      */
     private String java11;
+    /**
+     * maven image name e.g. harbor.local:5000/library/maven:3.8-openjdk-11-slim
+     */
+    private String maven;
 
     public Map<String, String> getRepos() {
         Field[] declaredFields = BuildPackImagesProperties.class.getDeclaredFields();
