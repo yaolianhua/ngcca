@@ -273,9 +273,13 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
             try {
                 return podApi.logs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_GIT_CONTAINER, 100);
             } catch (Exception e2) {
-                Log.info(InternalBuildPackApiV2.class.getName(),
-                        String.format("Fetch kaniko init container log error. %s", e2.getMessage()));
-                return "";
+                try {
+                    return podApi.logs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER, 100);
+                } catch (Exception e3) {
+                    Log.info(InternalBuildPackApiV2.class.getName(),
+                            String.format("Fetch kaniko init container log error. %s", e3.getMessage()));
+                    return "";
+                }
             }
         }
     }
