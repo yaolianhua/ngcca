@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
+import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
 import io.hotcloud.common.api.INet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,18 +15,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.buildpack.api.core.TemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.kanikoJob;
 
 public class TemplateRenderUnitTest {
 
 
     @Test
     public void kanikoJobTemplateSource() throws IOException {
-        String jarDockerfile = jarDockerfile("harbor.local:5000/library/java11-runtime:latest",
-                "harbor.local:5000/library/maven:3.8-openjdk-11-slim",
-                "target/*.jar",
-                "-Xms128m -Xmx512m",
-                "",
+        String jarDockerfile = jarDockerfileFromMavenBuilding(DockerfileJavaArtifact.ofMavenJar(
+                        "harbor.local:5000/library/maven:3.8-openjdk-11-slim",
+                        "harbor.local:5000/library/java11-runtime:latest",
+                        "target/*.jar",
+                        "-Xms128m -Xmx512m",
+                        ""),
                 false);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-jar-maven")) {
@@ -61,10 +64,11 @@ public class TemplateRenderUnitTest {
     @Test
     public void kanikoJobTemplateJarArtifact() throws IOException {
 
-        String jarDockerfile = jarDockerfile("192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
-                "http://120.78.225.168:28080/files/java/demo.jar",
-                "-Xms128m -Xmx512m",
-                "",
+        String jarDockerfile = jarDockerfileFromPackageUrl(DockerfileJavaArtifact.ofUrlJar(
+                        "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
+                        "http://120.78.225.168:28080/files/java/demo.jar",
+                        "-Xms128m -Xmx512m",
+                        ""),
                 false);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-jar")) {
@@ -95,8 +99,9 @@ public class TemplateRenderUnitTest {
     @Test
     public void kanikoJobTemplateWarArtifact() throws IOException {
 
-        String warDockerfile = warDockerfile("192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
-                "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war",
+        String warDockerfile = warDockerfileFromPackageUrl(DockerfileJavaArtifact.ofUrlWar(
+                        "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
+                        "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war"),
                 false);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-war")) {

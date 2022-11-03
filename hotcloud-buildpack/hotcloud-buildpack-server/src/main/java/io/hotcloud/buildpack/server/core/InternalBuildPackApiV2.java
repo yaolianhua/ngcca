@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
+import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
 import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
@@ -25,7 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static io.hotcloud.buildpack.api.core.TemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.kanikoJob;
+import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.dockerconfigjson;
+import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.secretOfDockerconfigjson;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 
@@ -101,14 +105,13 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
         String businessId = UUIDGenerator.uuidNoDash();
-        String encodedDockerfile = jarDockerfile(
-                registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
+        DockerfileJavaArtifact dockerfileJavaArtifact = DockerfileJavaArtifact.ofMavenJar(
                 registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
+                registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
                 jarPath,
                 buildImage.getSource().getStartOptions(),
-                buildImage.getSource().getStartArgs(),
-                true
-        );
+                buildImage.getSource().getStartArgs());
+        String encodedDockerfile = jarDockerfileFromMavenBuilding(dockerfileJavaArtifact, true);
         String job = kanikoJob(
                 namespace,
                 businessId,
@@ -157,10 +160,13 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
         String businessId = UUIDGenerator.uuidNoDash();
+        DockerfileJavaArtifact javaArtifact = buildImage.isJar() ?
+                DockerfileJavaArtifact.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
+                DockerfileJavaArtifact.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
 
         String encodedDockerfile = buildImage.isJar() ?
-                jarDockerfile(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs(), true) :
-                warDockerfile(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, true);
+                jarDockerfileFromPackageUrl(javaArtifact, true) :
+                warDockerfileFromPackageUrl(javaArtifact, true);
         String job = kanikoJob(
                 namespace,
                 businessId,
