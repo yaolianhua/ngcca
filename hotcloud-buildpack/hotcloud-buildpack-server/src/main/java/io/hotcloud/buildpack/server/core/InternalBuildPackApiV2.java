@@ -8,10 +8,9 @@ import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
 import io.hotcloud.common.api.Validator;
+import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.db.core.registry.RegistryImageEntity;
-import io.hotcloud.db.core.registry.RegistryImageRepository;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
@@ -20,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,7 +38,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     private final JobApi jobApi;
     private final PodApi podApi;
     private final RegistryProperties registryProperties;
-    private final RegistryImageRepository registryImageRepository;
+    private final DatabaseRegistryImages registryImagesContainer;
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
 
     private static Map<String, List<String>> resolvedHostAliases(String registry, String httpUrl) {
@@ -74,7 +74,12 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     }
 
     @Override
-    protected BuildPackJobResource prepareJob(String namespace, String httpGitUrl, String branch) {
+    protected BuildPackJobResource prepareJobOfSource(String namespace, BuildImage buildImage) {
+
+        Assert.state(buildImage.isSourceCode(), "Source-code support only");
+        String httpGitUrl = buildImage.getSource().getHttpGitUrl();
+        String branch = buildImage.getSource().getBranch();
+        String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
 
         Assert.hasText(httpGitUrl, "Http git url is null");
         Assert.state(!CHINESE_PATTERN.matcher(httpGitUrl).find(), "Git url contains chinese char");
@@ -95,15 +100,15 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
-        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
-
-        RegistryImageEntity gitImageEntity = registryImageRepository.findByName(BuildPackImages.Git.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Git image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Git image is null");
-
         String businessId = UUIDGenerator.uuidNoDash();
+        String encodedDockerfile = jarDockerfile(
+                registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
+                registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
+                jarPath,
+                buildImage.getSource().getStartOptions(),
+                buildImage.getSource().getStartArgs(),
+                true
+        );
         String job = kanikoJob(
                 namespace,
                 businessId,
@@ -111,10 +116,12 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                kanikoImageEntity.getValue(),
+                registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
                 branch,
                 httpGitUrl,
-                gitImageEntity.getValue(),
+                registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase()),
+                registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                encodedDockerfile,
                 resolvedHostAliases(registryProperties.getUrl(), httpGitUrl));
 
 
@@ -134,7 +141,9 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     }
 
     @Override
-    protected BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
+    protected BuildPackJobResource prepareJobOfArtifact(String namespace, BuildImage buildImage) {
+
+        String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
 
         Assert.hasText(httpUrl, "Binary package url is null");
         String filename = FileHelper.getFilename(httpUrl);
@@ -147,19 +156,11 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
-        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
-
-        RegistryImageEntity alpineImageEntity = registryImageRepository.findByName(BuildPackImages.Alpine.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Alpine image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Alpine image is null");
-
-        RegistryImageEntity javaImageEntity = registryImageRepository.findByName(BuildPackImages.Java11.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
-
         String businessId = UUIDGenerator.uuidNoDash();
+
+        String encodedDockerfile = buildImage.isJar() ?
+                jarDockerfile(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs(), true) :
+                warDockerfile(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, true);
         String job = kanikoJob(
                 namespace,
                 businessId,
@@ -167,11 +168,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                kanikoImageEntity.getValue(),
-                alpineImageEntity.getValue(),
-                jarDockerfile(javaImageEntity.getValue(), httpUrl, jarStartOptions, jarStartArgs, true),
+                registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
+                registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                encodedDockerfile,
                 resolvedHostAliases(registryProperties.getUrl(), httpUrl));
-
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
                 .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
@@ -185,58 +185,6 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         return jobResource;
     }
-
-    @Override
-    protected BuildPackJobResource prepareJob(String namespace, String httpUrl) {
-        Assert.hasText(httpUrl, "Binary package url is null");
-        String filename = FileHelper.getFilename(httpUrl);
-        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
-        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
-
-        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String image = String.format("%s:%s", k8sName, date);
-
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
-
-        RegistryImageEntity kanikoImageEntity = registryImageRepository.findByName(BuildPackImages.Kaniko.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Kaniko image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Kaniko image is null");
-
-        RegistryImageEntity alpineImageEntity = registryImageRepository.findByName(BuildPackImages.Alpine.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Alpine image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Alpine image is null");
-
-        RegistryImageEntity javaImageEntity = registryImageRepository.findByName(BuildPackImages.Java11.name().toLowerCase());
-        Assert.notNull(kanikoImageEntity, "Java11 image entity is null");
-        Assert.hasText(kanikoImageEntity.getValue(), "Java11 image is null");
-
-        String businessId = UUIDGenerator.uuidNoDash();
-        String job = kanikoJob(
-                namespace,
-                businessId,
-                k8sName,
-                k8sName,
-                retrieveSecretName(namespace),
-                artifactUrl,
-                kanikoImageEntity.getValue(),
-                alpineImageEntity.getValue(),
-                warDockerfile(javaImageEntity.getValue(), httpUrl, true),
-                resolvedHostAliases(registryProperties.getUrl(), httpUrl));
-
-
-        BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(job)
-                .name(k8sName)
-                .namespace(namespace)
-                .build();
-
-        Map<String, String> alternative = jobResource.getAlternative();
-        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, artifactUrl);
-
-        return jobResource;
-    }
-
     @Override
     protected BuildPackDockerSecretResource prepareSecret(String namespace) {
         String dockerconfigjson = dockerconfigjson(

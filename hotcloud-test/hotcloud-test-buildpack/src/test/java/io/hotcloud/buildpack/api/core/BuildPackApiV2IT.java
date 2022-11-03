@@ -29,9 +29,9 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
         namespaceApi.create(namespace);
         BuildPack buildPack = buildPackApiV2.apply(
                 namespace,
-                "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/web.jar",
-                "-Xms128m -Xmx512m",
-                "-Dspring.profiles.active=production");
+                BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
+                        "-Xms128m -Xmx512m",
+                        "-Dspring.profiles.active=production"));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());
@@ -78,7 +78,7 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
         namespaceApi.create(namespace);
         BuildPack buildPack = buildPackApiV2.apply(
                 namespace,
-                "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war");
+                BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war"));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());
@@ -125,15 +125,15 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
 
         BuildPack buildPack = buildPackApiV2.apply(
                 namespace,
-                "https://gitee.com/yannanshan/devops-thymeleaf.git",
-                "master");
+                BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
+                        "master", "", "", ""));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());
         System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
 
         while (loopCount.get() < 60) {
-            TimeUnit.SECONDS.sleep(6);
+            TimeUnit.SECONDS.sleep(60);
             ImageBuildStatus status = buildPackApiV2.getStatus(namespace, buildPack.getJobResource().getName());
 
             if (Objects.equals(status, ImageBuildStatus.Unknown)) {

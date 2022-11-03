@@ -34,7 +34,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void playFromWarArtifact() throws InterruptedException {
+    public void playWarArtifact() throws InterruptedException {
         List<String> buildPackIds = buildPackService.findAll("admin")
                 .stream()
                 .filter(e -> !e.isDone())
@@ -67,7 +67,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
     }
 
     @Test
-    public void playFromJarArtifact() throws InterruptedException {
+    public void playJarArtifact() throws InterruptedException {
         List<String> buildPackIds = buildPackService.findAll("admin")
                 .stream()
                 .filter(e -> !e.isDone())
@@ -78,7 +78,7 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
         }
 
         BuildPack buildPack = buildPackPlayerV2.play(
-                BuildImage.ofJar("http://minio.docker.local:9009/files/web.jar",
+                BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
                         "-Xms128m -Xmx512m",
                         "-Dspring.profiles.active=production")
         );
@@ -103,8 +103,9 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
             }
         }
     }
+
     @Test
-    public void playFromSourceCode() throws InterruptedException {
+    public void playSourceCode() throws InterruptedException {
         List<String> buildPackIds = buildPackService.findAll("admin")
                 .stream()
                 .filter(e -> !e.isDone())
@@ -114,8 +115,8 @@ public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
             buildPackPlayerV2.delete(buildPackId, false);
         }
         BuildPack buildPack = buildPackPlayerV2.play(
-                BuildImage.ofSource("https://gitee.com/yannanshan/devops-thymeleaf.git",
-                        "master")
+                BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
+                        "master", "", "", "")
         );
 
         while (true) {

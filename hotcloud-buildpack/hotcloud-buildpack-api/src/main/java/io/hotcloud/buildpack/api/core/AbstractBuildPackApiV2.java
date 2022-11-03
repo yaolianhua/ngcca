@@ -5,59 +5,23 @@ import io.hotcloud.common.api.UUIDGenerator;
 
 public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2{
 
-    protected abstract BuildPackJobResource prepareJob(String namespace, String httpGitUrl, String branch);
+    protected abstract BuildPackJobResource prepareJobOfSource(String namespace, BuildImage buildImage);
 
-    protected abstract BuildPackJobResource prepareJob(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs);
-
-    protected abstract BuildPackJobResource prepareJob(String namespace, String httpUrl);
+    protected abstract BuildPackJobResource prepareJobOfArtifact(String namespace, BuildImage buildImage);
 
     protected abstract BuildPackDockerSecretResource prepareSecret(String namespace);
 
     @Override
-    public BuildPack apply(String namespace, String httpGitUrl, String branch) {
+    public BuildPack apply(String namespace, BuildImage buildImage) {
 
         BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
 
-        BuildPackJobResource jobResource = prepareJob(namespace, httpGitUrl, branch);
-
-        String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
-        BuildPack buildPack = BuildPack.builder()
-                .jobResource(jobResource)
-                .secretResource(secretResource)
-                .uuid(businessId)
-                .build();
-
-        doApply(buildPack.getYaml());
-
-        return buildPack;
-    }
-
-    @Override
-    public BuildPack apply(String namespace, String httpUrl, String jarStartOptions, String jarStartArgs) {
-
-        BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
-
-        BuildPackJobResource jobResource = prepareJob(namespace, httpUrl, jarStartOptions, jarStartArgs);
+        BuildPackJobResource jobResource = buildImage.isSourceCode() ?
+                prepareJobOfSource(namespace, buildImage) :
+                prepareJobOfArtifact(namespace, buildImage);
 
         String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
 
-        BuildPack buildPack = BuildPack.builder()
-                .jobResource(jobResource)
-                .secretResource(secretResource)
-                .uuid(businessId)
-                .build();
-
-        doApply(buildPack.getYaml());
-
-        return buildPack;
-    }
-
-    @Override
-    public BuildPack apply(String namespace, String httpUrl) {
-        BuildPackDockerSecretResource secretResource = prepareSecret(namespace);
-
-        BuildPackJobResource jobResource = prepareJob(namespace, httpUrl);
-        String businessId = jobResource.getLabels().getOrDefault(CommonConstant.K8S_APP_BUSINESS_DATA_ID, UUIDGenerator.uuidNoDash());
         BuildPack buildPack = BuildPack.builder()
                 .jobResource(jobResource)
                 .secretResource(secretResource)
