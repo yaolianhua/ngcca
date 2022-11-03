@@ -20,6 +20,7 @@ public class TemplateRender {
     public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
     public static final String IMAGEBUILD_JAR_WAR_TEMPLATE = "imagebuild-jar-war.template";
     public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
+    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE = "Dockerfile-jar-maven.template";
     public static final String DOCKERFILE_WAR_TEMPLATE = "Dockerfile-war.template";
     public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
 
@@ -99,7 +100,9 @@ public class TemplateRender {
                                    String kanikoImage,
                                    String gitBranch,
                                    String httpGitUrl,
-                                   String initContainerImage,
+                                   String initGitContainerImage,
+                                   String initAlpineContainerImage,
+                                   String encodedDockerfile,
                                    Map<String, List<String>> hostAliases) {
 
         Assert.hasText(destination, "kaniko args missing [--destination]");
@@ -116,11 +119,14 @@ public class TemplateRender {
         renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secretName) ? secretName : K8S_NAME);
         renders.put(Kaniko.DESTINATION, destination);
         renders.put(Kaniko.KANIKO_IMAGE, StringUtils.hasText(kanikoImage) ? kanikoImage : "gcr.io/kaniko-project/executor:latest");
-        renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, StringUtils.hasText(initContainerImage) ? initContainerImage : "alpine/git:latest");
+        renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, StringUtils.hasText(initGitContainerImage) ? initGitContainerImage : "alpine/git:latest");
+        renders.put(Kaniko.INIT_ALPINE_CONTAINER_IMAGE, StringUtils.hasText(initAlpineContainerImage) ? initAlpineContainerImage : "alpine:latest");
         renders.put(Kaniko.GIT_BRANCH, gitBranch);
         renders.put(Kaniko.HTTP_GIT_URL, httpGitUrl);
         renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_GIT_CONTAINER);
+        renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER);
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
+        renders.put(Kaniko.DOCKERFILE_ENCODED, encodedDockerfile);
 
         renders.put(Kaniko.HOST_ALIASES, buildHostAliases(hostAliases));
 
@@ -217,6 +223,28 @@ public class TemplateRender {
     }
 
     /**
+     * 从模板返回构建jar的Dockerfile
+     *
+     * @param base64 返回文本值是否base64
+     */
+    @SneakyThrows
+    public static String jarDockerfile(String javaRuntime, String maven, String jarPath, String jarStartOptions, String jarStartArgs, boolean base64) {
+        InputStream inputStream = new ClassPathResource(DOCKERFILE_JAR_MAVEN_TEMPLATE).getInputStream();
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
+        Map<String, String> renders = new HashMap<>(8);
+        renders.put(Dockerfile.MAVEN, maven);
+        renders.put(Dockerfile.JAVA_RUNTIME, javaRuntime);
+        renders.put(Dockerfile.JAR_TARGET_PATH, jarPath);
+        renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(jarStartOptions) ? jarStartOptions : "");
+        renders.put(Dockerfile.JAR_START_ARGS, StringUtils.hasText(jarStartArgs) ? jarStartArgs : "");
+
+        String dockerfile = apply(template, renders);
+        return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
+                : dockerfile;
+    }
+
+    /**
      * 从模板返回构建war的Dockerfile
      *
      * @param base64 返回文本值是否base64
@@ -259,7 +287,8 @@ public class TemplateRender {
         String PACKAGE_URL = "PACKAGE_URL";
         String JAR_START_OPTIONS = "JAR_START_OPTIONS";
         String JAR_START_ARGS = "JAR_START_ARGS";
-
+        String MAVEN = "MAVEN";
+        String JAR_TARGET_PATH = "JAR_TARGET_PATH";
 
     }
 

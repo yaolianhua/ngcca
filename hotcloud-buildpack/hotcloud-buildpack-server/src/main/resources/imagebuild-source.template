@@ -51,13 +51,25 @@ spec:
           imagePullPolicy: IfNotPresent
           name: #{[ INIT_GIT_CONTAINER_NAME ]}
           command:
-          - git
-          - clone
-          - --branch=#{[ GIT_BRANCH ]}
-          - --depth=1
-          - #{[ HTTP_GIT_URL ]}
-          - /workspace
-          - --verbose
+          - 'git'
+          - '-c'
+          - 'http.sslVerify=false'
+          - 'clone'
+          - '--branch=#{[ GIT_BRANCH ]}'
+          - '--depth=1'
+          - '#{[ HTTP_GIT_URL ]}'
+          - '/workspace'
+          - '--verbose'
+          volumeMounts:
+          - name: workspace-volume
+            mountPath: /workspace
+        - image: #{[ INIT_ALPINE_CONTAINER_IMAGE ]}
+          imagePullPolicy: IfNotPresent
+          name: #{[ INIT_ALPINE_CONTAINER_NAME ]}
+          command:
+          - 'sh'
+          - '-c'
+          - "if [ -f Dockerfile ]; then echo 'Dockerfile exist. use default Dockerfile'; else echo -e '#{[ DOCKERFILE_ENCODED ]}' |base64 -d > /workspace/Dockerfile; fi"
           volumeMounts:
           - name: workspace-volume
             mountPath: /workspace

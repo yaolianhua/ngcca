@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - args:
-            - --destination=192.168.146.128:5000/kaniko-test/devops:latest
+            - --destination=harbor.local:5000/image-build-test/thymeleaf-fragments:latest
             - --skip-tls-verify=true
             - --insecure=true
             - --context=/workspace
@@ -32,7 +32,7 @@ spec:
             - --log-format=color
             - --force=false
             - --verbosity=info
-          image: gcr.io/kaniko-project/executor:latest
+          image: harbor.local:5000/library/kaniko:20221029
           imagePullPolicy: IfNotPresent
           name: kaniko
           ports: [ ]
@@ -44,23 +44,39 @@ spec:
               name: workspace-volume
               readOnly: false
       dnsPolicy: ClusterFirst
-      hostAliases: [ ]
+      hostAliases:
+        - ip: 192.168.110.199
+          hostnames:
+            - harbor.local
+            - git.docker.local
       imagePullSecrets: [ ]
       initContainers:
-        - image: alpine/git:latest
+        - image: harbor.local:5000/library/alpine-git:latest
           imagePullPolicy: IfNotPresent
           name: git
           command:
-          - git
-          - clone
-          - --branch=master
-          - --depth=1
-          - https://gitee.com/yannanshan/devops-thymeleaf.git
-          - /workspace
-          - --verbose
+            - 'git'
+            - '-c'
+            - 'http.sslVerify=false'
+            - 'clone'
+            - '--branch=master'
+            - '--depth=1'
+            - 'https://git.docker.local/self-host/thymeleaf-fragments.git'
+            - '/workspace'
+            - '--verbose'
           volumeMounts:
-          - name: workspace-volume
-            mountPath: /workspace
+            - name: workspace-volume
+              mountPath: /workspace
+        - image: harbor.local:5000/library/alpine:latest
+          imagePullPolicy: IfNotPresent
+          name: alpine
+          command:
+            - 'sh'
+            - '-c'
+            - "if [ -f Dockerfile ]; then echo 'Dockerfile exist. use default Dockerfile'; else echo -e 'RlJPTSBoYXJib3IubG9jYWw6NTAwMC9saWJyYXJ5L21hdmVuOjMuOC1vcGVuamRrLTExLXNsaW0gQVMgYnVpbGRlcgoKV09SS0RJUiAvd29ya3NwYWNlCgpDT1BZIC4gLgpSVU4gbXZuIGNsZWFuIHBhY2thZ2UgLURtYXZlbi50ZXN0LnNraXA9dHJ1ZQoKRlJPTSBoYXJib3IubG9jYWw6NTAwMC9saWJyYXJ5L2phdmExMS1ydW50aW1lOmxhdGVzdAoKUlVOIGxuIC1zZiAvdXNyL3NoYXJlL3pvbmVpbmZvL0FzaWEvU2hhbmdoYWkgL2V0Yy9sb2NhbHRpbWUKUlVOIGVjaG8gJ0FzaWEvU2hhbmdoYWknID4gL2V0Yy90aW1lem9uZQoKRU5WIExBTkc9ImVuX1VTLlVURi04IgpFTlYgVEVSTT14dGVybQpFTlYgVElNRVNUQU1QIGN1cnJlbnRUaW1lCgpSVU4gbWtkaXIgLXAgL2hvbWUvYWRtaW4vYXBwLwpDT1BZIC0tZnJvbT1idWlsZGVyIC93b3Jrc3BhY2UvdGFyZ2V0LyouamFyIC9ob21lL2FkbWluL2FwcC9hcHAuamFyClJVTiBlY2hvIC1lICdleGVjIGphdmEgLVhtczEyOG0gLVhteDUxMm0gLWphciAgL2hvbWUvYWRtaW4vYXBwL2FwcC5qYXInID4gL2hvbWUvYWRtaW4vc3RhcnQuc2ggJiYgY2htb2QgK3ggL2hvbWUvYWRtaW4vc3RhcnQuc2gKCldPUktESVIgJEFETUlOX0hPTUUKCkNNRCBbIi9iaW4vYmFzaCIsICIvaG9tZS9hZG1pbi9zdGFydC5zaCJd' |base64 -d > /workspace/Dockerfile; fi"
+          volumeMounts:
+            - name: workspace-volume
+              mountPath: /workspace
       restartPolicy: Never
       volumes:
         - name: docker-registry-secret
