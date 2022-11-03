@@ -4,9 +4,11 @@ import io.hotcloud.buildpack.api.core.BuildPackImages;
 import io.hotcloud.buildpack.server.core.BuildPackImagesProperties;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
+import io.hotcloud.common.api.registry.DatabaseRegistryImagesContainer;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -16,19 +18,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunnerProcessor {
 
     private final RegistryImageRepository registryImageRepository;
     private final RegistryProperties registryProperties;
     private final BuildPackImagesProperties buildPackImagesProperties;
-
-    public BuildPackDatabaseRegistryImageRunnerProcessor(RegistryImageRepository registryImageRepository,
-                                                         RegistryProperties registryProperties,
-                                                         BuildPackImagesProperties buildPackImagesProperties) {
-        this.registryImageRepository = registryImageRepository;
-        this.registryProperties = registryProperties;
-        this.buildPackImagesProperties = buildPackImagesProperties;
-    }
+    private final DatabaseRegistryImagesContainer registryImagesContainer;
 
     @Override
     public void execute() {
@@ -44,10 +40,14 @@ public class BuildPackDatabaseRegistryImageRunnerProcessor implements CommonRunn
                 saveEntity.setName(key);
                 saveEntity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 registryImageRepository.save(saveEntity);
+
+                registryImagesContainer.put(key, saveEntity.getValue());
             } else {
                 entity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 entity.setModifiedAt(LocalDateTime.now());
                 registryImageRepository.save(entity);
+
+                registryImagesContainer.put(key, entity.getValue());
             }
 
             prints.add(repo);
