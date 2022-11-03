@@ -52,7 +52,12 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
             }
 
             if (ApplicationInstanceSource.Origin.SOURCE_CODE.name().equalsIgnoreCase(applicationInstance.getSource().getOrigin().name())) {
-                BuildImage buildImage = BuildImage.ofSource(applicationInstance.getSource().getUrl(), applicationInstance.getSource().getGitBranch());
+                BuildImage buildImage = BuildImage.ofSource(
+                        applicationInstance.getSource().getUrl(),
+                        applicationInstance.getSource().getGitBranch(),
+                        applicationInstance.getSource().getGitSubmodule(),
+                        applicationInstance.getSource().getStartOptions(),
+                        applicationInstance.getSource().getStartArgs());
 
                 buildPack = buildPackPlayerV2.play(buildImage);
             }

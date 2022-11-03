@@ -22,9 +22,14 @@ public class ApplicationInstanceSource {
      */
     private String url;
     /**
-     * if source value is {@code source_code}. the value is not null, default {@code master}
+     * if origin value is {@code source_code}. the value is not null, default {@code master}
      */
     private String gitBranch;
+
+    /**
+     * if origin value is {@code source_code}. the value can be set, default {@code null}
+     */
+    private String gitSubmodule;
     /**
      * e.g. -Dspring.profiles.active=production
      */

@@ -15,13 +15,16 @@ public class BuildImage {
     private Jar jar;
     private War war;
 
-    public static BuildImage ofSource(String httpGitUrl, String branch){
+    public static BuildImage ofSource(String httpGitUrl, String branch, String submodule, String startOptions, String startArgs) {
         return BuildImage.builder().source(
-                        SourceCode.builder()
-                                .httpGitUrl(httpGitUrl)
-                                .branch(branch)
-                                .build()
-                ).build();
+                SourceCode.builder()
+                        .httpGitUrl(httpGitUrl)
+                        .branch(branch)
+                        .submodule(submodule)
+                        .startOptions(startOptions)
+                        .startArgs(startArgs)
+                        .build()
+        ).build();
     }
 
     public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs){
@@ -42,33 +45,53 @@ public class BuildImage {
         ).build();
     }
     public boolean isSourceCode(){
-        return source != null;
+        return source != null && !isWar() && !isJar();
     }
 
     public boolean isJar(){
-        return jar != null;
+        return jar != null && !isWar() && !isSourceCode();
     }
 
     public boolean isWar(){
-        return war != null;
+        return war != null && !isJar() && !isSourceCode();
     }
+
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SourceCode{
+    public static class SourceCode {
 
         private String httpGitUrl;
-        private String branch;
+        @Builder.Default
+        private String branch = "master";
+        private String submodule;
+        /**
+         * e.g. "-Xms128m -Xmx512m"
+         */
+        private String startOptions;
+        /**
+         * e.g. -Dspring.profiles.active=production
+         */
+        private String startArgs;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Jar{
+    public static class Jar {
+        /**
+         * Deploy buildPack from binary jar package
+         */
         private String packageUrl;
+        /**
+         * e.g. "-Xms128m -Xmx512m"
+         */
         private String startOptions;
+        /**
+         * e.g. -Dspring.profiles.active=production
+         */
         private String startArgs;
     }
 
