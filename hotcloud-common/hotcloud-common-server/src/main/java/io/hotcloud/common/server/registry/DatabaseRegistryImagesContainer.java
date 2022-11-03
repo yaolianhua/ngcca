@@ -1,6 +1,7 @@
-package io.hotcloud.common.api.registry;
+package io.hotcloud.common.server.registry;
 
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class DatabaseRegistryImagesContainer {
+public class DatabaseRegistryImagesContainer implements DatabaseRegistryImages {
 
     private final Map<String, String> images = new ConcurrentHashMap<>(256);
 
