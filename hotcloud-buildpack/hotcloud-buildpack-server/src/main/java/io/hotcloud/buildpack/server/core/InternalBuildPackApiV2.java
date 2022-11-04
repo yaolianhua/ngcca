@@ -167,7 +167,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                     k8sName,
                     retrieveSecretName(namespace),
                     destination,
-                    registryImagesContainer.get(BuildPackImages.Kaniko.name()).toLowerCase(),
+                    registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
                     registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
                     DockerfileJava(javaArtifact, true),
                     KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase())),
