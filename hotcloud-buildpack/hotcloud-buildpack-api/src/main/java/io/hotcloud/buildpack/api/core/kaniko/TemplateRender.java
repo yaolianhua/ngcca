@@ -53,18 +53,7 @@ public class TemplateRender {
 
     }
 
-    /**
-     * Dockerfile 模板变量名
-     */
-    interface Dockerfile {
-        String JAVA_RUNTIME = "JAVA_RUNTIME";
-        String PACKAGE_URL = "PACKAGE_URL";
-        String JAR_START_OPTIONS = "JAR_START_OPTIONS";
-        String JAR_START_ARGS = "JAR_START_ARGS";
-        String MAVEN = "MAVEN";
-        String JAR_TARGET_PATH = "JAR_TARGET_PATH";
 
-    }
 
     /**
      * Kaniko 模板变量名

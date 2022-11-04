@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.DockerfileJava;
 import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.kanikoJob;
 import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.dockerconfigjson;
 import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.secretOfDockerconfigjson;
@@ -111,7 +111,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 jarPath,
                 buildImage.getSource().getStartOptions(),
                 buildImage.getSource().getStartArgs());
-        String encodedDockerfile = jarDockerfileFromMavenBuilding(dockerfileJavaArtifact, true);
+        String encodedDockerfile = DockerfileJava(dockerfileJavaArtifact, true);
         String job = kanikoJob(
                 namespace,
                 businessId,
@@ -164,9 +164,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 DockerfileJavaArtifact.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
                 DockerfileJavaArtifact.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
 
-        String encodedDockerfile = buildImage.isJar() ?
-                jarDockerfileFromPackageUrl(javaArtifact, true) :
-                warDockerfileFromPackageUrl(javaArtifact, true);
+        String encodedDockerfile = DockerfileJava(javaArtifact, true);
         String job = kanikoJob(
                 namespace,
                 businessId,

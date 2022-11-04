@@ -18,64 +18,60 @@ import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.*;
 public class DockerfileTemplateRender {
 
     /**
-     * 从模板返回构建jar的Dockerfile
+     * 从模板渲染Dockerfile
+     * <ul>
+     *  <li>从源代码渲染，系统需要先从maven构建
+     *  <li>从包（Jar&War）地址渲染
+     * <ul/>
      *
-     * @param base64 返回文本值是否base64
+     * @param javaArtifact 渲染模板参数对象
+     * @param base64       是否base64返回结果
+     * @return Dockerfile
      */
     @SneakyThrows
-    public static String jarDockerfileFromPackageUrl(DockerfileJavaArtifact javaArtifact, boolean base64) {
-        InputStream inputStream = new ClassPathResource(DOCKERFILE_JAR_TEMPLATE).getInputStream();
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+    public static String DockerfileJava(DockerfileJavaArtifact javaArtifact, boolean base64) {
+
 
         Map<String, String> renders = new HashMap<>(8);
-        renders.put(TemplateRender.Dockerfile.JAVA_RUNTIME, javaArtifact.getRuntime());
-        renders.put(TemplateRender.Dockerfile.PACKAGE_URL, javaArtifact.getHttpPackageUrl());
-        renders.put(TemplateRender.Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(javaArtifact.getJarStartOptions()) ? javaArtifact.getJarStartOptions() : "");
-        renders.put(TemplateRender.Dockerfile.JAR_START_ARGS, StringUtils.hasText(javaArtifact.getJarStartArgs()) ? javaArtifact.getJarStartArgs() : "");
+        InputStream inputStream = null;
 
+        renders.put(Dockerfile.JAVA_RUNTIME, javaArtifact.getRuntime());
+        renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(javaArtifact.getJarStartOptions()) ? javaArtifact.getJarStartOptions() : "");
+        renders.put(Dockerfile.JAR_START_ARGS, StringUtils.hasText(javaArtifact.getJarStartArgs()) ? javaArtifact.getJarStartArgs() : "");
+        renders.put(Dockerfile.MAVEN, javaArtifact.getMaven());
+        renders.put(Dockerfile.JAR_TARGET_PATH, javaArtifact.getJarTarget());
+        renders.put(Dockerfile.PACKAGE_URL, javaArtifact.getHttpPackageUrl());
+
+        if (javaArtifact.isMavenJar()) {
+            inputStream = new ClassPathResource(DOCKERFILE_JAR_MAVEN_TEMPLATE).getInputStream();
+        }
+
+        if (javaArtifact.isJar()) {
+            inputStream = new ClassPathResource(DOCKERFILE_JAR_TEMPLATE).getInputStream();
+        }
+
+        if (javaArtifact.isWar()) {
+            inputStream = new ClassPathResource(DOCKERFILE_WAR_TEMPLATE).getInputStream();
+        }
+
+        assert inputStream != null;
+        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
         String dockerfile = apply(template, renders);
         return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
                 : dockerfile;
     }
 
     /**
-     * 从模板返回构建jar的Dockerfile
-     *
-     * @param base64 返回文本值是否base64
+     * Dockerfile 模板变量名
      */
-    @SneakyThrows
-    public static String jarDockerfileFromMavenBuilding(DockerfileJavaArtifact javaArtifact, boolean base64) {
-        InputStream inputStream = new ClassPathResource(DOCKERFILE_JAR_MAVEN_TEMPLATE).getInputStream();
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+    interface Dockerfile {
+        String JAVA_RUNTIME = "JAVA_RUNTIME";
+        String PACKAGE_URL = "PACKAGE_URL";
+        String JAR_START_OPTIONS = "JAR_START_OPTIONS";
+        String JAR_START_ARGS = "JAR_START_ARGS";
+        String MAVEN = "MAVEN";
+        String JAR_TARGET_PATH = "JAR_TARGET_PATH";
 
-        Map<String, String> renders = new HashMap<>(8);
-        renders.put(TemplateRender.Dockerfile.MAVEN, javaArtifact.getMaven());
-        renders.put(TemplateRender.Dockerfile.JAVA_RUNTIME, javaArtifact.getRuntime());
-        renders.put(TemplateRender.Dockerfile.JAR_TARGET_PATH, javaArtifact.getJarTarget());
-        renders.put(TemplateRender.Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(javaArtifact.getJarStartOptions()) ? javaArtifact.getJarStartOptions() : "");
-        renders.put(TemplateRender.Dockerfile.JAR_START_ARGS, StringUtils.hasText(javaArtifact.getJarStartArgs()) ? javaArtifact.getJarStartArgs() : "");
-
-        String dockerfile = apply(template, renders);
-        return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
-                : dockerfile;
     }
 
-    /**
-     * 从模板返回构建war的Dockerfile
-     *
-     * @param base64 返回文本值是否base64
-     */
-    @SneakyThrows
-    public static String warDockerfileFromPackageUrl(DockerfileJavaArtifact javaArtifact, boolean base64) {
-        InputStream inputStream = new ClassPathResource(DOCKERFILE_WAR_TEMPLATE).getInputStream();
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-
-        Map<String, String> renders = new HashMap<>(8);
-        renders.put(TemplateRender.Dockerfile.JAVA_RUNTIME, javaArtifact.getRuntime());
-        renders.put(TemplateRender.Dockerfile.PACKAGE_URL, javaArtifact.getHttpPackageUrl());
-
-        String dockerfile = apply(template, renders);
-        return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
-                : dockerfile;
-    }
 }
