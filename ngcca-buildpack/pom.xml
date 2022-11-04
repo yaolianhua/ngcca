@@ -9,24 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-buildpack</artifactId>
+    <artifactId>ngcca-buildpack</artifactId>
     <packaging>pom</packaging>
-    <name>Hot Cloud :: BuildPack</name>
+    <name>NGCCA :: BuildPack</name>
     <modules>
-        <module>hotcloud-buildpack-api</module>
-        <module>hotcloud-buildpack-server</module>
+        <module>ngcca-buildpack-api</module>
+        <module>ngcca-buildpack-server</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-buildpack-api</artifactId>
+                <artifactId>ngcca-buildpack-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-buildpack-server</artifactId>
+                <artifactId>ngcca-buildpack-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
