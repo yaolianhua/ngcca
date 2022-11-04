@@ -9,24 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-application</artifactId>
+    <artifactId>ngcca-application</artifactId>
     <packaging>pom</packaging>
-    <name>Hot Cloud :: Application</name>
+    <name>NGCCA :: Application</name>
     <modules>
-        <module>hotcloud-application-api</module>
-        <module>hotcloud-application-server</module>
+        <module>ngcca-application-api</module>
+        <module>ngcca-application-server</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-application-api</artifactId>
+                <artifactId>ngcca-application-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-application-server</artifactId>
+                <artifactId>ngcca-application-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

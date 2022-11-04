@@ -11,7 +11,7 @@
         <module>hotcloud-security</module>
         <module>hotcloud-db</module>
         <module>hotcloud-web</module>
-        <module>hotcloud-application</module>
+        <module>ngcca-application</module>
         <module>hotcloud-test</module>
     </modules>
     <parent>
@@ -62,7 +62,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-application</artifactId>
+                <artifactId>ngcca-application</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
