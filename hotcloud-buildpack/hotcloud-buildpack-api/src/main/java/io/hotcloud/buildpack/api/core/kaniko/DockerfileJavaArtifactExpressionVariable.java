@@ -5,7 +5,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 @Data
-public class DockerfileJavaArtifact {
+public class DockerfileJavaArtifactExpressionVariable {
 
     /**
      * e.g. harbor.local:5000/library/maven:3.8-openjdk-11-slim
@@ -36,13 +36,13 @@ public class DockerfileJavaArtifact {
      */
     private String jarStartArgs;
 
-    public static DockerfileJavaArtifact ofMavenJar(String maven, String runtime, String jarTarget, String jarStartOptions, String jarStartArgs) {
+    public static DockerfileJavaArtifactExpressionVariable ofMavenJar(String maven, String runtime, String jarTarget, String jarStartOptions, String jarStartArgs) {
 
         Assert.hasText(maven, "Maven image is null");
         Assert.hasText(runtime, "Java-runtime image is null");
         Assert.hasText(jarTarget, "Jar target path is null");
 
-        DockerfileJavaArtifact jarArtifact = new DockerfileJavaArtifact();
+        DockerfileJavaArtifactExpressionVariable jarArtifact = new DockerfileJavaArtifactExpressionVariable();
         jarArtifact.setJarTarget(jarTarget);
         jarArtifact.setMaven(maven);
         jarArtifact.setRuntime(runtime);
@@ -52,12 +52,12 @@ public class DockerfileJavaArtifact {
         return jarArtifact;
     }
 
-    public static DockerfileJavaArtifact ofUrlJar(String runtime, String packageUrl, String jarStartOptions, String jarStartArgs) {
+    public static DockerfileJavaArtifactExpressionVariable ofUrlJar(String runtime, String packageUrl, String jarStartOptions, String jarStartArgs) {
 
         Assert.hasText(runtime, "Java-runtime image is null");
         Assert.hasText(packageUrl, "Jar package http url is null");
 
-        DockerfileJavaArtifact jarArtifact = new DockerfileJavaArtifact();
+        DockerfileJavaArtifactExpressionVariable jarArtifact = new DockerfileJavaArtifactExpressionVariable();
         jarArtifact.setHttpPackageUrl(packageUrl);
         jarArtifact.setRuntime(runtime);
         jarArtifact.setJarStartOptions(jarStartOptions);
@@ -66,11 +66,11 @@ public class DockerfileJavaArtifact {
         return jarArtifact;
     }
 
-    public static DockerfileJavaArtifact ofUrlWar(String runtime, String packageUrl) {
+    public static DockerfileJavaArtifactExpressionVariable ofUrlWar(String runtime, String packageUrl) {
         Assert.hasText(runtime, "Java-runtime image is null");
         Assert.hasText(packageUrl, "War package http url is null");
 
-        DockerfileJavaArtifact warArtifact = new DockerfileJavaArtifact();
+        DockerfileJavaArtifactExpressionVariable warArtifact = new DockerfileJavaArtifactExpressionVariable();
         warArtifact.setHttpPackageUrl(packageUrl);
         warArtifact.setRuntime(runtime);
         warArtifact.setWar(true);

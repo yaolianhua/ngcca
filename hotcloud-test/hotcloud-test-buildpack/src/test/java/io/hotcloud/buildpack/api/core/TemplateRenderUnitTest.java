@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
+import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.common.api.INet;
 import org.junit.Assert;
@@ -17,14 +17,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.kanikoJob;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.parseJob;
 
 public class TemplateRenderUnitTest {
 
 
     @Test
     public void kanikoJobTemplateSource() throws IOException {
-        String jarDockerfile = DockerfileJava(DockerfileJavaArtifact.ofMavenJar(
+        String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofMavenJar(
                         "harbor.local:5000/library/maven:3.8-openjdk-11-slim",
                         "harbor.local:5000/library/java11-runtime:latest",
                         "target/*.jar",
@@ -55,7 +55,7 @@ public class TemplateRenderUnitTest {
                 ),
                 Map.of(INet.getLocalizedIPv4(), List.of("harbor.local", "git.docker.local"))
         );
-        String kanikoJob = kanikoJob(jobExpressionVariable);
+        String kanikoJob = parseJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-source.yaml")) {
             assert inputStream != null;
@@ -68,7 +68,7 @@ public class TemplateRenderUnitTest {
     @Test
     public void kanikoJobTemplateJarArtifact() throws IOException {
 
-        String jarDockerfile = DockerfileJava(DockerfileJavaArtifact.ofUrlJar(
+        String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlJar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
                         "http://120.78.225.168:28080/files/java/demo.jar",
                         "-Xms128m -Xmx512m",
@@ -94,7 +94,7 @@ public class TemplateRenderUnitTest {
                 null,
                 Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local"))
         );
-        String kanikoJob = kanikoJob(jobExpressionVariable);
+        String kanikoJob = parseJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-jar.yaml")) {
             assert inputStream != null;
@@ -106,7 +106,7 @@ public class TemplateRenderUnitTest {
     @Test
     public void kanikoJobTemplateWarArtifact() throws IOException {
 
-        String warDockerfile = DockerfileJava(DockerfileJavaArtifact.ofUrlWar(
+        String warDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlWar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
                         "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war"),
                 false);
@@ -130,7 +130,7 @@ public class TemplateRenderUnitTest {
                 null,
                 Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local"))
         );
-        String kanikoJob = kanikoJob(jobExpressionVariable);
+        String kanikoJob = parseJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-war.yaml")) {
             assert inputStream != null;

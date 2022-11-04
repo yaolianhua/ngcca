@@ -4,7 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
-import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
+import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
@@ -104,13 +104,13 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
         String businessId = UUIDGenerator.uuidNoDash();
-        DockerfileJavaArtifact dockerfileJavaArtifact = DockerfileJavaArtifact.ofMavenJar(
+        DockerfileJavaArtifactExpressionVariable dockerfileJavaArtifactExpressionVariable = DockerfileJavaArtifactExpressionVariable.ofMavenJar(
                 registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
                 registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
                 jarPath,
                 buildImage.getSource().getStartOptions(),
                 buildImage.getSource().getStartArgs());
-        String encodedDockerfile = DockerfileJava(dockerfileJavaArtifact, true);
+        String encodedDockerfile = DockerfileJava(dockerfileJavaArtifactExpressionVariable, true);
         KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
                 businessId,
                 namespace,
@@ -127,7 +127,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
                 .labels(Map.of(K8S_APP, k8sName,
                         K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(kanikoJob(jobExpressionVariable))
+                .jobResourceYaml(parseJob(jobExpressionVariable))
                 .name(k8sName)
                 .namespace(namespace)
                 .build();
@@ -156,9 +156,9 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
 
         String businessId = UUIDGenerator.uuidNoDash();
-        DockerfileJavaArtifact javaArtifact = buildImage.isJar() ?
-                DockerfileJavaArtifact.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
-                DockerfileJavaArtifact.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
+        DockerfileJavaArtifactExpressionVariable javaArtifact = buildImage.isJar() ?
+                DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
+                DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
         String encodedDockerfile = DockerfileJava(javaArtifact, true);
 
         KanikoJobExpressionVariable expressionVariable = KanikoJobExpressionVariable.of(businessId,
@@ -172,7 +172,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
                 .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(kanikoJob(expressionVariable))
+                .jobResourceYaml(parseJob(expressionVariable))
                 .name(k8sName)
                 .namespace(namespace)
                 .build();
@@ -192,7 +192,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         String k8sName = retrieveSecretName(namespace);
 
-        String secret = secretOfDockerconfigjson(namespace, k8sName, k8sName, dockerconfigjson);
+        String secret = parseSecret(namespace, k8sName, k8sName, dockerconfigjson);
 
         return BuildPackDockerSecretResource.builder()
                 .namespace(namespace)

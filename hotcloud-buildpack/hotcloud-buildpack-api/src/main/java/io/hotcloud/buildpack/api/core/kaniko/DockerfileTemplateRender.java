@@ -32,7 +32,7 @@ public class DockerfileTemplateRender {
      * @return Dockerfile
      */
     @SneakyThrows
-    public static String DockerfileJava(DockerfileJavaArtifact javaArtifact, boolean base64) {
+    public static String DockerfileJava(DockerfileJavaArtifactExpressionVariable javaArtifact, boolean base64) {
 
 
         Map<String, String> renders = new HashMap<>(8);
