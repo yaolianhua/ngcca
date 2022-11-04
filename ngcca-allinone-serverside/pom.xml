@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-allinone-serverside</artifactId>
-    <name>Hot Cloud :: allinone :: serverside</name>
+    <artifactId>ngcca-allinone-serverside</artifactId>
+    <name>NGCCA :: allinone :: serverside</name>
 
     <dependencies>
         <dependency>
