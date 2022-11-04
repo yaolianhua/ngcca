@@ -23,7 +23,7 @@ public class TemplateRenderUnitTest {
 
 
     @Test
-    public void kanikoJobTemplateSource() throws IOException {
+    public void gitSourceTemplate() throws IOException {
         String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofMavenJar(
                         "harbor.local:5000/library/maven:3.8-openjdk-11-slim",
                         "harbor.local:5000/library/java11-runtime:latest",
@@ -66,7 +66,7 @@ public class TemplateRenderUnitTest {
     }
 
     @Test
-    public void kanikoJobTemplateJarArtifact() throws IOException {
+    public void jarTemplate() throws IOException {
 
         String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlJar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
@@ -103,8 +103,9 @@ public class TemplateRenderUnitTest {
             Assert.assertEquals(yaml, kanikoJob);
         }
     }
+
     @Test
-    public void kanikoJobTemplateWarArtifact() throws IOException {
+    public void warTemplate() throws IOException {
 
         String warDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlWar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
