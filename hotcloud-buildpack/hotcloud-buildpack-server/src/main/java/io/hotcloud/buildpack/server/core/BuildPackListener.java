@@ -2,10 +2,7 @@ package io.hotcloud.buildpack.server.core;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.buildpack.api.core.BuildPack;
-import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.buildpack.api.core.ImageBuildStatus;
+import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.*;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.Message;
@@ -16,6 +13,7 @@ import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.api.workload.JobApi;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -35,9 +33,11 @@ import static io.hotcloud.common.api.CommonConstant.SUCCESS_MESSAGE;
  **/
 @Component
 @Deprecated(since = "BuildPackApiV2")
+@RequiredArgsConstructor
 public class BuildPackListener {
 
     private final BuildPackService buildPackService;
+    private final BuildPackApiV2 buildPackApiV2;
     private final PodApi podApi;
     private final JobApi jobApi;
 
@@ -47,24 +47,6 @@ public class BuildPackListener {
 
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBroadcaster messageBroadcaster;
-
-    public BuildPackListener(BuildPackService buildPackService,
-                             ApplicationEventPublisher eventPublisher,
-                             MessageBroadcaster messageBroadcaster,
-                             PersistentVolumeClaimApi persistentVolumeClaimApi,
-                             PersistentVolumeApi persistentVolumeApi,
-                             SecretApi secretApi,
-                             PodApi podApi,
-                             JobApi jobApi) {
-        this.buildPackService = buildPackService;
-        this.eventPublisher = eventPublisher;
-        this.messageBroadcaster = messageBroadcaster;
-        this.persistentVolumeClaimApi = persistentVolumeClaimApi;
-        this.persistentVolumeApi = persistentVolumeApi;
-        this.secretApi = secretApi;
-        this.podApi = podApi;
-        this.jobApi = jobApi;
-    }
 
     private void sleep(int seconds) {
         try {
@@ -205,8 +187,7 @@ public class BuildPackListener {
                     break;
                 }
 
-                Job job = jobApi.read(namespace, jobName);
-                ImageBuildStatus jobStatus = BuildPackStatus.status(job);
+                ImageBuildStatus jobStatus = buildPackApiV2.getStatus(namespace, jobName);
 
                 if (jobStatus == ImageBuildStatus.Active) {
                     Log.info(BuildPackListener.class.getName(),
