@@ -10,7 +10,7 @@
         <module>ngcca-buildpack</module>
         <module>hotcloud-security</module>
         <module>ngcca-db</module>
-        <module>hotcloud-web</module>
+        <module>ngcca-web</module>
         <module>ngcca-application</module>
         <module>hotcloud-test</module>
     </modules>
@@ -92,7 +92,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-web</artifactId>
+                <artifactId>ngcca-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- Swagger -->
