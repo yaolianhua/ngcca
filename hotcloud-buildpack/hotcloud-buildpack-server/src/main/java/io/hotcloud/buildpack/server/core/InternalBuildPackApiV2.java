@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
+import io.hotcloud.buildpack.api.core.kaniko.SecretExpressionVariable;
 import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
@@ -28,7 +29,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.parseJob;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.parseSecret;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 
@@ -184,20 +186,20 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     }
     @Override
     protected BuildPackDockerSecretResource prepareSecret(String namespace) {
-        String dockerconfigjson = dockerconfigjson(
-                registryProperties.getUrl(),
-                registryProperties.getUsername(),
-                registryProperties.getPassword(),
-                true);
 
         String k8sName = retrieveSecretName(namespace);
+        SecretExpressionVariable secretExpressionVariable = SecretExpressionVariable.of(
+                namespace,
+                k8sName,
+                SecretExpressionVariable.DockerConfigJson.of(registryProperties.getUrl(), registryProperties.getUsername(), registryProperties.getPassword())
+        );
 
-        String secret = parseSecret(namespace, k8sName, k8sName, dockerconfigjson);
+        String secret = parseSecret(secretExpressionVariable);
 
         return BuildPackDockerSecretResource.builder()
                 .namespace(namespace)
                 .labels(Map.of(K8S_APP, k8sName))
-                .data(Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, dockerconfigjson))
+                .data(Map.of(BuildPackConstant.DOCKER_CONFIG_JSON, secretExpressionVariable.getDockerconfigjson()))
                 .name(k8sName)
                 .secretResourceYaml(secret)
                 .build();

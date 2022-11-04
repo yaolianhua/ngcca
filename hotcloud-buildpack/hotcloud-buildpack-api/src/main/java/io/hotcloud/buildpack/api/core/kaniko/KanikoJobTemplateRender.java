@@ -4,13 +4,14 @@ import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.apply;
@@ -53,8 +54,15 @@ public class KanikoJobTemplateRender {
         return builder.toString().stripTrailing();
     }
 
+    /**
+     * 从模板创建可直接部署的k8s的job资源对象
+     * <ul><li>从Git克隆创建的模板<li>从给定包创建的模板<ul/>
+     *
+     * @param job {@link KanikoJobExpressionVariable}
+     * @return job yaml
+     */
     @SneakyThrows
-    public static String kanikoJob(KanikoJobExpressionVariable job) {
+    public static String parseJob(KanikoJobExpressionVariable job) {
 
         InputStream inputStream = job.hasGit() ?
                 new ClassPathResource(IMAGEBUILD_SOURCE_TEMPLATE).getInputStream() :
@@ -84,43 +92,20 @@ public class KanikoJobTemplateRender {
     }
 
     /**
-     * 获取仓库凭证
-     *
-     * @param registry         仓库地址 e.g. 192.168.146.128:5000
-     * @param registryUser     授权用户
-     * @param registryPassword 授权用户访问密码
-     * @param base64           返回文本是否base64
-     */
-    public static String dockerconfigjson(String registry, String registryUser, String registryPassword, boolean base64) {
-
-        String registryUrl;
-        if (Objects.equals(registry, "index.docker.io")) {
-            registryUrl = "https://index.docker.io/v1/";
-        } else {
-            registryUrl = registry;
-        }
-        String plainAuth = String.format("%s:%s", registryUser, registryPassword);
-        String base64Auth = Base64.getEncoder().encodeToString(plainAuth.getBytes(StandardCharsets.UTF_8));
-        String plainDockerconfigjson = "{\"auths\":{\"" + registryUrl + "\":{\"username\":\"" + registryUser + "\",\"password\":\"" + registryPassword + "\",\"auth\":\"" + base64Auth + "\"}}}";
-
-        return base64 ? Base64.getEncoder().encodeToString(plainDockerconfigjson.getBytes(StandardCharsets.UTF_8)) : plainDockerconfigjson;
-    }
-
-
-    /**
      * 从模板创建secret
      */
     @SneakyThrows
-    public static String secretOfDockerconfigjson(String namespace, String label, String secret, String dockerconfigjson) {
-        String DEFAULT_K8S_NAME = String.format("kaniko-%s", UUID.randomUUID().toString().replace("-", ""));
+    public static String parseSecret(SecretExpressionVariable secret) {
 
         InputStream inputStream = new ClassPathResource(IMAGEBUILD_SECRET_TEMPLATE).getInputStream();
         String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+
         Map<String, String> renders = new HashMap<>(8);
-        renders.put(Kaniko.NAMESPACE, StringUtils.hasText(namespace) ? namespace : "default");
-        renders.put(Kaniko.SECRET_NAME, StringUtils.hasText(secret) ? secret : DEFAULT_K8S_NAME);
-        renders.put(Kaniko.LABEL_NAME, StringUtils.hasText(label) ? label : DEFAULT_K8S_NAME);
-        renders.put(Kaniko.DOCKER_CONFIG_JSON, dockerconfigjson);
+
+        renders.put(Kaniko.NAMESPACE, secret.getNamespace());
+        renders.put(Kaniko.SECRET_NAME, secret.getSecret());
+        renders.put(Kaniko.LABEL_NAME, secret.getSecret());
+        renders.put(Kaniko.DOCKER_CONFIG_JSON, secret.getDockerconfigjson());
 
         return apply(template, renders);
     }
