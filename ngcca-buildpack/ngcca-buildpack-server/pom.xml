@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-db</artifactId>
+            <artifactId>ngcca-db</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- git -->

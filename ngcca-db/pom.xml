@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-db</artifactId>
-    <name>Hot Cloud :: DB</name>
+    <artifactId>ngcca-db</artifactId>
+    <name>NGCCA :: DB</name>
 
     <dependencies>
         <dependency>

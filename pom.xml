@@ -9,7 +9,7 @@
         <module>hotcloud-common</module>
         <module>ngcca-buildpack</module>
         <module>hotcloud-security</module>
-        <module>hotcloud-db</module>
+        <module>ngcca-db</module>
         <module>hotcloud-web</module>
         <module>ngcca-application</module>
         <module>hotcloud-test</module>
@@ -72,7 +72,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-allinone-serverside</artifactId>
+                <artifactId>ngcca-allinone-serverside</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -82,7 +82,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-db</artifactId>
+                <artifactId>ngcca-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-db</artifactId>
+            <artifactId>ngcca-db</artifactId>
             <scope>test</scope>
         </dependency>
         <!--test -->
