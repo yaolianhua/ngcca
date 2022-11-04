@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
+import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.common.api.INet;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.UUIDGenerator;
@@ -27,9 +28,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.kanikoJob;
-import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.dockerconfigjson;
-import static io.hotcloud.buildpack.api.core.kaniko.SecretTemplateRender.secretOfDockerconfigjson;
+import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.*;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 
@@ -112,26 +111,23 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 buildImage.getSource().getStartOptions(),
                 buildImage.getSource().getStartArgs());
         String encodedDockerfile = DockerfileJava(dockerfileJavaArtifact, true);
-        String job = kanikoJob(
-                namespace,
+        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
                 businessId,
-                k8sName,
+                namespace,
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
-                registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
-                branch,
-                httpGitUrl,
-                registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase()),
+                registryImagesContainer.get(BuildPackImages.Kaniko.name()).toLowerCase(),
                 registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
                 encodedDockerfile,
-                resolvedHostAliases(registryProperties.getUrl(), httpGitUrl));
-
+                KanikoJobExpressionVariable.GitExpressionVariable.of(httpGitUrl, branch, registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase())),
+                resolvedHostAliases(registryProperties.getUrl(), httpGitUrl)
+        );
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
                 .labels(Map.of(K8S_APP, k8sName,
                         K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(job)
+                .jobResourceYaml(kanikoJob(jobExpressionVariable))
                 .name(k8sName)
                 .namespace(namespace)
                 .build();
@@ -163,23 +159,20 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         DockerfileJavaArtifact javaArtifact = buildImage.isJar() ?
                 DockerfileJavaArtifact.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
                 DockerfileJavaArtifact.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
-
         String encodedDockerfile = DockerfileJava(javaArtifact, true);
-        String job = kanikoJob(
+
+        KanikoJobExpressionVariable expressionVariable = KanikoJobExpressionVariable.of(businessId,
                 namespace,
-                businessId,
-                k8sName,
                 k8sName,
                 retrieveSecretName(namespace),
                 artifactUrl,
                 registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
                 registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
-                encodedDockerfile,
-                resolvedHostAliases(registryProperties.getUrl(), httpUrl));
+                encodedDockerfile, null, resolvedHostAliases(registryProperties.getUrl(), httpUrl));
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
                 .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(job)
+                .jobResourceYaml(kanikoJob(expressionVariable))
                 .name(k8sName)
                 .namespace(namespace)
                 .build();

@@ -1,6 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifact;
+import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.common.api.INet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,20 +39,23 @@ public class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
-
-        String kanikoJob = kanikoJob("kaniko-test",
+        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
                 "kaniko-test",
                 "harbor.local:5000/image-build-test/thymeleaf-fragments:latest",
                 "harbor.local:5000/library/kaniko:20221029",
-                "master",
-                "https://git.docker.local/self-host/thymeleaf-fragments.git",
-                "harbor.local:5000/library/alpine-git:latest",
                 "harbor.local:5000/library/alpine:latest",
                 dockerfileEncoded,
-                Map.of(INet.getLocalizedIPv4(), List.of("harbor.local", "git.docker.local")));
+                KanikoJobExpressionVariable.GitExpressionVariable.of(
+                        "https://git.docker.local/self-host/thymeleaf-fragments.git",
+                        "master",
+                        "harbor.local:5000/library/alpine-git:latest"
+                ),
+                Map.of(INet.getLocalizedIPv4(), List.of("harbor.local", "git.docker.local"))
+        );
+        String kanikoJob = kanikoJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-source.yaml")) {
             assert inputStream != null;
@@ -78,7 +82,7 @@ public class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
-        String kanikoJob = kanikoJob("kaniko-test",
+        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
@@ -87,7 +91,10 @@ public class TemplateRenderUnitTest {
                 "gcr.io/kaniko-project/executor:latest",
                 "alpine:latest",
                 dockerfileEncoded,
-                Map.of("10.0.0.159", List.of("harbor.local","gitlab.docker.local")));
+                null,
+                Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local"))
+        );
+        String kanikoJob = kanikoJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-jar.yaml")) {
             assert inputStream != null;
@@ -111,7 +118,7 @@ public class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(warDockerfile.getBytes(StandardCharsets.UTF_8));
-        String kanikoJob = kanikoJob("kaniko-test",
+        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
@@ -120,7 +127,10 @@ public class TemplateRenderUnitTest {
                 "gcr.io/kaniko-project/executor:latest",
                 "alpine:latest",
                 dockerfileEncoded,
-                Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local")));
+                null,
+                Map.of("10.0.0.159", List.of("harbor.local", "gitlab.docker.local"))
+        );
+        String kanikoJob = kanikoJob(jobExpressionVariable);
 
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-war.yaml")) {
             assert inputStream != null;

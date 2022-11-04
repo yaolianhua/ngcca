@@ -8,12 +8,6 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 public class TemplateRender {
-    public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
-    public static final String IMAGEBUILD_JAR_WAR_TEMPLATE = "imagebuild-jar-war.template";
-    public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
-    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE = "Dockerfile-jar-maven.template";
-    public static final String DOCKERFILE_WAR_TEMPLATE = "Dockerfile-war.template";
-    public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
 
     /**
      * 渲染固定模板  {@code #{[ 此值将被替换 ]}}
@@ -51,32 +45,6 @@ public class TemplateRender {
                 .parseExpression(template, new TemplateParserContext())
                 .getValue(render, String.class);
 
-    }
-
-
-
-    /**
-     * Kaniko 模板变量名
-     */
-    interface Kaniko {
-        String NAMESPACE = "NAMESPACE";
-        String ID = "ID";
-        String JOB_NAME = "JOB_NAME";
-        String INIT_GIT_CONTAINER_NAME = "INIT_GIT_CONTAINER_NAME";
-        String INIT_ALPINE_CONTAINER_NAME = "INIT_ALPINE_CONTAINER_NAME";
-        String LABEL_NAME = "LABEL_NAME";
-        String SECRET_NAME = "SECRET_NAME";
-        String DESTINATION = "DESTINATION";
-        String GIT_BRANCH = "GIT_BRANCH";
-        String HTTP_GIT_URL = "HTTP_GIT_URL";
-        String KANIKO_IMAGE = "KANIKO_IMAGE";
-        String KANIKO_CONTAINER_NAME = "KANIKO_CONTAINER_NAME";
-        String INIT_GIT_CONTAINER_IMAGE = "INIT_GIT_CONTAINER_IMAGE";
-        String INIT_ALPINE_CONTAINER_IMAGE = "INIT_ALPINE_CONTAINER_IMAGE";
-        String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
-        String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";
-
-        String HOST_ALIASES = "HOST_ALIASES";
     }
 
 }

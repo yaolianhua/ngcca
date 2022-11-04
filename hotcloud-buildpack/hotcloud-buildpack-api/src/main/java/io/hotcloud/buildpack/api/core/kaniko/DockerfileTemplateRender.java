@@ -13,9 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.*;
+import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.apply;
 
 public class DockerfileTemplateRender {
+    public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
+    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE = "Dockerfile-jar-maven.template";
+    public static final String DOCKERFILE_WAR_TEMPLATE = "Dockerfile-war.template";
 
     /**
      * 从模板渲染Dockerfile
