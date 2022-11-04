@@ -78,114 +78,123 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         return resolvedHostAliases;
     }
 
+    private static String resolvedK8sName(BuildImage buildImage) {
+        if (buildImage.isSourceCode()) {
+            Assert.hasText(buildImage.getSource().getHttpGitUrl(), "Http git url is null");
+            Assert.isTrue(!CHINESE_PATTERN.matcher(buildImage.getSource().getHttpGitUrl()).find(), "Git url contains chinese char");
+            Assert.isTrue(!CHINESE_PATTERN.matcher(buildImage.getSource().getBranch()).find(), "Git branch contains chinese char");
+
+            //https://git.docker.local/self-host/thymeleaf-fragments.git --> /thymeleaf-fragments.git
+            String substringWithSlash = buildImage.getSource().getHttpGitUrl().substring(buildImage.getSource().getHttpGitUrl().lastIndexOf("/"));
+            // /thymeleaf-fragments.git --> thymeleaf-fragments
+            String originProjectString = substringWithSlash.substring(1, substringWithSlash.length() - ".git".length());
+
+            String resolvedProject = originProjectString.toLowerCase().replaceAll("_", "-");
+            String resolvedBranch = buildImage.getSource().getBranch().toLowerCase().replaceAll("_", "-");
+
+            Assert.isTrue(Validator.validK8sName(resolvedProject), "git project name is illegal [" + resolvedProject + "]");
+            Assert.isTrue(Validator.validK8sName(resolvedBranch), "git branch is illegal [" + resolvedBranch + "]");
+            return String.format("%s-%s-%s", resolvedProject, resolvedBranch, System.currentTimeMillis());
+        }
+
+        if (buildImage.isJar() || buildImage.isWar()) {
+            String packageUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
+            Assert.hasText(packageUrl, "Binary package url is null");
+            String filename = FileHelper.getFilename(packageUrl);
+            Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
+
+            return String.format("%s-%s", filename, System.currentTimeMillis());
+        }
+
+        throw new UnsupportedOperationException("Not supported operation for BuildImage");
+    }
+
     @Override
-    protected BuildPackJobResource prepareJobOfSource(String namespace, BuildImage buildImage) {
-
-        Assert.state(buildImage.isSourceCode(), "Source-code support only");
-        String httpGitUrl = buildImage.getSource().getHttpGitUrl();
-        String branch = buildImage.getSource().getBranch();
-        String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
-
-        Assert.hasText(httpGitUrl, "Http git url is null");
-        Assert.state(!CHINESE_PATTERN.matcher(httpGitUrl).find(), "Git url contains chinese char");
-        Assert.state(!CHINESE_PATTERN.matcher(branch).find(), "Git branch contains chinese char");
-
-        String substring = httpGitUrl.substring(httpGitUrl.lastIndexOf("/"));
-        String originString = substring.substring(1, substring.length() - ".git".length());
-
-        String project = originString.toLowerCase().replaceAll("_", "-");
-        String resolvedBranch = branch.toLowerCase().replaceAll("_", "-");
-
-
-        Assert.isTrue(Validator.validK8sName(project), "git project name is illegal [" + project + "]");
-        String k8sName = String.format("%s-%s-%s", project, resolvedBranch, System.currentTimeMillis());
-
-        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String image = String.format("%s:%s", k8sName, date);
-
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
-
-        String businessId = UUIDGenerator.uuidNoDash();
-        DockerfileJavaArtifactExpressionVariable dockerfileJavaArtifactExpressionVariable = DockerfileJavaArtifactExpressionVariable.ofMavenJar(
-                registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
-                registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
-                jarPath,
-                buildImage.getSource().getStartOptions(),
-                buildImage.getSource().getStartArgs());
-        String encodedDockerfile = DockerfileJava(dockerfileJavaArtifactExpressionVariable, true);
-        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
-                businessId,
-                namespace,
-                k8sName,
-                retrieveSecretName(namespace),
-                artifactUrl,
-                registryImagesContainer.get(BuildPackImages.Kaniko.name()).toLowerCase(),
-                registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
-                encodedDockerfile,
-                KanikoJobExpressionVariable.GitExpressionVariable.of(httpGitUrl, branch, registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase())),
-                resolvedHostAliases(registryProperties.getUrl(), httpGitUrl)
-        );
+    protected BuildPackJobResource prepareJobResource(String namespace, BuildImage buildImage) {
+        KanikoJobExpressionVariable expressionVariable = determinedKanikoJobExpressionVariable(buildImage, namespace);
+        String jobYamlString = parseJob(expressionVariable);
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName,
-                        K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(parseJob(jobExpressionVariable))
-                .name(k8sName)
+                .labels(Map.of(K8S_APP, expressionVariable.getJob(), K8S_APP_BUSINESS_DATA_ID, expressionVariable.getBusinessId()))
+                .jobResourceYaml(jobYamlString)
+                .name(expressionVariable.getJob())
                 .namespace(namespace)
                 .build();
 
         Map<String, String> alternative = jobResource.getAlternative();
-        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, artifactUrl);
+        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, expressionVariable.getDestination());
 
         return jobResource;
-
     }
 
-    @Override
-    protected BuildPackJobResource prepareJobOfArtifact(String namespace, BuildImage buildImage) {
+    private DockerfileJavaArtifactExpressionVariable determinedDockerfileJavaArtifactExpressionVariable(BuildImage buildImage) {
+        if (buildImage.isSourceCode()) {
+            String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
+            return DockerfileJavaArtifactExpressionVariable.ofMavenJar(
+                    registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
+                    registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
+                    jarPath,
+                    buildImage.getSource().getStartOptions(),
+                    buildImage.getSource().getStartArgs());
+        }
 
-        String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
+        if (buildImage.isJar() || buildImage.isWar()) {
+            String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
+            return buildImage.isJar() ?
+                    DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
+                    DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
+        }
 
-        Assert.hasText(httpUrl, "Binary package url is null");
-        String filename = FileHelper.getFilename(httpUrl);
-        Assert.isTrue(Validator.validK8sName(filename), "Binary package name is illegal [" + filename + "]");
+        throw new UnsupportedOperationException("Not supported operation for BuildImage");
+    }
 
-        String k8sName = String.format("%s-%s", filename, System.currentTimeMillis());
+    private KanikoJobExpressionVariable determinedKanikoJobExpressionVariable(BuildImage buildImage,
+                                                                              String namespace) {
 
+        String k8sName = resolvedK8sName(buildImage);
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String image = String.format("%s:%s", k8sName, date);
+        // image-name:image-tag
+        String repo = String.format("%s:%s", k8sName, date);
+        // harbor.local:5000/image-build-test/jenkins:20221220045021
+        String destination = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), repo);
 
-        String artifactUrl = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), image);
+        DockerfileJavaArtifactExpressionVariable javaArtifact = determinedDockerfileJavaArtifactExpressionVariable(buildImage);
 
-        String businessId = UUIDGenerator.uuidNoDash();
-        DockerfileJavaArtifactExpressionVariable javaArtifact = buildImage.isJar() ?
-                DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
-                DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
-        String encodedDockerfile = DockerfileJava(javaArtifact, true);
+        if (buildImage.isSourceCode()) {
+            return KanikoJobExpressionVariable.of(
+                    UUIDGenerator.uuidNoDash(),
+                    namespace,
+                    k8sName,
+                    retrieveSecretName(namespace),
+                    destination,
+                    registryImagesContainer.get(BuildPackImages.Kaniko.name()).toLowerCase(),
+                    registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                    DockerfileJava(javaArtifact, true),
+                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase())),
+                    resolvedHostAliases(registryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
+            );
+        }
 
-        KanikoJobExpressionVariable expressionVariable = KanikoJobExpressionVariable.of(businessId,
-                namespace,
-                k8sName,
-                retrieveSecretName(namespace),
-                artifactUrl,
-                registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
-                registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
-                encodedDockerfile, null, resolvedHostAliases(registryProperties.getUrl(), httpUrl));
+        if (buildImage.isJar() || buildImage.isWar()) {
+            String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
+            return KanikoJobExpressionVariable.of(
+                    UUIDGenerator.uuidNoDash(),
+                    namespace,
+                    k8sName,
+                    retrieveSecretName(namespace),
+                    destination,
+                    registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
+                    registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                    DockerfileJava(javaArtifact, true),
+                    null,
+                    resolvedHostAliases(registryProperties.getUrl(), httpUrl));
+        }
 
-        BuildPackJobResource jobResource = BuildPackJobResource.builder()
-                .labels(Map.of(K8S_APP, k8sName, K8S_APP_BUSINESS_DATA_ID, businessId))
-                .jobResourceYaml(parseJob(expressionVariable))
-                .name(k8sName)
-                .namespace(namespace)
-                .build();
-
-        Map<String, String> alternative = jobResource.getAlternative();
-        alternative.put(BuildPackConstant.IMAGEBUILD_ARTIFACT, artifactUrl);
-
-        return jobResource;
+        throw new UnsupportedOperationException("Not supported operation for BuildImage");
     }
+
     @Override
-    protected BuildPackDockerSecretResource prepareSecret(String namespace) {
+    protected BuildPackDockerSecretResource prepareSecretResource(String namespace) {
 
         String k8sName = retrieveSecretName(namespace);
         SecretExpressionVariable secretExpressionVariable = SecretExpressionVariable.of(
