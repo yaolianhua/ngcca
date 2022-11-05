@@ -3,19 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotcloud-kubernetes</artifactId>
+        <artifactId>ngcca-kubernetes</artifactId>
         <groupId>io.hotcloud</groupId>
         <version>0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-kubernetes-api</artifactId>
-    <name>Hot Cloud :: Kubernetes :: Api</name>
+    <artifactId>ngcca-kubernetes-api</artifactId>
+    <name>NGCCA :: Kubernetes :: Api</name>
 
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-kubernetes-model</artifactId>
+            <artifactId>ngcca-kubernetes-model</artifactId>
         </dependency>
 
         <dependency>
