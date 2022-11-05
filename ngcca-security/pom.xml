@@ -11,24 +11,24 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>hotcloud-security-server</module>
-        <module>hotcloud-security-api</module>
+        <module>ngcca-security-server</module>
+        <module>ngcca-security-api</module>
     </modules>
-    <artifactId>hotcloud-security</artifactId>
-    <name>Hot Cloud :: Security</name>
+    <artifactId>ngcca-security</artifactId>
+    <name>NGCCA :: Security</name>
 
     <dependencyManagement>
         <dependencies>
 
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-security-server</artifactId>
+                <artifactId>ngcca-security-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-security-api</artifactId>
+                <artifactId>ngcca-security-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

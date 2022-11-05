@@ -3,14 +3,14 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotcloud-security</artifactId>
+        <artifactId>ngcca-security</artifactId>
         <groupId>io.hotcloud</groupId>
         <version>0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-security-server</artifactId>
-    <name>Hot Cloud :: Security :: Server</name>
+    <artifactId>ngcca-security-server</artifactId>
+    <name>NGCCA :: Security :: Server</name>
 
     <dependencies>
         <dependency>
@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-security-api</artifactId>
+            <artifactId>ngcca-security-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>

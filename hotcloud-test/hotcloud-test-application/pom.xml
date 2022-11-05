@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-security-server</artifactId>
+            <artifactId>ngcca-security-server</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

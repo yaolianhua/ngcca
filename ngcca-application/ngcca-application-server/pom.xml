@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-security-api</artifactId>
+            <artifactId>ngcca-security-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
