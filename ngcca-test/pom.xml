@@ -9,16 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-test</artifactId>
+    <artifactId>ngcca-test</artifactId>
     <packaging>pom</packaging>
-    <name>Hot Cloud :: Test</name>
+    <name>NGCCA :: Test</name>
     <modules>
-        <module>hotcloud-test-common</module>
-        <module>hotcloud-test-buildpack</module>
-        <module>hotcloud-test-application</module>
-        <module>hotcloud-test-security</module>
-        <module>hotcloud-test-db</module>
-        <module>hotcloud-test-kubernetes</module>
+        <module>ngcca-test-common</module>
+        <module>ngcca-test-buildpack</module>
+        <module>ngcca-test-application</module>
+        <module>ngcca-test-security</module>
+        <module>ngcca-test-db</module>
+        <module>ngcca-test-kubernetes</module>
     </modules>
 
 </project>

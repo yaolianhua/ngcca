@@ -3,28 +3,23 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotcloud-test</artifactId>
+        <artifactId>ngcca-test</artifactId>
         <groupId>io.hotcloud</groupId>
         <version>0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-test-security</artifactId>
-    <name>Hot Cloud :: Test :: Security</name>
+    <artifactId>ngcca-test-common</artifactId>
+    <name>NGCCA :: Test :: Common</name>
 
     <dependencies>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-security-server</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-common-server</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

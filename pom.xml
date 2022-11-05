@@ -12,7 +12,7 @@
         <module>ngcca-db</module>
         <module>ngcca-web</module>
         <module>ngcca-application</module>
-        <module>hotcloud-test</module>
+        <module>ngcca-test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -87,7 +87,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-test</artifactId>
+                <artifactId>ngcca-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
