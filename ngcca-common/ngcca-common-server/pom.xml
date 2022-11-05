@@ -3,19 +3,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hotcloud-common</artifactId>
+        <artifactId>ngcca-common</artifactId>
         <groupId>io.hotcloud</groupId>
         <version>0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-common-server</artifactId>
-    <name>Hot Cloud :: Common :: Server</name>
+    <artifactId>ngcca-common-server</artifactId>
+    <name>NGCCA :: Common :: Server</name>
 
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>hotcloud-common-api</artifactId>
+            <artifactId>ngcca-common-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

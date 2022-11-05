@@ -9,23 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hotcloud-common</artifactId>
+    <artifactId>ngcca-common</artifactId>
     <packaging>pom</packaging>
-    <name>Hot Cloud :: Common</name>
+    <name>NGCCA :: Common</name>
     <modules>
-        <module>hotcloud-common-api</module>
-        <module>hotcloud-common-server</module>
+        <module>ngcca-common-api</module>
+        <module>ngcca-common-server</module>
     </modules>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-common-api</artifactId>
+                <artifactId>ngcca-common-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-common-server</artifactId>
+                <artifactId>ngcca-common-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

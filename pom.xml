@@ -6,7 +6,7 @@
     <modules>
         <module>ngcca-allinone-serverside</module>
         <module>hotcloud-kubernetes</module>
-        <module>hotcloud-common</module>
+        <module>ngcca-common</module>
         <module>ngcca-buildpack</module>
         <module>ngcca-security</module>
         <module>ngcca-db</module>
@@ -52,7 +52,7 @@
         <dependencies>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>hotcloud-common</artifactId>
+                <artifactId>ngcca-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
