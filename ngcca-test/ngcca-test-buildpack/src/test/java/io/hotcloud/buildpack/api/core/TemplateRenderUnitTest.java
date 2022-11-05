@@ -2,7 +2,6 @@ package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
-import io.hotcloud.common.api.INet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -53,7 +52,7 @@ public class TemplateRenderUnitTest {
                         "master",
                         "harbor.local:5000/library/alpine-git:latest"
                 ),
-                Map.of(INet.getLocalizedIPv4(), List.of("harbor.local", "git.docker.local"))
+                Map.of("192.168.110.199", List.of("harbor.local", "git.docker.local"))
         );
         String kanikoJob = parseJob(jobExpressionVariable);
 

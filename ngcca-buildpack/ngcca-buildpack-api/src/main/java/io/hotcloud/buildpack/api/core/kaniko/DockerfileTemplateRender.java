@@ -22,10 +22,8 @@ public class DockerfileTemplateRender {
 
     /**
      * 从模板渲染Dockerfile
-     * <ul>
-     *  <li>从源代码渲染，系统需要先从maven构建
-     *  <li>从包（Jar&War）地址渲染
-     * <ul/>
+     * <p>1. 从源代码渲染，系统需要先从maven构建
+     * <p>2. 从包（Jar/War）地址渲染
      *
      * @param javaArtifact 渲染模板参数对象
      * @param base64       是否base64返回结果

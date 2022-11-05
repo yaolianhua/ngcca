@@ -21,10 +21,10 @@
     </parent>
 
     <groupId>io.hotcloud</groupId>
-    <artifactId>hotcloud</artifactId>
+    <artifactId>ngcca</artifactId>
     <version>0.3</version>
     <packaging>pom</packaging>
-    <name>Hot Cloud</name>
+    <name>NGCCA</name>
 
     <properties>
         <java.version>11</java.version>

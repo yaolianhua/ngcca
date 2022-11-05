@@ -56,7 +56,8 @@ public class KanikoJobTemplateRender {
 
     /**
      * 从模板创建可直接部署的k8s的job资源对象
-     * <ul><li>从Git克隆创建的模板<li>从给定包创建的模板<ul/>
+     * <p>1. 从Git克隆创建的模板
+     * <P>2. 从给定包创建的模板
      *
      * @param job {@link KanikoJobExpressionVariable}
      * @return job yaml
