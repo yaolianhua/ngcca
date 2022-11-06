@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,10 +37,10 @@ public class SecretController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Secret request body")
     )
-    public ResponseEntity<Result<Secret>> secret(@RequestBody SecretCreateRequest params) throws ApiException {
+    public ResponseEntity<Secret> secret(@RequestBody SecretCreateRequest params) throws ApiException {
         Secret secret = secretApi.create(params);
 
-        return WebResponse.created(secret);
+        return ResponseEntity.status(HttpStatus.CREATED).body(secret);
     }
 
     @PostMapping("/yaml")
@@ -50,9 +49,9 @@ public class SecretController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Secret kubernetes yaml")
     )
-    public ResponseEntity<Result<Secret>> secret(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<Secret> secret(@RequestBody YamlBody yaml) throws ApiException {
         Secret secret = secretApi.create(yaml.getYaml());
-        return WebResponse.created(secret);
+        return ResponseEntity.status(HttpStatus.CREATED).body(secret);
     }
 
     @GetMapping("/{namespace}/{secret}")
@@ -64,10 +63,10 @@ public class SecretController {
                     @Parameter(name = "secret", description = "secret name")
             }
     )
-    public ResponseEntity<Result<Secret>> secretRead(@PathVariable String namespace,
-                                                     @PathVariable String secret) {
+    public ResponseEntity<Secret> secretRead(@PathVariable String namespace,
+                                             @PathVariable String secret) {
         Secret read = secretApi.read(namespace, secret);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -78,10 +77,10 @@ public class SecretController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<SecretList>> secretListRead(@PathVariable String namespace,
-                                                             @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<SecretList> secretListRead(@PathVariable String namespace,
+                                                     @RequestParam(required = false) Map<String, String> labelSelector) {
         SecretList list = secretApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{secret}")
@@ -93,9 +92,9 @@ public class SecretController {
                     @Parameter(name = "secret", description = "secret name")
             }
     )
-    public ResponseEntity<Result<Void>> secretDelete(@PathVariable String namespace,
-                                                     @PathVariable String secret) throws ApiException {
+    public ResponseEntity<Void> secretDelete(@PathVariable String namespace,
+                                             @PathVariable String secret) throws ApiException {
         secretApi.delete(namespace, secret);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

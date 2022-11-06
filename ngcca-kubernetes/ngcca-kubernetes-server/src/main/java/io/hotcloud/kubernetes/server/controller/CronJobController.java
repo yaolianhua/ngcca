@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.workload.CronJobApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,9 @@ public class CronJobController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "CronJob request body")
     )
-    public ResponseEntity<Result<CronJob>> cronjob(@Validated @RequestBody CronJobCreateRequest params) throws ApiException {
+    public ResponseEntity<CronJob> cronjob(@Validated @RequestBody CronJobCreateRequest params) throws ApiException {
         CronJob cronjob = cronJobApi.create(params);
-        return WebResponse.created(cronjob);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cronjob);
     }
 
     @PostMapping("/yaml")
@@ -49,9 +48,9 @@ public class CronJobController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "CronJob kubernetes yaml")
     )
-    public ResponseEntity<Result<CronJob>> cronjob(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<CronJob> cronjob(@RequestBody YamlBody yaml) throws ApiException {
         CronJob cronjob = cronJobApi.create(yaml.getYaml());
-        return WebResponse.created(cronjob);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cronjob);
     }
 
 
@@ -64,10 +63,10 @@ public class CronJobController {
                     @Parameter(name = "cronjob", description = "cronjob name")
             }
     )
-    public ResponseEntity<Result<CronJob>> cronjobRead(@PathVariable String namespace,
-                                                       @PathVariable String cronjob) {
+    public ResponseEntity<CronJob> cronjobRead(@PathVariable String namespace,
+                                               @PathVariable String cronjob) {
         CronJob read = cronJobApi.read(namespace, cronjob);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -78,10 +77,10 @@ public class CronJobController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<CronJobList>> cronjobListRead(@PathVariable String namespace,
-                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<CronJobList> cronjobListRead(@PathVariable String namespace,
+                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
         CronJobList list = cronJobApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{cronjob}")
@@ -93,10 +92,10 @@ public class CronJobController {
                     @Parameter(name = "cronjob", description = "cronjob name")
             }
     )
-    public ResponseEntity<Result<Void>> cronjobDelete(@PathVariable String namespace,
-                                                      @PathVariable String cronjob) throws ApiException {
+    public ResponseEntity<Void> cronjobDelete(@PathVariable String namespace,
+                                              @PathVariable String cronjob) throws ApiException {
         cronJobApi.delete(namespace, cronjob);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
 }

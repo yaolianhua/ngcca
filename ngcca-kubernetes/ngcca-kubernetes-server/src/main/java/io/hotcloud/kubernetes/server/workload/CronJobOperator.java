@@ -3,8 +3,6 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.workload.CronJobApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
@@ -41,10 +39,10 @@ public class CronJobOperator implements CronJobApi {
         try {
             v1CronJob = Yaml.loadAs(yaml, V1CronJob.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load cronjob yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load cronjob yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1CronJob.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1CronJob cronJob = batchV1Api.createNamespacedCronJob(namespace,
                 v1CronJob,
                 "true",

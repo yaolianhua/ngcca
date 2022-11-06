@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +44,11 @@ public class PodController {
                     @Parameter(name = "tail", description = "tail number")
             }
     )
-    public ResponseEntity<Result<String>> podlogs(@PathVariable String namespace,
-                                                  @PathVariable String pod,
-                                                  @RequestParam(value = "tail", required = false) Integer tailing) {
+    public ResponseEntity<String> podlogs(@PathVariable String namespace,
+                                          @PathVariable String pod,
+                                          @RequestParam(value = "tail", required = false) Integer tailing) {
         String log = podApi.logs(namespace, pod, tailing);
-        return WebResponse.ok(log);
+        return ResponseEntity.ok(log);
     }
 
     @GetMapping("/{namespace}/{pod}/loglines")
@@ -62,11 +61,11 @@ public class PodController {
                     @Parameter(name = "tail", description = "tail number")
             }
     )
-    public ResponseEntity<Result<List<String>>> podloglines(@PathVariable String namespace,
-                                                            @PathVariable String pod,
-                                                            @RequestParam(value = "tail", required = false) Integer tailing) {
+    public ResponseEntity<List<String>> podloglines(@PathVariable String namespace,
+                                                    @PathVariable String pod,
+                                                    @RequestParam(value = "tail", required = false) Integer tailing) {
         List<String> lines = podApi.logsline(namespace, pod, tailing);
-        return WebResponse.ok(lines);
+        return ResponseEntity.ok(lines);
     }
 
     @PostMapping
@@ -75,9 +74,9 @@ public class PodController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Pod request body")
     )
-    public ResponseEntity<Result<Pod>> pod(@Validated @RequestBody PodCreateRequest params) throws ApiException {
+    public ResponseEntity<Pod> pod(@Validated @RequestBody PodCreateRequest params) throws ApiException {
         Pod pod = podApi.create(params);
-        return WebResponse.created(pod);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pod);
     }
 
     @PostMapping("/yaml")
@@ -86,9 +85,9 @@ public class PodController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Pod kubernetes yaml")
     )
-    public ResponseEntity<Result<Pod>> pod(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<Pod> pod(@RequestBody YamlBody yaml) throws ApiException {
         Pod pod = podApi.create(yaml.getYaml());
-        return WebResponse.created(pod);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pod);
     }
 
 
@@ -101,10 +100,10 @@ public class PodController {
                     @Parameter(name = "pod", description = "pod name")
             }
     )
-    public ResponseEntity<Result<Pod>> podRead(@PathVariable String namespace,
-                                               @PathVariable String pod) {
+    public ResponseEntity<Pod> podRead(@PathVariable String namespace,
+                                       @PathVariable String pod) {
         Pod read = podApi.read(namespace, pod);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @PatchMapping("/{namespace}/{pod}/annotations")
@@ -117,11 +116,11 @@ public class PodController {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "annotation mapping body")
     )
-    public ResponseEntity<Result<Pod>> annotations(@PathVariable String namespace,
-                                                   @PathVariable String pod,
-                                                   @RequestBody Map<String, String> annotations) {
+    public ResponseEntity<Pod> annotations(@PathVariable String namespace,
+                                           @PathVariable String pod,
+                                           @RequestBody Map<String, String> annotations) {
         Pod patched = podApi.addAnnotations(namespace, pod, annotations);
-        return WebResponse.accepted(patched);
+        return ResponseEntity.accepted().body(patched);
     }
 
     @PatchMapping("/{namespace}/{pod}/labels")
@@ -134,11 +133,11 @@ public class PodController {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "labels mapping body")
     )
-    public ResponseEntity<Result<Pod>> labels(@PathVariable String namespace,
-                                              @PathVariable String pod,
-                                              @RequestBody Map<String, String> labels) {
+    public ResponseEntity<Pod> labels(@PathVariable String namespace,
+                                      @PathVariable String pod,
+                                      @RequestBody Map<String, String> labels) {
         Pod patched = podApi.addLabels(namespace, pod, labels);
-        return WebResponse.accepted(patched);
+        return ResponseEntity.accepted().body(patched);
     }
 
     @GetMapping("/{namespace}")
@@ -149,10 +148,10 @@ public class PodController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<PodList>> podListRead(@PathVariable String namespace,
-                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<PodList> podListRead(@PathVariable String namespace,
+                                               @RequestParam(required = false) Map<String, String> labelSelector) {
         PodList list = podApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{pod}")
@@ -164,9 +163,9 @@ public class PodController {
                     @Parameter(name = "pod", description = "pod name")
             }
     )
-    public ResponseEntity<Result<Void>> podDelete(@PathVariable("namespace") String namespace,
-                                                  @PathVariable("pod") String name) throws ApiException {
+    public ResponseEntity<Void> podDelete(@PathVariable("namespace") String namespace,
+                                          @PathVariable("pod") String name) throws ApiException {
         podApi.delete(namespace, name);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

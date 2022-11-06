@@ -3,8 +3,6 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.configurations.SecretApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -42,10 +40,10 @@ public class SecretOperator implements SecretApi {
         try {
             v1Secret = Yaml.loadAs(yaml, V1Secret.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load secret yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load secret yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Secret.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1Secret cm = coreV1Api.createNamespacedSecret(namespace,
                 v1Secret,
                 "true",

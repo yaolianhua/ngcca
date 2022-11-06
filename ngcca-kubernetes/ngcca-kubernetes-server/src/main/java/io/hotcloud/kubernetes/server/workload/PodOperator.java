@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.StatusDetails;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -45,10 +43,10 @@ public class PodOperator implements PodApi {
         try {
             v1Pod = Yaml.loadAs(yaml, V1Pod.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load pod yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load pod yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Pod.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1Pod pod = coreV1Api.createNamespacedPod(
                 namespace,
                 v1Pod,

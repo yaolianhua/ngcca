@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +37,10 @@ public class ConfigMapController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "ConfigMap request body")
     )
-    public ResponseEntity<Result<ConfigMap>> configMap(@Validated @RequestBody ConfigMapCreateRequest params) throws ApiException {
+    public ResponseEntity<ConfigMap> configMap(@Validated @RequestBody ConfigMapCreateRequest params) throws ApiException {
         ConfigMap configMap = configMapApi.create(params);
 
-        return WebResponse.created(configMap);
+        return ResponseEntity.status(HttpStatus.CREATED).body(configMap);
     }
 
     @PostMapping("/yaml")
@@ -50,9 +49,9 @@ public class ConfigMapController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "ConfigMap kubernetes yaml")
     )
-    public ResponseEntity<Result<ConfigMap>> configMap(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<ConfigMap> configMap(@RequestBody YamlBody yaml) throws ApiException {
         ConfigMap configMap = configMapApi.create(yaml.getYaml());
-        return WebResponse.created(configMap);
+        return ResponseEntity.status(HttpStatus.CREATED).body(configMap);
     }
 
     @GetMapping("/{namespace}/{configmap}")
@@ -64,10 +63,10 @@ public class ConfigMapController {
                     @Parameter(name = "configmap", description = "configmap name")
             }
     )
-    public ResponseEntity<Result<ConfigMap>> configMapRead(@PathVariable String namespace,
-                                                           @PathVariable String configmap) {
+    public ResponseEntity<ConfigMap> configMapRead(@PathVariable String namespace,
+                                                   @PathVariable String configmap) {
         ConfigMap read = configMapApi.read(namespace, configmap);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -78,10 +77,10 @@ public class ConfigMapController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<ConfigMapList>> configMapListRead(@PathVariable String namespace,
-                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<ConfigMapList> configMapListRead(@PathVariable String namespace,
+                                                           @RequestParam(required = false) Map<String, String> labelSelector) {
         ConfigMapList list = configMapApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{configmap}")
@@ -93,9 +92,9 @@ public class ConfigMapController {
                     @Parameter(name = "configmap", description = "configmap name")
             }
     )
-    public ResponseEntity<Result<Void>> configMapDelete(@PathVariable("namespace") String namespace,
-                                                        @PathVariable("configmap") String name) throws ApiException {
+    public ResponseEntity<Void> configMapDelete(@PathVariable("namespace") String namespace,
+                                                @PathVariable("configmap") String name) throws ApiException {
         configMapApi.delete(namespace, name);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

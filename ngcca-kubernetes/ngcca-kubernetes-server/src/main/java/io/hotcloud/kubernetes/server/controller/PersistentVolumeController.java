@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,9 @@ public class PersistentVolumeController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolume request body")
     )
-    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@Validated @RequestBody PersistentVolumeCreateRequest params) throws ApiException {
+    public ResponseEntity<PersistentVolume> persistentvolume(@Validated @RequestBody PersistentVolumeCreateRequest params) throws ApiException {
         PersistentVolume persistentVolume = persistentVolumeApi.create(params);
-        return WebResponse.created(persistentVolume);
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistentVolume);
     }
 
     @PostMapping("/yaml")
@@ -49,9 +48,9 @@ public class PersistentVolumeController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolume kubernetes yaml")
     )
-    public ResponseEntity<Result<PersistentVolume>> persistentvolume(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<PersistentVolume> persistentvolume(@RequestBody YamlBody yaml) throws ApiException {
         PersistentVolume persistentVolume = persistentVolumeApi.create(yaml.getYaml());
-        return WebResponse.created(persistentVolume);
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistentVolume);
     }
 
     @DeleteMapping("/{persistentvolume}")
@@ -62,9 +61,9 @@ public class PersistentVolumeController {
                     @Parameter(name = "persistentvolume", description = "persistentvolume name")
             }
     )
-    public ResponseEntity<Result<Void>> persistentvolumeDelete(@PathVariable String persistentvolume) throws ApiException {
+    public ResponseEntity<Void> persistentvolumeDelete(@PathVariable String persistentvolume) throws ApiException {
         persistentVolumeApi.delete(persistentvolume);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/{persistentvolume}")
@@ -75,9 +74,9 @@ public class PersistentVolumeController {
                     @Parameter(name = "persistentvolume", description = "persistentvolume name")
             }
     )
-    public ResponseEntity<Result<PersistentVolume>> persistentVolumeRead(@PathVariable String persistentvolume) {
+    public ResponseEntity<PersistentVolume> persistentVolumeRead(@PathVariable String persistentvolume) {
         PersistentVolume read = persistentVolumeApi.read(persistentvolume);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping
@@ -85,9 +84,9 @@ public class PersistentVolumeController {
             summary = "PersistentVolume collection read",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<Result<PersistentVolumeList>> persistentVolumeListRead(@RequestParam(required = false) Map<String, String> labels) {
+    public ResponseEntity<PersistentVolumeList> persistentVolumeListRead(@RequestParam(required = false) Map<String, String> labels) {
         PersistentVolumeList list = persistentVolumeApi.read(labels);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
 }

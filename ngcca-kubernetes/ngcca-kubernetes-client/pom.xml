@@ -13,12 +13,8 @@
     <name>NGCCA :: Kubernetes :: Client</name>
 
     <dependencies>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-common-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
+
+    <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-api</artifactId>
         </dependency>

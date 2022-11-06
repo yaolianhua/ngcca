@@ -4,8 +4,6 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.TimeoutImageEditReplacePatchable;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -45,10 +43,10 @@ public class DeploymentOperator implements DeploymentApi {
         try {
             v1Deployment = Yaml.loadAs(yaml, V1Deployment.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load deployment yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load deployment yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Deployment.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1Deployment created = appsV1Api.createNamespacedDeployment(namespace,
                 v1Deployment,
                 "true",

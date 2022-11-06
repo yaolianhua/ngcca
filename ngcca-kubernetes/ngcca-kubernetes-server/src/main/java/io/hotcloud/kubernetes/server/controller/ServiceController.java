@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +38,9 @@ public class ServiceController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Service request body")
     )
-    public ResponseEntity<Result<Service>> service(@Validated @RequestBody ServiceCreateRequest params) throws ApiException {
+    public ResponseEntity<Service> service(@Validated @RequestBody ServiceCreateRequest params) throws ApiException {
         Service service = serviceApi.create(params);
-        return WebResponse.created(service);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service);
     }
 
     @PostMapping("/yaml")
@@ -50,9 +49,9 @@ public class ServiceController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Service kubernetes yaml")
     )
-    public ResponseEntity<Result<Service>> service(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<Service> service(@RequestBody YamlBody yaml) throws ApiException {
         Service service = serviceApi.create(yaml.getYaml());
-        return WebResponse.created(service);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service);
     }
 
     @GetMapping("/{namespace}/{service}")
@@ -64,10 +63,10 @@ public class ServiceController {
                     @Parameter(name = "service", description = "service name")
             }
     )
-    public ResponseEntity<Result<Service>> serviceRead(@PathVariable String namespace,
-                                                       @PathVariable String service) {
+    public ResponseEntity<Service> serviceRead(@PathVariable String namespace,
+                                               @PathVariable String service) {
         Service read = serviceApi.read(namespace, service);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -78,10 +77,10 @@ public class ServiceController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<ServiceList>> serviceListRead(@PathVariable String namespace,
-                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<ServiceList> serviceListRead(@PathVariable String namespace,
+                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
         ServiceList list = serviceApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}/{service}")
@@ -93,9 +92,9 @@ public class ServiceController {
                     @Parameter(name = "service", description = "service name")
             }
     )
-    public ResponseEntity<Result<Void>> serviceDelete(@PathVariable("namespace") String namespace,
-                                                      @PathVariable("service") String name) throws ApiException {
+    public ResponseEntity<Void> serviceDelete(@PathVariable("namespace") String namespace,
+                                              @PathVariable("service") String name) throws ApiException {
         serviceApi.delete(namespace, name);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

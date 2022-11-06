@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.StorageV1Api;
@@ -38,7 +37,7 @@ public class StorageClassOperator implements StorageClassApi {
         try {
             v1StorageClass = Yaml.loadAs(yaml, V1StorageClass.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load storageClass yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load storageClass yaml error. '%s'", e.getMessage()));
         }
 
         V1StorageClass v1Sc = storageV1Api.createStorageClass(

@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.server;
 
-import io.hotcloud.common.api.Log;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,12 +27,12 @@ public class WatcherConfiguration {
 
     @PostConstruct
     public void init() {
-        Log.info(WatcherConfiguration.class.getName(), String.format("【Start workloads watcher '%s'】", watchApiContainer.keySet()));
+        log.info(String.format("【Start workloads watcher '%s'】", watchApiContainer.keySet()));
         for (WorkloadsWatchApi watchApi : watchApiContainer.values()) {
             try {
                 watchApi.watch();
             } catch (Exception e) {
-                Log.error(WatcherConfiguration.class.getName(), String.format("Start workload watcher error. %s", e.getMessage()));
+                log.error(String.format("Start workload watcher error. %s", e.getMessage()));
             }
 
         }

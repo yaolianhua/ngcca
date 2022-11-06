@@ -1,7 +1,5 @@
 package io.hotcloud.kubernetes.client;
 
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,27 +10,21 @@ import javax.annotation.PostConstruct;
 /**
  * @author yaolianhua789@gmail.com
  **/
-@ConfigurationProperties("hotcloud.server")
+@ConfigurationProperties("ngcca.kubernetes-agent")
 @Slf4j
 @Data
-@Properties(prefix = "hotcloud.server")
 public class HotCloudHttpClientProperties {
 
     private String host = "localhost";
     private Integer port = 8080;
     private String domainName;
 
-    private String basicUsername = "clientuser";
+    private String basicUsername = "admin";
     private String basicPassword = "e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea";
 
     @PostConstruct
     public void print() {
-        Log.info(HotCloudHttpClientProperties.class.getName(),
-                String.format("【Hot Cloud server address '%s', basic auth user '%s', basic password '%s'】",
-                        obtainUrl(),
-                        basicUsername,
-                        basicPassword)
-        );
+        log.info("【Ngcca kubernetes-agent address '{}', basic auth user '{}', basic password '{}'】", obtainUrl(), basicUsername, basicPassword);
     }
 
     public String obtainUrl() {

@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.workload.StatefulSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +41,10 @@ public class StatefulSetController {
                     @Parameter(name = "statefulset", description = "statefulset name")
             }
     )
-    public ResponseEntity<Result<StatefulSet>> statefulSetRead(@PathVariable String namespace,
-                                                               @PathVariable String statefulset) {
+    public ResponseEntity<StatefulSet> statefulSetRead(@PathVariable String namespace,
+                                                       @PathVariable String statefulset) {
         StatefulSet read = statefulSetApi.read(namespace, statefulset);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -56,10 +55,10 @@ public class StatefulSetController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<StatefulSetList>> statefulSetListRead(@PathVariable String namespace,
-                                                                       @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<StatefulSetList> statefulSetListRead(@PathVariable String namespace,
+                                                               @RequestParam(required = false) Map<String, String> labelSelector) {
         StatefulSetList list = statefulSetApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @PostMapping
@@ -68,9 +67,9 @@ public class StatefulSetController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StatefulSet request body")
     )
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@Validated @RequestBody StatefulSetCreateRequest params) throws ApiException {
+    public ResponseEntity<StatefulSet> statefulSet(@Validated @RequestBody StatefulSetCreateRequest params) throws ApiException {
         StatefulSet statefulSet = statefulSetApi.create(params);
-        return WebResponse.created(statefulSet);
+        return ResponseEntity.status(HttpStatus.CREATED).body(statefulSet);
     }
 
     @PostMapping("/yaml")
@@ -79,9 +78,9 @@ public class StatefulSetController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StatefulSet kubernetes yaml")
     )
-    public ResponseEntity<Result<StatefulSet>> statefulSet(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<StatefulSet> statefulSet(@RequestBody YamlBody yaml) throws ApiException {
         StatefulSet statefulSet = statefulSetApi.create(yaml.getYaml());
-        return WebResponse.created(statefulSet);
+        return ResponseEntity.status(HttpStatus.CREATED).body(statefulSet);
     }
 
     @DeleteMapping("/{namespace}/{statefulset}")
@@ -93,9 +92,9 @@ public class StatefulSetController {
                     @Parameter(name = "statefulset", description = "statefulset name")
             }
     )
-    public ResponseEntity<Result<Void>> statefulSetDelete(@PathVariable String namespace,
-                                                          @PathVariable String statefulset) throws ApiException {
+    public ResponseEntity<Void> statefulSetDelete(@PathVariable String namespace,
+                                                  @PathVariable String statefulset) throws ApiException {
         statefulSetApi.delete(namespace, statefulset);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

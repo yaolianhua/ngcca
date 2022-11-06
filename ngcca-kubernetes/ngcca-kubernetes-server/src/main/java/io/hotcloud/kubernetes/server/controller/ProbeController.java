@@ -1,7 +1,5 @@
 package io.hotcloud.kubernetes.server.controller;
 
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,9 +23,9 @@ public class ProbeController {
             summary = "Liveness Probe",
             responses = {@ApiResponse(responseCode = "202")}
     )
-    public ResponseEntity<Result<Void>> livenessProbe() {
+    public ResponseEntity<Void> livenessProbe() {
         log.debug("livenessProbe request");
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping(value = "/readyz")
@@ -35,8 +33,8 @@ public class ProbeController {
             summary = "Readiness Probe",
             responses = {@ApiResponse(responseCode = "202")}
     )
-    public ResponseEntity<Result<Void>> readinessProbe() {
+    public ResponseEntity<Void> readinessProbe() {
         log.debug("readinessProbe request");
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

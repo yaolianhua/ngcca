@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -11,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +36,9 @@ public class NamespaceController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Namespace request body")
     )
-    public ResponseEntity<Result<Void>> namespace(@Validated @RequestBody NamespaceCreateRequest params) throws ApiException {
+    public ResponseEntity<Void> namespace(@Validated @RequestBody NamespaceCreateRequest params) throws ApiException {
         namespaceApi.create(params);
-        return WebResponse.created();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{namespace}")
@@ -50,9 +49,9 @@ public class NamespaceController {
                     @Parameter(name = "namespace", description = "kubernetes namespace name")
             }
     )
-    public ResponseEntity<Result<Namespace>> namespaceRead(@PathVariable String namespace) {
+    public ResponseEntity<Namespace> namespaceRead(@PathVariable String namespace) {
         Namespace read = namespaceApi.read(namespace);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping
@@ -60,9 +59,9 @@ public class NamespaceController {
             summary = "Namespace collection read",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<Result<NamespaceList>> namespaceListRead(@RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<NamespaceList> namespaceListRead(@RequestParam(required = false) Map<String, String> labelSelector) {
         NamespaceList list = namespaceApi.read(labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{namespace}")
@@ -73,8 +72,8 @@ public class NamespaceController {
                     @Parameter(name = "namespace", description = "kubernetes namespace name")
             }
     )
-    public ResponseEntity<Result<Void>> namespaceDelete(@PathVariable("namespace") String namespace) throws ApiException {
+    public ResponseEntity<Void> namespaceDelete(@PathVariable("namespace") String namespace) throws ApiException {
         namespaceApi.delete(namespace);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

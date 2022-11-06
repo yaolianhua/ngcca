@@ -1,7 +1,6 @@
 package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
-import io.hotcloud.common.api.Result;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 public class KubernetesExceptionHandler {
 
     @ExceptionHandler(value = ApiException.class)
-    public ResponseEntity<Result<Void>> handle(ApiException ex, HttpServletRequest request) {
+    public ResponseEntity<String> handle(ApiException ex, HttpServletRequest request) {
         String message;
         String msg = ex.getMessage();
         if (StringUtils.hasText(msg)) {
@@ -31,23 +30,21 @@ public class KubernetesExceptionHandler {
         } else {
             message = ex.getResponseBody();
         }
-        Result<Void> error = Result.error(ex.getCode(), message);
+
         log.error("{}", message, ex);
-        return ResponseEntity.status(ex.getCode()).body(error);
+        return ResponseEntity.status(ex.getCode()).body(message);
     }
 
     @ExceptionHandler(value = YAMLException.class)
-    public ResponseEntity<Result<Void>> handle(YAMLException ex, HttpServletRequest request) {
-        Result<Void> error = Result.error(HttpStatus.FORBIDDEN.value(), ex.getMessage());
+    public ResponseEntity<String> handle(YAMLException ex, HttpServletRequest request) {
         log.error("{}", ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
     @ExceptionHandler(value = KubernetesClientException.class)
-    public ResponseEntity<Result<Void>> handle(KubernetesClientException ex, HttpServletRequest request) {
-        Result<Void> error = Result.error(ex.getCode(), ex.getMessage());
+    public ResponseEntity<String> handle(KubernetesClientException ex, HttpServletRequest request) {
         log.error("{}", ex.getMessage(), ex);
-        return ResponseEntity.status(ex.getCode()).body(error);
+        return ResponseEntity.status(ex.getCode()).body(ex.getMessage());
     }
 
 }

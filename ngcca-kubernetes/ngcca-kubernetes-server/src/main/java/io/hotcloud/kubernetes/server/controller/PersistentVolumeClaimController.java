@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,9 @@ public class PersistentVolumeClaimController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolumeClaim request body")
     )
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateRequest params) throws ApiException {
+    public ResponseEntity<PersistentVolumeClaim> persistentVolumeClaim(@Validated @RequestBody PersistentVolumeClaimCreateRequest params) throws ApiException {
         PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimApi.create(params);
-        return WebResponse.created(persistentVolumeClaim);
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistentVolumeClaim);
     }
 
     @PostMapping("/yaml")
@@ -49,9 +48,9 @@ public class PersistentVolumeClaimController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PersistentVolumeClaim kubernetes yaml")
     )
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaim(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<PersistentVolumeClaim> persistentVolumeClaim(@RequestBody YamlBody yaml) throws ApiException {
         PersistentVolumeClaim persistentVolumeClaim = persistentVolumeClaimApi.create(yaml.getYaml());
-        return WebResponse.created(persistentVolumeClaim);
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistentVolumeClaim);
     }
 
     @DeleteMapping("/{namespace}/{persistentvolumeclaim}")
@@ -63,10 +62,10 @@ public class PersistentVolumeClaimController {
                     @Parameter(name = "persistentvolumeclaim", description = "persistentvolumeclaim name")
             }
     )
-    public ResponseEntity<Result<Void>> deletePersistentVolumeClaim(@PathVariable("persistentvolumeclaim") String persistentVolumeClaim,
-                                                                    @PathVariable("namespace") String namespace) throws ApiException {
+    public ResponseEntity<Void> deletePersistentVolumeClaim(@PathVariable("persistentvolumeclaim") String persistentVolumeClaim,
+                                                            @PathVariable("namespace") String namespace) throws ApiException {
         persistentVolumeClaimApi.delete(persistentVolumeClaim, namespace);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/{namespace}/{persistentvolumeclaim}")
@@ -78,10 +77,10 @@ public class PersistentVolumeClaimController {
                     @Parameter(name = "persistentvolumeclaim", description = "persistentvolumeclaim name")
             }
     )
-    public ResponseEntity<Result<PersistentVolumeClaim>> persistentVolumeClaimRead(@PathVariable String namespace,
-                                                                                   @PathVariable String persistentvolumeclaim) {
+    public ResponseEntity<PersistentVolumeClaim> persistentVolumeClaimRead(@PathVariable String namespace,
+                                                                           @PathVariable String persistentvolumeclaim) {
         PersistentVolumeClaim read = persistentVolumeClaimApi.read(namespace, persistentvolumeclaim);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -92,10 +91,10 @@ public class PersistentVolumeClaimController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<PersistentVolumeClaimList>> persistentVolumeClaimListRead(@PathVariable String namespace,
-                                                                                           @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<PersistentVolumeClaimList> persistentVolumeClaimListRead(@PathVariable String namespace,
+                                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
         PersistentVolumeClaimList list = persistentVolumeClaimApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
 }

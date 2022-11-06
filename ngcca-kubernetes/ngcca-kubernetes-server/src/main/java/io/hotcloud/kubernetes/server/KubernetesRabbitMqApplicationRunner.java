@@ -1,28 +1,23 @@
 package io.hotcloud.kubernetes.server;
 
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.CommonRunnerProcessor;
-import io.hotcloud.common.api.message.MessageProperties;
+import io.hotcloud.kubernetes.model.CommonConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnProperty(
-        name = MessageProperties.PROPERTIES_TYPE_NAME,
-        havingValue = MessageProperties.RABBITMQ
-)
-public class KubernetesRabbitMQRunnerProcessor implements CommonRunnerProcessor {
+public class KubernetesRabbitMqApplicationRunner implements ApplicationRunner {
 
     private final RabbitAdmin rabbitAdmin;
 
-    public KubernetesRabbitMQRunnerProcessor(RabbitAdmin rabbitAdmin) {
+    public KubernetesRabbitMqApplicationRunner(RabbitAdmin rabbitAdmin) {
         this.rabbitAdmin = rabbitAdmin;
     }
 
     @Override
-    public void execute() {
+    public void run(ApplicationArguments args) throws Exception {
         Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
         Queue buildPackJobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK).build();
         Queue applicationDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION).build();

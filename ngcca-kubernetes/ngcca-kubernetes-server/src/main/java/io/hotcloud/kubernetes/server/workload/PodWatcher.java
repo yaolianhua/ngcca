@@ -5,13 +5,13 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.message.Message;
-import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.hotcloud.kubernetes.api.WorkloadsType;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
+import io.hotcloud.kubernetes.model.CommonConstant;
+import io.hotcloud.kubernetes.model.Message;
 import io.hotcloud.kubernetes.model.WatchMessageBody;
+import io.hotcloud.kubernetes.server.KubernetesRabbitmqMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +25,10 @@ import java.util.Map;
 public class PodWatcher implements WorkloadsWatchApi {
 
     private final KubernetesApi kubernetesApi;
-    private final MessageBroadcaster messageBroadcaster;
+    private final KubernetesRabbitmqMessageBroadcaster messageBroadcaster;
 
     public PodWatcher(KubernetesApi kubernetesApi,
-                      MessageBroadcaster messageBroadcaster) {
+                      KubernetesRabbitmqMessageBroadcaster messageBroadcaster) {
         this.kubernetesApi = kubernetesApi;
         this.messageBroadcaster = messageBroadcaster;
     }

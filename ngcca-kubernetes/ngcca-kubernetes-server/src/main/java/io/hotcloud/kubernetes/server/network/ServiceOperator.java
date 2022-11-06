@@ -4,8 +4,6 @@ import com.google.gson.JsonSyntaxException;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.network.ServiceApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -41,10 +39,10 @@ public class ServiceOperator implements ServiceApi {
         try {
             v1Service = Yaml.loadAs(yaml, V1Service.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load service yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load service yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1Service.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1Service service = coreV1Api.createNamespacedService(namespace,
                 v1Service,
                 "true",

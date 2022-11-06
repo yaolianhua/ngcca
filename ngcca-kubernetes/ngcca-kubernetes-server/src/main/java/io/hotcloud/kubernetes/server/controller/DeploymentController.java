@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.api.workload.DeploymentApi;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -14,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +43,10 @@ public class DeploymentController {
                     @Parameter(name = "deployment", description = "deployment name")
             }
     )
-    public ResponseEntity<Result<Deployment>> deploymentRead(@PathVariable String namespace,
-                                                             @PathVariable String deployment) {
+    public ResponseEntity<Deployment> deploymentRead(@PathVariable String namespace,
+                                                     @PathVariable String deployment) {
         Deployment read = deploymentApi.read(namespace, deployment);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -58,10 +57,10 @@ public class DeploymentController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<DeploymentList>> deploymentListRead(@PathVariable String namespace,
-                                                                     @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<DeploymentList> deploymentListRead(@PathVariable String namespace,
+                                                             @RequestParam(required = false) Map<String, String> labelSelector) {
         DeploymentList list = deploymentApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @PostMapping
@@ -70,9 +69,9 @@ public class DeploymentController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Deployment request body")
     )
-    public ResponseEntity<Result<Deployment>> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
+    public ResponseEntity<Deployment> deployment(@Validated @RequestBody DeploymentCreateRequest params) throws ApiException {
         Deployment deployment = deploymentApi.create(params);
-        return WebResponse.created(deployment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(deployment);
     }
 
     @PostMapping("/yaml")
@@ -81,9 +80,9 @@ public class DeploymentController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Deployment kubernetes yaml")
     )
-    public ResponseEntity<Result<Deployment>> deployment(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<Deployment> deployment(@RequestBody YamlBody yaml) throws ApiException {
         Deployment deployment = deploymentApi.create(yaml.getYaml());
-        return WebResponse.created(deployment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(deployment);
     }
 
     @DeleteMapping("/{namespace}/{deployment}")
@@ -95,10 +94,10 @@ public class DeploymentController {
                     @Parameter(name = "deployment", description = "deployment name")
             }
     )
-    public ResponseEntity<Result<Void>> deploymentDelete(@PathVariable("namespace") String namespace,
-                                                         @PathVariable("deployment") String name) throws ApiException {
+    public ResponseEntity<Void> deploymentDelete(@PathVariable("namespace") String namespace,
+                                                 @PathVariable("deployment") String name) throws ApiException {
         deploymentApi.delete(namespace, name);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @PatchMapping("/{namespace}/{deployment}/{count}/scale")
@@ -112,12 +111,12 @@ public class DeploymentController {
                     @Parameter(name = "wait", description = "if true, wait for the number of instances to exist - no guarantee is made as to readiness", schema = @Schema(allowableValues = {"true", "false"}))
             }
     )
-    public ResponseEntity<Result<Void>> deploymentScale(@PathVariable("namespace") String namespace,
-                                                        @PathVariable("deployment") String name,
-                                                        @PathVariable("count") Integer count,
-                                                        @RequestParam(value = "wait", required = false) boolean wait) {
+    public ResponseEntity<Void> deploymentScale(@PathVariable("namespace") String namespace,
+                                                @PathVariable("deployment") String name,
+                                                @PathVariable("count") Integer count,
+                                                @RequestParam(value = "wait", required = false) boolean wait) {
         deploymentApi.scale(namespace, name, count, wait);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @PatchMapping("/{namespace}/{deployment}/rolling")
@@ -130,11 +129,11 @@ public class DeploymentController {
                     @Parameter(name = "action", description = "rolling action enums")
             }
     )
-    public ResponseEntity<Result<Deployment>> deploymentRolling(@PathVariable("namespace") String namespace,
-                                                                @PathVariable("deployment") String name,
-                                                                @RequestParam(value = "action") RollingAction action) {
+    public ResponseEntity<Deployment> deploymentRolling(@PathVariable("namespace") String namespace,
+                                                        @PathVariable("deployment") String name,
+                                                        @RequestParam(value = "action") RollingAction action) {
         Deployment deployment = deploymentApi.rolling(action, namespace, name);
-        return WebResponse.accepted(deployment);
+        return ResponseEntity.accepted().body(deployment);
     }
 
     @PatchMapping("/{namespace}/{deployment}/images")
@@ -147,11 +146,11 @@ public class DeploymentController {
                     @Parameter(name = "containerToImageMap", description = "container image mapping")
             }
     )
-    public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
-                                                                    @PathVariable("deployment") String name,
-                                                                    @RequestParam Map<String, String> containerToImageMap) {
+    public ResponseEntity<Deployment> deploymentUpdateImage(@PathVariable("namespace") String namespace,
+                                                            @PathVariable("deployment") String name,
+                                                            @RequestParam Map<String, String> containerToImageMap) {
         Deployment deployment = deploymentApi.imageUpdate(containerToImageMap, namespace, name);
-        return WebResponse.accepted(deployment);
+        return ResponseEntity.accepted().body(deployment);
     }
 
     @PatchMapping("/{namespace}/{deployment}/image")
@@ -164,10 +163,10 @@ public class DeploymentController {
                     @Parameter(name = "image", description = "single container image")
             }
     )
-    public ResponseEntity<Result<Deployment>> deploymentUpdateImage(@PathVariable("namespace") String namespace,
-                                                                    @PathVariable("deployment") String name,
-                                                                    @RequestParam(value = "image") String image) {
+    public ResponseEntity<Deployment> deploymentUpdateImage(@PathVariable("namespace") String namespace,
+                                                            @PathVariable("deployment") String name,
+                                                            @RequestParam(value = "image") String image) {
         Deployment deployment = deploymentApi.imageUpdate(namespace, name, image);
-        return WebResponse.accepted(deployment);
+        return ResponseEntity.accepted().body(deployment);
     }
 }

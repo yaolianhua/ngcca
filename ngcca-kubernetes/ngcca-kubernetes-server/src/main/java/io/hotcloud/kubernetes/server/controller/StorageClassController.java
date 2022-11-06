@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.storage.StorageClassApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,9 @@ public class StorageClassController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StorageClass request body")
     )
-    public ResponseEntity<Result<StorageClass>> storageClass(@Validated @RequestBody StorageClassCreateRequest params) throws ApiException {
+    public ResponseEntity<StorageClass> storageClass(@Validated @RequestBody StorageClassCreateRequest params) throws ApiException {
         StorageClass storageClass = storageClassApi.create(params);
-        return WebResponse.created(storageClass);
+        return ResponseEntity.status(HttpStatus.CREATED).body(storageClass);
     }
 
     @PostMapping("/yaml")
@@ -49,9 +48,9 @@ public class StorageClassController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "StorageClass kubernetes yaml")
     )
-    public ResponseEntity<Result<StorageClass>> storageClass(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<StorageClass> storageClass(@RequestBody YamlBody yaml) throws ApiException {
         StorageClass storageClass = storageClassApi.create(yaml.getYaml());
-        return WebResponse.created(storageClass);
+        return ResponseEntity.status(HttpStatus.CREATED).body(storageClass);
     }
 
     @DeleteMapping("/{storageclass}")
@@ -62,9 +61,9 @@ public class StorageClassController {
                     @Parameter(name = "storageclass", description = "storageclass name")
             }
     )
-    public ResponseEntity<Result<Void>> storageClassDelete(@PathVariable String storageclass) throws ApiException {
+    public ResponseEntity<Void> storageClassDelete(@PathVariable String storageclass) throws ApiException {
         storageClassApi.delete(storageclass);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/{storageclass}")
@@ -75,9 +74,9 @@ public class StorageClassController {
                     @Parameter(name = "storageclass", description = "storageclass name")
             }
     )
-    public ResponseEntity<Result<StorageClass>> storageClassRead(@PathVariable String storageclass) {
+    public ResponseEntity<StorageClass> storageClassRead(@PathVariable String storageclass) {
         StorageClass read = storageClassApi.read(storageclass);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping
@@ -85,9 +84,9 @@ public class StorageClassController {
             summary = "StorageClass collection read",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<Result<StorageClassList>> storageClassListRead(@RequestParam(required = false) Map<String, String> labels) {
+    public ResponseEntity<StorageClassList> storageClassListRead(@RequestParam(required = false) Map<String, String> labels) {
         StorageClassList list = storageClassApi.read(labels);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
 }

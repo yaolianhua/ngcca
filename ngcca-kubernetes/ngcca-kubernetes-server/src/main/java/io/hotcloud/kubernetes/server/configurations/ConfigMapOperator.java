@@ -3,8 +3,6 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -43,10 +41,10 @@ public class ConfigMapOperator implements ConfigMapApi {
         try {
             v1ConfigMap = Yaml.loadAs(yaml, V1ConfigMap.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load configMap yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load configMap yaml error. '%s'", e.getMessage()));
         }
         String namespace = Objects.requireNonNull(v1ConfigMap.getMetadata()).getNamespace();
-        namespace = StringUtils.hasText(namespace) ? namespace : UUIDGenerator.DEFAULT;
+        namespace = StringUtils.hasText(namespace) ? namespace : "default";
         V1ConfigMap cm = coreV1Api.createNamespacedConfigMap(namespace,
                 v1ConfigMap,
                 "true",

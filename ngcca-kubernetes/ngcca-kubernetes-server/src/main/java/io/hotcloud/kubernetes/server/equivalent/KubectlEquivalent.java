@@ -6,12 +6,11 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.StatusDetails;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
-import io.hotcloud.common.api.Validator;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.api.pod.PodApi;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.validator.routines.InetAddressValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -126,7 +125,7 @@ public class KubectlEquivalent implements KubectlApi {
             }
         } catch (Exception e) {
             log.error("upload error '{}'", e.getMessage(), e);
-            throw new HotCloudException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
         return false;
@@ -176,7 +175,7 @@ public class KubectlEquivalent implements KubectlApi {
             }
         } catch (Exception e) {
             log.error("download error '{}'", e.getMessage(), e);
-            throw new HotCloudException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
         return false;
@@ -191,7 +190,8 @@ public class KubectlEquivalent implements KubectlApi {
         //valid ipv4Address
         AtomicReference<String> ipReference = new AtomicReference<>(ipv4Address);
         String ipR = StringUtils.hasText(ipReference.get()) ? ipReference.get() : "127.0.0.1";
-        Assert.state(Validator.validIpv4(ipR), "invalid ipv4 address");
+
+        Assert.state(InetAddressValidator.getInstance().isValid(ipR), "invalid ipv4 address");
 
         //valid pod exist
         Pod read = podApi.read(namespace, pod);
@@ -208,7 +208,7 @@ public class KubectlEquivalent implements KubectlApi {
         try {
             inetAddressReference.set(InetAddress.getByName(ipR));
         } catch (UnknownHostException e) {
-            throw new HotCloudException(e.getMessage(), 400);
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         //valid timeunit and alive times

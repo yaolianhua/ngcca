@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.workload.DaemonSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +41,10 @@ public class DaemonSetController {
                     @Parameter(name = "daemonset", description = "daemonset name")
             }
     )
-    public ResponseEntity<Result<DaemonSet>> daemonSetRead(@PathVariable String namespace,
-                                                           @PathVariable String daemonset) {
+    public ResponseEntity<DaemonSet> daemonSetRead(@PathVariable String namespace,
+                                                   @PathVariable String daemonset) {
         DaemonSet read = daemonSetApi.read(namespace, daemonset);
-        return WebResponse.ok(read);
+        return ResponseEntity.ok(read);
     }
 
     @GetMapping("/{namespace}")
@@ -56,10 +55,10 @@ public class DaemonSetController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<DaemonSetList>> daemonSetListRead(@PathVariable String namespace,
-                                                                   @RequestParam(required = false) Map<String, String> labelSelector) {
+    public ResponseEntity<DaemonSetList> daemonSetListRead(@PathVariable String namespace,
+                                                           @RequestParam(required = false) Map<String, String> labelSelector) {
         DaemonSetList list = daemonSetApi.read(namespace, labelSelector);
-        return WebResponse.ok(list);
+        return ResponseEntity.ok(list);
     }
 
     @PostMapping
@@ -68,9 +67,9 @@ public class DaemonSetController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "DaemonSet request body")
     )
-    public ResponseEntity<Result<DaemonSet>> daemonset(@Validated @RequestBody DaemonSetCreateRequest params) throws ApiException {
+    public ResponseEntity<DaemonSet> daemonset(@Validated @RequestBody DaemonSetCreateRequest params) throws ApiException {
         DaemonSet daemonset = daemonSetApi.create(params);
-        return WebResponse.created(daemonset);
+        return ResponseEntity.status(HttpStatus.CREATED).body(daemonset);
     }
 
     @PostMapping("/yaml")
@@ -79,9 +78,9 @@ public class DaemonSetController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "DaemonSet kubernetes yaml")
     )
-    public ResponseEntity<Result<DaemonSet>> daemonset(@RequestBody YamlBody yaml) throws ApiException {
+    public ResponseEntity<DaemonSet> daemonset(@RequestBody YamlBody yaml) throws ApiException {
         DaemonSet daemonset = daemonSetApi.create(yaml.getYaml());
-        return WebResponse.created(daemonset);
+        return ResponseEntity.status(HttpStatus.CREATED).body(daemonset);
     }
 
     @DeleteMapping("/{namespace}/{daemonset}")
@@ -93,9 +92,9 @@ public class DaemonSetController {
                     @Parameter(name = "daemonset", description = "daemonset name")
             }
     )
-    public ResponseEntity<Result<Void>> daemonSetDelete(@PathVariable String namespace,
-                                                        @PathVariable String daemonset) throws ApiException {
+    public ResponseEntity<Void> daemonSetDelete(@PathVariable String namespace,
+                                                @PathVariable String daemonset) throws ApiException {
         daemonSetApi.delete(namespace, daemonset);
-        return WebResponse.accepted();
+        return ResponseEntity.accepted().build();
     }
 }

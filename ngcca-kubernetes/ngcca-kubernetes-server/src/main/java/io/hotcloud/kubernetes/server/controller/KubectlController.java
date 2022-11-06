@@ -2,8 +2,6 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.WebResponse;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,10 +41,10 @@ public class KubectlController {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "kubernetes yaml body")
     )
-    public ResponseEntity<Result<List<HasMetadata>>> resourceListCreateOrReplace(@RequestParam(value = "namespace", required = false) String namespace,
-                                                                                 @RequestBody YamlBody yaml) {
+    public ResponseEntity<List<HasMetadata>> resourceListCreateOrReplace(@RequestParam(value = "namespace", required = false) String namespace,
+                                                                         @RequestBody YamlBody yaml) {
         List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml.getYaml());
-        return WebResponse.created(hasMetadata);
+        return ResponseEntity.status(HttpStatus.CREATED).body(hasMetadata);
     }
 
     @DeleteMapping
@@ -57,10 +56,10 @@ public class KubectlController {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "kubernetes yaml body")
     )
-    public ResponseEntity<Result<Boolean>> resourceListDelete(@RequestParam(value = "namespace", required = false) String namespace,
-                                                              @RequestBody YamlBody yaml) {
+    public ResponseEntity<Boolean> resourceListDelete(@RequestParam(value = "namespace", required = false) String namespace,
+                                                      @RequestBody YamlBody yaml) {
         Boolean delete = kubectlApi.delete(namespace, yaml.getYaml());
-        return WebResponse.accepted(delete);
+        return ResponseEntity.accepted().body(delete);
     }
 
     @PostMapping("/{namespace}/{pod}/forward")
@@ -78,15 +77,15 @@ public class KubectlController {
                     @Parameter(name = "timeUnit", description = "alive time unit", schema = @Schema(defaultValue = "TimeUnit.MINUTES"))
             }
     )
-    public ResponseEntity<Result<Boolean>> portForward(@PathVariable(value = "namespace") String namespace,
-                                                       @PathVariable(value = "pod") String pod,
-                                                       @RequestParam(value = "ipv4Address", required = false) String address,
-                                                       @RequestParam(value = "containerPort") Integer containerPort,
-                                                       @RequestParam(value = "localPort") Integer localPort,
-                                                       @RequestParam(value = "alive", required = false) Long alive,
-                                                       @RequestParam(value = "timeUnit", required = false) TimeUnit unit) {
+    public ResponseEntity<Boolean> portForward(@PathVariable(value = "namespace") String namespace,
+                                               @PathVariable(value = "pod") String pod,
+                                               @RequestParam(value = "ipv4Address", required = false) String address,
+                                               @RequestParam(value = "containerPort") Integer containerPort,
+                                               @RequestParam(value = "localPort") Integer localPort,
+                                               @RequestParam(value = "alive", required = false) Long alive,
+                                               @RequestParam(value = "timeUnit", required = false) TimeUnit unit) {
         Boolean portForward = kubectlApi.portForward(namespace, pod, address, containerPort, localPort, alive, unit);
-        return WebResponse.accepted(portForward);
+        return ResponseEntity.accepted().body(portForward);
     }
 
     @PostMapping("/{namespace}/{pod}/upload")
@@ -103,14 +102,14 @@ public class KubectlController {
                     @Parameter(name = "action", description = "copy action enums", schema = @Schema(allowableValues = {"FILE", "DIRECTORY"}))
             }
     )
-    public ResponseEntity<Result<Boolean>> upload(@PathVariable(value = "namespace") String namespace,
-                                                  @PathVariable(value = "pod") String pod,
-                                                  @RequestParam(value = "container", required = false) String container,
-                                                  @RequestParam(value = "source") String source,
-                                                  @RequestParam(value = "target") String target,
-                                                  @RequestParam(value = "action") CopyAction action) {
+    public ResponseEntity<Boolean> upload(@PathVariable(value = "namespace") String namespace,
+                                          @PathVariable(value = "pod") String pod,
+                                          @RequestParam(value = "container", required = false) String container,
+                                          @RequestParam(value = "source") String source,
+                                          @RequestParam(value = "target") String target,
+                                          @RequestParam(value = "action") CopyAction action) {
         Boolean uploaded = kubectlApi.upload(namespace, pod, container, source, target, action);
-        return WebResponse.accepted(uploaded);
+        return ResponseEntity.accepted().body(uploaded);
     }
 
     @PostMapping("/{namespace}/{pod}/download")
@@ -127,14 +126,14 @@ public class KubectlController {
                     @Parameter(name = "action", description = "copy action enums", schema = @Schema(allowableValues = {"FILE", "DIRECTORY"}))
             }
     )
-    public ResponseEntity<Result<Boolean>> download(@PathVariable(value = "namespace") String namespace,
-                                                    @PathVariable(value = "pod") String pod,
-                                                    @RequestParam(value = "container", required = false) String container,
-                                                    @RequestParam(value = "source") String source,
-                                                    @RequestParam(value = "target") String target,
-                                                    @RequestParam(value = "action") CopyAction action) {
+    public ResponseEntity<Boolean> download(@PathVariable(value = "namespace") String namespace,
+                                            @PathVariable(value = "pod") String pod,
+                                            @RequestParam(value = "container", required = false) String container,
+                                            @RequestParam(value = "source") String source,
+                                            @RequestParam(value = "target") String target,
+                                            @RequestParam(value = "action") CopyAction action) {
         Boolean downloaded = kubectlApi.download(namespace, pod, container, source, target, action);
-        return WebResponse.accepted(downloaded);
+        return ResponseEntity.accepted().body(downloaded);
     }
 
     @GetMapping("/{namespace}/events")
@@ -145,8 +144,8 @@ public class KubectlController {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
             }
     )
-    public ResponseEntity<Result<List<Event>>> events(@PathVariable(value = "namespace") String namespace) {
-        return WebResponse.ok(kubectlApi.events(namespace));
+    public ResponseEntity<List<Event>> events(@PathVariable(value = "namespace") String namespace) {
+        return ResponseEntity.ok(kubectlApi.events(namespace));
     }
 
     @GetMapping("/events")
@@ -154,8 +153,8 @@ public class KubectlController {
             summary = "Events collection read",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<Result<List<Event>>> events() {
-        return WebResponse.ok(kubectlApi.events());
+    public ResponseEntity<List<Event>> events() {
+        return ResponseEntity.ok(kubectlApi.events());
     }
 
     @GetMapping("/{namespace}/{pod}/events")
@@ -167,9 +166,9 @@ public class KubectlController {
                     @Parameter(name = "pod", description = "pod name")
             }
     )
-    public ResponseEntity<Result<List<Event>>> namespacedPodEvents(@PathVariable(value = "namespace") String namespace,
-                                                                   @PathVariable(value = "pod") String pod) {
-        return WebResponse.ok(kubectlApi.namespacedPodEvents(namespace, pod));
+    public ResponseEntity<List<Event>> namespacedPodEvents(@PathVariable(value = "namespace") String namespace,
+                                                           @PathVariable(value = "pod") String pod) {
+        return ResponseEntity.ok(kubectlApi.namespacedPodEvents(namespace, pod));
     }
 
     @GetMapping("/{namespace}/events/{event}")
@@ -181,9 +180,9 @@ public class KubectlController {
                     @Parameter(name = "event", description = "event name")
             }
     )
-    public ResponseEntity<Result<Event>> events(@PathVariable(value = "namespace") String namespace,
-                                                @PathVariable(value = "event") String name) {
-        return WebResponse.ok(kubectlApi.events(namespace, name));
+    public ResponseEntity<Event> events(@PathVariable(value = "namespace") String namespace,
+                                        @PathVariable(value = "event") String name) {
+        return ResponseEntity.ok(kubectlApi.events(namespace, name));
     }
 
 }

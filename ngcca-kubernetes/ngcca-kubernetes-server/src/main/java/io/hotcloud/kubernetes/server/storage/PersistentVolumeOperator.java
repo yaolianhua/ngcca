@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.api.storage.PersistentVolumeApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -38,7 +37,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
         try {
             v1PersistentVolume = Yaml.loadAs(yaml, V1PersistentVolume.class);
         } catch (Exception e) {
-            throw new HotCloudException(String.format("load persistentVolume yaml error. '%s'", e.getMessage()));
+            throw new IllegalArgumentException(String.format("load persistentVolume yaml error. '%s'", e.getMessage()));
         }
 
         V1PersistentVolume v1Pv = coreV1Api.createPersistentVolume(
