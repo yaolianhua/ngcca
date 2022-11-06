@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.equivalent;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public interface KubectlHttpClient {
      * @param yaml      yaml wrapper {@link YamlBody}
      * @return {@link HasMetadata}
      */
-    Result<List<HasMetadata>> resourceListCreateOrReplace(String namespace, YamlBody yaml);
+    List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml);
 
     /**
      * Delete resourceList. Equivalent to using kubectl delete yaml
@@ -30,7 +29,7 @@ public interface KubectlHttpClient {
      * @param yaml      yaml wrapper {@link YamlBody}
      * @return {@link Boolean}
      */
-    Result<Boolean> delete(String namespace, YamlBody yaml);
+    Boolean delete(String namespace, YamlBody yaml);
 
     /**
      * Listen on port localPort on selected IP inetAddress, forwarding to port in the pod
@@ -45,13 +44,13 @@ public interface KubectlHttpClient {
      * @param timeUnit      timeunit default {@code  TimeUnit.MINUTES}
      * @return {@link Boolean}
      */
-    Result<Boolean> portForward(String namespace,
-                                String pod,
-                                String ipv4Address,
-                                Integer containerPort,
-                                Integer localPort,
-                                Long time,
-                                TimeUnit timeUnit);
+    Boolean portForward(String namespace,
+                        String pod,
+                        String ipv4Address,
+                        Integer containerPort,
+                        Integer localPort,
+                        Long time,
+                        TimeUnit timeUnit);
 
     /**
      * Upload local file/dir to inside Pod
@@ -65,7 +64,7 @@ public interface KubectlHttpClient {
      * @param action    {@link  CopyAction}
      * @return {@link Boolean}
      */
-    Result<Boolean> upload(String namespace, String pod, String container, String source, String target, CopyAction action);
+    Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action);
 
     /**
      * Download remote Pod file/dir to locally
@@ -79,7 +78,7 @@ public interface KubectlHttpClient {
      * @param action    {@link  CopyAction}
      * @return {@link Boolean}
      */
-    Result<Boolean> download(String namespace, String pod, String container, String source, String target, CopyAction action);
+    Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action);
 
     /**
      * List namespaced events. Equivalent to using kubectl get events -n {@code namespace}
@@ -87,14 +86,14 @@ public interface KubectlHttpClient {
      * @param namespace namespace
      * @return {@link Event}
      */
-    Result<List<Event>> events(String namespace);
+    List<Event> events(String namespace);
 
     /**
      * List events in any namespace
      *
      * @return {@link Event}
      */
-    Result<List<Event>> events();
+    List<Event> events();
 
     /**
      * List namespaced pod events
@@ -103,7 +102,7 @@ public interface KubectlHttpClient {
      * @param pod       pod name
      * @return {@link Event}
      */
-    Result<List<Event>> namespacedPodEvents(String namespace, String pod);
+    List<Event> namespacedPodEvents(String namespace, String pod);
 
     /**
      * Get namespaced events. Equivalent to using kubectl get events {@code name} -n {@code namespace}
@@ -112,5 +111,5 @@ public interface KubectlHttpClient {
      * @param name      event name
      * @return {@link Event}
      */
-    Result<Event> events(String namespace, String name);
+    Event events(String namespace, String name);
 }

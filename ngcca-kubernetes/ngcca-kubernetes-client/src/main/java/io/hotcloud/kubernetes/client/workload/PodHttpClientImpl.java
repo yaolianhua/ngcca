@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.workload;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -38,7 +37,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<String> logs(String namespace, String pod, Integer tail) {
+    public String logs(String namespace, String pod, Integer tail) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
 
@@ -47,7 +46,7 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .queryParam("tail", tail)
                 .build(namespace, pod);
 
-        ResponseEntity<Result<String>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<String> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,7 +54,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<List<String>> loglines(String namespace, String pod, Integer tail) {
+    public List<String> loglines(String namespace, String pod, Integer tail) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
 
@@ -64,7 +63,7 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .queryParam("tail", tail)
                 .build(namespace, pod);
 
-        ResponseEntity<Result<List<String>>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<List<String>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -72,7 +71,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<Pod> read(String namespace, String pod) {
+    public Pod read(String namespace, String pod) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
 
@@ -80,7 +79,7 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -88,7 +87,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<PodList> readList(String namespace, Map<String, String> labelSelector) {
+    public PodList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -100,17 +99,17 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<Result<PodList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<PodList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Pod> create(PodCreateRequest request) throws ApiException {
+    public Pod create(PodCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Pod> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -118,14 +117,14 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<Pod> create(YamlBody yaml) throws ApiException {
+    public Pod create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -133,7 +132,7 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace, String pod) throws ApiException {
+    public Void delete(String namespace, String pod) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
 
@@ -141,14 +140,14 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Pod> addAnnotations(String namespace, String pod, Map<String, String> annotations) {
+    public Pod addAnnotations(String namespace, String pod, Map<String, String> annotations) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
         Assert.isTrue(!CollectionUtils.isEmpty(annotations), "annotations is empty");
@@ -157,14 +156,14 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/annotations", uri))
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(annotations),
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(annotations),
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Pod> addLabels(String namespace, String pod, Map<String, String> labels) {
+    public Pod addLabels(String namespace, String pod, Map<String, String> labels) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
         Assert.isTrue(!CollectionUtils.isEmpty(labels), "labels is empty");
@@ -173,7 +172,7 @@ public class PodHttpClientImpl implements PodHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/labels", uri))
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Pod>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(labels),
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(labels),
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,7 +37,7 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
 
 
     @Override
-    public Result<List<HasMetadata>> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
+    public List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
         Assert.notNull(yaml, "yaml body is null");
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
@@ -46,7 +45,7 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
                 : uriComponentsBuilder.build().toUri();
 
-        ResponseEntity<Result<List<HasMetadata>>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<List<HasMetadata>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -54,7 +53,7 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
     }
 
     @Override
-    public Result<Boolean> delete(String namespace, YamlBody yaml) {
+    public Boolean delete(String namespace, YamlBody yaml) {
         Assert.notNull(yaml, "yaml body is null");
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
@@ -62,14 +61,14 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
                 : uriComponentsBuilder.build().toUri();
 
-        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, new HttpEntity<>(yaml),
+        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Boolean> portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
+    public Boolean portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
 
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
@@ -85,31 +84,31 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 .queryParam("timeUnit", timeUnit)
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<List<Event>> events(String namespace) {
+    public List<Event> events(String namespace) {
         Assert.hasText(namespace, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", uri))
                 .build(namespace);
 
-        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<List<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<List<Event>> events() {
+    public List<Event> events() {
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/events", uri)).build().toUri();
 
-        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(
+        ResponseEntity<List<Event>> response = restTemplate.exchange(
                 uriRequest,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -119,14 +118,14 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
     }
 
     @Override
-    public Result<List<Event>> namespacedPodEvents(String namespace, String pod) {
+    public List<Event> namespacedPodEvents(String namespace, String pod) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", uri))
                 .build(namespace, pod);
 
-        ResponseEntity<Result<List<Event>>> response = restTemplate.exchange(
+        ResponseEntity<List<Event>> response = restTemplate.exchange(
                 uriRequest,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -136,21 +135,21 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
     }
 
     @Override
-    public Result<Event> events(String namespace, String name) {
+    public Event events(String namespace, String name) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(name, "name is null");
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", uri))
                 .build(namespace, name);
 
-        ResponseEntity<Result<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Event> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Boolean> upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
+    public Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
         Assert.hasText(source, "source path  is null");
@@ -165,14 +164,14 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 .queryParam("action", action)
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Boolean> download(String namespace, String pod, String container, String source, String target, CopyAction action) {
+    public Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action) {
         Assert.hasText(namespace, "namespace is null");
         Assert.hasText(pod, "pod name is null");
         Assert.hasText(source, "source path  is null");
@@ -187,7 +186,7 @@ public class KubectlHttpClientImpl implements KubectlHttpClient {
                 .queryParam("action", action)
                 .build(namespace, pod);
 
-        ResponseEntity<Result<Boolean>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

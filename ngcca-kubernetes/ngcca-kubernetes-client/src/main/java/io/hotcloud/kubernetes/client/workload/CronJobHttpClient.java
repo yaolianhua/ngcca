@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface CronJobHttpClient {
      * @param cronJob   cronJob name
      * @return {@link CronJob}
      */
-    Result<CronJob> read(String namespace, String cronJob);
+    CronJob read(String namespace, String cronJob);
 
     /**
      * Read namespaced CronJobList
@@ -30,7 +29,7 @@ public interface CronJobHttpClient {
      * @param labelSelector label selector
      * @return {@link CronJobList}
      */
-    Result<CronJobList> readList(String namespace, Map<String, String> labelSelector);
+    CronJobList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create CronJob from {@code CronJobCreateRequest}
@@ -39,7 +38,7 @@ public interface CronJobHttpClient {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<CronJob> create(CronJobCreateRequest request) throws ApiException;
+    CronJob create(CronJobCreateRequest request) throws ApiException;
 
     /**
      * Create CronJob from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface CronJobHttpClient {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<CronJob> create(YamlBody yaml) throws ApiException;
+    CronJob create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced CronJob
@@ -58,6 +57,6 @@ public interface CronJobHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String cronJob) throws ApiException;
+    Void delete(String namespace, String cronJob) throws ApiException;
 
 }

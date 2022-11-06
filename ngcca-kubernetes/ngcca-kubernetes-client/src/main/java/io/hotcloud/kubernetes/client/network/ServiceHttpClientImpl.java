@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.network;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -41,7 +40,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
     }
 
     @Override
-    public Result<Service> read(String namespace, String service) {
+    public Service read(String namespace, String service) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(service), "service name is null");
 
@@ -49,7 +48,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, service);
 
-        ResponseEntity<Result<Service>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Service> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -57,7 +56,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
     }
 
     @Override
-    public Result<ServiceList> readList(String namespace, Map<String, String> labelSelector) {
+    public ServiceList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -69,17 +68,17 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<Result<ServiceList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<ServiceList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Service> create(ServiceCreateRequest request) throws ApiException {
+    public Service create(ServiceCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<Service>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Service> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -87,14 +86,14 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
     }
 
     @Override
-    public Result<Service> create(YamlBody yaml) throws ApiException {
+    public Service create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Result<Service>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Service> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -102,7 +101,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace, String service) throws ApiException {
+    public Void delete(String namespace, String service) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(service), "service name is null");
 
@@ -110,7 +109,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, service);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface PersistentVolumeClaimHttpClient {
      * @param persistentVolumeClaim persistentVolumeClaim name
      * @return {@link PersistentVolumeClaim}
      */
-    Result<PersistentVolumeClaim> read(String namespace, String persistentVolumeClaim);
+    PersistentVolumeClaim read(String namespace, String persistentVolumeClaim);
 
     /**
      * Read namespaced PersistentVolumeClaimList
@@ -30,7 +29,7 @@ public interface PersistentVolumeClaimHttpClient {
      * @param labelSelector label selector
      * @return {@link PersistentVolumeClaimList}
      */
-    Result<PersistentVolumeClaimList> readList(String namespace, Map<String, String> labelSelector);
+    PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create PersistentVolumeClaim from {@code PersistentVolumeClaimCreateRequest}
@@ -39,7 +38,7 @@ public interface PersistentVolumeClaimHttpClient {
      * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<PersistentVolumeClaim> create(PersistentVolumeClaimCreateRequest request) throws ApiException;
+    PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException;
 
     /**
      * Create PersistentVolumeClaim from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface PersistentVolumeClaimHttpClient {
      * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<PersistentVolumeClaim> create(YamlBody yaml) throws ApiException;
+    PersistentVolumeClaim create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced PersistentVolumeClaim
@@ -58,6 +57,6 @@ public interface PersistentVolumeClaimHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String persistentVolumeClaim) throws ApiException;
+    Void delete(String namespace, String persistentVolumeClaim) throws ApiException;
 
 }

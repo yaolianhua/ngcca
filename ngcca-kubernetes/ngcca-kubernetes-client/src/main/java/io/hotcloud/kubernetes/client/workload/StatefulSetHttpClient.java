@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface StatefulSetHttpClient {
      * @param statefulSet statefulSet name
      * @return {@link StatefulSet}
      */
-    Result<StatefulSet> read(String namespace, String statefulSet);
+    StatefulSet read(String namespace, String statefulSet);
 
     /**
      * Read namespaced StatefulSetList
@@ -30,7 +29,7 @@ public interface StatefulSetHttpClient {
      * @param labelSelector label selector
      * @return {@link StatefulSetList}
      */
-    Result<StatefulSetList> readList(String namespace, Map<String, String> labelSelector);
+    StatefulSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create StatefulSet from {@code StatefulSetCreateRequest}
@@ -39,7 +38,7 @@ public interface StatefulSetHttpClient {
      * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<StatefulSet> create(StatefulSetCreateRequest request) throws ApiException;
+    StatefulSet create(StatefulSetCreateRequest request) throws ApiException;
 
     /**
      * Create StatefulSet from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface StatefulSetHttpClient {
      * @return {@link StatefulSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<StatefulSet> create(YamlBody yaml) throws ApiException;
+    StatefulSet create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced StatefulSet
@@ -58,6 +57,6 @@ public interface StatefulSetHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String statefulSet) throws ApiException;
+    Void delete(String namespace, String statefulSet) throws ApiException;
 
 }

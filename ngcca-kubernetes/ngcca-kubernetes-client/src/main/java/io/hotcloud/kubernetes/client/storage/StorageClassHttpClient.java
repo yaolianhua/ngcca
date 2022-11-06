@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface StorageClassHttpClient {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<StorageClass> create(StorageClassCreateRequest request) throws ApiException;
+    StorageClass create(StorageClassCreateRequest request) throws ApiException;
 
     /**
      * Create StorageClass from yaml
@@ -30,7 +29,7 @@ public interface StorageClassHttpClient {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<StorageClass> create(YamlBody yaml) throws ApiException;
+    StorageClass create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete named StorageClass
@@ -39,7 +38,7 @@ public interface StorageClassHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String storageClass) throws ApiException;
+    Void delete(String storageClass) throws ApiException;
 
     /**
      * Read named StorageClass
@@ -47,7 +46,7 @@ public interface StorageClassHttpClient {
      * @param name StorageClass name
      * @return {@link StorageClass}
      */
-    Result<StorageClass> read(String name);
+    StorageClass read(String name);
 
     /**
      * Read StorageClassList
@@ -55,5 +54,5 @@ public interface StorageClassHttpClient {
      * @param labelSelector label selector
      * @return {@link StorageClassList}
      */
-    Result<StorageClassList> readList(Map<String, String> labelSelector);
+    StorageClassList readList(Map<String, String> labelSelector);
 }

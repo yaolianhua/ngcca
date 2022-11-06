@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.configurations;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
 
@@ -21,7 +20,7 @@ public interface ConfigMapHttpClient {
      * @param configmap configmap name
      * @return {@link ConfigMap}
      */
-    Result<ConfigMap> read(String namespace, String configmap);
+    ConfigMap read(String namespace, String configmap);
 
     /**
      * Read namespaced ConfigMapList
@@ -30,7 +29,7 @@ public interface ConfigMapHttpClient {
      * @param labelSelector label selector
      * @return {@link ConfigMapList}
      */
-    Result<ConfigMapList> readList(String namespace, Map<String, String> labelSelector);
+    ConfigMapList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create ConfigMap from {@code ConfigMapCreateRequest}
@@ -39,7 +38,7 @@ public interface ConfigMapHttpClient {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<ConfigMap> create(ConfigMapCreateRequest request) throws ApiException;
+    ConfigMap create(ConfigMapCreateRequest request) throws ApiException;
 
     /**
      * Create ConfigMap from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface ConfigMapHttpClient {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<ConfigMap> create(YamlBody yaml) throws ApiException;
+    ConfigMap create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced ConfigMap
@@ -58,6 +57,6 @@ public interface ConfigMapHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String configmap) throws ApiException;
+    Void delete(String namespace, String configmap) throws ApiException;
 
 }

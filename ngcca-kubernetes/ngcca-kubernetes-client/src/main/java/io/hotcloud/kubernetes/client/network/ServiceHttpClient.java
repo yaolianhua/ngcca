@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.network;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface ServiceHttpClient {
      * @param service   service name
      * @return {@link Service}
      */
-    Result<Service> read(String namespace, String service);
+    Service read(String namespace, String service);
 
     /**
      * Read namespaced ServiceList
@@ -30,7 +29,7 @@ public interface ServiceHttpClient {
      * @param labelSelector label selector
      * @return {@link ServiceList}
      */
-    Result<ServiceList> readList(String namespace, Map<String, String> labelSelector);
+    ServiceList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create Service from {@code ServiceCreateRequest}
@@ -39,7 +38,7 @@ public interface ServiceHttpClient {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Service> create(ServiceCreateRequest request) throws ApiException;
+    Service create(ServiceCreateRequest request) throws ApiException;
 
     /**
      * Create Service from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface ServiceHttpClient {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Service> create(YamlBody yaml) throws ApiException;
+    Service create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced Service
@@ -58,6 +57,6 @@ public interface ServiceHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String service) throws ApiException;
+    Void delete(String namespace, String service) throws ApiException;
 
 }

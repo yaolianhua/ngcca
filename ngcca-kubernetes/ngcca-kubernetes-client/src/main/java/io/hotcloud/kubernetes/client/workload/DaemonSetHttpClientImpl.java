@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.workload;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -40,7 +39,7 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public Result<DaemonSet> read(String namespace, String daemonSet) {
+    public DaemonSet read(String namespace, String daemonSet) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
 
@@ -48,7 +47,7 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, daemonSet);
 
-        ResponseEntity<Result<DaemonSet>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -56,7 +55,7 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public Result<DaemonSetList> readList(String namespace, Map<String, String> labelSelector) {
+    public DaemonSetList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -67,17 +66,17 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<Result<DaemonSetList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<DaemonSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<DaemonSet> create(DaemonSetCreateRequest request) throws ApiException {
+    public DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<DaemonSet>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,13 +84,13 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public Result<DaemonSet> create(YamlBody yaml) throws ApiException {
+    public DaemonSet create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Result<DaemonSet>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -99,14 +98,14 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace, String daemonSet) throws ApiException {
+    public Void delete(String namespace, String daemonSet) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, daemonSet);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.workload;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.kubernetes.api.RollingAction;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -22,7 +21,7 @@ public interface DeploymentHttpClient {
      * @param deployment deployment name
      * @return {@link Deployment}
      */
-    Result<Deployment> read(String namespace, String deployment);
+    Deployment read(String namespace, String deployment);
 
     /**
      * Read namespaced DeploymentList
@@ -31,7 +30,7 @@ public interface DeploymentHttpClient {
      * @param labelSelector label selector
      * @return {@link DeploymentList}
      */
-    Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector);
+    DeploymentList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create Deployment from {@code DeploymentCreateRequest}
@@ -40,7 +39,7 @@ public interface DeploymentHttpClient {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Deployment> create(DeploymentCreateRequest request) throws ApiException;
+    Deployment create(DeploymentCreateRequest request) throws ApiException;
 
     /**
      * Create Deployment from {@code YamlBody}
@@ -49,7 +48,7 @@ public interface DeploymentHttpClient {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Deployment> create(YamlBody yaml) throws ApiException;
+    Deployment create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced Deployment
@@ -59,7 +58,7 @@ public interface DeploymentHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String deployment) throws ApiException;
+    Void delete(String namespace, String deployment) throws ApiException;
 
     /**
      * Scale namespaced Deployment
@@ -70,7 +69,7 @@ public interface DeploymentHttpClient {
      * @param wait       if true, wait for the number of instances to exist - no guarantee is made as to readiness
      * @return {@link Void}
      */
-    Result<Void> scale(String namespace, String deployment, Integer count, boolean wait);
+    Void scale(String namespace, String deployment, Integer count, boolean wait);
 
     /**
      * Rolling namespaced Deployment
@@ -80,7 +79,7 @@ public interface DeploymentHttpClient {
      * @param deployment deployment name
      * @return {@link Deployment}
      */
-    Result<Deployment> rolling(RollingAction action, String namespace, String deployment);
+    Deployment rolling(RollingAction action, String namespace, String deployment);
 
     /**
      * Update existing container image of single container resource
@@ -90,7 +89,7 @@ public interface DeploymentHttpClient {
      * @param image      image to be updated
      * @return {@link Deployment}
      */
-    Result<Deployment> imageSet(String namespace, String deployment, String image);
+    Deployment imageSet(String namespace, String deployment, String image);
 
     /**
      * Update existing container image(s) of resources
@@ -100,5 +99,5 @@ public interface DeploymentHttpClient {
      * @param containerToImageMap Map with keys as container name and value as image
      * @return {@link Deployment}
      */
-    Result<Deployment> imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap);
+    Deployment imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap);
 }

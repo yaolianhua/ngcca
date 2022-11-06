@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
-import io.hotcloud.kubernetes.model.Result;
 import io.kubernetes.client.openapi.ApiException;
 import org.springframework.util.Assert;
 
@@ -22,7 +21,7 @@ public interface NamespaceHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> create(NamespaceCreateRequest namespaceCreateRequest) throws ApiException;
+    Void create(NamespaceCreateRequest namespaceCreateRequest) throws ApiException;
 
     /**
      * Create namespace
@@ -31,7 +30,7 @@ public interface NamespaceHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    default Result<Void> create(String namespace) throws ApiException {
+    default Void create(String namespace) throws ApiException {
         Assert.hasText(namespace, "namespace is null");
         NamespaceCreateRequest params = new NamespaceCreateRequest();
         ObjectMetadata namespaceMetadata = new ObjectMetadata();
@@ -47,7 +46,7 @@ public interface NamespaceHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace) throws ApiException;
+    Void delete(String namespace) throws ApiException;
 
     /**
      * Read named Namespace
@@ -55,7 +54,7 @@ public interface NamespaceHttpClient {
      * @param name Namespace name
      * @return {@link Namespace}
      */
-    Result<Namespace> read(String name);
+    Namespace read(String name);
 
     /**
      * Read NamespaceList
@@ -63,5 +62,5 @@ public interface NamespaceHttpClient {
      * @param labelSelector label selector
      * @return {@link NamespaceList}
      */
-    Result<NamespaceList> readList(Map<String, String> labelSelector);
+    NamespaceList readList(Map<String, String> labelSelector);
 }

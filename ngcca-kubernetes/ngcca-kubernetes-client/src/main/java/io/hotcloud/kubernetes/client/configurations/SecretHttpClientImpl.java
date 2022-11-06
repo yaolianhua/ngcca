@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.configurations;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -40,7 +39,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
     }
 
     @Override
-    public Result<Secret> read(String namespace, String secret) {
+    public Secret read(String namespace, String secret) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(secret), "secret name is null");
 
@@ -48,7 +47,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, secret);
 
-        ResponseEntity<Result<Secret>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -56,7 +55,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
     }
 
     @Override
-    public Result<SecretList> readList(String namespace, Map<String, String> labelSelector) {
+    public SecretList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -68,17 +67,17 @@ public class SecretHttpClientImpl implements SecretHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<Result<SecretList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<SecretList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Secret> create(SecretCreateRequest request) throws ApiException {
+    public Secret create(SecretCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<Secret>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Secret> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -86,14 +85,14 @@ public class SecretHttpClientImpl implements SecretHttpClient {
     }
 
     @Override
-    public Result<Secret> create(YamlBody yaml) throws ApiException {
+    public Secret create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Result<Secret>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -101,7 +100,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace, String secret) throws ApiException {
+    public Void delete(String namespace, String secret) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(secret), "secret name is null");
 
@@ -109,7 +108,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, secret);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

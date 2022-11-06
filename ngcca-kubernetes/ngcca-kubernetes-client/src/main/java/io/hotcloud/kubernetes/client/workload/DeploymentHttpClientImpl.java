@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -39,7 +38,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
 
     @Override
-    public Result<Deployment> read(String namespace, String deployment) {
+    public Deployment read(String namespace, String deployment) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), "deployment name is null");
 
@@ -47,7 +46,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, deployment);
 
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,7 +54,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
     }
 
     @Override
-    public Result<DeploymentList> readList(String namespace, Map<String, String> labelSelector) {
+    public DeploymentList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -67,17 +66,17 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<Result<DeploymentList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<DeploymentList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Deployment> create(DeploymentCreateRequest request) throws ApiException {
+    public Deployment create(DeploymentCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Deployment> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,14 +84,14 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
     }
 
     @Override
-    public Result<Deployment> create(YamlBody yaml) throws ApiException {
+    public Deployment create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -100,7 +99,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace, String deployment) throws ApiException {
+    public Void delete(String namespace, String deployment) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), "deployment name is null");
 
@@ -108,14 +107,14 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, deployment);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Void> scale(String namespace, String deployment, Integer count, boolean wait) {
+    public Void scale(String namespace, String deployment, Integer count, boolean wait) {
         Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
         Assert.isTrue(Objects.nonNull(count), () -> "scale count is null");
@@ -125,14 +124,14 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .queryParam("wait", wait)
                 .build(namespace, deployment, count);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Deployment> rolling(RollingAction action, String namespace, String deployment) {
+    public Deployment rolling(RollingAction action, String namespace, String deployment) {
         Assert.notNull(action, "action is null");
         Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
@@ -142,14 +141,14 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .queryParam("action", action)
                 .build(namespace, deployment);
 
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Deployment> imageSet(String namespace, String deployment, String image) {
+    public Deployment imageSet(String namespace, String deployment, String image) {
         Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
         Assert.isTrue(StringUtils.hasText(image), () -> "image name is null");
@@ -159,14 +158,14 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .queryParam("image", image)
                 .build(namespace, deployment);
 
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Deployment> imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap) {
+    public Deployment imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap) {
         Assert.isTrue(StringUtils.hasText(namespace), () -> "namespace is null");
         Assert.isTrue(StringUtils.hasText(deployment), () -> "deployment name is null");
         Assert.isTrue(!CollectionUtils.isEmpty(containerToImageMap), () -> "containerToImageMap is empty");
@@ -179,7 +178,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
                 .queryParams(params)
                 .build(namespace, deployment);
 
-        ResponseEntity<Result<Deployment>> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

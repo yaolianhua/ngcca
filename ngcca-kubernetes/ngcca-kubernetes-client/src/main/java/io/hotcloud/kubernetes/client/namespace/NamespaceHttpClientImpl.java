@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
-import io.hotcloud.kubernetes.model.Result;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,10 +37,10 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
     }
 
     @Override
-    public Result<Void> create(NamespaceCreateRequest request) throws ApiException {
+    public Void create(NamespaceCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -49,28 +48,28 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
     }
 
     @Override
-    public Result<Void> delete(String namespace) throws ApiException {
+    public Void delete(String namespace) throws ApiException {
         Assert.hasText(namespace, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
                 .build(namespace);
 
-        ResponseEntity<Result<Void>> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Result<Namespace> read(String name) {
+    public Namespace read(String name) {
         Assert.hasText(name, "namespace is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))
                 .build(name);
 
-        ResponseEntity<Result<Namespace>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Namespace> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -78,7 +77,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
     }
 
     @Override
-    public Result<NamespaceList> readList(Map<String, String> labelSelector) {
+    public NamespaceList readList(Map<String, String> labelSelector) {
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -89,7 +88,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
                 .queryParams(params)
                 .build().toUri();
 
-        ResponseEntity<Result<NamespaceList>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<NamespaceList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();

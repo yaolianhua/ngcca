@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface DaemonSetHttpClient {
      * @param daemonSet daemonSet name
      * @return {@link DaemonSet}
      */
-    Result<DaemonSet> read(String namespace, String daemonSet);
+    DaemonSet read(String namespace, String daemonSet);
 
     /**
      * Read namespaced DaemonSetList
@@ -30,7 +29,7 @@ public interface DaemonSetHttpClient {
      * @param labelSelector label selector
      * @return {@link DaemonSetList}
      */
-    Result<DaemonSetList> readList(String namespace, Map<String, String> labelSelector);
+    DaemonSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create DaemonSet from {@code DaemonSetCreateRequest}
@@ -39,7 +38,7 @@ public interface DaemonSetHttpClient {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<DaemonSet> create(DaemonSetCreateRequest request) throws ApiException;
+    DaemonSet create(DaemonSetCreateRequest request) throws ApiException;
 
     /**
      * Create DaemonSet from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface DaemonSetHttpClient {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<DaemonSet> create(YamlBody yaml) throws ApiException;
+    DaemonSet create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced DaemonSet
@@ -58,6 +57,6 @@ public interface DaemonSetHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String daemonSet) throws ApiException;
+    Void delete(String namespace, String daemonSet) throws ApiException;
 
 }

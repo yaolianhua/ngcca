@@ -2,7 +2,6 @@ package io.hotcloud.kubernetes.client.configurations;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.kubernetes.model.Result;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -21,7 +20,7 @@ public interface SecretHttpClient {
      * @param secret    secret name
      * @return {@link Secret}
      */
-    Result<Secret> read(String namespace, String secret);
+    Secret read(String namespace, String secret);
 
     /**
      * Read namespaced SecretList
@@ -30,7 +29,7 @@ public interface SecretHttpClient {
      * @param labelSelector label selector
      * @return {@link SecretList}
      */
-    Result<SecretList> readList(String namespace, Map<String, String> labelSelector);
+    SecretList readList(String namespace, Map<String, String> labelSelector);
 
     /**
      * Create Secret from {@code SecretCreateRequest}
@@ -39,7 +38,7 @@ public interface SecretHttpClient {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Secret> create(SecretCreateRequest request) throws ApiException;
+    Secret create(SecretCreateRequest request) throws ApiException;
 
     /**
      * Create Secret from {@code YamlBody}
@@ -48,7 +47,7 @@ public interface SecretHttpClient {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Secret> create(YamlBody yaml) throws ApiException;
+    Secret create(YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced Secret
@@ -58,6 +57,6 @@ public interface SecretHttpClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Result<Void> delete(String namespace, String secret) throws ApiException;
+    Void delete(String namespace, String secret) throws ApiException;
 
 }
