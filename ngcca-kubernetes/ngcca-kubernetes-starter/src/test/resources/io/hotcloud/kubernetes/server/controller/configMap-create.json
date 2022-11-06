@@ -1,0 +1,3 @@
+{
+  "yaml": "apiVersion: v1\ndata:\n  config: |\n    logging:\n      level:\n        io.hotCloud.server: debug\n        io.hotCloud.message: info\n    kubernetes:\n      in-cluster: true\n      enable-workloads-watcher: true\nkind: ConfigMap\nmetadata:\n  name: hotcloud-config\n  namespace: default\n  labels: {\n      \"k8s-app\": \"hotcloud\"\n  }\nimmutable: true"
+}

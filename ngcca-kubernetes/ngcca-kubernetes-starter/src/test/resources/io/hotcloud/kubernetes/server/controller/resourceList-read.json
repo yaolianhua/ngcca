@@ -1,0 +1,232 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "ServiceAccount",
+    "metadata": {
+      "creationTimestamp": "2022-02-26T12:25:46Z",
+      "labels": {
+        "k8s-app": "hotcloud"
+      },
+      "name": "hotcloud",
+      "namespace": "default",
+      "resourceVersion": "283199",
+      "uid": "06b72bd9-889e-4e62-882d-5f50cc8953c9"
+    }
+  },
+  {
+    "apiVersion": "rbac.authorization.k8s.io/v1",
+    "kind": "ClusterRoleBinding",
+    "metadata": {
+      "creationTimestamp": "2022-02-26T12:25:46Z",
+      "labels": {
+        "k8s-app": "hotcloud"
+      },
+      "name": "hotcloud",
+      "resourceVersion": "283201",
+      "uid": "e0773ea6-233e-475d-848b-941a6cbb1829"
+    },
+    "roleRef": {
+      "kind": "ClusterRole",
+      "apiGroup": "rbac.authorization.k8s.io",
+      "name": "cluster-admin"
+    },
+    "subjects": [
+      {
+        "kind": "ServiceAccount",
+        "name": "hotcloud",
+        "namespace": "default"
+      }
+    ]
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+      "creationTimestamp": "2022-02-26T12:25:46Z",
+      "labels": {
+        "k8s-app": "hotcloud"
+      },
+      "name": "hotcloud",
+      "namespace": "default",
+      "resourceVersion": "283205",
+      "uid": "da76490d-c065-44ee-86a1-ade8bdf8d809"
+    },
+    "spec": {
+      "clusterIP": "10.111.165.51",
+      "clusterIPs": [
+        "10.111.165.51"
+      ],
+      "externalTrafficPolicy": "Cluster",
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": [
+        "IPv4"
+      ],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 30080,
+          "port": 8080,
+          "protocol": "TCP",
+          "targetPort": "http"
+        }
+      ],
+      "selector": {
+        "k8s-app": "hotcloud"
+      },
+      "sessionAffinity": "None",
+      "type": "NodePort"
+    },
+    "status": {
+      "loadBalancer": {}
+    }
+  },
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "creationTimestamp": "2022-02-26T12:25:46Z",
+      "generation": 1,
+      "labels": {
+        "k8s-app": "hotcloud"
+      },
+      "name": "hotcloud",
+      "namespace": "default",
+      "resourceVersion": "283208",
+      "uid": "558279aa-ac65-4e68-bf04-2439b1ce6ef3"
+    },
+    "spec": {
+      "progressDeadlineSeconds": 600,
+      "replicas": 1,
+      "revisionHistoryLimit": 10,
+      "selector": {
+        "matchLabels": {
+          "k8s-app": "hotcloud"
+        }
+      },
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "k8s-app": "hotcloud"
+          }
+        },
+        "spec": {
+          "affinity": {
+            "nodeAffinity": {
+              "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                  {
+                    "matchExpressions": [
+                      {
+                        "key": "node-role.kubernetes.io/master",
+                        "operator": "Exists"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "containers": [
+            {
+              "image": "yaolianhua/hotcloud",
+              "imagePullPolicy": "Always",
+              "name": "hotcloud",
+              "ports": [
+                {
+                  "containerPort": 8080,
+                  "name": "http",
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "limits": {
+                  "cpu": "200m",
+                  "memory": "256Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+                }
+              },
+              "securityContext": {
+                "privileged": true
+              },
+              "terminationMessagePath": "/dev/termination-log",
+              "terminationMessagePolicy": "File",
+              "volumeMounts": [
+                {
+                  "mountPath": "/hotcloud/config",
+                  "name": "hotcloud-volume",
+                  "readOnly": true
+                },
+                {
+                  "mountPath": "/root/.kube/config",
+                  "name": "kubeconfig",
+                  "readOnly": true
+                }
+              ]
+            }
+          ],
+          "dnsPolicy": "ClusterFirst",
+          "restartPolicy": "Always",
+          "schedulerName": "default-scheduler",
+          "securityContext": {},
+          "serviceAccount": "hotcloud",
+          "serviceAccountName": "hotcloud",
+          "terminationGracePeriodSeconds": 30,
+          "tolerations": [
+            {
+              "effect": "NoSchedule",
+              "operator": "Exists"
+            }
+          ],
+          "volumes": [
+            {
+              "configMap": {
+                "defaultMode": 420,
+                "items": [
+                  {
+                    "key": "config",
+                    "path": "application.yml"
+                  }
+                ],
+                "name": "hotcloud-config"
+              },
+              "name": "hotcloud-volume"
+            },
+            {
+              "hostPath": {
+                "path": "/root/.kube/config",
+                "type": ""
+              },
+              "name": "kubeconfig"
+            }
+          ]
+        }
+      }
+    },
+    "status": {}
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+      "creationTimestamp": "2022-02-26T12:25:46Z",
+      "name": "hotcloud-config",
+      "namespace": "default",
+      "resourceVersion": "283213",
+      "uid": "ad22572b-486a-42a6-9e3a-52eb4700d185"
+    },
+    "data": {
+      "config": "logging:\n  level:\n    io.hotcloud.kubernetes.server: debug\n    io.hotcloud.message: info\nkubernetes:\n  in-cluster: true\n  enable-workloads-watcher: true\nmessage:\n  type: websocket\n  rabbitmq:\n    host:\n    username:\n    password:\n    port:\nbuildpack:\n  kaniko:\n    cache: false\n    cache-dir:\n    cache-repo:\n    cache-ttl-duration: 168h\n    compressed-caching: true\n    cleanup: true\n    context:\n    context-sub-path:\n    destination:\n    digest-file:\n    dockerfile: Dockerfile\n    force: false\n    image-fs-extract-retry: 3\n    git:\n    ignore-path:\n    ignore-var-run: true\n    image-name-tag-with-digest-file:\n    image-name-with-digest-file:\n    insecure: true\n    insecure-pull: true\n    insecure-registry:\n    label:\n    log-format: color\n    log-timestamp: false\n    no-push: false\n    push-retry: 3\n    registry-certificate:\n    registry-mirror:\n    reproducible: false\n    single-snapshot: false\n    skip-tls-verify: true\n    skip-tls-verify-pull: true\n    skip-tls-verify-registry: true\n    skip-unused-stages: true\n    snapshot-mode: full\n    tar-path:\n    target:\n    use-new-run: true\n    verbosity: debug\n"
+    }
+  }
+]

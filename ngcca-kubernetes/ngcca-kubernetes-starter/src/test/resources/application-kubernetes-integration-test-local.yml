@@ -1,0 +1,12 @@
+kubernetes:
+  in-cluster: false
+  enable-workloads-watcher: false
+logging:
+  level:
+    io.hotcloud.kubernetes.server: info
+ngcca:
+  kubernetes-agent:
+    host: localhost
+    port: 1400
+    basic-username: admin
+    basic-password: e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea
