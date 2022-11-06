@@ -18,7 +18,6 @@
         <module>ngcca-test-application</module>
         <module>ngcca-test-security</module>
         <module>ngcca-test-db</module>
-        <module>ngcca-test-kubernetes</module>
     </modules>
 
 </project>
