@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server;
 
-import io.hotcloud.kubernetes.model.CommonConstant;
+import io.hotcloud.kubernetes.model.RabbitMQConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -21,17 +21,17 @@ public class KubernetesRabbitMqApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Queue queue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
-        Queue buildPackJobQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK).build();
-        Queue applicationDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION).build();
-        Queue templateDeploymentQueue = QueueBuilder.durable(CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_TEMPLATE).build();
+        Queue queue = QueueBuilder.durable(RabbitMQConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_EVENTS).build();
+        Queue buildPackJobQueue = QueueBuilder.durable(RabbitMQConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_JOB_BUILDPACK).build();
+        Queue applicationDeploymentQueue = QueueBuilder.durable(RabbitMQConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION).build();
+        Queue templateDeploymentQueue = QueueBuilder.durable(RabbitMQConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_TEMPLATE).build();
 
-        FanoutExchange cronjobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB).build();
-        FanoutExchange jobExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB).build();
-        FanoutExchange deploymentExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT).build();
-        FanoutExchange daemonsetExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET).build();
-        FanoutExchange statefulsetExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET).build();
-        FanoutExchange podExchange = ExchangeBuilder.fanoutExchange(CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_POD).build();
+        FanoutExchange cronjobExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_CRONJOB).build();
+        FanoutExchange jobExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_JOB).build();
+        FanoutExchange deploymentExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT).build();
+        FanoutExchange daemonsetExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DAEMONSET).build();
+        FanoutExchange statefulsetExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_STATEFULSET).build();
+        FanoutExchange podExchange = ExchangeBuilder.fanoutExchange(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_POD).build();
 
         Binding cronjobBinding = BindingBuilder.bind(queue).to(cronjobExchange);
         Binding jobBinding = BindingBuilder.bind(queue).to(jobExchange);
