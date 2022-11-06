@@ -28,7 +28,7 @@ public class NoneSecurityConfigurer {
 
     @PostConstruct
     public void print() {
-        Log.info(NoneSecurityConfigurer.class.getName(), "【Spring security disabled. if you want to enable, you need configure the environment 'security.enabled=true'】");
+        Log.warn(NoneSecurityConfigurer.class.getName(), "【Spring security disabled. if you want to enable, you need configure the environment 'security.enabled=true'】");
     }
 
 }
