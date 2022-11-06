@@ -5,10 +5,10 @@ import io.hotcloud.buildpack.server.clone.GitClonedCollectionQuery;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author yaolianhua789@gmail.com
  **/
-@WebMvcTest(value = GitController.class)
+@WebMvcTest(value = GitController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBeans(value = {
         @MockBean(classes = {
                 GitClonedService.class,
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 UserApi.class
         })
 })
-@ActiveProfiles("buildpack-mvc-test")
+//@ActiveProfiles("buildpack-mvc-test")
 public class GitControllerTest {
 
     public final static String PATH = "/v1/git";
