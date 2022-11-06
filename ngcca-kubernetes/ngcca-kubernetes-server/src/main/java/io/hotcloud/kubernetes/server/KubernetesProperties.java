@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
@@ -32,6 +33,8 @@ public class KubernetesProperties {
      */
     private boolean enableWorkloadsWatcher;
 
+    private RabbitmqProperties rabbitmq;
+
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
     }
@@ -39,7 +42,9 @@ public class KubernetesProperties {
     @PostConstruct
     public void log() {
         if (this.enableWorkloadsWatcher) {
-            log.info("【Load Kubernetes Properties】enable global event watch for workloads ");
+            Assert.notNull(rabbitmq, "rabbitmq config is null");
+            String rabbitmqUrl = String.format("amqp://%s@%s:%s", rabbitmq.getUsername(), rabbitmq.getHost(), rabbitmq.getPort());
+            log.info("【Load Kubernetes Properties】enable global event watch for workloads. rabbitmq url '{}'", rabbitmqUrl);
         }
         if (this.inCluster) {
             log.info("【Load Kubernetes Properties】using in-cluster mode ");
@@ -48,5 +53,12 @@ public class KubernetesProperties {
         log.info(String.format("【Load Kubernetes Properties】using kubeconfig path '%s'", kubeConfigPath));
     }
 
+    @Data
+    public static class RabbitmqProperties {
+        private String host;
+        private Integer port;
+        private String username;
+        private String password;
+    }
 
 }

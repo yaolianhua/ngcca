@@ -2,18 +2,21 @@ package io.hotcloud.kubernetes.server;
 
 import io.hotcloud.kubernetes.model.CommonConstant;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(name = "kubernetes.enable-workloads-watcher", havingValue = "true")
 public class KubernetesRabbitMqApplicationRunner implements ApplicationRunner {
 
-    private final RabbitAdmin rabbitAdmin;
+    private final ConnectionFactory connectionFactory;
 
-    public KubernetesRabbitMqApplicationRunner(RabbitAdmin rabbitAdmin) {
-        this.rabbitAdmin = rabbitAdmin;
+    public KubernetesRabbitMqApplicationRunner(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     @Override
@@ -41,6 +44,8 @@ public class KubernetesRabbitMqApplicationRunner implements ApplicationRunner {
         Binding deploymentQueueBinding = BindingBuilder.bind(applicationDeploymentQueue).to(deploymentExchange);
         Binding templateDeploymentQueueBinding = BindingBuilder.bind(templateDeploymentQueue).to(deploymentExchange);
 
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        rabbitAdmin.setAutoStartup(true);
         rabbitAdmin.declareExchange(cronjobExchange);
         rabbitAdmin.declareExchange(jobExchange);
         rabbitAdmin.declareExchange(deploymentExchange);
