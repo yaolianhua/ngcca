@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class PodHttpClientImpl implements PodHttpClient {
+class PodHttpClientImpl implements PodHttpClient {
 
     private final URI uri;
     private static final String PATH = "/v1/kubernetes/pods";

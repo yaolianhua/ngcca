@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.storage;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.PersistentVolume;
-import io.fabric8.kubernetes.api.model.PersistentVolumeList;
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.fabric8.kubernetes.api.model.batch.v1.JobList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.workload.JobHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
+import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,27 +27,28 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClient {
+class JobHttpClientImpl implements JobHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/persistentvolumes";
+    private static final String PATH = "/v1/kubernetes/jobs";
     private final RestTemplate restTemplate;
 
-    public PersistentVolumeHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                                          RestTemplate restTemplate) {
+    public JobHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                             RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public PersistentVolume read(String persistentVolume) {
-        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+    public Job read(String namespace, String job) {
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(job), "job name is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri))
-                .build(persistentVolume);
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, job);
 
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<Job> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -54,28 +56,29 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
     }
 
     @Override
-    public PersistentVolumeList readList(Map<String, String> labelSelector) {
+    public JobList readList(String namespace, Map<String, String> labelSelector) {
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(uri.toString())
+                .fromHttpUrl(String.format("%s/{namespace}", uri))
                 .queryParams(params)
-                .build().toUri();
+                .build(namespace);
 
-        ResponseEntity<PersistentVolumeList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<JobList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
+    public Job create(JobCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Job> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -83,14 +86,14 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
     }
 
     @Override
-    public PersistentVolume create(YamlBody yaml) throws ApiException {
+    public Job create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Job> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -98,12 +101,13 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
     }
 
     @Override
-    public Void delete(String persistentVolume) throws ApiException {
-        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+    public Void delete(String namespace, String job) throws ApiException {
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(job), "job name is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
-                .build(persistentVolume);
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, job);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

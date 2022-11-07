@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
 import io.hotcloud.kubernetes.model.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class DeploymentHttpClientImpl implements DeploymentHttpClient {
+class DeploymentHttpClientImpl implements DeploymentHttpClient {
 
     private final URI uri;
     private static final String PATH = "/v1/kubernetes/deployments";

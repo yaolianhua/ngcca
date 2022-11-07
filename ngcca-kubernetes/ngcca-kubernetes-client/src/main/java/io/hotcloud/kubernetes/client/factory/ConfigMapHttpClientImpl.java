@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
-import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
+import io.fabric8.kubernetes.api.model.ConfigMap;
+import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
+import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,28 +27,28 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class CronJobHttpClientImpl implements CronJobHttpClient {
+class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/cronjobs";
+    private static final String PATH = "/v1/kubernetes/configmaps";
     private final RestTemplate restTemplate;
 
-    public CronJobHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                                 RestTemplate restTemplate) {
+    public ConfigMapHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                                   RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public CronJob read(String namespace, String cronJob) {
+    public ConfigMap read(String namespace, String configmap) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(cronJob), "cronJob name is null");
+        Assert.isTrue(StringUtils.hasText(configmap), "configmap name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, cronJob);
+                .build(namespace, configmap);
 
-        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,7 +56,7 @@ public class CronJobHttpClientImpl implements CronJobHttpClient {
     }
 
     @Override
-    public CronJobList readList(String namespace, Map<String, String> labelSelector) {
+    public ConfigMapList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -67,17 +68,17 @@ public class CronJobHttpClientImpl implements CronJobHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<CronJobList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<ConfigMapList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public CronJob create(CronJobCreateRequest request) throws ApiException {
+    public ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<CronJob> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<ConfigMap> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,14 +86,14 @@ public class CronJobHttpClientImpl implements CronJobHttpClient {
     }
 
     @Override
-    public CronJob create(YamlBody yaml) throws ApiException {
+    public ConfigMap create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -100,13 +101,13 @@ public class CronJobHttpClientImpl implements CronJobHttpClient {
     }
 
     @Override
-    public Void delete(String namespace, String cronJob) throws ApiException {
+    public Void delete(String namespace, String configmap) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(cronJob), "cronJob name is null");
+        Assert.isTrue(StringUtils.hasText(configmap), "configmap name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, cronJob);
+                .build(namespace, configmap);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

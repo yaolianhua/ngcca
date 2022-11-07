@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.namespace;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class NamespaceHttpClientImpl implements NamespaceHttpClient {
+class NamespaceHttpClientImpl implements NamespaceHttpClient {
 
     private static final String PATH = "/v1/kubernetes/namespaces";
     private final URI uri;

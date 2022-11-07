@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.configurations;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -26,7 +27,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class SecretHttpClientImpl implements SecretHttpClient {
+class SecretHttpClientImpl implements SecretHttpClient {
 
     private final URI uri;
     private static final String PATH = "/v1/kubernetes/secrets";

@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.equivalent;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class KubectlHttpClientImpl implements KubectlHttpClient {
+class KubectlHttpClientImpl implements KubectlHttpClient {
 
     private static final String PATH = "/v1/kubernetes/equivalents";
     private final URI uri;

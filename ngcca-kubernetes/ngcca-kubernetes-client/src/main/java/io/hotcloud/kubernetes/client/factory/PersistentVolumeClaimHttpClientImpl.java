@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.fabric8.kubernetes.api.model.batch.v1.JobList;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
+import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
+import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,28 +27,28 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class JobHttpClientImpl implements JobHttpClient {
+class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClaimHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/jobs";
+    private static final String PATH = "/v1/kubernetes/persistentvolumeclaims";
     private final RestTemplate restTemplate;
 
-    public JobHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                             RestTemplate restTemplate) {
+    public PersistentVolumeClaimHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                                               RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public Job read(String namespace, String job) {
+    public PersistentVolumeClaim read(String namespace, String persistentVolumeClaim) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(job), "job name is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, job);
+                .build(namespace, persistentVolumeClaim);
 
-        ResponseEntity<Job> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,7 +56,7 @@ public class JobHttpClientImpl implements JobHttpClient {
     }
 
     @Override
-    public JobList readList(String namespace, Map<String, String> labelSelector) {
+    public PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -67,17 +68,17 @@ public class JobHttpClientImpl implements JobHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<JobList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<PersistentVolumeClaimList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public Job create(JobCreateRequest request) throws ApiException {
+    public PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Job> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,14 +86,14 @@ public class JobHttpClientImpl implements JobHttpClient {
     }
 
     @Override
-    public Job create(YamlBody yaml) throws ApiException {
+    public PersistentVolumeClaim create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<Job> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -100,13 +101,13 @@ public class JobHttpClientImpl implements JobHttpClient {
     }
 
     @Override
-    public Void delete(String namespace, String job) throws ApiException {
+    public Void delete(String namespace, String persistentVolumeClaim) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(job), "job name is null");
+        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, job);
+                .build(namespace, persistentVolumeClaim);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.storage;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
-import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
+import io.fabric8.kubernetes.api.model.apps.DaemonSet;
+import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.workload.DaemonSetHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
+import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,28 +27,28 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClaimHttpClient {
+class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/persistentvolumeclaims";
+    private static final String PATH = "/v1/kubernetes/daemonsets";
     private final RestTemplate restTemplate;
 
-    public PersistentVolumeClaimHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                                               RestTemplate restTemplate) {
+    public DaemonSetHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                                   RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public PersistentVolumeClaim read(String namespace, String persistentVolumeClaim) {
+    public DaemonSet read(String namespace, String daemonSet) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
+        Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, persistentVolumeClaim);
+                .build(namespace, daemonSet);
 
-        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,10 +56,9 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
     }
 
     @Override
-    public PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector) {
+    public DaemonSetList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         labelSelector.forEach(params::add);
 
@@ -67,17 +67,17 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<PersistentVolumeClaimList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<DaemonSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException {
+    public DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,14 +85,13 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
     }
 
     @Override
-    public PersistentVolumeClaim create(YamlBody yaml) throws ApiException {
+    public DaemonSet create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -100,13 +99,12 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
     }
 
     @Override
-    public Void delete(String namespace, String persistentVolumeClaim) throws ApiException {
+    public Void delete(String namespace, String daemonSet) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(persistentVolumeClaim), "persistentVolumeClaim name is null");
-
+        Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, persistentVolumeClaim);
+                .build(namespace, daemonSet);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

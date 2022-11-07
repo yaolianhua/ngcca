@@ -1,16 +1,14 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.factory;
 
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClientImpl;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
-import io.hotcloud.kubernetes.client.configurations.SecretHttpClientImpl;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClientImpl;
 import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
-import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClientImpl;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
-import io.hotcloud.kubernetes.client.network.ServiceHttpClientImpl;
-import io.hotcloud.kubernetes.client.storage.*;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.storage.StorageClassHttpClient;
 import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.web.client.RestTemplate;
 

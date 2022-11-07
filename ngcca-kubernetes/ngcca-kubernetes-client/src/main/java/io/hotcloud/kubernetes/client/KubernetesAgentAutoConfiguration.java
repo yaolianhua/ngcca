@@ -1,5 +1,6 @@
 package io.hotcloud.kubernetes.client;
 
+import io.hotcloud.kubernetes.client.factory.KubernetesAgentClientFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

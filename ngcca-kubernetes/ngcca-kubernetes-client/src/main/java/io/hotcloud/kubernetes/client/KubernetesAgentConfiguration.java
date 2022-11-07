@@ -3,6 +3,7 @@ package io.hotcloud.kubernetes.client;
 import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
 import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
 import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.factory.KubernetesAgentClientFactory;
 import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
 import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
 import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;

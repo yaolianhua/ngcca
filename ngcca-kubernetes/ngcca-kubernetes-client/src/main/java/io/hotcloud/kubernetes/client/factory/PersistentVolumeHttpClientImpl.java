@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.configurations;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.ConfigMap;
-import io.fabric8.kubernetes.api.model.ConfigMapList;
+import io.fabric8.kubernetes.api.model.PersistentVolume;
+import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
+import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,28 +27,27 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
+class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/configmaps";
+    private static final String PATH = "/v1/kubernetes/persistentvolumes";
     private final RestTemplate restTemplate;
 
-    public ConfigMapHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                                   RestTemplate restTemplate) {
+    public PersistentVolumeHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                                          RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public ConfigMap read(String namespace, String configmap) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(configmap), "configmap name is null");
+    public PersistentVolume read(String persistentVolume) {
+        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, configmap);
+                .fromHttpUrl(String.format("%s/{name}", uri))
+                .build(persistentVolume);
 
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,29 +55,28 @@ public class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
     }
 
     @Override
-    public ConfigMapList readList(String namespace, Map<String, String> labelSelector) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+    public PersistentVolumeList readList(Map<String, String> labelSelector) {
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
+                .fromHttpUrl(uri.toString())
                 .queryParams(params)
-                .build(namespace);
+                .build().toUri();
 
-        ResponseEntity<ConfigMapList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<PersistentVolumeList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
+    public PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -85,14 +84,14 @@ public class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
     }
 
     @Override
-    public ConfigMap create(YamlBody yaml) throws ApiException {
+    public PersistentVolume create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -100,13 +99,12 @@ public class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
     }
 
     @Override
-    public Void delete(String namespace, String configmap) throws ApiException {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(configmap), "configmap name is null");
+    public Void delete(String persistentVolume) throws ApiException {
+        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, configmap);
+                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
+                .build(persistentVolume);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

@@ -1,10 +1,11 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client.factory;
 
-import io.fabric8.kubernetes.api.model.apps.DaemonSet;
-import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
+import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
+import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.workload.CronJobHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
+import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,28 +27,28 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
+class CronJobHttpClientImpl implements CronJobHttpClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/daemonsets";
+    private static final String PATH = "/v1/kubernetes/cronjobs";
     private final RestTemplate restTemplate;
 
-    public DaemonSetHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
-                                   RestTemplate restTemplate) {
+    public CronJobHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
+                                 RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
     }
 
     @Override
-    public DaemonSet read(String namespace, String daemonSet) {
+    public CronJob read(String namespace, String cronJob) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
+        Assert.isTrue(StringUtils.hasText(cronJob), "cronJob name is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, daemonSet);
+                .build(namespace, cronJob);
 
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -55,9 +56,10 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public DaemonSetList readList(String namespace, Map<String, String> labelSelector) {
+    public CronJobList readList(String namespace, Map<String, String> labelSelector) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         labelSelector.forEach(params::add);
 
@@ -66,17 +68,17 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
                 .queryParams(params)
                 .build(namespace);
 
-        ResponseEntity<DaemonSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+        ResponseEntity<CronJobList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
     }
 
     @Override
-    public DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
+    public CronJob create(CronJobCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<CronJob> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -84,13 +86,14 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public DaemonSet create(YamlBody yaml) throws ApiException {
+    public CronJob create(YamlBody yaml) throws ApiException {
         Assert.notNull(yaml, "request body is null");
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
                 .build().toUri();
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -98,12 +101,13 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     }
 
     @Override
-    public Void delete(String namespace, String daemonSet) throws ApiException {
+    public Void delete(String namespace, String cronJob) throws ApiException {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(daemonSet), "daemonSet name is null");
+        Assert.isTrue(StringUtils.hasText(cronJob), "cronJob name is null");
+
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, daemonSet);
+                .build(namespace, cronJob);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {

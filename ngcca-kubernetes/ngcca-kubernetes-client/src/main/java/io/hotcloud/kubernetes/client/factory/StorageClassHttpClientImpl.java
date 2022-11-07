@@ -1,8 +1,9 @@
-package io.hotcloud.kubernetes.client.storage;
+package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.storage.StorageClassHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -25,7 +26,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class StorageClassHttpClientImpl implements StorageClassHttpClient {
+class StorageClassHttpClientImpl implements StorageClassHttpClient {
     private static final String PATH = "/v1/kubernetes/storageclasses";
     private final URI uri;
     private final RestTemplate restTemplate;
