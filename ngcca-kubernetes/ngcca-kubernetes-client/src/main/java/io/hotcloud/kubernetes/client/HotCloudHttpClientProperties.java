@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 public class HotCloudHttpClientProperties {
 
     private String host = "localhost";
-    private Integer port = 8080;
+    private Integer port = 1400;
     private String domainName;
 
     private String basicUsername = "admin";
