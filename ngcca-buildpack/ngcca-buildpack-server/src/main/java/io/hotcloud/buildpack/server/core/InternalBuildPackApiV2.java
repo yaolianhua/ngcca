@@ -14,9 +14,10 @@ import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.api.JobApi;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.PodApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.workload.JobHttpClient;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,9 +40,9 @@ import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 @Slf4j
 class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
-    private final KubectlApi kubectlApi;
-    private final JobApi jobApi;
-    private final PodApi podApi;
+    private final KubectlHttpClient kubectlApi;
+    private final JobHttpClient jobApi;
+    private final PodHttpClient podApi;
     private final RegistryProperties registryProperties;
     private final DatabaseRegistryImages registryImagesContainer;
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
@@ -220,7 +221,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
     @Override
     protected void doApply(String yaml) {
-        List<HasMetadata> metadataList = kubectlApi.apply(null, yaml);
+        List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(yaml));
         for (HasMetadata hasMetadata : metadataList) {
             Log.info(InternalBuildPackApiV2.class.getName(),
                     String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
@@ -267,7 +268,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
             return "";
         }
 
-        List<Pod> pods = podApi.read(namespace, kanikoJob.getMetadata().getLabels()).getItems();
+        List<Pod> pods = podApi.readList(namespace, kanikoJob.getMetadata().getLabels()).getItems();
         if (CollectionUtils.isEmpty(pods)) {
             Log.info(InternalBuildPackApiV2.class.getName(),
                     String.format("Fetch kaniko log error. list pods is empty namespace:%s job:%s", namespace, job));

@@ -6,8 +6,9 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -26,8 +27,8 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
 
     private final BuildPackApiV2 buildPackApiV2;
     private final UserApi userApi;
-    private final NamespaceApi namespaceApi;
-    private final KubectlApi kubectlApi;
+    private final KubectlHttpClient kubectlApi;
+    private final NamespaceHttpClient namespaceApi;
     private final BuildPackService buildPackService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
@@ -110,7 +111,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
         try {
-            Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), existBuildPack.getYaml());
+            Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
             Log.info(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, existBuildPack.getJobResource().getNamespace(), existBuildPack.getJobResource().getName()));
         } catch (Exception ex) {
             Log.error(BuildPackInProcessWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));

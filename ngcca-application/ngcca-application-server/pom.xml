@@ -36,7 +36,7 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-kubernetes-api</artifactId>
+            <artifactId>ngcca-kubernetes-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

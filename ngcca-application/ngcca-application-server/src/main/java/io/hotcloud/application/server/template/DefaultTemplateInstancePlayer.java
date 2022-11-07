@@ -9,8 +9,9 @@ import io.hotcloud.application.server.template.processor.InstanceTemplateProcess
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final ApplicationEventPublisher eventPublisher;
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstanceActivityLogger activityLogger;
-    private final KubectlApi kubectlApi;
-    private final NamespaceApi namespaceApi;
+    private final KubectlHttpClient kubectlApi;
+    private final NamespaceHttpClient namespaceApi;
     private final UserApi userApi;
     private final TemplateInstanceK8sService templateInstanceK8sService;
 
@@ -52,7 +53,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.create(namespace);
             }
-            kubectlApi.apply(namespace, templateInstance.getYaml());
+            kubectlApi.resourceListCreateOrReplace(namespace, YamlBody.of(templateInstance.getYaml()));
         } catch (Exception ex) {
             saved.setMessage(ex.getMessage());
             templateInstanceService.saveOrUpdate(saved);

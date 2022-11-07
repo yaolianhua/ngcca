@@ -8,9 +8,9 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.DeploymentApi;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.PodApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApplicationInstanceK8sService {
 
-    private final DeploymentApi deploymentApi;
+    private final DeploymentHttpClient deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationDeploymentCacheApi applicationDeploymentCacheApi;
-    private final PodApi podApi;
-    private final KubectlApi kubectlApi;
+    private final PodHttpClient podApi;
+    private final KubectlHttpClient kubectlApi;
 
     public void processApplicationCreatedBlocked(ApplicationInstance instance) {
 
@@ -58,7 +58,7 @@ public class ApplicationInstanceK8sService {
                 int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationDeploymentCacheApi.getTimeoutSeconds()));
                 if (timeout > 0) {
                     String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-                    PodList podList = podApi.read(applicationInstance.getNamespace(),
+                    PodList podList = podApi.readList(applicationInstance.getNamespace(),
                             Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, instance.getId(), CommonConstant.K8S_APP, applicationInstance.getName())
                     );
                     if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {

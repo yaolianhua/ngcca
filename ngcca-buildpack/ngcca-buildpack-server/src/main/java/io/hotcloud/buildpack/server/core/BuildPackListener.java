@@ -8,7 +8,11 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.api.*;
+import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
+import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.workload.JobHttpClient;
+import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -34,12 +38,12 @@ public class BuildPackListener {
 
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
-    private final PodApi podApi;
-    private final JobApi jobApi;
+    private final PodHttpClient podApi;
+    private final JobHttpClient jobApi;
 
-    private final PersistentVolumeClaimApi persistentVolumeClaimApi;
-    private final PersistentVolumeApi persistentVolumeApi;
-    private final SecretApi secretApi;
+    private final PersistentVolumeClaimHttpClient persistentVolumeClaimApi;
+    private final PersistentVolumeHttpClient persistentVolumeApi;
+    private final SecretHttpClient secretApi;
 
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBroadcaster messageBroadcaster;
@@ -138,7 +142,7 @@ public class BuildPackListener {
         }
         try {
             boolean success = doneEvent.isSuccess();
-            PodList read = podApi.read(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
+            PodList read = podApi.readList(buildPack.getJobResource().getNamespace(), buildPack.getJobResource().getLabels());
             Pod pod = read.getItems().get(0);
 
             String logs = podApi.logs(buildPack.getJobResource().getNamespace(), pod.getMetadata().getName(), 100);

@@ -7,7 +7,8 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcessor <ApplicationInstance> {
 
     private final ApplicationProperties applicationProperties;
-    private final KubectlApi kubectlApi;
+    private final KubectlHttpClient kubectlApi;
     private final ApplicationInstanceService applicationInstanceService;
 
     @Override
@@ -70,7 +71,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
             applicationInstance.setHost(hosts);
             applicationInstanceService.saveOrUpdate(applicationInstance);
 
-            kubectlApi.apply(applicationInstance.getNamespace(), ingress);
+            kubectlApi.resourceListCreateOrReplace(applicationInstance.getNamespace(), YamlBody.of(ingress));
             Log.info(ApplicationInstanceIngressProcessor.class.getName(),
                     String.format("[%s] user's application instance k8s ingress [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         }catch (Exception e){
@@ -87,7 +88,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
     @Override
     public void processDelete(ApplicationInstance input) {
         if (StringUtils.hasText(input.getIngress())){
-            Boolean deleted = kubectlApi.delete(input.getNamespace(), input.getIngress());
+            Boolean deleted = kubectlApi.delete(input.getNamespace(), YamlBody.of(input.getIngress()));
             Log.info(ApplicationInstanceIngressProcessor.class.getName(),
                     String.format("[%s] user's application instance k8s ingress [%s] deleted [%s]", input.getUser(), input.getName(), deleted));
         }

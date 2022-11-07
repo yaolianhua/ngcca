@@ -13,8 +13,9 @@ import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.api.NamespaceApi;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
 import io.hotcloud.security.api.user.UserNamespacePair;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -36,24 +37,14 @@ import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
         name = MessageProperties.PROPERTIES_TYPE_NAME,
         havingValue = MessageProperties.RABBITMQ
 )
+@RequiredArgsConstructor
 public class ApplicationRabbitMQMessageSubscriber {
 
     private final TemplateInstancePlayer templateInstancePlayer;
     private final TemplateInstanceService templateInstanceService;
 
-    private final NamespaceApi namespaceApi;
-
+    private final NamespaceHttpClient namespaceApi;
     private final ObjectMapper objectMapper;
-
-    public ApplicationRabbitMQMessageSubscriber(TemplateInstancePlayer templateInstancePlayer,
-                                                TemplateInstanceService templateInstanceService,
-                                                NamespaceApi namespaceApi,
-                                                ObjectMapper objectMapper) {
-        this.templateInstancePlayer = templateInstancePlayer;
-        this.templateInstanceService = templateInstanceService;
-        this.namespaceApi = namespaceApi;
-        this.objectMapper = objectMapper;
-    }
 
     @RabbitListener(
             bindings = {

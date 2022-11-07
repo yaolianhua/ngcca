@@ -10,9 +10,10 @@ import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.DeploymentApi;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.ServiceApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
+import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -29,13 +30,13 @@ import java.util.stream.Collectors;
 public class TemplateInstanceK8sService {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
-    private final DeploymentApi deploymentApi;
-    private final ServiceApi serviceApi;
-    private final KubectlApi kubectlApi;
+    private final DeploymentHttpClient deploymentApi;
+    private final ServiceHttpClient serviceApi;
+    private final KubectlHttpClient kubectlApi;
 
     public void processTemplateCreateBlocked(TemplateInstance instance) {
 
-        if (!templateDeploymentCacheApi.tryLock(instance.getId())){
+        if (!templateDeploymentCacheApi.tryLock(instance.getId())) {
             return;
         }
 
@@ -99,7 +100,7 @@ public class TemplateInstanceK8sService {
                     Log.info(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
                     if (StringUtils.hasText(template.getIngress())) {
-                        List<HasMetadata> metadataList = kubectlApi.apply(template.getNamespace(), template.getIngress());
+                        List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
                         String ingress = metadataList.stream()
                                 .map(e -> e.getMetadata().getName())
                                 .findFirst().orElse(null);
@@ -128,11 +129,11 @@ public class TemplateInstanceK8sService {
 
         try {
             templateDeploymentCacheApi.unLock(instance.getId());
-            Boolean delete = kubectlApi.delete(namespace, instance.getYaml());
+            Boolean delete = kubectlApi.delete(namespace, YamlBody.of(instance.getYaml()));
             Log.info(TemplateInstanceK8sService.class.getName(), String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
 
             if (StringUtils.hasText(instance.getIngress())){
-                Boolean deleteIngress = kubectlApi.delete(namespace, instance.getIngress());
+                Boolean deleteIngress = kubectlApi.delete(namespace, YamlBody.of(instance.getIngress()));
                 Log.info(TemplateInstanceK8sService.class.getName(), String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, namespace, name));
             }
 

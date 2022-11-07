@@ -9,12 +9,13 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.api.cache.Cache;
 import io.hotcloud.common.api.registry.RegistryProperties;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
+import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -31,45 +32,19 @@ import java.util.Objects;
  **/
 @Component
 @Deprecated(since = "BuildPackApiV2")
+@RequiredArgsConstructor
 class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
     private final AbstractBuildPackApi abstractBuildPackApi;
     private final UserApi userApi;
     private final KanikoFlag kanikoFlag;
     private final RegistryProperties registryProperties;
-    private final Cache cache;
-    private final NamespaceApi namespaceApi;
-    private final KubectlApi kubectlApi;
-
+    private final NamespaceHttpClient namespaceApi;
+    private final KubectlHttpClient kubectlApi;
     private final GitClonedService gitClonedService;
     private final BuildPackService buildPackService;
     private final BuildPackActivityLogger activityLogger;
-
     private final ApplicationEventPublisher eventPublisher;
-
-    public DefaultBuildPackPlayer(AbstractBuildPackApi abstractBuildPackApi,
-                                  UserApi userApi,
-                                  KanikoFlag kanikoFlag,
-                                  RegistryProperties registryProperties,
-                                  Cache cache,
-                                  NamespaceApi namespaceApi,
-                                  KubectlApi kubectlApi,
-                                  GitClonedService gitClonedService,
-                                  BuildPackService buildPackService,
-                                  BuildPackActivityLogger activityLogger,
-                                  ApplicationEventPublisher eventPublisher) {
-        this.abstractBuildPackApi = abstractBuildPackApi;
-        this.userApi = userApi;
-        this.kanikoFlag = kanikoFlag;
-        this.registryProperties = registryProperties;
-        this.cache = cache;
-        this.namespaceApi = namespaceApi;
-        this.kubectlApi = kubectlApi;
-        this.gitClonedService = gitClonedService;
-        this.buildPackService = buildPackService;
-        this.activityLogger = activityLogger;
-        this.eventPublisher = eventPublisher;
-    }
 
     @Override
     protected void beforeApply(String clonedId) {
@@ -106,7 +81,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
             if (namespaceApi.read(namespace) == null) {
                 namespaceApi.create(namespace);
             }
-            kubectlApi.apply(namespace, savedBuildPack.getYaml());
+            kubectlApi.resourceListCreateOrReplace(namespace, YamlBody.of(savedBuildPack.getYaml()));
         } catch (Exception e) {
             eventPublisher.publishEvent(new BuildPackStartFailureEvent(savedBuildPack, e));
             return savedBuildPack;
