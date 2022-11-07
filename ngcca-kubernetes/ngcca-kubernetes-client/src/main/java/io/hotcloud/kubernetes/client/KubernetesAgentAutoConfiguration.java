@@ -10,16 +10,16 @@ import org.springframework.web.client.RestTemplate;
  * @author yaolianhua789@gmail.com
  **/
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(HotCloudHttpClientProperties.class)
+@EnableConfigurationProperties(NgccaKubernetesAgentProperties.class)
 @Import({
         RestTemplateConfiguration.class,
-        HotCloudHttpClientConfiguration.class
+        KubernetesAgentConfiguration.class
 })
-public class HotCloudHttpClientAutoConfiguration {
+public class KubernetesAgentAutoConfiguration {
 
     @Bean
-    public HotCloudHttpClientFactory clientFactory(RestTemplate restTemplate,
-                                                   HotCloudHttpClientProperties properties) {
-        return new HotCloudHttpClientFactory(restTemplate, properties);
+    public KubernetesAgentClientFactory clientFactory(RestTemplate restTemplate,
+                                                      NgccaKubernetesAgentProperties properties) {
+        return new KubernetesAgentClientFactory(restTemplate, properties);
     }
 }

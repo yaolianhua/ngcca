@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class KubectlHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String NAMESPACE = "default";

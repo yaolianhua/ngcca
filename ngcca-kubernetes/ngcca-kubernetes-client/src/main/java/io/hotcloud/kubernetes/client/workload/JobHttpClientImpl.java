@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class JobHttpClientImpl implements JobHttpClient {
     private static final String PATH = "/v1/kubernetes/jobs";
     private final RestTemplate restTemplate;
 
-    public JobHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public JobHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

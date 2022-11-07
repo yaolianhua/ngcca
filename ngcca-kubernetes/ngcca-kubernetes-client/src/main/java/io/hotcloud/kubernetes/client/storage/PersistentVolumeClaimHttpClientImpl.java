@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class PersistentVolumeClaimHttpClientImpl implements PersistentVolumeClai
     private static final String PATH = "/v1/kubernetes/persistentvolumeclaims";
     private final RestTemplate restTemplate;
 
-    public PersistentVolumeClaimHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public PersistentVolumeClaimHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                                RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

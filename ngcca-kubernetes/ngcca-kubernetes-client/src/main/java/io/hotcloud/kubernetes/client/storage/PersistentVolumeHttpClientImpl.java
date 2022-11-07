@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.storage;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class PersistentVolumeHttpClientImpl implements PersistentVolumeHttpClien
     private static final String PATH = "/v1/kubernetes/persistentvolumes";
     private final RestTemplate restTemplate;
 
-    public PersistentVolumeHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public PersistentVolumeHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                           RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

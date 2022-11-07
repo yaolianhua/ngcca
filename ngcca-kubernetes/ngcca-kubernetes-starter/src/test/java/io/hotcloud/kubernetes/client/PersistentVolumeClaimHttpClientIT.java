@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class PersistentVolumeClaimHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String PERSISTENT_VOLUME_CLAIM = "myclaim";

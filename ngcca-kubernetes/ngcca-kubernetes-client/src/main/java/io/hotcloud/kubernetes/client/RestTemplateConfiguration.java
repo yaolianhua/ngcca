@@ -15,9 +15,9 @@ import java.util.Objects;
 @Slf4j
 public class RestTemplateConfiguration {
 
-    private final HotCloudHttpClientProperties properties;
+    private final NgccaKubernetesAgentProperties properties;
 
-    public RestTemplateConfiguration(HotCloudHttpClientProperties properties) {
+    public RestTemplateConfiguration(NgccaKubernetesAgentProperties properties) {
         this.properties = properties;
     }
 

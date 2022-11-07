@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
@@ -30,7 +30,7 @@ public class DeploymentHttpClientImpl implements DeploymentHttpClient {
     private static final String PATH = "/v1/kubernetes/deployments";
     private final RestTemplate restTemplate;
 
-    public DeploymentHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public DeploymentHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                     RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

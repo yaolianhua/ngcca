@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class DaemonSetHttpClientImpl implements DaemonSetHttpClient {
     private static final String PATH = "/v1/kubernetes/daemonsets";
     private final RestTemplate restTemplate;
 
-    public DaemonSetHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public DaemonSetHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                    RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

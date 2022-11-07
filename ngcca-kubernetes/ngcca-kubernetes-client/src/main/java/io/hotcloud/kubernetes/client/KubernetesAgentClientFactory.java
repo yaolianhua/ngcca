@@ -19,13 +19,13 @@ import java.util.Objects;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class HotCloudHttpClientFactory {
+public class KubernetesAgentClientFactory {
 
     private final RestTemplate restTemplate;
-    private final HotCloudHttpClientProperties properties;
+    private final NgccaKubernetesAgentProperties properties;
 
-    public HotCloudHttpClientFactory(RestTemplate restTemplate,
-                                     HotCloudHttpClientProperties properties) {
+    public KubernetesAgentClientFactory(RestTemplate restTemplate,
+                                        NgccaKubernetesAgentProperties properties) {
         this.restTemplate = restTemplate;
         this.properties = properties;
     }

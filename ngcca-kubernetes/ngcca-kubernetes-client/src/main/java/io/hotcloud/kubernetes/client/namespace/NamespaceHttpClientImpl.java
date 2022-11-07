@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.namespace;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class NamespaceHttpClientImpl implements NamespaceHttpClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public NamespaceHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public NamespaceHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                    RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

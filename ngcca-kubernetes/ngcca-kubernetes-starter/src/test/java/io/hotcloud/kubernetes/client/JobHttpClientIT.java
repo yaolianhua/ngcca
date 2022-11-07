@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class JobHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String JOB = "kaniko";

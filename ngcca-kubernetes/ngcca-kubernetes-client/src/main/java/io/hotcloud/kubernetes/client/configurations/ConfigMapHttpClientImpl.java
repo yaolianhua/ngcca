@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.configurations;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class ConfigMapHttpClientImpl implements ConfigMapHttpClient {
     private static final String PATH = "/v1/kubernetes/configmaps";
     private final RestTemplate restTemplate;
 
-    public ConfigMapHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public ConfigMapHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                    RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

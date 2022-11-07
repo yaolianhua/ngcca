@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class StatefulSetHttpClientImpl implements StatefulSetHttpClient {
     private static final String PATH = "/v1/kubernetes/statefulsets";
     private final RestTemplate restTemplate;
 
-    public StatefulSetHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public StatefulSetHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                      RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

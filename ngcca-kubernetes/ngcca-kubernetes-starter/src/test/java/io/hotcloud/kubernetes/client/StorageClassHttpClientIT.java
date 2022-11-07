@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class StorageClassHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String STORAGE_CLASS = "local-storage";

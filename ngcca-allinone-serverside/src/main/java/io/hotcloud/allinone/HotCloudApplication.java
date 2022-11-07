@@ -1,6 +1,6 @@
 package io.hotcloud.allinone;
 
-import io.hotcloud.kubernetes.client.EnableHotCloudHttpClient;
+import io.hotcloud.kubernetes.client.EnableKubernetesAgentClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 "io.hotcloud.allinone"
         }
 )
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class HotCloudApplication {
 
     public static void main(String[] args) {

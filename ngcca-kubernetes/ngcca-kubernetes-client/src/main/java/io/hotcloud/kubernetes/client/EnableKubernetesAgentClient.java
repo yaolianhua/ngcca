@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({HotCloudHttpClientAutoConfiguration.class})
-public @interface EnableHotCloudHttpClient {
+@Import({KubernetesAgentAutoConfiguration.class})
+public @interface EnableKubernetesAgentClient {
 }

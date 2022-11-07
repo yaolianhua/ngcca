@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-@EnableHotCloudHttpClient
+@EnableKubernetesAgentClient
 public class DeploymentHttpClientIT extends ClientIntegrationTestBase {
 
     private static final String DEPLOYMENT = "nginx";

@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.network;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -33,7 +33,7 @@ public class ServiceHttpClientImpl implements ServiceHttpClient {
     private static final String PATH = "/v1/kubernetes/services";
     private final RestTemplate restTemplate;
 
-    public ServiceHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public ServiceHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                  RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);

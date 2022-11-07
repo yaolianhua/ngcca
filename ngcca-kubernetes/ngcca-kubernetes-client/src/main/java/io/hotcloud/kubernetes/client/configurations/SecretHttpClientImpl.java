@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.configurations;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -32,7 +32,7 @@ public class SecretHttpClientImpl implements SecretHttpClient {
     private static final String PATH = "/v1/kubernetes/secrets";
     private final RestTemplate restTemplate;
 
-    public SecretHttpClientImpl(HotCloudHttpClientProperties clientProperties,
+    public SecretHttpClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                 RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         uri = URI.create(clientProperties.obtainUrl() + PATH);
