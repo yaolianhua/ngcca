@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties("ngcca.kubernetes-agent")
 @Slf4j
 @Data
- class NgccaKubernetesAgentProperties {
+public class NgccaKubernetesAgentProperties {
 
     private String host = "localhost";
     private Integer port = 1400;
