@@ -25,6 +25,17 @@ public interface PodHttpClient {
     String logs(String namespace, String pod, Integer tail);
 
     /**
+     * Get container logs
+     *
+     * @param namespace   namespace
+     * @param pod         pod name
+     * @param container   container name
+     * @param tailingLine tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
+     * @return {@link String}
+     */
+    String logs(String namespace, String pod, String container, Integer tailingLine);
+
+    /**
      * Get namespaced pod logs
      *
      * @param namespace namespace

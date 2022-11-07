@@ -51,6 +51,25 @@ public class PodController {
         return ResponseEntity.ok(log);
     }
 
+    @GetMapping("/{namespace}/{pod}/{container}/log")
+    @Operation(
+            summary = "Pod container log read",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "namespace", description = "kubernetes namespace"),
+                    @Parameter(name = "pod", description = "pod name"),
+                    @Parameter(name = "container", description = "container name"),
+                    @Parameter(name = "tail", description = "tail number")
+            }
+    )
+    public ResponseEntity<String> containerLogs(@PathVariable String namespace,
+                                                @PathVariable String pod,
+                                                @PathVariable String container,
+                                                @RequestParam(value = "tail", required = false) Integer tailing) {
+        String log = podApi.logs(namespace, pod, container, tailing);
+        return ResponseEntity.ok(log);
+    }
+
     @GetMapping("/{namespace}/{pod}/loglines")
     @Operation(
             summary = "Pod log read",

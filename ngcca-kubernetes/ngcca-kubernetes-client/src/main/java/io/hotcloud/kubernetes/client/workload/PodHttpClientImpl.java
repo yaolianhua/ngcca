@@ -54,6 +54,24 @@ public class PodHttpClientImpl implements PodHttpClient {
     }
 
     @Override
+    public String logs(String namespace, String pod, String container, Integer tailingLine) {
+        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
+        Assert.isTrue(StringUtils.hasText(container), "container name is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{pod}/{container}/log", uri))
+                .queryParam("tail", tailingLine)
+                .build(namespace, pod, container);
+
+        ResponseEntity<String> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public List<String> loglines(String namespace, String pod, Integer tail) {
         Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
         Assert.isTrue(StringUtils.hasText(pod), "pod name is null");
