@@ -18,6 +18,11 @@
             <artifactId>ngcca-kubernetes-server</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-kubernetes-client</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

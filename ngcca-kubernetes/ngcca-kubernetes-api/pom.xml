@@ -17,19 +17,5 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-model</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.kubernetes</groupId>
-            <artifactId>client-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.kubernetes</groupId>
-            <artifactId>client-java-api</artifactId>
-        </dependency>
     </dependencies>
 </project>

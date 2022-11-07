@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.equivalent;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.kubernetes.api.equianlent.CopyAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;

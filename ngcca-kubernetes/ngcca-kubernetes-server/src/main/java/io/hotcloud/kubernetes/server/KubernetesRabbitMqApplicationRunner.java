@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server;
 
-import io.hotcloud.kubernetes.model.RabbitMQConstant;
+import io.hotcloud.kubernetes.model.module.RabbitMQConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;

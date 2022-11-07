@@ -15,10 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-kubernetes-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-api</artifactId>
         </dependency>
 

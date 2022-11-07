@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import io.swagger.v3.oas.annotations.Operation;

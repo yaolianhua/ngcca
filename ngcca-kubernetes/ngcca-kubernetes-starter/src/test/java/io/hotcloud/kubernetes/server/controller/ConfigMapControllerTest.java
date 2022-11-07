@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
+import io.hotcloud.kubernetes.api.ConfigMapApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

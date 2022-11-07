@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
-import io.hotcloud.kubernetes.api.workload.JobApi;
+import io.hotcloud.kubernetes.api.JobApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

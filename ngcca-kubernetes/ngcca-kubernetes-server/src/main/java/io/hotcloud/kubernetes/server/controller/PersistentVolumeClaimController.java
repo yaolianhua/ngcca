@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimApi;
+import io.hotcloud.kubernetes.api.PersistentVolumeClaimApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

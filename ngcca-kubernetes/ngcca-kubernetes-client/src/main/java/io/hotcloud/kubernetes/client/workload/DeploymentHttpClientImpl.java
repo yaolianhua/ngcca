@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.workload;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.kubernetes.api.RollingAction;
 import io.hotcloud.kubernetes.client.HotCloudHttpClientProperties;
+import io.hotcloud.kubernetes.model.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

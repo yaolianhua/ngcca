@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.kubernetes.api.workload.CronJobApi;
+import io.hotcloud.kubernetes.api.CronJobApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.models.V1CronJob;

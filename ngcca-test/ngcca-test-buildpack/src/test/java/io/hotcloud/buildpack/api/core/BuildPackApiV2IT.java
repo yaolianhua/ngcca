@@ -2,8 +2,8 @@ package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.*;
-import io.hotcloud.kubernetes.api.workload.StatefulSetApi;
+import io.hotcloud.kubernetes.api.StatefulSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

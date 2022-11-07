@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.server.workload;
 
 import io.hotcloud.kubernetes.NgccaKubernetesAgentApplication;
-import io.hotcloud.kubernetes.api.pod.PodApi;
+import io.hotcloud.kubernetes.api.PodApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;

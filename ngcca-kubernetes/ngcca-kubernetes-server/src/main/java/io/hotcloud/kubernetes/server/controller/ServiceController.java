@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.kubernetes.api.network.ServiceApi;
+import io.hotcloud.kubernetes.api.ServiceApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

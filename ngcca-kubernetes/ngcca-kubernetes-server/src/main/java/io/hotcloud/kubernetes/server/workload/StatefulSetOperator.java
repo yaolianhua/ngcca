@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.kubernetes.api.workload.StatefulSetApi;
+import io.hotcloud.kubernetes.api.StatefulSetApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1StatefulSet;

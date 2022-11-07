@@ -7,7 +7,7 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.KubectlApi;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;

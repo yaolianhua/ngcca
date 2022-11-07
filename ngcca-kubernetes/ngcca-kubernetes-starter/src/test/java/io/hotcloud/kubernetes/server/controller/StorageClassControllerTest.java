@@ -7,7 +7,7 @@ import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassBuilder;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.fabric8.kubernetes.api.model.storage.StorageClassListBuilder;
-import io.hotcloud.kubernetes.api.storage.StorageClassApi;
+import io.hotcloud.kubernetes.api.StorageClassApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

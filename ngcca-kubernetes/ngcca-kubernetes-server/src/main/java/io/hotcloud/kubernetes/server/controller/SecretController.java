@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.kubernetes.api.configurations.SecretApi;
+import io.hotcloud.kubernetes.api.SecretApi;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;

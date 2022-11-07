@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.kubernetes.api.pod.PodApi;
+import io.hotcloud.kubernetes.api.PodApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

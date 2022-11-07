@@ -13,7 +13,7 @@ import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;

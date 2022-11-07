@@ -9,8 +9,8 @@ import io.hotcloud.application.server.template.processor.InstanceTemplateProcess
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import lombok.RequiredArgsConstructor;

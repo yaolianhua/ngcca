@@ -3,7 +3,7 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.hotcloud.kubernetes.api.storage.StorageClassApi;
+import io.hotcloud.kubernetes.api.StorageClassApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.StorageV1Api;
 import io.kubernetes.client.openapi.models.V1StorageClass;

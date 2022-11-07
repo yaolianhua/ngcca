@@ -1,18 +1,16 @@
 package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.*;
-import io.hotcloud.kubernetes.api.configurations.SecretBuilder;
-import io.hotcloud.kubernetes.api.storage.PersistentVolumeBuilder;
-import io.hotcloud.kubernetes.api.storage.PersistentVolumeClaimBuilder;
-import io.hotcloud.kubernetes.api.workload.JobBuilder;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
+import io.hotcloud.kubernetes.model.configurations.SecretBuilder;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.pod.container.Container;
 import io.hotcloud.kubernetes.model.pod.container.ImagePullPolicy;
 import io.hotcloud.kubernetes.model.pod.container.VolumeMount;
 import io.hotcloud.kubernetes.model.storage.*;
+import io.hotcloud.kubernetes.model.workload.JobBuilder;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.hotcloud.kubernetes.model.workload.JobTemplate;

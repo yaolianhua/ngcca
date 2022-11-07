@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.kubernetes.api.equianlent.CopyAction;
-import io.hotcloud.kubernetes.api.equianlent.KubectlApi;
+import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

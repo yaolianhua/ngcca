@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.kubernetes.api.workload.DaemonSetApi;
+import io.hotcloud.kubernetes.api.DaemonSetApi;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

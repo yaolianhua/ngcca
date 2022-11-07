@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.kubernetes.api.configurations.ConfigMapApi;
+import io.hotcloud.kubernetes.api.ConfigMapApi;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;

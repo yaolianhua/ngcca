@@ -20,7 +20,7 @@ import io.hotcloud.common.api.storage.FileHelper;
 import io.hotcloud.common.api.storage.minio.MinioBucketApi;
 import io.hotcloud.common.api.storage.minio.MinioObjectApi;
 import io.hotcloud.common.api.storage.minio.MinioProperties;
-import io.hotcloud.kubernetes.api.namespace.NamespaceApi;
+import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
