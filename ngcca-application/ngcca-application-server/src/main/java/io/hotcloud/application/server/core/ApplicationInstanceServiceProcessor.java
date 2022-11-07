@@ -6,7 +6,7 @@ import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
-import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
+import io.hotcloud.kubernetes.client.ServiceHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;

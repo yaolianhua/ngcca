@@ -4,7 +4,7 @@ import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.storage.StorageClassHttpClient;
+import io.hotcloud.kubernetes.client.StorageClassHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

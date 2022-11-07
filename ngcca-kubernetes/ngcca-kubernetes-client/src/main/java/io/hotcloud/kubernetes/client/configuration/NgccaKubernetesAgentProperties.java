@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.configuration;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties("ngcca.kubernetes-agent")
 @Slf4j
 @Data
-public class NgccaKubernetesAgentProperties {
+ class NgccaKubernetesAgentProperties {
 
     private String host = "localhost";
     private Integer port = 1400;

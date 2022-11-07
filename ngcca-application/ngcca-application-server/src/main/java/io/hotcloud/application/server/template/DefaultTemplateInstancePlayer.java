@@ -9,8 +9,8 @@ import io.hotcloud.application.server.template.processor.InstanceTemplateProcess
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
+import io.hotcloud.kubernetes.client.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.NamespaceHttpClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;

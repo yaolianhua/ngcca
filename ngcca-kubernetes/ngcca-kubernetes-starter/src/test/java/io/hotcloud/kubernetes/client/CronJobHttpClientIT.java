@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
-import io.hotcloud.kubernetes.client.workload.CronJobHttpClient;
-import io.hotcloud.kubernetes.client.workload.PodHttpClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.pod.container.Container;

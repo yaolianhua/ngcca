@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
-import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.client.workload.DaemonSetHttpClient;
+import io.hotcloud.kubernetes.client.DaemonSetHttpClient;
+import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DaemonSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

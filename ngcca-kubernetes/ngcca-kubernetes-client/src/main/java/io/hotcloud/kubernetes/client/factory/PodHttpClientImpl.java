@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.client.workload.PodHttpClient;
+import io.hotcloud.kubernetes.client.PodHttpClient;
+import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

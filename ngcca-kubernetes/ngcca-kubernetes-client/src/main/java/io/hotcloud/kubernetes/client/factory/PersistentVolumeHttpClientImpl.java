@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.PersistentVolumeHttpClient;
+import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.openapi.ApiException;

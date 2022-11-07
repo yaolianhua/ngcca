@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client.network;
+package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;

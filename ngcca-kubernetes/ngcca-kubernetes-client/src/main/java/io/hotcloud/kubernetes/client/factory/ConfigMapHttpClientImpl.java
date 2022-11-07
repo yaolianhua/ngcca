@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
+import io.hotcloud.kubernetes.client.ConfigMapHttpClient;
+import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;

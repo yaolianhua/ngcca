@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client.storage;
+package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;

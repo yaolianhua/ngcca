@@ -2,8 +2,8 @@ package io.hotcloud.kubernetes.client.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.kubernetes.client.NgccaKubernetesAgentProperties;
-import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;

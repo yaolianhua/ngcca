@@ -1,21 +1,13 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.configuration;
 
-import io.hotcloud.kubernetes.client.configurations.ConfigMapHttpClient;
-import io.hotcloud.kubernetes.client.configurations.SecretHttpClient;
-import io.hotcloud.kubernetes.client.equivalent.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.*;
 import io.hotcloud.kubernetes.client.factory.KubernetesAgentClientFactory;
-import io.hotcloud.kubernetes.client.namespace.NamespaceHttpClient;
-import io.hotcloud.kubernetes.client.network.ServiceHttpClient;
-import io.hotcloud.kubernetes.client.storage.PersistentVolumeClaimHttpClient;
-import io.hotcloud.kubernetes.client.storage.PersistentVolumeHttpClient;
-import io.hotcloud.kubernetes.client.storage.StorageClassHttpClient;
-import io.hotcloud.kubernetes.client.workload.*;
 import org.springframework.context.annotation.Bean;
 
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class KubernetesAgentConfiguration {
+ class KubernetesAgentConfiguration {
 
     @Bean
     public DeploymentHttpClient deploymentHttpClient(KubernetesAgentClientFactory factory) {

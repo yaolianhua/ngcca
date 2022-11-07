@@ -5,8 +5,6 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
-import io.hotcloud.kubernetes.client.workload.PodHttpClient;
-import io.hotcloud.kubernetes.client.workload.StatefulSetHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;

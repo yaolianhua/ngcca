@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.client.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class RestTemplateConfiguration {
+ class RestTemplateConfiguration {
 
     private final NgccaKubernetesAgentProperties properties;
 

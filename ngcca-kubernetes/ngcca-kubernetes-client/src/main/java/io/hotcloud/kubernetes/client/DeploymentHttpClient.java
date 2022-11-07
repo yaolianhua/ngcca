@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client.workload;
+package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;

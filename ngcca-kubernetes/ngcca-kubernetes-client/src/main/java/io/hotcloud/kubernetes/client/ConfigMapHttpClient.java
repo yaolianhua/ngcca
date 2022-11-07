@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client.configurations;
+package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;

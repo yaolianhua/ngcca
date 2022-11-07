@@ -9,7 +9,7 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.workload.DeploymentHttpClient;
+import io.hotcloud.kubernetes.client.DeploymentHttpClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;

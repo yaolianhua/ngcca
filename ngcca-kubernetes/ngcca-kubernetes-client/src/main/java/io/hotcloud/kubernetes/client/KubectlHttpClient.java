@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.client.equivalent;
+package io.hotcloud.kubernetes.client;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
