@@ -8,9 +8,9 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.DeploymentHttpClient;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.PodHttpClient;
+import io.hotcloud.kubernetes.client.http.DeploymentClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApplicationInstanceK8sService {
 
-    private final DeploymentHttpClient deploymentApi;
+    private final DeploymentClient deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationDeploymentCacheApi applicationDeploymentCacheApi;
-    private final PodHttpClient podApi;
-    private final KubectlHttpClient kubectlApi;
+    private final PodClient podApi;
+    private final KubectlClient kubectlApi;
 
     public void processApplicationCreatedBlocked(ApplicationInstance instance) {
 

@@ -9,8 +9,8 @@ import io.hotcloud.application.server.template.processor.InstanceTemplateProcess
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.NamespaceHttpClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
@@ -30,8 +30,8 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final ApplicationEventPublisher eventPublisher;
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstanceActivityLogger activityLogger;
-    private final KubectlHttpClient kubectlApi;
-    private final NamespaceHttpClient namespaceApi;
+    private final KubectlClient kubectlApi;
+    private final NamespaceClient namespaceApi;
     private final UserApi userApi;
     private final TemplateInstanceK8sService templateInstanceK8sService;
 

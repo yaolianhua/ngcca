@@ -6,7 +6,7 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
-import io.hotcloud.kubernetes.client.NamespaceHttpClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -24,7 +24,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
 
     private final ApplicationInstanceService applicationInstanceService;
     private final UserApi userApi;
-    private final NamespaceHttpClient namespaceApi;
+    private final NamespaceClient namespaceApi;
     @Override
     public ApplicationInstance check(ApplicationForm applicationForm) {
         ApplicationInstanceSource applicationInstanceSource = applicationForm.getSource();

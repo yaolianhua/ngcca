@@ -9,7 +9,7 @@ import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.DeploymentHttpClient;
+import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
@@ -35,7 +35,7 @@ import static io.hotcloud.common.api.CommonConstant.K8S_APP;
 @RequiredArgsConstructor
 class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProcessor <ApplicationInstance> {
 
-    private final DeploymentHttpClient deploymentApi;
+    private final DeploymentClient deploymentApi;
     private final BuildPackService buildPackService;
     private final ApplicationInstanceService applicationInstanceService;
 

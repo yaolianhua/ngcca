@@ -14,9 +14,9 @@ import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.registry.RegistryProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.client.JobHttpClient;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.PodHttpClient;
+import io.hotcloud.kubernetes.client.http.JobClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +40,9 @@ import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 @Slf4j
 class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
-    private final KubectlHttpClient kubectlApi;
-    private final JobHttpClient jobApi;
-    private final PodHttpClient podApi;
+    private final KubectlClient kubectlApi;
+    private final JobClient jobApi;
+    private final PodClient podApi;
     private final RegistryProperties registryProperties;
     private final DatabaseRegistryImages registryImagesContainer;
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");

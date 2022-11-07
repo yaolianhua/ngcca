@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.client.configuration;
 
-import io.hotcloud.kubernetes.client.*;
-import io.hotcloud.kubernetes.client.factory.KubernetesAgentClientFactory;
+import io.hotcloud.kubernetes.client.http.*;
+import io.hotcloud.kubernetes.client.http.factory.KubernetesAgentClientFactory;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -10,72 +10,72 @@ import org.springframework.context.annotation.Bean;
  class KubernetesAgentConfiguration {
 
     @Bean
-    public DeploymentHttpClient deploymentHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(DeploymentHttpClient.class);
+    public DeploymentClient deploymentHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(DeploymentClient.class);
     }
 
     @Bean
-    public ServiceHttpClient serviceHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(ServiceHttpClient.class);
+    public ServiceClient serviceHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(ServiceClient.class);
     }
 
     @Bean
-    public ConfigMapHttpClient configMapHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(ConfigMapHttpClient.class);
+    public ConfigMapClient configMapHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(ConfigMapClient.class);
     }
 
     @Bean
-    public SecretHttpClient secretHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(SecretHttpClient.class);
+    public SecretClient secretHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(SecretClient.class);
     }
 
     @Bean
-    public CronJobHttpClient cronJobHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(CronJobHttpClient.class);
+    public CronJobClient cronJobHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(CronJobClient.class);
     }
 
     @Bean
-    public DaemonSetHttpClient daemonSetHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(DaemonSetHttpClient.class);
+    public DaemonSetClient daemonSetHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(DaemonSetClient.class);
     }
 
     @Bean
-    public JobHttpClient jobHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(JobHttpClient.class);
+    public JobClient jobHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(JobClient.class);
     }
 
     @Bean
-    public StatefulSetHttpClient statefulSetHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(StatefulSetHttpClient.class);
+    public StatefulSetClient statefulSetHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(StatefulSetClient.class);
     }
 
     @Bean
-    public PodHttpClient podHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(PodHttpClient.class);
+    public PodClient podHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(PodClient.class);
     }
 
     @Bean
-    public PersistentVolumeClaimHttpClient persistentVolumeClaimHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(PersistentVolumeClaimHttpClient.class);
+    public PersistentVolumeClaimClient persistentVolumeClaimHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(PersistentVolumeClaimClient.class);
     }
 
     @Bean
-    public PersistentVolumeHttpClient persistentVolumeHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(PersistentVolumeHttpClient.class);
+    public PersistentVolumeClient persistentVolumeHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(PersistentVolumeClient.class);
     }
 
     @Bean
-    public StorageClassHttpClient storageClassHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(StorageClassHttpClient.class);
+    public StorageClassClient storageClassHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(StorageClassClient.class);
     }
 
     @Bean
-    public KubectlHttpClient kubectlHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(KubectlHttpClient.class);
+    public KubectlClient kubectlHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(KubectlClient.class);
     }
 
     @Bean
-    public NamespaceHttpClient namespaceHttpClient(KubernetesAgentClientFactory factory) {
-        return factory.getClient(NamespaceHttpClient.class);
+    public NamespaceClient namespaceHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(NamespaceClient.class);
     }
 }

@@ -6,8 +6,8 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.NamespaceHttpClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
@@ -27,8 +27,8 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
 
     private final BuildPackApiV2 buildPackApiV2;
     private final UserApi userApi;
-    private final KubectlHttpClient kubectlApi;
-    private final NamespaceHttpClient namespaceApi;
+    private final KubectlClient kubectlApi;
+    private final NamespaceClient namespaceApi;
     private final BuildPackService buildPackService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;

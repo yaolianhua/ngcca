@@ -8,7 +8,7 @@ import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageBroadcaster;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.client.*;
+import io.hotcloud.kubernetes.client.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -34,12 +34,12 @@ public class BuildPackListener {
 
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
-    private final PodHttpClient podApi;
-    private final JobHttpClient jobApi;
+    private final PodClient podApi;
+    private final JobClient jobApi;
 
-    private final PersistentVolumeClaimHttpClient persistentVolumeClaimApi;
-    private final PersistentVolumeHttpClient persistentVolumeApi;
-    private final SecretHttpClient secretApi;
+    private final PersistentVolumeClaimClient persistentVolumeClaimApi;
+    private final PersistentVolumeClient persistentVolumeApi;
+    private final SecretClient secretApi;
 
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBroadcaster messageBroadcaster;

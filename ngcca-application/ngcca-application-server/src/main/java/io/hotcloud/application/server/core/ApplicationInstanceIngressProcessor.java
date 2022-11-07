@@ -7,7 +7,7 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcessor <ApplicationInstance> {
 
     private final ApplicationProperties applicationProperties;
-    private final KubectlHttpClient kubectlApi;
+    private final KubectlClient kubectlApi;
     private final ApplicationInstanceService applicationInstanceService;
 
     @Override

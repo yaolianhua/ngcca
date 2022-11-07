@@ -10,9 +10,9 @@ import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.kubernetes.client.DeploymentHttpClient;
-import io.hotcloud.kubernetes.client.KubectlHttpClient;
-import io.hotcloud.kubernetes.client.ServiceHttpClient;
+import io.hotcloud.kubernetes.client.http.DeploymentClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 public class TemplateInstanceK8sService {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
-    private final DeploymentHttpClient deploymentApi;
-    private final ServiceHttpClient serviceApi;
-    private final KubectlHttpClient kubectlApi;
+    private final DeploymentClient deploymentApi;
+    private final ServiceClient serviceApi;
+    private final KubectlClient kubectlApi;
 
     public void processTemplateCreateBlocked(TemplateInstance instance) {
 

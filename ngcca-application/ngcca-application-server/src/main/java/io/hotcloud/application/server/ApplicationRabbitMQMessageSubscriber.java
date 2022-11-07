@@ -13,7 +13,7 @@ import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.common.api.message.Message;
 import io.hotcloud.common.api.message.MessageProperties;
 import io.hotcloud.common.api.storage.FileHelper;
-import io.hotcloud.kubernetes.client.NamespaceHttpClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -43,7 +43,7 @@ public class ApplicationRabbitMQMessageSubscriber {
     private final TemplateInstancePlayer templateInstancePlayer;
     private final TemplateInstanceService templateInstanceService;
 
-    private final NamespaceHttpClient namespaceApi;
+    private final NamespaceClient namespaceApi;
     private final ObjectMapper objectMapper;
 
     @RabbitListener(
