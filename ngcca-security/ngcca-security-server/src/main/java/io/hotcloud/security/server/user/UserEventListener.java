@@ -2,9 +2,9 @@ package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.cache.Cache;
-import io.hotcloud.common.api.message.Message;
-import io.hotcloud.common.api.message.MessageBroadcaster;
+import io.hotcloud.common.api.core.cache.Cache;
+import io.hotcloud.common.api.core.message.Message;
+import io.hotcloud.common.api.core.message.MessageBroadcaster;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import io.hotcloud.security.api.user.event.UserCreatedEvent;

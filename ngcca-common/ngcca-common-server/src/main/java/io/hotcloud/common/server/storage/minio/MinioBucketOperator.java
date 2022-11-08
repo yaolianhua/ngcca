@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.storage.minio;
 
+import io.hotcloud.common.api.core.minio.MinioBucketApi;
 import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.common.api.storage.minio.MinioBucketApi;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;

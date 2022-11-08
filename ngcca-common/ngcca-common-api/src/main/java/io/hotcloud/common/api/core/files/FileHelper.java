@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.storage;
+package io.hotcloud.common.api.core.files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;

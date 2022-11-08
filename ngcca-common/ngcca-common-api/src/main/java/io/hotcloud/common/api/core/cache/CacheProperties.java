@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.cache;
+package io.hotcloud.common.api.core.cache;
 
 import io.hotcloud.common.api.env.Properties;
 import lombok.Data;

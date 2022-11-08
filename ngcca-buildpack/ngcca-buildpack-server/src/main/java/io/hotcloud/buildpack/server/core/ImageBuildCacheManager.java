@@ -3,7 +3,7 @@ package io.hotcloud.buildpack.server.core;
 import io.hotcloud.buildpack.api.core.ImageBuildCacheApi;
 import io.hotcloud.buildpack.api.core.ImageBuildStatus;
 import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.core.cache.Cache;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

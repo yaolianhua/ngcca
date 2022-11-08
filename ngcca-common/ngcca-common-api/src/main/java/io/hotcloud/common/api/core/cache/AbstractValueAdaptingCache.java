@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.cache;
+package io.hotcloud.common.api.core.cache;
 
 import org.springframework.util.Assert;
 

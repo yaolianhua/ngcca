@@ -1,8 +1,8 @@
 package io.hotcloud.common.server.message;
 
 import com.github.javafaker.Faker;
-import io.hotcloud.common.api.message.Message;
-import io.hotcloud.common.api.message.MessageBroadcaster;
+import io.hotcloud.common.api.core.message.Message;
+import io.hotcloud.common.api.core.message.MessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;

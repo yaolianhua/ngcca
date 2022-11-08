@@ -9,7 +9,7 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartedEvent;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.api.registry.RegistryProperties;
+import io.hotcloud.common.api.core.registry.RegistryProperties;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;

@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.message.websocket;
 
-import io.hotcloud.common.api.message.Message;
+import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.server.message.websocket.config.MessageDecoder;
 import io.hotcloud.common.server.message.websocket.config.MessageEncoder;
 import lombok.extern.slf4j.Slf4j;

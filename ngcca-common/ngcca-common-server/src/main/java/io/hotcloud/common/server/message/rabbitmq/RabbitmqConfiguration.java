@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.message.rabbitmq;
 
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.message.MessageProperties;
+import io.hotcloud.common.api.core.message.MessageProperties;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

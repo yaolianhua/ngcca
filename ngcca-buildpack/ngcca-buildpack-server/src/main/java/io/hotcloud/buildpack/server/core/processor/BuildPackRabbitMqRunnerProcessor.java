@@ -2,7 +2,7 @@ package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.api.CommonRunnerProcessor;
-import io.hotcloud.common.api.message.MessageProperties;
+import io.hotcloud.common.api.core.message.MessageProperties;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

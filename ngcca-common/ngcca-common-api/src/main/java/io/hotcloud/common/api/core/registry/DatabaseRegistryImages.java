@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.registry;
+package io.hotcloud.common.api.core.registry;
 
 public interface DatabaseRegistryImages {
 

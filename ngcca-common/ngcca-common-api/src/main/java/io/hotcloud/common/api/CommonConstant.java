@@ -1,6 +1,6 @@
 package io.hotcloud.common.api;
 
-import io.hotcloud.common.api.storage.FileHelper;
+import io.hotcloud.common.api.core.files.FileHelper;
 
 import java.nio.file.Path;
 

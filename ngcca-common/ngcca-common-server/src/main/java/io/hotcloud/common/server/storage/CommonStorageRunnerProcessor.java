@@ -2,7 +2,7 @@ package io.hotcloud.common.server.storage;
 
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.storage.FileHelper;
+import io.hotcloud.common.api.core.files.FileHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

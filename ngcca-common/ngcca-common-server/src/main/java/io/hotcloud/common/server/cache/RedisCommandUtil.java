@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.cache;
 
-import io.hotcloud.common.api.cache.RedisCommand;
+import io.hotcloud.common.api.core.cache.RedisCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;

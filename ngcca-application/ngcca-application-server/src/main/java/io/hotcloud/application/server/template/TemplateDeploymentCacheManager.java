@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.TemplateDeploymentCacheApi;
-import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.core.cache.Cache;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

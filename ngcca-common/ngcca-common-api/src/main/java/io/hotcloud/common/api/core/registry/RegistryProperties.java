@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.registry;
+package io.hotcloud.common.api.core.registry;
 
 import io.hotcloud.common.api.env.Properties;
 import lombok.Data;

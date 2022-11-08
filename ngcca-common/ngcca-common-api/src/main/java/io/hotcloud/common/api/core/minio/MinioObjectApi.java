@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.storage.minio;
+package io.hotcloud.common.api.core.minio;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.storage.minio;
+package io.hotcloud.common.api.core.minio;
 
 import io.hotcloud.common.api.env.Properties;
 import lombok.Data;

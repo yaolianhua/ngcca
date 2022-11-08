@@ -3,7 +3,7 @@ package io.hotcloud.common.server.cache;
 import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.cache.Cache;
+import io.hotcloud.common.api.core.cache.Cache;
 import org.springframework.stereotype.Component;
 
 @Component

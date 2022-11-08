@@ -3,7 +3,7 @@ package io.hotcloud.common.server.message.websocket.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.api.message.Message;
+import io.hotcloud.common.api.core.message.Message;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.DecodeException;

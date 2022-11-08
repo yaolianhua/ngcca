@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.message;
 
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.message.MessageProperties;
+import io.hotcloud.common.api.core.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

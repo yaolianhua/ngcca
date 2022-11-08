@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.registry;
 
+import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
-import io.hotcloud.common.api.registry.DatabaseRegistryImages;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

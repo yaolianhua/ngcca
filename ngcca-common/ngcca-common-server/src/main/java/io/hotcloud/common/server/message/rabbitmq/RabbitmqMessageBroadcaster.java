@@ -2,10 +2,10 @@ package io.hotcloud.common.server.message.rabbitmq;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.hotcloud.common.api.core.message.Message;
+import io.hotcloud.common.api.core.message.MessageBroadcaster;
+import io.hotcloud.common.api.core.message.MessageProperties;
 import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.common.api.message.Message;
-import io.hotcloud.common.api.message.MessageBroadcaster;
-import io.hotcloud.common.api.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -1,8 +1,8 @@
 package io.hotcloud.common.server.message.websocket;
 
-import io.hotcloud.common.api.message.Message;
-import io.hotcloud.common.api.message.MessageBroadcaster;
-import io.hotcloud.common.api.message.MessageProperties;
+import io.hotcloud.common.api.core.message.Message;
+import io.hotcloud.common.api.core.message.MessageBroadcaster;
+import io.hotcloud.common.api.core.message.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;

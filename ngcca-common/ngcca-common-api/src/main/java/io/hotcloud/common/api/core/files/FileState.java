@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.storage;
+package io.hotcloud.common.api.core.files;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;

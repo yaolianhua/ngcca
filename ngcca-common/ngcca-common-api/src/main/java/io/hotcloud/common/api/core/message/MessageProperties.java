@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.message;
+package io.hotcloud.common.api.core.message;
 
 import io.hotcloud.common.api.env.Properties;
 import lombok.Data;
