@@ -1,23 +1,26 @@
 package io.hotcloud.security.server.user;
 
-import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-public class SecurityInternalUserRunnerProcessor implements CommonRunnerProcessor {
+public class SecurityInternalUserRunnerProcessor implements ApplicationRunner {
 
     private final UserApi userApi;
 
     public SecurityInternalUserRunnerProcessor(UserApi userApi) {
         this.userApi = userApi;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        Stream.of("admin", "guest").forEach(this::internalUserSaved);
     }
 
     private void internalUserSaved(String username) {
@@ -31,10 +34,5 @@ public class SecurityInternalUserRunnerProcessor implements CommonRunnerProcesso
             User saved = userApi.save(user);
             Log.info(SecurityInternalUserRunnerProcessor.class.getName(), String.format("%s user created", saved.getUsername()));
         }
-    }
-
-    @Override
-    public void execute() {
-        Stream.of("admin", "guest", "clientuser").forEach(this::internalUserSaved);
     }
 }
