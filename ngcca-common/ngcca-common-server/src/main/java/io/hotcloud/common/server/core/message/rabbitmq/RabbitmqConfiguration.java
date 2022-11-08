@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitmqConfiguration {
 
-    public static final String EXCHANGE_FANOUT_BROADCAST_MESSAGE = "hotcloud.message.broadcast";
+    public static final String EXCHANGE_FANOUT_BROADCAST_MESSAGE = "ngcca.message.broadcast";
 
-    public static final String QUEUE_SUBSCRIBE_MESSAGE = "hotcloud.message.subscribe";
+    public static final String QUEUE_SUBSCRIBE_MESSAGE = "ngcca.message.subscribe";
 
     @Bean
     public FanoutExchange messageBroadcastExchange() {
