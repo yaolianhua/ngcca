@@ -6,9 +6,6 @@ import io.hotcloud.db.core.user.UserEntity;
 import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import io.hotcloud.security.api.user.event.UserCreatedEvent;
-import io.hotcloud.security.api.user.event.UserDeletedEvent;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,14 +27,11 @@ public class UserService implements UserApi {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationEventPublisher eventPublisher;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       ApplicationEventPublisher eventPublisher) {
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -60,8 +54,6 @@ public class UserService implements UserApi {
         entity.setCreatedAt(LocalDateTime.now());
         UserEntity saved = userRepository.save(entity);
 
-        user = saved.toT(User.class);
-        eventPublisher.publishEvent(new UserCreatedEvent(user));
         return buildUser(saved);
     }
 
@@ -112,11 +104,6 @@ public class UserService implements UserApi {
             return;
         }
         if (physically) {
-            boolean exist = this.exist(username);
-            if (exist) {
-                User user = this.retrieve(username);
-                eventPublisher.publishEvent(new UserDeletedEvent(user));
-            }
             userRepository.deleteByUsername(username);
             return;
         }
@@ -134,11 +121,6 @@ public class UserService implements UserApi {
             return;
         }
         if (physically) {
-            User user = this.find(id);
-            if (user != null) {
-                eventPublisher.publishEvent(new UserDeletedEvent(user));
-            }
-
             userRepository.deleteById(id);
             return;
         }
