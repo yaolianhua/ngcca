@@ -1,7 +1,7 @@
-package io.hotcloud.common.server.controller;
+package io.hotcloud.application.server.controller;
 
+import io.hotcloud.application.server.core.FileUploadService;
 import io.hotcloud.common.api.Result;
-import io.hotcloud.common.server.core.minio.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,12 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static io.hotcloud.common.api.WebResponse.created;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @RestController
-@RequestMapping("/v1/storage")
-@Tag(name = "Storage")
+@RequestMapping("/v1/files")
+@Tag(name = "Files")
 public class StorageController {
 
 

@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.core.minio;
+package io.hotcloud.application.server.core;
 
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.minio.MinioBucketApi;

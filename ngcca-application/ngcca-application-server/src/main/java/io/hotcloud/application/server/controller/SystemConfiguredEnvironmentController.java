@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.controller;
+package io.hotcloud.application.server.controller;
 
 import io.hotcloud.common.api.Result;
 import io.hotcloud.common.api.env.ConfiguredEnvironmentQuery;
