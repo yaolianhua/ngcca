@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
-@ConfigurationProperties(prefix = CONFIG_PREFIX + ".rabbitmq")
+@ConfigurationProperties(prefix = CONFIG_PREFIX + "rabbitmq")
 @Data
 @Slf4j
-@Properties(prefix = CONFIG_PREFIX + ".rabbitmq")
+@Properties(prefix = CONFIG_PREFIX + "rabbitmq")
 public class NgccaRabbitmqProperties {
 
     private String host;
