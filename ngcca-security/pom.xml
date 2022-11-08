@@ -13,6 +13,7 @@
     <modules>
         <module>ngcca-security-server</module>
         <module>ngcca-security-api</module>
+        <module>ngcca-security-spring-boot-starter</module>
     </modules>
     <artifactId>ngcca-security</artifactId>
     <name>NGCCA :: Security</name>
@@ -29,6 +30,12 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-security-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-security-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

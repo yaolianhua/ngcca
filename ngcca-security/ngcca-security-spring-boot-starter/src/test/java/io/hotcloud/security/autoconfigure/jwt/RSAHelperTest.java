@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.autoconfigure.jwt;
 
 import io.hotcloud.security.api.jwt.RSAHelper;
 import org.junit.jupiter.api.Assertions;

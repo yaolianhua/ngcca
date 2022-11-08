@@ -1,6 +1,9 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.autoconfigure.jwt;
 
-import io.hotcloud.security.api.jwt.*;
+import io.hotcloud.security.api.jwt.Jwt;
+import io.hotcloud.security.api.jwt.JwtBody;
+import io.hotcloud.security.api.jwt.JwtSigner;
+import io.hotcloud.security.api.jwt.JwtVerifier;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 public class JwtTest {
 
