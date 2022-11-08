@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.user;
+package io.hotcloud.security.server;
 
 import io.hotcloud.common.model.Log;
 import io.hotcloud.security.api.user.User;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Stream;
 
 @Component
-public class SecurityInternalUserRunnerProcessor implements ApplicationRunner {
+public class SecuritySystemUserInitialization implements ApplicationRunner {
 
     private final UserApi userApi;
 
-    public SecurityInternalUserRunnerProcessor(UserApi userApi) {
+    public SecuritySystemUserInitialization(UserApi userApi) {
         this.userApi = userApi;
     }
 
@@ -32,7 +32,7 @@ public class SecurityInternalUserRunnerProcessor implements ApplicationRunner {
                     .enabled(true)
                     .build();
             User saved = userApi.save(user);
-            Log.info(SecurityInternalUserRunnerProcessor.class.getName(), String.format("%s user created", saved.getUsername()));
+            Log.info(SecuritySystemUserInitialization.class.getName(), String.format("%s user created", saved.getUsername()));
         }
     }
 }
