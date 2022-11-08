@@ -11,7 +11,6 @@ import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
-import io.hotcloud.common.api.core.message.MessageProperties;
 import io.hotcloud.common.api.exception.HotCloudException;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.UserNamespacePair;
@@ -21,22 +20,13 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.util.List;
 
 import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
-
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@ConditionalOnProperty(
-        name = MessageProperties.PROPERTIES_TYPE_NAME,
-        havingValue = MessageProperties.RABBITMQ
-)
 @RequiredArgsConstructor
 public class ApplicationRabbitMQMessageSubscriber {
 

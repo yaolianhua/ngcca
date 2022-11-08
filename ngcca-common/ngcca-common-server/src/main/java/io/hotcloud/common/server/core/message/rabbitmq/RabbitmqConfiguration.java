@@ -1,24 +1,14 @@
 package io.hotcloud.common.server.core.message.rabbitmq;
 
 import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.core.message.MessageProperties;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-        name = MessageProperties.PROPERTIES_TYPE_NAME,
-        havingValue = MessageProperties.RABBITMQ
-)
 @EnableRabbit
 public class RabbitmqConfiguration {
 

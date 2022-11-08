@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 public final class CommonConstant {
 
+    public static final String CONFIG_PREFIX = "ngcca";
     public static final String ROOT_PATH = Path.of(FileHelper.getUserHome(), "hotcloud").toString();
 
     public static final String K8S_APP = "k8s-app";

@@ -15,7 +15,6 @@ import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
-import io.hotcloud.common.api.core.message.MessageProperties;
 import io.hotcloud.common.api.core.minio.MinioBucketApi;
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
 import io.hotcloud.common.api.core.minio.MinioProperties;
@@ -28,7 +27,6 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -40,14 +38,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@ConditionalOnProperty(
-        name = MessageProperties.PROPERTIES_TYPE_NAME,
-        havingValue = MessageProperties.RABBITMQ
-)
 @RequiredArgsConstructor
 @Deprecated(since = "BuildPackApiV2")
 public class BuildPackRabbitMQMessageSubscriber {
