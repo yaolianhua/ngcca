@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.api.jwt;
 
 import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Properties;

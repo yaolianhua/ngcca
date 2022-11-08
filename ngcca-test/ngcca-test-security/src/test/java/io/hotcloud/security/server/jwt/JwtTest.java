@@ -1,5 +1,6 @@
 package io.hotcloud.security.server.jwt;
 
+import io.hotcloud.security.api.jwt.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

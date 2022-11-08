@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.api.jwt;
 
 import io.hotcloud.common.model.exception.HotCloudException;
 import io.jsonwebtoken.*;
@@ -24,7 +24,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
     }
 
     @Override
-    public String sign(io.hotcloud.security.server.jwt.Jwt jwt) {
+    public String sign(Jwt jwt) {
 
         HeaderClaims headerClaims = jwt.header();
         PayloadClaims payloadClaims = jwt.payload();
@@ -45,8 +45,8 @@ public class JwtManager implements JwtSigner, JwtVerifier {
 
     @SuppressWarnings("unchecked")
     @Override
-    public io.hotcloud.security.server.jwt.Jwt verify(String sign) {
-        SecretKey secretKey = Keys.hmacShaKeyFor(Base64.getEncoder().encode(io.hotcloud.security.server.jwt.Jwt.SECRET.getBytes(StandardCharsets.UTF_8)));
+    public Jwt verify(String sign) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(Base64.getEncoder().encode(Jwt.SECRET.getBytes(StandardCharsets.UTF_8)));
         io.jsonwebtoken.Jwt<JwsHeader<?>, Claims> jwt;
         try {
             jwt = Jwts.parserBuilder()
@@ -57,7 +57,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
             throw new HotCloudException(e.getMessage(), 401);
         }
 
-        return new io.hotcloud.security.server.jwt.Jwt() {
+        return new Jwt() {
             @Override
             public HeaderClaims header() {
                 JwsHeader<?> header = jwt.getHeader();
@@ -80,7 +80,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                 payloadClaims.setExpiresAt(claims.getExpiration());
                 payloadClaims.setNotBefore(claims.getNotBefore());
 
-                io.hotcloud.security.server.jwt.Jwt.DEFAULT_CLAIMS.forEach(claims::remove);
+                Jwt.DEFAULT_CLAIMS.forEach(claims::remove);
                 payloadClaims.setAttributes(claims);
                 return payloadClaims;
             }

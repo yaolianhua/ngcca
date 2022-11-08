@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.api.jwt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

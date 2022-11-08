@@ -1,4 +1,4 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.api.jwt;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;

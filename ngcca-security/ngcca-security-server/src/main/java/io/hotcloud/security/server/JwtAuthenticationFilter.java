@@ -1,6 +1,7 @@
-package io.hotcloud.security.server.jwt;
+package io.hotcloud.security.server;
 
 import io.hotcloud.common.model.Log;
+import io.hotcloud.security.api.jwt.JwtVerifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

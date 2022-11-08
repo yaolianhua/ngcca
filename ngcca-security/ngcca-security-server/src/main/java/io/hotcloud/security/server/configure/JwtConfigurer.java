@@ -1,9 +1,9 @@
 package io.hotcloud.security.server.configure;
 
-import io.hotcloud.security.server.jwt.JwtManager;
-import io.hotcloud.security.server.jwt.JwtProperties;
-import io.hotcloud.security.server.jwt.JwtSigner;
-import io.hotcloud.security.server.jwt.JwtVerifier;
+import io.hotcloud.security.api.jwt.JwtManager;
+import io.hotcloud.security.api.jwt.JwtProperties;
+import io.hotcloud.security.api.jwt.JwtSigner;
+import io.hotcloud.security.api.jwt.JwtVerifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

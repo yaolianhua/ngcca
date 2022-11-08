@@ -1,12 +1,12 @@
 package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.security.api.jwt.JwtSigner;
+import io.hotcloud.security.api.jwt.JwtVerifier;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
-import io.hotcloud.security.server.jwt.JwtSigner;
-import io.hotcloud.security.server.jwt.JwtVerifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
