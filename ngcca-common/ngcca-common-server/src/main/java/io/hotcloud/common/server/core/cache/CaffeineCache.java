@@ -3,7 +3,7 @@ package io.hotcloud.common.server.core.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.hotcloud.common.api.core.cache.AbstractValueAdaptingCache;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.util.Assert;

@@ -4,8 +4,8 @@ import io.fabric8.kubernetes.api.model.Service;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.exception.HotCloudResourceConflictException;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.CommonConstant.K8S_APP;
+import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor

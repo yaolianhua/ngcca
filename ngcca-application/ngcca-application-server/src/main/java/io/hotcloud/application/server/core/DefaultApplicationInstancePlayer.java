@@ -2,7 +2,7 @@ package io.hotcloud.application.server.core;
 
 import io.hotcloud.application.api.core.*;
 import io.hotcloud.application.api.core.event.ApplicationInstanceCreateEvent;
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

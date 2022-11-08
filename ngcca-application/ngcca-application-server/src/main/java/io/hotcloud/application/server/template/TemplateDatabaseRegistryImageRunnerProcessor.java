@@ -2,9 +2,9 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.common.api.CommonRunnerProcessor;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.core.registry.RegistryProperties;
+import io.hotcloud.common.model.Log;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
 import lombok.RequiredArgsConstructor;

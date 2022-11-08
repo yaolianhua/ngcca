@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-import static io.hotcloud.common.api.CommonConstant.SUCCESS_MESSAGE;
+import static io.hotcloud.common.model.CommonConstant.SUCCESS_MESSAGE;
 
 /**
  * @author yaolianhua789@gmail.com

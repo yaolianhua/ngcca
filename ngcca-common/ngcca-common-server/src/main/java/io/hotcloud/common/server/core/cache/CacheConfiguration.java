@@ -1,9 +1,9 @@
 package io.hotcloud.common.server.core.cache;
 
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.cache.Cache;
 import io.hotcloud.common.api.core.cache.CacheProperties;
 import io.hotcloud.common.api.core.cache.RedisCommand;
+import io.hotcloud.common.model.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

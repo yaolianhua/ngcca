@@ -1,10 +1,10 @@
 package io.hotcloud.db;
 
-import io.hotcloud.common.api.env.Properties;
+import io.hotcloud.common.model.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static io.hotcloud.common.api.CommonConstant.CONFIG_PREFIX;
+import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
 @ConfigurationProperties(prefix = CONFIG_PREFIX + ".mongodb")
 @Data

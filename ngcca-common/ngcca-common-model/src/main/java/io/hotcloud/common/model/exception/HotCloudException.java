@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.exception;
+package io.hotcloud.common.model.exception;
 
 /**
  * @author yaolianhua789@gmail.com

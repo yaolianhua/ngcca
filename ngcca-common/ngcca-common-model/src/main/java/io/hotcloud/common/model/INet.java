@@ -1,6 +1,6 @@
-package io.hotcloud.common.api;
+package io.hotcloud.common.model;
 
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudException;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;

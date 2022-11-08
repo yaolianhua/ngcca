@@ -1,6 +1,6 @@
 package io.hotcloud.common.api.core.cache;
 
-import io.hotcloud.common.api.env.Properties;
+import io.hotcloud.common.model.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;

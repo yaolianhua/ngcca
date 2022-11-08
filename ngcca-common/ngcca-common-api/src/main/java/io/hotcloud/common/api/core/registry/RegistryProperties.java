@@ -1,6 +1,6 @@
 package io.hotcloud.common.api.core.registry;
 
-import io.hotcloud.common.api.env.Properties;
+import io.hotcloud.common.model.Properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

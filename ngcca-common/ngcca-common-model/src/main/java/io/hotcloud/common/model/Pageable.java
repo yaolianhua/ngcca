@@ -1,4 +1,4 @@
-package io.hotcloud.common.api;
+package io.hotcloud.common.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

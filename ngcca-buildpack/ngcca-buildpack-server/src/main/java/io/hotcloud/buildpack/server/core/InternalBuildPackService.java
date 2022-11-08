@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.CommonConstant.K8S_APP;
+import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 
 /**
  * @author yaolianhua789@gmail.com

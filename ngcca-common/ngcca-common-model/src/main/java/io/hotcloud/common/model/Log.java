@@ -1,8 +1,8 @@
-package io.hotcloud.common.api;
+package io.hotcloud.common.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -7,8 +7,8 @@ import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.application.api.core.ApplicationInstanceSource;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Log;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.CommonConstant.K8S_APP;
+import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor

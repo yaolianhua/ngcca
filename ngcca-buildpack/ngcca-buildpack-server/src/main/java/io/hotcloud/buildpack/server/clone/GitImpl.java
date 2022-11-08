@@ -2,9 +2,9 @@ package io.hotcloud.buildpack.server.clone;
 
 import io.hotcloud.buildpack.api.clone.GitApi;
 import io.hotcloud.buildpack.api.clone.GitCloned;
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.core.files.FileHelper;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.Validator;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;

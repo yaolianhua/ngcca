@@ -4,9 +4,9 @@ import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedCreateEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedDeleteEvent;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
+import io.hotcloud.common.model.Log;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

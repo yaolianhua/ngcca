@@ -2,8 +2,8 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
-import io.hotcloud.common.api.PageResult;
-import io.hotcloud.common.api.Pageable;
+import io.hotcloud.common.model.PageResult;
+import io.hotcloud.common.model.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

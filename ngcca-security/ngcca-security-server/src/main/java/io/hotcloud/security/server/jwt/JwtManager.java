@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.jwt;
 
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.util.Assert;

@@ -1,6 +1,6 @@
 package io.hotcloud.db;
 
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import io.hotcloud.db.core.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

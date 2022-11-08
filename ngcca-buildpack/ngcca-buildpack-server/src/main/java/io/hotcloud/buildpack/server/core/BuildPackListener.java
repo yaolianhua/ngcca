@@ -4,10 +4,10 @@ import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.event.*;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.api.core.message.MessageBroadcaster;
+import io.hotcloud.common.model.Log;
 import io.hotcloud.kubernetes.client.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
-import static io.hotcloud.common.api.CommonConstant.FAILED_MESSAGE;
-import static io.hotcloud.common.api.CommonConstant.SUCCESS_MESSAGE;
+import static io.hotcloud.common.model.CommonConstant.FAILED_MESSAGE;
+import static io.hotcloud.common.model.CommonConstant.SUCCESS_MESSAGE;
 
 /**
  * @author yaolianhua789@gmail.com

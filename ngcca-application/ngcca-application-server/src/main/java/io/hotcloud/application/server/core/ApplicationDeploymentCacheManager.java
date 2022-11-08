@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static io.hotcloud.common.api.CommonConstant.CK_APPLICATION_WATCHED;
-import static io.hotcloud.common.api.CommonConstant.CK_DEPLOYMENT_TIMEOUT_SECONDS;
+import static io.hotcloud.common.model.CommonConstant.CK_APPLICATION_WATCHED;
+import static io.hotcloud.common.model.CommonConstant.CK_DEPLOYMENT_TIMEOUT_SECONDS;
 
 @Component
 public class ApplicationDeploymentCacheManager implements ApplicationDeploymentCacheApi {

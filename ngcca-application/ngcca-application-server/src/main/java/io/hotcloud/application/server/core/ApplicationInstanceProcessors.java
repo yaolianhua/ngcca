@@ -4,7 +4,7 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.buildpack.api.core.ImageBuildCacheApi;
 import io.hotcloud.buildpack.api.core.ImageBuildStatus;
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

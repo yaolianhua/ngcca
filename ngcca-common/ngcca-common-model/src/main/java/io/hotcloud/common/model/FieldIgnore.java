@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.env;
+package io.hotcloud.common.model;
 
 import java.lang.annotation.*;
 

@@ -2,9 +2,9 @@ package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
-import io.hotcloud.common.api.PageResult;
-import io.hotcloud.common.api.Pageable;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.PageResult;
+import io.hotcloud.common.model.Pageable;
+import io.hotcloud.common.model.exception.HotCloudException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

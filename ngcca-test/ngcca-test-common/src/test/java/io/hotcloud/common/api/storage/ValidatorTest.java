@@ -1,6 +1,6 @@
 package io.hotcloud.common.api.storage;
 
-import io.hotcloud.common.api.Validator;
+import io.hotcloud.common.model.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

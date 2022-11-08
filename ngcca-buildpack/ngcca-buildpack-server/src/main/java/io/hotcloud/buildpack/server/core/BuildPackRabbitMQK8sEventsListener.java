@@ -5,10 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.buildpack.api.core.*;
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.message.Message;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.exception.HotCloudException;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import static io.hotcloud.buildpack.api.core.ImageBuildStatus.Failed;
 import static io.hotcloud.buildpack.api.core.ImageBuildStatus.Succeeded;
-import static io.hotcloud.common.api.CommonConstant.*;
+import static io.hotcloud.common.model.CommonConstant.*;
 
 @Component
 @ConditionalOnProperty(

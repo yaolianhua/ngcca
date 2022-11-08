@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.jwt;
 
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.env.Properties;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.Properties;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

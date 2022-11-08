@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.configure;
 
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

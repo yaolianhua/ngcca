@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.controller;
 
 import io.hotcloud.application.server.core.FileUploadService;
-import io.hotcloud.common.api.Result;
+import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static io.hotcloud.common.api.WebResponse.created;
+import static io.hotcloud.common.model.WebResponse.created;
 
 @RestController
 @RequestMapping("/v1/files")

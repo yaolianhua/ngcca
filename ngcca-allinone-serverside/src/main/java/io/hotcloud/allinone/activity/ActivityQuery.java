@@ -1,10 +1,10 @@
 package io.hotcloud.allinone.activity;
 
-import io.hotcloud.common.api.PageResult;
-import io.hotcloud.common.api.Pageable;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.api.activity.ActivityTarget;
+import io.hotcloud.common.model.PageResult;
+import io.hotcloud.common.model.Pageable;
 import io.hotcloud.db.core.activity.ActivityEntity;
 import io.hotcloud.db.core.activity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;

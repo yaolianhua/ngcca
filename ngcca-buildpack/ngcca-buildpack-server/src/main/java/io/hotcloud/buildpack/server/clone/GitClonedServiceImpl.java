@@ -2,10 +2,10 @@ package io.hotcloud.buildpack.server.clone;
 
 import io.hotcloud.buildpack.api.clone.*;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.core.cache.Cache;
-import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.Validator;
+import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.security.api.user.User;

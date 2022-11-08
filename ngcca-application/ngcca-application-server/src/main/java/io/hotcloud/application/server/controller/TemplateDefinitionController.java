@@ -3,7 +3,7 @@ package io.hotcloud.application.server.controller;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
-import io.hotcloud.common.api.Result;
+import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.WebResponse.*;
+import static io.hotcloud.common.model.WebResponse.*;
 
 
 /**

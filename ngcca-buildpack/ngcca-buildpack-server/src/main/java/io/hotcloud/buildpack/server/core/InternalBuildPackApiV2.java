@@ -7,13 +7,13 @@ import io.hotcloud.buildpack.api.core.*;
 import io.hotcloud.buildpack.api.core.kaniko.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.SecretExpressionVariable;
-import io.hotcloud.common.api.INet;
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.UUIDGenerator;
-import io.hotcloud.common.api.Validator;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.api.core.registry.RegistryProperties;
+import io.hotcloud.common.model.INet;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.UUIDGenerator;
+import io.hotcloud.common.model.Validator;
 import io.hotcloud.kubernetes.client.http.JobClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 import static io.hotcloud.buildpack.api.core.kaniko.DockerfileTemplateRender.DockerfileJava;
 import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.parseJob;
 import static io.hotcloud.buildpack.api.core.kaniko.KanikoJobTemplateRender.parseSecret;
-import static io.hotcloud.common.api.CommonConstant.K8S_APP;
-import static io.hotcloud.common.api.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
+import static io.hotcloud.common.model.CommonConstant.K8S_APP;
+import static io.hotcloud.common.model.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
 
 @Service
 @RequiredArgsConstructor

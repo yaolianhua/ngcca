@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.minio;
 
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudException;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;

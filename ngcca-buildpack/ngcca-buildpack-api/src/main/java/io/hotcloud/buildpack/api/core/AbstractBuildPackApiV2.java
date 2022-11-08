@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.UUIDGenerator;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.UUIDGenerator;
 
 public abstract class AbstractBuildPackApiV2 implements BuildPackApiV2 {
 

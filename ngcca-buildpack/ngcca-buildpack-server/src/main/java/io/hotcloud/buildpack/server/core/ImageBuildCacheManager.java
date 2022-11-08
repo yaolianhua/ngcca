@@ -2,13 +2,13 @@ package io.hotcloud.buildpack.server.core;
 
 import io.hotcloud.buildpack.api.core.ImageBuildCacheApi;
 import io.hotcloud.buildpack.api.core.ImageBuildStatus;
-import io.hotcloud.common.api.CommonConstant;
 import io.hotcloud.common.api.core.cache.Cache;
+import io.hotcloud.common.model.CommonConstant;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static io.hotcloud.common.api.CommonConstant.*;
+import static io.hotcloud.common.model.CommonConstant.*;
 
 @Component
 public class ImageBuildCacheManager implements ImageBuildCacheApi {

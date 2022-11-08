@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.registry;
 
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.registry.RegistryProperties;
+import io.hotcloud.common.model.Log;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;

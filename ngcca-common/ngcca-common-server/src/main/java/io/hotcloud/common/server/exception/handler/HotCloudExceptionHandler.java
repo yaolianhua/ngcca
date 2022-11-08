@@ -1,10 +1,10 @@
 package io.hotcloud.common.server.exception.handler;
 
-import io.hotcloud.common.api.Log;
-import io.hotcloud.common.api.Result;
-import io.hotcloud.common.api.exception.HotCloudException;
-import io.hotcloud.common.api.exception.HotCloudResourceConflictException;
-import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.HotCloudResourceConflictException;
+import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

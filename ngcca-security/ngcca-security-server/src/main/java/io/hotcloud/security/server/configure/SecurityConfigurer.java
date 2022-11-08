@@ -1,6 +1,6 @@
 package io.hotcloud.security.server.configure;
 
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import io.hotcloud.security.server.Http401UnauthorizedEntryPoint;
 import io.hotcloud.security.server.jwt.JwtAuthenticationFilter;
 import io.hotcloud.security.server.jwt.JwtVerifier;

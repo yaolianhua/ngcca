@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.common.api.CommonConstant;
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;

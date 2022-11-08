@@ -7,7 +7,7 @@ import io.hotcloud.application.api.core.ApplicationInstanceSource;
 import io.hotcloud.buildpack.api.core.BuildImage;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackPlayerV2;
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

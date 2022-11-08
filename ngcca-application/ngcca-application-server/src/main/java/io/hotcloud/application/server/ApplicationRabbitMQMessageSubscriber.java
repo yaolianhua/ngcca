@@ -7,11 +7,11 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.api.template.TemplateInstanceService;
-import io.hotcloud.common.api.CommonConstant;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
-import io.hotcloud.common.api.exception.HotCloudException;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.exception.HotCloudException;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 import java.util.List;
 
-import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
+import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
 @Component
 @RequiredArgsConstructor
 public class ApplicationRabbitMQMessageSubscriber {

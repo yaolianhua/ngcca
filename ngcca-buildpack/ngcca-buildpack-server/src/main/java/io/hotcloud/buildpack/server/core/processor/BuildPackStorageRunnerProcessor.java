@@ -2,8 +2,8 @@ package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
 import io.hotcloud.common.api.CommonRunnerProcessor;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
+import io.hotcloud.common.model.Log;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

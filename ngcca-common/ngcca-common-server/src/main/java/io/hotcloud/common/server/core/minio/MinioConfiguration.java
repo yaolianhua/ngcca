@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.minio;
 
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.minio.MinioProperties;
+import io.hotcloud.common.model.Log;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;

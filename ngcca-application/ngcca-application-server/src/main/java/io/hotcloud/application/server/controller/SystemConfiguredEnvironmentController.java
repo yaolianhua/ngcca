@@ -1,8 +1,8 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.common.api.Result;
 import io.hotcloud.common.api.env.ConfiguredEnvironmentQuery;
 import io.hotcloud.common.api.env.EnvironmentProperty;
+import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-import static io.hotcloud.common.api.WebResponse.ok;
+import static io.hotcloud.common.model.WebResponse.ok;
 
 @RestController
 @RequestMapping("/v1/configuredenvironments")

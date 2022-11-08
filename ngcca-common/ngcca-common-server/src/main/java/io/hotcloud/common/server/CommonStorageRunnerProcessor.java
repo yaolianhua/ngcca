@@ -1,15 +1,15 @@
 package io.hotcloud.common.server;
 
 import io.hotcloud.common.api.CommonRunnerProcessor;
-import io.hotcloud.common.api.Log;
 import io.hotcloud.common.api.core.files.FileHelper;
+import io.hotcloud.common.model.Log;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
+import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
 @Component
 public class CommonStorageRunnerProcessor implements CommonRunnerProcessor {
 

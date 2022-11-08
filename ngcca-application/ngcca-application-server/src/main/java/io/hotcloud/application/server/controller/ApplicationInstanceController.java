@@ -3,7 +3,7 @@ package io.hotcloud.application.server.controller;
 import io.hotcloud.application.api.core.ApplicationForm;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstancePlayer;
-import io.hotcloud.common.api.Result;
+import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.hotcloud.common.api.WebResponse.accepted;
-import static io.hotcloud.common.api.WebResponse.created;
+import static io.hotcloud.common.model.WebResponse.accepted;
+import static io.hotcloud.common.model.WebResponse.created;
 
 
 @RestController

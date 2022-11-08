@@ -2,7 +2,7 @@ package io.hotcloud.buildpack.api.core;
 
 import java.nio.file.Path;
 
-import static io.hotcloud.common.api.CommonConstant.ROOT_PATH;
+import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
 
 /**
  * @author yaolianhua789@gmail.com

@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
-import io.hotcloud.common.api.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
 import io.hotcloud.db.core.application.TemplateInstanceEntity;
 import io.hotcloud.db.core.application.TemplateInstanceRepository;
 import org.springframework.stereotype.Service;

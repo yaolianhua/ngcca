@@ -1,8 +1,8 @@
 package io.hotcloud.allinone.statistics;
 
-import io.hotcloud.common.api.PageResult;
-import io.hotcloud.common.api.Pageable;
-import io.hotcloud.common.api.Result;
+import io.hotcloud.common.model.PageResult;
+import io.hotcloud.common.model.Pageable;
+import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.hotcloud.common.api.WebResponse.ok;
-import static io.hotcloud.common.api.WebResponse.okPage;
+import static io.hotcloud.common.model.WebResponse.ok;
+import static io.hotcloud.common.model.WebResponse.okPage;
 
 /**
  * @author yaolianhua789@gmail.com

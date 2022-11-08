@@ -1,6 +1,6 @@
 package io.hotcloud.common.server;
 
-import io.hotcloud.common.api.Log;
+import io.hotcloud.common.model.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
