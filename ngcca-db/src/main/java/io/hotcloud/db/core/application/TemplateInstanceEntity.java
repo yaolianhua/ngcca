@@ -4,9 +4,8 @@ import io.hotcloud.db.core.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -17,19 +16,15 @@ import org.springframework.data.redis.core.index.Indexed;
         def = "{'user': 1, 'name': 1}",
         unique = true
 )
-@RedisHash("template_instance")
 @Getter
 @Setter
 public class TemplateInstanceEntity extends AbstractEntity {
 
     @Indexed
-    @org.springframework.data.mongodb.core.index.Indexed
     private String user;
     @Indexed
-    @org.springframework.data.mongodb.core.index.Indexed
     private String name;
-    @Indexed
-    @org.springframework.data.mongodb.core.index.Indexed(unique = true)
+    @Indexed(unique = true)
     private String uuid;
 
     private String namespace;

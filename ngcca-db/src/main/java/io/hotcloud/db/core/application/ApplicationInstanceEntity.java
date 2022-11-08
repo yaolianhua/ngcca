@@ -5,9 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
 
 
 @Document(collection = "application_instance")
@@ -16,17 +15,14 @@ import org.springframework.data.redis.core.index.Indexed;
         def = "{'user': 1, 'name': 1}",
         unique = false
 )
-@RedisHash("application_instance")
 @Getter
 @Setter
 public class ApplicationInstanceEntity extends AbstractEntity {
 
     private String buildPackId;
     @Indexed
-    @org.springframework.data.mongodb.core.index.Indexed
     private String user;
     @Indexed
-    @org.springframework.data.mongodb.core.index.Indexed
     private String name;
 
     private String namespace;

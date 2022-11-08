@@ -3,10 +3,6 @@ package io.hotcloud.db;
 import io.hotcloud.common.api.Log;
 import io.hotcloud.db.core.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,25 +10,13 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Configuration(proxyBeanMethods = false)
 @Slf4j
 @EnableConfigurationProperties(DatabaseProperties.class)
-@ConditionalOnProperty(
-        name = DatabaseProperties.PROPERTIES_TYPE_NAME,
-        havingValue = "mongodb"
-)
 @EnableMongoRepositories(basePackageClasses = AbstractEntity.class)
-@EnableAutoConfiguration(exclude = {
-        RedisRepositoriesAutoConfiguration.class,
-        RedisAutoConfiguration.class
-})
 @EnableTransactionManagement
 public class MongodbDatabaseConfiguration {
 
@@ -44,10 +28,8 @@ public class MongodbDatabaseConfiguration {
 
     @PostConstruct
     public void print() {
-        final DatabaseProperties.MongodbProperties mongodb = properties.getMongodb();
-        Assert.notNull(mongodb, "Mongodb properties is null");
-        String mongoUrl = String.format("mongodb://%s:%s/%s", mongodb.getHost(), mongodb.getPort(), mongodb.getDatabase());
-        Log.info(MongodbDatabaseConfiguration.class.getName(), String.format("【Load DB Configuration. implementation using mongodb. url='%s'】", mongoUrl));
+        String mongoUrl = String.format("mongodb://%s:%s/%s", properties.getHost(), properties.getPort(), properties.getDatabase());
+        Log.info(MongodbDatabaseConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
     }
 
     @Bean
