@@ -9,9 +9,9 @@ import static io.hotcloud.common.api.CommonConstant.CONFIG_PREFIX;
 @ConfigurationProperties(prefix = CONFIG_PREFIX + ".mongodb")
 @Data
 @Properties(prefix = CONFIG_PREFIX + ".mongodb")
-public class DatabaseProperties {
+public class NgccaMongodbProperties {
 
-    private String database = "hotcloud";
+    private String database = "ngcca";
     private String username;
     private String password;
     private String host;

@@ -2,7 +2,7 @@ package io.hotcloud.security;
 
 import io.hotcloud.common.server.core.cache.CacheConfiguration;
 import io.hotcloud.common.server.core.message.MessageConfiguration;
-import io.hotcloud.db.DatabaseProperties;
+import io.hotcloud.db.NgccaMongodbProperties;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackageClasses = {
         CacheConfiguration.class,
         MessageConfiguration.class,
-        DatabaseProperties.class,
+        NgccaMongodbProperties.class,
         HotCloudSecurityApplicationTest.class
 })
 public class HotCloudSecurityApplicationTest {

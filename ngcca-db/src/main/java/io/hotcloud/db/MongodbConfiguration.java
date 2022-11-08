@@ -15,21 +15,21 @@ import javax.annotation.PostConstruct;
 
 @Configuration(proxyBeanMethods = false)
 @Slf4j
-@EnableConfigurationProperties(DatabaseProperties.class)
+@EnableConfigurationProperties(NgccaMongodbProperties.class)
 @EnableMongoRepositories(basePackageClasses = AbstractEntity.class)
 @EnableTransactionManagement
-public class MongodbDatabaseConfiguration {
+public class MongodbConfiguration {
 
-    private final DatabaseProperties properties;
+    private final NgccaMongodbProperties properties;
 
-    public MongodbDatabaseConfiguration(DatabaseProperties properties) {
+    public MongodbConfiguration(NgccaMongodbProperties properties) {
         this.properties = properties;
     }
 
     @PostConstruct
     public void print() {
         String mongoUrl = String.format("mongodb://%s:%s/%s", properties.getHost(), properties.getPort(), properties.getDatabase());
-        Log.info(MongodbDatabaseConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
+        Log.info(MongodbConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
     }
 
     @Bean
