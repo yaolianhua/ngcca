@@ -16,12 +16,12 @@ import static io.hotcloud.common.api.WebResponse.created;
 @RestController
 @RequestMapping("/v1/files")
 @Tag(name = "Files")
-public class StorageController {
+public class FilesController {
 
 
     private final FileUploadService fileUploadService;
 
-    public StorageController(FileUploadService fileUploadService) {
+    public FilesController(FileUploadService fileUploadService) {
         this.fileUploadService = fileUploadService;
     }
 
