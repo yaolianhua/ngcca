@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.controller;
 
 import io.hotcloud.common.api.Result;
-import io.hotcloud.common.server.storage.minio.FileUploadService;
+import io.hotcloud.common.server.core.minio.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

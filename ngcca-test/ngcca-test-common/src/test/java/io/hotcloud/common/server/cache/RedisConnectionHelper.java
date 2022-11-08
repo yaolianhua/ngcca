@@ -1,5 +1,6 @@
 package io.hotcloud.common.server.cache;
 
+import io.hotcloud.common.server.core.cache.RedisHelper;
 import lombok.Data;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.connection.RedisConnection;

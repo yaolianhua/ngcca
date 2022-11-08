@@ -2,8 +2,8 @@ package io.hotcloud.application;
 
 import io.hotcloud.buildpack.NamedBuildPackPackage;
 import io.hotcloud.common.server.AsyncConfiguration;
-import io.hotcloud.common.server.cache.CacheConfiguration;
-import io.hotcloud.common.server.message.MessageConfiguration;
+import io.hotcloud.common.server.core.cache.CacheConfiguration;
+import io.hotcloud.common.server.core.message.MessageConfiguration;
 import io.hotcloud.db.DatabaseProperties;
 import io.hotcloud.kubernetes.server.KubernetesApiConfiguration;
 import io.hotcloud.security.NamedSecurityPackage;
