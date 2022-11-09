@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConditionalOnProperty(name = "kubernetes.enable-workloads-watcher", havingValue = "true")
-public class KubernetesRabbitMqApplicationRunner implements ApplicationRunner {
+public class KubernetesRabbitmqInitialization implements ApplicationRunner {
 
     private final ConnectionFactory connectionFactory;
 
-    public KubernetesRabbitMqApplicationRunner(ConnectionFactory connectionFactory) {
+    public KubernetesRabbitmqInitialization(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
