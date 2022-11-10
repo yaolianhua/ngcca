@@ -1,57 +1,44 @@
-cache:
-  type: redis
-  redis:
-    host:
-    password:
-    port:
-    database:
-db:
-  type: mongodb
-  redis:
-    database: 0
-    host:
-    port:
-    password:
-  mongodb:
-    database:
-    host:
-    port:
-    password:
-    username:
-minio:
-  access-key:
-  secret-key:
-  endpoint:
-message:
-  type: rabbitmq
+app:
+  dot-suffix-domain: .k8s-cluster.com
+  deployment-notify-mode: rabbitmq
+buildpack:
+  imagebuild:
+    notify-mode: rabbitmq
+ngcca:
   rabbitmq:
     host:
     username:
     password:
     port:
-kubernetes:
-  in-cluster: true
-  enable-workloads-watcher: true
-security:
-  enabled: true
-  jwt:
-    algorithm: 'HS512'
-    sign-key: "!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)!@#$%^&*(HOTCLOUD)"
-  ignored:
-    urls:
-      - /swagger**/**
-      - /v3/api-docs/**
-      - /favicon.ico
-      - /pub
-      - /**/login
-buildpack:
-  imagebuild:
-    notify-mode: rabbitmq
-registry:
-  url:
-  username:
-  password:
-  imagebuild-namespace:
-app:
-  dot-suffix-domain:
-  deployment-notify-mode: rabbitmq
+  redis:
+    database:
+    password:
+    host:
+    port:
+  registry:
+    url:
+    username:
+    password:
+    imagebuild-namespace:
+  minio:
+    access-key:
+    secret-key:
+    endpoint:
+  mongodb:
+    host:
+    username:
+    password:
+    port:
+    database:
+  kubernetes-agent:
+    host:
+    port:
+    domain-name:
+  security:
+    ignored:
+      urls:
+        - "/swagger**/**"
+        - "/v3/api-docs/**"
+        - "/favicon.ico"
+        - "/pub"
+        - "/**/login"

@@ -16,6 +16,7 @@
         <module>ngcca-common-api</module>
         <module>ngcca-common-server</module>
         <module>ngcca-common-model</module>
+        <module>ngcca-common-spring-boot-starter</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -32,6 +33,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-common-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-common-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

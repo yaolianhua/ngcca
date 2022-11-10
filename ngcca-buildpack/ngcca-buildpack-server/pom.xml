@@ -15,7 +15,12 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-common-api</artifactId>
+            <artifactId>ngcca-common-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-security-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -25,11 +30,6 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-security-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -44,16 +44,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
     </dependencies>

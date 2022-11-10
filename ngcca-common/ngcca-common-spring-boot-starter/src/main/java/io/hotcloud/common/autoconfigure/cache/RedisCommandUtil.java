@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.core.cache;
+package io.hotcloud.common.autoconfigure.cache;
 
 import io.hotcloud.common.api.core.cache.RedisCommand;
 import lombok.extern.slf4j.Slf4j;

@@ -15,7 +15,7 @@ import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.api.core.minio.MinioBucketApi;
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
-import io.hotcloud.common.api.core.minio.MinioProperties;
+import io.hotcloud.common.autoconfigure.minio.MinioProperties;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.exception.HotCloudException;

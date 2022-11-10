@@ -1,47 +1,32 @@
-package io.hotcloud.common.server.core.minio;
+package io.hotcloud.common.autoconfigure.minio;
 
-import io.hotcloud.common.api.core.minio.MinioProperties;
 import io.hotcloud.common.model.Log;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
+import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Configuration(proxyBeanMethods = false)
-@Slf4j
 @EnableConfigurationProperties(MinioProperties.class)
-@ConditionalOnProperty(prefix = "minio", value = "endpoint")
 public class MinioConfiguration {
 
-    private final MinioProperties properties;
-
-    public MinioConfiguration(MinioProperties properties) {
-        this.properties = properties;
-    }
-
-    @PostConstruct
-    public void print() {
-        Log.info(MinioConfiguration.class.getName(),
-                String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s' max-upload-megabytes = '%sMB'】",
-                        properties.getEndpoint(), properties.getDefaultBucket(), properties.getMaxUploadMegabytes()));
-    }
-
     @Bean
-    public MinioClient minioClient() throws Exception {
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = CONFIG_PREFIX + "minio", value = "endpoint")
+    public MinioClient minioClient(MinioProperties properties) throws Exception {
         MinioClient minioClient = MinioClient.builder()
                 .endpoint(properties.getEndpoint())
                 .credentials(properties.getAccessKey(), properties.getSecretKey())
                 .build();
         checkDefaultBucketOrCreate(minioClient, properties.getDefaultBucket());
+
+        Log.info(MinioConfiguration.class.getName(),
+                String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s' max-upload-megabytes = '%sMB'】",
+                        properties.getEndpoint(), properties.getDefaultBucket(), properties.getMaxUploadMegabytes()));
         return minioClient;
     }
 
@@ -51,6 +36,5 @@ public class MinioConfiguration {
             return;
         }
         client.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
-        log.info("Created default-bucket '{}'", bucket);
     }
 }

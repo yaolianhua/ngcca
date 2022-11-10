@@ -1,6 +1,6 @@
 spring:
   application:
-    name: hotcloud
+    name: ngcca-server
   config:
     import:
       - application-allinone.yml
@@ -8,18 +8,18 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   rabbitmq:
-    host: ${message.rabbitmq.host:}
-    port: ${message.rabbitmq.port:}
-    username: ${message.rabbitmq.username:}
-    password: ${message.rabbitmq.password:}
+    host: ${ngcca.rabbitmq.host:}
+    port: ${ngcca.rabbitmq.port:}
+    username: ${ngcca.rabbitmq.username:}
+    password: ${ngcca.rabbitmq.password:}
     virtual-host: /
   data:
     mongodb:
-      database: ${db.mongodb.database:}
-      host: ${db.mongodb.host:}
-      port: ${db.mongodb.port:}
-      password: ${db.mongodb.password:}
-      username: ${db.mongodb.username:}
+      database: ${ngcca.mongodb.database:}
+      host: ${ngcca.mongodb.host:}
+      port: ${ngcca.mongodb.port:}
+      password: ${ngcca.mongodb.password:}
+      username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
   servlet:

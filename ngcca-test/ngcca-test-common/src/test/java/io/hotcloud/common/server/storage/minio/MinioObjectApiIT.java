@@ -2,7 +2,7 @@ package io.hotcloud.common.server.storage.minio;
 
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
-import io.hotcloud.common.api.core.minio.MinioProperties;
+import io.hotcloud.common.autoconfigure.minio.MinioProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

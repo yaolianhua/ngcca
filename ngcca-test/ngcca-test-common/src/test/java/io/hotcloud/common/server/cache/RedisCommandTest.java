@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.cache;
 
-import io.hotcloud.common.server.core.cache.RedisCommandUtil;
+import io.hotcloud.common.autoconfigure.cache.RedisCommandUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

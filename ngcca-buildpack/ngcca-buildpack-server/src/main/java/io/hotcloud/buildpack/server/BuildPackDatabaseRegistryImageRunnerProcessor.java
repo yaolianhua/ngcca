@@ -4,7 +4,7 @@ import io.hotcloud.buildpack.api.core.BuildPackImages;
 import io.hotcloud.buildpack.server.core.BuildPackImagesProperties;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
-import io.hotcloud.common.api.core.registry.RegistryProperties;
+import io.hotcloud.common.autoconfigure.RegistryProperties;
 import io.hotcloud.common.model.Log;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;

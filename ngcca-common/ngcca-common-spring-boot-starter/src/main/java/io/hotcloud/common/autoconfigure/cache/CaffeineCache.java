@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.core.cache;
+package io.hotcloud.common.autoconfigure.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

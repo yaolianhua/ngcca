@@ -1,17 +1,15 @@
-package io.hotcloud.common.api.core.message;
+package io.hotcloud.common.autoconfigure;
 
 import io.hotcloud.common.model.Properties;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
 @ConfigurationProperties(prefix = CONFIG_PREFIX + "rabbitmq")
 @Data
-@Slf4j
 @Properties(prefix = CONFIG_PREFIX + "rabbitmq")
-public class NgccaRabbitmqProperties {
+public class RabbitmqProperties {
 
     private String host;
     private Integer port;

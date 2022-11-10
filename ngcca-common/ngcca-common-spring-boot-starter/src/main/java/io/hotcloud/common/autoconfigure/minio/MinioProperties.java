@@ -1,14 +1,14 @@
-package io.hotcloud.common.api.core.minio;
+package io.hotcloud.common.autoconfigure.minio;
 
 import io.hotcloud.common.model.Properties;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
+
 @Data
-@ConfigurationProperties(prefix = "minio")
-@Slf4j
-@Properties(prefix = "minio")
+@ConfigurationProperties(prefix = CONFIG_PREFIX + "minio")
+@Properties(prefix = CONFIG_PREFIX + "minio")
 public class MinioProperties {
 
     /**

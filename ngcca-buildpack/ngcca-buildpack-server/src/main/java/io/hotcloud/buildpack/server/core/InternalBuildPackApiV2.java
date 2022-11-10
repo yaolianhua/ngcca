@@ -9,7 +9,7 @@ import io.hotcloud.buildpack.api.core.kaniko.KanikoJobExpressionVariable;
 import io.hotcloud.buildpack.api.core.kaniko.SecretExpressionVariable;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
-import io.hotcloud.common.api.core.registry.RegistryProperties;
+import io.hotcloud.common.autoconfigure.RegistryProperties;
 import io.hotcloud.common.model.INet;
 import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.UUIDGenerator;

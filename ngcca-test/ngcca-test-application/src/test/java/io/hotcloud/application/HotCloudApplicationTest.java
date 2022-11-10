@@ -1,8 +1,8 @@
 package io.hotcloud.application;
 
 import io.hotcloud.buildpack.NamedBuildPackPackage;
+import io.hotcloud.common.autoconfigure.cache.RedisConfiguration;
 import io.hotcloud.common.server.AsyncConfiguration;
-import io.hotcloud.common.server.core.cache.CacheConfiguration;
 import io.hotcloud.common.server.core.message.MessageConfiguration;
 import io.hotcloud.db.NgccaMongodbProperties;
 import io.hotcloud.kubernetes.server.KubernetesApiConfiguration;
@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 AsyncConfiguration.class,
                 MessageConfiguration.class,
                 NamedBuildPackPackage.class,
-                CacheConfiguration.class,
+                RedisConfiguration.class,
                 NgccaMongodbProperties.class,
                 NamedSecurityPackage.class
         }
