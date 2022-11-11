@@ -1,13 +1,3 @@
-kubernetes:
-  in-cluster: false
-  enable-workloads-watcher: true
-app:
-  dot-suffix-domain: .k8s-cluster.com
-  deployment-notify-mode: rabbitmq
-
-buildpack:
-  imagebuild:
-    notify-mode: rabbitmq
 ngcca:
   rabbitmq:
     host: localhost

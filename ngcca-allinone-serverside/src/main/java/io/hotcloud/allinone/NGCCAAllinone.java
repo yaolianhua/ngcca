@@ -17,9 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         NgccaMongodbConfiguration.class
 })
 @EnableKubernetesAgentClient
-public class NGCCAApplication {
+public class NGCCAAllinone {
 
     public static void main(String[] args) {
-        SpringApplication.run(NGCCAApplication.class, args);
+        SpringApplication.run(NGCCAAllinone.class, args);
     }
 }
