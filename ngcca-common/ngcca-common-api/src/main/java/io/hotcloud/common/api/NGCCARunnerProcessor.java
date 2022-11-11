@@ -1,6 +1,6 @@
 package io.hotcloud.common.api;
 
-public interface CommonRunnerProcessor {
+public interface NGCCARunnerProcessor {
 
     void execute();
 }

@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.env;
 
 import com.google.common.base.CaseFormat;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.env.AbstractConfiguredEnvironment;
 import io.hotcloud.common.api.env.EnvironmentProperty;
 import io.hotcloud.common.model.FieldIgnore;
@@ -20,7 +20,7 @@ import java.util.Objects;
 
 
 @Component
-public class SystemConfiguredEnvironment extends AbstractConfiguredEnvironment implements CommonRunnerProcessor {
+public class SystemConfiguredEnvironment extends AbstractConfiguredEnvironment implements NGCCARunnerProcessor {
 
     private final ApplicationContext context;
 

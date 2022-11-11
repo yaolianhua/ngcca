@@ -1,12 +1,13 @@
 package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.stereotype.Component;
+
 @Component
-class BuildPackRabbitMqRunnerProcessor implements CommonRunnerProcessor {
+class BuildPackRabbitMqRunnerProcessor implements NGCCARunnerProcessor {
 
     private final RabbitAdmin rabbitAdmin;
 

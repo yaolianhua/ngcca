@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.core.KanikoFlag;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 @Slf4j
 @Deprecated(since = "BuildPackApiV2")
-class BuildPackDefaultArgsPrinterRunnerProcessor implements CommonRunnerProcessor {
+class BuildPackDefaultArgsPrinterRunnerProcessor implements NGCCARunnerProcessor {
 
     private final KanikoFlag kanikoFlag;
 

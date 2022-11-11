@@ -1,6 +1,6 @@
 package io.hotcloud.common.server;
 
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;
@@ -11,17 +11,17 @@ import java.util.List;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE - 3)
-public class CommonApplicationRunner implements ApplicationRunner {
+public class NGCCAApplicationRunner implements ApplicationRunner {
 
-    private final List<CommonRunnerProcessor> processors;
+    private final List<NGCCARunnerProcessor> processors;
 
-    public CommonApplicationRunner(List<CommonRunnerProcessor> processors) {
+    public NGCCAApplicationRunner(List<NGCCARunnerProcessor> processors) {
         this.processors = processors;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        for (CommonRunnerProcessor processor : processors) {
+        for (NGCCARunnerProcessor processor : processors) {
             processor.execute();
         }
 

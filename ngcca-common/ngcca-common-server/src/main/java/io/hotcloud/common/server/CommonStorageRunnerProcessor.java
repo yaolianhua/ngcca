@@ -1,6 +1,6 @@
 package io.hotcloud.common.server;
 
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.model.utils.Log;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
+
 @Component
-public class CommonStorageRunnerProcessor implements CommonRunnerProcessor {
+public class CommonStorageRunnerProcessor implements NGCCARunnerProcessor {
 
     @Override
     public void execute() {

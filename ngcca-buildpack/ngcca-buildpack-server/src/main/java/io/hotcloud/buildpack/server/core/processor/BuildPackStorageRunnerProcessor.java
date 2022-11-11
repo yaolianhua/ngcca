@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.server.core.processor;
 
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.model.utils.Log;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
  **/
 @Component
 @Deprecated(since = "BuildPackApiV2")
-class BuildPackStorageRunnerProcessor implements CommonRunnerProcessor {
+class BuildPackStorageRunnerProcessor implements NGCCARunnerProcessor {
 
     @Override
     public void execute() {

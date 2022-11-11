@@ -1,7 +1,7 @@
 package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.Template;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.autoconfigure.RegistryProperties;
 import io.hotcloud.common.model.utils.Log;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class TemplateDatabaseRegistryImageRunnerProcessor implements CommonRunnerProcessor {
+public class TemplateDatabaseRegistryImageRunnerProcessor implements NGCCARunnerProcessor {
 
     private final RegistryImageRepository registryImageRepository;
     private final RegistryProperties registryProperties;

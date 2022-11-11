@@ -1,13 +1,13 @@
 package io.hotcloud.common.server.core.cache;
 
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.core.cache.Cache;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.utils.Log;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CacheRunnerProcessor implements CommonRunnerProcessor {
+public class CacheRunnerProcessor implements NGCCARunnerProcessor {
 
     private final Cache cache;
 

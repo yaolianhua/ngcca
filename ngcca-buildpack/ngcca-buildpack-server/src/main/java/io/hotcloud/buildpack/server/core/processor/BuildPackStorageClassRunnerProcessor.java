@@ -2,7 +2,7 @@ package io.hotcloud.buildpack.server.core.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.buildpack.api.core.BuildPackConstant;
-import io.hotcloud.common.api.CommonRunnerProcessor;
+import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -17,7 +17,7 @@ import java.util.Objects;
  **/
 @Component
 @Deprecated(since = "BuildPackApiV2")
-class BuildPackStorageClassRunnerProcessor implements CommonRunnerProcessor {
+class BuildPackStorageClassRunnerProcessor implements NGCCARunnerProcessor {
 
     private final StorageClassClient storageClassApi;
 
