@@ -5,5 +5,5 @@ package io.hotcloud.security;
  * <p>
  * Location the security module package root
  **/
-public class NamedSecurityPackage {
+public class NgccaSecurityRootPackage {
 }
