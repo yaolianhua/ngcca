@@ -18,7 +18,7 @@ import io.hotcloud.common.api.core.minio.MinioObjectApi;
 import io.hotcloud.common.autoconfigure.minio.MinioProperties;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Log;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.UserNamespacePair;
 import lombok.RequiredArgsConstructor;
@@ -194,7 +194,7 @@ public class BuildPackRabbitMQMessageSubscriber {
             });
 
         } catch (JsonProcessingException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 
@@ -204,7 +204,7 @@ public class BuildPackRabbitMQMessageSubscriber {
             });
 
         } catch (JsonProcessingException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 }

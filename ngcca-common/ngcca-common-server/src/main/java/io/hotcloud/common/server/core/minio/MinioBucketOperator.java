@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.minio;
 
 import io.hotcloud.common.api.core.minio.MinioBucketApi;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -36,7 +36,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             minioClient.makeBucket(makeBucketArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("make bucket failed: " + ex.getMessage());
+            throw new NGCCACommonException("make bucket failed: " + ex.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             minioClient.removeBucket(removeBucketArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("remove bucket failed: " + ex.getMessage());
+            throw new NGCCACommonException("remove bucket failed: " + ex.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             return minioClient.bucketExists(bucketExistsArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("exist bucket failed: " + ex.getMessage());
+            throw new NGCCACommonException("exist bucket failed: " + ex.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build()
             );
         } catch (Exception e) {
-            throw new HotCloudException("Set bucket policy failed: " + e.getMessage());
+            throw new NGCCACommonException("Set bucket policy failed: " + e.getMessage());
         }
     }
 }

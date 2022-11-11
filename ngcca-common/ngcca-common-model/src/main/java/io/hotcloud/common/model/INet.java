@@ -1,6 +1,6 @@
 package io.hotcloud.common.model;
 
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -13,7 +13,7 @@ public class INet {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 
@@ -21,7 +21,7 @@ public class INet {
         try {
             return InetAddress.getByName(host).getHostAddress();
         } catch (UnknownHostException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 
@@ -33,7 +33,7 @@ public class INet {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class INet {
         try {
             address = new URL(url);
         } catch (MalformedURLException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
         return address.getHost();
     }

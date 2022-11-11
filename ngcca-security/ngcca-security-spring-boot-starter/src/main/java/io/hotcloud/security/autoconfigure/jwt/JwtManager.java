@@ -1,6 +1,6 @@
 package io.hotcloud.security.autoconfigure.jwt;
 
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.security.api.jwt.HeaderClaims;
 import io.hotcloud.security.api.jwt.JwtSigner;
 import io.hotcloud.security.api.jwt.JwtVerifier;
@@ -55,7 +55,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                     .build()
                     .parse(sign);
         } catch (Exception e) {
-            throw new HotCloudException(e.getMessage(), 401);
+            throw new NGCCACommonException(e.getMessage(), 401);
         }
 
         return new io.hotcloud.security.api.jwt.Jwt() {

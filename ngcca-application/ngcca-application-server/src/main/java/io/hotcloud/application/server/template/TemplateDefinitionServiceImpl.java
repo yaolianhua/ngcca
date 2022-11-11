@@ -3,9 +3,9 @@ package io.hotcloud.application.server.template;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
-import io.hotcloud.common.model.exception.HotCloudException;
-import io.hotcloud.common.model.exception.HotCloudResourceConflictException;
-import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
+import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.db.core.application.TemplateDefinitionEntity;
 import io.hotcloud.db.core.application.TemplateDefinitionRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
                 .map(Enum::name)
                 .collect(Collectors.toList());
         if (!names.contains(name)) {
-            throw new HotCloudException("Supported template " + names);
+            throw new NGCCACommonException("Supported template " + names);
         }
     }
 
@@ -49,7 +49,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         Assert.notNull(definition, "TemplateDefinition body is null");
 
         if (StringUtils.hasText(definition.getId())) {
-            TemplateDefinitionEntity existed = templateDefinitionRepository.findById(definition.getId()).orElseThrow(() -> new HotCloudResourceNotFoundException("Template definition not found [" + definition.getId() + "]"));
+            TemplateDefinitionEntity existed = templateDefinitionRepository.findById(definition.getId()).orElseThrow(() -> new NGCCAResourceNotFoundException("Template definition not found [" + definition.getId() + "]"));
             if (StringUtils.hasText(definition.getName())) {
                 templateDefinitionNameVerified(definition.getName());
                 existed.setName(definition.getName());
@@ -79,7 +79,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
 
         TemplateDefinitionEntity entity = templateDefinitionRepository.findByName(definition.getName());
         if (Objects.nonNull(entity)) {
-            throw new HotCloudResourceConflictException("Template definition already exist [" + definition.getName() + "]");
+            throw new NGCCAResourceConflictException("Template definition already exist [" + definition.getName() + "]");
         }
 
         TemplateDefinitionEntity saveEntity = (TemplateDefinitionEntity) new TemplateDefinitionEntity().copyToEntity(definition);
@@ -92,7 +92,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
 
     @Override
     public TemplateDefinition findById(String id) {
-        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Template definition not found [" + id + "]"));
+        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElseThrow(() -> new NGCCAResourceNotFoundException("Template definition not found [" + id + "]"));
         return existed.toT(TemplateDefinition.class);
     }
 
@@ -100,7 +100,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
     public TemplateDefinition findByName(String name) {
         TemplateDefinitionEntity entity = templateDefinitionRepository.findByName(name);
         if (null == entity) {
-            throw new HotCloudResourceNotFoundException("Template definition not found [" + name + "]");
+            throw new NGCCAResourceNotFoundException("Template definition not found [" + name + "]");
         }
         return entity.toT(TemplateDefinition.class);
     }
@@ -128,7 +128,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
 
     @Override
     public void deleteById(String id) {
-        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Template definition not found [" + id + "]"));
+        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElseThrow(() -> new NGCCAResourceNotFoundException("Template definition not found [" + id + "]"));
         templateDefinitionRepository.delete(existed);
     }
 }

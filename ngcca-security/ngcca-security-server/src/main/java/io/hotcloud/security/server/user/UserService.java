@@ -1,7 +1,7 @@
 package io.hotcloud.security.server.user;
 
 import io.hotcloud.common.model.Validator;
-import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.db.core.user.UserEntity;
 import io.hotcloud.db.core.user.UserRepository;
 import io.hotcloud.security.api.user.User;
@@ -62,7 +62,7 @@ public class UserService implements UserApi {
         Assert.notNull(user, "User body is null");
         Assert.hasText(user.getId(), "user id is null");
 
-        UserEntity existEntity = userRepository.findById(user.getId()).orElseThrow(() -> new HotCloudResourceNotFoundException("User is not found"));
+        UserEntity existEntity = userRepository.findById(user.getId()).orElseThrow(() -> new NGCCAResourceNotFoundException("User is not found"));
         if (StringUtils.hasText(user.getAvatar())) {
             existEntity.setAvatar(user.getAvatar());
         }
@@ -125,7 +125,7 @@ public class UserService implements UserApi {
             return;
         }
 
-        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("User not found [" + id + "]"));
+        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new NGCCAResourceNotFoundException("User not found [" + id + "]"));
         entity.setEnabled(false);
 
         userRepository.save(entity);
@@ -151,7 +151,7 @@ public class UserService implements UserApi {
 
     @Override
     public User find(String id) {
-        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("User not found [" + id + "]"));
+        UserEntity entity = userRepository.findById(id).orElseThrow(() -> new NGCCAResourceNotFoundException("User not found [" + id + "]"));
         return buildUser(entity);
     }
 

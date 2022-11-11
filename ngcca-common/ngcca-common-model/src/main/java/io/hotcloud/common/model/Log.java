@@ -2,7 +2,7 @@ package io.hotcloud.common.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +40,7 @@ public class Log implements Serializable {
         try {
             return mapper.writeValueAsString(message);
         } catch (JsonProcessingException e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
     }
 

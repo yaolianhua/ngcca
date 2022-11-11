@@ -4,8 +4,8 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.core.*;
 import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Validator;
-import io.hotcloud.common.model.exception.HotCloudException;
-import io.hotcloud.common.model.exception.HotCloudResourceConflictException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;
@@ -57,13 +57,13 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
                 Log.info(ApplicationInstanceParameterCheckerImpl.class.getName(),
                         String.format("[%s] user's k8s namespace create success [%s]", current.getUsername(), namespace));
             } catch (ApiException e) {
-                throw new HotCloudException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());
+                throw new NGCCACommonException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());
             }
         }
 
         ApplicationInstance applicationInstance = applicationInstanceService.findActiveSucceed(current.getUsername(), applicationForm.getName());
         if (Objects.nonNull(applicationInstance)){
-            throw new HotCloudResourceConflictException("Application name [" + applicationForm.getName() + "] is already exist for current user [" + current.getUsername() + "]");
+            throw new NGCCAResourceConflictException("Application name [" + applicationForm.getName() + "] is already exist for current user [" + current.getUsername() + "]");
         }
 
         return ApplicationInstance.builder()

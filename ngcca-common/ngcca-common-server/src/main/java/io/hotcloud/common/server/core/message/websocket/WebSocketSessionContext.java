@@ -1,6 +1,6 @@
 package io.hotcloud.common.server.core.message.websocket;
 
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 
 import javax.websocket.Session;
 import java.util.Objects;
@@ -29,7 +29,7 @@ public final class WebSocketSessionContext {
         return SESSIONS.stream()
                 .filter(e -> Objects.equals(sessionId, e.getId()))
                 .findFirst()
-                .orElseThrow(() -> new HotCloudException("Can not get session for [" + sessionId + "]", 404));
+                .orElseThrow(() -> new NGCCACommonException("Can not get session for [" + sessionId + "]", 404));
     }
 
     public static Set<Session> getSessions() {

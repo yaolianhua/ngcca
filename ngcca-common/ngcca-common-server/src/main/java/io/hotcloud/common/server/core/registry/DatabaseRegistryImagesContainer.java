@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.registry;
 
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
-import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -35,6 +35,6 @@ public class DatabaseRegistryImagesContainer implements DatabaseRegistryImages {
             return value;
         }
 
-        throw new HotCloudResourceNotFoundException("image not not found [" + key + "]");
+        throw new NGCCAResourceNotFoundException("image not not found [" + key + "]");
     }
 }

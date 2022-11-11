@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.core.minio;
 
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .build();
             return minioClient.getPresignedObjectUrl(presignedObjectUrlArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("get object url failed: " + ex.getMessage());
+            throw new NGCCACommonException("get object url failed: " + ex.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class MinioObjectOperator implements MinioObjectApi {
             minioClient.uploadObject(objectArgs);
             return object;
         } catch (Exception ex) {
-            throw new HotCloudException("upload failed: " + ex.getMessage());
+            throw new NGCCACommonException("upload failed: " + ex.getMessage());
         }
 
     }
@@ -72,7 +72,7 @@ public class MinioObjectOperator implements MinioObjectApi {
             minioClient.putObject(putObjectArgs);
             return object;
         } catch (Exception ex) {
-            throw new HotCloudException("upload failed: " + ex.getMessage());
+            throw new NGCCACommonException("upload failed: " + ex.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .build();
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception ex) {
-            throw new HotCloudException("remove failed: " + ex.getMessage());
+            throw new NGCCACommonException("remove failed: " + ex.getMessage());
         }
 
     }

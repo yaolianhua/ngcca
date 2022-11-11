@@ -3,7 +3,7 @@ package io.hotcloud.common.autoconfigure.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.hotcloud.common.api.core.cache.AbstractValueAdaptingCache;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.util.Assert;
@@ -50,7 +50,7 @@ public class CaffeineCache extends AbstractValueAdaptingCache {
             try {
                 return toStoreValue(valueLoader.call());
             } catch (Exception e) {
-                throw new HotCloudException(String.format("Value for key '%s' could not be loaded using '%s'", key, valueLoader));
+                throw new NGCCACommonException(String.format("Value for key '%s' could not be loaded using '%s'", key, valueLoader));
             }
         })));
 

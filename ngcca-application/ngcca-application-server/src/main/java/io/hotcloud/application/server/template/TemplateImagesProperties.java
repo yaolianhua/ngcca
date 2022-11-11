@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -65,7 +65,7 @@ public class TemplateImagesProperties {
                 }
                 args.put(field.getName(), String.valueOf(o));
             } catch (IllegalAccessException e) {
-                throw new HotCloudException(e.getMessage(), e);
+                throw new NGCCACommonException(e.getMessage(), e);
             }
         }
 

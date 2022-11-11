@@ -4,7 +4,7 @@ import io.hotcloud.common.api.core.minio.MinioBucketApi;
 import io.hotcloud.common.api.core.minio.MinioObjectApi;
 import io.hotcloud.common.autoconfigure.minio.MinioProperties;
 import io.hotcloud.common.model.Log;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -59,7 +59,7 @@ public class FileUploadService {
                     String.format("File [%s] upload success. spend time [%ss]", filename, watch.getTotalTimeSeconds()));
             return String.format("%s/%s/%s", properties.getEndpoint(), bucket, filename);
         } catch (Exception e) {
-            throw new HotCloudException(e.getMessage());
+            throw new NGCCACommonException(e.getMessage());
         }
 
     }

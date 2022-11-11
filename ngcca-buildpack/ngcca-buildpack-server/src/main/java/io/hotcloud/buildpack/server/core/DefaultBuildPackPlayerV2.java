@@ -5,7 +5,7 @@ import io.hotcloud.buildpack.api.core.event.BuildPackStartedEventV2;
 import io.hotcloud.common.api.activity.ActivityAction;
 import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Validator;
-import io.hotcloud.common.model.exception.HotCloudException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -65,7 +65,7 @@ public class DefaultBuildPackPlayerV2 implements BuildPackPlayerV2 {
             try {
                 namespaceApi.create(currentUser.getNamespace());
             } catch (ApiException e) {
-                throw new HotCloudException("Create namespace exception: " + e.getMessage());
+                throw new NGCCACommonException("Create namespace exception: " + e.getMessage());
             }
         }
     }

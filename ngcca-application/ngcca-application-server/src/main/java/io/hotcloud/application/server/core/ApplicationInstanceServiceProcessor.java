@@ -5,7 +5,7 @@ import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.common.model.Log;
-import io.hotcloud.common.model.exception.HotCloudResourceConflictException;
+import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
@@ -69,7 +69,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
 
             Service fetched = serviceApi.read(metadata.getNamespace(), metadata.getName());
             if (Objects.nonNull(fetched)) {
-                throw new HotCloudResourceConflictException("kubernetes service [" + metadata.getName() + "] has been existed in namespace [" + metadata.getNamespace() + "]");
+                throw new NGCCAResourceConflictException("kubernetes service [" + metadata.getName() + "] has been existed in namespace [" + metadata.getNamespace() + "]");
             }
             Service svc = serviceApi.create(request);
 

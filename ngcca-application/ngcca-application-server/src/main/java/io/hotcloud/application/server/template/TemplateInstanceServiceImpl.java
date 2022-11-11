@@ -2,7 +2,7 @@ package io.hotcloud.application.server.template;
 
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
-import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.db.core.application.TemplateInstanceEntity;
 import io.hotcloud.db.core.application.TemplateInstanceRepository;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
         Assert.notNull(instance, "Application instance body is null");
 
         if (StringUtils.hasText(instance.getId())) {
-            TemplateInstanceEntity find = templateInstanceRepository.findById(instance.getId()).orElseThrow(() -> new HotCloudResourceNotFoundException("instance template not found [" + instance.getId() + "]"));
+            TemplateInstanceEntity find = templateInstanceRepository.findById(instance.getId()).orElseThrow(() -> new NGCCAResourceNotFoundException("instance template not found [" + instance.getId() + "]"));
 
             find.setModifiedAt(LocalDateTime.now());
             find.setSuccess(instance.isSuccess());

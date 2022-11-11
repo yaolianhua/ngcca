@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
 import io.hotcloud.application.api.core.ApplicationInstanceSource;
-import io.hotcloud.common.model.exception.HotCloudException;
-import io.hotcloud.common.model.exception.HotCloudResourceNotFoundException;
+import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.db.core.application.ApplicationInstanceEntity;
 import io.hotcloud.db.core.application.ApplicationInstanceRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
     public ApplicationInstance saveOrUpdate(ApplicationInstance applicationInstance) {
         String id = applicationInstance.getId();
         if (StringUtils.hasText(id)) {
-            ApplicationInstanceEntity fetched = applicationInstanceRepository.findById(id).orElseThrow(() -> new HotCloudResourceNotFoundException("Application instance not found [" + id + "]"));
+            ApplicationInstanceEntity fetched = applicationInstanceRepository.findById(id).orElseThrow(() -> new NGCCAResourceNotFoundException("Application instance not found [" + id + "]"));
             fetched.setMessage(applicationInstance.getMessage());
             fetched.setNodePorts(applicationInstance.getNodePorts());
             fetched.setIngress(applicationInstance.getIngress());
@@ -127,7 +127,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         try {
             return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            throw new HotCloudException("Write value error. " + e.getCause().getMessage());
+            throw new NGCCACommonException("Write value error. " + e.getCause().getMessage());
         }
     }
 
@@ -135,7 +135,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         try {
             return objectMapper.readValue(content, clazz);
         } catch (JsonProcessingException e) {
-            throw new HotCloudException("Read value error. " + e.getCause().getMessage());
+            throw new NGCCACommonException("Read value error. " + e.getCause().getMessage());
         }
     }
 }
