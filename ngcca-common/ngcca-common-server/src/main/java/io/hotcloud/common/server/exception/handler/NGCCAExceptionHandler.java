@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @RestControllerAdvice
 @Slf4j
 @Order(-1)
-public class HotCloudExceptionHandler {
+public class NGCCAExceptionHandler {
 
     @ExceptionHandler(value = NGCCACommonException.class)
     public ResponseEntity<Result<Void>> handle(NGCCACommonException ex, HttpServletRequest request) {
@@ -35,7 +32,7 @@ public class HotCloudExceptionHandler {
 
     @ExceptionHandler(value = NGCCAResourceConflictException.class)
     public ResponseEntity<Result<Void>> handle(NGCCAResourceConflictException ex, HttpServletRequest request) {
-        Log.error(HotCloudExceptionHandler.class.getName(),
+        Log.error(NGCCAExceptionHandler.class.getName(),
                 "ExceptionHandler",
                 String.format("%s", ex.getMessage()));
         Result<Void> error = Result.error(409, ex.getMessage());
