@@ -1,12 +1,12 @@
 package io.hotcloud.application;
 
-import io.hotcloud.buildpack.NamedBuildPackPackage;
+import io.hotcloud.buildpack.NgccaBuildPackRootPackage;
+import io.hotcloud.common.autoconfigure.AsyncConfiguration;
 import io.hotcloud.common.autoconfigure.cache.RedisConfiguration;
-import io.hotcloud.common.server.AsyncConfiguration;
 import io.hotcloud.common.server.core.message.MessageConfiguration;
 import io.hotcloud.db.NgccaMongodbProperties;
 import io.hotcloud.kubernetes.server.KubernetesApiConfiguration;
-import io.hotcloud.security.NamedSecurityPackage;
+import io.hotcloud.security.NgccaSecurityRootPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -15,14 +15,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(
         scanBasePackageClasses = {
                 HotCloudApplicationTest.class,
-                NamedSecurityPackage.class,
+                NgccaSecurityRootPackage.class,
                 KubernetesApiConfiguration.class,
                 AsyncConfiguration.class,
                 MessageConfiguration.class,
-                NamedBuildPackPackage.class,
+                NgccaBuildPackRootPackage.class,
                 RedisConfiguration.class,
                 NgccaMongodbProperties.class,
-                NamedSecurityPackage.class
+                NgccaSecurityRootPackage.class
         }
 )
 public class HotCloudApplicationTest {
