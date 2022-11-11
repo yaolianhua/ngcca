@@ -15,6 +15,7 @@
     <modules>
         <module>ngcca-buildpack-api</module>
         <module>ngcca-buildpack-server</module>
+        <module>ngcca-buildpack-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -27,6 +28,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-buildpack-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-buildpack-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

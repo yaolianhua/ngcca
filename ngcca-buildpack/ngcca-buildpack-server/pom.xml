@@ -15,18 +15,22 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-common-server</artifactId>
+            <artifactId>ngcca-common-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-security-server</artifactId>
+            <artifactId>ngcca-security-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-client</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-db</artifactId>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
