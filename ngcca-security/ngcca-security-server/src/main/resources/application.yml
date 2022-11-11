@@ -13,18 +13,5 @@ spring:
       username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
-ngcca:
-  security:
-    enabled: true
-    jwt:
-      algorithm: 'HS512'
-      sign-key: "!@#$%^&*(NGCCA)!@#$%^&*(NGCCA)!@#$%^&*(NGCCA)"
-    ignored:
-      urls:
-        - "/swagger**/**"
-        - "/v3/api-docs/**"
-        - "/favicon.ico"
-        - "/pub"
-        - "/**/login"
 server:
   port: 8070
