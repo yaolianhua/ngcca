@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ngcca-common-model</artifactId>
-    <name>NGCCA :: Common :: Api</name>
+    <name>NGCCA :: Common :: Model</name>
 
     <dependencies>
         <dependency>
