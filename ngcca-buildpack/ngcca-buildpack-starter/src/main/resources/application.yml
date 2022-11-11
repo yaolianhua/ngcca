@@ -52,13 +52,5 @@ ngcca:
   buildpack:
     imagebuild:
       notify-mode: rabbitmq
-  security:
-    ignored:
-      urls:
-        - "/swagger**/**"
-        - "/v3/api-docs/**"
-        - "/favicon.ico"
-        - "/pub"
-        - "/**/login"
 server:
   port: 8081
