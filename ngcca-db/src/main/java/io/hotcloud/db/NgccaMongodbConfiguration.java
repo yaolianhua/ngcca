@@ -18,18 +18,18 @@ import javax.annotation.PostConstruct;
 @EnableConfigurationProperties(NgccaMongodbProperties.class)
 @EnableMongoRepositories(basePackageClasses = AbstractEntity.class)
 @EnableTransactionManagement
-public class MongodbConfiguration {
+public class NgccaMongodbConfiguration {
 
     private final NgccaMongodbProperties properties;
 
-    public MongodbConfiguration(NgccaMongodbProperties properties) {
+    public NgccaMongodbConfiguration(NgccaMongodbProperties properties) {
         this.properties = properties;
     }
 
     @PostConstruct
     public void print() {
         String mongoUrl = String.format("mongodb://%s:%s/%s", properties.getHost(), properties.getPort(), properties.getDatabase());
-        Log.info(MongodbConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
+        Log.info(NgccaMongodbConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
     }
 
     @Bean
