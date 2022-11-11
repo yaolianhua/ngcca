@@ -1,7 +1,7 @@
 package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
-import io.hotcloud.common.model.UUIDGenerator;
+import io.hotcloud.common.model.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.api.KubectlApi;
 import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.kubernetes.client.openapi.ApiException;

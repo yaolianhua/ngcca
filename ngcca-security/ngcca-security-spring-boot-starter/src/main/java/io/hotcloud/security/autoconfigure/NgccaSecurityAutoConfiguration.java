@@ -1,6 +1,6 @@
 package io.hotcloud.security.autoconfigure;
 
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.security.api.jwt.JwtVerifier;
 import io.hotcloud.security.api.user.UserApi;
 import io.hotcloud.security.autoconfigure.jwt.JwtAuthenticationFilter;

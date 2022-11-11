@@ -4,7 +4,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.common.api.CommonRunnerProcessor;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.autoconfigure.RegistryProperties;
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
 import lombok.RequiredArgsConstructor;

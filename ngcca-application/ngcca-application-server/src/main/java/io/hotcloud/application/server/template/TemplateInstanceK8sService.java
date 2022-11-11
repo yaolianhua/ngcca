@@ -9,7 +9,7 @@ import io.hotcloud.application.api.template.TemplateDeploymentCacheApi;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.ServiceClient;

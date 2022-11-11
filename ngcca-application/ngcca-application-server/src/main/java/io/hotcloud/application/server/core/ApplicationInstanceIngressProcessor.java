@@ -6,7 +6,7 @@ import io.hotcloud.application.api.IngressTemplateRender;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstanceProcessor;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;

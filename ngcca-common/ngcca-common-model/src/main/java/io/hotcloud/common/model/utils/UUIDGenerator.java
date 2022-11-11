@@ -1,4 +1,4 @@
-package io.hotcloud.common.model;
+package io.hotcloud.common.model.utils;
 
 import org.springframework.util.Assert;
 

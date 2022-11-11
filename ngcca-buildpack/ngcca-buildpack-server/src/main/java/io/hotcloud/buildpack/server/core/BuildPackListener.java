@@ -7,7 +7,7 @@ import io.hotcloud.buildpack.api.core.event.*;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.api.core.message.MessageBroadcaster;
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

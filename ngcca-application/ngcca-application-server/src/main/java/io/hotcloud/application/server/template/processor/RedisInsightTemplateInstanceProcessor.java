@@ -6,7 +6,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.RedisInsightTemplate;
-import io.hotcloud.common.model.UUIDGenerator;
+import io.hotcloud.common.model.utils.UUIDGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 

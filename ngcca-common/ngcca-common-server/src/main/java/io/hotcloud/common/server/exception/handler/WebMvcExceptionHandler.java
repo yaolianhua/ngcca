@@ -1,7 +1,7 @@
 package io.hotcloud.common.server.exception.handler;
 
-import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.utils.Log;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

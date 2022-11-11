@@ -1,6 +1,6 @@
 package io.hotcloud.common.autoconfigure.minio;
 
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;

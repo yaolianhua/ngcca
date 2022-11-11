@@ -1,7 +1,7 @@
 package io.hotcloud.security.autoconfigure;
 
-import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Properties;
+import io.hotcloud.common.model.utils.Log;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -2,10 +2,10 @@ package io.hotcloud.application.server.core;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.application.api.core.*;
-import io.hotcloud.common.model.Log;
-import io.hotcloud.common.model.Validator;
 import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
+import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.model.utils.Validator;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.security.api.user.User;
 import io.hotcloud.security.api.user.UserApi;

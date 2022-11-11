@@ -8,7 +8,7 @@ import io.hotcloud.application.api.core.ApplicationInstanceSource;
 import io.hotcloud.buildpack.api.core.BuildPack;
 import io.hotcloud.buildpack.api.core.BuildPackService;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.model.Log;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;

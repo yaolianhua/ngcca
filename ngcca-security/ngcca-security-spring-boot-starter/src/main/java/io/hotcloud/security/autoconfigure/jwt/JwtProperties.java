@@ -1,7 +1,7 @@
 package io.hotcloud.security.autoconfigure.jwt;
 
-import io.hotcloud.common.model.Log;
 import io.hotcloud.common.model.Properties;
+import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.security.api.jwt.Jwt;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
