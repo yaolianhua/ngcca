@@ -9,17 +9,20 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 
-@ConfigurationProperties(prefix = "app")
-@Properties(prefix = "app")
+import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
+
+@ConfigurationProperties(prefix = CONFIG_PREFIX + "application")
+@Properties(prefix = CONFIG_PREFIX + "application")
 @Data
 @Configuration(proxyBeanMethods = false)
 public class ApplicationProperties {
 
-    public static final String PROPERTIES_TYPE_NAME = "app.deployment-notify-mode";
+    public static final String PROPERTIES_TYPE_NAME = CONFIG_PREFIX + "application.deployment-notify-mode";
     public static final String RABBITMQ = "rabbitmq";
     public static final String IN_PROCESS = "inProcess";
 
     private NotifyMode deploymentNotifyMode = NotifyMode.inProcess;
+
     enum NotifyMode {
         //
         rabbitmq,

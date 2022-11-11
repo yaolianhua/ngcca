@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ngcca-buildpack
+    name: ngcca-application
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -49,16 +49,8 @@ ngcca:
     host:
     port:
     domain-name:
-  buildpack:
-    imagebuild:
-      notify-mode: rabbitmq
-  security:
-    ignored:
-      urls:
-        - "/swagger**/**"
-        - "/v3/api-docs/**"
-        - "/favicon.ico"
-        - "/pub"
-        - "/**/login"
+  application:
+    deployment-notify-mode: rabbitmq
+    dot-suffix-domain: ".k8s-cluster.com"
 server:
-  port: 8081
+  port: 8082
