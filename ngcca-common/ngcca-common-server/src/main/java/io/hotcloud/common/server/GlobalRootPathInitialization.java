@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
 
 @Component
-public class CommonStorageRunnerProcessor implements NGCCARunnerProcessor {
+public class GlobalRootPathInitialization implements NGCCARunnerProcessor {
 
     @Override
     public void execute() {
@@ -21,15 +21,15 @@ public class CommonStorageRunnerProcessor implements NGCCARunnerProcessor {
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
-                Log.info(CommonStorageRunnerProcessor.class.getName(),
+                Log.info(GlobalRootPathInitialization.class.getName(),
                         String.format("Root storage path '%s' already exist ", ROOT_PATH));
                 return;
             }
             Path directories = Files.createDirectories(volumePath);
-            Log.info(CommonStorageRunnerProcessor.class.getName(),
+            Log.info(GlobalRootPathInitialization.class.getName(),
                     String.format("Root storage path '%s' created ", directories));
         } catch (IOException e) {
-            Log.error(CommonStorageRunnerProcessor.class.getName(),
+            Log.error(GlobalRootPathInitialization.class.getName(),
                     String.format("%s", e.getMessage()));
         }
     }
