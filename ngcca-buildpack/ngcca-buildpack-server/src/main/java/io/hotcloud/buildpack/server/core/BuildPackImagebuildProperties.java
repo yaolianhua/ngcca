@@ -8,13 +8,15 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 
+import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
+
 @Configuration(proxyBeanMethods = false)
-@ConfigurationProperties(prefix = "buildpack.imagebuild")
+@ConfigurationProperties(prefix = CONFIG_PREFIX + "buildpack.imagebuild")
 @Data
-@Properties(prefix = "buildpack.imagebuild")
+@Properties(prefix = CONFIG_PREFIX + "buildpack.imagebuild")
 public class BuildPackImagebuildProperties {
 
-    public static final String PROPERTIES_TYPE_NAME = "buildpack.imagebuild.notify-mode";
+    public static final String PROPERTIES_TYPE_NAME = CONFIG_PREFIX + "buildpack.imagebuild.notify-mode";
     public static final String RABBITMQ = "rabbitmq";
     public static final String IN_PROCESS = "inProcess";
 
