@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -26,10 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @MockBean(classes = {
                 GitClonedService.class,
                 GitClonedCollectionQuery.class,
-                UserApi.class
+                UserApi.class,
+                RestTemplate.class
         })
 })
-//@ActiveProfiles("buildpack-mvc-test")
 public class GitControllerTest {
 
     public final static String PATH = "/v1/git";

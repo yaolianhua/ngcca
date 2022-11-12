@@ -3,15 +3,15 @@ package io.hotcloud.buildpack.api.core;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.common.api.core.files.FileChangeWatcher;
 import io.hotcloud.common.api.core.files.FileState;
-import io.hotcloud.kubernetes.api.JobApi;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
-import io.hotcloud.kubernetes.api.PodApi;
+import io.hotcloud.kubernetes.client.http.JobClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.security.api.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,18 +35,18 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
+public class BuildPackPlayerIT {
 
     @Autowired
-    private JobApi jobApi;
+    private JobClient jobApi;
     @Autowired
-    private PodApi podApi;
+    private PodClient podApi;
     @Autowired
     private UserApi userApi;
     @Autowired
-    private KubectlApi kubectlApi;
+    private KubectlClient kubectlApi;
     @Autowired
-    private NamespaceApi namespaceApi;
+    private NamespaceClient namespaceApi;
 
     @Autowired
     private AbstractBuildPackPlayer abstractBuildPackPlayer;
@@ -208,12 +208,12 @@ public class BuildPackPlayerIT extends BuildPackIntegrationTestBase {
 
         String job = buildpack.getJobResource().getName();
 
-        kubectlApi.apply(null, buildpack.getYaml());
+        kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(buildpack.getYaml()));
 
         Job jobRead = jobApi.read(namespace, job);
         Assertions.assertNotNull(jobRead);
 
-        PodList podList = podApi.read(namespace, jobRead.getMetadata().getLabels());
+        PodList podList = podApi.readList(namespace, jobRead.getMetadata().getLabels());
         Assertions.assertEquals(1, podList.getItems().size());
 
         String clonedPath = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);

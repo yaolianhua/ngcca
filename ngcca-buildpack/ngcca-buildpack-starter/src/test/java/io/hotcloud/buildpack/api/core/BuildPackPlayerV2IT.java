@@ -1,6 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class BuildPackPlayerV2IT extends BuildPackIntegrationTestBase {
+public class BuildPackPlayerV2IT extends NgccaBuildPackApplicationTest {
 
     @Autowired
     private BuildPackPlayerV2 buildPackPlayerV2;

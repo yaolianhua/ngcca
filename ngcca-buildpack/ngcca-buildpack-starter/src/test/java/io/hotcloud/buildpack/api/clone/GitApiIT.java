@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.clone;
 
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -16,7 +15,7 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class GitApiIT extends BuildPackIntegrationTestBase {
+public class GitApiIT {
 
     @Autowired
     private GitApi gitApi;

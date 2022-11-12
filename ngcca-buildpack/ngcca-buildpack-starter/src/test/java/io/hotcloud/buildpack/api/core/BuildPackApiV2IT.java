@@ -1,9 +1,10 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
 import io.hotcloud.common.model.utils.UUIDGenerator;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,14 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
+public class BuildPackApiV2IT extends NgccaBuildPackApplicationTest {
 
     @Autowired
     private BuildPackApiV2 buildPackApiV2;
     @Autowired
-    private KubectlApi kubectlApi;
+    private KubectlClient kubectlApi;
     @Autowired
-    private NamespaceApi namespaceApi;
+    private NamespaceClient namespaceApi;
     public final String namespace = UUIDGenerator.uuidNoDash();
 
     @Test
@@ -171,7 +172,7 @@ public class BuildPackApiV2IT extends BuildPackIntegrationTestBase {
         System.out.println(buildPackApiV2.fetchLog(namespace, job));
     }
     private void cleared(BuildPack buildPack) throws ApiException {
-        Boolean delete = kubectlApi.delete(namespace, buildPack.getYaml());
+        Boolean delete = kubectlApi.delete(namespace, YamlBody.of(buildPack.getYaml()));
         System.out.printf("Delete kaniko job [%s]%n", delete);
         namespaceApi.delete(namespace);
         System.out.printf("Delete namespace [%s]%n", namespace);

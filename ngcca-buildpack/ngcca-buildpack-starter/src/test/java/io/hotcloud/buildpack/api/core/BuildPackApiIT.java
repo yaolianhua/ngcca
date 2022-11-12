@@ -3,11 +3,12 @@ package io.hotcloud.buildpack.api.core;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
+import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
 import io.hotcloud.common.model.utils.UUIDGenerator;
-import io.hotcloud.kubernetes.api.KubectlApi;
-import io.hotcloud.kubernetes.api.NamespaceApi;
-import io.hotcloud.kubernetes.api.SecretApi;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.NamespaceClient;
+import io.hotcloud.kubernetes.client.http.SecretClient;
+import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -27,16 +28,16 @@ import java.util.Map;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class BuildPackApiIT extends BuildPackIntegrationTestBase {
+public class BuildPackApiIT extends NgccaBuildPackApplicationTest {
 
     @Autowired
     private AbstractBuildPackApi buildPackApi;
     @Autowired
-    private KubectlApi kubectlApi;
+    private KubectlClient kubectlApi;
     @Autowired
-    private NamespaceApi namespaceApi;
+    private NamespaceClient namespaceApi;
     @Autowired
-    private SecretApi secretApi;
+    private SecretClient secretApi;
 
     public final String namespace = UUIDGenerator.uuidNoDash();
     @Before
@@ -83,11 +84,11 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         Assertions.assertTrue(StringUtils.hasText(yaml));
         log.info("storage resource list yaml: \n {}", buildPackStorageResourceList.getResourceListYaml());
 
-        List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml);
+        List<HasMetadata> hasMetadata = kubectlApi.resourceListCreateOrReplace(namespace, YamlBody.of(yaml));
         Assertions.assertFalse(CollectionUtils.isEmpty(hasMetadata));
         Assertions.assertEquals(2, hasMetadata.size());
 
-        Boolean delete = kubectlApi.delete(namespace, yaml);
+        Boolean delete = kubectlApi.delete(namespace, YamlBody.of(yaml));
         Assertions.assertTrue(delete);
     }
 
@@ -106,10 +107,10 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
         Assertions.assertTrue(StringUtils.hasText(yaml));
         log.info("docker secret resource yaml: \n {}", yaml);
 
-        List<HasMetadata> hasMetadata = kubectlApi.apply(namespace, yaml);
+        List<HasMetadata> hasMetadata = kubectlApi.resourceListCreateOrReplace(namespace, YamlBody.of(yaml));
         Assertions.assertEquals(1, hasMetadata.size());
 
-        SecretList secretList = secretApi.read(namespace, buildPackDockerSecretResource.getLabels());
+        SecretList secretList = secretApi.readList(namespace, buildPackDockerSecretResource.getLabels());
         Assertions.assertEquals(1, secretList.getItems().size());
 
         Secret secret = secretList.getItems().get(0);
@@ -118,7 +119,7 @@ public class BuildPackApiIT extends BuildPackIntegrationTestBase {
 
         Assertions.assertEquals(dockersecret.dockerconfigjson(), dockerconfigjson);
 
-        Boolean delete = kubectlApi.delete(namespace, yaml);
+        Boolean delete = kubectlApi.delete(namespace, YamlBody.of(yaml));
         Assertions.assertTrue(delete);
     }
 }

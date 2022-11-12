@@ -1,6 +1,5 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.BuildPackIntegrationTestBase;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.security.api.user.UserApi;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class BuildPackServiceIT extends BuildPackIntegrationTestBase {
+public class BuildPackServiceIT {
 
     @Autowired
     private UserApi userApi;
