@@ -88,7 +88,7 @@ spec:
         - image: harbor.local:5000/ngcca/k8s-agent:20221110162236
           env:
             - name: KUBERNETES_RABBITMQ_HOST
-              value: "192.168.110.199"
+              value: "10.0.0.159"
             - name: KUBERNETES_RABBITMQ_PORT
               value: "5672"
             - name: KUBERNETES_RABBITMQ_USERNAME
@@ -110,6 +110,11 @@ spec:
               memory: 512Mi
           securityContext:
             privileged: true
+          livenessProbe:
+            httpGet:
+              port: 1400
+              path: /livez
+            periodSeconds: 20
       tolerations:
         - effect: NoSchedule
           operator: Exists
