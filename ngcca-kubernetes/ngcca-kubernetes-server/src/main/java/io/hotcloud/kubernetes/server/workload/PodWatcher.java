@@ -79,7 +79,7 @@ public class PodWatcher implements WorkloadsWatchApi {
                         @Override
                         public boolean reconnecting() {
                             log.info("Pod watcher reconnecting");
-                            return true;
+                            return false;
                         }
                     });
     }

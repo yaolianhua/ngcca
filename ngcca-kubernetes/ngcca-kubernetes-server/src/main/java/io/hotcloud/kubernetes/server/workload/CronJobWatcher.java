@@ -82,7 +82,7 @@ public class CronJobWatcher implements WorkloadsWatchApi {
                         @Override
                         public boolean reconnecting() {
                             log.info("CronJob watcher reconnecting");
-                            return true;
+                            return false;
                         }
                     });
 

@@ -81,7 +81,7 @@ public class JobWatcher implements WorkloadsWatchApi {
                         @Override
                         public boolean reconnecting() {
                             log.info("Job watcher reconnecting");
-                            return true;
+                            return false;
                         }
                     });
     }

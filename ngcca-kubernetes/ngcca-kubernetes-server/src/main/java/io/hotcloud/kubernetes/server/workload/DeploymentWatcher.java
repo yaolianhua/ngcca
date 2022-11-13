@@ -81,7 +81,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                     @Override
                     public boolean reconnecting() {
                         log.info("Deployment watcher reconnecting");
-                        return true;
+                        return false;
                     }
                 });
 

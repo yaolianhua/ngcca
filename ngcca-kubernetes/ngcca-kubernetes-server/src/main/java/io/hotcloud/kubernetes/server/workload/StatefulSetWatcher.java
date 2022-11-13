@@ -80,7 +80,7 @@ public class StatefulSetWatcher implements WorkloadsWatchApi {
                         @Override
                         public boolean reconnecting() {
                             log.info("StatefulSet watcher reconnecting");
-                            return true;
+                            return false;
                         }
                     });
     }

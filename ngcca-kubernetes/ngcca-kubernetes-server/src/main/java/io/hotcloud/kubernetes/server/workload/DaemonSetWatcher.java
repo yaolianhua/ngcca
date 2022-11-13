@@ -81,7 +81,7 @@ public class DaemonSetWatcher implements WorkloadsWatchApi {
                         @Override
                         public boolean reconnecting() {
                             log.info("DaemonSet watcher reconnecting");
-                            return true;
+                            return false;
                         }
                     });
 
