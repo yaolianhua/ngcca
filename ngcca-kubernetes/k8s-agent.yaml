@@ -85,7 +85,7 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: harbor.local:5000/ngcca/k8s-agent:20221110162236
+        - image: harbor.local:5000/ngcca/k8s-agent:20221113140055
           env:
             - name: KUBERNETES_RABBITMQ_HOST
               value: "10.0.0.159"
