@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ngcca-security
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  data:
+    mongodb:
+      database: ${ngcca.mongodb.database:}
+      host: ${ngcca.mongodb.host:}
+      port: ${ngcca.mongodb.port:}
+      password: ${ngcca.mongodb.password:}
+      username: ${ngcca.mongodb.username:}
+      auto-index-creation: true
+      authentication-database: admin
+server:
+  port: 8070

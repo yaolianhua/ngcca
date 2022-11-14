@@ -15,7 +15,6 @@
     <modules>
         <module>ngcca-test-common</module>
         <module>ngcca-test-application</module>
-        <module>ngcca-test-security</module>
     </modules>
 
 </project>
