@@ -31,7 +31,7 @@ import java.util.Objects;
 
         restTemplate.getInterceptors().add(
                 ((request, body, execution) -> {
-                    log.info("HTTP '{}' Request To '{}'", Objects.requireNonNull(request.getMethod()).name(),
+                    log.debug("HTTP '{}' Request To '{}'", Objects.requireNonNull(request.getMethod()).name(),
                             request.getURI());
                     return execution.execute(request, body);
                 })
