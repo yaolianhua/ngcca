@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: ngcca-application
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  rabbitmq:
+    host: ${ngcca.rabbitmq.host:}
+    port: ${ngcca.rabbitmq.port:}
+    username: ${ngcca.rabbitmq.username:}
+    password: ${ngcca.rabbitmq.password:}
+    virtual-host: /
+  data:
+    mongodb:
+      database: ${ngcca.mongodb.database:}
+      host: ${ngcca.mongodb.host:}
+      port: ${ngcca.mongodb.port:}
+      password: ${ngcca.mongodb.password:}
+      username: ${ngcca.mongodb.username:}
+      auto-index-creation: true
+      authentication-database: admin
+ngcca:
+  rabbitmq:
+    host:
+    username:
+    password:
+    port:
+  redis:
+    database:
+    password:
+    host:
+    port:
+  registry:
+    url:
+    username:
+    password:
+    imagebuild-namespace:
+  minio:
+    access-key:
+    secret-key:
+    endpoint:
+  mongodb:
+    host:
+    username:
+    password:
+    port:
+    database:
+  kubernetes-agent:
+    host:
+    port:
+    domain-name:
+  application:
+    deployment-notify-mode: rabbitmq
+    dot-suffix-domain: ".k8s-cluster.com"

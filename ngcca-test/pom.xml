@@ -12,8 +12,5 @@
     <artifactId>ngcca-test</artifactId>
     <packaging>pom</packaging>
     <name>NGCCA :: Test</name>
-    <modules>
-        <module>ngcca-test-application</module>
-    </modules>
 
 </project>

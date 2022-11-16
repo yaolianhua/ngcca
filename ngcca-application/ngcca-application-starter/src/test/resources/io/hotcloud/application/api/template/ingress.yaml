@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: namespace
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: nginx-ingress.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: management
+                port:
+                  number: 1000
