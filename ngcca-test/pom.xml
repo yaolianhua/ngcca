@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <name>NGCCA :: Test</name>
     <modules>
-        <module>ngcca-test-common</module>
         <module>ngcca-test-application</module>
     </modules>
 
