@@ -1,12 +1,14 @@
-package io.hotcloud.common.server.message;
+package io.hotcloud.common.api.core.message;
 
-import io.hotcloud.common.autoconfigure.RabbitmqConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.ExchangeTypes;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -14,11 +16,22 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 @Slf4j
 public class RabbitmqMessageSubscribeListener {
 
+    @Bean
+    public org.springframework.amqp.core.Queue queue() {
+        return QueueBuilder.durable("queue.subscribe.message").build();
+    }
+
+    @Bean
+    public org.springframework.amqp.core.Exchange exchange() {
+        return ExchangeBuilder.fanoutExchange("exchange.subscribe.message").durable(true).build();
+    }
+
+
     @RabbitListener(
             bindings = {
                     @QueueBinding(
-                            value = @Queue(value = RabbitmqConfiguration.QUEUE_SUBSCRIBE_MESSAGE),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = RabbitmqConfiguration.EXCHANGE_FANOUT_BROADCAST_MESSAGE)
+                            value = @Queue(value = "queue.subscribe.message"),
+                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = "exchange.subscribe.message")
                     )
             }
     )

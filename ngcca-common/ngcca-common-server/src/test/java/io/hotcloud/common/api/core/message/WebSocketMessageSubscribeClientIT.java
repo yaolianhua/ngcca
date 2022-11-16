@@ -1,18 +1,12 @@
-package io.hotcloud.common.server.message;
+package io.hotcloud.common.api.core.message;
 
 import com.github.javafaker.Faker;
-import io.hotcloud.common.api.core.message.Message;
-import io.hotcloud.common.api.core.message.MessageBroadcaster;
+import io.hotcloud.common.server.core.message.websocket.WebSocketMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,23 +14,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = HotCloudMessageApplicationTest.class
-)
+@Deprecated(forRemoval = true)
 @Slf4j
-@ActiveProfiles("websocket-message-integration-test")
 public class WebSocketMessageSubscribeClientIT {
 
     private final Faker faker = new Faker();
     AtomicInteger count = new AtomicInteger(0);
-    @Qualifier("webSocketMessageBroadcaster")//for eliminate compiler errors only
     @Autowired
-    private MessageBroadcaster messageBroadcaster;
+    private WebSocketMessageBroadcaster messageBroadcaster;
 
     /**
      * {@link WebSocketMessageSubscribeClientIT#broadcast()}

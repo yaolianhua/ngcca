@@ -1,6 +1,5 @@
-package io.hotcloud.common.api;
+package io.hotcloud.common.model.utils;
 
-import io.hotcloud.common.model.utils.INet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

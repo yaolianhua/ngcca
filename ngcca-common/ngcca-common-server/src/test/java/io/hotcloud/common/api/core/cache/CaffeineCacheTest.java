@@ -1,12 +1,9 @@
-package io.hotcloud.common.server.cache;
+package io.hotcloud.common.api.core.cache;
 
-import io.hotcloud.common.api.core.cache.Cache;
-import io.hotcloud.common.autoconfigure.cache.RedisCache;
+import io.hotcloud.common.autoconfigure.cache.CaffeineCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +11,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class RedisCacheTest {
+public class CaffeineCacheTest {
 
     private final CacheObjectTest cacheData = new CacheObjectTest();
 
@@ -27,16 +24,10 @@ public class RedisCacheTest {
         cacheData.setCacheObjectTests(List.of(new CacheObjectTest("Inner name", "Inner value")));
     }
 
-    @Disabled
     @Test
     public void cache() {
 
-        RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("localhost", 6379, "QbMufCD@9WVQ^Hv", 15);
-        Assertions.assertTrue(connectionValidBind.isValid());
-
-        RedisTemplate<String, Object> redisTemplate = RedisConnectionHelper.getRedisTemplate(connectionValidBind.getRedisConnectionFactory());
-
-        Cache cache = new RedisCache(redisTemplate);
+        Cache cache = new CaffeineCache(null);
 
         cache.put("C1", cacheData);
         Assertions.assertNotNull(cache.get("C1"));
