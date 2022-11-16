@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationInstanceK8sService {
+public class ApplicationInProcessWatchService {
 
     private final DeploymentClient deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
@@ -45,7 +45,7 @@ public class ApplicationInstanceK8sService {
                 ApplicationInstance applicationInstance = applicationInstanceService.findOne(instance.getId());
                 //if deleted
                 if (applicationInstance.isDeleted()) {
-                    Log.warn(ApplicationInstanceK8sService.class.getName(), String.format("[%s] user's application instance [%s] has been deleted", instance.getUser(), instance.getName()));
+                    Log.warn(ApplicationInProcessWatchService.class.getName(), String.format("[%s] user's application instance [%s] has been deleted", instance.getUser(), instance.getName()));
                     applicationDeploymentCacheApi.unLock(applicationInstance.getId());
                     return;
                 }
@@ -86,12 +86,12 @@ public class ApplicationInstanceK8sService {
                 if (Objects.nonNull(deployment)) {
                     boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, instance.getReplicas());
                     if (!ready) {
-                        Log.debug(ApplicationInstanceK8sService.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
+                        Log.debug(ApplicationInProcessWatchService.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
                     }
 
                     //deployment success
                     if (ready) {
-                        Log.info(ApplicationInstanceK8sService.class.getName(),  String.format("[%s] user's application instance deployment [%s] success!", applicationInstance.getUser(), applicationInstance.getName()));
+                        Log.info(ApplicationInProcessWatchService.class.getName(), String.format("[%s] user's application instance deployment [%s] success!", applicationInstance.getUser(), applicationInstance.getName()));
                         applicationInstance.setMessage(CommonConstant.SUCCESS_MESSAGE);
                         applicationInstance.setSuccess(true);
                         applicationInstanceService.saveOrUpdate(applicationInstance);
@@ -102,7 +102,7 @@ public class ApplicationInstanceK8sService {
             }
 
         } catch (Exception e) {
-            Log.error(ApplicationInstanceK8sService.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(ApplicationInProcessWatchService.class.getName(), String.format("%s", e.getMessage()));
 
             instance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(instance);
