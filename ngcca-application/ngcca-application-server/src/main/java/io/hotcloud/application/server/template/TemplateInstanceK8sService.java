@@ -1,9 +1,6 @@
 package io.hotcloud.application.server.template;
 
-import io.fabric8.kubernetes.api.model.Event;
-import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.fabric8.kubernetes.api.model.Service;
-import io.fabric8.kubernetes.api.model.ServicePort;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.application.api.template.TemplateDeploymentCacheApi;
 import io.hotcloud.application.api.template.TemplateInstance;
@@ -12,6 +9,7 @@ import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ public class TemplateInstanceK8sService {
     private final DeploymentClient deploymentApi;
     private final ServiceClient serviceApi;
     private final KubectlClient kubectlApi;
+    private final PodClient podApi;
 
     public void processTemplateCreateBlocked(TemplateInstance instance) {
 
@@ -54,17 +56,28 @@ public class TemplateInstanceK8sService {
                 //if timeout
                 int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
                 if (timeout > 0) {
-                    String events = kubectlApi.events(template.getNamespace()).stream()
-                            .filter(e -> "warning".equalsIgnoreCase(e.getType()))
-                            .map(Event::getMessage)
-                            .distinct()
-                            .collect(Collectors.joining("\n"));
+                    String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
+                    PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
+                    if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
+                        List<String> podNameList = podList.getItems()
+                                .stream()
+                                .map(e -> e.getMetadata().getName())
+                                .collect(Collectors.toList());
 
-                    template.setMessage(events);
+                        timeoutMessage = podNameList.stream()
+                                .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
+                                .flatMap(Collection::stream)
+                                .filter(event -> Objects.equals("Warning", event.getType()))
+                                .map(Event::getMessage)
+                                .distinct()
+                                .collect(Collectors.joining("\n"));
+                    }
+
+                    template.setMessage(timeoutMessage);
                     template.setSuccess(false);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.warn(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(),template.getNamespace()));
+                    Log.warn(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
 
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
