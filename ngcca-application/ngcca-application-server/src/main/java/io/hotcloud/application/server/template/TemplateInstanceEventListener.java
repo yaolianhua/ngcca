@@ -17,16 +17,16 @@ import org.springframework.stereotype.Component;
         matchIfMissing = true
 )
 public class TemplateInstanceEventListener {
-    private final TemplateInstanceK8sService templateInstanceK8sService;
+    private final TemplateInProcessWatchService templateInProcessWatchService;
 
-    public TemplateInstanceEventListener(TemplateInstanceK8sService templateInstanceK8sService) {
-        this.templateInstanceK8sService = templateInstanceK8sService;
+    public TemplateInstanceEventListener(TemplateInProcessWatchService templateInProcessWatchService) {
+        this.templateInProcessWatchService = templateInProcessWatchService;
     }
 
     @EventListener
     @Async
     public void create(TemplateInstanceStartedEvent event) {
-        templateInstanceK8sService.processTemplateCreateBlocked(event.getInstance());
+        templateInProcessWatchService.processTemplateCreateBlocked(event.getInstance());
     }
 
 }

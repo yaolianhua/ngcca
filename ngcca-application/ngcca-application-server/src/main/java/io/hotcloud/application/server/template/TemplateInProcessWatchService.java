@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class TemplateInstanceK8sService {
+public class TemplateInProcessWatchService {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
     private final DeploymentClient deploymentApi;
@@ -48,7 +48,7 @@ public class TemplateInstanceK8sService {
                 TemplateInstance template = templateInstanceService.findOne(instance.getId());
                 //if deleted
                 if (template == null) {
-                    Log.warn(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
+                    Log.warn(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
                 }
@@ -77,7 +77,7 @@ public class TemplateInstanceK8sService {
                     template.setSuccess(false);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.warn(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                    Log.warn(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
 
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
@@ -87,7 +87,7 @@ public class TemplateInstanceK8sService {
                 Deployment deployment = deploymentApi.read(instance.getNamespace(), instance.getName());
                 boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
-                    Log.info(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                    Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 }
 
                 //deployment success
@@ -110,14 +110,14 @@ public class TemplateInstanceK8sService {
                     template.setSuccess(true);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.info(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
+                    Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
                     if (StringUtils.hasText(template.getIngress())) {
                         List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
                         String ingress = metadataList.stream()
                                 .map(e -> e.getMetadata().getName())
                                 .findFirst().orElse(null);
-                        Log.info(TemplateInstanceK8sService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+                        Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
                     }
 
                     templateDeploymentCacheApi.unLock(instance.getId());
@@ -128,7 +128,7 @@ public class TemplateInstanceK8sService {
 
         } catch (Exception e) {
             templateDeploymentCacheApi.unLock(instance.getId());
-            Log.error(TemplateInstanceK8sService.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(TemplateInProcessWatchService.class.getName(), String.format("%s", e.getMessage()));
             instance.setSuccess(false);
             instance.setMessage(e.getMessage());
             templateInstanceService.saveOrUpdate(instance);
