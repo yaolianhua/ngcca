@@ -1,9 +1,6 @@
 package io.hotcloud.application.server.template;
 
-import io.hotcloud.application.api.template.Template;
-import io.hotcloud.application.api.template.TemplateInstance;
-import io.hotcloud.application.api.template.TemplateInstancePlayer;
-import io.hotcloud.application.api.template.TemplateInstanceService;
+import io.hotcloud.application.api.template.*;
 import io.hotcloud.application.api.template.event.TemplateInstanceStartedEvent;
 import io.hotcloud.application.server.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.common.api.activity.ActivityAction;
@@ -18,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -33,7 +31,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final KubectlClient kubectlApi;
     private final NamespaceClient namespaceApi;
     private final UserApi userApi;
-    private final TemplateInstanceK8sService templateInstanceK8sService;
+    private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
 
     @Override
     public TemplateInstance play(Template template) {
@@ -79,6 +77,18 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         Log.debug(DefaultTemplateInstancePlayer.class.getName(),
                 String.format("Activity [%s] saved", activityLog.getId()));
 
-        templateInstanceK8sService.processTemplateDelete(find);
+        try {
+            templateDeploymentCacheApi.unLock(find.getId());
+            Boolean delete = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
+            Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, find.getNamespace(), find.getName()));
+
+            if (StringUtils.hasText(find.getIngress())) {
+                Boolean deleteIngress = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getIngress()));
+                Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, find.getNamespace(), find.getName()));
+            }
+
+        } catch (Exception e) {
+            Log.error(DefaultTemplateInstancePlayer.class.getName(), String.format("%s", e.getMessage()));
+        }
     }
 }

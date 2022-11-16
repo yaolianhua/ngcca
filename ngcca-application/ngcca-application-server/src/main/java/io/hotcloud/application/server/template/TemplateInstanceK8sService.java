@@ -135,25 +135,4 @@ public class TemplateInstanceK8sService {
         }
     }
 
-    public void processTemplateDelete(TemplateInstance instance) {
-
-        String namespace = instance.getNamespace();
-        String name = instance.getName();
-
-        try {
-            templateDeploymentCacheApi.unLock(instance.getId());
-            Boolean delete = kubectlApi.delete(namespace, YamlBody.of(instance.getYaml()));
-            Log.info(TemplateInstanceK8sService.class.getName(), String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, namespace, name));
-
-            if (StringUtils.hasText(instance.getIngress())){
-                Boolean deleteIngress = kubectlApi.delete(namespace, YamlBody.of(instance.getIngress()));
-                Log.info(TemplateInstanceK8sService.class.getName(), String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, namespace, name));
-            }
-
-        } catch (Exception e) {
-            Log.error(TemplateInstanceK8sService.class.getName(), String.format("%s", e.getMessage()));
-        }
-    }
-
-
 }
