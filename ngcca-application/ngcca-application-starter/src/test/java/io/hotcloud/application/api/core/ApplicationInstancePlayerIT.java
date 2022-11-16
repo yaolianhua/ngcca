@@ -117,22 +117,21 @@ public class ApplicationInstancePlayerIT extends NgccaApplicationTest {
     @Test
     public void playJarDeployment() throws InterruptedException {
         ApplicationForm form = ApplicationForm.builder()
-                .name("web")
+                .name("thymeleaf-fragments")
                 .canHttp(true)
                 .replicas(1)
-                .serverPort(4000)
-                .envs(Map.of("hotcloud.host", "hotcloud",
-                        "hotcloud.port", "8080"))
+                .serverPort(8080)
+                .envs(Map.of())
                 .source(
                         ApplicationInstanceSource.builder()
-                                .url("http://minio.docker.local:9009/files/web.jar")
+                                .url("http://minio.docker.local:9009/files/thymeleaf-fragments.jar")
                                 .startArgs("-Dspring.profiles.active=production")
                                 .startOptions("-Xms128m -Xmx512m")
                                 .origin(ApplicationInstanceSource.Origin.JAR)
                                 .build()
                 ).build();
 
-        ApplicationInstance one = applicationInstanceService.findActiveSucceed("admin", "web");
+        ApplicationInstance one = applicationInstanceService.findActiveSucceed("admin", "thymeleaf-fragments");
         if (one != null) {
             player.delete(one.getId());
         }
