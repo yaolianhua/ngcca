@@ -3,11 +3,8 @@ package io.hotcloud.application.server.template;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.fabric8.kubernetes.api.model.*;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.application.api.ApplicationProperties;
-import io.hotcloud.application.api.template.TemplateDeploymentCacheApi;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstancePlayer;
 import io.hotcloud.application.api.template.TemplateInstanceService;
@@ -15,12 +12,7 @@ import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.kubernetes.client.http.DeploymentClient;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
-import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.WorkloadsType;
-import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,16 +23,9 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 @ConditionalOnProperty(
@@ -53,11 +38,7 @@ public class TemplateRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstancePlayer templateInstancePlayer;
-    private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
-    private final DeploymentClient deploymentApi;
-    private final ServiceClient serviceApi;
-    private final KubectlClient kubectlApi;
-    private final PodClient podApi;
+    private final TemplateInProcessWatchService templateInProcessWatchService;
 
 
     @RabbitListener(
@@ -96,7 +77,7 @@ public class TemplateRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("Template [{}] {} events: {}/{}/{}", template.getId(), messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                this.watch(template);
+                templateInProcessWatchService.mqWatch(template);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
@@ -115,84 +96,6 @@ public class TemplateRabbitMQK8sEventsListener {
 
         } catch (JsonProcessingException e) {
             throw new NGCCACommonException(e.getMessage());
-        }
-    }
-
-    private void watch(TemplateInstance template) {
-
-        try {
-            //if timeout
-            int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
-            if (timeout > 0) {
-                String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-                PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
-                if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
-                    List<String> podNameList = podList.getItems()
-                            .stream()
-                            .map(e -> e.getMetadata().getName())
-                            .collect(Collectors.toList());
-
-                    timeoutMessage = podNameList.stream()
-                            .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
-                            .flatMap(Collection::stream)
-                            .filter(event -> Objects.equals("Warning", event.getType()))
-                            .map(Event::getMessage)
-                            .distinct()
-                            .collect(Collectors.joining("\n"));
-                }
-
-                template.setMessage(timeoutMessage);
-                template.setSuccess(false);
-                templateInstanceService.saveOrUpdate(template);
-
-                Log.warn(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
-
-                return;
-            }
-
-            //deploying
-            Deployment deployment = deploymentApi.read(template.getNamespace(), template.getName());
-            boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
-            if (!ready) {
-                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
-                return;
-            }
-
-            //deployment success
-            String nodePorts;
-
-            Service service = serviceApi.read(template.getNamespace(), template.getService());
-            Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
-            List<ServicePort> ports = service.getSpec().getPorts();
-            if (!CollectionUtils.isEmpty(ports) && ports.size() > 1) {
-                nodePorts = ports.stream()
-                        .map(e -> String.valueOf(e.getNodePort()))
-                        .collect(Collectors.joining(","));
-            } else {
-                nodePorts = String.valueOf(ports.get(0).getNodePort());
-            }
-
-            template.setNodePorts(nodePorts);
-            template.setMessage(CommonConstant.SUCCESS_MESSAGE);
-            template.setSuccess(true);
-            templateInstanceService.saveOrUpdate(template);
-
-            Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
-
-            if (StringUtils.hasText(template.getIngress())) {
-                List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
-                String ingress = metadataList.stream()
-                        .map(e -> e.getMetadata().getName())
-                        .findFirst().orElse(null);
-                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
-            }
-
-        } catch (Exception e) {
-            templateDeploymentCacheApi.unLock(template.getId());
-            Log.error(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("%s", e.getMessage()));
-            template.setSuccess(false);
-            template.setMessage(e.getMessage());
-            templateInstanceService.saveOrUpdate(template);
         }
     }
 

@@ -36,6 +36,84 @@ public class TemplateInProcessWatchService {
     private final KubectlClient kubectlApi;
     private final PodClient podApi;
 
+    public void mqWatch(TemplateInstance template) {
+
+        try {
+            //if timeout
+            int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
+            if (timeout > 0) {
+                String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
+                PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
+                if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
+                    List<String> podNameList = podList.getItems()
+                            .stream()
+                            .map(e -> e.getMetadata().getName())
+                            .collect(Collectors.toList());
+
+                    timeoutMessage = podNameList.stream()
+                            .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
+                            .flatMap(Collection::stream)
+                            .filter(event -> Objects.equals("Warning", event.getType()))
+                            .map(Event::getMessage)
+                            .distinct()
+                            .collect(Collectors.joining("\n"));
+                }
+
+                template.setMessage(timeoutMessage);
+                template.setSuccess(false);
+                templateInstanceService.saveOrUpdate(template);
+
+                Log.warn(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+
+                return;
+            }
+
+            //deploying
+            Deployment deployment = deploymentApi.read(template.getNamespace(), template.getName());
+            boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
+            if (!ready) {
+                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                return;
+            }
+
+            //deployment success
+            String nodePorts;
+
+            Service service = serviceApi.read(template.getNamespace(), template.getService());
+            Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
+            List<ServicePort> ports = service.getSpec().getPorts();
+            if (!CollectionUtils.isEmpty(ports) && ports.size() > 1) {
+                nodePorts = ports.stream()
+                        .map(e -> String.valueOf(e.getNodePort()))
+                        .collect(Collectors.joining(","));
+            } else {
+                nodePorts = String.valueOf(ports.get(0).getNodePort());
+            }
+
+            template.setNodePorts(nodePorts);
+            template.setMessage(CommonConstant.SUCCESS_MESSAGE);
+            template.setSuccess(true);
+            templateInstanceService.saveOrUpdate(template);
+
+            Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
+
+            if (StringUtils.hasText(template.getIngress())) {
+                List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
+                String ingress = metadataList.stream()
+                        .map(e -> e.getMetadata().getName())
+                        .findFirst().orElse(null);
+                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+            }
+
+        } catch (Exception e) {
+            templateDeploymentCacheApi.unLock(template.getId());
+            Log.error(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("%s", e.getMessage()));
+            template.setSuccess(false);
+            template.setMessage(e.getMessage());
+            templateInstanceService.saveOrUpdate(template);
+        }
+    }
+
     public void processTemplateCreateBlocked(TemplateInstance instance) {
 
         if (!templateDeploymentCacheApi.tryLock(instance.getId())) {
