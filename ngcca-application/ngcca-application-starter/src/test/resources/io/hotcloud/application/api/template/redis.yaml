@@ -17,39 +17,39 @@ spec:
         app: redis
     spec:
       containers:
-        - image: redis:7.0
-          imagePullPolicy: IfNotPresent
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "125m"
-            limits:
-              memory: "512Mi"
-              cpu: "250m"
+      - image: redis:7.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        name: redis
+        command:
+        - redis-server
+        - "/redis-master/redis.conf"
+        env:
+        - name: MASTER
+          value: "true"
+        ports:
+        - containerPort: 6379
           name: redis
-          command:
-            - redis-server
-            - "/redis-master/redis.conf"
-          env:
-            - name: MASTER
-              value: "true"
-          ports:
-            - containerPort: 6379
-              name: redis
-          volumeMounts:
-            - mountPath: /redis-master
-              name: config
-            - name: redis-persistent-storage
-              mountPath: /data
-      volumes:
-        - name: config
-          configMap:
-            name: redis
-            items:
-              - key: redis-config
-                path: redis.conf
+        volumeMounts:
+        - mountPath: /redis-master
+          name: config
         - name: redis-persistent-storage
-          emptyDir: { }
+          mountPath: /data
+      volumes:
+      - name: config
+        configMap:
+          name: redis
+          items:
+          - key: redis-config
+            path: redis.conf
+      - name: redis-persistent-storage
+        emptyDir: { }
 ---
 apiVersion: v1
 kind: Service
@@ -58,10 +58,10 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   ports:
-    - port: 6379
-      protocol: TCP
-      targetPort: 6379
-      name: redis
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+    name: redis
   selector:
     app: redis
   type: NodePort

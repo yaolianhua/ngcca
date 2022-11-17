@@ -42,7 +42,7 @@ spec:
           mountPath: /var/lib/rabbitmq
       volumes:
       - name: rabbitmq-persistent-storage
-        emptyDir: {}
+        emptyDir: { }
 ---
 apiVersion: v1
 kind: Service

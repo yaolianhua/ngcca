@@ -17,28 +17,28 @@ spec:
         app: mysql
     spec:
       containers:
-        - image: mysql:8.0
-          imagePullPolicy: IfNotPresent
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "125m"
-            limits:
-              memory: "512Mi"
-              cpu: "250m"
+      - image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: passw0rd
+        ports:
+        - containerPort: 3306
           name: mysql
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: passw0rd
-          ports:
-            - containerPort: 3306
-              name: mysql
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-      volumes:
+        volumeMounts:
         - name: mysql-persistent-storage
-          emptyDir: { }
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        emptyDir: { }
 ---
 apiVersion: v1
 kind: Service
@@ -47,9 +47,9 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   ports:
-    - port: 3306
-      protocol: TCP
-      targetPort: 3306
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
   selector:
     app: mysql
   type: NodePort

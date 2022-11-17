@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: #{[MONGO]}
-  strategy: {}
+  strategy: { }
   template:
     metadata:
       labels:
@@ -63,7 +63,7 @@ spec:
               mountPath: /data/db
       volumes:
         - name: mongo-data-dir
-          emptyDir: {}
+          emptyDir: { }
 ---
 apiVersion: v1
 kind: Service

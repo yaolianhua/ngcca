@@ -49,7 +49,7 @@ spec:
           - key: redis-config
             path: redis.conf
       - name: redis-persistent-storage
-        emptyDir: {}
+        emptyDir: { }
 ---
 apiVersion: v1
 kind: Service

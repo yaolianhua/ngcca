@@ -20,7 +20,7 @@ spec:
     spec:
       volumes:
         - name: db
-          emptyDir: {}
+          emptyDir: { }
       initContainers:
         - name: init
           image: busybox
@@ -28,14 +28,14 @@ spec:
             - /bin/sh
             - '-c'
             - 'chown -R 1001 /db'
-          resources: {}
+          resources: { }
           volumeMounts:
             - name: db
               mountPath: /db
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       containers:
-        - name:  #{[REDISINSIGHT]}
+        - name: #{[REDISINSIGHT]}
           image: #{[REDISINSIGHT_IMAGE]}
           imagePullPolicy: IfNotPresent
           resources:

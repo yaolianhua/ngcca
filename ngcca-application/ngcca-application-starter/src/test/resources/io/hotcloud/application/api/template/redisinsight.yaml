@@ -46,11 +46,11 @@ spec:
               memory: "512Mi"
               cpu: "250m"
           volumeMounts:
-            - name: db
-              mountPath: /db
+          - name: db
+            mountPath: /db
           ports:
-            - containerPort: 8001
-              protocol: TCP
+          - containerPort: 8001
+            protocol: TCP
 ---
 apiVersion: v1
 kind: Service

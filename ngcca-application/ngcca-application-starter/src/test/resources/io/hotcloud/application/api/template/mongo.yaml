@@ -21,7 +21,7 @@ spec:
         - image: mongo:5.0
           imagePullPolicy: IfNotPresent
           name: mongodb
-          args: [ "--dbpath","/data/db" ]
+          args: ["--dbpath","/data/db"]
           livenessProbe:
             exec:
               command:

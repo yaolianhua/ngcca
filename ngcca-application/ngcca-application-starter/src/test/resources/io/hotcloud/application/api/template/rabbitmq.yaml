@@ -17,32 +17,32 @@ spec:
         app: rabbitmq
     spec:
       containers:
-        - image: rabbitmq:3.9-management
-          imagePullPolicy: IfNotPresent
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "125m"
-            limits:
-              memory: "512Mi"
-              cpu: "250m"
+      - image: rabbitmq:3.9-management
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        name: rabbitmq
+        env:
+        - name: RABBITMQ_DEFAULT_PASS
+          value: passw0rd
+        - name: RABBITMQ_DEFAULT_USER
+          value: admin
+        ports:
+        - containerPort: 5672
           name: rabbitmq
-          env:
-            - name: RABBITMQ_DEFAULT_PASS
-              value: passw0rd
-            - name: RABBITMQ_DEFAULT_USER
-              value: admin
-          ports:
-            - containerPort: 5672
-              name: rabbitmq
-            - containerPort: 15672
-              name: management
-          volumeMounts:
-            - name: rabbitmq-persistent-storage
-              mountPath: /var/lib/rabbitmq
-      volumes:
+        - containerPort: 15672
+          name: management
+        volumeMounts:
         - name: rabbitmq-persistent-storage
-          emptyDir: { }
+          mountPath: /var/lib/rabbitmq
+      volumes:
+      - name: rabbitmq-persistent-storage
+        emptyDir: { }
 ---
 apiVersion: v1
 kind: Service
@@ -51,14 +51,14 @@ metadata:
   namespace: 5b2378dc5d2f4eedb55ed9217255c8cd
 spec:
   ports:
-    - port: 5672
-      protocol: TCP
-      targetPort: 5672
-      name: rabbitmq
-    - port: 15672
-      protocol: TCP
-      targetPort: 15672
-      name: management
+  - port: 5672
+    protocol: TCP
+    targetPort: 5672
+    name: rabbitmq
+  - port: 15672
+    protocol: TCP
+    targetPort: 15672
+    name: management
   selector:
     app: rabbitmq
   type: NodePort
