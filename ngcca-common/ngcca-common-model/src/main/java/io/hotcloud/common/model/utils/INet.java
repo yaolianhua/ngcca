@@ -21,7 +21,7 @@ public class INet {
         try {
             return InetAddress.getByName(host).getHostAddress();
         } catch (UnknownHostException e) {
-            throw new NGCCACommonException(e.getMessage());
+            return getLoopbackAddress();
         }
     }
 
