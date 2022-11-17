@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApplicationInstanceListener {
 
-    private final ApplicationInProcessWatchService applicationInProcessWatchService;
+    private final ApplicationDeploymentWatchService applicationDeploymentWatchService;
 
     @EventListener
     @Async
     public void applicationInstanceCreate (ApplicationInstanceCreateEvent createEvent){
-        applicationInProcessWatchService.processApplicationCreatedBlocked(createEvent.getInstance());
+        applicationDeploymentWatchService.inProcessWatch(createEvent.getInstance());
     }
 }

@@ -3,12 +3,8 @@ package io.hotcloud.application.server.core;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.fabric8.kubernetes.api.model.Event;
-import io.fabric8.kubernetes.api.model.PodList;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.application.api.ApplicationProperties;
-import io.hotcloud.application.api.core.ApplicationDeploymentCacheApi;
 import io.hotcloud.application.api.core.ApplicationInstance;
 import io.hotcloud.application.api.core.ApplicationInstancePlayer;
 import io.hotcloud.application.api.core.ApplicationInstanceService;
@@ -16,9 +12,6 @@ import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.kubernetes.client.http.DeploymentClient;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +23,9 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 @ConditionalOnProperty(
@@ -51,10 +38,7 @@ public class ApplicationRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationInstancePlayer applicationInstancePlayer;
-    private final ApplicationDeploymentCacheApi deploymentCacheApi;
-    private final PodClient podApi;
-    private final KubectlClient kubectlApi;
-    private final DeploymentClient deploymentApi;
+    private final ApplicationDeploymentWatchService applicationDeploymentWatchService;
 
     @RabbitListener(
             bindings = {
@@ -96,7 +80,7 @@ public class ApplicationRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("Application [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                this.watch(fetched);
+                applicationDeploymentWatchService.mqWatch(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
@@ -116,60 +100,6 @@ public class ApplicationRabbitMQK8sEventsListener {
         } catch (JsonProcessingException e) {
             throw new NGCCACommonException(e.getMessage());
         }
-    }
-
-    private void watch(ApplicationInstance applicationInstance) {
-
-        try {
-            //if timeout
-            int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(deploymentCacheApi.getTimeoutSeconds()));
-            if (timeout > 0) {
-                String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-                PodList podList = podApi.readList(applicationInstance.getNamespace(),
-                        Map.of(CommonConstant.K8S_APP_BUSINESS_DATA_ID, applicationInstance.getId(), CommonConstant.K8S_APP, applicationInstance.getName())
-                );
-                if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
-                    List<String> podNameList = podList.getItems()
-                            .stream()
-                            .map(e -> e.getMetadata().getName())
-                            .collect(Collectors.toList());
-
-                    timeoutMessage = podNameList.stream()
-                            .map(pod -> kubectlApi.namespacedPodEvents(applicationInstance.getNamespace(), pod))
-                            .flatMap(Collection::stream)
-                            .filter(event -> Objects.equals("Warning", event.getType()))
-                            .map(Event::getMessage)
-                            .distinct()
-                            .collect(Collectors.joining("\n"));
-                }
-                applicationInstance.setMessage(timeoutMessage);
-                applicationInstanceService.saveOrUpdate(applicationInstance);
-                return;
-            }
-
-            Deployment deployment = deploymentApi.read(applicationInstance.getNamespace(), applicationInstance.getName());
-            if (Objects.nonNull(deployment)) {
-                boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, applicationInstance.getReplicas());
-                if (!ready) {
-                    Log.info(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
-                    return;
-                }
-
-                //deployment success
-                Log.info(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's application instance deployment [%s] deploy success!", applicationInstance.getUser(), applicationInstance.getName()));
-                applicationInstance.setMessage(CommonConstant.SUCCESS_MESSAGE);
-                applicationInstance.setSuccess(true);
-                applicationInstanceService.saveOrUpdate(applicationInstance);
-            }
-
-
-        } catch (Exception e) {
-            Log.error(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("%s", e.getMessage()));
-
-            applicationInstance.setMessage(e.getMessage());
-            applicationInstanceService.saveOrUpdate(applicationInstance);
-        }
-
     }
 
 }
