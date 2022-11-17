@@ -1,23 +1,14 @@
-FROM maven:3.8.3-jdk-11-slim AS builder
+FROM harbor.local:5000/library/openjdk:11.0.12-jre-slim-buster
 
-WORKDIR /build/
-
-COPY . .
-RUN mvn clean package
-RUN cp hotcloud-allinone-serverside/target/hotcloud-allinone.jar .
-RUN java -Djarmode=layertools -jar hotcloud-allinone.jar extract
-
-FROM openjdk:11.0.12-jre-slim-buster
-
+WORKDIR /ngcca/
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
-WORKDIR /hotcloud/
-COPY --from=builder /build/dependencies/ .
-COPY --from=builder /build/snapshot-dependencies/ .
-COPY --from=builder /build/spring-boot-loader/ .
-COPY --from=builder /build/application/ .
+COPY ngcca-server/target/ngcca-server.jar .
+RUN java -Djarmode=layertools -jar ngcca-server.jar extract && rm -rf ngcca-server.jar
 
-
+ENV LANG="en_US.UTF-8"
+ENV TERM=xterm
+ENV TIMESTAMP currentTime
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
 EXPOSE 8080
 

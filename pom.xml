@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>ngcca-allinone-serverside</module>
+        <module>ngcca-server</module>
         <module>ngcca-kubernetes</module>
         <module>ngcca-common</module>
         <module>ngcca-buildpack</module>
@@ -71,7 +71,7 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-allinone-serverside</artifactId>
+                <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
