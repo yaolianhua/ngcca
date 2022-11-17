@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +19,10 @@ import java.util.stream.StreamSupport;
 /**
  * @author yaolianhua789@gmail.com
  **/
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaDBApplicationTest.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
-public class GitClonedRepositoryIT extends NgccaDBApplicationTest {
+public class GitClonedRepositoryIT {
 
     @Autowired
     private GitClonedRepository gitClonedRepository;

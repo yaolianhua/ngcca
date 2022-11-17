@@ -8,18 +8,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-
+@SpringBootTest(classes = NgccaSecurityApplicationTest.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 @Slf4j
-public class UserApiIT extends NgccaSecurityApplicationTest {
+public class UserApiIT {
 
     @Autowired
     private UserApi userApi;

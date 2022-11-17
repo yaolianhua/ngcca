@@ -1,20 +1,27 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
+import io.hotcloud.buildpack.NgccaBuildPackApplication;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class BuildPackPlayerV2IT extends NgccaBuildPackApplicationTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaBuildPackApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+public class BuildPackPlayerV2IT {
 
     @Autowired
     private BuildPackPlayerV2 buildPackPlayerV2;

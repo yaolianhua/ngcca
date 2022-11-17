@@ -3,6 +3,7 @@ package io.hotcloud.buildpack.api.core;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.hotcloud.buildpack.NgccaBuildPackApplication;
 import io.hotcloud.buildpack.api.clone.GitCloned;
 import io.hotcloud.buildpack.api.clone.GitClonedService;
 import io.hotcloud.common.api.core.files.FileChangeWatcher;
@@ -18,10 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -31,9 +36,9 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaBuildPackApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @Slf4j
 public class BuildPackPlayerIT {
 

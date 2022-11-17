@@ -6,19 +6,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaDBApplicationTest.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
-public class UserRepositoryIT extends NgccaDBApplicationTest {
+public class UserRepositoryIT {
 
     @Autowired
     private UserRepository userRepository;

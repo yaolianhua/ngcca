@@ -1,19 +1,26 @@
 package io.hotcloud.buildpack.api.core;
 
-import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
+import io.hotcloud.buildpack.NgccaBuildPackApplication;
 import io.hotcloud.common.model.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BuildPackApiV2IT extends NgccaBuildPackApplicationTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaBuildPackApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+public class BuildPackApiV2IT {
 
     @Autowired
     private BuildPackApiV2 buildPackApiV2;

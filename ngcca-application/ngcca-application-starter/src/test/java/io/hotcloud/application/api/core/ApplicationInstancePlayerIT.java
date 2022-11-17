@@ -1,19 +1,29 @@
 package io.hotcloud.application.api.core;
 
-import io.hotcloud.application.NgccaApplicationTest;
+import io.hotcloud.application.NgccaApplication;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class ApplicationInstancePlayerIT extends NgccaApplicationTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+        classes = NgccaApplication.class
+)
+@ActiveProfiles("test")
+public class ApplicationInstancePlayerIT  {
 
     @Autowired
     private ApplicationInstancePlayer player;

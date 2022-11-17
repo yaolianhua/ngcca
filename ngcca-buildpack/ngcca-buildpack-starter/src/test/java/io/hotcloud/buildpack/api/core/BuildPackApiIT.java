@@ -3,7 +3,7 @@ package io.hotcloud.buildpack.api.core;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.buildpack.NgccaBuildPackApplicationTest;
+import io.hotcloud.buildpack.NgccaBuildPackApplication;
 import io.hotcloud.common.model.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
@@ -15,7 +15,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -24,11 +28,11 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NgccaBuildPackApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @Slf4j
-public class BuildPackApiIT extends NgccaBuildPackApplicationTest {
+public class BuildPackApiIT {
 
     @Autowired
     private AbstractBuildPackApi buildPackApi;
