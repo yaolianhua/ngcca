@@ -13,6 +13,7 @@ import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class TemplateInProcessWatchService {
+public class TemplateDeploymentWatchService {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
     private final DeploymentClient deploymentApi;
@@ -42,28 +43,13 @@ public class TemplateInProcessWatchService {
             //if timeout
             int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
             if (timeout > 0) {
-                String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-                PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
-                if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
-                    List<String> podNameList = podList.getItems()
-                            .stream()
-                            .map(e -> e.getMetadata().getName())
-                            .collect(Collectors.toList());
-
-                    timeoutMessage = podNameList.stream()
-                            .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
-                            .flatMap(Collection::stream)
-                            .filter(event -> Objects.equals("Warning", event.getType()))
-                            .map(Event::getMessage)
-                            .distinct()
-                            .collect(Collectors.joining("\n"));
-                }
+                String timeoutMessage = retrieveK8sEventsMessage(template);
 
                 template.setMessage(timeoutMessage);
                 template.setSuccess(false);
                 templateInstanceService.saveOrUpdate(template);
 
-                Log.warn(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
 
                 return;
             }
@@ -72,7 +58,7 @@ public class TemplateInProcessWatchService {
             Deployment deployment = deploymentApi.read(template.getNamespace(), template.getName());
             boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
             if (!ready) {
-                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 return;
             }
 
@@ -95,26 +81,47 @@ public class TemplateInProcessWatchService {
             template.setSuccess(true);
             templateInstanceService.saveOrUpdate(template);
 
-            Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
+            Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
             if (StringUtils.hasText(template.getIngress())) {
                 List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
                 String ingress = metadataList.stream()
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
-                Log.info(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
             }
 
         } catch (Exception e) {
             templateDeploymentCacheApi.unLock(template.getId());
-            Log.error(TemplateRabbitMQK8sEventsListener.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(TemplateDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
             template.setSuccess(false);
             template.setMessage(e.getMessage());
             templateInstanceService.saveOrUpdate(template);
         }
     }
 
-    public void processTemplateCreateBlocked(TemplateInstance instance) {
+    @NotNull
+    private String retrieveK8sEventsMessage(TemplateInstance template) {
+        String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
+        PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
+        if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
+            List<String> podNameList = podList.getItems()
+                    .stream()
+                    .map(e -> e.getMetadata().getName())
+                    .collect(Collectors.toList());
+
+            timeoutMessage = podNameList.stream()
+                    .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
+                    .flatMap(Collection::stream)
+                    .filter(event -> Objects.equals("Warning", event.getType()))
+                    .map(Event::getMessage)
+                    .distinct()
+                    .collect(Collectors.joining("\n"));
+        }
+        return timeoutMessage;
+    }
+
+    public void inProcessWatch(TemplateInstance instance) {
 
         if (!templateDeploymentCacheApi.tryLock(instance.getId())) {
             return;
@@ -126,7 +133,7 @@ public class TemplateInProcessWatchService {
                 TemplateInstance template = templateInstanceService.findOne(instance.getId());
                 //if deleted
                 if (template == null) {
-                    Log.warn(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
+                    Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] has been deleted", instance.getUser(), instance.getName(), instance.getId()));
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
                 }
@@ -134,28 +141,13 @@ public class TemplateInProcessWatchService {
                 //if timeout
                 int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
                 if (timeout > 0) {
-                    String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-                    PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
-                    if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
-                        List<String> podNameList = podList.getItems()
-                                .stream()
-                                .map(e -> e.getMetadata().getName())
-                                .collect(Collectors.toList());
-
-                        timeoutMessage = podNameList.stream()
-                                .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
-                                .flatMap(Collection::stream)
-                                .filter(event -> Objects.equals("Warning", event.getType()))
-                                .map(Event::getMessage)
-                                .distinct()
-                                .collect(Collectors.joining("\n"));
-                    }
+                    String timeoutMessage = retrieveK8sEventsMessage(template);
 
                     template.setMessage(timeoutMessage);
                     template.setSuccess(false);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.warn(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                    Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
 
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
@@ -165,7 +157,7 @@ public class TemplateInProcessWatchService {
                 Deployment deployment = deploymentApi.read(instance.getNamespace(), instance.getName());
                 boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
-                    Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                    Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 }
 
                 //deployment success
@@ -188,14 +180,14 @@ public class TemplateInProcessWatchService {
                     template.setSuccess(true);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
+                    Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
                     if (StringUtils.hasText(template.getIngress())) {
                         List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
                         String ingress = metadataList.stream()
                                 .map(e -> e.getMetadata().getName())
                                 .findFirst().orElse(null);
-                        Log.info(TemplateInProcessWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+                        Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
                     }
 
                     templateDeploymentCacheApi.unLock(instance.getId());
@@ -206,7 +198,7 @@ public class TemplateInProcessWatchService {
 
         } catch (Exception e) {
             templateDeploymentCacheApi.unLock(instance.getId());
-            Log.error(TemplateInProcessWatchService.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(TemplateDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
             instance.setSuccess(false);
             instance.setMessage(e.getMessage());
             templateInstanceService.saveOrUpdate(instance);

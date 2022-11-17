@@ -38,7 +38,7 @@ public class TemplateRabbitMQK8sEventsListener {
     private final ObjectMapper objectMapper;
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstancePlayer templateInstancePlayer;
-    private final TemplateInProcessWatchService templateInProcessWatchService;
+    private final TemplateDeploymentWatchService templateDeploymentWatchService;
 
 
     @RabbitListener(
@@ -77,7 +77,7 @@ public class TemplateRabbitMQK8sEventsListener {
                     return;
                 }
                 log.info("Template [{}] {} events: {}/{}/{}", template.getId(), messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                templateInProcessWatchService.mqWatch(template);
+                templateDeploymentWatchService.mqWatch(template);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())){
