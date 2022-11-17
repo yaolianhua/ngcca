@@ -162,20 +162,19 @@ public class TemplateDeploymentWatchService {
 
                 //deployment success
                 if (ready) {
-                    String nodePorts;
-
                     Service service = serviceApi.read(template.getNamespace(), template.getService());
                     Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
                     List<ServicePort> ports = service.getSpec().getPorts();
                     if (!CollectionUtils.isEmpty(ports) && ports.size() > 1){
-                        nodePorts = ports.stream()
+                        String nodePorts = ports.stream()
                                 .map(e -> String.valueOf(e.getNodePort()))
                                 .collect(Collectors.joining(","));
+                        template.setNodePorts(nodePorts);
                     }else {
-                        nodePorts =  String.valueOf(ports.get(0).getNodePort());
+                        String nodePorts = String.valueOf(ports.get(0).getNodePort());
+                        template.setNodePorts(nodePorts);
                     }
 
-                    template.setNodePorts(nodePorts);
                     template.setMessage(CommonConstant.SUCCESS_MESSAGE);
                     template.setSuccess(true);
                     templateInstanceService.saveOrUpdate(template);
