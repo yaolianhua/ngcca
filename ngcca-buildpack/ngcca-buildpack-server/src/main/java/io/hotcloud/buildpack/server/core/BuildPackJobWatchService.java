@@ -5,6 +5,7 @@ import io.hotcloud.common.model.utils.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,12 +16,54 @@ import static io.hotcloud.common.model.CommonConstant.*;
 
 @Component
 @RequiredArgsConstructor
-public class BuildPackInProcessWatchService {
+public class BuildPackJobWatchService {
     private final BuildPackService buildPackService;
     private final BuildPackApiV2 buildPackApiV2;
     private final ImageBuildCacheApi imageBuildCacheApi;
 
-    public void watchCreated(BuildPack buildPack) {
+    public void mqWatch(BuildPack buildPack) {
+
+        String namespace = buildPack.getJobResource().getNamespace();
+        String job = buildPack.getJobResource().getName();
+        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
+        boolean timeout = LocalDateTime.now().compareTo(buildPack.getCreatedAt().plusSeconds(imageBuildCacheApi.getTimeoutSeconds())) > 0;
+        try {
+            if (timeout) {
+                buildPack.setDone(true);
+                buildPack.setMessage(TIMEOUT_MESSAGE);
+                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+
+                buildPackService.saveOrUpdate(buildPack);
+                imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+
+                return;
+            }
+
+            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, job);
+            if (Objects.equals(Succeeded, status) || Objects.equals(Failed, status)) {
+                buildPack.setDone(true);
+                buildPack.setMessage(Objects.equals(Succeeded, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
+                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+                buildPackService.saveOrUpdate(buildPack);
+
+                imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+                return;
+            }
+
+            Log.info(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
+            imageBuildCacheApi.setStatus(buildPack.getId(), status);
+
+        } catch (Exception ex) {
+            Log.error(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
+
+            buildPack.setDone(true);
+            buildPack.setMessage("exception occur: " + ex.getMessage());
+            buildPackService.saveOrUpdate(buildPack);
+            imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+        }
+    }
+
+    public void inProcessWatch(BuildPack buildPack) {
         AtomicInteger loopCount = new AtomicInteger();
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
@@ -36,7 +79,7 @@ public class BuildPackInProcessWatchService {
 
                 buildPack = buildPackService.findOne(buildPack.getId());
                 if (Objects.isNull(buildPack) || buildPack.isDeleted()) {
-                    Log.warn(BuildPackInProcessWatchService.class.getName(), "[ImageBuild] BuildPack has been deleted");
+                    Log.warn(BuildPackJobWatchService.class.getName(), "[ImageBuild] BuildPack has been deleted");
 
                     if (Objects.nonNull(buildPack)) {
                         imageBuildCacheApi.unLock(buildPack.getId());
@@ -56,7 +99,7 @@ public class BuildPackInProcessWatchService {
                     return;
                 }
 
-                Log.info(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
+                Log.info(BuildPackJobWatchService.class.getName(), String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
                 imageBuildCacheApi.setStatus(buildPack.getId(), status);
 
                 loopCount.incrementAndGet();
@@ -71,7 +114,7 @@ public class BuildPackInProcessWatchService {
             imageBuildCacheApi.unLock(buildPack.getId());
 
         }catch (Exception ex){
-            Log.error(BuildPackInProcessWatchService.class.getName(), String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
+            Log.error(BuildPackJobWatchService.class.getName(), String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
 
             buildPack.setDone(true);
             buildPack.setMessage(ex.getMessage());
