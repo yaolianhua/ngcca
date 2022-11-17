@@ -1,5 +1,0 @@
-minio:
-  access-key: admin
-  secret-key: QbMufCD@9WVQ^Hv
-  endpoint: "http://localhost:9009"
-  default-bucket: test

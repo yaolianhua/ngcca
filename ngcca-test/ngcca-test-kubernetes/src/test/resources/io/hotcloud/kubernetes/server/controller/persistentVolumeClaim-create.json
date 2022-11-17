@@ -1,3 +1,0 @@
-{
-  "yaml": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: dockerfile-claim\n  namespace: default\n  labels: {\n    \"k8s-app\": \"dockerfile-claim\"\n  }\nspec:\n  accessModes:\n    - ReadWriteOnce\n  volumeMode: Filesystem\n  volumeName: dockerfile\n  resources:\n    requests:\n      storage: 1Gi\n  storageClassName: \"storage-local\""
-}

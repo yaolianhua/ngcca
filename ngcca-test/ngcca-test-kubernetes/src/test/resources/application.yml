@@ -1,5 +1,0 @@
-spring:
-  application:
-    name: hotcloud-kubernetes
-server:
-  port: 8002

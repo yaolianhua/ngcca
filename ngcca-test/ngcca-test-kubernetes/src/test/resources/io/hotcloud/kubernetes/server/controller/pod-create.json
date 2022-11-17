@@ -1,3 +1,0 @@
-{
-  "yaml": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: nginx\n  namespace: default\n  labels: {\n    \"k8s-app\": \"nginx\"\n  }\nspec:\n  containers:\n  - name: nginx\n    image: nginx:1.14.2\n    ports:\n    - containerPort: 80"
-}

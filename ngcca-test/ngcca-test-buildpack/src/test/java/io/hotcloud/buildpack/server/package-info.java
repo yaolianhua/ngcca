@@ -1,1 +1,0 @@
-package io.hotcloud.buildpack.server;

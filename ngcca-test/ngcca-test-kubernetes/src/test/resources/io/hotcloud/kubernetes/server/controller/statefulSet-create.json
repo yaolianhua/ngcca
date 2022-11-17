@@ -1,3 +1,0 @@
-{
-  "yaml": "apiVersion: apps/v1\nkind: StatefulSet\nmetadata:\n  name: web\n  labels: {\n    \"k8s-app\": \"web\"\n  }\nspec:\n  serviceName: \"nginx\"\n  replicas: 2\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      labels:\n        app: nginx\n    spec:\n      containers:\n      - name: nginx\n        image: k8s.gcr.io/nginx-slim:0.8\n        ports:\n        - containerPort: 80\n          name: web\n        volumeMounts:\n        - name: www\n          mountPath: /usr/share/nginx/html\n  volumeClaimTemplates:\n  - metadata:\n      name: www\n    spec:\n      accessModes: [ \"ReadWriteOnce\" ]\n      resources:\n        requests:\n          storage: 1Gi\n"
-}
