@@ -1,10 +1,18 @@
-FROM harbor.local:5000/library/openjdk:11.0.12-jre-slim-buster
+FROM harbor.local:5000/library/openjdk:11.0.12-jre-slim-buster AS builder
 
-WORKDIR /ngcca/
-LABEL maintainer="<yaolianhua789@gmail.com>"
+WORKDIR /build/
 
 COPY ngcca-server/target/ngcca-server.jar .
-RUN java -Djarmode=layertools -jar ngcca-server.jar extract && rm -rf ngcca-server.jar
+RUN java -Djarmode=layertools -jar ngcca-server.jar extract
+
+FROM harbor.local:5000/library/openjdk:11.0.12-jre-slim-buster
+LABEL maintainer="<yaolianhua789@gmail.com>"
+
+WORKDIR /ngcca/
+COPY --from=builder /build/dependencies/ .
+COPY --from=builder /build/spring-boot-loader/ .
+COPY --from=builder /build/snapshot-dependencies/ ./
+COPY --from=builder /build/application/ .
 
 ENV LANG="en_US.UTF-8"
 ENV TERM=xterm
