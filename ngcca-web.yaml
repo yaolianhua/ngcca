@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    k8s-app: hotcloud-web
-  name: hotcloud-web
-  namespace: hotcloud-system
+    k8s-app: ngcca-web
+  name: ngcca-web
+  namespace: ngcca-system
 spec:
   ports:
     - name: http
@@ -12,27 +12,27 @@ spec:
       protocol: TCP
       targetPort: http
   selector:
-    k8s-app: hotcloud-web
+    k8s-app: ngcca-web
   type: ClusterIP
   sessionAffinity: None
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-hotcloud$DOT_SUFFIX_DOMAIN
-  namespace: hotcloud-system
+  name: ngcca-web$DOT_SUFFIX_DOMAIN
+  namespace: ngcca-system
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   rules:
-    - host: web-hotcloud$DOT_SUFFIX_DOMAIN
+    - host: ngcca-web$DOT_SUFFIX_DOMAIN
       http:
         paths:
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: hotcloud-web
+                name: ngcca-web
                 port:
                   number: 4000
 ---
@@ -40,18 +40,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    k8s-app: hotcloud-web
-  name: hotcloud-web
-  namespace: hotcloud-system
+    k8s-app: ngcca-web
+  name: ngcca-web
+  namespace: ngcca-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: hotcloud-web
+      k8s-app: ngcca-web
   template:
     metadata:
       labels:
-        k8s-app: hotcloud-web
+        k8s-app: ngcca-web
     spec:
       affinity:
         nodeAffinity:
@@ -63,7 +63,7 @@ spec:
       containers:
         - image: $WEB_IMAGE
           imagePullPolicy: IfNotPresent
-          name: hotcloud-web
+          name: ngcca-web
           ports:
             - containerPort: 4000
               name: http
@@ -79,7 +79,7 @@ spec:
             privileged: true
           env:
             - name: HOTCLOUD_HOST
-              value: "hotcloud"
+              value: "ngcca-server"
             - name: HOTCLOUD_PORT
               value: "8080"
       tolerations:
