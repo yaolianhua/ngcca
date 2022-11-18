@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ENV_FILE=$1
-NAMESPACE="hotcloud-system"
+NAMESPACE="ngcca-system"
 if [ -z "$ENV_FILE" ]; then
-    echo "no env file specified. use default env file hotcloud.env"
-    ENV_FILE="hotcloud.env"
+    echo "no env file specified. use default env file ngcca.env"
+    ENV_FILE="ngcca.env"
 fi
 
 if [ ! -f "$ENV_FILE" ]; then
@@ -26,10 +26,10 @@ function apply() {
     SERVICE=$1
     if [ -z "$SERVICE" ]; then
         print "deploy all"
-        envsubst < hotcloud.yaml | kubectl apply -f -
+        envsubst < ngcca.yaml | kubectl apply -f -
         sleep 3
 
-        envsubst < hotcloud-web.yaml | kubectl apply -f -
+        envsubst < ngcca-web.yaml | kubectl apply -f -
         sleep 3
 
         return
@@ -37,7 +37,7 @@ function apply() {
 
     if [ "$SERVICE" = "server" ]; then
         print "deploy $SERVICE"
-        envsubst < hotcloud.yaml | kubectl apply -f -
+        envsubst < ngcca.yaml | kubectl apply -f -
         sleep 3
 
         return
@@ -45,7 +45,7 @@ function apply() {
 
     if [ "$SERVICE" = "web" ]; then
         print "deploy $SERVICE"
-        envsubst < hotcloud-web.yaml | kubectl apply -f -
+        envsubst < ngcca-web.yaml | kubectl apply -f -
         sleep 3
 
         return
@@ -64,10 +64,10 @@ function delete() {
   SERVICE=$1
   if [ -z "$SERVICE" ]; then
       print "delete all"
-      envsubst < hotcloud.yaml | kubectl delete -f -
+      envsubst < ngcca.yaml | kubectl delete -f -
       sleep 3
 
-      envsubst < hotcloud-web.yaml | kubectl delete -f -
+      envsubst < ngcca-web.yaml | kubectl delete -f -
       sleep 3
 
       return
@@ -75,7 +75,7 @@ function delete() {
 
   if [ "$SERVICE" = "server" ]; then
       print "delete $SERVICE"
-      envsubst < hotcloud.yaml | kubectl delete -f -
+      envsubst < ngcca.yaml | kubectl delete -f -
       sleep 3
 
       return
@@ -83,7 +83,7 @@ function delete() {
 
   if [ "$SERVICE" = "web" ]; then
       print "delete $SERVICE"
-      envsubst < hotcloud-web.yaml | kubectl delete -f -
+      envsubst < ngcca-web.yaml | kubectl delete -f -
       sleep 3
 
       return
