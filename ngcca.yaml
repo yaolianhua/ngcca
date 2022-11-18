@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: ngcca-server
+  name: ngcca-server
+  namespace: ngcca-system
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  selector:
+    k8s-app: ngcca-server
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ngcca$DOT_SUFFIX_DOMAIN
+  namespace: ngcca-system
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api-ngcca$DOT_SUFFIX_DOMAIN
+      http:
+        paths:
+          - path: /swagger-ui.html
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ngcca-server
+                port:
+                  number: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: ngcca-server
+  name: ngcca-server
+  namespace: ngcca-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ngcca-server
+  template:
+    metadata:
+      labels:
+        k8s-app: ngcca-server
+    spec:
+      containers:
+        - image: $SERVER_IMAGE
+          imagePullPolicy: IfNotPresent
+          name: ngcca-server
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /ngcca/config
+              name: ngcca-server-config-volume
+              readOnly: false
+      volumes:
+        - configMap:
+            name: ngcca-server-config
+            items:
+              - key: config
+                path: application.yml
+          name: ngcca-server-config-volume
+---
+apiVersion: v1
+data:
+  config: |
+    ngcca:
+      rabbitmq:
+        host: $MIDDLEWARE_HOST
+        username: $MIDDLEWARE_USER
+        password: $MIDDLEWARE_PASSWORD
+        port: 5672
+      redis:
+        database: 1
+        password: $MIDDLEWARE_PASSWORD
+        host: $MIDDLEWARE_HOST
+        port: 6379
+      registry:
+        url: $REGISTRY_URL
+        username: $REGISTRY_USER
+        password: $REGISTRY_PASSWORD
+        imagebuild-namespace: image-build-dev
+      minio:
+        access-key: $MIDDLEWARE_USER
+        secret-key: $MIDDLEWARE_PASSWORD
+        endpoint: $MINIO_ENDPOINT
+      mongodb:
+        host: $MIDDLEWARE_HOST
+        username: $MIDDLEWARE_USER
+        password: $MIDDLEWARE_PASSWORD
+        port: 27017
+        database: ngcca
+      kubernetes-agent:
+        host: k8s-agent.ngcca-system.svc.cluster.local
+        port: 
+        domain-name: 
+      application:
+        dot-suffix-domain: $DOT_SUFFIX_DOMAIN
+        deployment-notify-mode: rabbitmq
+      buildpack:
+        imagebuild:
+          notify-mode: rabbitmq
+kind: ConfigMap
+metadata:
+  name: ngcca-server-config
+  namespace: ngcca-system
