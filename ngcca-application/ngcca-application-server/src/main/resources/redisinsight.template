@@ -23,7 +23,7 @@ spec:
           emptyDir: { }
       initContainers:
         - name: init
-          image: busybox
+          image: #{[BUSYBOX_IMAGE]}
           command:
             - /bin/sh
             - '-c'

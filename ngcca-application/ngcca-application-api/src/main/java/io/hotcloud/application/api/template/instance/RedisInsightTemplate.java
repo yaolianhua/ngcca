@@ -20,15 +20,19 @@ public class RedisInsightTemplate {
         this.namespace = namespace;
     }
 
-    public RedisInsightTemplate(String image, String namespace) {
+    public RedisInsightTemplate(String image, String initContainerImage, String namespace) {
         if (StringUtils.hasText(image)) {
             this.image = image;
+        }
+        if (StringUtils.hasText(initContainerImage)) {
+            this.initContainerImage = initContainerImage;
         }
         this.namespace = namespace;
     }
 
     private String name = Template.RedisInsight.name().toLowerCase();
     private String image = "redislabs/redisinsight:latest";
+    private String initContainerImage = "busybox:latest";
     private String namespace;
     private String service = Template.RedisInsight.name().toLowerCase() + "-service";
 
@@ -39,7 +43,8 @@ public class RedisInsightTemplate {
                         Map.of("REDISINSIGHT", name,
                                 "ID", id,
                                 "NAMESPACE", namespace,
-                                "REDISINSIGHT_IMAGE", image),
+                                "REDISINSIGHT_IMAGE", image,
+                                "BUSYBOX_IMAGE", initContainerImage),
                         String.class
                 );
     }

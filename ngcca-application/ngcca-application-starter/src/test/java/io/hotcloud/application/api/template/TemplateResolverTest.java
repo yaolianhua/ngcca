@@ -84,7 +84,7 @@ public class TemplateResolverTest {
     @Test
     public void redisInsightTemplate() throws IOException {
 
-        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate("5b2378dc5d2f4eedb55ed9217255c8cd");
+        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate("redislabs/redisinsight:latest","harbor.local:5000/library/busybox:latest","5b2378dc5d2f4eedb55ed9217255c8cd");
         try (InputStream resourceAsStream = getClass().getResourceAsStream("redisinsight.yaml")) {
             String collect = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resourceAsStream)))
                     .lines()

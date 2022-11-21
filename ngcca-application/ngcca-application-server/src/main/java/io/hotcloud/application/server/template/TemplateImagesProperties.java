@@ -44,6 +44,10 @@ public class TemplateImagesProperties {
      * rabbitmq image name e.g. namespace/rabbitmq:3.9-management
      */
     private String rabbitmq;
+    /**
+     * busybox image name e.g. library/busybox:latest
+     */
+    private String busybox;
 
     public Map<String, String> getRepos() {
         Field[] declaredFields = TemplateImagesProperties.class.getDeclaredFields();

@@ -6,6 +6,7 @@ import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceProcessor;
 import io.hotcloud.application.api.template.instance.RedisInsightTemplate;
+import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.model.utils.UUIDGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,12 @@ import static io.hotcloud.application.api.IngressTemplateRender.render;
 class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     private final ApplicationProperties applicationProperties;
+    private final DatabaseRegistryImages registryImages;
 
-    public RedisInsightTemplateInstanceProcessor(ApplicationProperties applicationProperties) {
+    public RedisInsightTemplateInstanceProcessor(ApplicationProperties applicationProperties,
+                                                 DatabaseRegistryImages registryImages) {
         this.applicationProperties = applicationProperties;
+        this.registryImages = registryImages;
     }
 
     @Override
@@ -35,7 +39,8 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
         if (!support(template)){
             return null;
         }
-        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(imageUrl, namespace);
+        String busybox = registryImages.getOrDefault("busybox", "busybox:latest");
+        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(imageUrl, busybox, namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
                 .namespace(namespace)

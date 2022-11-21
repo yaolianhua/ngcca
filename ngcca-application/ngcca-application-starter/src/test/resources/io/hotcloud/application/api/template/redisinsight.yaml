@@ -23,7 +23,7 @@ spec:
           emptyDir: { }
       initContainers:
         - name: init
-          image: busybox
+          image: harbor.local:5000/library/busybox:latest
           command:
             - /bin/sh
             - '-c'
