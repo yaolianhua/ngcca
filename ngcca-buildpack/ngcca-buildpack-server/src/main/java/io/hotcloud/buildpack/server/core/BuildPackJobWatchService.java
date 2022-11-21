@@ -46,7 +46,7 @@ public class BuildPackJobWatchService {
                 buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
                 buildPackService.saveOrUpdate(buildPack);
 
-                imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Failed);
+                imageBuildCacheApi.setStatus(buildPack.getId(), status);
                 return;
             }
 
