@@ -10,5 +10,6 @@ public enum Template {
     Redis,
     RedisInsight,
     Mysql,
-    Rabbitmq
+    Rabbitmq,
+    Busybox
 }

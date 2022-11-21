@@ -39,7 +39,7 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
         if (!support(template)){
             return null;
         }
-        String busybox = registryImages.getOrDefault("busybox", "busybox:latest");
+        String busybox = registryImages.getOrDefault(Template.Busybox.name().toLowerCase(), "busybox:latest");
         RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(imageUrl, busybox, namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
