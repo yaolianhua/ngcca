@@ -1,0 +1,36 @@
+ngcca:
+  rabbitmq:
+    host:
+    username:
+    password:
+    port:
+  redis:
+    database:
+    password:
+    host:
+    port:
+  registry:
+    url:
+    username:
+    password:
+    imagebuild-namespace:
+  minio:
+    access-key:
+    secret-key:
+    endpoint:
+  mongodb:
+    host:
+    username:
+    password:
+    port:
+    database:
+  kubernetes-agent:
+    host:
+    port:
+    domain-name:
+  application:
+    dot-suffix-domain: .k8s-cluster.com
+    deployment-notify-mode: rabbitmq
+  buildpack:
+    imagebuild:
+      notify-mode: rabbitmq

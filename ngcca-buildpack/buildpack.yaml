@@ -1,0 +1,141 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations: { }
+  labels: &id001
+    k8s-app: devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  name: devops-thymeleaf-job-buildpack-025070bae0ef4668a96f2d0a712203af
+  namespace: 025070bae0ef4668a96f2d0a712203af
+spec:
+  activeDeadlineSeconds: 1800
+  backoffLimit: 3
+  selector:
+    matchExpressions: [ ]
+    matchLabels: { }
+  template:
+    metadata:
+      annotations: { }
+      labels: *id001
+    spec:
+      containers:
+        - args:
+            - --destination=10.10.12.123/demo/devops-thymeleaf:20220401183914
+            - --skip-tls-verify=true
+            - --log-timestamp=false
+            - --cache-ttl=336h
+            - --ignore-var-run=true
+            - --compressed-caching=true
+            - --insecure=true
+            - --context=/workspace
+            - --use-new-run=true
+            - --skip-tls-verify-registry=true
+            - --skip-tls-verify-pull=true
+            - --image-fs-extract-retry=3
+            - --no-push=false
+            - --insecure-pull=true
+            - --cache=true
+            - --push-retry=3
+            - --reproducible=false
+            - --dockerfile=/workspace/Dockerfile
+            - --cache-dir=/cache
+            - --single-snapshot=false
+            - --tarPath=/workspace/devops-thymeleaf-20220401183914.tar
+            - --snapshotMode=full
+            - --skip-unused-stages=false
+            - --cleanup=false
+            - --insecure-registry=10.10.12.123
+            - --log-format=color
+            - --force=false
+            - --verbosity=info
+          command: [ ]
+          env: [ ]
+          envFrom: [ ]
+          image: gcr.io/kaniko-project/executor:latest
+          imagePullPolicy: IfNotPresent
+          name: kaniko
+          ports: [ ]
+          volumeMounts:
+            - mountPath: /kaniko/.docker
+              name: docker-registry-secret-volume
+              readOnly: true
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets: [ ]
+      initContainers: [ ]
+      nodeSelector: { }
+      restartPolicy: Never
+      tolerations: [ ]
+      volumes:
+        - name: docker-registry-secret-volume
+          secret:
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+            optional: false
+            secretName: secret-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+        - name: workspace-volume
+          persistentVolumeClaim:
+            claimName: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  ttlSecondsAfterFinished: 600
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations: { }
+  labels: { }
+  name: pv-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  namespace: 025070bae0ef4668a96f2d0a712203af
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 500M
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+    namespace: 025070bae0ef4668a96f2d0a712203af
+  mountOptions: [ ]
+  nfs:
+    path: /home/nfs-share/025070bae0ef4668a96f2d0a712203af/devops-thymeleaf
+    readOnly: false
+    server: 127.0.0.1
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: storage-class-buildpack
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations: { }
+  labels: { }
+  name: pvc-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  namespace: 025070bae0ef4668a96f2d0a712203af
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    limits: { }
+    requests:
+      storage: 500M
+  selector:
+    matchExpressions: [ ]
+    matchLabels: { }
+  storageClassName: storage-class-buildpack
+  volumeMode: Filesystem
+  volumeName: pv-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations: { }
+  labels:
+    k8s-app: 025070bae0ef4668a96f2d0a712203af
+  name: secret-devops-thymeleaf-025070bae0ef4668a96f2d0a712203af
+  namespace: 025070bae0ef4668a96f2d0a712203af
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyIxMC4xMC4xMi4xMjMiOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiSGFyYm9yMTIzNDUiLCJhdXRoIjoiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9In19fQ==
+immutable: true
+stringData: { }

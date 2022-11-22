@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: ngcca-kubernetes-agent
+server:
+  port: 1401

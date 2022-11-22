@@ -1,0 +1,3 @@
+{
+  "yaml": "apiVersion: v1\nkind: PersistentVolume\nmetadata:\n  name: dockerfile\n  labels: {\n    \"k8s-app\": \"dockerfile\"\n  }\nspec:\n  capacity:\n    storage: 1Gi\n  claimRef:\n    kind: PersistentVolumeClaim\n    name: dockerfile-claim\n    namespace: default\n  volumeMode: Filesystem\n  accessModes:\n    - ReadWriteOnce\n  persistentVolumeReclaimPolicy: Retain\n  storageClassName: \"storage-local\"\n  hostPath:\n    path: /kaniko\n    type: \"\""
+}

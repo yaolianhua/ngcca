@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: hotcloud-web
+  thymeleaf:
+    cache: false
+
+server:
+  port: 4000
+hotcloud:
+  host: ${hotcloud.host:localhost}
+  port: ${hotcloud.port:8080}
+feign:
+  circuitbreaker:
+    enabled: true

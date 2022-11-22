@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ngcca-db
+  data:
+    mongodb:
+      database: ngcca-test
+      host: localhost
+      port: 27017
+      password: QbMufCD@9WVQ^Hv
+      username: admin
+      auto-index-creation: true
+      authentication-database: admin
+server:
+  port: 8060

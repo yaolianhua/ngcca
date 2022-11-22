@@ -1,0 +1,61 @@
+<section class="content" th:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">模板列表</h3>
+                    </div>
+                    <div class="card-header">
+                        <div class="col-sm-1">
+                            <button class="btn btn-block btn-dark" data-target="#modal-new-template" data-toggle="modal"
+                                    type="button">添加模板
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover" id="template-list">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>版本</th>
+                                <th>描述</th>
+                                <th>描述详情</th>
+                                <th>创建时间</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="templateDefinition: ${response.data}">
+                                <td th:text="${templateDefinition.name}"></td>
+                                <td th:text="${templateDefinition.version}"></td>
+                                <td th:text="${templateDefinition.shortDesc}"></td>
+                                <td th:text="${templateDefinition.description}"></td>
+                                <td th:text="${templateDefinition.createdAt}"></td>
+                                <td th:text="${templateDefinition.modifiedAt}"></td>
+                                <td class="project-actions text-center">
+                                    <!--                                    <button class="btn btn-primary btn-sm"-->
+                                    <!--                                            th:attr="onclick=|templateDP('${templateDefinition.id}', '${endpoint}')|"><i-->
+                                    <!--                                            class="fas fa-templateDefinition"></i>详情-->
+                                    <!--                                    </button>-->
+                                    <!--                                    <button class="btn btn-info btn-sm" th:attr="onclick=|templateEP('${templateDefinition.id}')|"><i-->
+                                    <!--                                            class="fas fa-pencil-alt"></i>编辑-->
+                                    <!--                                    </button>-->
+                                    <button class="btn btn-danger btn-sm"
+                                            th:attr="onclick=|templateD('${templateDefinition.id}')|"><i
+                                            class="fas fa-trash"></i>删除
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

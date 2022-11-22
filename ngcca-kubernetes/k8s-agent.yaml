@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: k8s-agent
+  name: k8s-agent
+  namespace: ngcca-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    k8s-app: k8s-agent
+  name: k8s-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: k8s-agent
+    namespace: ngcca-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: k8s-agent
+  name: k8s-agent
+  namespace: ngcca-system
+spec:
+  ports:
+    - name: http
+      port: 1400
+      protocol: TCP
+      targetPort: http
+  selector:
+    k8s-app: k8s-agent
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-agent
+  namespace: ngcca-system
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: k8s-agent.k8s-cluster.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: k8s-agent
+                port:
+                  number: 1400
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: k8s-agent
+  name: k8s-agent
+  namespace: ngcca-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: k8s-agent
+  template:
+    metadata:
+      labels:
+        k8s-app: k8s-agent
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+      containers:
+        - image: harbor.local:5000/ngcca/k8s-agent:20221113140055
+          env:
+            - name: KUBERNETES_RABBITMQ_HOST
+              value: "10.0.0.159"
+            - name: KUBERNETES_RABBITMQ_PORT
+              value: "5672"
+            - name: KUBERNETES_RABBITMQ_USERNAME
+              value: "admin"
+            - name: KUBERNETES_RABBITMQ_PASSWORD
+              value: "QbMufCD@9WVQ^Hv"
+          imagePullPolicy: IfNotPresent
+          name: k8s-agent
+          ports:
+            - containerPort: 1400
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+          securityContext:
+            privileged: true
+          livenessProbe:
+            httpGet:
+              port: 1400
+              path: /livez
+            periodSeconds: 20
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      serviceAccountName: k8s-agent

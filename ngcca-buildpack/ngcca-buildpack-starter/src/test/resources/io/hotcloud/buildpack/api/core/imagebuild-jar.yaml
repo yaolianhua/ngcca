@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations: { }
+  labels:
+    k8s-app: kaniko-test
+    app.business.data/id: 985b8ff6-09e1-4226-891e-5c9dc7bbd155
+  name: kaniko-test
+  namespace: kaniko-test
+spec:
+  activeDeadlineSeconds: 1800
+  backoffLimit: 3
+  template:
+    metadata:
+      annotations: { }
+      labels:
+        k8s-app: kaniko-test
+        app.business.data/id: 985b8ff6-09e1-4226-891e-5c9dc7bbd155
+    spec:
+      containers:
+        - args:
+            - --destination=192.168.146.128:5000/kaniko-test/app-jar:latest
+            - --skip-tls-verify=true
+            - --insecure=true
+            - --context=/workspace
+            - --skip-tls-verify-registry=true
+            - --skip-tls-verify-pull=true
+            - --no-push=false
+            - --insecure-pull=true
+            - --push-retry=3
+            - --dockerfile=/workspace/Dockerfile
+            - --log-format=color
+            - --force=false
+            - --verbosity=info
+          image: gcr.io/kaniko-project/executor:latest
+          imagePullPolicy: IfNotPresent
+          name: kaniko
+          ports: [ ]
+          volumeMounts:
+            - mountPath: /kaniko/.docker
+              name: docker-registry-secret
+              readOnly: true
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      dnsPolicy: ClusterFirst
+      hostAliases:
+      - ip: 10.0.0.159
+        hostnames:
+        - harbor.local
+        - gitlab.docker.local
+      imagePullSecrets: [ ]
+      initContainers:
+        - name: alpine
+          image: alpine:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - 'sh'
+            - '-c'
+            - "echo -e 'RlJPTSAxOTIuMTY4LjE0Ni4xMjg6NTAwMC9iYXNlL2phdmExMTp0b21jYXQ5LjAtb3BlbmpkazExCgpSVU4gbG4gLXNmIC91c3Ivc2hhcmUvem9uZWluZm8vQXNpYS9TaGFuZ2hhaSAvZXRjL2xvY2FsdGltZQpSVU4gZWNobyAnQXNpYS9TaGFuZ2hhaScgPiAvZXRjL3RpbWV6b25lCgpFTlYgTEFORz0iZW5fVVMuVVRGLTgiCkVOViBURVJNPXh0ZXJtCkVOViBUSU1FU1RBTVAgY3VycmVudFRpbWUKClJVTiBta2RpciAtcCAvaG9tZS9hZG1pbi9hcHAvClJVTiB3Z2V0IC1xICdodHRwOi8vMTIwLjc4LjIyNS4xNjg6MjgwODAvZmlsZXMvamF2YS9kZW1vLmphcicgLU8gL2hvbWUvYWRtaW4vYXBwL2FwcC5qYXIKUlVOIGVjaG8gLWUgJ2V4ZWMgamF2YSAtWG1zMTI4bSAtWG14NTEybSAtamFyICAvaG9tZS9hZG1pbi9hcHAvYXBwLmphcicgPiAvaG9tZS9hZG1pbi9zdGFydC5zaCAmJiBjaG1vZCAreCAvaG9tZS9hZG1pbi9zdGFydC5zaAoKV09SS0RJUiAkQURNSU5fSE9NRQoKQ01EIFsiL2Jpbi9iYXNoIiwgIi9ob21lL2FkbWluL3N0YXJ0LnNoIl0=' |base64 -d > /workspace/Dockerfile"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          volumeMounts:
+            - mountPath: /workspace
+              name: workspace-volume
+              readOnly: false
+      restartPolicy: Never
+      volumes:
+        - name: docker-registry-secret
+          secret:
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+            optional: false
+            secretName: kaniko-test
+        - name: workspace-volume
+          emptyDir: { }
