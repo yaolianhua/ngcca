@@ -1,5 +1,9 @@
 package io.hotcloud.common.model.registry;
 
+import io.hotcloud.common.model.exception.NGCCACommonException;
+
+import java.util.Arrays;
+
 public enum RegistryType {
     //
     Harbor,
@@ -8,5 +12,12 @@ public enum RegistryType {
     //
     DockerHub,
     //
-    Quay
+    Quay;
+
+    public static RegistryType of(String name) {
+        return Arrays.stream(RegistryType.values())
+                .filter(e -> e.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new NGCCACommonException("Unsupported registry type: " + name));
+    }
 }

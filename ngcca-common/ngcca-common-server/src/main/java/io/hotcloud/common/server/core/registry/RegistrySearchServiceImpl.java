@@ -12,6 +12,7 @@ import io.hotcloud.common.model.registry.RegistryRepositoryTag;
 import io.hotcloud.common.model.registry.RegistryType;
 import io.hotcloud.common.model.registry.dockerhub.DockerHub;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,6 +30,9 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
     private static String validateRegistryUrl(RegistryType type, String registry) {
         if (Objects.equals(type, RegistryType.DockerHub)) {
             registry = DockerHub.HTTP_URL;
+        }
+        if (!StringUtils.hasText(registry)) {
+            throw new NGCCACommonException("registry url is null", 400);
         }
         if (!registry.startsWith("http://") && !registry.startsWith("https://")) {
             throw new NGCCACommonException("The registry url protocol is missing [http, https]", 400);
