@@ -8,9 +8,9 @@ import io.hotcloud.common.model.registry.RegistryAuthentication;
 import io.hotcloud.common.model.registry.RegistryRepository;
 import io.hotcloud.common.model.registry.RegistryRepositoryTag;
 import io.hotcloud.common.model.registry.quay.QuayRepository;
-import io.hotcloud.common.model.registry.quay.QuayRepositoryQueryResponse;
+import io.hotcloud.common.model.registry.quay.QuayRepositorySearchResult;
 import io.hotcloud.common.model.registry.quay.QuayRepositoryTag;
-import io.hotcloud.common.model.registry.quay.QuayTagQueryResponse;
+import io.hotcloud.common.model.registry.quay.QuayTagSearchResult;
 import io.hotcloud.common.model.utils.Log;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -71,7 +71,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
             httpHeaders.setBearerAuth(authentication.getAccessToken());
             httpEntity = new HttpEntity<>(httpHeaders);
         }
-        QuayRepositoryQueryResponse response = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<QuayRepositoryQueryResponse>() {
+        QuayRepositorySearchResult response = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<QuayRepositorySearchResult>() {
         }).getBody();
 
         containers.addAll(Objects.requireNonNull(response).getResults());
@@ -116,7 +116,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
             httpHeaders.setBearerAuth(authentication.getAccessToken());
             httpEntity = new HttpEntity<>(httpHeaders);
         }
-        QuayTagQueryResponse response = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<QuayTagQueryResponse>() {
+        QuayTagSearchResult response = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<QuayTagSearchResult>() {
         }).getBody();
 
         containers.addAll(Objects.requireNonNull(response).getTags());

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class QuayRepositoryQueryResponse {
+public class QuayRepositorySearchResult {
 
     @JsonProperty("start_index")
     private int startIndex;

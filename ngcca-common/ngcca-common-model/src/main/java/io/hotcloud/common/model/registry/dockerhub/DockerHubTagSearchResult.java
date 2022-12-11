@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DockerHubRepositoryQueryResponse {
+public class DockerHubTagSearchResult {
 
     @JsonProperty("next")
     private String next;
@@ -18,5 +18,5 @@ public class DockerHubRepositoryQueryResponse {
     private int count;
 
     @JsonProperty("results")
-    private List<DockerHubRepository> results;
+    private List<DockerHubRepositoryTag> results;
 }

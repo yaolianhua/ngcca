@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class QuayTagQueryResponse {
+public class QuayTagSearchResult {
 
     @JsonProperty("has_additional")
     private boolean hasAdditional;

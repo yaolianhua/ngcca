@@ -7,8 +7,8 @@ import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.registry.RegistryAuthentication;
 import io.hotcloud.common.model.registry.RegistryRepository;
 import io.hotcloud.common.model.registry.RegistryRepositoryTag;
-import io.hotcloud.common.model.registry.dockerhub.DockerHubRepositoryQueryResponse;
-import io.hotcloud.common.model.registry.dockerhub.DockerHubTagQueryResponse;
+import io.hotcloud.common.model.registry.dockerhub.DockerHubRepositorySearchResult;
+import io.hotcloud.common.model.registry.dockerhub.DockerHubTagSearchResult;
 import io.hotcloud.common.model.utils.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -45,10 +45,10 @@ public class DockerHubRegistrySearchClient implements RegistrySearchClient {
         Log.info(DockerHubRegistrySearchClient.class.getName(), String.format("DockerHub repository search. request url '%s'", requestUrl));
 
         try {
-            DockerHubRepositoryQueryResponse response = restTemplate.exchange(requestUrl,
+            DockerHubRepositorySearchResult response = restTemplate.exchange(requestUrl,
                     HttpMethod.GET,
                     HttpEntity.EMPTY,
-                    new ParameterizedTypeReference<DockerHubRepositoryQueryResponse>() {
+                    new ParameterizedTypeReference<DockerHubRepositorySearchResult>() {
                     }).getBody();
 
             List<RegistryRepository> repositories = Objects.requireNonNull(response).getResults().stream()
@@ -78,10 +78,10 @@ public class DockerHubRegistrySearchClient implements RegistrySearchClient {
                 .build(namespace, name);
         Log.info(DockerHubRegistrySearchClient.class.getName(), String.format("DockerHub repository tags search. request url '%s'", requestUrl));
         try {
-            DockerHubTagQueryResponse response = restTemplate.exchange(requestUrl,
+            DockerHubTagSearchResult response = restTemplate.exchange(requestUrl,
                     HttpMethod.GET,
                     HttpEntity.EMPTY,
-                    new ParameterizedTypeReference<DockerHubTagQueryResponse>() {
+                    new ParameterizedTypeReference<DockerHubTagSearchResult>() {
                     }).getBody();
 
             List<RegistryRepositoryTag> tags = Objects.requireNonNull(response).getResults().stream()
