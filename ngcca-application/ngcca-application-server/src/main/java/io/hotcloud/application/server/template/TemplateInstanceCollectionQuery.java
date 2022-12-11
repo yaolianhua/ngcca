@@ -42,7 +42,7 @@ public class TemplateInstanceCollectionQuery {
         }
 
         List<TemplateInstance> filtered = filter(templates, success);
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
 
     }
 

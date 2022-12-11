@@ -40,7 +40,7 @@ public class UserCollectionQuery {
             users = userApi.users();
         }
         Collection<User> filtered = filter(users, enabled);
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
     }
 
     public Collection<User> filter(Collection<User> users, Boolean enabled) {

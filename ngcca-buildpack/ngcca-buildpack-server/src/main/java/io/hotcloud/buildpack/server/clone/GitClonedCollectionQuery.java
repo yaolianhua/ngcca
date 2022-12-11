@@ -41,7 +41,7 @@ public class GitClonedCollectionQuery {
         }
 
         List<GitCloned> filtered = filter(cloneds, success);
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
     }
 
     public List<GitCloned> filter(List<GitCloned> cloneds, Boolean success) {

@@ -66,7 +66,7 @@ public class DockerRegistrySearchClient implements RegistrySearchClient {
                     .map(e -> RegistryRepository.of(resolvedRegistry, e))
                     .collect(Collectors.toList());
 
-            return PageResult.ofPage(filteredRepositories, pageable.getPage(), pageable.getPageSize());
+            return PageResult.ofCollectionPage(filteredRepositories, pageable);
         } catch (Exception e) {
             throw new NGCCACommonException(e.getMessage(), 500);
         }
@@ -100,7 +100,7 @@ public class DockerRegistrySearchClient implements RegistrySearchClient {
             List<RegistryRepositoryTag> tags = Objects.requireNonNull(registryTags).getTags().stream()
                     .map(e -> RegistryRepositoryTag.of(e, resolvedRegistry, namespacedRepository))
                     .collect(Collectors.toList());
-            return PageResult.ofPage(tags, pageable.getPage(), pageable.getPageSize());
+            return PageResult.ofCollectionPage(tags, pageable);
         } catch (Exception e) {
             if (e instanceof HttpClientErrorException) {
                 HttpClientErrorException ex = (HttpClientErrorException) e;

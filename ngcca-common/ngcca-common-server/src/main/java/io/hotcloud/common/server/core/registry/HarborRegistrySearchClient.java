@@ -65,7 +65,7 @@ public class HarborRegistrySearchClient implements RegistrySearchClient {
                     .map(e -> RegistryRepository.of(resolvedRegistry, e.getRepositoryName()))
                     .collect(Collectors.toList());
 
-            return PageResult.ofPage(repositories, pageable.getPage(), pageable.getPageSize());
+            return PageResult.ofCollectionPage(repositories, pageable);
         } catch (Exception e) {
             throw new NGCCACommonException(e.getMessage(), 500);
         }

@@ -53,7 +53,7 @@ public class BuildPackCollectionQuery {
         }
 
         List<BuildPack> filtered = filter(buildPacks, done, deleted);
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
 
     }
 
@@ -75,7 +75,7 @@ public class BuildPackCollectionQuery {
             buildPacks = buildPackService.findAll();
         }
         List<BuildPack> filtered = filter(buildPacks, done, deleted);
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
 
     }
 

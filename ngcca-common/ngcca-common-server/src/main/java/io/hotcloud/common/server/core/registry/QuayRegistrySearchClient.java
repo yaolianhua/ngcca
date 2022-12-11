@@ -49,7 +49,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
                     .map(e -> RegistryRepository.of(resolvedRegistry, String.format("%s/%s", e.getNamespace().getName(), e.getName())))
                     .collect(Collectors.toList());
 
-            return PageResult.ofPage(repositories, pageable.getPage(), pageable.getPageSize());
+            return PageResult.ofCollectionPage(repositories, pageable);
         } catch (Exception e) {
             throw new NGCCACommonException(e.getMessage(), 500);
         }
@@ -94,7 +94,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
                     .map(e -> RegistryRepositoryTag.of(e.getName(), resolvedRegistry, namespacedRepository))
                     .collect(Collectors.toList());
 
-            return PageResult.ofPage(tags, pageable.getPage(), pageable.getPageSize());
+            return PageResult.ofCollectionPage(tags, pageable);
         } catch (Exception e) {
             throw new NGCCACommonException(e.getMessage(), 500);
         }
