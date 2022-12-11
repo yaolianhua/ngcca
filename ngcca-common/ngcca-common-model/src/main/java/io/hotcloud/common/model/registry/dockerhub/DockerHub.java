@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model.dockerhub;
+package io.hotcloud.common.model.registry.dockerhub;
 
 public class DockerHub {
 

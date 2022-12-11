@@ -1,14 +1,14 @@
 package io.hotcloud.common.server.core.registry;
 
 import io.hotcloud.common.api.core.registry.RegistrySearchClient;
-import io.hotcloud.common.api.core.registry.model.RegistryAuthentication;
-import io.hotcloud.common.api.core.registry.model.RegistryRepository;
-import io.hotcloud.common.api.core.registry.model.RegistryRepositoryTag;
-import io.hotcloud.common.api.core.registry.model.dockerhub.DockerHubRepositoryQueryResponse;
-import io.hotcloud.common.api.core.registry.model.dockerhub.DockerHubTagQueryResponse;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.registry.RegistryAuthentication;
+import io.hotcloud.common.model.registry.RegistryRepository;
+import io.hotcloud.common.model.registry.RegistryRepositoryTag;
+import io.hotcloud.common.model.registry.dockerhub.DockerHubRepositoryQueryResponse;
+import io.hotcloud.common.model.registry.dockerhub.DockerHubTagQueryResponse;
 import io.hotcloud.common.model.utils.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.core.registry.RegistryUtil.*;
+import static io.hotcloud.common.model.utils.RegistryUtil.*;
 
 @Slf4j
 public class DockerHubRegistrySearchClient implements RegistrySearchClient {

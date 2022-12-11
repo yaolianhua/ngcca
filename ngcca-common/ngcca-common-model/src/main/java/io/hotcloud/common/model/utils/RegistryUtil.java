@@ -1,6 +1,6 @@
-package io.hotcloud.common.api.core.registry;
+package io.hotcloud.common.model.utils;
 
-import io.hotcloud.common.api.core.registry.model.dockerhub.DockerHub;
+import io.hotcloud.common.model.registry.dockerhub.DockerHub;
 import org.springframework.util.Assert;
 
 public final class RegistryUtil {

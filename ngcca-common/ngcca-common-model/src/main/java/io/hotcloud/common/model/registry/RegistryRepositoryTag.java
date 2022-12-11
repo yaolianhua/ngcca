@@ -1,9 +1,9 @@
-package io.hotcloud.common.api.core.registry.model;
+package io.hotcloud.common.model.registry;
 
-import io.hotcloud.common.api.core.registry.model.dockerhub.DockerHub;
+import io.hotcloud.common.model.registry.dockerhub.DockerHub;
 import lombok.Data;
 
-import static io.hotcloud.common.api.core.registry.RegistryUtil.retrieveRepositoryNameWithNamespace;
+import static io.hotcloud.common.model.utils.RegistryUtil.retrieveRepositoryNameWithNamespace;
 
 @Data
 public class RegistryRepositoryTag {

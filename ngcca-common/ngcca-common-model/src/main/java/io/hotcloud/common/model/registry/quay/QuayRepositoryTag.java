@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model.quay;
+package io.hotcloud.common.model.registry.quay;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

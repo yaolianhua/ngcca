@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry;
+package io.hotcloud.common.model.registry;
 
 public enum RegistryType {
     //

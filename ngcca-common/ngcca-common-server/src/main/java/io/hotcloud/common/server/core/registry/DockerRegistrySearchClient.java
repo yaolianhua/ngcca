@@ -1,15 +1,15 @@
 package io.hotcloud.common.server.core.registry;
 
 import io.hotcloud.common.api.core.registry.RegistrySearchClient;
-import io.hotcloud.common.api.core.registry.model.RegistryAuthentication;
-import io.hotcloud.common.api.core.registry.model.RegistryRepository;
-import io.hotcloud.common.api.core.registry.model.RegistryRepositoryTag;
-import io.hotcloud.common.api.core.registry.model.dockerregistry.DockerRegistryCatalog;
-import io.hotcloud.common.api.core.registry.model.dockerregistry.DockerRegistryTags;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
+import io.hotcloud.common.model.registry.RegistryAuthentication;
+import io.hotcloud.common.model.registry.RegistryRepository;
+import io.hotcloud.common.model.registry.RegistryRepositoryTag;
+import io.hotcloud.common.model.registry.dockerregistry.DockerRegistryCatalog;
+import io.hotcloud.common.model.registry.dockerregistry.DockerRegistryTags;
 import io.hotcloud.common.model.utils.Log;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.common.api.core.registry.RegistryUtil.retrieveRepositoryNameWithNamespace;
+import static io.hotcloud.common.model.utils.RegistryUtil.retrieveRepositoryNameWithNamespace;
 
 public class DockerRegistrySearchClient implements RegistrySearchClient {
 

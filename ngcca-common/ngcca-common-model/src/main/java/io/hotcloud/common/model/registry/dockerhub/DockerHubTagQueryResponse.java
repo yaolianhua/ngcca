@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model.dockerhub;
+package io.hotcloud.common.model.registry.dockerhub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DockerHubRepositoryQueryResponse {
+public class DockerHubTagQueryResponse {
 
     @JsonProperty("next")
     private String next;
@@ -18,5 +18,5 @@ public class DockerHubRepositoryQueryResponse {
     private int count;
 
     @JsonProperty("results")
-    private List<DockerHubRepository> results;
+    private List<DockerHubRepositoryTag> results;
 }

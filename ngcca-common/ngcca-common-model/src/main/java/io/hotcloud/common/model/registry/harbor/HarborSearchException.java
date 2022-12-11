@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model.harbor;
+package io.hotcloud.common.model.registry.harbor;
 
 public class HarborSearchException extends RuntimeException {
 

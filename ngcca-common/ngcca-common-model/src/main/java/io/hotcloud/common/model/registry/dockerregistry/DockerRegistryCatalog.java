@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model.dockerregistry;
+package io.hotcloud.common.model.registry.dockerregistry;
 
 import lombok.Data;
 

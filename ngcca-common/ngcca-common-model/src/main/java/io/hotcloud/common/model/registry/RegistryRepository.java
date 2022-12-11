@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry.model;
+package io.hotcloud.common.model.registry;
 
 import lombok.Data;
 import org.springframework.util.StringUtils;
