@@ -1,4 +1,4 @@
-package io.hotcloud.common.server.core.registry;
+package io.hotcloud.common.server.core.registry.search;
 
 import lombok.SneakyThrows;
 import org.apache.http.client.HttpClient;

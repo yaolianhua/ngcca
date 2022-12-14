@@ -1,6 +1,6 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.common.api.core.registry.RegistrySearchService;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchService;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.registry.RegistryAuthentication;

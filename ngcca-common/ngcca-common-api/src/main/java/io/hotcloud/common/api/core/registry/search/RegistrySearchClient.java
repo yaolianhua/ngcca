@@ -1,4 +1,4 @@
-package io.hotcloud.common.api.core.registry;
+package io.hotcloud.common.api.core.registry.search;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

@@ -1,8 +1,8 @@
-package io.hotcloud.common.server.core.registry;
+package io.hotcloud.common.server.core.registry.search;
 
-import io.hotcloud.common.api.core.registry.RegistrySearchClient;
-import io.hotcloud.common.api.core.registry.RegistrySearchClientProvider;
-import io.hotcloud.common.api.core.registry.RegistrySearchService;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchClient;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchClientProvider;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchService;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.NGCCACommonException;

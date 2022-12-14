@@ -1,7 +1,7 @@
-package io.hotcloud.common.server.core.registry;
+package io.hotcloud.common.server.core.registry.search;
 
-import io.hotcloud.common.api.core.registry.RegistrySearchClient;
-import io.hotcloud.common.api.core.registry.RegistrySearchClientProvider;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchClient;
+import io.hotcloud.common.api.core.registry.search.RegistrySearchClientProvider;
 import io.hotcloud.common.model.registry.RegistryType;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
