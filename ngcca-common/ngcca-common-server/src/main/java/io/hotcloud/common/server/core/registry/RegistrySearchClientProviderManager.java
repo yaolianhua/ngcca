@@ -23,7 +23,7 @@ public class RegistrySearchClientProviderManager implements RegistrySearchClient
     @Override
     public RegistrySearchClient getClient(RegistryType type, URI uri) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory(CustomHttpClient.acceptsUntrustedCertsHttpClient());
+        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.acceptsUntrustedCertsHttpClient());
         restTemplate.setRequestFactory(httpRequestFactory);
 
         if (Objects.equals(type, RegistryType.Registry)) {
