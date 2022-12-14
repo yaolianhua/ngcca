@@ -1,5 +1,6 @@
 package io.hotcloud.common.model.registry;
 
+import io.hotcloud.common.model.registry.dockerhub.DockerHub;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +20,7 @@ public class RegistryRepository {
         final RegistryRepository repository = new RegistryRepository();
         repository.setRegistry(registry);
         if (StringUtils.hasText(name) && !name.contains("/")) {
-            name = String.format("library/%s", name);
+            name = String.format("%s/%s", DockerHub.OFFICIAL_IMAGE_PREFIX, name);
         }
         repository.setName(name);
         return repository;
