@@ -65,7 +65,7 @@ public class DockerHubRegistrySearchClient implements RegistrySearchClient {
      * <a href="https://docs.docker.com/docker-hub/api/latest/#tag/repositories/paths/~1v2~1namespaces~1%7Bnamespace%7D~1repositories~1%7Brepository%7D~1tags/get">接口文档</a>
      */
     @Override
-    public PageResult<RegistryRepositoryTag> searchRepositoryTag(RegistryAuthentication authentication, Pageable pageable, String repository) {
+    public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
 
         String namespace = retrieveRepositoryNamespace(repository);
         String name = retrieveRepositoryNameWithNoNamespace(repository);

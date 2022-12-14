@@ -62,6 +62,6 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
         } catch (URISyntaxException e) {
             throw new NGCCACommonException(e.getMessage(), 400);
         }
-        return client.searchRepositoryTag(authentication, pageable, repository);
+        return client.searchTags(authentication, pageable, repository);
     }
 }

@@ -26,5 +26,5 @@ public interface RegistrySearchClient {
      * @param repository     仓库镜像 e.g. library/nginx
      * @return RegistryRepositoryTag
      */
-    PageResult<RegistryRepositoryTag> searchRepositoryTag(RegistryAuthentication authentication, Pageable pageable, String repository);
+    PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository);
 }

@@ -72,7 +72,7 @@ public class HarborRegistrySearchClient implements RegistrySearchClient {
     }
 
     @Override
-    public PageResult<RegistryRepositoryTag> searchRepositoryTag(RegistryAuthentication authentication, Pageable pageable, String repository) {
+    public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
         String namespace = retrieveRepositoryNamespace(repository);
         String repositoryNameWithNoNamespace = retrieveRepositoryNameWithNoNamespace(repository);
         String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);

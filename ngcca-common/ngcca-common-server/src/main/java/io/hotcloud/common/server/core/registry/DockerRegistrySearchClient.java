@@ -78,7 +78,7 @@ public class DockerRegistrySearchClient implements RegistrySearchClient {
      * @param repository The full path of the repository. e.g. namespace/name
      */
     @Override
-    public PageResult<RegistryRepositoryTag> searchRepositoryTag(RegistryAuthentication authentication, Pageable pageable, String repository) {
+    public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
         String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/{repository}/tags/list")
