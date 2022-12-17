@@ -17,9 +17,9 @@ public class CacheTimeInitialization implements NGCCARunnerProcessor {
 
     @Override
     public void execute() {
-        cache.put(CommonConstant.CK_IMAGEBUILD_TIMEOUT_SECONDS, 1200);
-        Log.info(CacheTimeInitialization.class.getName(), "Cached imagebuild-timeout-seconds. value='1200s'");
-        cache.put(CommonConstant.CK_DEPLOYMENT_TIMEOUT_SECONDS, 600);
-        Log.info(CacheTimeInitialization.class.getName(), "Cached deployment-timeout-seconds. value='600s'");
+        cache.put(CommonConstant.CK_IMAGEBUILD_TIMEOUT_SECONDS, 3600);
+        Log.info(CacheTimeInitialization.class.getName(), "Cached imagebuild-timeout-seconds. value='3600s'");
+        cache.put(CommonConstant.CK_DEPLOYMENT_TIMEOUT_SECONDS, 1200);
+        Log.info(CacheTimeInitialization.class.getName(), "Cached deployment-timeout-seconds. value='1200s'");
     }
 }
