@@ -8,6 +8,8 @@ public interface ApplicationInstanceService {
 
     ApplicationInstance findActiveSucceed(String user, String name);
     ApplicationInstance findOne(String id);
+    List<ApplicationInstance> findAll();
+    List<ApplicationInstance> findAll(String user);
 
     ApplicationInstance saveOrUpdate(ApplicationInstance instance);
 

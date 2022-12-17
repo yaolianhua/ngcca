@@ -13,4 +13,11 @@ public interface ApplicationInstanceRepository extends PagingAndSortingRepositor
      * @return {@link ApplicationInstanceEntity}
      */
     List<ApplicationInstanceEntity> findByNameAndUser (String name, String user);
+
+    /**
+     * Get Entities with the giving username
+     * @param user user's name
+     * @return {@link ApplicationInstanceEntity}
+     */
+    List<ApplicationInstanceEntity> findByUser (String user);
 }
