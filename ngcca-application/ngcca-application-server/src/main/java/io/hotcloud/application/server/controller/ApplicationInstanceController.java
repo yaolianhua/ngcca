@@ -56,6 +56,19 @@ public class ApplicationInstanceController {
         return accepted();
     }
 
+    @DeleteMapping
+    @Operation(
+            summary = "Delete all application instance",
+            responses = {@ApiResponse(responseCode = "202")},
+            parameters = {
+                    @Parameter(name = "user", description = "delete specified user, it will be delete all if user is null")
+            }
+    )
+    public ResponseEntity<Result<Void>> deleteAll(@RequestParam(value = "user", required = false) String user) {
+        applicationInstancePlayer.deleteAll(user);
+        return accepted();
+    }
+
     @GetMapping
     @Operation(
             summary = "application instance paging query",
