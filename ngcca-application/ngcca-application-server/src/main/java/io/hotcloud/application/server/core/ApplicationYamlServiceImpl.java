@@ -40,6 +40,6 @@ public class ApplicationYamlServiceImpl implements ApplicationYamlService {
             return IngressTemplateRender.INGRESS_2RULE;
         }
 
-        throw new NGCCACommonException("Unsupported type [" + type + "]");
+        throw new NGCCACommonException("Unsupported type [" + type + "]", 400);
     }
 }
