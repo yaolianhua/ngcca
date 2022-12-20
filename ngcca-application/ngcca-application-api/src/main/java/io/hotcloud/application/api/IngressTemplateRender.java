@@ -7,17 +7,31 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.util.Assert;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IngressTemplateRender {
 
-    public static String render (IngressDefinition ingress) {
+    public static final String INGRESS_1RULE;
+    public static final String INGRESS_2RULE;
+
+    static {
+        try {
+            INGRESS_1RULE = new BufferedReader(new InputStreamReader(new ClassPathResource("ingress.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            INGRESS_2RULE = new BufferedReader(new InputStreamReader(new ClassPathResource("ingress-2rules.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String render(IngressDefinition ingress) {
         return ingress.getRules().size() == 1 ? render1Rules(ingress) : render2Rules(ingress);
     }
+
     @SneakyThrows
-    public static String render1Rules(IngressDefinition ingress){
+    public static String render1Rules(IngressDefinition ingress) {
         Assert.isTrue(ingress.getRules().size() == 1, "ingress rule size need to be 1");
         IngressDefinition.Rule rule = ingress.getRules().get(0);
         Map<String, String> render = Map.of(
@@ -29,9 +43,8 @@ public class IngressTemplateRender {
                 "SERVICE_PORT", rule.getPort()
         );
 
-        String template = new BufferedReader(new InputStreamReader(new ClassPathResource("ingress.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         SpelExpressionParser parser = new SpelExpressionParser();
-        return parser.parseExpression(template, new TemplateParserContext()).getValue(render, String.class);
+        return parser.parseExpression(INGRESS_1RULE, new TemplateParserContext()).getValue(render, String.class);
 
     }
 
@@ -54,9 +67,8 @@ public class IngressTemplateRender {
                 "SERVICE_PORT2", rule2.getPort()
         );
 
-        String template = new BufferedReader(new InputStreamReader(new ClassPathResource("ingress-2rules.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         SpelExpressionParser parser = new SpelExpressionParser();
-        return parser.parseExpression(template, new TemplateParserContext()).getValue(render, String.class);
+        return parser.parseExpression(INGRESS_2RULE, new TemplateParserContext()).getValue(render, String.class);
 
     }
 }
