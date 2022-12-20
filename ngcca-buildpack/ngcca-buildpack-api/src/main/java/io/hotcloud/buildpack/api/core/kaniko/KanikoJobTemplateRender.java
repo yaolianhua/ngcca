@@ -6,7 +6,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +18,20 @@ import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.apply;
 
 public class KanikoJobTemplateRender {
 
-    public static final String IMAGEBUILD_SOURCE_TEMPLATE = "imagebuild-source.template";
-    public static final String IMAGEBUILD_JAR_WAR_TEMPLATE = "imagebuild-jar-war.template";
+    public static final String IMAGEBUILD_SOURCE_TEMPLATE;
+    public static final String IMAGEBUILD_JAR_WAR_TEMPLATE;
 
-    public static final String IMAGEBUILD_SECRET_TEMPLATE = "imagebuild-secret.template";
+    public static final String IMAGEBUILD_SECRET_TEMPLATE;
+
+    static {
+        try {
+            IMAGEBUILD_SOURCE_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-source.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            IMAGEBUILD_JAR_WAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-jar-war.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            IMAGEBUILD_SECRET_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-secret.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * <pre>
@@ -65,10 +75,6 @@ public class KanikoJobTemplateRender {
     @SneakyThrows
     public static String parseJob(KanikoJobExpressionVariable job) {
 
-        InputStream inputStream = job.hasGit() ?
-                new ClassPathResource(IMAGEBUILD_SOURCE_TEMPLATE).getInputStream() :
-                new ClassPathResource(IMAGEBUILD_JAR_WAR_TEMPLATE).getInputStream();
-
         HashMap<String, String> renders = new HashMap<>(32);
         renders.put(Kaniko.NAMESPACE, job.getNamespace());
         renders.put(Kaniko.ID, job.getBusinessId());
@@ -88,7 +94,7 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, Objects.nonNull(job.getGit()) ? job.getGit().getInitGitContainer() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_GIT_CONTAINER);
 
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String template = job.hasGit() ? IMAGEBUILD_SOURCE_TEMPLATE : IMAGEBUILD_JAR_WAR_TEMPLATE;
         return apply(template, renders);
     }
 
@@ -98,9 +104,6 @@ public class KanikoJobTemplateRender {
     @SneakyThrows
     public static String parseSecret(SecretExpressionVariable secret) {
 
-        InputStream inputStream = new ClassPathResource(IMAGEBUILD_SECRET_TEMPLATE).getInputStream();
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-
         Map<String, String> renders = new HashMap<>(8);
 
         renders.put(Kaniko.NAMESPACE, secret.getNamespace());
@@ -108,7 +111,7 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.LABEL_NAME, secret.getSecret());
         renders.put(Kaniko.DOCKER_CONFIG_JSON, secret.getDockerconfigjson());
 
-        return apply(template, renders);
+        return apply(IMAGEBUILD_SECRET_TEMPLATE, renders);
     }
 
     /**
