@@ -5,7 +5,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -16,9 +16,19 @@ import java.util.stream.Collectors;
 import static io.hotcloud.buildpack.api.core.kaniko.TemplateRender.apply;
 
 public class DockerfileTemplateRender {
-    public static final String DOCKERFILE_JAR_TEMPLATE = "Dockerfile-jar.template";
-    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE = "Dockerfile-jar-maven.template";
-    public static final String DOCKERFILE_WAR_TEMPLATE = "Dockerfile-war.template";
+    public static final String DOCKERFILE_JAR_TEMPLATE;
+    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE;
+    public static final String DOCKERFILE_WAR_TEMPLATE;
+
+    static {
+        try {
+            DOCKERFILE_JAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-jar.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            DOCKERFILE_JAR_MAVEN_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-jar-maven.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            DOCKERFILE_WAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-war.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 从模板渲染Dockerfile
@@ -34,7 +44,6 @@ public class DockerfileTemplateRender {
 
 
         Map<String, String> renders = new HashMap<>(8);
-        InputStream inputStream = null;
 
         renders.put(Dockerfile.JAVA_RUNTIME, javaArtifact.getRuntime());
         renders.put(Dockerfile.JAR_START_OPTIONS, StringUtils.hasText(javaArtifact.getJarStartOptions()) ? javaArtifact.getJarStartOptions() : "");
@@ -43,20 +52,19 @@ public class DockerfileTemplateRender {
         renders.put(Dockerfile.JAR_TARGET_PATH, javaArtifact.getJarTarget());
         renders.put(Dockerfile.PACKAGE_URL, javaArtifact.getHttpPackageUrl());
 
+        String template = null;
         if (javaArtifact.isMavenJar()) {
-            inputStream = new ClassPathResource(DOCKERFILE_JAR_MAVEN_TEMPLATE).getInputStream();
+            template = DOCKERFILE_JAR_MAVEN_TEMPLATE;
         }
 
         if (javaArtifact.isJar()) {
-            inputStream = new ClassPathResource(DOCKERFILE_JAR_TEMPLATE).getInputStream();
+            template = DOCKERFILE_JAR_TEMPLATE;
         }
 
         if (javaArtifact.isWar()) {
-            inputStream = new ClassPathResource(DOCKERFILE_WAR_TEMPLATE).getInputStream();
+            template = DOCKERFILE_WAR_TEMPLATE;
         }
 
-        assert inputStream != null;
-        String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
         String dockerfile = apply(template, renders);
         return base64 ? Base64.getEncoder().encodeToString(dockerfile.getBytes(StandardCharsets.UTF_8))
                 : dockerfile;

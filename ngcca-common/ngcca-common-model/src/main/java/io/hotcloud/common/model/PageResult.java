@@ -28,21 +28,16 @@ public class PageResult<E> extends Result<Collection<E>> {
         this.pageSize = pageSize;
     }
 
-    public static <E> PageResult<E> ofPage(Collection<E> data, int page, int pageSize) {
-        List<E> paged = paging(data, page, pageSize);
-        return new PageResult<>(200, "success", paged, data.size(), page, pageSize);
+    public static <E> PageResult<E> ofCollectionPage(Collection<E> data, Pageable pageable) {
+        List<E> pagedCollection = data.stream()
+                .skip((pageable.offset()))
+                .limit(pageable.getPageSize())
+                .collect(toList());
+        return new PageResult<>(200, "success", pagedCollection, data.size(), pageable.getPage(), pageable.getPageSize());
     }
 
     public static <E> PageResult<E> ofSingle(Collection<E> data) {
         return new PageResult<>(200, "success", data, data.size(), 1, data.size());
-    }
-
-    public static <T> List<T> paging(Collection<T> data, int page, int pageSize) {
-
-        page = Math.max(page, 1);
-        pageSize = pageSize < 1 ? 10 : pageSize;
-        return data.stream().skip((((long) (page - 1) * pageSize))).limit(pageSize).collect(toList());
-
     }
 
     @JsonIgnore

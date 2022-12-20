@@ -48,7 +48,7 @@ public class ActivityQuery {
         //desc sorted
         filtered.sort((e1, e2) -> e2.getCreatedAt().compareTo(e1.getCreatedAt()));
 
-        return PageResult.ofPage(filtered, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(filtered, pageable);
 
     }
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +47,22 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
     public ApplicationInstance findOne(String id) {
         ApplicationInstanceEntity entity = applicationInstanceRepository.findById(id).orElse(null);
         return entity == null ? null : toApplicationInstance(entity);
+    }
+
+    @Override
+    public List<ApplicationInstance> findAll() {
+        Iterable<ApplicationInstanceEntity> iterable = applicationInstanceRepository.findAll();
+        return StreamSupport.stream(iterable.spliterator(), false)
+                .map(e -> e.toT(ApplicationInstance.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApplicationInstance> findAll(String user) {
+        return applicationInstanceRepository.findByUser(user)
+                .stream()
+                .map(e -> e.toT(ApplicationInstance.class))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -69,7 +69,7 @@ public class StatisticsService {
                 .map(User::getId)
                 .map(this::statistics)
                 .collect(Collectors.toList());
-        return PageResult.ofPage(statistics, pageable.getPage(), pageable.getPageSize());
+        return PageResult.ofCollectionPage(statistics, pageable);
     }
 
 }
