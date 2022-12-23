@@ -32,6 +32,7 @@ function ok(response) {
 }
 
 function fail(error) {
+    console.log(error);
     toastr.error('操作失败[' + error + ']');
 }
 
