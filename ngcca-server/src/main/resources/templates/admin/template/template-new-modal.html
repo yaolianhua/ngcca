@@ -17,11 +17,8 @@
                                 <label for="template_name">模版</label>
                                 <select class="form-control custom-select" id="template_name" name="name">
                                     <option disabled selected>请选择</option>
-                                    <option value="Redis">Redis</option>
-                                    <option value="Mongodb">Mongodb</option>
-                                    <option value="RedisInsight">RedisInsight</option>
-                                    <option value="Mysql">Mysql</option>
-                                    <option value="Rabbitmq">Rabbitmq</option>
+                                    <option th:each="template : ${templates}" th:text="${template}"
+                                            th:value="${template}"></option>
                                 </select>
                             </div>
                             <div class="form-group">

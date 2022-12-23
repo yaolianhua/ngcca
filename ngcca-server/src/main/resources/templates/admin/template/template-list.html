@@ -28,7 +28,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="templateDefinition: ${response.data}">
+                            <tr th:each="templateDefinition: ${collection}">
                                 <td th:text="${templateDefinition.name}"></td>
                                 <td th:text="${templateDefinition.version}"></td>
                                 <td th:text="${templateDefinition.shortDesc}"></td>

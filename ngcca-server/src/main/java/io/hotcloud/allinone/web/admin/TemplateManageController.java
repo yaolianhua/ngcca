@@ -39,19 +39,19 @@ public class TemplateManageController {
                             @RequestParam(value = "id", required = false) String id) {
         model.addAttribute(WebConstant.TEMPLATES, Arrays.stream(Template.values()).map(Enum::name).collect(Collectors.toList()));
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.RESPONSE, templateDefinitionService.findAll(name));
+            model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
             return "admin/template/template-list::content";
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
-            model.addAttribute(WebConstant.RESPONSE, templateDefinitionService.findById(id));
+            model.addAttribute(WebConstant.TEMPLATE_DEFINITION, templateDefinitionService.findById(id));
             return "admin/template/template-edit::content";
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            model.addAttribute(WebConstant.RESPONSE, templateDefinitionService.findById(id));
+            model.addAttribute(WebConstant.TEMPLATE_DEFINITION, templateDefinitionService.findById(id));
             return "admin/template/template-detail::content";
         }
 
-        model.addAttribute(WebConstant.RESPONSE, templateDefinitionService.findAll(name));
+        model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
         return "admin/template/template-manage";
     }
 

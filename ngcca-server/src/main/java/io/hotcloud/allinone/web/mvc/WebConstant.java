@@ -6,6 +6,8 @@ package io.hotcloud.allinone.web.mvc;
 public final class WebConstant {
 
     public static final String USER = "user";
+    public static final String TEMPLATE_DEFINITION = "templateDefinition";
+
 
     public static final String NGCCA_ENDPOINT = "endpoint";
     public static final String RESPONSE = "response";
