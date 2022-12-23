@@ -18,18 +18,17 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
 @Component
 @Slf4j
 @Aspect
-public class GlobalSessionUserAspect {
+public class GlobalSessionAspect {
     private final UserApi userApi;
     private final JwtVerifier jwtVerifier;
 
-    public GlobalSessionUserAspect(UserApi userApi, JwtVerifier jwtVerifier) {
+    public GlobalSessionAspect(UserApi userApi, JwtVerifier jwtVerifier) {
         this.userApi = userApi;
         this.jwtVerifier = jwtVerifier;
     }
@@ -66,15 +65,13 @@ public class GlobalSessionUserAspect {
 
         String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] == null) {
+        for (Object arg : args) {
+            if (arg == null) {
                 continue;
             }
-            if (args[i].getClass().equals(User.class) && WebConstant.USER.equals(parameterNames[i])) {
-                Arrays.fill(args, i, i + 1, user);
-            }
-            if (args[i].getClass().equals(BindingAwareModelMap.class)) {
-                Model model = (BindingAwareModelMap) args[i];
+
+            if (arg.getClass().equals(BindingAwareModelMap.class)) {
+                Model model = (BindingAwareModelMap) arg;
                 model.addAttribute(WebConstant.USER, user);
                 model.addAttribute(WebConstant.HOTCLOUD_ENDPOINT, "http://localhost:4000");
             }

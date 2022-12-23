@@ -5,10 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WebUser {
+public @interface CookieUser {
 }
