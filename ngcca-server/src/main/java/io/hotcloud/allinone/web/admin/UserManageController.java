@@ -82,7 +82,7 @@ public class UserManageController {
     @DeleteMapping("/users/{id}")
     @ResponseBody
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
-        userApi.deleteByUserid(id, false);
+        userApi.deleteByUserid(id, true);
         return accepted();
     }
 
