@@ -2,6 +2,7 @@ package io.hotcloud.allinone.web.user;
 
 import io.hotcloud.allinone.web.activity.Activity;
 import io.hotcloud.allinone.web.activity.ActivityQuery;
+import io.hotcloud.allinone.web.mvc.CookieUser;
 import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.allinone.web.statistics.Statistics;
@@ -10,7 +11,6 @@ import io.hotcloud.common.api.activity.ActivityLog;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.security.api.user.User;
-import io.hotcloud.security.api.user.UserApi;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,18 +28,16 @@ public class UserIndexController {
 
     private final StatisticsService statisticsService;
     private final ActivityQuery activityQuery;
-    private final UserApi userApi;
 
-    public UserIndexController(StatisticsService statisticsService, ActivityQuery activityQuery, UserApi userApi) {
+    public UserIndexController(StatisticsService statisticsService, ActivityQuery activityQuery) {
         this.statisticsService = statisticsService;
         this.activityQuery = activityQuery;
-        this.userApi = userApi;
     }
 
     @RequestMapping(value = {"/index", "/"})
     @WebSession
     public String indexPage(Model model,
-                            User user) {
+                            @CookieUser User user) {
         Statistics statistics = statisticsService.statistics(user.getId());
         PageResult<ActivityLog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 20));
         List<Activity> activities = pageResult.getData().stream().map(this::toActivity).collect(Collectors.toList());
