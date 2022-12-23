@@ -1,7 +1,7 @@
 package io.hotcloud.allinone.web.admin;
 
 import io.hotcloud.allinone.web.mvc.WebConstant;
-import io.hotcloud.allinone.web.mvc.WebUser;
+import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.application.api.template.Template;
 import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
@@ -32,7 +32,7 @@ public class TemplateManageController {
     }
 
     @RequestMapping(value = {"/template-manage"})
-    @WebUser
+    @WebSession
     public String templates(Model model,
                             @RequestParam(value = "action", required = false) String action,
                             @RequestParam(value = "name", required = false) String name,

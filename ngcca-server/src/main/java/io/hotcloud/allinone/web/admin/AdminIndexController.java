@@ -1,6 +1,6 @@
 package io.hotcloud.allinone.web.admin;
 
-import io.hotcloud.allinone.web.mvc.WebUser;
+import io.hotcloud.allinone.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminIndexController {
 
     @RequestMapping(value = {"/index", "/", ""})
-    @WebUser
+    @WebSession
     public String indexPage(Model model) {
         return "admin/index";
     }

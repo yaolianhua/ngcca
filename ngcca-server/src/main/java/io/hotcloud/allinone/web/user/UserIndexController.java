@@ -3,7 +3,7 @@ package io.hotcloud.allinone.web.user;
 import io.hotcloud.allinone.web.activity.Activity;
 import io.hotcloud.allinone.web.activity.ActivityQuery;
 import io.hotcloud.allinone.web.mvc.WebConstant;
-import io.hotcloud.allinone.web.mvc.WebUser;
+import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.allinone.web.statistics.Statistics;
 import io.hotcloud.allinone.web.statistics.StatisticsService;
 import io.hotcloud.common.api.activity.ActivityLog;
@@ -37,7 +37,7 @@ public class UserIndexController {
     }
 
     @RequestMapping(value = {"/index", "/"})
-    @WebUser
+    @WebSession
     public String indexPage(Model model,
                             User user) {
         Statistics statistics = statisticsService.statistics(user.getId());

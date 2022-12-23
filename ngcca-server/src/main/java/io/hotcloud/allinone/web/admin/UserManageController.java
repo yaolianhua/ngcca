@@ -1,7 +1,7 @@
 package io.hotcloud.allinone.web.admin;
 
 import io.hotcloud.allinone.web.mvc.WebConstant;
-import io.hotcloud.allinone.web.mvc.WebUser;
+import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.allinone.web.statistics.StatisticsService;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
@@ -36,7 +36,7 @@ public class UserManageController {
     }
 
     @RequestMapping(value = {"/user-manage"})
-    @WebUser
+    @WebSession
     public String users(Model model,
                         @RequestParam(value = "action", required = false) String action,
                         @RequestParam(value = "id", required = false) String userid,

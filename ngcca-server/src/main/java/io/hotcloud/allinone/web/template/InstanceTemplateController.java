@@ -1,6 +1,6 @@
 package io.hotcloud.allinone.web.template;
 
-import io.hotcloud.allinone.web.mvc.WebUser;
+import io.hotcloud.allinone.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InstanceTemplateController {
 
     @RequestMapping({"/", ""})
-    @WebUser
+    @WebSession
     public String template(Model model) {
         return "template/instancetemplate";
     }
