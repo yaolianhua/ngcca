@@ -4,6 +4,7 @@ import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebCookie;
 import io.hotcloud.security.api.login.BearerToken;
 import io.hotcloud.security.api.login.LoginApi;
+import io.hotcloud.security.api.user.UserApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -23,9 +23,11 @@ import java.util.Objects;
 public class AdminLoginController {
 
     private final LoginApi loginApi;
+    private final UserApi userApi;
 
-    public AdminLoginController(LoginApi loginApi) {
+    public AdminLoginController(LoginApi loginApi, UserApi userApi) {
         this.loginApi = loginApi;
+        this.userApi = userApi;
     }
 
     @GetMapping
@@ -40,7 +42,7 @@ public class AdminLoginController {
                              @ModelAttribute("password") String password) {
         try {
             BearerToken bearerToken = loginApi.basicLogin(username, password);
-            if (!isAdmin(username)) {
+            if (!userApi.isAdmin(username)) {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
                 return "admin/login";
             } else {
@@ -53,10 +55,6 @@ public class AdminLoginController {
             return "admin/login";
         }
 
-    }
-
-    private boolean isAdmin(String username) {
-        return Objects.equals("admin", username);
     }
 
 }

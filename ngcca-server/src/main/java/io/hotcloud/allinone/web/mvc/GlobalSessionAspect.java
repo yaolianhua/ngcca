@@ -42,8 +42,8 @@ public class GlobalSessionAspect {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
         if (!StringUtils.hasText(authorization)) {
-            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
             if (request.getRequestURI().startsWith("/administrator")) {
                 return "redirect:/administrator/login";
             }
@@ -51,7 +51,6 @@ public class GlobalSessionAspect {
         }
 
         if (!jwtVerifier.valid(authorization)) {
-            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
             if (request.getRequestURI().startsWith("/administrator")) {
                 return "redirect:/administrator/login";
             }
@@ -62,6 +61,12 @@ public class GlobalSessionAspect {
         Map<String, Object> attributes = jwtVerifier.retrieveAttributes(authorization);
         String username = (String) attributes.get("username");
         User user = userApi.retrieve(username);
+
+        if (!userApi.isAdmin(username)) {
+            if (request.getRequestURI().startsWith("/administrator")) {
+                return "redirect:/administrator/login";
+            }
+        }
 
         String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
