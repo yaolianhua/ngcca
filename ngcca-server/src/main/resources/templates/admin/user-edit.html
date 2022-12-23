@@ -9,33 +9,33 @@
                         </div>
                         <form id="user-edit-form">
                             <div class="card-body">
-                                <input name="id" th:value="${response.id}" type="hidden">
+                                <input name="id" th:value="${user.id}" type="hidden">
                                 <div class="form-group">
                                     <label for="username">用户名</label>
                                     <input class="form-control" id="username" name="username" readonly
-                                           th:value="${response.username}" type="text">
+                                           th:value="${user.username}" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label for="nickname">昵称</label>
                                     <input class="form-control" id="nickname" name="nickname"
                                            placeholder="用户昵称,可为空"
-                                           th:value="${response.nickname}" type="text">
+                                           th:value="${user.nickname}" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label for="mobile">手机号</label>
                                     <input class="form-control" id="mobile" name="mobile" placeholder="手机号,可为空"
-                                           th:value="${response.mobile}" type="text">
+                                           th:value="${user.mobile}" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">邮箱</label>
                                     <input class="form-control" id="email" name="email" placeholder="邮箱地址,可为空"
-                                           th:value="${response.email}" type="email">
+                                           th:value="${user.email}" type="email">
                                 </div>
                                 <!--<div class="form-group">
                                     <label for="enable">用户状态</label>
                                     <select class="form-control custom-select" id="enable" name="enabled">
-                                        <option value="true" th:selected="${response.enabled} == true">激活</option>
-                                        <option value="false" th:selected="${response.enabled} == false">禁用</option>
+                                        <option value="true" th:selected="${user.enabled} == true">激活</option>
+                                        <option value="false" th:selected="${user.enabled} == false">禁用</option>
                                     </select>
                                 </div>-->
                             </div>

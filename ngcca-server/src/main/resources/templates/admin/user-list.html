@@ -29,7 +29,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="user: ${response.data}">
+                            <tr th:each="user: ${page.data}">
                                 <td th:text="${user.username}"></td>
                                 <td th:text="${user.nickname}"></td>
                                 <td th:text="${user.mobile}"></td>

@@ -78,7 +78,7 @@ public class GlobalSessionAspect {
             if (arg.getClass().equals(BindingAwareModelMap.class)) {
                 Model model = (BindingAwareModelMap) arg;
                 model.addAttribute(WebConstant.USER, user);
-                model.addAttribute(WebConstant.HOTCLOUD_ENDPOINT, "http://localhost:4000");
+                model.addAttribute(WebConstant.NGCCA_ENDPOINT, "http://localhost:4000");
             }
         }
 

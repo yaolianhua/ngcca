@@ -43,19 +43,19 @@ public class UserManageController {
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.RESPONSE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+            model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
             return "admin/user-list::content";
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
-            model.addAttribute(WebConstant.RESPONSE, userApi.find(userid));
+            model.addAttribute(WebConstant.USER, userApi.find(userid));
             return "admin/user-edit::content";
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            model.addAttribute(WebConstant.RESPONSE, statisticsService.statistics(userid));
+            model.addAttribute(WebConstant.STATISTICS, statisticsService.statistics(userid));
             return "admin/user-detail::content";
         }
 
-        model.addAttribute(WebConstant.RESPONSE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+        model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
         return "admin/user-manage";
     }
 
