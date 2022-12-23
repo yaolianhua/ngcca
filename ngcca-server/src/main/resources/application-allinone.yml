@@ -34,3 +34,13 @@ ngcca:
   buildpack:
     imagebuild:
       notify-mode: rabbitmq
+  security:
+    ignored:
+      urls:
+        - /login
+        - /administrator/**
+        - /index
+        - /dist/**
+        - /plugins/**
+        - /js/**
+        - /favicon.ico

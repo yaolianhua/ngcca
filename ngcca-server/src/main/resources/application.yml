@@ -1,9 +1,11 @@
 spring:
   application:
-    name: ngcca-server
+    name: ngcca
   config:
     import:
       - application-allinone.yml
+  thymeleaf:
+    cache: false
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
