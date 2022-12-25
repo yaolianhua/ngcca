@@ -1,3 +1,31 @@
+//初始化常量
+const TEMPLATE_DEFINITION_API = "/v1/definition/templates";
+const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage?action=list";
+// Request interceptors for API calls
+axios.interceptors.request.use(
+    config => {
+        config.headers['Authorization'] = `Bearer ${getAuthorization()}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+//Get authorization from cookies
+function getAuthorization() {
+    let strcookie = document.cookie;//获取cookie字符串
+    let arrcookie = strcookie.split("; ");//分割
+    //遍历匹配
+    for (let i = 0; i < arrcookie.length; i++) {
+        let arr = arrcookie[i].split("=");
+        if (arr[0] === "authorization") {
+            return arr[1];
+        }
+    }
+    return "";
+}
+
 $(function () {
     templatePaging();
     toastr.options = {
@@ -46,54 +74,17 @@ function templateS() {
     // Send a POST request
     axios({
         method: 'post',
-        url: '/administrator/templates',
+        url: TEMPLATE_DEFINITION_API,
         data: data
     }).then(function (response) {
         $('#modal-new-template').modal('hide');
-        $('#templates-fragment').load('/administrator/template-manage?action=list', function () {
+        $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
             templatePaging();
         });
 
         ok(response);
     }).catch(function (error) {
         fail(error);
-    });
-}
-
-//template edit
-function templateES() {
-    let data = {};
-    let value = $('#template-edit-form').serializeArray();
-    $.each(value, function (index, item) {
-        data[item.name] = item.value;
-    });
-    // Send a POST request
-    axios({
-        method: 'put',
-        url: '/administrator/templates',
-        data: data
-    }).then(function (response) {
-        $('#templates-fragment').load('/administrator/template-manage?action=list', function () {
-            templatePaging();
-        });
-
-        ok(response);
-    }).catch(function (error) {
-        fail(error);
-    });
-}
-
-//template edit view
-function templateEP(id) {
-    $('#templates-fragment').load('/administrator/template-manage?action=edit&id=' + id, function () {
-
-    });
-}
-
-//template detail view
-function templateDP(id, endpoint) {
-    $('#templates-fragment').load('/administrator/template-manage?action=detail&id=' + id, function () {
-        dropzone(id, endpoint);
     });
 }
 
@@ -116,9 +107,9 @@ function templateD(id) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete('/administrator/templates/' + id)
+            axios.delete(TEMPLATE_DEFINITION_API + '/' + id)
                 .then(response => {
-                    $('#templates-fragment').load('/administrator/template-manage?action=list', function () {
+                    $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
                         templatePaging();
                     });
                     ok(response);
