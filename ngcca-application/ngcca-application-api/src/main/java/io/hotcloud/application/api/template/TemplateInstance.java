@@ -19,6 +19,7 @@ public class TemplateInstance {
     private String uuid;
     private String user;
     private String name;
+    private String version;
 
     private String host;
     private String namespace;
