@@ -1,5 +1,6 @@
 package io.hotcloud.allinone.web.admin;
 
+import io.hotcloud.allinone.web.Views;
 import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.allinone.web.statistics.StatisticsService;
@@ -44,19 +45,20 @@ public class UserManageController {
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
-            return "admin/user-list::content";
+            return Views.USER_MANAGE_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
             model.addAttribute(WebConstant.USER, userApi.find(userid));
-            return "admin/user-edit::content";
+            return Views.USER_MANAGE_EDIT_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
             model.addAttribute(WebConstant.STATISTICS, statisticsService.statistics(userid));
-            return "admin/user-detail::content";
+            model.addAttribute(WebConstant.USER, userApi.find(userid));
+            return Views.USER_MANAGE_DETAIL_FRAGMENT;
         }
 
         model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
-        return "admin/user-manage";
+        return Views.USER_MANAGE;
     }
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
