@@ -14,4 +14,5 @@ public class RegistryImageEntity extends AbstractEntity {
     @Indexed(unique = true)
     private String name;
     private String value;
+    private String tag;
 }

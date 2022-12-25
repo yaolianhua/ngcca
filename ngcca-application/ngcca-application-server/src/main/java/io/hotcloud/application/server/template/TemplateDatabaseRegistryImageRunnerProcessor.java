@@ -31,18 +31,21 @@ public class TemplateDatabaseRegistryImageRunnerProcessor implements NGCCARunner
         for (Template image : Template.values()) {
             String key = image.name().toLowerCase();
             String repo = templateImagesProperties.getRepos().get(key);
+            String tag = templateImagesProperties.getTag(key);
             Assert.hasText(repo, String.format("%s image name is null", key));
 
             RegistryImageEntity entity = registryImageRepository.findByName(key);
             if (Objects.isNull(entity)) {
                 RegistryImageEntity saveEntity = new RegistryImageEntity();
                 saveEntity.setName(key);
+                saveEntity.setTag(tag);
                 saveEntity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
                 registryImageRepository.save(saveEntity);
 
                 registryImagesContainer.put(key, saveEntity.getValue());
             } else {
                 entity.setValue(String.format("%s/%s", registryProperties.getUrl(), repo));
+                entity.setTag(tag);
                 entity.setModifiedAt(LocalDateTime.now());
                 registryImageRepository.save(entity);
 
