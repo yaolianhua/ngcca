@@ -90,7 +90,7 @@ function templateS() {
 
 //template list
 function templates() {
-    $('#templates-fragment').load('/administrator/template-manage?action=list', function () {
+    $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
         templatePaging();
     });
 }
