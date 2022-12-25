@@ -39,7 +39,7 @@ public class UserIndexController {
     public String indexPage(Model model,
                             @CookieUser User user) {
         Statistics statistics = statisticsService.statistics(user.getId());
-        PageResult<ActivityLog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 20));
+        PageResult<ActivityLog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 8));
         List<Activity> activities = pageResult.getData().stream().map(this::toActivity).collect(Collectors.toList());
         model.addAttribute(WebConstant.STATISTICS, statistics);
         model.addAttribute(WebConstant.ACTIVITIES, activities);
