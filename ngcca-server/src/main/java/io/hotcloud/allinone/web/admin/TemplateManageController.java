@@ -1,5 +1,6 @@
 package io.hotcloud.allinone.web.admin;
 
+import io.hotcloud.allinone.web.Views;
 import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.application.api.template.Template;
@@ -40,19 +41,19 @@ public class TemplateManageController {
         model.addAttribute(WebConstant.TEMPLATES, Arrays.stream(Template.values()).map(Enum::name).collect(Collectors.toList()));
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
-            return "admin/template/template-list::content";
+            return Views.TEMPLATE_DEFINITION_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
             model.addAttribute(WebConstant.TEMPLATE_DEFINITION, templateDefinitionService.findById(id));
-            return "admin/template/template-edit::content";
+            return Views.TEMPLATE_DEFINITION_EDIT_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
             model.addAttribute(WebConstant.TEMPLATE_DEFINITION, templateDefinitionService.findById(id));
-            return "admin/template/template-detail::content";
+            return Views.TEMPLATE_DEFINITION_DETAIL_FRAGMENT;
         }
 
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
-        return "admin/template/template-manage";
+        return Views.TEMPLATE_DEFINITION_MANAGE;
     }
 
     @PostMapping(value = "/templates", consumes = MediaType.APPLICATION_JSON_VALUE)
