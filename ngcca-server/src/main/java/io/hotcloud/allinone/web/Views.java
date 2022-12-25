@@ -10,5 +10,7 @@ public final class Views {
     public static final String USER_MANAGE_EDIT_FRAGMENT = "admin/user-manage/user-edit::content";
     public static final String USER_MANAGE_DETAIL_FRAGMENT = "admin/user-manage/user-detail::content";
     public static final String USER_MANAGE = "admin/user-manage/user-manage";
+    public static final String ADMIN_LOGIN = "admin/login";
+    public static final String ADMIN_INDEX = "admin/index";
 
 }

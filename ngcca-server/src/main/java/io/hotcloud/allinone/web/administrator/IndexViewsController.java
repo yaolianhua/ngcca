@@ -1,20 +1,18 @@
-package io.hotcloud.allinone.web.admin;
+package io.hotcloud.allinone.web.administrator;
 
+import io.hotcloud.allinone.web.Views;
 import io.hotcloud.allinone.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Controller
-@RequestMapping("/administrator")
-public class AdminIndexController {
+@RequestMapping("/administrator/index")
+public class IndexViewsController {
 
-    @RequestMapping(value = {"/index", "/", ""})
+    @RequestMapping(value = {"/", ""})
     @WebSession
     public String indexPage(Model model) {
-        return "admin/index";
+        return Views.ADMIN_INDEX;
     }
 }

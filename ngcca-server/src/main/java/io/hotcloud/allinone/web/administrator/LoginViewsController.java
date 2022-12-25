@@ -1,5 +1,6 @@
-package io.hotcloud.allinone.web.admin;
+package io.hotcloud.allinone.web.administrator;
 
+import io.hotcloud.allinone.web.Views;
 import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebCookie;
 import io.hotcloud.security.api.login.BearerToken;
@@ -20,19 +21,19 @@ import javax.servlet.http.HttpServletResponse;
  **/
 @Controller
 @RequestMapping("/administrator/login")
-public class AdminLoginController {
+public class LoginViewsController {
 
     private final LoginApi loginApi;
     private final UserApi userApi;
 
-    public AdminLoginController(LoginApi loginApi, UserApi userApi) {
+    public LoginViewsController(LoginApi loginApi, UserApi userApi) {
         this.loginApi = loginApi;
         this.userApi = userApi;
     }
 
     @GetMapping
     public String adminLoginPage() {
-        return "admin/login";
+        return Views.ADMIN_LOGIN;
     }
 
     @PostMapping
@@ -44,7 +45,7 @@ public class AdminLoginController {
             BearerToken bearerToken = loginApi.basicLogin(username, password);
             if (!userApi.isAdmin(username)) {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
-                return "admin/login";
+                return Views.ADMIN_LOGIN;
             } else {
                 Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
                 response.addCookie(cookie);
@@ -52,7 +53,7 @@ public class AdminLoginController {
             }
         } catch (Exception e) {
             model.addAttribute(WebConstant.MESSAGE, e.getMessage());
-            return "admin/login";
+            return Views.ADMIN_LOGIN;
         }
 
     }
