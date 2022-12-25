@@ -1,10 +1,41 @@
+//初始化常量
+const USER_API = "/v1/security/users";
+const AVATAR_UPLOAD = "/v1/files/upload?bucket=avatar";
+const USER_LIST_VIEWS = "/administrator/user-manage?action=list";
+const USER_EDIT_VIEWS = "/administrator/user-manage?action=edit&id=";
+const USER_DETAIL_VIEWS = "/administrator/user-manage?action=detail&id=";
+// Request interceptors for API calls
+axios.interceptors.request.use(
+    config => {
+        config.headers['Authorization'] = `Bearer ${getAuthorization()}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+//Get authorization from cookies
+function getAuthorization() {
+    let strcookie = document.cookie;//获取cookie字符串
+    let arrcookie = strcookie.split("; ");//分割
+    //遍历匹配
+    for (let i = 0; i < arrcookie.length; i++) {
+        let arr = arrcookie[i].split("=");
+        if (arr[0] === "authorization") {
+            return arr[1];
+        }
+    }
+    return "";
+}
+
 $(function () {
     userPaging();
     toastr.options = {
         "timeOut": "3000"
     };
-});
 
+});
 const swal = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -46,11 +77,11 @@ function userS() {
     // Send a POST request
     axios({
         method: 'post',
-        url: '/administrator/users',
+        url: USER_API,
         data: data
     }).then(function (response) {
         $('#modal-new-user').modal('hide');
-        $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+        $('#users-fragment').load(USER_LIST_VIEWS, function () {
             userPaging();
         });
 
@@ -70,10 +101,10 @@ function userES() {
     // Send a POST request
     axios({
         method: 'put',
-        url: '/administrator/users',
+        url: USER_API,
         data: data
     }).then(function (response) {
-        $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+        $('#users-fragment').load(USER_LIST_VIEWS, function () {
             userPaging();
         });
 
@@ -85,21 +116,21 @@ function userES() {
 
 //user edit view
 function userEP(id) {
-    $('#users-fragment').load('/administrator/user-manage?action=edit&id=' + id, function () {
+    $('#users-fragment').load(USER_EDIT_VIEWS + id, function () {
 
     });
 }
 
 //user detail view
 function userDP(id, endpoint) {
-    $('#users-fragment').load('/administrator/user-manage?action=detail&id=' + id, function () {
+    $('#users-fragment').load(USER_DETAIL_VIEWS + id, function () {
         dropzone(id, endpoint);
     });
 }
 
 //user list
 function users() {
-    $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+    $('#users-fragment').load(USER_LIST_VIEWS, function () {
         userPaging();
     });
 }
@@ -116,9 +147,9 @@ function userD(id) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete('/administrator/users/' + id)
+            axios.delete(USER_API + "/" + id)
                 .then(response => {
-                    $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+                    $('#users-fragment').load(USER_LIST_VIEWS, function () {
                         userPaging();
                     });
                     ok(response);
@@ -134,9 +165,9 @@ function userD(id) {
 
 //user on
 function userOn(user) {
-    axios.put('/administrator/users/' + user + '/true')
+    axios.put(USER_API + "/" + user + '/true')
         .then(response => {
-            $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+            $('#users-fragment').load(USER_LIST_VIEWS, function () {
                 userPaging();
             });
             ok(response);
@@ -148,9 +179,9 @@ function userOn(user) {
 
 //user off
 function userOff(user) {
-    axios.put('/administrator/users/' + user + '/false')
+    axios.put(USER_API + "/" + user + '/false')
         .then(response => {
-            $('#users-fragment').load('/administrator/user-manage?action=list', function () {
+            $('#users-fragment').load(USER_LIST_VIEWS, function () {
                 userPaging();
             });
             ok(response);
@@ -158,20 +189,6 @@ function userOff(user) {
         .catch(error => {
             fail(error);
         });
-}
-
-//Get authorization from cookies
-function getAuthorization() {
-    let strcookie = document.cookie;//获取cookie字符串
-    let arrcookie = strcookie.split("; ");//分割
-    //遍历匹配
-    for (let i = 0; i < arrcookie.length; i++) {
-        let arr = arrcookie[i].split("=");
-        if (arr[0] === "authorization") {
-            return arr[1];
-        }
-    }
-    return "";
 }
 
 //user avatar save
@@ -191,7 +208,7 @@ function useravatarS() {
     // Send a PUT request
     axios({
         method: 'put',
-        url: '/administrator/users',
+        url: USER_API,
         data: data
     }).then(function (response) {
         $('#modal-upload-avatar').modal('hide');
@@ -212,7 +229,7 @@ function dropzone(id, endpoint) {
     let previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);
     let myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: endpoint + "/v1/files/upload?bucket=avatar", // Set the url
+        url: endpoint + AVATAR_UPLOAD, // Set the url
         headers: {"Authorization": 'Bearer ' + getAuthorization()},
         acceptedFiles: "image/jpg, image/png, image/gif",
         success: function (file, response) {
