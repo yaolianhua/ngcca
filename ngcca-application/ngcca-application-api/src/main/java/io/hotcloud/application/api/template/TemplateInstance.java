@@ -20,6 +20,7 @@ public class TemplateInstance {
     private String user;
     private String name;
     private String version;
+    private int progress;
 
     private String host;
     private String namespace;
@@ -41,4 +42,8 @@ public class TemplateInstance {
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    public boolean isDeploying() {
+        return !success && progress != 100;
+    }
 }
