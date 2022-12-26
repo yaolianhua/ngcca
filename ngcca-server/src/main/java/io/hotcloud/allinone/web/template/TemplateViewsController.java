@@ -10,6 +10,9 @@ import io.hotcloud.security.api.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/template")
@@ -34,7 +37,12 @@ public class TemplateViewsController {
     @RequestMapping("/user-template")
     @WebSession
     public String template(Model model,
+                           @RequestParam(value = "action", required = false) String action,
                            @CookieUser User user) {
+        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+            model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findByName(user.getUsername()));
+            return Views.USER_TEMPLATE_LIST_FRAGMENT;
+        }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
         return Views.USER_TEMPLATE;
     }
