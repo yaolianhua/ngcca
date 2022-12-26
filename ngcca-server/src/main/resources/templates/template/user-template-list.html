@@ -47,17 +47,15 @@
                     </td>
                     <td class="project_progress">
                         <div class="progress progress-sm">
-                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" class="progress-bar bg-green"
-                                 role="progressbar" style="width: 50%">
+                            <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-green"
+                                 role="progressbar" th:style="'width: ' + ${instance.progress} + '%'">
                             </div>
                         </div>
-                        <small>
-                            10% Complete
-                        </small>
+                        <small th:text="${instance.progress} + '% complete'"></small>
                     </td>
                     <td class="project-state">
                 <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"
-                      th:text="${instance.success} ? '部署成功' : '部署中'"></span>
+                      th:text="${instance.deploying} ? '部署中' : (${instance.success} ? '部署成功' : '部署失败')"></span>
                     </td>
                     <td class="project-actions text-right">
                         <a class="btn btn-primary btn-sm" th:attr="onclick=|instanceDetail('${instance.id}')|">
