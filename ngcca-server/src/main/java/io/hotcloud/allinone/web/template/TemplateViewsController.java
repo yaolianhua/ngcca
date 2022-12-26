@@ -38,10 +38,15 @@ public class TemplateViewsController {
     @WebSession
     public String template(Model model,
                            @RequestParam(value = "action", required = false) String action,
+                           @RequestParam(value = "id", required = false) String id,
                            @CookieUser User user) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findByName(user.getUsername()));
+            model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
             return Views.USER_TEMPLATE_LIST_FRAGMENT;
+        }
+        if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
+            model.addAttribute(WebConstant.TEMPLATE_INSTANCE, templateInstanceService.findOne(id));
+            return Views.USER_TEMPLATE_DETAIL_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
         return Views.USER_TEMPLATE;
