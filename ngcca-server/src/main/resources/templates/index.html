@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>NGCCA | 首页</title>
+
+  <link th:include="global-link">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <div th:include="navbar"></div>
+
+  <div th:include="sidebar"></div>
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div th:include="content-header"></div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon"><i class="fas fa-code-branch"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">代码仓库</span>
+                <span class="info-box-number" th:text="${statistics.repositories.total}"></span>
+              </div>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">构建面板</span>
+                <span class="info-box-number" th:text="${statistics.buildPacks.total}"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+          <!-- fix for small devices only -->
+          <div class="clearfix hidden-md-up"></div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">模板实例</span>
+                <span class="info-box-number" th:text="${statistics.templates.total}"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon"><i class="fas fa-cloud"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">应用实例</span>
+                <span class="info-box-number" th:text="${statistics.applications.total}"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+            <div class="col-md-6">
+              <!-- The time line -->
+              <div class="timeline">
+
+                <div th:each="activity: ${activities}">
+                  <i class="fas" th:classappend="${activity.icon}"></i>
+                  <div class="timeline-item">
+                    <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
+                    <h3 class="timeline-header">
+                      <a href="#" th:text="${activity.display}"></a>
+                    </h3>
+
+                    <div class="timeline-body" th:text="${activity.description}">
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card">
+
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="chart-responsive">
+                        <canvas height="150" id="pieChart"></canvas>
+                      </div>
+                      <!-- ./chart-responsive -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                      <ul class="chart-legend clearfix">
+                        <li><i class="fas fa-wrench text-success"></i> 构建成功</li>
+                        <li><i class="fas fa-wrench text-danger"></i> 构建失败</li>
+                        <li><i class="fas fa-wrench text-warning"></i> 构建删除</li>
+                        <li><i class="fas fa-code-branch text-success"></i> 克隆成功</li>
+                        <li><i class="fas fa-code-branch text-danger"></i> 克隆失败</li>
+                        <li><i class="fas fa-cubes text-success"></i> 实例模板部署成功</li>
+                        <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
+                        <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
+                        <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
+                      </ul>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer p-0">
+                  <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <i class="fas fa-code-branch text-sm"></i>
+                        <span class="float-right">
+                        [[${statistics.repositories.total}]]
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <i class="fas fa-cubes text-sm"></i>
+                        <span class="float-right">
+                        [[${statistics.templates.total}]]
+                      </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <i class="fas fa-wrench text-sm"></i>
+                        <span class="float-right">
+                         [[${statistics.buildPacks.total}]]
+                      </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <i class="fas fa-cloud text-sm"></i>
+                        <span class="float-right">
+                        [[${statistics.applications.total}]]
+                      </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- /.footer -->
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <div th:include="footer"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<div th:include="global-script"></div>
+<script th:inline="javascript" type="text/javascript">
+  /* global Chart:false */
+  $(function () {
+    'use strict'
+    let pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+    let data = [];
+    data[0] = [[${statistics.buildPacks.success}]];
+    data[1] = [[${statistics.buildPacks.failed}]];
+    data[2] = [[${statistics.buildPacks.deleted}]];
+    data[3] = [[${statistics.repositories.success}]];
+    data[4] = [[${statistics.repositories.failed}]];
+    data[5] = [[${statistics.templates.success}]];
+    data[6] = [[${statistics.templates.failed}]];
+    data[7] = [[${statistics.applications.success}]];
+    data[8] = [[${statistics.applications.failed}]];
+
+    let pieData = {
+      labels: [
+        '构建成功',
+        '构建失败',
+        '构建删除',
+        '克隆成功',
+        '克隆失败',
+        '实例模板部署成功',
+        '实例模板部署失败',
+        '应用发布成功',
+        '应用发布失败'
+      ],
+      datasets: [
+        {
+          data: data,
+          backgroundColor:
+                  [
+                    '#03f689', '#f56954', '#f39c12',
+                    '#03f689', '#f56954',
+                    '#03f689', '#f56954',
+                    '#03f689', '#f56954',
+                  ]
+        }
+      ]
+    }
+    let pieOptions = {
+      legend: {
+        display: true
+      }
+    }
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    // eslint-disable-next-line no-unused-vars
+    let pieChart = new Chart(pieChartCanvas, {
+      type: 'doughnut',
+      data: pieData,
+      options: pieOptions
+    })
+
+  })
+
+</script>
+</body>
+</html>

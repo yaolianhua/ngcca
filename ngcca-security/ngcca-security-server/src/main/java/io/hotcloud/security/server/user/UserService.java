@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -157,7 +158,6 @@ public class UserService implements UserApi {
 
     @Override
     public User current() {
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Assert.notNull(authentication, "Authentication is null");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -181,6 +181,12 @@ public class UserService implements UserApi {
                 .stream()
                 .map(this::buildUser)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isAdmin(String username) {
+        User user = this.retrieve(username);
+        return Objects.equals("admin", user.getUsername());
     }
 
     private User buildUser(UserEntity entity) {

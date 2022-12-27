@@ -1,9 +1,11 @@
 spring:
   application:
-    name: ngcca-server
+    name: ngcca
   config:
     import:
       - application-allinone.yml
+  thymeleaf:
+    cache: false
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -28,3 +30,4 @@ spring:
       max-file-size: 1024MB
 server:
   max-http-header-size: 40KB
+  port: 4000

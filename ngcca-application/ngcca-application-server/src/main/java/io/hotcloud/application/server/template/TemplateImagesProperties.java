@@ -49,6 +49,17 @@ public class TemplateImagesProperties {
      */
     private String busybox;
 
+    public String getTag(String name) {
+        if (!StringUtils.hasText(name)) {
+            throw new NGCCACommonException("image name is null");
+        }
+
+        // namespace/rabbitmq:3.9-management
+        String repository = this.getRepos().get(name.toLowerCase());
+        int pos = repository.indexOf(":");
+        return repository.substring(pos + 1);
+    }
+
     public Map<String, String> getRepos() {
         Field[] declaredFields = TemplateImagesProperties.class.getDeclaredFields();
         Map<String, String> args = new HashMap<>(32);

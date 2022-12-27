@@ -32,6 +32,7 @@ public class InstanceTemplateProcessors {
         for (TemplateInstanceProcessor processor : processors) {
             TemplateInstance templateInstance = processor.process(template, imageUrl, user, namespace);
             if (Objects.nonNull(templateInstance)){
+                templateInstance.setVersion(image.getTag());
                 return templateInstance;
             }
         }

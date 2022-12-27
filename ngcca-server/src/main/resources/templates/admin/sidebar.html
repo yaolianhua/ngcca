@@ -1,0 +1,66 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a class="brand-link" th:href="@{/administrator/index}">
+        <img alt="HotCloud Logo" class="brand-image img-circle elevation-3" style="opacity: .8"
+             th:src="@{/dist/img/HotCloudlogo.png}">
+        <span class="brand-text font-weight-light">NGCCA</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img alt="User avatar" class="img-circle elevation-2" th:src="${user.avatar}">
+            </div>
+            <div class="info">
+                <a class="d-block" href="#"><p th:text="${user.username}"></p></a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-accordion="false" data-widget="treeview" role="menu">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item menu-open">
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/index}">
+                                <i class="far fa-chart-bar nav-icon"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- 用户管理 -->
+                <li class="nav-item menu-open">
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/user-manage}">
+                                <i class="far fa-user-circle nav-icon"></i>
+                                <p>用户管理</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 模板管理 -->
+                <li class="nav-item menu-open">
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/template-manage}">
+                                <i class="fas fa-cubes nav-icon"></i>
+                                <p>模板管理</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

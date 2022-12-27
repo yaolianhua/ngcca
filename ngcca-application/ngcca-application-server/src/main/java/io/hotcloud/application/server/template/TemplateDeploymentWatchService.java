@@ -47,6 +47,7 @@ public class TemplateDeploymentWatchService {
 
                 template.setMessage(timeoutMessage);
                 template.setSuccess(false);
+                template.setProgress(100);
                 templateInstanceService.saveOrUpdate(template);
 
                 Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
@@ -58,6 +59,8 @@ public class TemplateDeploymentWatchService {
             Deployment deployment = deploymentApi.read(template.getNamespace(), template.getName());
             boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
             if (!ready) {
+                template.setProgress(50);
+                templateInstanceService.saveOrUpdate(template);
                 Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 return;
             }
@@ -79,6 +82,7 @@ public class TemplateDeploymentWatchService {
             template.setNodePorts(nodePorts);
             template.setMessage(CommonConstant.SUCCESS_MESSAGE);
             template.setSuccess(true);
+            template.setProgress(100);
             templateInstanceService.saveOrUpdate(template);
 
             Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
@@ -96,6 +100,7 @@ public class TemplateDeploymentWatchService {
             Log.error(TemplateDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
             template.setSuccess(false);
             template.setMessage(e.getMessage());
+            template.setProgress(100);
             templateInstanceService.saveOrUpdate(template);
         }
     }
@@ -145,6 +150,7 @@ public class TemplateDeploymentWatchService {
 
                     template.setMessage(timeoutMessage);
                     template.setSuccess(false);
+                    template.setProgress(100);
                     templateInstanceService.saveOrUpdate(template);
 
                     Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
@@ -157,6 +163,8 @@ public class TemplateDeploymentWatchService {
                 Deployment deployment = deploymentApi.read(instance.getNamespace(), instance.getName());
                 boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
                 if (!ready) {
+                    template.setProgress(50);
+                    templateInstanceService.saveOrUpdate(template);
                     Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 }
 
@@ -177,6 +185,7 @@ public class TemplateDeploymentWatchService {
 
                     template.setMessage(CommonConstant.SUCCESS_MESSAGE);
                     template.setSuccess(true);
+                    template.setProgress(100);
                     templateInstanceService.saveOrUpdate(template);
 
                     Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
@@ -199,6 +208,7 @@ public class TemplateDeploymentWatchService {
             templateDeploymentCacheApi.unLock(instance.getId());
             Log.error(TemplateDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
             instance.setSuccess(false);
+            instance.setProgress(100);
             instance.setMessage(e.getMessage());
             templateInstanceService.saveOrUpdate(instance);
         }

@@ -1,5 +1,6 @@
 package io.hotcloud.allinone;
 
+import io.hotcloud.allinone.web.NgccaWebRootPackage;
 import io.hotcloud.application.NgccaApplicationRootPackage;
 import io.hotcloud.buildpack.NgccaBuildPackRootPackage;
 import io.hotcloud.common.NgccaCommonRootPackage;
@@ -14,7 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         NgccaBuildPackRootPackage.class,
         NgccaSecurityRootPackage.class,
         NgccaCommonRootPackage.class,
-        NgccaMongodbConfiguration.class
+        NgccaMongodbConfiguration.class,
+        NgccaWebRootPackage.class
 })
 @EnableKubernetesAgentClient
 public class NGCCAAllinone {

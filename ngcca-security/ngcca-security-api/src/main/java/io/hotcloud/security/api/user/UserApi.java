@@ -99,4 +99,12 @@ public interface UserApi {
      * @return user collection
      */
     Collection<User> usersLike(String username);
+
+    /**
+     * Infer if the user is an administrator
+     *
+     * @param username username
+     * @return true/false
+     */
+    boolean isAdmin(String username);
 }

@@ -26,12 +26,15 @@ import java.util.stream.StreamSupport;
 public class TemplateDefinitionServiceImpl implements TemplateDefinitionService {
 
     private final TemplateDefinitionRepository templateDefinitionRepository;
+    private final TemplateImagesProperties templateImagesProperties;
 
-    public TemplateDefinitionServiceImpl(TemplateDefinitionRepository templateDefinitionRepository) {
+    public TemplateDefinitionServiceImpl(TemplateDefinitionRepository templateDefinitionRepository,
+                                         TemplateImagesProperties templateImagesProperties) {
         this.templateDefinitionRepository = templateDefinitionRepository;
+        this.templateImagesProperties = templateImagesProperties;
     }
 
-    private void templateDefinitionNameVerified(String name) {
+    private void validateTemplateDefinitionName(String name) {
         if (!StringUtils.hasText(name)) {
             return;
         }
@@ -43,6 +46,13 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         }
     }
 
+    private void validateTemplateDefinitionVersion(String name, String version) {
+        String tag = templateImagesProperties.getTag(name);
+        if (!Objects.equals(tag, version)) {
+            throw new NGCCACommonException("Template [" + name + "] supported version [" + tag + "]", 400);
+        }
+    }
+
     @Override
     public TemplateDefinition saveOrUpdate(TemplateDefinition definition) {
 
@@ -51,10 +61,11 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         if (StringUtils.hasText(definition.getId())) {
             TemplateDefinitionEntity existed = templateDefinitionRepository.findById(definition.getId()).orElseThrow(() -> new NGCCAResourceNotFoundException("Template definition not found [" + definition.getId() + "]"));
             if (StringUtils.hasText(definition.getName())) {
-                templateDefinitionNameVerified(definition.getName());
+                validateTemplateDefinitionName(definition.getName());
                 existed.setName(definition.getName());
             }
             if (StringUtils.hasText(definition.getVersion())) {
+                validateTemplateDefinitionVersion(definition.getName(), definition.getVersion());
                 existed.setVersion(definition.getVersion());
             }
             if (StringUtils.hasText(definition.getDescription())) {
@@ -75,7 +86,8 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
 
 
         Assert.hasText(definition.getName(), "Template definition name is null");
-        templateDefinitionNameVerified(definition.getName());
+        validateTemplateDefinitionName(definition.getName());
+        validateTemplateDefinitionVersion(definition.getName(), definition.getVersion());
 
         TemplateDefinitionEntity entity = templateDefinitionRepository.findByName(definition.getName());
         if (Objects.nonNull(entity)) {
