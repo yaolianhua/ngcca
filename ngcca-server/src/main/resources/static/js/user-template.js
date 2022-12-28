@@ -1,7 +1,7 @@
 //初始化常量
 const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
-const USER_TEMPLATE_LIST_VIEWS = "/template/user-template?action=list";
-const USER_TEMPLATE_DETAIL_VIEWS = "/template/user-template?action=detail?id=";
+const USER_TEMPLATE_LIST_VIEWS = "/template/instances?action=list";
+const USER_TEMPLATE_DETAIL_VIEWS = "/template/instances?action=detail&id=";
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {
@@ -53,14 +53,14 @@ function fail(error) {
 
 //user template instance detail view
 function instanceDetail(id) {
-    $('#user-templates-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
+    $('#user-instance-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
 
     });
 }
 
 //user template instance list
 function instances() {
-    $('#user-templates-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
 
     });
 }
@@ -79,7 +79,7 @@ function instanceDelete(id) {
         if (result.isConfirmed) {
             axios.delete(TEMPLATE_INSTANCE_API + "/" + id)
                 .then(response => {
-                    $('#user-templates-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+                    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
 
                     });
                     ok(response);

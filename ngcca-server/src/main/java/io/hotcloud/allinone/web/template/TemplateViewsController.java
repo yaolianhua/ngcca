@@ -34,7 +34,7 @@ public class TemplateViewsController {
         return Views.TEMPLATE_LIST;
     }
 
-    @RequestMapping("/user-template")
+    @RequestMapping("/instances")
     @WebSession
     public String template(Model model,
                            @RequestParam(value = "action", required = false) String action,
@@ -42,13 +42,13 @@ public class TemplateViewsController {
                            @CookieUser User user) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
-            return Views.USER_TEMPLATE_LIST_FRAGMENT;
+            return Views.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
             model.addAttribute(WebConstant.TEMPLATE_INSTANCE, templateInstanceService.findOne(id));
-            return Views.USER_TEMPLATE_DETAIL_FRAGMENT;
+            return Views.USER_TEMPLATE_INSTANCE_DETAIL_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
-        return Views.USER_TEMPLATE;
+        return Views.USER_TEMPLATE_INSTANCE;
     }
 }
