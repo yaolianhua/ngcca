@@ -27,11 +27,12 @@ function getAuthorization() {
     return "";
 }
 
+let intervalId;
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
-    setInterval('instances()', 5000);
+    intervalId = setInterval('instances()', 5000);
 });
 const swal = Swal.mixin({
     customClass: {
@@ -53,6 +54,7 @@ function fail(error) {
 
 //user template instance detail view
 function instanceDetail(id) {
+    clearInterval(intervalId);
     $('#user-instance-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
 
     });
