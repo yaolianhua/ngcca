@@ -33,6 +33,9 @@
                         <b class="d-block">[[ ${templateInstance.deploying} ? 'deploying' : (${templateInstance.success}
                             ? 'success' : 'failed') ]]</b>
                     </p>
+                    <p class="text-sm">部署时间
+                        <b class="d-block">[[ ${templateInstance.createdAt} ]]</b>
+                    </p>
                 </div>
 
                 <h5 class="mt-5 text-muted">实例详情</h5>
@@ -57,11 +60,19 @@
                         Http Port： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.httpPort} ]]</a>
                     </li>
                     <br>
-
+                    <li>
+                        Yaml：<textarea id="codemirror-yaml">[[  ${templateInstance.yaml} ]]</textarea>
+                    </li>
+                    <br>
+                    <li>
+                        Ingress Yaml：<textarea id="codemirror-ingress">[[  ${templateInstance.ingress} ]]</textarea>
+                    </li>
+                    <br>
                 </ul>
-                <div class="text-center mt-5 mb-3">
-                    <a class="btn btn-sm btn-primary" href="#">Add files</a>
-                    <a class="btn btn-sm btn-warning" href="#">Report contact</a>
+
+                <div class="text-left mt-5 mb-3">
+                    <a class="btn btn-sm btn-primary" th:href="@{/template/instances}">返回列表</a>
+
                 </div>
             </div>
         </div>

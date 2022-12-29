@@ -28,12 +28,15 @@ function getAuthorization() {
 }
 
 let intervalId;
+
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
     intervalId = setInterval('instances()', 5000);
 });
+
+
 const swal = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -56,7 +59,15 @@ function fail(error) {
 function instanceDetail(id) {
     clearInterval(intervalId);
     $('#user-instance-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
-
+        // CodeMirror
+        CodeMirror.fromTextArea(document.getElementById("codemirror-yaml"), {
+            mode: "yaml",
+            theme: "monokai"
+        });
+        CodeMirror.fromTextArea(document.getElementById("codemirror-ingress"), {
+            mode: "yaml",
+            theme: "monokai"
+        });
     });
 }
 
