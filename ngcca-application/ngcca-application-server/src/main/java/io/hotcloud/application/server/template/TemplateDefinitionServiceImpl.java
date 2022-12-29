@@ -118,6 +118,20 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
     }
 
     @Override
+    public TemplateDefinition findByNameIgnoreCase(String name) {
+        if (!StringUtils.hasText(name)) {
+            throw new NGCCACommonException("parameter name is null");
+        }
+        List<TemplateDefinition> definitions = this.findAll();
+        for (TemplateDefinition definition : definitions) {
+            if (Objects.equals(definition.getName().toLowerCase(), name.toLowerCase())) {
+                return definition;
+            }
+        }
+        throw new NGCCAResourceNotFoundException("Template definition not found [" + name + "]");
+    }
+
+    @Override
     public List<TemplateDefinition> findAll() {
         Iterable<TemplateDefinitionEntity> iterable = templateDefinitionRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)

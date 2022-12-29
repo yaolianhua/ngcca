@@ -24,6 +24,11 @@ public interface TemplateDefinitionService {
     TemplateDefinition findByName(String name);
 
     /**
+     * Find template definition with the giving name
+     */
+    TemplateDefinition findByNameIgnoreCase(String name);
+
+    /**
      * Find all template definition
      */
     List<TemplateDefinition> findAll();
