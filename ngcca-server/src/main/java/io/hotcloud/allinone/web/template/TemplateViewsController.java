@@ -4,7 +4,9 @@ import io.hotcloud.allinone.web.Views;
 import io.hotcloud.allinone.web.mvc.CookieUser;
 import io.hotcloud.allinone.web.mvc.WebConstant;
 import io.hotcloud.allinone.web.mvc.WebSession;
+import io.hotcloud.application.api.template.TemplateDefinition;
 import io.hotcloud.application.api.template.TemplateDefinitionService;
+import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.security.api.user.User;
 import org.springframework.stereotype.Controller;
@@ -45,7 +47,10 @@ public class TemplateViewsController {
             return Views.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            model.addAttribute(WebConstant.TEMPLATE_INSTANCE, templateInstanceService.findOne(id));
+            TemplateInstance instance = templateInstanceService.findOne(id);
+            model.addAttribute(WebConstant.TEMPLATE_INSTANCE, instance);
+            TemplateDefinition definition = templateDefinitionService.findByNameIgnoreCase(instance.getName());
+            model.addAttribute(WebConstant.TEMPLATE_DEFINITION, definition);
             return Views.USER_TEMPLATE_INSTANCE_DETAIL_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));

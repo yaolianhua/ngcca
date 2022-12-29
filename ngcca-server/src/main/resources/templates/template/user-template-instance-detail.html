@@ -13,40 +13,51 @@
         </div>
         <div class="card-body">
             <div class="col-12 col-md-12 col-lg-12 order-1 order-md-2">
-                <h3 class="text-success"><i class="fas fa-cubes"></i> [[ ${templateInstance.name} ]] </h3>
-                <p class="text-muted">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu
-                    stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure
-                    terr.</p>
+                <div class="text-center">
+                    <img alt="template picture"
+                         class="profile-user-img img-fluid img-circle"
+                         th:src="${templateDefinition.logo}">
+                </div>
                 <br>
+
+                <p class="text-primary">[[ ${templateDefinition.shortDesc} ]]</p>
+
                 <div class="text-muted">
-                    <p class="text-sm">Client Company
-                        <b class="d-block">Deveint Inc</b>
+                    <p class="text-sm">部署版本
+                        <b class="d-block">[[ ${templateInstance.version} ]]</b>
                     </p>
-                    <p class="text-sm">Project Leader
-                        <b class="d-block">Tony Chicken</b>
+                    <p class="text-sm">部署进度
+                        <b class="d-block">[[ ${templateInstance.progress} ]]%</b>
+                    </p>
+                    <p class="text-sm">部署状态
+                        <b class="d-block">[[ ${templateInstance.deploying} ? 'deploying' : (${templateInstance.success}
+                            ? 'success' : 'failed') ]]</b>
                     </p>
                 </div>
 
-                <h5 class="mt-5 text-muted">Project files</h5>
+                <h5 class="mt-5 text-muted">实例详情</h5>
                 <ul class="list-unstyled">
                     <li>
-                        <a class="btn-link text-secondary" href=""><i class="far fa-fw fa-file-word"></i>
-                            Functional-requirements.docx</a>
+                        Ingress： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.host} ]]</a>
                     </li>
+                    <br>
                     <li>
-                        <a class="btn-link text-secondary" href=""><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
+                        Namespace： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.namespace} ]]</a>
                     </li>
+                    <br>
                     <li>
-                        <a class="btn-link text-secondary" href=""><i class="far fa-fw fa-envelope"></i>
-                            Email-from-flatbal.mln</a>
+                        Service： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.service} ]]</a>
                     </li>
+                    <br>
                     <li>
-                        <a class="btn-link text-secondary" href=""><i class="far fa-fw fa-image "></i> Logo.png</a>
+                        NodePort： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.nodePorts} ]]</a>
                     </li>
+                    <br>
                     <li>
-                        <a class="btn-link text-secondary" href=""><i class="far fa-fw fa-file-word"></i>
-                            Contract-10_12_2014.docx</a>
+                        Http Port： <a class="btn-link text-secondary" href="#">[[ ${templateInstance.httpPort} ]]</a>
                     </li>
+                    <br>
+
                 </ul>
                 <div class="text-center mt-5 mb-3">
                     <a class="btn btn-sm btn-primary" href="#">Add files</a>
