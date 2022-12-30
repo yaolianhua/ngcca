@@ -8,7 +8,7 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 8080
+      port: 4000
       protocol: TCP
       targetPort: http
   selector:
@@ -24,7 +24,6 @@ metadata:
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
-  ingressClassName: nginx
   rules:
     - host: api-ngcca$DOT_SUFFIX_DOMAIN
       http:
@@ -35,7 +34,17 @@ spec:
               service:
                 name: ngcca-server
                 port:
-                  number: 8080
+                  number: 4000
+    - host: web-ngcca$DOT_SUFFIX_DOMAIN
+      http:
+        paths:
+          - path: /index
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ngcca-server
+                port:
+                  number: 4000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,7 +68,7 @@ spec:
           imagePullPolicy: IfNotPresent
           name: ngcca-server
           ports:
-            - containerPort: 8080
+            - containerPort: 4000
               name: http
               protocol: TCP
           resources:
