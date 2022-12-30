@@ -19,7 +19,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: api-ngcca$DOT_SUFFIX_DOMAIN
+  name: ngcca
   namespace: ngcca-system
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
