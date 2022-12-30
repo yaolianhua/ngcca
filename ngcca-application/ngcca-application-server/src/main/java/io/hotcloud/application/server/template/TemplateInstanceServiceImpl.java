@@ -38,6 +38,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
             find.setMessage(instance.getMessage());
             find.setNodePorts(instance.getNodePorts());
             find.setProgress(instance.getProgress());
+            find.setLoadBalancerIngressIp(instance.getLoadBalancerIngressIp());
             TemplateInstanceEntity updated = templateInstanceRepository.save(find);
 
             return updated.toT(TemplateInstance.class);

@@ -2,15 +2,13 @@ package io.hotcloud.application.server.template;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import io.hotcloud.application.api.template.TemplateDeploymentCacheApi;
 import io.hotcloud.application.api.template.TemplateInstance;
 import io.hotcloud.application.api.template.TemplateInstanceService;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.kubernetes.client.http.DeploymentClient;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
-import io.hotcloud.kubernetes.client.http.ServiceClient;
+import io.hotcloud.kubernetes.client.http.*;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +33,7 @@ public class TemplateDeploymentWatchService {
     private final DeploymentClient deploymentApi;
     private final ServiceClient serviceApi;
     private final KubectlClient kubectlApi;
+    private final IngressClient ingressClient;
     private final PodClient podApi;
 
     public void mqWatch(TemplateInstance template) {
@@ -85,15 +84,20 @@ public class TemplateDeploymentWatchService {
             template.setProgress(100);
             templateInstanceService.saveOrUpdate(template);
 
-            Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
-
             if (StringUtils.hasText(template.getIngress())) {
                 List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
                 String ingress = metadataList.stream()
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
-                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+
+                String loadBalancerIngressIp = getLoadBalancerIngressIp(template, ingress);
+                template.setLoadBalancerIngressIp(loadBalancerIngressIp);
+                templateInstanceService.saveOrUpdate(template);
+
+                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success. loadBalanceIngressIp [%s]", template.getUser(), template.getName(), ingress, loadBalancerIngressIp));
             }
+
+            Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
         } catch (Exception e) {
             templateDeploymentCacheApi.unLock(template.getId());
@@ -103,6 +107,44 @@ public class TemplateDeploymentWatchService {
             template.setProgress(100);
             templateInstanceService.saveOrUpdate(template);
         }
+    }
+
+    @NotNull
+    private String getLoadBalancerIngressIp(TemplateInstance template, String ingress) {
+        for (int i = 0; i < 10; i++) {
+            try {
+                int sleep = (i + 1) * 5;
+                TimeUnit.SECONDS.sleep(sleep);
+                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("Fetch ingress loadBalancer ip. waiting '%ss'", sleep));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            Ingress ingressRead = ingressClient.read(template.getNamespace(), ingress);
+            String loadBalancerIngressIp = ingressRead
+                    .getStatus()
+                    .getLoadBalancer()
+                    .getIngress()
+                    .stream()
+                    .map(LoadBalancerIngress::getIp)
+                    .collect(Collectors.joining(","));
+
+            if (!StringUtils.hasText(loadBalancerIngressIp) || Objects.equals("null", loadBalancerIngressIp)) {
+                loadBalancerIngressIp = ingressRead
+                        .getStatus()
+                        .getLoadBalancer()
+                        .getIngress()
+                        .stream()
+                        .map(LoadBalancerIngress::getHostname)
+                        .collect(Collectors.joining(","));
+            }
+
+            if (StringUtils.hasText(loadBalancerIngressIp) && !Objects.equals("null", loadBalancerIngressIp)) {
+                return loadBalancerIngressIp;
+            }
+
+        }
+
+        return "pending";
     }
 
     @NotNull
@@ -188,7 +230,6 @@ public class TemplateDeploymentWatchService {
                     template.setProgress(100);
                     templateInstanceService.saveOrUpdate(template);
 
-                    Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
                     if (StringUtils.hasText(template.getIngress())) {
                         List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
@@ -196,7 +237,13 @@ public class TemplateDeploymentWatchService {
                                 .map(e -> e.getMetadata().getName())
                                 .findFirst().orElse(null);
                         Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success.", template.getUser(), template.getName(), ingress));
+
+                        String loadBalancerIngressIp = getLoadBalancerIngressIp(template, ingress);
+                        template.setLoadBalancerIngressIp(loadBalancerIngressIp);
+                        templateInstanceService.saveOrUpdate(template);
                     }
+
+                    Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
                     templateDeploymentCacheApi.unLock(instance.getId());
                     return;
