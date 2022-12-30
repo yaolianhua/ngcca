@@ -82,7 +82,9 @@ public class TemplateDeploymentWatchService {
             template.setMessage(CommonConstant.SUCCESS_MESSAGE);
             template.setSuccess(true);
             template.setProgress(100);
-            template.setLoadBalancerIngressIp("Pending");
+            if (StringUtils.hasText(template.getIngress())) {
+                template.setLoadBalancerIngressIp("Pending");
+            }
             templateInstanceService.saveOrUpdate(template);
 
             if (StringUtils.hasText(template.getIngress())) {
@@ -221,7 +223,7 @@ public class TemplateDeploymentWatchService {
                                 .map(e -> String.valueOf(e.getNodePort()))
                                 .collect(Collectors.joining(","));
                         template.setNodePorts(nodePorts);
-                    }else {
+                    } else {
                         String nodePorts = String.valueOf(ports.get(0).getNodePort());
                         template.setNodePorts(nodePorts);
                     }
@@ -229,7 +231,9 @@ public class TemplateDeploymentWatchService {
                     template.setMessage(CommonConstant.SUCCESS_MESSAGE);
                     template.setSuccess(true);
                     template.setProgress(100);
-                    template.setLoadBalancerIngressIp("Pending");
+                    if (StringUtils.hasText(template.getIngress())) {
+                        template.setLoadBalancerIngressIp("Pending");
+                    }
                     templateInstanceService.saveOrUpdate(template);
 
 
