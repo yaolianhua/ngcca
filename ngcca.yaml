@@ -28,7 +28,7 @@ spec:
     - host: api-ngcca$DOT_SUFFIX_DOMAIN
       http:
         paths:
-          - path: /swagger-ui.html
+          - path: /
             pathType: ImplementationSpecific
             backend:
               service:
@@ -38,7 +38,7 @@ spec:
     - host: web-ngcca$DOT_SUFFIX_DOMAIN
       http:
         paths:
-          - path: /index
+          - path: /
             pathType: ImplementationSpecific
             backend:
               service:
