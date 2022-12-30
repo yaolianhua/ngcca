@@ -82,6 +82,7 @@ public class TemplateDeploymentWatchService {
             template.setMessage(CommonConstant.SUCCESS_MESSAGE);
             template.setSuccess(true);
             template.setProgress(100);
+            template.setLoadBalancerIngressIp("Pending");
             templateInstanceService.saveOrUpdate(template);
 
             if (StringUtils.hasText(template.getIngress())) {
@@ -228,6 +229,7 @@ public class TemplateDeploymentWatchService {
                     template.setMessage(CommonConstant.SUCCESS_MESSAGE);
                     template.setSuccess(true);
                     template.setProgress(100);
+                    template.setLoadBalancerIngressIp("Pending");
                     templateInstanceService.saveOrUpdate(template);
 
 
