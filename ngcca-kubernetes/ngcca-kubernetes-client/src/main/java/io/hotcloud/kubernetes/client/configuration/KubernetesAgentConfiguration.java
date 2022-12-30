@@ -78,4 +78,9 @@ import org.springframework.context.annotation.Bean;
     public NamespaceClient namespaceHttpClient(KubernetesAgentClientFactory factory) {
         return factory.getClient(NamespaceClient.class);
     }
+
+    @Bean
+    public IngressClient ingressHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(IngressClient.class);
+    }
 }

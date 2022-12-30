@@ -45,7 +45,7 @@ function fail(error) {
 function instanceDeploy(name) {
     axios.post(TEMPLATE_INSTANCE_API + "?template=" + name)
         .then(response => {
-            window.location.href = "/template/user-template";
+            window.location.href = "/template/instances";
         })
         .catch(error => {
             fail(error);

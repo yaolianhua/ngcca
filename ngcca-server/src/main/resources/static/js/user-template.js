@@ -1,7 +1,7 @@
 //初始化常量
 const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
-const USER_TEMPLATE_LIST_VIEWS = "/template/user-template?action=list";
-const USER_TEMPLATE_DETAIL_VIEWS = "/template/user-template?action=detail?id=";
+const USER_TEMPLATE_LIST_VIEWS = "/template/instances?action=list";
+const USER_TEMPLATE_DETAIL_VIEWS = "/template/instances?action=detail&id=";
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {
@@ -27,12 +27,16 @@ function getAuthorization() {
     return "";
 }
 
+let intervalId;
+
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
-    setInterval('instances()', 5000);
+    intervalId = setInterval('instances()', 5000);
 });
+
+
 const swal = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -53,14 +57,23 @@ function fail(error) {
 
 //user template instance detail view
 function instanceDetail(id) {
-    $('#user-templates-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
-
+    clearInterval(intervalId);
+    $('#user-instance-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
+        // CodeMirror
+        CodeMirror.fromTextArea(document.getElementById("codemirror-yaml"), {
+            mode: "yaml",
+            theme: "monokai"
+        });
+        CodeMirror.fromTextArea(document.getElementById("codemirror-ingress"), {
+            mode: "yaml",
+            theme: "monokai"
+        });
     });
 }
 
 //user template instance list
 function instances() {
-    $('#user-templates-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
 
     });
 }
@@ -79,7 +92,7 @@ function instanceDelete(id) {
         if (result.isConfirmed) {
             axios.delete(TEMPLATE_INSTANCE_API + "/" + id)
                 .then(response => {
-                    $('#user-templates-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+                    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
 
                     });
                     ok(response);
