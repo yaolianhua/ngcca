@@ -43,6 +43,7 @@ public class TemplateInstanceEntity extends AbstractEntity {
 
     private String yaml;
     private String ingress;
+    private String loadBalancerIngressIp;
 
     private boolean success;
 

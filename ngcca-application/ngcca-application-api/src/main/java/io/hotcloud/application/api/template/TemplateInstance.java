@@ -34,6 +34,7 @@ public class TemplateInstance {
 
     private String yaml;
     private String ingress;
+    private String loadBalancerIngressIp;
 
     private boolean success;
 
