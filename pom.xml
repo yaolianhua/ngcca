@@ -29,8 +29,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <springdoc.version>1.6.9</springdoc.version>
-        <kubernetes.client-version>16.0.0</kubernetes.client-version>
-        <fabric8.kubernetes.client-version>6.1.1</fabric8.kubernetes.client-version>
+        <kubernetes.client-version>17.0.0</kubernetes.client-version>
+        <fabric8.kubernetes.client-version>6.3.1</fabric8.kubernetes.client-version>
         <lombok.version>1.18.22</lombok.version>
         <apache.commons.validator-version>1.7</apache.commons.validator-version>
         <apache.commons.io-version>2.11.0</apache.commons.io-version>
