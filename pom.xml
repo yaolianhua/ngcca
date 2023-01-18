@@ -25,7 +25,7 @@
     <name>NGCCA</name>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <springdoc.version>1.6.9</springdoc.version>

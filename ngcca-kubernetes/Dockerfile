@@ -1,4 +1,4 @@
-FROM harbor.local:5000/library/openjdk:11.0.12-jre-slim-buster
+FROM harbor.local:5000/library/openjdk:17-slim-buster
 
 LABEL maintainer="<yaolianhua789@gmail.com>"
 WORKDIR /k8sAgent/
