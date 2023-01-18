@@ -6,7 +6,7 @@ if [[ -z $namespace ]]; then
     echo "used registry url '$namespace'"
 fi
 
-mvn clean package
+mvn --batch-mode --errors --fail-fast --threads 1C clean package
 
 IMAGE="$namespace/ngcca/k8s-agent:$(date '+%Y%m%d%H%M%S')"
 
