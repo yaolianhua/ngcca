@@ -1,9 +1,8 @@
 package io.hotcloud.kubernetes.model.workload;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author yaolianhua789@gmail.com

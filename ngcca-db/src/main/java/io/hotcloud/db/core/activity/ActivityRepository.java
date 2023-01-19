@@ -1,5 +1,6 @@
 package io.hotcloud.db.core.activity;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface ActivityRepository extends PagingAndSortingRepository<ActivityEntity, String> {
+public interface ActivityRepository extends PagingAndSortingRepository<ActivityEntity, String>, CrudRepository<ActivityEntity, String> {
 
     /**
      * Find entity with the giving {@code user}

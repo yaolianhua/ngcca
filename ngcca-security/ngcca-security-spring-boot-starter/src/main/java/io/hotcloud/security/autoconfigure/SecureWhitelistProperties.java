@@ -2,10 +2,10 @@ package io.hotcloud.security.autoconfigure;
 
 import io.hotcloud.common.model.Properties;
 import io.hotcloud.common.model.utils.Log;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package io.hotcloud.db.core.buildpack;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public interface BuildPackRepository extends PagingAndSortingRepository<BuildPackEntity, String> {
+public interface BuildPackRepository extends PagingAndSortingRepository<BuildPackEntity, String> , CrudRepository<BuildPackEntity, String> {
 
     /**
      * Find all with giving {@code user} and {@code clonedId}

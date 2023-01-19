@@ -2,6 +2,7 @@ package io.hotcloud.common.server.exception.handler;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.utils.Log;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 @RestControllerAdvice

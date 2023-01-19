@@ -1,8 +1,8 @@
 package io.hotcloud.common.server.core.message.websocket;
 
 import io.hotcloud.common.model.exception.NGCCACommonException;
+import jakarta.websocket.Session;
 
-import javax.websocket.Session;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;

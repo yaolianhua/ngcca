@@ -2,9 +2,8 @@ package io.hotcloud.kubernetes.model.workload;
 
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
+import jakarta.validation.Valid;
 import lombok.Data;
-
-import javax.validation.Valid;
 
 /**
  * @author yaolianhua789@gmail.com

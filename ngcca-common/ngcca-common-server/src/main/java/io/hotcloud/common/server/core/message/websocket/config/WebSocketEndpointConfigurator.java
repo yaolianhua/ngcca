@@ -1,10 +1,10 @@
 package io.hotcloud.common.server.core.message.websocket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.websocket.HandshakeResponse;
+import jakarta.websocket.server.HandshakeRequest;
+import jakarta.websocket.server.ServerEndpointConfig;
 
-import javax.websocket.HandshakeResponse;
-import javax.websocket.server.HandshakeRequest;
-import javax.websocket.server.ServerEndpointConfig;
 import java.util.Map;
 
 /**
