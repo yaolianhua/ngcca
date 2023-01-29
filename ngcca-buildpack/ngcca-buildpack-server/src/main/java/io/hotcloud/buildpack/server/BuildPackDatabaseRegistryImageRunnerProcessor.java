@@ -1,10 +1,10 @@
 package io.hotcloud.buildpack.server;
 
-import io.hotcloud.buildpack.api.core.BuildPackImages;
 import io.hotcloud.buildpack.server.core.BuildPackImagesProperties;
 import io.hotcloud.common.api.NGCCARunnerProcessor;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.autoconfigure.RegistryProperties;
+import io.hotcloud.common.model.RuntimeImages;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.db.core.registry.RegistryImageEntity;
 import io.hotcloud.db.core.registry.RegistryImageRepository;
@@ -29,7 +29,7 @@ public class BuildPackDatabaseRegistryImageRunnerProcessor implements NGCCARunne
     @Override
     public void execute() {
         List<String> prints = new ArrayList<>();
-        for (BuildPackImages image : BuildPackImages.values()) {
+        for (RuntimeImages image : RuntimeImages.values()) {
             String key = image.name().toLowerCase();
             String repo = buildPackImagesProperties.getRepos().get(key);
             String tag = buildPackImagesProperties.getTag(key);

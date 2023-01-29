@@ -1,6 +1,6 @@
-package io.hotcloud.buildpack.api.core;
+package io.hotcloud.common.model;
 
-public enum BuildPackImages {
+public enum RuntimeImages {
     //
     Kaniko,
     //
@@ -8,7 +8,9 @@ public enum BuildPackImages {
     //
     Alpine,
     //
+    Java8,
     Java11,
+    Java17,
     //
     Maven
 

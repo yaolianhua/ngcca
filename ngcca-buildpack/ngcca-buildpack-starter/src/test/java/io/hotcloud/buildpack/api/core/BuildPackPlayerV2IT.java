@@ -2,6 +2,7 @@ package io.hotcloud.buildpack.api.core;
 
 import io.hotcloud.buildpack.NgccaBuildPackApplication;
 import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.RuntimeImages;
 import io.hotcloud.security.api.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class BuildPackPlayerV2IT {
         for (String buildPackId : buildPackIds) {
             buildPackPlayerV2.delete(buildPackId, false);
         }
-        BuildPack buildPack = buildPackPlayerV2.play(BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war"));
+        BuildPack buildPack = buildPackPlayerV2.play(BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", RuntimeImages.Java11));
 
         while (true) {
             TimeUnit.SECONDS.sleep(10);
@@ -87,7 +88,7 @@ public class BuildPackPlayerV2IT {
         BuildPack buildPack = buildPackPlayerV2.play(
                 BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
                         "-Xms128m -Xmx512m",
-                        "-Dspring.profiles.active=production")
+                        "-Dspring.profiles.active=production", RuntimeImages.Java11)
         );
 
         while (true) {
@@ -123,7 +124,7 @@ public class BuildPackPlayerV2IT {
         }
         BuildPack buildPack = buildPackPlayerV2.play(
                 BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
-                        "master", "", "", "")
+                        "master", "", "", "", RuntimeImages.Java11)
         );
 
         while (true) {
