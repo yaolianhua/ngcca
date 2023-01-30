@@ -12,6 +12,7 @@
 image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
 stages:
   - test
+  - package
   - build
 
 test:
@@ -21,16 +22,18 @@ test:
   only:
     - main
 
-build_jar:
+package:
   image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
-  stage: build
+  stage: package
   script:
     - mvn -Dmaven.test.skip=true clean package
 
-build_image:
+docker-build:
   image: docker:latest
-  command: [ "--insecure-registry","$CI_REGISTRY" ]
   stage: build
+  services:
+    - docker:dind
+    - command: [ "--insecure-registry","$CI_REGISTRY" ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
