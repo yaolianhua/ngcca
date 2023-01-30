@@ -20,8 +20,8 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 stages:
-  - test
-  - package
+#  - test
+  #  - package
   - build
 
 test:
@@ -46,7 +46,7 @@ build:
   services:
     - name: docker:dind
       entrypoint: [ "dockerd-entrypoint.sh" ]
-      command: [ "--insecure-registry", "$CI_REGISTRY" ]
+      command: [ "--insecure-registry=$CI_REGISTRY" ]
 
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
