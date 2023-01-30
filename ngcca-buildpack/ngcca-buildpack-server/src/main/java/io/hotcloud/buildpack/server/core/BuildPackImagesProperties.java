@@ -45,9 +45,17 @@ public class BuildPackImagesProperties {
      */
     private String java17;
     /**
+     * maven image name e.g. library/maven:3.8-openjdk-8-slim
+     */
+    private String maven3808;
+    /**
      * maven image name e.g. library/maven:3.8-openjdk-11-slim
      */
-    private String maven;
+    private String maven3811;
+    /**
+     * maven image name e.g. library/maven:3.8-openjdk-17-slim
+     */
+    private String maven3817;
 
     public String getTag(String name) {
         if (!StringUtils.hasText(name)) {

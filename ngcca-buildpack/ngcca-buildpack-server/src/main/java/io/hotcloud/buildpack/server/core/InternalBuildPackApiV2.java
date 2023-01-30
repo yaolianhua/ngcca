@@ -11,6 +11,7 @@ import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.autoconfigure.RegistryProperties;
 import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.utils.INet;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.common.model.utils.UUIDGenerator;
@@ -132,9 +133,17 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     private DockerfileJavaArtifactExpressionVariable determinedDockerfileJavaArtifactExpressionVariable(BuildImage buildImage) {
         if (buildImage.isSourceCode()) {
             String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
+            RuntimeImages runtime = buildImage.getSource().getRuntime();
+            String mavenKey;
+            switch (runtime) {
+                case Java8 -> mavenKey = RuntimeImages.Maven3808.name();
+                case Java11 -> mavenKey = RuntimeImages.Maven3811.name();
+                case Java17 -> mavenKey = RuntimeImages.Maven3817.name();
+                default -> throw new NGCCACommonException("Unsupported runtime");
+            }
             return DockerfileJavaArtifactExpressionVariable.ofMavenJar(
-                    registryImagesContainer.get(RuntimeImages.Maven.name().toLowerCase()),
-                    registryImagesContainer.get(buildImage.getSource().getRuntime().name().toLowerCase()),
+                    registryImagesContainer.get(mavenKey.toLowerCase()),
+                    registryImagesContainer.get(runtime.name().toLowerCase()),
                     jarPath,
                     buildImage.getSource().getStartOptions(),
                     buildImage.getSource().getStartArgs());

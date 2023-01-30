@@ -12,6 +12,8 @@ public enum RuntimeImages {
     Java11,
     Java17,
     //
-    Maven
+    Maven3808,
+    Maven3811,
+    Maven3817
 
 }
