@@ -21,7 +21,6 @@ variables:
 
 stages:
   - test
-  - package
   - build
 
 test:
@@ -34,13 +33,13 @@ test:
 
 package:
   image: maven:3.8-openjdk-17-slim
-  stage: package
+  stage: build
   only:
     - main
   script:
     - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true clean package
 
-build:
+docker-build:
   image: docker:latest
   stage: build
   services:
