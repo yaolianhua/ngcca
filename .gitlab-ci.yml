@@ -20,25 +20,25 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 stages:
-#  - test
+  #  - test
   #  - package
   - build
 
-test:
-  image: maven:3.8-openjdk-17-slim
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean test
-  only:
-    - main
-
-package:
-  image: maven:3.8-openjdk-17-slim
-  stage: package
-  only:
-    - main
-  script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true clean package
+#test:
+#  image: maven:3.8-openjdk-17-slim
+#  stage: test
+#  script:
+#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean test
+#  only:
+#    - main
+#
+#package:
+#  image: maven:3.8-openjdk-17-slim
+#  stage: package
+#  only:
+#    - main
+#  script:
+#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true clean package
 
 build:
   image: docker:latest
