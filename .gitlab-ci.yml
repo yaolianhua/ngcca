@@ -9,7 +9,7 @@
 #
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
-
+image: maven:3.8-openjdk-17-slim
 stages:
   - test
   - build
