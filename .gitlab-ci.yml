@@ -9,7 +9,7 @@
 #
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
-image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
+image: maven:3.8-openjdk-17-slim
 stages:
   - test
   - package
@@ -23,7 +23,7 @@ test:
     - main
 
 package:
-  image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
+  image: maven:3.8-openjdk-17-slim
   stage: package
   script:
     - mvn -Dmaven.test.skip=true clean package
