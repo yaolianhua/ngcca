@@ -19,49 +19,63 @@ variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --threads 1C"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-image: maven:3.8-openjdk-17-slim
+#image: maven:3.8-openjdk-17-slim
 
 stages:
-  - build
-  - test
-  - package
-  - image-push
+  #  - build
+  #  - test
+  #  - package
+  #  - image-push
+  - deploy
 
-build:
-  stage: build
-  script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean compile
-  only:
-    - main
+#build:
+#  stage: build
+#  script:
+#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean compile
+#  only:
+#    - main
+#
+#test:
+#  stage: test
+#  script:
+#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
+#  only:
+#    - main
+#
+#package:
+#  stage: package
+#  only:
+#    - main
+#  script:
+#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true package
+#  artifacts:
+#    paths:
+#      - ngcca-server/target/ngcca-server.jar
+#
+#docker-build:
+#  image: docker:latest
+#  stage: image-push
+#  services:
+#    - name: docker:dind
+#      command: [ "--insecure-registry","119.91.214.25:5000" ]
+#
+#  before_script:
+#    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+#  script:
+#    - export IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y%m%d%H%M%S')
+#    - docker build -t $IMAGE .
+#    - docker push $IMAGE
 
-test:
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
-  only:
-    - main
-
-package:
-  stage: package
-  only:
-    - main
-  script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true package
-  artifacts:
-    paths:
-      - ngcca-server/target/ngcca-server.jar
-
-docker-build:
-  image: docker:latest
-  stage: image-push
-  services:
-    - name: docker:dind
-      command: [ "--insecure-registry","119.91.214.25:5000" ]
-
+deploy:
+  image: ubuntu
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan 119.91.214.25 >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - export IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y%m%d%H%M%S')
-    - docker build -t $IMAGE .
-    - docker push $IMAGE
-
+    - ssh -p 26889 root@119.91.214.25
+    - kubectl get pods -n ngcca-system
