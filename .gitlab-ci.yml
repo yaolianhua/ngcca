@@ -16,6 +16,10 @@ cache:
   paths:
     - .m2/repository/
 
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode --errors --threads 1C"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
 stages:
   - test
   - package
@@ -24,7 +28,7 @@ stages:
 test:
   stage: test
   script:
-    - mvn clean test
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean test
   only:
     - main
 
@@ -33,14 +37,14 @@ package:
   only:
     - main
   script:
-    - mvn -Dmaven.test.skip=true clean package
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true clean package
 
-docker-build:
+build:
   image: docker:latest
   stage: build
   services:
     - name: docker:dind
-      command: [ "--insecure-registry=$CI_REGISTRY" ]
+      command: [ "--insecure-registry="+$CI_REGISTRY ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
