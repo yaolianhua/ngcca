@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,7 +40,7 @@ public class NgccaSecurityAutoConfiguration {
         http.csrf().disable();
         http.formLogin().disable();
         http.logout().disable();
-        http.authorizeRequests().anyRequest().permitAll();
+        http.authorizeHttpRequests().anyRequest().permitAll();
 
         Log.warn(NgccaSecurityAutoConfiguration.class.getName(),
                 "【Spring security disabled. if you want to enable, you need configure the environment 'security.enabled=true'】");
@@ -53,9 +54,9 @@ public class NgccaSecurityAutoConfiguration {
                                                    JwtVerifier jwtVerifier,
                                                    UserDetailsService userDetailsService) throws Exception {
 
-        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();
         //permit all whitelist
-        http.authorizeRequests().antMatchers(whitelistProperties.getUrls().toArray(new String[0])).permitAll();
+        http.authorizeHttpRequests().requestMatchers(whitelistProperties.getUrls().toArray(new String[0])).permitAll();
 
         http.cors();
         http.csrf().disable();
@@ -65,10 +66,11 @@ public class NgccaSecurityAutoConfiguration {
         //enable jwt auth
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.securityContext(scc -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL));
         //enable basic auth
         http.httpBasic().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
 
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeHttpRequests().anyRequest().authenticated();
 
         http.exceptionHandling().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
 

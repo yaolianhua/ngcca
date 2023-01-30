@@ -2,6 +2,7 @@ package io.hotcloud.db;
 
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.db.core.AbstractEntity;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +11,6 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.annotation.PostConstruct;
 
 @Configuration(proxyBeanMethods = false)
 @Slf4j

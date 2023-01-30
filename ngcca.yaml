@@ -58,6 +58,8 @@ spec:
   selector:
     matchLabels:
       k8s-app: ngcca-server
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:

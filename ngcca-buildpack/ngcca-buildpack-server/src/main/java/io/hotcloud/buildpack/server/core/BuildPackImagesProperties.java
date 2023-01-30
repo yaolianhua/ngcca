@@ -33,13 +33,29 @@ public class BuildPackImagesProperties {
      */
     private String alpine;
     /**
+     * java8 image name e.g. namespace/java8-runtime:latest
+     */
+    private String java8;
+    /**
      * java11 image name e.g. namespace/java11-runtime:latest
      */
     private String java11;
     /**
+     * java17 image name e.g. namespace/java17-runtime:latest
+     */
+    private String java17;
+    /**
+     * maven image name e.g. library/maven:3.8-openjdk-8-slim
+     */
+    private String maven3808;
+    /**
      * maven image name e.g. library/maven:3.8-openjdk-11-slim
      */
-    private String maven;
+    private String maven3811;
+    /**
+     * maven image name e.g. library/maven:3.8-openjdk-17-slim
+     */
+    private String maven3817;
 
     public String getTag(String name) {
         if (!StringUtils.hasText(name)) {

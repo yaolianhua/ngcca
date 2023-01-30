@@ -10,6 +10,8 @@ import io.hotcloud.buildpack.api.core.kaniko.SecretExpressionVariable;
 import io.hotcloud.common.api.core.files.FileHelper;
 import io.hotcloud.common.api.core.registry.DatabaseRegistryImages;
 import io.hotcloud.common.autoconfigure.RegistryProperties;
+import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.exception.NGCCACommonException;
 import io.hotcloud.common.model.utils.INet;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.common.model.utils.UUIDGenerator;
@@ -131,9 +133,17 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     private DockerfileJavaArtifactExpressionVariable determinedDockerfileJavaArtifactExpressionVariable(BuildImage buildImage) {
         if (buildImage.isSourceCode()) {
             String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
+            RuntimeImages runtime = buildImage.getSource().getRuntime();
+            String mavenKey;
+            switch (runtime) {
+                case Java8 -> mavenKey = RuntimeImages.Maven3808.name();
+                case Java11 -> mavenKey = RuntimeImages.Maven3811.name();
+                case Java17 -> mavenKey = RuntimeImages.Maven3817.name();
+                default -> throw new NGCCACommonException("Unsupported runtime");
+            }
             return DockerfileJavaArtifactExpressionVariable.ofMavenJar(
-                    registryImagesContainer.get(BuildPackImages.Maven.name().toLowerCase()),
-                    registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()),
+                    registryImagesContainer.get(mavenKey.toLowerCase()),
+                    registryImagesContainer.get(runtime.name().toLowerCase()),
                     jarPath,
                     buildImage.getSource().getStartOptions(),
                     buildImage.getSource().getStartArgs());
@@ -142,8 +152,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         if (buildImage.isJar() || buildImage.isWar()) {
             String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
             return buildImage.isJar() ?
-                    DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
-                    DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(BuildPackImages.Java11.name().toLowerCase()), httpUrl);
+                    DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(buildImage.getJar().getRuntime().name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
+                    DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(buildImage.getWar().getRuntime().name().toLowerCase()), httpUrl);
         }
 
         throw new UnsupportedOperationException("Not supported operation for BuildImage");
@@ -168,10 +178,10 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                     k8sName,
                     retrieveSecretName(namespace),
                     destination,
-                    registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
-                    registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                    registryImagesContainer.get(RuntimeImages.Kaniko.name().toLowerCase()),
+                    registryImagesContainer.get(RuntimeImages.Alpine.name().toLowerCase()),
                     DockerfileJava(javaArtifact, true),
-                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImagesContainer.get(BuildPackImages.Git.name().toLowerCase())),
+                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImagesContainer.get(RuntimeImages.Git.name().toLowerCase())),
                     resolvedHostAliases(registryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
             );
         }
@@ -184,8 +194,8 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                     k8sName,
                     retrieveSecretName(namespace),
                     destination,
-                    registryImagesContainer.get(BuildPackImages.Kaniko.name().toLowerCase()),
-                    registryImagesContainer.get(BuildPackImages.Alpine.name().toLowerCase()),
+                    registryImagesContainer.get(RuntimeImages.Kaniko.name().toLowerCase()),
+                    registryImagesContainer.get(RuntimeImages.Alpine.name().toLowerCase()),
                     DockerfileJava(javaArtifact, true),
                     null,
                     resolvedHostAliases(registryProperties.getUrl(), httpUrl));

@@ -34,19 +34,21 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
     @Override
     public void processCreate(ApplicationInstance applicationInstance) {
         BuildPack buildPack = null;
+
         try {
             if (ApplicationInstanceSource.Origin.JAR.name().equalsIgnoreCase(applicationInstance.getSource().getOrigin().name())) {
                 BuildImage buildImage = BuildImage.ofJar(
                         applicationInstance.getSource().getUrl(),
                         applicationInstance.getSource().getStartOptions(),
-                        applicationInstance.getSource().getStartArgs()
+                        applicationInstance.getSource().getStartArgs(),
+                        applicationInstance.getSource().getRuntime()
                 );
 
                 buildPack = buildPackPlayerV2.play(buildImage);
             }
 
             if (ApplicationInstanceSource.Origin.WAR.name().equalsIgnoreCase(applicationInstance.getSource().getOrigin().name())) {
-                BuildImage buildImage = BuildImage.ofWar(applicationInstance.getSource().getUrl());
+                BuildImage buildImage = BuildImage.ofWar(applicationInstance.getSource().getUrl(), applicationInstance.getSource().getRuntime());
 
                 buildPack = buildPackPlayerV2.play(buildImage);
             }
@@ -57,7 +59,9 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
                         applicationInstance.getSource().getGitBranch(),
                         applicationInstance.getSource().getGitSubmodule(),
                         applicationInstance.getSource().getStartOptions(),
-                        applicationInstance.getSource().getStartArgs());
+                        applicationInstance.getSource().getStartArgs(),
+                        applicationInstance.getSource().getRuntime());
+
 
                 buildPack = buildPackPlayerV2.play(buildImage);
             }

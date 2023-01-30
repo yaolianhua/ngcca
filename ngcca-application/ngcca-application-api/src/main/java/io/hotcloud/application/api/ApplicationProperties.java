@@ -2,12 +2,11 @@ package io.hotcloud.application.api;
 
 import io.hotcloud.common.model.Properties;
 import io.hotcloud.common.model.utils.Log;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.PostConstruct;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 

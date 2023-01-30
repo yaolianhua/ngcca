@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0</version>
+        <version>3.0.1</version>
     </parent>
 
     <groupId>io.hotcloud</groupId>
@@ -25,13 +25,14 @@
     <name>NGCCA</name>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <springdoc.version>1.6.9</springdoc.version>
-        <kubernetes.client-version>16.0.0</kubernetes.client-version>
-        <fabric8.kubernetes.client-version>6.1.1</fabric8.kubernetes.client-version>
+        <springdoc.version>1.6.14</springdoc.version>
+        <kubernetes.client-version>17.0.0</kubernetes.client-version>
+        <fabric8.kubernetes.client-version>6.3.1</fabric8.kubernetes.client-version>
         <lombok.version>1.18.22</lombok.version>
+        <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
         <apache.commons.validator-version>1.7</apache.commons.validator-version>
         <apache.commons.io-version>2.11.0</apache.commons.io-version>
         <apache.commons.pool2-version>2.11.1</apache.commons.pool2-version>
@@ -213,7 +214,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

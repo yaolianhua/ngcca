@@ -72,6 +72,8 @@ spec:
   selector:
     matchLabels:
       k8s-app: k8s-agent
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:

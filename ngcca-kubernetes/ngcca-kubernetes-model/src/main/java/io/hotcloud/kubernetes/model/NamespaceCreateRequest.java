@@ -1,8 +1,7 @@
 package io.hotcloud.kubernetes.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author yaolianhua789@gmail.com

@@ -1,5 +1,6 @@
 package io.hotcloud.buildpack.api.core;
 
+import io.hotcloud.common.model.RuntimeImages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class BuildImage {
     private Jar jar;
     private War war;
 
-    public static BuildImage ofSource(String httpGitUrl, String branch, String submodule, String startOptions, String startArgs) {
+    public static BuildImage ofSource(String httpGitUrl, String branch, String submodule, String startOptions, String startArgs, RuntimeImages runtime) {
         return BuildImage.builder().source(
                 SourceCode.builder()
                         .httpGitUrl(httpGitUrl)
@@ -23,28 +24,32 @@ public class BuildImage {
                         .submodule(submodule)
                         .startOptions(startOptions)
                         .startArgs(startArgs)
+                        .runtime(runtime)
                         .build()
         ).build();
     }
 
-    public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs){
+    public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs, RuntimeImages runtime) {
         return BuildImage.builder().jar(
                 Jar.builder()
                         .packageUrl(httpUrl)
                         .startOptions(startOptions)
                         .startArgs(startArgs)
+                        .runtime(runtime)
                         .build()
         ).build();
     }
 
-    public static BuildImage ofWar(String httpUrl){
+    public static BuildImage ofWar(String httpUrl, RuntimeImages runtime) {
         return BuildImage.builder().war(
                 War.builder()
                         .packageUrl(httpUrl)
+                        .runtime(runtime)
                         .build()
         ).build();
     }
-    public boolean isSourceCode(){
+
+    public boolean isSourceCode() {
         return source != null && !isWar() && !isJar();
     }
 
@@ -74,6 +79,7 @@ public class BuildImage {
          * e.g. -Dspring.profiles.active=production
          */
         private String startArgs;
+        private RuntimeImages runtime;
     }
 
     @Data
@@ -93,6 +99,8 @@ public class BuildImage {
          * e.g. -Dspring.profiles.active=production
          */
         private String startArgs;
+
+        private RuntimeImages runtime;
     }
 
     @Data
@@ -101,6 +109,7 @@ public class BuildImage {
     @AllArgsConstructor
     public static class War{
         private String packageUrl;
+        private RuntimeImages runtime;
     }
 
 }

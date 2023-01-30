@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.kubernetes.client.openapi.ApiException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yaolianhua789@gmail.com

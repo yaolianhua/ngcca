@@ -1,9 +1,8 @@
 package io.hotcloud.kubernetes.model.network;
 
 import io.hotcloud.kubernetes.model.ObjectMetadata;
+import jakarta.validation.Valid;
 import lombok.Data;
-
-import javax.validation.Valid;
 
 /**
  * @author yaolianhua789@gmail.com

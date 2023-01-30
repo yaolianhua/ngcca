@@ -1,10 +1,11 @@
 package io.hotcloud.db.core.application;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface ApplicationInstanceRepository extends PagingAndSortingRepository<ApplicationInstanceEntity, String> {
+public interface ApplicationInstanceRepository extends PagingAndSortingRepository<ApplicationInstanceEntity, String>, CrudRepository<ApplicationInstanceEntity, String> {
 
     /**
      * Get Entities with the giving username and application name

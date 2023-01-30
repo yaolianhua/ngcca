@@ -3,14 +3,14 @@ package io.hotcloud.common.server.core.message.websocket;
 import io.hotcloud.common.api.core.message.Message;
 import io.hotcloud.common.server.core.message.websocket.config.MessageDecoder;
 import io.hotcloud.common.server.core.message.websocket.config.MessageEncoder;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 
 /**
  * @author yaolianhua789@gmail.com
