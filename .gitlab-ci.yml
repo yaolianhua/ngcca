@@ -9,7 +9,7 @@
 #
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
-image: maven:3.8-openjdk-17-slim
+image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
 stages:
   - test
   - build
@@ -17,20 +17,15 @@ stages:
 test:
   stage: test
   script:
-    - mvn -s .m2/settings.xml -Dmaven.repo.local=.m2/repository clean test
+    - mvn clean test
   only:
     - main
 
-cache:
-  key: ngcca-ci-cache
-  paths:
-    - .m2/repository/
-
 build_jar:
-  image: 119.91.214.25:5000/library/maven:3.8-openjdk-17-slim
+  image: $CI_REGISTRY/library/maven:3.8-openjdk-17-slim
   stage: build
   script:
-    - mvn -s .m2/settings.xml -Dmaven.repo.local=.m2/repository -Dmaven.test.skip=true clean package
+    - mvn -Dmaven.test.skip=true clean package
 
 build_image:
   image: docker:latest
