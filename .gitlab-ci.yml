@@ -9,7 +9,6 @@
 #
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
-image: maven:3.8-openjdk-17-slim
 
 cache:
   key: ngcca-ci-cache
@@ -26,6 +25,7 @@ stages:
   - build
 
 test:
+  image: maven:3.8-openjdk-17-slim
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean test
@@ -33,6 +33,7 @@ test:
     - main
 
 package:
+  image: maven:3.8-openjdk-17-slim
   stage: package
   only:
     - main
@@ -44,8 +45,7 @@ build:
   stage: build
   services:
     - name: docker:dind
-      command:
-        - --insecure-registry=$CI_REGISTRY
+      command: [ "--insecure-registries",$CI_REGISTRY ]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
