@@ -47,7 +47,7 @@ build:
     - name: docker:dind
       command: [ "--insecure-registries",$CI_REGISTRY ]
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
     - export IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y%m%d%H%M%S')
     - docker build -t $IMAGE .
