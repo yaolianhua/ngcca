@@ -1,11 +1,11 @@
-FROM harbor.local:5000/library/openjdk:17-slim-buster AS builder
+FROM 119.91.214.25:5000/library/openjdk:17-slim-buster AS builder
 
 WORKDIR /build/
 
 COPY ngcca-server/target/ngcca-server.jar .
 RUN java -Djarmode=layertools -jar ngcca-server.jar extract
 
-FROM harbor.local:5000/library/openjdk:17-slim-buster
+FROM 119.91.214.25:5000/library/openjdk:17-slim-buster
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
 WORKDIR /ngcca/
