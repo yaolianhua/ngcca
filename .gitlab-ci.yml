@@ -19,29 +19,41 @@ variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --threads 1C"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
+image: maven:3.8-openjdk-17-slim
+
 stages:
-  - test
   - build
+  - test
+  - package
+  - image-push
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean compile
+  only:
+    - main
 
 test:
-  image: maven:3.8-openjdk-17-slim
   stage: test
   script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean test
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
   only:
     - main
 
 package:
-  image: maven:3.8-openjdk-17-slim
-  stage: build
+  stage: package
   only:
     - main
   script:
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true clean package
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true package
+  artifacts:
+    paths:
+      - ngcca-server/target/ngcca-server.jar
 
 docker-build:
   image: docker:latest
-  stage: build
+  stage: image-push
   services:
     - name: docker:dind
       command: [ "--insecure-registry","119.91.214.25:5000" ]
