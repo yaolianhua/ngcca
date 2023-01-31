@@ -80,6 +80,6 @@ deploy:
     - ssh-keyscan 119.91.214.25 >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh root@119.91.214.25 -p 26889 "kubectl get pods -n ngcca-system"
+    - ssh root@119.91.214.25 -p 26889 "hostname && echo 'Welcome!!!' > welcome.txt"
 
 
