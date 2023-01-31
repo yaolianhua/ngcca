@@ -78,5 +78,4 @@ deploy:
     - ssh-keyscan 119.91.214.25 >> ~/.ssh/known_hosts
 
   script:
-    - ssh -p 26889 root@119.91.214.25
-    - kubectl get pods -n ngcca-system
+    - ssh -p 26889 -T root@119.91.214.25 && kubectl get pods -n ngcca-system
