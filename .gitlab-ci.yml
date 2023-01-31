@@ -69,6 +69,8 @@ stages:
 deploy:
   image: ubuntu
   stage: deploy
+  only:
+    - main
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
     - eval $(ssh-agent -s)
@@ -77,4 +79,4 @@ deploy:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script:
-    - ssh -p 26889 -T root@119.91.214.25 && kubectl get pods -n ngcca-system
+    - ssh root@119.91.214.25 -p 26889 && kubectl get pods -n ngcca-system
