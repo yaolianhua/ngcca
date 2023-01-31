@@ -18,9 +18,9 @@ cache:
 variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --threads 1C"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  TIMESTAMP: echo $(date '+%Y%m%d%H%M%S')
-  IMAGE_NAME: "$CI_REGISTRY/ngcca/ngcca-server:$TIMESTAMP"
 
+before_script:
+  - export IMAGE_NAME="$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y%m%d%H%M%S')"
 #image: maven:3.8-openjdk-17-slim
 
 stages:
