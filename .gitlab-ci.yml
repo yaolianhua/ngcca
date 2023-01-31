@@ -72,8 +72,8 @@ deploy:
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
     - eval $(ssh-agent -s)
-    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add ~/.ssh/gitlab-ci
   script:
     - ssh -p 26889 -T root@119.91.214.25 && kubectl get pods -n ngcca-system
