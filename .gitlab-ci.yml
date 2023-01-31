@@ -67,17 +67,19 @@ stages:
 #    - docker push $IMAGE
 
 deploy:
-  image: ubuntu
+  image: alpine
   stage: deploy
   only:
     - main
   before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
+    - ssh-keyscan 119.91.214.25 >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh root@119.91.214.25 -p 26889 && kubectl get pods -n ngcca-system
+    - ssh root@119.91.214.25 -p 26889 "kubectl get pods -n ngcca-system"
+
+
