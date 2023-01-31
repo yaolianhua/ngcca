@@ -80,7 +80,8 @@ deploy:
     - ssh-keyscan -p $SSH_PORT $SSH_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - echo "$CI_REGISTRY/ngcca/ngcca-server:$(date -d '$CI_COMMIT_TIMESTAMP' +'$DATE_FORMAT') will be update ..."
+    - IMAGE_NAME=$CI_REGISTRY/ngcca/ngcca-server:$(date -d $CI_COMMIT_TIMESTAMP + $DATE_FORMAT)
+    - echo "$IMAGE_NAME will be update ..."
     - ssh root@$SSH_IP -p $SSH_PORT "kubectl get pods -o wide -n ngcca-system"
 
 
