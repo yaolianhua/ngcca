@@ -72,9 +72,9 @@ deploy:
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
     - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-add "${SSH_PRIVATE_KEY}" ~/.ssh/gitlab-ci
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script:
     - ssh -p 26889 -T root@119.91.214.25 && kubectl get pods -n ngcca-system
