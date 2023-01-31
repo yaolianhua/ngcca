@@ -74,6 +74,6 @@ deploy:
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add ~/.ssh/gitlab-ci
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add ~/.ssh/
   script:
     - ssh -p 26889 -T root@119.91.214.25 && kubectl get pods -n ngcca-system
