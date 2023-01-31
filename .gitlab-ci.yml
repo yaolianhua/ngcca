@@ -26,6 +26,7 @@ stages:
   #  - test
   #  - package
   #  - image-push
+  - demo
   - deploy
 
 #build:
@@ -58,12 +59,30 @@ stages:
 #  services:
 #    - name: docker:dind
 #      command: [ "--insecure-registry","119.91.214.25:5000" ]
-#
 #  before_script:
 #    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
 #  script:
-#    - docker build -t $IMAGE_NAME .
-#    - docker push $IMAGE_NAME
+#    - IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y-%m-%dT%H-%M-%S')
+#    - echo "$IMAGE" > .image
+#    - docker build -t $IMAGE .
+#    - docker push $IMAGE
+#  artifacts:
+#    paths:
+#      - .image
+#  only:
+#    - main
+
+demo:
+  image: alpine
+  stage: demo
+  script:
+    - IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y-%m-%dT%H-%M-%S')
+    - echo "$IMAGE" > .image
+  artifacts:
+    paths:
+      - .image
+  only:
+    - main
 
 deploy:
   image: alpine
@@ -79,8 +98,9 @@ deploy:
     - ssh-keyscan -p $SSH_PORT $SSH_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - IMAGE_NAME="$CI_REGISTRY/ngcca/ngcca-server:$(date -d "$CI_COMMIT_TIMESTAMP" +"%Y-%m-%dT%H-%M-%S")"
-    - echo "$IMAGE_NAME will be update ..."
+    - export IMAGE=$(cat .image)
+    - echo "$IMAGE will be update ..."
     - ssh root@$SSH_IP -p $SSH_PORT "kubectl get pods -o wide -n ngcca-system"
+    - exit
 
 
