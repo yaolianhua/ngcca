@@ -19,65 +19,52 @@ variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --threads 1C"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-#image: maven:3.8-openjdk-17-slim
+image: maven:3.8-openjdk-17-slim
 
 stages:
-#  - build
-  #  - test
-  #  - package
-  #  - image-push
-  - demo
+  - build
+  - test
+  - package
+  - image-push
   - deploy
 
-#build:
-#  stage: build
-#  script:
-#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean compile
-#  only:
-#    - main
-#
-#test:
-#  stage: test
-#  script:
-#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
-#  only:
-#    - main
-#
-#package:
-#  stage: package
-#  only:
-#    - main
-#  script:
-#    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true package
-#  artifacts:
-#    paths:
-#      - ngcca-server/target/ngcca-server.jar
-#
-#docker-build:
-#  image: docker:latest
-#  stage: image-push
-#  services:
-#    - name: docker:dind
-#      command: [ "--insecure-registry","119.91.214.25:5000" ]
-#  before_script:
-#    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-#  script:
-#    - IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y-%m-%dT%H-%M-%S')
-#    - echo "$IMAGE" > .image
-#    - docker build -t $IMAGE .
-#    - docker push $IMAGE
-#  artifacts:
-#    paths:
-#      - .image
-#  only:
-#    - main
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean compile
+  only:
+    - main
 
-demo:
-  image: alpine
-  stage: demo
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
+  only:
+    - main
+
+package:
+  stage: package
+  only:
+    - main
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -Dmaven.test.skip=true package
+  artifacts:
+    paths:
+      - ngcca-server/target/ngcca-server.jar
+
+docker-build:
+  image: docker:latest
+  stage: image-push
+  services:
+    - name: docker:dind
+      command: [ "--insecure-registry","119.91.214.25:5000" ]
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
     - IMAGE=$CI_REGISTRY/ngcca/ngcca-server:$(date '+%Y-%m-%dT%H-%M-%S')
     - echo "$IMAGE" > .image
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
   artifacts:
     paths:
       - .image
@@ -100,7 +87,7 @@ deploy:
   script:
     - export IMAGE=$(cat .image)
     - echo "$IMAGE will be update ..."
-    - ssh root@$SSH_IP -p $SSH_PORT "kubectl get pods -o wide -n ngcca-system"
+    - ssh root@$SSH_IP -p $SSH_PORT "kubectl set image deploy/ngcca-server -n ngcca-system ngcca-server=$IMAGE --record"
     - exit
 
 
