@@ -42,7 +42,7 @@ public class BuildPackServiceImpl implements BuildPackService {
         Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null");
         Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null");
 
-        BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().copyToEntity(buildPack);
+        BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().toE(buildPack);
 
         entity.setJob(writeJson(buildPack.getJobResource()));
         entity.setSecret(writeJson(buildPack.getSecretResource()));

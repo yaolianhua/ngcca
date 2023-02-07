@@ -49,7 +49,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
             throw new IllegalStateException("instance template [" + existEntity.getId() + "] already exist for user [" + existEntity.getUser() + "]");
         }
 
-        TemplateInstanceEntity entity = (TemplateInstanceEntity) new TemplateInstanceEntity().copyToEntity(instance);
+        TemplateInstanceEntity entity = (TemplateInstanceEntity) new TemplateInstanceEntity().toE(instance);
         entity.setCreatedAt(LocalDateTime.now());
 
         TemplateInstanceEntity saved = templateInstanceRepository.save(entity);

@@ -32,7 +32,7 @@ public class KubernetesClusterManagement {
             kubernetesClusterRepository.save(fetched);
         }
 
-        KubernetesClusterEntity entity = (KubernetesClusterEntity) new KubernetesClusterEntity().copyToEntity(info);
+        KubernetesClusterEntity entity = (KubernetesClusterEntity) new KubernetesClusterEntity().toE(info);
         entity.setCreatedAt(LocalDateTime.now());
         kubernetesClusterRepository.save(entity);
     }

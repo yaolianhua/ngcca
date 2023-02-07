@@ -23,7 +23,7 @@ public class AbstractEntity implements Serializable {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public <T> AbstractEntity copyToEntity(T data) {
+    public <T> AbstractEntity toE(T data) {
         BeanUtils.copyProperties(data, this);
         return this;
     }

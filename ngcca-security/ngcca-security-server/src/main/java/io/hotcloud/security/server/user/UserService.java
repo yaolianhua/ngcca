@@ -49,7 +49,7 @@ public class UserService implements UserApi {
         Assert.state(Validator.validUsername(user.getUsername()), "username must be start with a lowercase letter and contain lowercase letters and numbers only! [5-16] characters");
         Assert.isTrue(!exist(user.getUsername()), "username [" + user.getUsername() + "] already exist!");
 
-        UserEntity entity = (UserEntity) new UserEntity().copyToEntity(user);
+        UserEntity entity = (UserEntity) new UserEntity().toE(user);
 
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         entity.setCreatedAt(LocalDateTime.now());

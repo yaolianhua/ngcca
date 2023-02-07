@@ -94,7 +94,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
             throw new NGCCAResourceConflictException("Template definition already exist [" + definition.getName() + "]");
         }
 
-        TemplateDefinitionEntity saveEntity = (TemplateDefinitionEntity) new TemplateDefinitionEntity().copyToEntity(definition);
+        TemplateDefinitionEntity saveEntity = (TemplateDefinitionEntity) new TemplateDefinitionEntity().toE(definition);
         saveEntity.setCreatedAt(LocalDateTime.now());
         saveEntity.setModifiedAt(LocalDateTime.now());
         TemplateDefinitionEntity saved = templateDefinitionRepository.save(saveEntity);

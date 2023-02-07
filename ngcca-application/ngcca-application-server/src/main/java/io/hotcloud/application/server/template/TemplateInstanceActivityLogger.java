@@ -44,7 +44,7 @@ public class TemplateInstanceActivityLogger {
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
                 .build();
-        ActivityEntity entity = (ActivityEntity) new ActivityEntity().copyToEntity(activityLog);
+        ActivityEntity entity = (ActivityEntity) new ActivityEntity().toE(activityLog);
         ActivityEntity saved = activityRepository.save(entity);
 
         return saved.toT(ActivityLog.class);

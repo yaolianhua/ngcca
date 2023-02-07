@@ -101,7 +101,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             return toApplicationInstance(updated);
         }
 
-        ApplicationInstanceEntity entity = (ApplicationInstanceEntity) new ApplicationInstanceEntity().copyToEntity(applicationInstance);
+        ApplicationInstanceEntity entity = (ApplicationInstanceEntity) new ApplicationInstanceEntity().toE(applicationInstance);
         entity.setEnvs(writeJson(applicationInstance.getEnvs()));
         entity.setSource(writeJson(applicationInstance.getSource()));
         entity.setCreatedAt(LocalDateTime.now());

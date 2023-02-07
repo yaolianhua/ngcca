@@ -74,7 +74,7 @@ public class GitClonedServiceImpl implements GitClonedService {
             return updated.toT(GitCloned.class);
         }
 
-        GitClonedEntity entity = (GitClonedEntity) new GitClonedEntity().copyToEntity(cloned);
+        GitClonedEntity entity = (GitClonedEntity) new GitClonedEntity().toE(cloned);
         entity.setCreatedAt(LocalDateTime.now());
         GitClonedEntity saved = repository.save(entity);
 
