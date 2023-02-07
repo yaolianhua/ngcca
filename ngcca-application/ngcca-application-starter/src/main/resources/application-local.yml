@@ -25,8 +25,8 @@ ngcca:
     port: 27017
     database: ngcca-dev
   kubernetes-agent:
-    port:
-    host:
-    domain-name: k8s-agent.k8s-cluster.com
+    port: 1400
+    host: localhost
+    domain-name:
 
 
