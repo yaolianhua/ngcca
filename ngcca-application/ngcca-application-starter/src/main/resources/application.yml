@@ -52,5 +52,7 @@ ngcca:
   application:
     deployment-notify-mode: rabbitmq
     dot-suffix-domain: ".k8s-cluster.com"
+  chatgpt:
+    api-key:
 server:
   port: 8082

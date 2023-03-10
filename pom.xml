@@ -44,6 +44,7 @@
         <caffeine.version>3.0.6</caffeine.version>
         <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
+        <openfeign.version>4.0.1</openfeign.version>
     </properties>
 
     <dependencyManagement>
@@ -204,6 +205,11 @@
                 <version>${okhttp.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${openfeign.version}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
