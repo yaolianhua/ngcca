@@ -1,6 +1,5 @@
 package io.hotcloud.kubernetes.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.kubernetes.model.module.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +24,8 @@ public class KubernetesRabbitmqMessageBroadcaster {
             String content = objectMapper.writeValueAsString(message);
             rabbitTemplate.convertAndSend(exchange, "", content);
             log.debug("Rabbitmq broadcast message: \n {}", content);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            log.error("Kubernetes message broadcast error: {}", e.getMessage());
         }
 
     }

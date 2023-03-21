@@ -10,6 +10,9 @@ spring:
     username: ${kubernetes.rabbitmq.username:}
     password: ${kubernetes.rabbitmq.password:}
     virtual-host: /
+    cache:
+      connection:
+        mode: connection
 kubernetes:
   in-cluster: true
   enable-workloads-watcher: true
