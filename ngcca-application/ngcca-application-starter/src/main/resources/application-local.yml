@@ -1,25 +1,25 @@
 ngcca:
   rabbitmq:
-    host: localhost
+    host: middleware.local
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: localhost
+    host: middleware.local
     port: 6379
   registry:
-    url: harbor.local:5000
+    url: harbor.linux-local:5000
     username: admin
     password: QbMufCD@9WVQ^Hv
     imagebuild-namespace: image-build-dev
   minio:
     access-key: admin
     secret-key: QbMufCD@9WVQ^Hv
-    endpoint: "http://localhost:9009"
+    endpoint: "http://middleware.local:9009"
   mongodb:
-    host: localhost
+    host: middleware.local
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 27017
