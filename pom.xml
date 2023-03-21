@@ -45,6 +45,7 @@
         <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
         <openfeign.version>4.0.1</openfeign.version>
+        <openai-gpt3.version>0.11.1</openai-gpt3.version>
     </properties>
 
     <dependencyManagement>
@@ -209,6 +210,11 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${openfeign.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.theokanning.openai-gpt3-java</groupId>
+                <artifactId>service</artifactId>
+                <version>${openai-gpt3.version}</version>
             </dependency>
         </dependencies>
 

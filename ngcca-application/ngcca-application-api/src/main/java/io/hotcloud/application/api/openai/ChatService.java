@@ -1,4 +1,4 @@
-package io.hotcloud.application.api.chatgpt;
+package io.hotcloud.application.api.openai;
 
 public interface ChatService {
 

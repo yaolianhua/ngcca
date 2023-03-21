@@ -52,7 +52,11 @@ ngcca:
   application:
     deployment-notify-mode: rabbitmq
     dot-suffix-domain: ".k8s-cluster.com"
-  chatgpt:
+  openai:
     api-key:
+    http-proxy:
+      hostname:
+      port:
+    http-client-timeout-seconds: 60
 server:
   port: 8082

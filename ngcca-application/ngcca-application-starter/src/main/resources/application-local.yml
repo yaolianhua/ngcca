@@ -28,5 +28,11 @@ ngcca:
     port: 1400
     host: localhost
     domain-name:
+  openai:
+    api-key:
+    http-proxy:
+      hostname: "127.0.0.1"
+      port: 1087
+    http-client-timeout-seconds: 60
 
 

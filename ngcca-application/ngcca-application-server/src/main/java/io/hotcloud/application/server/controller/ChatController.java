@@ -1,6 +1,6 @@
 package io.hotcloud.application.server.controller;
 
-import io.hotcloud.application.api.chatgpt.ChatService;
+import io.hotcloud.application.api.openai.ChatService;
 import io.hotcloud.common.model.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/chatgpt")
+@RequestMapping("/v1/openai")
 @RestController
 @Tag(name = "ChatGPT api")
 public class ChatController {
@@ -24,7 +24,7 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @PostMapping
+    @PostMapping("/chat")
     @Operation(
             summary = "Creates a completion for the chat message",
             responses = {@ApiResponse(responseCode = "200")},
