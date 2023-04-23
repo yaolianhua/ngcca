@@ -17,13 +17,13 @@ public class BuildPackYamlServiceImpl implements BuildPackYamlService {
         }
 
         if ("dockerfile-jar".equalsIgnoreCase(type)) {
-            return DockerfileTemplateRender.DOCKERFILE_JAR_TEMPLATE;
+            return DockerfileTemplateRender.JAR_TEMPLATE_DOCKERFILE;
         }
         if ("dockerfile-jar-maven".equalsIgnoreCase(type)) {
-            return DockerfileTemplateRender.DOCKERFILE_JAR_MAVEN_TEMPLATE;
+            return DockerfileTemplateRender.MAVEN_JAR_TEMPLATE_DOCKERFILE;
         }
         if ("dockerfile-war".equalsIgnoreCase(type)) {
-            return DockerfileTemplateRender.DOCKERFILE_WAR_TEMPLATE;
+            return DockerfileTemplateRender.WAR_TEMPLATE_DOCKERFILE;
         }
 
         if ("imagebuild-source".equalsIgnoreCase(type)) {

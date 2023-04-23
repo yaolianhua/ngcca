@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
 
 
 public class DockerfileTemplateRender {
-    public static final String DOCKERFILE_JAR_TEMPLATE;
-    public static final String DOCKERFILE_JAR_MAVEN_TEMPLATE;
-    public static final String DOCKERFILE_WAR_TEMPLATE;
+    public static final String JAR_TEMPLATE_DOCKERFILE;
+    public static final String MAVEN_JAR_TEMPLATE_DOCKERFILE;
+    public static final String WAR_TEMPLATE_DOCKERFILE;
 
     static {
         try {
-            DOCKERFILE_JAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-jar.template").getInputStream())).lines().collect(Collectors.joining("\n"));
-            DOCKERFILE_JAR_MAVEN_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-jar-maven.template").getInputStream())).lines().collect(Collectors.joining("\n"));
-            DOCKERFILE_WAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("Dockerfile-war.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            JAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("jar-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
+            MAVEN_JAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("maven-jar-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
+            WAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("war-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,15 +53,15 @@ public class DockerfileTemplateRender {
 
         String template = null;
         if (javaArtifact.isMavenJar()) {
-            template = DOCKERFILE_JAR_MAVEN_TEMPLATE;
+            template = MAVEN_JAR_TEMPLATE_DOCKERFILE;
         }
 
         if (javaArtifact.isJar()) {
-            template = DOCKERFILE_JAR_TEMPLATE;
+            template = JAR_TEMPLATE_DOCKERFILE;
         }
 
         if (javaArtifact.isWar()) {
-            template = DOCKERFILE_WAR_TEMPLATE;
+            template = WAR_TEMPLATE_DOCKERFILE;
         }
 
         String dockerfile = TemplateRender.apply(template, renders);
