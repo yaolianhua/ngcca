@@ -1,12 +1,8 @@
 package io.hotcloud.allinone.web.activity;
 
-import io.hotcloud.common.api.activity.ActivityAction;
-import io.hotcloud.common.api.activity.ActivityLog;
-import io.hotcloud.common.api.activity.ActivityTarget;
-import io.hotcloud.common.model.PageResult;
-import io.hotcloud.common.model.Pageable;
-import io.hotcloud.db.core.activity.ActivityEntity;
-import io.hotcloud.db.core.activity.ActivityRepository;
+import io.hotcloud.common.model.*;
+import io.hotcloud.module.db.core.activity.ActivityEntity;
+import io.hotcloud.module.db.core.activity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;

@@ -1,0 +1,35 @@
+package io.hotcloud.server;
+
+import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.server.files.FileHelper;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
+
+@Component
+public class GlobalRootPathInitialization implements NGCCARunnerProcessor {
+
+    @Override
+    public void execute() {
+        try {
+            Path volumePath = Path.of(ROOT_PATH);
+            boolean exists = FileHelper.exists(volumePath);
+
+            if (exists) {
+                Log.info(GlobalRootPathInitialization.class.getName(),
+                        String.format("Root storage path '%s' already exist ", ROOT_PATH));
+                return;
+            }
+            Path directories = Files.createDirectories(volumePath);
+            Log.info(GlobalRootPathInitialization.class.getName(),
+                    String.format("Root storage path '%s' created ", directories));
+        } catch (IOException e) {
+            Log.error(GlobalRootPathInitialization.class.getName(),
+                    String.format("%s", e.getMessage()));
+        }
+    }
+}

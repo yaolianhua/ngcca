@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ngcca-vendors</artifactId>
+        <groupId>io.hotcloud</groupId>
+        <version>0.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ngcca-vendor-buildpack</artifactId>
+    <name>NGCCA :: Vendor :: BuildPack</name>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-common-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -7,10 +7,9 @@
         <module>ngcca-server</module>
         <module>ngcca-kubernetes</module>
         <module>ngcca-common</module>
-        <module>ngcca-buildpack</module>
-        <module>ngcca-security</module>
-        <module>ngcca-db</module>
-        <module>ngcca-application</module>
+        <module>ngcca-vendors</module>
+        <module>ngcca-core-server</module>
+        <module>ngcca-module</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -56,16 +55,7 @@
                 <artifactId>ngcca-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-buildpack</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-kubernetes</artifactId>
@@ -76,16 +66,7 @@
                 <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-security</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-db</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <!-- Swagger -->
             <dependency>
                 <groupId>org.springdoc</groupId>
@@ -111,6 +92,24 @@
                 <artifactId>kubernetes-client</artifactId>
                 <version>${fabric8.kubernetes.client-version}</version>
             </dependency>
+
+            <!-- vendors -->
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-buildpack</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-minio</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-registry</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <!-- lombok -->
             <dependency>

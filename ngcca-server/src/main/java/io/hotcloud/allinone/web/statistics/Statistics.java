@@ -1,10 +1,10 @@
 package io.hotcloud.allinone.web.statistics;
 
-import io.hotcloud.application.api.core.ApplicationInstanceStatistics;
-import io.hotcloud.application.api.template.TemplateInstanceStatistics;
-import io.hotcloud.buildpack.api.clone.GitClonedStatistics;
-import io.hotcloud.buildpack.api.core.BuildPackStatistics;
-import io.hotcloud.security.api.user.User;
+import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
+import io.hotcloud.module.application.template.TemplateInstanceStatistics;
+import io.hotcloud.module.security.user.User;
+import io.hotcloud.vendor.buildpack.BuildPackStatistics;
+import io.hotcloud.vendor.buildpack.GitClonedStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

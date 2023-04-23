@@ -1,8 +1,8 @@
 package io.hotcloud.allinone.web.mvc;
 
-import io.hotcloud.security.api.jwt.JwtVerifier;
-import io.hotcloud.security.api.user.User;
-import io.hotcloud.security.api.user.UserApi;
+import io.hotcloud.module.security.jwt.JwtVerifier;
+import io.hotcloud.module.security.user.User;
+import io.hotcloud.module.security.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

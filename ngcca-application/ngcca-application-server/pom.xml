@@ -20,11 +20,7 @@
             <artifactId>ngcca-common-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-security-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-application-api</artifactId>

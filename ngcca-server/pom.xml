@@ -28,25 +28,7 @@
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-buildpack-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-application-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-security-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-db</artifactId>
+            <artifactId>ngcca-core-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

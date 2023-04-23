@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.hotcloud.common.autoconfigure.CommonAutoConfiguration
+  io.hotcloud.server.CommonAutoConfiguration

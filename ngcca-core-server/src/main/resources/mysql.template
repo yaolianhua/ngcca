@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #{[MYSQL]}
+  namespace: #{[NAMESPACE]}
+  labels:
+    app.business.data/id: #{[ ID ]}
+spec:
+  selector:
+    matchLabels:
+      app: #{[MYSQL]}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: #{[MYSQL]}
+    spec:
+      containers:
+      - image: #{[MYSQL_IMAGE]}
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        name: #{[MYSQL]}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: #{[MYSQL_ROOT_PASSWORD]}
+        ports:
+        - containerPort: 3306
+          name: #{[MYSQL]}
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #{[MYSQL]}
+  namespace: #{[NAMESPACE]}
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: #{[MYSQL]}
+  type: NodePort

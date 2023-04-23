@@ -1,17 +1,17 @@
 package io.hotcloud.allinone.web.statistics;
 
-import io.hotcloud.application.api.core.ApplicationInstanceStatistics;
-import io.hotcloud.application.api.template.TemplateInstanceStatistics;
-import io.hotcloud.application.server.core.ApplicationInstanceStatisticsService;
-import io.hotcloud.application.server.template.TemplateInstanceStatisticsService;
-import io.hotcloud.buildpack.api.clone.GitClonedStatistics;
-import io.hotcloud.buildpack.api.core.BuildPackStatistics;
-import io.hotcloud.buildpack.server.clone.GitClonedStatisticsService;
-import io.hotcloud.buildpack.server.core.BuildPackStatisticsService;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.security.api.user.User;
-import io.hotcloud.security.api.user.UserApi;
+import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
+import io.hotcloud.module.application.template.TemplateInstanceStatistics;
+import io.hotcloud.module.security.user.User;
+import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.server.application.core.ApplicationInstanceStatisticsService;
+import io.hotcloud.server.application.template.TemplateInstanceStatisticsService;
+import io.hotcloud.server.buildpack.service.BuildPackStatisticsService;
+import io.hotcloud.server.buildpack.service.GitClonedStatisticsService;
+import io.hotcloud.vendor.buildpack.BuildPackStatistics;
+import io.hotcloud.vendor.buildpack.GitClonedStatistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
