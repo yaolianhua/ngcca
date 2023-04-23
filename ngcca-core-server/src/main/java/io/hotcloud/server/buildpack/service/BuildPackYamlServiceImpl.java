@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.vendor.buildpack.BuildPackYamlService;
 import io.hotcloud.vendor.buildpack.kaniko.DockerfileTemplateRender;
 import io.hotcloud.vendor.buildpack.kaniko.KanikoJobTemplateRender;
@@ -35,6 +35,6 @@ public class BuildPackYamlServiceImpl implements BuildPackYamlService {
         if ("imagebuild-secret".equalsIgnoreCase(type)) {
             return KanikoJobTemplateRender.IMAGEBUILD_SECRET_TEMPLATE;
         }
-        throw new NGCCACommonException("Unsupported type [" + type + "]", 400);
+        throw new NGCCAPlatformException("Unsupported type [" + type + "]", 400);
     }
 }

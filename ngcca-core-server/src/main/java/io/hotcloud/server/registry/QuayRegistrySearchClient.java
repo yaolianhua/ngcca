@@ -3,7 +3,7 @@ package io.hotcloud.server.registry;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.vendor.registry.RegistrySearchClient;
 import io.hotcloud.vendor.registry.model.RegistryAuthentication;
@@ -52,7 +52,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
 
             return PageResult.ofCollectionPage(repositories, pageable);
         } catch (Exception e) {
-            throw new NGCCACommonException(e.getMessage(), 500);
+            throw new NGCCAPlatformException(e.getMessage(), 500);
         }
     }
 
@@ -97,7 +97,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
 
             return PageResult.ofCollectionPage(tags, pageable);
         } catch (Exception e) {
-            throw new NGCCACommonException(e.getMessage(), 500);
+            throw new NGCCAPlatformException(e.getMessage(), 500);
         }
     }
 

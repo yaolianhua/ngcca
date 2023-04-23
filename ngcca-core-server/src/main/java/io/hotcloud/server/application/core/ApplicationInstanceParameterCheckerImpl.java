@@ -1,7 +1,7 @@
 package io.hotcloud.server.application.core;
 
 import io.fabric8.kubernetes.api.model.Namespace;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.common.model.utils.Validator;
@@ -58,7 +58,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
                 Log.info(ApplicationInstanceParameterCheckerImpl.class.getName(),
                         String.format("[%s] user's k8s namespace create success [%s]", current.getUsername(), namespace));
             } catch (ApiException e) {
-                throw new NGCCACommonException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());
+                throw new NGCCAPlatformException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());
             }
         }
 

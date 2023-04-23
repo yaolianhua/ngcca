@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.module.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.module.db.core.buildpack.BuildPackRepository;
 import io.hotcloud.vendor.buildpack.*;
@@ -174,7 +174,7 @@ public class BuildPackServiceImpl implements BuildPackService {
         try {
             return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException("Write value error. " + e.getCause().getMessage());
+            throw new NGCCAPlatformException("Write value error. " + e.getCause().getMessage());
         }
     }
 
@@ -182,7 +182,7 @@ public class BuildPackServiceImpl implements BuildPackService {
         try {
             return objectMapper.readValue(content, clazz);
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException("Read value error. " + e.getCause().getMessage());
+            throw new NGCCAPlatformException("Read value error. " + e.getCause().getMessage());
         }
     }
 }

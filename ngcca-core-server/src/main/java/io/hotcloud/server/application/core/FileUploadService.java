@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.core;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.server.minio.MinioProperties;
 import io.hotcloud.vendor.minio.MinioBucketApi;
@@ -59,7 +59,7 @@ public class FileUploadService {
                     String.format("File [%s] upload success. spend time [%ss]", filename, watch.getTotalTimeSeconds()));
             return String.format("%s/%s/%s", properties.getEndpoint(), bucket, filename);
         } catch (Exception e) {
-            throw new NGCCACommonException(e.getMessage());
+            throw new NGCCAPlatformException(e.getMessage());
         }
 
     }

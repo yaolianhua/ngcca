@@ -7,7 +7,7 @@ import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.NodeAddress;
 import io.fabric8.kubernetes.api.model.NodeSystemInfo;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.common.model.utils.UUIDGenerator;
 import io.hotcloud.server.message.Message;
@@ -99,7 +99,7 @@ public class KubernetesClusterRabbitMQMessageSubscriber {
             });
 
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException(e.getMessage());
+            throw new NGCCAPlatformException(e.getMessage());
         }
     }
 }

@@ -4,7 +4,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.common.model.RuntimeImages;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.INet;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.common.model.utils.UUIDGenerator;
@@ -143,7 +143,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 case Java8 -> mavenKey = RuntimeImages.Maven3808.name();
                 case Java11 -> mavenKey = RuntimeImages.Maven3811.name();
                 case Java17 -> mavenKey = RuntimeImages.Maven3817.name();
-                default -> throw new NGCCACommonException("Unsupported runtime");
+                default -> throw new NGCCAPlatformException("Unsupported runtime");
             }
             return DockerfileJavaArtifactExpressionVariable.ofMavenJar(
                     registryImagesContainer.get(mavenKey.toLowerCase()),

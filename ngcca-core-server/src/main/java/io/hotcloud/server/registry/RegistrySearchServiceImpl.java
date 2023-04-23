@@ -3,7 +3,7 @@ package io.hotcloud.server.registry;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.vendor.registry.RegistrySearchClient;
 import io.hotcloud.vendor.registry.RegistrySearchClientProvider;
 import io.hotcloud.vendor.registry.RegistrySearchService;
@@ -33,10 +33,10 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
             registry = DockerHub.HTTP_URL;
         }
         if (!StringUtils.hasText(registry)) {
-            throw new NGCCACommonException("registry url is null", 400);
+            throw new NGCCAPlatformException("registry url is null", 400);
         }
         if (!registry.startsWith("http://") && !registry.startsWith("https://")) {
-            throw new NGCCACommonException("The registry url protocol is missing [http, https]", 400);
+            throw new NGCCAPlatformException("The registry url protocol is missing [http, https]", 400);
         }
 
         return registry;
@@ -49,7 +49,7 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
         try {
             client = registrySearchClientProvider.getClient(type, new URI(registry));
         } catch (URISyntaxException e) {
-            throw new NGCCACommonException(e.getMessage(), 400);
+            throw new NGCCAPlatformException(e.getMessage(), 400);
         }
         return client.searchRepositories(authentication, pageable, query);
     }
@@ -61,7 +61,7 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
         try {
             client = registrySearchClientProvider.getClient(type, new URI(registry));
         } catch (URISyntaxException e) {
-            throw new NGCCACommonException(e.getMessage(), 400);
+            throw new NGCCAPlatformException(e.getMessage(), 400);
         }
         return client.searchTags(authentication, pageable, repository);
     }

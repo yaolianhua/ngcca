@@ -2,7 +2,7 @@ package io.hotcloud.server.application.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstanceService;
@@ -144,7 +144,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         try {
             return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException("Write value error. " + e.getCause().getMessage());
+            throw new NGCCAPlatformException("Write value error. " + e.getCause().getMessage());
         }
     }
 
@@ -152,7 +152,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         try {
             return objectMapper.readValue(content, clazz);
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException("Read value error. " + e.getCause().getMessage());
+            throw new NGCCAPlatformException("Read value error. " + e.getCause().getMessage());
         }
     }
 }

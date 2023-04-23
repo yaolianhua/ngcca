@@ -2,7 +2,7 @@ package io.hotcloud.server.application.template;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +51,7 @@ public class TemplateImagesProperties {
 
     public String getTag(String name) {
         if (!StringUtils.hasText(name)) {
-            throw new NGCCACommonException("image name is null");
+            throw new NGCCAPlatformException("image name is null");
         }
 
         // namespace/rabbitmq:3.9-management
@@ -80,7 +80,7 @@ public class TemplateImagesProperties {
                 }
                 args.put(field.getName(), String.valueOf(o));
             } catch (IllegalAccessException e) {
-                throw new NGCCACommonException(e.getMessage(), e);
+                throw new NGCCAPlatformException(e.getMessage(), e);
             }
         }
 

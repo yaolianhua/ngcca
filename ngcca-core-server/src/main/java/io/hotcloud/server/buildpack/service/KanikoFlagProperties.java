@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.vendor.buildpack.KanikoFlag;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -110,7 +110,7 @@ public class KanikoFlagProperties implements KanikoFlag {
                 }
                 args.put(field.getName(), String.valueOf(o));
             } catch (IllegalAccessException e) {
-                throw new NGCCACommonException(e.getMessage(), e);
+                throw new NGCCAPlatformException(e.getMessage(), e);
             }
         }
 

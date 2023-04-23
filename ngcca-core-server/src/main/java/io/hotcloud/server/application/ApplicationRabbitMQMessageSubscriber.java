@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.module.application.template.TemplateInstance;
@@ -90,7 +90,7 @@ public class ApplicationRabbitMQMessageSubscriber {
             });
 
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException(e.getMessage());
+            throw new NGCCAPlatformException(e.getMessage());
         }
     }
 }

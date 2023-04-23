@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.template;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import io.hotcloud.module.application.template.Template;
@@ -42,14 +42,14 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
                 .map(Enum::name)
                 .collect(Collectors.toList());
         if (!names.contains(name)) {
-            throw new NGCCACommonException("Supported template " + names);
+            throw new NGCCAPlatformException("Supported template " + names);
         }
     }
 
     private void validateTemplateDefinitionVersion(String name, String version) {
         String tag = templateImagesProperties.getTag(name);
         if (!Objects.equals(tag, version)) {
-            throw new NGCCACommonException("Template [" + name + "] supported version [" + tag + "]", 400);
+            throw new NGCCAPlatformException("Template [" + name + "] supported version [" + tag + "]", 400);
         }
     }
 
@@ -120,7 +120,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
     @Override
     public TemplateDefinition findByNameIgnoreCase(String name) {
         if (!StringUtils.hasText(name)) {
-            throw new NGCCACommonException("parameter name is null");
+            throw new NGCCAPlatformException("parameter name is null");
         }
         List<TemplateDefinition> definitions = this.findAll();
         for (TemplateDefinition definition : definitions) {

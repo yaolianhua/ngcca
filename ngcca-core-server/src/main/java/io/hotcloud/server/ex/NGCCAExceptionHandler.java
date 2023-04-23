@@ -1,7 +1,7 @@
 package io.hotcloud.server.ex;
 
 import io.hotcloud.common.model.Result;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Order(-1)
 public class NGCCAExceptionHandler {
 
-    @ExceptionHandler(value = NGCCACommonException.class)
-    public ResponseEntity<Result<Void>> handle(NGCCACommonException ex, HttpServletRequest request) {
+    @ExceptionHandler(value = NGCCAPlatformException.class)
+    public ResponseEntity<Result<Void>> handle(NGCCAPlatformException ex, HttpServletRequest request) {
         Result<Void> error = Result.error(ex.getCode(), ex.getMessage());
         log.error("request '{}' error: {}", request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(ex.getCode()).body(error);

@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.core;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.module.application.IngressTemplateRender;
 import io.hotcloud.module.application.core.ApplicationYamlService;
 import io.hotcloud.module.application.template.instance.*;
@@ -40,6 +40,6 @@ public class ApplicationYamlServiceImpl implements ApplicationYamlService {
             return IngressTemplateRender.INGRESS_2RULE;
         }
 
-        throw new NGCCACommonException("Unsupported type [" + type + "]", 400);
+        throw new NGCCAPlatformException("Unsupported type [" + type + "]", 400);
     }
 }

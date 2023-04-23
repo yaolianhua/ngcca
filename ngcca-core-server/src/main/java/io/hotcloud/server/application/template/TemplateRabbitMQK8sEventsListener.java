@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.utils.Log;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
@@ -95,7 +95,7 @@ public class TemplateRabbitMQK8sEventsListener {
             });
 
         } catch (JsonProcessingException e) {
-            throw new NGCCACommonException(e.getMessage());
+            throw new NGCCAPlatformException(e.getMessage());
         }
     }
 

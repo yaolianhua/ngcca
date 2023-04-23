@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.vendor.buildpack.BuildPack;
 import io.hotcloud.vendor.buildpack.BuildPackService;
 import org.springframework.stereotype.Component;
@@ -49,7 +49,7 @@ public class BuildPackCollectionQuery {
         } else if (StringUtils.hasText(clonedId)) {
             buildPacks = buildPackService.findByClonedId(clonedId);
         } else {
-            throw new NGCCACommonException("Unsupported query condition", 400);
+            throw new NGCCAPlatformException("Unsupported query condition", 400);
         }
 
         List<BuildPack> filtered = filter(buildPacks, done, deleted);

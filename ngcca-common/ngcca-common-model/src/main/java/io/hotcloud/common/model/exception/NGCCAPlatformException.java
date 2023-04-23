@@ -1,18 +1,18 @@
 package io.hotcloud.common.model.exception;
 
-public class NGCCACommonException extends RuntimeException {
+public class NGCCAPlatformException extends RuntimeException {
 
     private int code;
 
-    public NGCCACommonException(String message, Throwable cause) {
+    public NGCCAPlatformException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public NGCCACommonException(String message) {
+    public NGCCAPlatformException(String message) {
         this(message, 403);
     }
 
-    public NGCCACommonException(String message, int code) {
+    public NGCCAPlatformException(String message, int code) {
         super(message);
         this.code = code;
     }

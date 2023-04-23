@@ -1,6 +1,6 @@
 package io.hotcloud.server.security.configuration.jwt;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.module.security.jwt.Jwt;
 import io.hotcloud.module.security.jwt.*;
 import io.jsonwebtoken.*;
@@ -53,7 +53,7 @@ public class JwtManager implements JwtSigner, JwtVerifier {
                     .build()
                     .parse(sign);
         } catch (Exception e) {
-            throw new NGCCACommonException(e.getMessage(), 401);
+            throw new NGCCAPlatformException(e.getMessage(), 401);
         }
 
         return new Jwt() {

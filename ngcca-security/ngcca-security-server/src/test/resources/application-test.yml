@@ -1,7 +1,0 @@
-ngcca:
-  mongodb:
-    host: localhost
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 27017
-    database: ngcca-test

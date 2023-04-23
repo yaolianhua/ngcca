@@ -1,6 +1,6 @@
 package io.hotcloud.server.security.user;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.module.security.jwt.JwtSigner;
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.login.BearerToken;
@@ -53,7 +53,7 @@ public class HotCloudLoginService implements LoginApi {
             String token = jwtSigner.sign(Map.of("username", retrieved.getUsername()));
             return BearerToken.of(token);
         } catch (Exception ex) {
-            throw new NGCCACommonException("Invalid username or password");
+            throw new NGCCAPlatformException("Invalid username or password");
         }
 
     }

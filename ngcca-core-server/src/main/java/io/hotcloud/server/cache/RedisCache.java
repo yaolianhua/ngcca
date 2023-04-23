@@ -1,6 +1,6 @@
 package io.hotcloud.server.cache;
 
-import io.hotcloud.common.model.exception.NGCCACommonException;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
@@ -62,7 +62,7 @@ public class RedisCache extends AbstractValueAdaptingCache {
         try {
             redisTemplate.opsForValue().set(key, toStoreValue(valueLoader.call()));
         } catch (Exception e) {
-            throw new NGCCACommonException(String.format("Value for key '%s' could not be loaded using '%s'", key, valueLoader));
+            throw new NGCCAPlatformException(String.format("Value for key '%s' could not be loaded using '%s'", key, valueLoader));
         }
 
         return (T) get(key);
