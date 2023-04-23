@@ -12,5 +12,10 @@
     <artifactId>ngcca-vendor-minio</artifactId>
     <name>NGCCA :: Vendor :: Minio</name>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -18,23 +18,19 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-module-application</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-module-security</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-module-db</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-client</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- vendors -->
@@ -108,13 +104,17 @@
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.2.1</version>
         </dependency>
 
         <!-- git -->
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>service</artifactId>
         </dependency>
 
 
@@ -131,28 +131,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.theokanning.openai-gpt3-java</groupId>
-            <artifactId>service</artifactId>
-        </dependency>
 
-        <!-- test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

@@ -12,35 +12,60 @@
     <artifactId>ngcca-common</artifactId>
     <packaging>pom</packaging>
     <name>NGCCA :: Common</name>
-    <modules>
-        <!--        <module>ngcca-common-api</module>-->
-        <!--        <module>ngcca-common-server</module>-->
-        <module>ngcca-common-model</module>
-        <!--        <module>ngcca-common-spring-boot-starter</module>-->
-    </modules>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-common-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-common-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!--            <dependency>-->
-            <!--                <groupId>io.hotcloud</groupId>-->
-            <!--                <artifactId>ngcca-common-server</artifactId>-->
-            <!--                <version>${project.version}</version>-->
-            <!--            </dependency>-->
-            <!--            <dependency>-->
-            <!--                <groupId>io.hotcloud</groupId>-->
-            <!--                <artifactId>ngcca-common-spring-boot-starter</artifactId>-->
-            <!--                <version>${project.version}</version>-->
-            <!--            </dependency>-->
-        </dependencies>
-    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

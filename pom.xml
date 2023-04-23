@@ -43,11 +43,13 @@
         <caffeine.version>3.0.6</caffeine.version>
         <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
+        <httpclient5.version>5.2.1</httpclient5.version>
         <openfeign.version>4.0.1</openfeign.version>
         <openai-gpt3.version>0.11.1</openai-gpt3.version>
     </properties>
 
     <dependencyManagement>
+
         <!-- modules -->
         <dependencies>
             <dependency>
@@ -66,14 +68,39 @@
                 <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- Swagger -->
+            <!-- modules -->
             <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc.version}</version>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-module-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-module-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-module-db</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
+            <!-- vendors -->
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-buildpack</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-minio</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-registry</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- Kubernetes -->
             <dependency>
                 <groupId>io.kubernetes</groupId>
@@ -93,24 +120,12 @@
                 <version>${fabric8.kubernetes.client-version}</version>
             </dependency>
 
-            <!-- vendors -->
+            <!-- Swagger -->
             <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-vendor-buildpack</artifactId>
-                <version>${project.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-vendor-minio</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-vendor-registry</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
             <!-- lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -203,6 +218,11 @@
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5.version}</version>
             </dependency>
 
             <dependency>

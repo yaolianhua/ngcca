@@ -15,8 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-common-model</artifactId>
-            <version>${project.version}</version>
+            <artifactId>ngcca-common</artifactId>
         </dependency>
 
         <dependency>
