@@ -1,4 +1,4 @@
-package io.hotcloud.module.buildpack.kaniko;
+package io.hotcloud.vendor.kaniko;
 
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

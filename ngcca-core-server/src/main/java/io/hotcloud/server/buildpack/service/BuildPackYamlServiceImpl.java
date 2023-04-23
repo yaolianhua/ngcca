@@ -2,8 +2,8 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.module.buildpack.BuildPackYamlService;
-import io.hotcloud.module.buildpack.kaniko.DockerfileTemplateRender;
-import io.hotcloud.module.buildpack.kaniko.KanikoJobTemplateRender;
+import io.hotcloud.vendor.kaniko.DockerfileTemplateRender;
+import io.hotcloud.vendor.kaniko.KanikoJobTemplateRender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

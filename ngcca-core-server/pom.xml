@@ -47,6 +47,10 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-vendor-minio</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-vendor-kaniko</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.javafaker</groupId>

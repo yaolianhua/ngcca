@@ -1,4 +1,4 @@
-package io.hotcloud.module.buildpack.kaniko;
+package io.hotcloud.vendor.kaniko;
 
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;

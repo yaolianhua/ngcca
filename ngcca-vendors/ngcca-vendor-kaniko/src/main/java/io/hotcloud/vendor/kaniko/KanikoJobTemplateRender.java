@@ -1,6 +1,5 @@
-package io.hotcloud.module.buildpack.kaniko;
+package io.hotcloud.vendor.kaniko;
 
-import io.hotcloud.module.buildpack.BuildPackConstant;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.CollectionUtils;
@@ -83,14 +82,14 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.KANIKO_IMAGE, job.getKaniko());
         renders.put(Kaniko.INIT_ALPINE_CONTAINER_IMAGE, job.getInitAlpineContainer());
         renders.put(Kaniko.DOCKERFILE_ENCODED, job.getEncodedDockerfile());
-        renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER);
-        renders.put(Kaniko.KANIKO_CONTAINER_NAME, BuildPackConstant.KANIKO_CONTAINER);
+        renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, "alpine");
+        renders.put(Kaniko.KANIKO_CONTAINER_NAME, "kaniko");
         renders.put(Kaniko.HOST_ALIASES, buildHostAliases(job.getHostAliases()));
 
         renders.put(Kaniko.GIT_BRANCH, Objects.nonNull(job.getGit()) ? job.getGit().getBranch() : null);
         renders.put(Kaniko.HTTP_GIT_URL, Objects.nonNull(job.getGit()) ? job.getGit().getHttpGitUrl() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, Objects.nonNull(job.getGit()) ? job.getGit().getInitGitContainer() : null);
-        renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, BuildPackConstant.KANIKO_INIT_GIT_CONTAINER);
+        renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, "git");
 
         String template = job.hasGit() ? IMAGEBUILD_SOURCE_TEMPLATE : IMAGEBUILD_JAR_WAR_TEMPLATE;
         return TemplateRender.apply(template, renders);
