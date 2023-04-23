@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.controller;
 
-import io.hotcloud.vendor.buildpack.BuildPackYamlService;
+import io.hotcloud.module.buildpack.BuildPackYamlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

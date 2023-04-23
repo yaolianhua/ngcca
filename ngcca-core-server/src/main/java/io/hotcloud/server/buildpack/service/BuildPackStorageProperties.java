@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.Properties;
 import io.hotcloud.common.utils.Log;
-import io.hotcloud.vendor.buildpack.BuildPackConstant;
+import io.hotcloud.module.buildpack.BuildPackConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

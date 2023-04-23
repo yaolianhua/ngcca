@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.utils.Log;
-import io.hotcloud.vendor.buildpack.*;
+import io.hotcloud.module.buildpack.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.hotcloud.common.model.CommonConstant.*;
-import static io.hotcloud.vendor.buildpack.ImageBuildStatus.Failed;
-import static io.hotcloud.vendor.buildpack.ImageBuildStatus.Succeeded;
+import static io.hotcloud.module.buildpack.ImageBuildStatus.Failed;
+import static io.hotcloud.module.buildpack.ImageBuildStatus.Succeeded;
 
 @Component
 @RequiredArgsConstructor

@@ -3,9 +3,9 @@ package io.hotcloud.server.buildpack.service;
 import io.hotcloud.common.model.ActivityAction;
 import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.common.model.ActivityTarget;
+import io.hotcloud.module.buildpack.BuildPack;
 import io.hotcloud.module.db.core.activity.ActivityEntity;
 import io.hotcloud.module.db.core.activity.ActivityRepository;
-import io.hotcloud.vendor.buildpack.BuildPack;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

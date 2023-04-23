@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.processor;
 
+import io.hotcloud.module.buildpack.KanikoFlag;
 import io.hotcloud.server.NGCCARunnerProcessor;
-import io.hotcloud.vendor.buildpack.KanikoFlag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

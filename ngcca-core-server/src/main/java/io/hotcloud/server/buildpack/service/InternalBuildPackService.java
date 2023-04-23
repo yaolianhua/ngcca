@@ -13,7 +13,7 @@ import io.hotcloud.kubernetes.model.workload.JobBuilder;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
 import io.hotcloud.kubernetes.model.workload.JobSpec;
 import io.hotcloud.kubernetes.model.workload.JobTemplate;
-import io.hotcloud.vendor.buildpack.*;
+import io.hotcloud.module.buildpack.*;
 import io.kubernetes.client.util.Yaml;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

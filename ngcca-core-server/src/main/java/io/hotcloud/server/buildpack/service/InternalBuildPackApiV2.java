@@ -13,13 +13,13 @@ import io.hotcloud.kubernetes.client.http.JobClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.YamlBody;
+import io.hotcloud.module.buildpack.*;
+import io.hotcloud.module.buildpack.kaniko.DockerfileJavaArtifactExpressionVariable;
+import io.hotcloud.module.buildpack.kaniko.KanikoJobExpressionVariable;
+import io.hotcloud.module.buildpack.kaniko.SecretExpressionVariable;
 import io.hotcloud.server.files.FileHelper;
 import io.hotcloud.server.registry.DatabaseRegistryImages;
 import io.hotcloud.server.registry.RegistryProperties;
-import io.hotcloud.vendor.buildpack.*;
-import io.hotcloud.vendor.buildpack.kaniko.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.vendor.buildpack.kaniko.KanikoJobExpressionVariable;
-import io.hotcloud.vendor.buildpack.kaniko.SecretExpressionVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,9 +33,9 @@ import java.util.regex.Pattern;
 
 import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 import static io.hotcloud.common.model.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
-import static io.hotcloud.vendor.buildpack.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.vendor.buildpack.kaniko.KanikoJobTemplateRender.parseJob;
-import static io.hotcloud.vendor.buildpack.kaniko.KanikoJobTemplateRender.parseSecret;
+import static io.hotcloud.module.buildpack.kaniko.DockerfileTemplateRender.DockerfileJava;
+import static io.hotcloud.module.buildpack.kaniko.KanikoJobTemplateRender.parseJob;
+import static io.hotcloud.module.buildpack.kaniko.KanikoJobTemplateRender.parseSecret;
 
 @Service
 @RequiredArgsConstructor

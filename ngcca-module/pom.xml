@@ -17,6 +17,7 @@
         <module>ngcca-module-security</module>
         <module>ngcca-module-db</module>
         <module>ngcca-module-application</module>
+        <module>ngcca-module-buildpack</module>
     </modules>
 
 

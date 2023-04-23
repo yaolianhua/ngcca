@@ -2,8 +2,8 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.vendor.buildpack.GitCloned;
-import io.hotcloud.vendor.buildpack.GitClonedService;
+import io.hotcloud.module.buildpack.GitCloned;
+import io.hotcloud.module.buildpack.GitClonedService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

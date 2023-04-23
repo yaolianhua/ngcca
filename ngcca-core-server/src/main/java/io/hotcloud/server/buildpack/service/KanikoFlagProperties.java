@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.vendor.buildpack.KanikoFlag;
+import io.hotcloud.module.buildpack.KanikoFlag;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack;
 
-import io.hotcloud.vendor.buildpack.kaniko.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.vendor.buildpack.kaniko.KanikoJobExpressionVariable;
+import io.hotcloud.module.buildpack.kaniko.DockerfileJavaArtifactExpressionVariable;
+import io.hotcloud.module.buildpack.kaniko.KanikoJobExpressionVariable;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.vendor.buildpack.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.vendor.buildpack.kaniko.KanikoJobTemplateRender.parseJob;
+import static io.hotcloud.module.buildpack.kaniko.DockerfileTemplateRender.DockerfileJava;
+import static io.hotcloud.module.buildpack.kaniko.KanikoJobTemplateRender.parseJob;
 
 
 public class TemplateRenderUnitTest {

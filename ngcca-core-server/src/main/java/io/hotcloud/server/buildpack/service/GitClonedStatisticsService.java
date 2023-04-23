@@ -1,8 +1,8 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.vendor.buildpack.GitCloned;
-import io.hotcloud.vendor.buildpack.GitClonedService;
-import io.hotcloud.vendor.buildpack.GitClonedStatistics;
+import io.hotcloud.module.buildpack.GitCloned;
+import io.hotcloud.module.buildpack.GitClonedService;
+import io.hotcloud.module.buildpack.GitClonedStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

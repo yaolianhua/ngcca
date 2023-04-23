@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack;
 
-import io.hotcloud.vendor.buildpack.GitApi;
-import io.hotcloud.vendor.buildpack.GitCloned;
+import io.hotcloud.module.buildpack.GitApi;
+import io.hotcloud.module.buildpack.GitCloned;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

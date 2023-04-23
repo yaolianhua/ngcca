@@ -5,8 +5,8 @@ import io.hotcloud.common.utils.Log;
 import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
+import io.hotcloud.module.buildpack.BuildPackConstant;
 import io.hotcloud.server.NGCCARunnerProcessor;
-import io.hotcloud.vendor.buildpack.BuildPackConstant;
 import io.kubernetes.client.openapi.ApiException;
 
 import java.util.Objects;

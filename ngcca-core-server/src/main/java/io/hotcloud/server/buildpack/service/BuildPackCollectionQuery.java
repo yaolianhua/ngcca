@@ -3,8 +3,8 @@ package io.hotcloud.server.buildpack.service;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.vendor.buildpack.BuildPack;
-import io.hotcloud.vendor.buildpack.BuildPackService;
+import io.hotcloud.module.buildpack.BuildPack;
+import io.hotcloud.module.buildpack.BuildPackService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

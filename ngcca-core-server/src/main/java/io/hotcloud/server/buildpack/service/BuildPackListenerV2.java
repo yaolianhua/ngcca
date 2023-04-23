@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.vendor.buildpack.event.BuildPackStartedEventV2;
+import io.hotcloud.module.buildpack.event.BuildPackStartedEventV2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.event.EventListener;
