@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.server.message.Message;

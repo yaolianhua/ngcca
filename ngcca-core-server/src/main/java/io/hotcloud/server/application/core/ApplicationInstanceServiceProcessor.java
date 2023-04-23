@@ -2,7 +2,7 @@ package io.hotcloud.server.application.core;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;

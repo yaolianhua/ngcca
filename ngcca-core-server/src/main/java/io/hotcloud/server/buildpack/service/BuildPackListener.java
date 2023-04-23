@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.kubernetes.client.http.*;
 import io.hotcloud.server.files.FileHelper;
 import io.hotcloud.server.message.Message;

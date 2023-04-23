@@ -1,7 +1,7 @@
 package io.hotcloud.server.security.user;
 
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
-import io.hotcloud.common.model.utils.Validator;
+import io.hotcloud.common.utils.Validator;
 import io.hotcloud.module.db.core.user.UserEntity;
 import io.hotcloud.module.db.core.user.UserRepository;
 import io.hotcloud.module.security.user.User;

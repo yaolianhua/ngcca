@@ -3,7 +3,7 @@ package io.hotcloud.server.registry;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.vendor.registry.RegistrySearchClient;
 import io.hotcloud.vendor.registry.model.RegistryAuthentication;
 import io.hotcloud.vendor.registry.model.RegistryRepository;

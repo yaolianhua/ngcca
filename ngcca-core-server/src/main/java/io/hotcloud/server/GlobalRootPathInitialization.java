@@ -1,6 +1,6 @@
 package io.hotcloud.server;
 
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.server.files.FileHelper;
 import org.springframework.stereotype.Component;
 

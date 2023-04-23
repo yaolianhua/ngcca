@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.ActivityAction;
 import io.hotcloud.common.model.ActivityLog;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.vendor.buildpack.GitCloned;
 import io.hotcloud.vendor.buildpack.GitClonedCreateEvent;
 import io.hotcloud.vendor.buildpack.GitClonedDeleteEvent;

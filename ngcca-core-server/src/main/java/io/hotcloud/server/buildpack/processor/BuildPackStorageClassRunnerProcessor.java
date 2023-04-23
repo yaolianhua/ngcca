@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.processor;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;

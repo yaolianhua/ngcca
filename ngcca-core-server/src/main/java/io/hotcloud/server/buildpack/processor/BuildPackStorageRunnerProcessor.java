@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.processor;
 
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.server.NGCCARunnerProcessor;
 import io.hotcloud.server.files.FileHelper;
 import io.hotcloud.vendor.buildpack.BuildPackConstant;

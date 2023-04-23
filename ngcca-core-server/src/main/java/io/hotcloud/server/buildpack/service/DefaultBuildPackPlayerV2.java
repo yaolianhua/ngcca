@@ -2,8 +2,8 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.ActivityAction;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.common.model.utils.Validator;
+import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;

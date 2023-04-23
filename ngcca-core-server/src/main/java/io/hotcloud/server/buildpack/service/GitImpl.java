@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.common.model.utils.Validator;
+import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.utils.Validator;
 import io.hotcloud.server.files.FileHelper;
 import io.hotcloud.vendor.buildpack.GitApi;
 import io.hotcloud.vendor.buildpack.GitCloned;

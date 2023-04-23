@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.vendor.buildpack.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

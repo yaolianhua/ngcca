@@ -1,7 +1,7 @@
 package io.hotcloud.server.application.core;
 
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.server.minio.MinioProperties;
 import io.hotcloud.vendor.minio.MinioBucketApi;
 import io.hotcloud.vendor.minio.MinioObjectApi;

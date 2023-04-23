@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack.processor;
 
 import io.hotcloud.common.model.RuntimeImages;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.module.db.core.registry.RegistryImageEntity;
 import io.hotcloud.module.db.core.registry.RegistryImageRepository;
 import io.hotcloud.server.NGCCARunnerProcessor;

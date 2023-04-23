@@ -1,4 +1,4 @@
-package io.hotcloud.common.model.utils;
+package io.hotcloud.common.utils;
 
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 

@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.template;
 
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.db.core.registry.RegistryImageEntity;
 import io.hotcloud.module.db.core.registry.RegistryImageRepository;

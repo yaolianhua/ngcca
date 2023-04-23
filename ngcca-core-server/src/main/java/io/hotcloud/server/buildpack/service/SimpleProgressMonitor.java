@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import org.eclipse.jgit.lib.ProgressMonitor;
 
 /**

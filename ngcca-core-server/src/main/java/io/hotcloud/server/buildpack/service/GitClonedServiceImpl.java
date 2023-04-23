@@ -1,8 +1,8 @@
 package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.exception.NGCCAResourceNotFoundException;
-import io.hotcloud.common.model.utils.Log;
-import io.hotcloud.common.model.utils.Validator;
+import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.utils.Validator;
 import io.hotcloud.module.db.core.buildpack.GitClonedEntity;
 import io.hotcloud.module.db.core.buildpack.GitClonedRepository;
 import io.hotcloud.module.security.user.User;

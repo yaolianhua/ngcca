@@ -1,7 +1,7 @@
 package io.hotcloud.server.buildpack;
 
 import io.hotcloud.common.model.RuntimeImages;
-import io.hotcloud.common.model.utils.UUIDGenerator;
+import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;

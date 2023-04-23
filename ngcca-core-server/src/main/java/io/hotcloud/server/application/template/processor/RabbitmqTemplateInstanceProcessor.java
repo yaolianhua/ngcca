@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.template.processor;
 
-import io.hotcloud.common.model.utils.UUIDGenerator;
+import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.module.application.IngressDefinition;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;

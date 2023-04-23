@@ -1,7 +1,7 @@
 package io.hotcloud.server.ex;
 
 import io.hotcloud.common.model.Result;
-import io.hotcloud.common.model.utils.Log;
+import io.hotcloud.common.utils.Log;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
