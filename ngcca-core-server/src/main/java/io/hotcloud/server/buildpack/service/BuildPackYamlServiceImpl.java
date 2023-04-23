@@ -27,13 +27,13 @@ public class BuildPackYamlServiceImpl implements BuildPackYamlService {
         }
 
         if ("imagebuild-source".equalsIgnoreCase(type)) {
-            return KanikoJobTemplateRender.IMAGEBUILD_SOURCE_TEMPLATE;
+            return KanikoJobTemplateRender.SOURCE_CODE_TEMPLATE_YAML;
         }
         if ("imagebuild-jar-war".equalsIgnoreCase(type)) {
-            return KanikoJobTemplateRender.IMAGEBUILD_JAR_WAR_TEMPLATE;
+            return KanikoJobTemplateRender.ARTIFACT_TEMPLATE_YAML;
         }
         if ("imagebuild-secret".equalsIgnoreCase(type)) {
-            return KanikoJobTemplateRender.IMAGEBUILD_SECRET_TEMPLATE;
+            return KanikoJobTemplateRender.SECRET_TEMPLATE_YAML;
         }
         throw new NGCCAPlatformException("Unsupported type [" + type + "]", 400);
     }

@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 
 public class KanikoJobTemplateRender {
 
-    public static final String IMAGEBUILD_SOURCE_TEMPLATE;
-    public static final String IMAGEBUILD_JAR_WAR_TEMPLATE;
+    public static final String SOURCE_CODE_TEMPLATE_YAML;
+    public static final String ARTIFACT_TEMPLATE_YAML;
 
-    public static final String IMAGEBUILD_SECRET_TEMPLATE;
+    public static final String SECRET_TEMPLATE_YAML;
 
     static {
         try {
-            IMAGEBUILD_SOURCE_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-source.template").getInputStream())).lines().collect(Collectors.joining("\n"));
-            IMAGEBUILD_JAR_WAR_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-jar-war.template").getInputStream())).lines().collect(Collectors.joining("\n"));
-            IMAGEBUILD_SECRET_TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("imagebuild-secret.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            SOURCE_CODE_TEMPLATE_YAML = new BufferedReader(new InputStreamReader(new ClassPathResource("sourcecode-template.yaml").getInputStream())).lines().collect(Collectors.joining("\n"));
+            ARTIFACT_TEMPLATE_YAML = new BufferedReader(new InputStreamReader(new ClassPathResource("artifact-template.yaml").getInputStream())).lines().collect(Collectors.joining("\n"));
+            SECRET_TEMPLATE_YAML = new BufferedReader(new InputStreamReader(new ClassPathResource("secret-template.yaml").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -91,7 +91,7 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, Objects.nonNull(job.getGit()) ? job.getGit().getInitGitContainer() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, "git");
 
-        String template = job.hasGit() ? IMAGEBUILD_SOURCE_TEMPLATE : IMAGEBUILD_JAR_WAR_TEMPLATE;
+        String template = job.hasGit() ? SOURCE_CODE_TEMPLATE_YAML : ARTIFACT_TEMPLATE_YAML;
         return TemplateRender.apply(template, renders);
     }
 
@@ -108,7 +108,7 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.LABEL_NAME, secret.getSecret());
         renders.put(Kaniko.DOCKER_CONFIG_JSON, secret.getDockerconfigjson());
 
-        return TemplateRender.apply(IMAGEBUILD_SECRET_TEMPLATE, renders);
+        return TemplateRender.apply(SECRET_TEMPLATE_YAML, renders);
     }
 
     /**
