@@ -1,5 +1,7 @@
 package io.hotcloud.vendor.kaniko;
 
+import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.CollectionUtils;

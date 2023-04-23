@@ -1,8 +1,9 @@
 package io.hotcloud.server.buildpack;
 
-import io.hotcloud.buildpack.api.clone.GitClonedService;
-import io.hotcloud.buildpack.server.clone.GitClonedCollectionQuery;
-import io.hotcloud.security.api.user.UserApi;
+import io.hotcloud.module.buildpack.GitClonedService;
+import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.server.buildpack.controller.GitController;
+import io.hotcloud.server.buildpack.service.GitClonedCollectionQuery;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;

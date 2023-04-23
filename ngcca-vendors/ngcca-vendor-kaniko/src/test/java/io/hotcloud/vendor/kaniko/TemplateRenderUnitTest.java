@@ -1,9 +1,10 @@
-package io.hotcloud.server.buildpack;
+package io.hotcloud.vendor.kaniko;
 
-import io.hotcloud.module.buildpack.kaniko.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.module.buildpack.kaniko.KanikoJobExpressionVariable;
+
+import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,15 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.module.buildpack.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.module.buildpack.kaniko.KanikoJobTemplateRender.parseJob;
+import static io.hotcloud.vendor.kaniko.DockerfileTemplateRender.DockerfileJava;
+import static io.hotcloud.vendor.kaniko.KanikoJobTemplateRender.parseJob;
 
-
-public class TemplateRenderUnitTest {
+class TemplateRenderUnitTest {
 
 
     @Test
-    public void gitSourceTemplate() throws IOException {
+    void gitSourceTemplate() throws IOException {
         String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofMavenJar(
                         "harbor.local:5000/library/maven:3.8-openjdk-11-slim",
                         "harbor.local:5000/library/java11-runtime:latest",
@@ -32,7 +32,7 @@ public class TemplateRenderUnitTest {
                         ""),
                 false);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-jar-maven")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/maven-jar.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
             Assert.assertEquals(dockerfile, jarDockerfile);
@@ -57,7 +57,7 @@ public class TemplateRenderUnitTest {
         );
         String kanikoJob = parseJob(jobExpressionVariable);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-source.yaml")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/sourcecode.yaml")) {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
@@ -66,7 +66,7 @@ public class TemplateRenderUnitTest {
     }
 
     @Test
-    public void jarTemplate() throws IOException {
+    void jarTemplate() throws IOException {
 
         String jarDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlJar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
@@ -75,7 +75,7 @@ public class TemplateRenderUnitTest {
                         ""),
                 false);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-jar")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/jar.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
             Assert.assertEquals(dockerfile, jarDockerfile);
@@ -96,7 +96,7 @@ public class TemplateRenderUnitTest {
         );
         String kanikoJob = parseJob(jobExpressionVariable);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-jar.yaml")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/jar.yaml")) {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
@@ -105,14 +105,14 @@ public class TemplateRenderUnitTest {
     }
 
     @Test
-    public void warTemplate() throws IOException {
+    void warTemplate() throws IOException {
 
         String warDockerfile = DockerfileJava(DockerfileJavaArtifactExpressionVariable.ofUrlWar(
                         "192.168.146.128:5000/base/java11:tomcat9.0-openjdk11",
                         "http://192.168.146.128:28080/yaolianhua/java/kaniko-test/jenkins.war"),
                 false);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("Dockerfile-war")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/war.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
             Assert.assertEquals(dockerfile, warDockerfile);
@@ -133,7 +133,7 @@ public class TemplateRenderUnitTest {
         );
         String kanikoJob = parseJob(jobExpressionVariable);
 
-        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("imagebuild-war.yaml")) {
+        try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/war.yaml")) {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 

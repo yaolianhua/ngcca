@@ -17,9 +17,10 @@ import io.hotcloud.module.buildpack.*;
 import io.hotcloud.server.files.FileHelper;
 import io.hotcloud.server.registry.DatabaseRegistryImages;
 import io.hotcloud.server.registry.RegistryProperties;
-import io.hotcloud.vendor.kaniko.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.vendor.kaniko.KanikoJobExpressionVariable;
-import io.hotcloud.vendor.kaniko.SecretExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.DockerConfigJson;
+import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -215,7 +216,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
         SecretExpressionVariable secretExpressionVariable = SecretExpressionVariable.of(
                 namespace,
                 k8sName,
-                SecretExpressionVariable.DockerConfigJson.of(registryProperties.getUrl(), registryProperties.getUsername(), registryProperties.getPassword())
+                DockerConfigJson.of(registryProperties.getUrl(), registryProperties.getUsername(), registryProperties.getPassword())
         );
 
         String secret = parseSecret(secretExpressionVariable);

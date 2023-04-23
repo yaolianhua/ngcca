@@ -1,5 +1,6 @@
 package io.hotcloud.vendor.kaniko;
 
+import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;

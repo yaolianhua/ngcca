@@ -3,7 +3,6 @@ package io.hotcloud.server.buildpack;
 import io.hotcloud.module.buildpack.*;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaCoreServerApplication;
-import io.hotcloud.vendor.buildpack.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;

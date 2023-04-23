@@ -2,7 +2,7 @@ FROM harbor.local:5000/library/maven:3.8-openjdk-11-slim AS builder
 
 WORKDIR /workspace
 
-COPY ../../../../../ngcca-buildpack/ngcca-buildpack-starter/src/test/resources/io/hotcloud/buildpack/api/core .
+COPY . .
 RUN mvn clean package -Dmaven.test.skip=true
 
 FROM harbor.local:5000/library/java11-runtime:latest

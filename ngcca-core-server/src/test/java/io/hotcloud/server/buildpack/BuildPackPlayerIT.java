@@ -13,7 +13,6 @@ import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaCoreServerApplication;
 import io.hotcloud.server.files.FileChangeWatcher;
 import io.hotcloud.server.files.FileState;
-import io.hotcloud.vendor.buildpack.*;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

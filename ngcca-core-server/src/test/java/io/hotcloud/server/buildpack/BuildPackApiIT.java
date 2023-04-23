@@ -10,7 +10,6 @@ import io.hotcloud.kubernetes.client.http.SecretClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.buildpack.*;
 import io.hotcloud.server.NgccaCoreServerApplication;
-import io.hotcloud.vendor.buildpack.*;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;

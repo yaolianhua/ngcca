@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.buildpack.*;
 import io.hotcloud.server.NgccaCoreServerApplication;
-import io.hotcloud.vendor.buildpack.*;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.Test;
 import org.junit.runner.RunWith;

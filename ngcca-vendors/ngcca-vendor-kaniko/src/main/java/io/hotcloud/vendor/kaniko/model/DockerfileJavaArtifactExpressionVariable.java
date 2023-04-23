@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.kaniko;
+package io.hotcloud.vendor.kaniko.model;
 
 import lombok.Data;
 import org.springframework.util.Assert;
