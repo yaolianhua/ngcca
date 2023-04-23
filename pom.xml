@@ -65,10 +65,21 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-kubernetes-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- modules -->
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-module-buildpack</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-module-application</artifactId>
@@ -86,11 +97,6 @@
             </dependency>
 
             <!-- vendors -->
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-vendor-buildpack</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-vendor-minio</artifactId>

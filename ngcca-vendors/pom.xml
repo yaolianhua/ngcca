@@ -14,7 +14,6 @@
 
     <name>NGCCA :: Vendors</name>
     <modules>
-        <module>ngcca-vendor-buildpack</module>
         <module>ngcca-vendor-minio</module>
         <module>ngcca-vendor-registry</module>
     </modules>

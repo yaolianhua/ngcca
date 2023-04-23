@@ -15,6 +15,11 @@
 
     <dependencies>
 
+        <!-- modules -->
+        <dependency>
+            <groupId>io.hotcloud</groupId>
+            <artifactId>ngcca-module-buildpack</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-module-application</artifactId>
@@ -34,10 +39,6 @@
         </dependency>
 
         <!-- vendors -->
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-vendor-buildpack</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-vendor-registry</artifactId>
