@@ -104,7 +104,7 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
     }
 
     @Override
-    protected BuildPack buildpack(String clonedId, Boolean noPush) {
+    public BuildPack buildpack(String clonedId, Boolean noPush) {
 
         GitCloned cloned = gitClonedService.findOne(clonedId);
         Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]");

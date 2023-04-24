@@ -1,7 +1,7 @@
 package io.hotcloud.server.application;
 
-import io.hotcloud.application.api.IngressDefinition;
-import io.hotcloud.application.api.IngressTemplateRender;
+import io.hotcloud.module.application.IngressDefinition;
+import io.hotcloud.module.application.IngressTemplateRender;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -13,7 +13,7 @@ public abstract class AbstractBuildPackPlayer implements BuildPackPlayer {
      * @param noPush   if you only want to build the image, without pushing to a registry
      * @return {@link BuildPack}
      */
-    protected abstract BuildPack buildpack(String clonedId, Boolean noPush);
+    public abstract BuildPack buildpack(String clonedId, Boolean noPush);
 
     @Override
     public BuildPack apply(String clonedId, Boolean noPush) {

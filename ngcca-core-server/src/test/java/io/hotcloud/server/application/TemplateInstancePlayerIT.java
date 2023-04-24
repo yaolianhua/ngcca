@@ -1,7 +1,11 @@
 package io.hotcloud.server.application;
 
-import io.hotcloud.application.NgccaApplication;
-import io.hotcloud.security.api.user.UserApi;
+import io.hotcloud.module.application.template.Template;
+import io.hotcloud.module.application.template.TemplateInstance;
+import io.hotcloud.module.application.template.TemplateInstancePlayer;
+import io.hotcloud.module.application.template.TemplateInstanceService;
+import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.server.NgccaCoreServerApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaApplication.class
+        classes = NgccaCoreServerApplication.class
 )
 @ActiveProfiles("test")
 public class TemplateInstancePlayerIT  {

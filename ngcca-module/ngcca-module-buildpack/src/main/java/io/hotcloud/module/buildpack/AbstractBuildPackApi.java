@@ -72,7 +72,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param buildPack {@link BuildPack}
      * @return Publishable yaml resource
      */
-    abstract protected String yaml(BuildPack buildPack);
+    public abstract String yaml(BuildPack buildPack);
 
     /**
      * Generate job Yaml resource.
@@ -80,7 +80,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param jobResource {@link  BuildPackJobResourceInternalInput}
      * @return {@link BuildPackJobResource}
      */
-    abstract protected BuildPackJobResource jobResource(BuildPackJobResourceInternalInput jobResource);
+    public abstract BuildPackJobResource jobResource(BuildPackJobResourceInternalInput jobResource);
 
 
     /**
@@ -89,7 +89,7 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param storageResource {@link BuildPackStorageResourceInternalInput}
      * @return {@link BuildPackStorageResourceList}
      */
-    abstract protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput storageResource);
+    public abstract BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput storageResource);
 
     /**
      * Generate secret Yaml resource.
@@ -97,5 +97,5 @@ public abstract class AbstractBuildPackApi implements BuildPackApi {
      * @param dockersecretResource {@link BuildPackDockerSecretResourceInternalInput}
      * @return {@link  BuildPackDockerSecretResource}
      */
-    abstract protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput dockersecretResource);
+    public abstract BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput dockersecretResource);
 }

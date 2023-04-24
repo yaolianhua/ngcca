@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -24,6 +24,7 @@ import java.util.stream.StreamSupport;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = NgccaCoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
+@ActiveProfiles("test")
 public class GitClonedRepositoryIT {
 
     @Autowired
@@ -45,8 +46,7 @@ public class GitClonedRepositoryIT {
         Assertions.assertTrue(entities.isEmpty());
         Assertions.assertEquals(1, adminEntities.size());
 
-        List<GitClonedEntity> collect = StreamSupport.stream(gitClonedRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        List<GitClonedEntity> collect = StreamSupport.stream(gitClonedRepository.findAll().spliterator(), false).toList();
         Assertions.assertFalse(collect.isEmpty());
     }
 

@@ -41,7 +41,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected String yaml(BuildPack buildPack) {
+    public String yaml(BuildPack buildPack) {
         Assert.notNull(buildPack, "BuildPack is null");
         Assert.notNull(buildPack.getJobResource(), "BuildPack job resource is null");
         Assert.notNull(buildPack.getSecretResource(), "BuildPack docker secret resource is null");
@@ -62,7 +62,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackJobResource jobResource(BuildPackJobResourceInternalInput resource) {
+    public BuildPackJobResource jobResource(BuildPackJobResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack job resource request body is null");
         Assert.hasText(resource.getNamespace(), "namespace is null");
         Assert.hasText(resource.getPersistentVolumeClaim(), "pvc is null");
@@ -146,7 +146,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput resource) {
+    public BuildPackStorageResourceList storageResourceList(BuildPackStorageResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack storage resource request body is null");
         Assert.hasText(resource.getNamespace(), "namespace is null");
 
@@ -230,7 +230,7 @@ class InternalBuildPackService extends AbstractBuildPackApi {
     }
 
     @Override
-    protected BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput resource) {
+    public BuildPackDockerSecretResource dockersecret(BuildPackDockerSecretResourceInternalInput resource) {
         Assert.notNull(resource, "buildpack docker secret resource request body is null");
         Assert.hasText(resource.getNamespace(), "namespace is null");
 
