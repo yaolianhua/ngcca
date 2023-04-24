@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class CaffeineCacheTest {
+class CaffeineCacheTest {
 
     private final CacheObjectTest cacheData = new CacheObjectTest();
 
@@ -24,7 +24,7 @@ public class CaffeineCacheTest {
     }
 
     @Test
-    public void cache() {
+    void cache() {
 
         Cache cache = new CaffeineCache(null);
 

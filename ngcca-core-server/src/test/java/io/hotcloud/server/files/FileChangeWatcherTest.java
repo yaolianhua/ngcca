@@ -16,23 +16,23 @@ import java.util.concurrent.TimeUnit;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class FileChangeWatcherTest {
+class FileChangeWatcherTest {
 
     CountDownLatch latch = new CountDownLatch(1);
-    Path kanikoPath = Path.of(FileHelper.getUserHome(), "watch_test");
+    Path watchPath = Path.of(FileHelper.getUserHome(), "watch_test");
 
     /**
      * Run this Test before {@link FileChangeWatcherTest#trigger()}
      */
     @Disabled
     @Test
-    public void watch() throws IOException, InterruptedException {
+    void watch() throws IOException, InterruptedException {
 
-        FileUtils.deleteDirectory(kanikoPath.toFile());
-        Files.createDirectories(kanikoPath);
-        log.info("Path '{}' created", kanikoPath);
+        FileUtils.deleteDirectory(watchPath.toFile());
+        Files.createDirectories(watchPath);
+        log.info("Path '{}' created", watchPath);
 
-        FileChangeWatcher watcher = new FileChangeWatcher(kanikoPath, event -> {
+        FileChangeWatcher watcher = new FileChangeWatcher(watchPath, event -> {
             log.info("context = '{}', event = '{}', type = '{}'", event.context(), event.kind().name(), event.kind().type());
 
             if ("4.txt".equals(event.context().toString())) {
@@ -43,8 +43,8 @@ public class FileChangeWatcherTest {
         watcher.start();
         latch.await();
 
-        FileUtils.deleteDirectory(kanikoPath.toFile());
-        log.info("Path '{}' deleted", kanikoPath);
+        FileUtils.deleteDirectory(watchPath.toFile());
+        log.info("Path '{}' deleted", watchPath);
 
         watcher.stop();
     }
@@ -54,13 +54,13 @@ public class FileChangeWatcherTest {
      */
     @Disabled
     @Test
-    public void trigger() throws InterruptedException, IOException {
+    void trigger() throws InterruptedException, IOException {
 
         List<Path> paths = List.of(
-                Path.of(kanikoPath.toString(), "1.txt"),
-                Path.of(kanikoPath.toString(), "2.txt"),
-                Path.of(kanikoPath.toString(), "3.txt"),
-                Path.of(kanikoPath.toString(), "4.txt")
+                Path.of(watchPath.toString(), "1.txt"),
+                Path.of(watchPath.toString(), "2.txt"),
+                Path.of(watchPath.toString(), "3.txt"),
+                Path.of(watchPath.toString(), "4.txt")
         );
 
         for (Path path : paths) {

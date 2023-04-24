@@ -4,19 +4,19 @@ import io.hotcloud.common.utils.INet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class INetTest {
+ class INetTest {
 
     @Test
-    public void ipv4() {
+    void ipv4() {
 
-        String localhost = INet.getIPv4("localhost");
-        Assertions.assertEquals("127.0.0.1", localhost);
+       String localhost = INet.getIPv4("localhost");
+       Assertions.assertEquals("127.0.0.1", localhost);
 
-        String us = INet.getIPv4("www.baidu.com");
-        System.out.println("www.baidu.com: " + us);
+       String us = INet.getIPv4("www.baidu.com");
+       System.out.println("www.baidu.com: " + us);
 
-        String local = INet.getLocalizedIPv4();
-        Assertions.assertNotEquals("127.0.0.1", local);
+       String local = INet.getLocalizedIPv4();
+       Assertions.assertNotEquals("127.0.0.1", local);
 
         String loopbackAddress = INet.getLoopbackAddress();
         Assertions.assertEquals("127.0.0.1", loopbackAddress);
@@ -26,8 +26,8 @@ public class INetTest {
     }
 
     @Test
-    public void host() {
-        String host = INet.getHost("https://file.docker.local/Downloads/jenkins.war");
-        Assertions.assertEquals("file.docker.local", host);
+    void host() {
+       String host = INet.getHost("https://file.docker.local/Downloads/jenkins.war");
+       Assertions.assertEquals("file.docker.local", host);
     }
 }

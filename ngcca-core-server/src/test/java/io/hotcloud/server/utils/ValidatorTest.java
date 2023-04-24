@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class ValidatorTest {
+class ValidatorTest {
 
     static Stream<String> invalidIPv4Provider() {
         return Stream.of(
@@ -51,13 +51,13 @@ public class ValidatorTest {
     }
 
     @Test
-    public void inetAddress() {
+    void inetAddress() {
         invalidIPv4Provider().forEach(e -> Assertions.assertFalse(Validator.validIpv4(e)));
         validIPv4Provider().forEach(e -> Assertions.assertTrue(Validator.validIpv4(e)));
     }
 
     @Test
-    public void gitAddress() {
+    void gitAddress() {
         Assertions.assertTrue(Validator.validHTTPGitAddress("https://github.com/GoogleContainerTools/kaniko.git"));
         Assertions.assertTrue(Validator.validHTTPGitAddress("http://github.com/GoogleContainerTools/kaniko.git"));
         Assertions.assertFalse(Validator.validHTTPGitAddress("git@github.com:GoogleContainerTools/kaniko.git"));
@@ -85,7 +85,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void username() {
+    void username() {
         validUsernameProvider().forEach(e -> Assertions.assertTrue(Validator.validUsername(e)));
         invalidUsernameProvider().forEach(e -> Assertions.assertFalse(Validator.validUsername(e)));
     }
@@ -112,8 +112,9 @@ public class ValidatorTest {
                 "admin管理员"
         );
     }
+
     @Test
-    public void k8sName(){
+    void k8sName() {
         validK8sNameProvider().forEach(e -> Assertions.assertTrue(Validator.validK8sName(e)));
         invalidK8sNameProvider().forEach(e -> Assertions.assertFalse(Validator.validK8sName(e)));
     }

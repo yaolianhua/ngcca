@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author yaolianhua789@gmail.com
  **/
-public class RedisCacheTest {
+class RedisCacheTest {
 
     private final CacheObjectTest cacheData = new CacheObjectTest();
 
@@ -27,9 +27,9 @@ public class RedisCacheTest {
 
     @Disabled
     @Test
-    public void cache() {
+    void cache() {
 
-        RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("localhost", 6379, "QbMufCD@9WVQ^Hv", 15);
+        RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("linux.local", 6379, "QbMufCD@9WVQ^Hv", 1);
         Assertions.assertTrue(connectionValidBind.isValid());
 
         RedisTemplate<String, Object> redisTemplate = RedisConnectionHelper.getRedisTemplate(connectionValidBind.getRedisConnectionFactory());

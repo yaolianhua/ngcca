@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 @Slf4j
-public class RedisCommandTest {
+class RedisCommandTest {
 
     private final CacheObjectTest cacheData = new CacheObjectTest();
 
@@ -27,9 +27,9 @@ public class RedisCommandTest {
 
     @Disabled
     @Test
-    public void redisCommand() throws InterruptedException {
+    void redisCommand() throws InterruptedException {
 
-        RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("localhost", 6379, "QbMufCD@9WVQ^Hv", 14);
+        RedisConnectionHelper.ConnectionValidBind connectionValidBind = RedisConnectionHelper.isValidConnection("linux.local", 6379, "QbMufCD@9WVQ^Hv", 1);
         Assertions.assertTrue(connectionValidBind.isValid());
 
         RedisTemplate<String, Object> redisTemplate = RedisConnectionHelper.getRedisTemplate(connectionValidBind.getRedisConnectionFactory());

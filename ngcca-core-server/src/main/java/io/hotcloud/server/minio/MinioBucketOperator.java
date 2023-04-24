@@ -67,7 +67,7 @@ public class MinioBucketOperator implements MinioBucketApi {
     @Override
     public void setGetObjectPolicy(String bucket) {
         try {
-            InputStream inputStream = new ClassPathResource("minio-GetObject-policy.template").getInputStream();
+            InputStream inputStream = new ClassPathResource("allow-policy.json").getInputStream();
             String template = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
             String policyConfig = new SpelExpressionParser()
                     .parseExpression(template, new TemplateParserContext())
