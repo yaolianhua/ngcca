@@ -75,7 +75,7 @@ public class BuildPackController {
                                                       @RequestParam(value = "page", required = false) Integer page,
                                                       @RequestParam(value = "page_size", required = false) Integer pageSize) {
 
-        PageResult<BuildPack> pageResult = buildPackCollectionQuery.pagingQueryV2(user, done, deleted, Pageable.of(page, pageSize));
+        PageResult<BuildPack> pageResult = buildPackCollectionQuery.pagingQuery(user, done, deleted, Pageable.of(page, pageSize));
         return okPage(pageResult);
     }
 

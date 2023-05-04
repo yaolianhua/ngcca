@@ -29,12 +29,6 @@ public class BuildPackJobResource {
      * The job labels be created
      */
     private Map<String, String> labels;
-    /**
-     * Kaniko args mapping
-     */
-    @Deprecated(since = "BuildPackApiV2")
-    @Builder.Default
-    private Map<String, String> args = new HashMap<>();
 
     /**
      * Alternate properties container

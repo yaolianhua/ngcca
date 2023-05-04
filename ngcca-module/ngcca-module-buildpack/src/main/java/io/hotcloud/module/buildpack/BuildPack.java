@@ -22,16 +22,9 @@ public class BuildPack {
 
     private BuildPackJobResource jobResource;
 
-    @Deprecated(since = "BuildPackApiV2")
-    @Builder.Default
-    private BuildPackStorageResourceList storageResource = new BuildPackStorageResourceList();
-
     private BuildPackDockerSecretResource secretResource;
 
     private String user;
-
-    @Deprecated(since = "BuildPackApiV2")
-    private String clonedId = "Deprecated";
 
     private String httpGitUrl;
 

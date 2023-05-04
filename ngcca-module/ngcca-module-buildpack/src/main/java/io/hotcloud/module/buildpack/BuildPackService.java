@@ -16,31 +16,12 @@ public interface BuildPackService {
     BuildPack saveOrUpdate(BuildPack buildPack);
 
     /**
-     * Find all {@link BuildPack} with giving {@code user} and {@code clonedId}
-     *
-     * @param user     user's username
-     * @param clonedId git cloned id
-     * @return {@link BuildPack}
-     */
-    @Deprecated(since = "BuildPackApiV2")
-    List<BuildPack> findAll(String user, String clonedId);
-
-    /**
      * Find all user's {@link BuildPack} with giving {@code user}
      *
      * @param user user's username
      * @return {@link BuildPack}
      */
     List<BuildPack> findAll(String user);
-
-    /**
-     * Find all {@link BuildPack} with giving {@code clonedId}
-     *
-     * @param clonedId git cloned id
-     * @return {@link BuildPack}
-     */
-    @Deprecated(since = "BuildPackApiV2")
-    List<BuildPack> findByClonedId(String clonedId);
 
     /**
      * Find all user's {@link BuildPack}
@@ -64,16 +45,6 @@ public interface BuildPackService {
      * @return {@link BuildPack}
      */
     BuildPack findByUuid(String uuid);
-
-    /**
-     * Find un-done {@link BuildPack} with giving {@code user} and {@code clonedId}
-     *
-     * @param user     user's username
-     * @param clonedId git cloned id
-     * @return {@link BuildPack}
-     */
-    @Deprecated(since = "BuildPackApiV2")
-    BuildPack findOneOrNullWithNoDone(String user, String clonedId);
 
     /**
      * Delete all buildPack physically

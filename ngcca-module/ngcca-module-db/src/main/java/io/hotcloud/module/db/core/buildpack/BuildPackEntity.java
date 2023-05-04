@@ -20,10 +20,6 @@ public class BuildPackEntity extends AbstractEntity {
     @Indexed(unique = false)
     private String user;
 
-    @Deprecated(since = "BuildPackApiV2")
-    @Indexed(unique = false)
-    private String clonedId;
-
     private String httpGitUrl;
     private String gitBranch;
 
