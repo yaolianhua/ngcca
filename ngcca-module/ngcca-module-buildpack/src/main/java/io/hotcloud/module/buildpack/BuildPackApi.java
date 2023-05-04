@@ -1,28 +1,29 @@
 package io.hotcloud.module.buildpack;
 
-import java.util.Map;
-
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Deprecated(since = "BuildPackApiV2")
-interface BuildPackApi {
-
+public interface BuildPackApi {
     /**
-     * Generate {@link BuildPack} object
+     * Deploy kaniko job with the giving {@code buildImage}
      *
-     * @param namespace    In which namespace the {@link BuildPack} resource be created
-     * @param gitProject   Project name of git cloned
-     * @param registry     The registry address where the {@code git project} build is pushed to
-     * @param registryUser The registry auth user if it's non-public
-     * @param registryPass The registry auth password if it's non-public
-     * @param kanikoArgs   Kaniko args
+     * @param namespace  k8s namespace
+     * @param buildImage {@link BuildImage}
      * @return {@link BuildPack}
      */
-    BuildPack buildpack(String namespace,
-                        String gitProject,
-                        String registry,
-                        String registryUser,
-                        String registryPass,
-                        Map<String, String> kanikoArgs);
+    BuildPack apply(String namespace, BuildImage buildImage);
+
+    /**
+     * Get kaniko job status
+     *
+     * @param namespace user's k8s namespace
+     * @param job       kaniko job name
+     * @return {@link ImageBuildStatus}
+     */
+    ImageBuildStatus getStatus(String namespace, String job);
+
+    /**
+     * Fetch Kaniko build logs
+     *
+     * @param namespace user's k8s namespace
+     * @param job       kaniko job name
+     */
+    String fetchLog(String namespace, String job);
 }

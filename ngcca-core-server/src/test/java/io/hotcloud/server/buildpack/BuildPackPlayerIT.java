@@ -1,23 +1,15 @@
 package io.hotcloud.server.buildpack;
 
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
-import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.kubernetes.client.http.JobClient;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.NamespaceClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
-import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.module.buildpack.*;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.module.buildpack.BuildImage;
+import io.hotcloud.module.buildpack.BuildPack;
+import io.hotcloud.module.buildpack.BuildPackPlayer;
+import io.hotcloud.module.buildpack.BuildPackService;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaCoreServerApplication;
-import io.hotcloud.server.files.FileChangeWatcher;
-import io.hotcloud.server.files.FileState;
-import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,252 +18,137 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = NgccaCoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Slf4j
 public class BuildPackPlayerIT {
 
     @Autowired
-    private JobClient jobApi;
-    @Autowired
-    private PodClient podApi;
-    @Autowired
-    private UserApi userApi;
-    @Autowired
-    private KubectlClient kubectlApi;
-    @Autowired
-    private NamespaceClient namespaceApi;
-
-    @Autowired
-    private AbstractBuildPackPlayer abstractBuildPackPlayer;
-
-    @Autowired
-    private GitClonedService gitClonedService;
-
+    private BuildPackPlayer buildPackPlayer;
     @Autowired
     private BuildPackService buildPackService;
+    @Autowired
+    private UserApi userApi;
 
     @Before
     public void before() {
-
         UserDetails adminUserDetails = userApi.retrieve("admin");
-        UsernamePasswordAuthenticationToken adminUsernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(adminUserDetails, null, adminUserDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken adminUsernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(adminUserDetails, null, adminUserDetails.getAuthorities());
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
         SecurityContextHolder.getContext().setAuthentication(adminUsernamePasswordAuthenticationToken);
 
     }
 
-    private GitCloned cloned(String username, String url, String project) {
-        gitClonedService.clone(url, null, null, null, null);
-
-        gitClonedService.deleteOne(username, project);
-        GitCloned cloned = null;
-        while (null == cloned) {
-            sleep(5);
-            cloned = gitClonedService.findOne(username, project);
-        }
-
-        Assertions.assertFalse(StringUtils.hasText(cloned.getError()));
-
-        return cloned;
-    }
-
     @Test
-    public void apply_multi() {
-        buildPackService.deleteAll();
-        CountDownLatch latchMulti = new CountDownLatch(3);
-        new Thread(() -> {
-            try {
-                single("admin", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latchMulti.countDown();
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        }, "admin").start();
-        new Thread(() -> {
-            try {
-                single("guest", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latchMulti.countDown();
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        }, "guest").start();
-        new Thread(() -> {
-            try {
-                single("clientuser", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-                latchMulti.countDown();
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        }, "clientuser").start();
+    public void playWarArtifact() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayer.delete(buildPackId, false);
+        }
+        BuildPack buildPack = buildPackPlayer.play(BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", RuntimeImages.Java11));
 
         while (true) {
-            sleep(10);
-            if (latchMulti.getCount() == 0) {
-                log.info("All user's buildPack done!");
+            TimeUnit.SECONDS.sleep(10);
+            BuildPack one = buildPackService.findOne(buildPack.getId());
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("War package [%s] build successful. artifact url [%s]%n",
+                        one.getPackageUrl(), one.getArtifact());
+                System.out.println("Kaniko logs print: \n" + one.getLogs());
+
                 break;
             }
-            log.info("Not all done yet!");
-        }
-        buildPackService.deleteAll();
-    }
 
-    private void single(String username, String url, String project) throws ApiException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        UserDetails userDetails = userApi.retrieve(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("War package [%s] build failed%n",
+                        one.getPackageUrl());
+                System.out.println("Build message: \n" + one.getLogs());
 
-        GitCloned gitCloned = gitClonedService.findOne(username, project);
-        if (null == gitCloned) {
-            gitCloned = cloned(username, url, project);
-        }
-        Assertions.assertNotNull(gitCloned);
-
-        BuildPack buildPack = abstractBuildPackPlayer.apply(gitCloned.getId(), null);
-
-        new Thread(() -> {
-            while (true) {
-                sleep(5);
-                try {
-                    BuildPack find = buildPackService.findOne(buildPack.getId());
-                    if (find.isDone()) {
-                        if (Objects.equals("success", find.getMessage()) && StringUtils.hasText(find.getArtifact())) {
-                            latch.countDown();
-                            break;
-                        }
-                        if (StringUtils.hasText(find.getMessage()) && !"success".equals(find.getMessage())) {
-                            latch.countDown();
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    //why NPE?
-                    log.error("{}", e.getCause().getMessage(), e);
-                }
-
-            }
-        }, "buildpack").start();
-
-        while (true) {
-            if (latch.getCount() == 0) {
-                BuildPack find = buildPackService.findOne(buildPack.getId());
-                log.info("{} user's buildPack [{}] done! \n message: '{}' \n logs: \n {} artifact url: {}", username, find.getId(), find.getMessage(), find.getLogs(), find.getArtifact());
-                jobApi.delete(find.getJobResource().getNamespace(), find.getJobResource().getName());
                 break;
             }
         }
     }
 
     @Test
-    public void apply_single() throws ApiException {
-        buildPackService.deleteAll();
-        single("admin", "https://gitee.com/yannanshan/devops-thymeleaf.git", "devops-thymeleaf");
-        buildPackService.deleteAll();
-    }
+    public void playJarArtifact() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayer.delete(buildPackId, false);
+        }
 
-    private void sleep(int seconds) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        BuildPack buildPack = buildPackPlayer.play(
+                BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
+                        "-Xms128m -Xmx512m",
+                        "-Dspring.profiles.active=production", RuntimeImages.Java11)
+        );
+
+        while (true) {
+            TimeUnit.SECONDS.sleep(10);
+            BuildPack one = buildPackService.findOne(buildPack.getId());
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Jar package [%s] build successful. artifact url [%s]%n",
+                        one.getPackageUrl(), one.getArtifact());
+                System.out.println("Kaniko logs print: \n" + one.getLogs());
+
+                break;
+            }
+
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Jar package [%s] build failed%n",
+                        one.getPackageUrl());
+                System.out.println("Build message: \n" + one.getLogs());
+
+                break;
+            }
         }
     }
 
     @Test
-    public void buildPack_apply_manually() throws IOException, ApiException, InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        String gitUrl = "https://gitee.com/yannanshan/devops-thymeleaf.git";
-
-        gitClonedService.clone(gitUrl, null, null, null, null);
-        gitClonedService.deleteOne("admin", "devops-thymeleaf");
-        GitCloned cloned = null;
-        while (null == cloned) {
-            TimeUnit.SECONDS.sleep(5);
-            cloned = gitClonedService.findOne("admin", "devops-thymeleaf");
+    public void playSourceCode() throws InterruptedException {
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .collect(Collectors.toList());
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayer.delete(buildPackId, false);
         }
+        BuildPack buildPack = buildPackPlayer.play(
+                BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
+                        "master", "", "", "", RuntimeImages.Java11)
+        );
 
-        Assertions.assertFalse(StringUtils.hasText(cloned.getError()));
-        BuildPack buildpack = abstractBuildPackPlayer.buildpack(cloned.getId(), true);
+        while (true) {
+            TimeUnit.SECONDS.sleep(10);
+            BuildPack one = buildPackService.findOne(buildPack.getId());
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Git repository [%s][%s] build successful. artifact url [%s]%n",
+                        one.getHttpGitUrl(), one.getGitBranch(), one.getArtifact());
+                System.out.println("Kaniko logs print: \n" + one.getLogs());
 
-        Assertions.assertNotNull(buildpack);
-        Assertions.assertTrue(StringUtils.hasText(buildpack.getYaml()));
-
-        log.info("BuildPack yaml \n {}", buildpack.getYaml());
-        String namespace = buildpack.getJobResource().getNamespace();
-        namespaceApi.create(namespace);
-
-        String job = buildpack.getJobResource().getName();
-
-        kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(buildpack.getYaml()));
-
-        Job jobRead = jobApi.read(namespace, job);
-        Assertions.assertNotNull(jobRead);
-
-        PodList podList = podApi.readList(namespace, jobRead.getMetadata().getLabels());
-        Assertions.assertEquals(1, podList.getItems().size());
-
-        String clonedPath = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_PATH);
-        String gitProject = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_NAME);
-        String tarball = buildpack.getJobResource().getAlternative().get(BuildPackConstant.GIT_PROJECT_TARBALL);
-
-        FileState fileState = new FileState(Path.of(clonedPath, tarball));
-        FileChangeWatcher fileChangeWatcher = new FileChangeWatcher(Path.of(clonedPath), event -> {
-            if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
-                if (Objects.equals(event.context().toString(), tarball)) {
-                    log.info("Git project '{}' image tar '{}' generated. size '{}'",
-                            gitProject,
-                            event.context().toString(),
-                            Path.of(clonedPath, tarball).toFile().length());
-                }
+                break;
             }
 
-            if (event.kind().name().equals(StandardWatchEventKinds.ENTRY_MODIFY.name())) {
-                if (Objects.equals(event.context().toString(), tarball)) {
-                    log.info("Git project '{}' image tar '{}' changed. size '{}'",
-                            gitProject,
-                            event.context().toString(),
-                            Path.of(clonedPath, tarball).toFile().length());
-                }
-            }
+            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
+                System.out.printf("Git repository [%s][%s] build failed%n",
+                        one.getHttpGitUrl(), one.getGitBranch());
+                System.out.println("Build message: \n" + one.getLogs());
 
-        });
-        fileChangeWatcher.start();
-
-        new Thread(() -> {
-            while (true) {
-                boolean waitCompleted = fileState.waitCompleted();
-                if (waitCompleted) {
-                    latch.countDown();
-                    break;
-                }
-            }
-        }, "file-state").start();
-        Pod pod = podList.getItems().get(0);
-        String line = "";
-        while (latch.getCount() != 0) {
-
-            try {
-                String logs = podApi.logs(namespace, pod.getMetadata().getName(), 1);
-                if (!Objects.equals(line, logs)) {
-                    System.out.print(logs);
-                }
-                line = logs;
-            } catch (Exception e) {
-//                log.warn("{}", e.getMessage());
+                break;
             }
         }
-
-        log.info("BuildPack done.");
-        fileChangeWatcher.stop();
     }
 }

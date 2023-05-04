@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.module.buildpack.event.BuildPackStartedEventV2;
+import io.hotcloud.module.buildpack.event.BuildPackStartedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.event.EventListener;
@@ -19,7 +19,7 @@ public class BuildPackListenerV2 {
 
     @Async
     @EventListener
-    public void started(BuildPackStartedEventV2 startedEvent) {
+    public void started(BuildPackStartedEvent startedEvent) {
         buildPackJobWatchService.inProcessWatch(startedEvent.getBuildPack());
     }
 

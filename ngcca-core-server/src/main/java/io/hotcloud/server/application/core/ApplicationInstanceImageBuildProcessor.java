@@ -7,7 +7,7 @@ import io.hotcloud.module.application.core.ApplicationInstanceService;
 import io.hotcloud.module.application.core.ApplicationInstanceSource;
 import io.hotcloud.module.buildpack.BuildImage;
 import io.hotcloud.module.buildpack.BuildPack;
-import io.hotcloud.module.buildpack.BuildPackPlayerV2;
+import io.hotcloud.module.buildpack.BuildPackPlayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProcessor<ApplicationInstance> {
 
-    private final BuildPackPlayerV2 buildPackPlayerV2;
+    private final BuildPackPlayer buildPackPlayer;
     private final ApplicationInstanceService applicationInstanceService;
 
     @Override
@@ -44,13 +44,13 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
                         applicationInstance.getSource().getRuntime()
                 );
 
-                buildPack = buildPackPlayerV2.play(buildImage);
+                buildPack = buildPackPlayer.play(buildImage);
             }
 
             if (ApplicationInstanceSource.Origin.WAR.name().equalsIgnoreCase(applicationInstance.getSource().getOrigin().name())) {
                 BuildImage buildImage = BuildImage.ofWar(applicationInstance.getSource().getUrl(), applicationInstance.getSource().getRuntime());
 
-                buildPack = buildPackPlayerV2.play(buildImage);
+                buildPack = buildPackPlayer.play(buildImage);
             }
 
             if (ApplicationInstanceSource.Origin.SOURCE_CODE.name().equalsIgnoreCase(applicationInstance.getSource().getOrigin().name())) {
@@ -63,7 +63,7 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
                         applicationInstance.getSource().getRuntime());
 
 
-                buildPack = buildPackPlayerV2.play(buildImage);
+                buildPack = buildPackPlayer.play(buildImage);
             }
 
             applicationInstance.setBuildPackId(Objects.isNull(buildPack) ? null : buildPack.getId());
@@ -84,7 +84,7 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
     public void processDelete(ApplicationInstance input) {
         Log.info(ApplicationInstanceImageBuildProcessor.class.getName(), String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
         if (StringUtils.hasText(input.getBuildPackId())) {
-            buildPackPlayerV2.delete(input.getBuildPackId(), false);
+            buildPackPlayer.delete(input.getBuildPackId(), false);
         }
 
     }

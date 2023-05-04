@@ -18,7 +18,7 @@ import static io.hotcloud.module.buildpack.ImageBuildStatus.Succeeded;
 @RequiredArgsConstructor
 public class BuildPackJobWatchService {
     private final BuildPackService buildPackService;
-    private final BuildPackApiV2 buildPackApiV2;
+    private final BuildPackApi buildPackApi;
     private final ImageBuildCacheApi imageBuildCacheApi;
 
     public void mqWatch(BuildPack buildPack) {
@@ -31,7 +31,7 @@ public class BuildPackJobWatchService {
             if (timeout) {
                 buildPack.setDone(true);
                 buildPack.setMessage(TIMEOUT_MESSAGE);
-                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+                buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
 
                 buildPackService.saveOrUpdate(buildPack);
                 imageBuildCacheApi.setStatus(buildPack.getId(), Failed);
@@ -39,11 +39,11 @@ public class BuildPackJobWatchService {
                 return;
             }
 
-            ImageBuildStatus status = buildPackApiV2.getStatus(namespace, job);
+            ImageBuildStatus status = buildPackApi.getStatus(namespace, job);
             if (Objects.equals(Succeeded, status) || Objects.equals(Failed, status)) {
                 buildPack.setDone(true);
                 buildPack.setMessage(Objects.equals(Succeeded, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
-                buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+                buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
                 buildPackService.saveOrUpdate(buildPack);
 
                 imageBuildCacheApi.setStatus(buildPack.getId(), status);
@@ -87,11 +87,11 @@ public class BuildPackJobWatchService {
                     return;
                 }
 
-                ImageBuildStatus status = buildPackApiV2.getStatus(namespace, job);
+                ImageBuildStatus status = buildPackApi.getStatus(namespace, job);
                 if (Objects.equals(Succeeded, status) || Objects.equals(Failed, status)) {
                     buildPack.setDone(true);
                     buildPack.setMessage(Objects.equals(Succeeded, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
-                    buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+                    buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
                     buildPackService.saveOrUpdate(buildPack);
 
                     imageBuildCacheApi.setStatus(buildPack.getId(), status);
@@ -107,7 +107,7 @@ public class BuildPackJobWatchService {
 
             buildPack.setDone(true);
             buildPack.setMessage(TIMEOUT_MESSAGE);
-            buildPack.setLogs(buildPackApiV2.fetchLog(namespace, job));
+            buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
 
             buildPackService.saveOrUpdate(buildPack);
             imageBuildCacheApi.setStatus(buildPack.getId(), Failed);

@@ -1,92 +1,102 @@
 package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.ActivityAction;
-import io.hotcloud.common.model.ActivityLog;
+import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.buildpack.*;
-import io.hotcloud.module.buildpack.event.BuildPackDeletedEvent;
-import io.hotcloud.module.buildpack.event.BuildPackStartFailureEvent;
 import io.hotcloud.module.buildpack.event.BuildPackStartedEvent;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.registry.RegistryProperties;
-import jakarta.validation.constraints.NotNull;
+import io.kubernetes.client.openapi.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Deprecated(since = "BuildPackApiV2")
 @RequiredArgsConstructor
-class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
+public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
-    private final AbstractBuildPackApi abstractBuildPackApi;
+    private final BuildPackApi buildPackApi;
     private final UserApi userApi;
-    private final KanikoFlag kanikoFlag;
-    private final RegistryProperties registryProperties;
-    private final NamespaceClient namespaceApi;
     private final KubectlClient kubectlApi;
-    private final GitClonedService gitClonedService;
+    private final NamespaceClient namespaceApi;
     private final BuildPackService buildPackService;
     private final BuildPackActivityLogger activityLogger;
     private final ApplicationEventPublisher eventPublisher;
 
-    @Override
-    protected void beforeApply(String clonedId) {
-        Assert.hasText(clonedId, "Git cloned id is null");
+    private void checkBuildTaskHasRunningThenCreateNamespaceOrDefault(User currentUser, BuildImage buildImage) {
+        List<BuildPack> buildPacks = buildPackService.findAll(currentUser.getUsername());
 
-        //check git repository exist
-        GitCloned gitCloned = gitClonedService.findOne(clonedId);
-        Assert.notNull(gitCloned, "Git cloned repository not found [" + clonedId + "]");
-        Assert.state(gitCloned.isSuccess(), String.format("Git cloned repository [%s] is not successful", gitCloned.getUrl()));
+        if (buildImage.isSourceCode()) {
+            String httpGitUrl = buildImage.getSource().getHttpGitUrl();
+            String branch = buildImage.getSource().getBranch();
+            Assert.state(Validator.validHTTPGitAddress(httpGitUrl), "Http(s) git url invalid");
+            Assert.state(StringUtils.hasText(branch), "Git branch is null");
 
-        User current = userApi.current();
-        Assert.state(Objects.equals(current.getUsername(), gitCloned.getUser()), "Git cloned repository [" + gitCloned.getProject() + "] not found for current user [" + current.getUsername() + "]");
+            boolean buildTaskExisted = buildPacks.stream()
+                    .filter(e -> Objects.equals(httpGitUrl, e.getHttpGitUrl()))
+                    .filter(e -> Objects.equals(branch, e.getGitBranch()))
+                    .filter(e -> !e.isDeleted())
+                    .anyMatch(e -> Objects.equals(false, e.isDone()));
+            Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s gitUrl:%s branch:%s", currentUser.getUsername(), httpGitUrl, branch));
+        }
 
-        BuildPack buildPack = buildPackService.findOneOrNullWithNoDone(current.getUsername(), clonedId);
+        if (buildImage.isJar() || buildImage.isWar()) {
+            String httpPackageUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
+            Assert.hasText(httpPackageUrl, "Http(s) package url is null");
 
-        Assert.state(buildPack == null, String.format("[Conflict] '%s' user's git project '%s' is building",
-                gitCloned.getUser(),
-                gitCloned.getProject()));
+            boolean buildTaskExisted = buildPacks.stream()
+                    .filter(e -> Objects.equals(httpPackageUrl, e.getPackageUrl()))
+                    .filter(e -> !e.isDeleted())
+                    .anyMatch(e -> Objects.equals(false, e.isDone()));
+            Assert.state(!buildTaskExisted, String.format("ImageBuild task is running. user:%s packageUrl:%s", currentUser.getUsername(), httpPackageUrl));
+        }
+
+        if (Objects.isNull(namespaceApi.read(currentUser.getNamespace()))) {
+            try {
+                namespaceApi.create(currentUser.getNamespace());
+            } catch (ApiException e) {
+                throw new NGCCAPlatformException("Create namespace exception: " + e.getMessage());
+            }
+        }
     }
 
     @Override
-    protected BuildPack doApply(BuildPack buildPack) {
-        Assert.notNull(buildPack, "BuildPack body is null");
-        Assert.hasText(buildPack.getYaml(), "BuildPack resource yaml is null");
+    public BuildPack play(BuildImage build) {
+        User currentUser = userApi.current();
+        checkBuildTaskHasRunningThenCreateNamespaceOrDefault(currentUser, build);
 
-        BuildPack savedBuildPack = buildPackService.saveOrUpdate(buildPack);
-        Log.info(DefaultBuildPackPlayer.class.getName(),
-                String.format("saved [%s] user's BuildPack '%s'", savedBuildPack.getUser(), savedBuildPack.getId()));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.Create, savedBuildPack);
+        BuildPack buildPack = buildPackApi.apply(currentUser.getNamespace(), build);
 
-        String namespace = savedBuildPack.getJobResource().getNamespace();
-        //create user's namespace
-        try {
-            if (namespaceApi.read(namespace) == null) {
-                namespaceApi.create(namespace);
-            }
-            kubectlApi.resourceListCreateOrReplace(namespace, YamlBody.of(savedBuildPack.getYaml()));
-        } catch (Exception e) {
-            eventPublisher.publishEvent(new BuildPackStartFailureEvent(savedBuildPack, e));
-            return savedBuildPack;
+        if (build.isSourceCode()) {
+            buildPack.setHttpGitUrl(build.getSource().getHttpGitUrl());
+            buildPack.setGitBranch(build.getSource().getBranch());
         }
-        eventPublisher.publishEvent(new BuildPackStartedEvent(savedBuildPack));
+        if (build.isJar() || build.isWar()) {
+            String packageUrl = build.isJar() ? build.getJar().getPackageUrl() : build.getWar().getPackageUrl();
+            buildPack.setPackageUrl(packageUrl);
+        }
 
-        return savedBuildPack;
+        buildPack.setUser(currentUser.getUsername());
+        buildPack.setArtifact(buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
+
+        buildPack.setDeleted(false);
+        buildPack.setDone(false);
+
+        BuildPack saved = buildPackService.saveOrUpdate(buildPack);
+
+        eventPublisher.publishEvent(new BuildPackStartedEvent(saved));
+
+        return saved;
     }
 
     @Override
@@ -97,70 +107,15 @@ class DefaultBuildPackPlayer extends AbstractBuildPackPlayer {
 
         buildPackService.delete(id, physically);
         Log.info(DefaultBuildPackPlayer.class.getName(),
-                String.format("delete BuildPack '%s'", id));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, existBuildPack);
+                String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
+        activityLogger.log(ActivityAction.Delete, existBuildPack);
 
-        eventPublisher.publishEvent(new BuildPackDeletedEvent(existBuildPack, physically));
-    }
-
-    @Override
-    public BuildPack buildpack(String clonedId, Boolean noPush) {
-
-        GitCloned cloned = gitClonedService.findOne(clonedId);
-        Assert.notNull(cloned, "Git cloned repository is null [" + clonedId + "]");
-
-        Map<String, String> alternative = new HashMap<>(16);
-        alternative.put(BuildPackConstant.GIT_PROJECT_TARBALL, GitCloned.retrieveImageTarball(cloned.getUrl()));
-        alternative.put(BuildPackConstant.GIT_PROJECT_IMAGE, GitCloned.retrievePushImage(cloned.getUrl()));
-        alternative.put(BuildPackConstant.GIT_PROJECT_ID, clonedId);
-
-        //handle kaniko args
-        Map<String, String> args = resolvedArgs(cloned.getDockerfile(), noPush, alternative);
-
-        User current = userApi.current();
-        BuildPack buildpack = abstractBuildPackApi.buildpack(
-                current.getNamespace(),
-                cloned.getProject(),
-                registryProperties.getUrl(),
-                registryProperties.getUsername(),
-                registryProperties.getPassword(),
-                args);
-
-        buildpack.getJobResource().getAlternative().putAll(alternative);
-
-        buildpack.setClonedId(clonedId);
-        buildpack.setDone(false);
-        buildpack.setUser(current.getUsername());
-
-        return buildpack;
-    }
-
-    @NotNull
-    private Map<String, String> resolvedArgs(String dockerfile, Boolean noPush, Map<String, String> alternative) {
-        Map<String, String> args = kanikoFlag.resolvedArgs();
-
-        if (StringUtils.hasText(dockerfile)) {
-            args.put("dockerfile", Path.of(kanikoFlag.getContext(), dockerfile).toString());
+        try {
+            Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
+            Log.info(BuildPackJobWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, existBuildPack.getJobResource().getNamespace(), existBuildPack.getJobResource().getName()));
+        } catch (Exception ex) {
+            Log.error(BuildPackJobWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
-
-        if (Objects.nonNull(noPush)) {
-            args.put("no-push", String.valueOf(noPush));
-            if (noPush) {
-                //if using cache with --no-push, specify cache repo with --cache-repo
-                args.put("cache", String.valueOf(false));
-            }
-        } else {
-            args.put("no-push", "false");
-        }
-
-        args.put("insecure-registry", registryProperties.getUrl());
-        args.put("tarPath", Path.of(kanikoFlag.getTarPath(), alternative.get(BuildPackConstant.GIT_PROJECT_TARBALL)).toString());
-
-        //index.docker.io/example/image-name:latest
-        String destination = Path.of(registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), alternative.get(BuildPackConstant.GIT_PROJECT_IMAGE)).toString();
-        //must provide at least one destination when tarPath is specified
-        args.put("destination", destination);
-
-        return args;
     }
+
 }

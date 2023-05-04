@@ -1,19 +1,14 @@
 package io.hotcloud.module.buildpack;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Deprecated(since = "BuildPackApiV2")
 public interface BuildPackPlayer {
 
     /**
-     * Deploy buildPack resource
+     * Deploy buildPack
      *
-     * @param clonedId Git cloned id
-     * @param noPush   if you only want to build the image, without pushing to a registry
+     * @param build {@link BuildImage}
      * @return {@link BuildPack}
      */
-    BuildPack apply(String clonedId, Boolean noPush);
+    BuildPack play(BuildImage build);
 
     /**
      * Delete buildPack resource
@@ -22,5 +17,4 @@ public interface BuildPackPlayer {
      * @param physically whether delete physically
      */
     void delete(String id, boolean physically);
-
 }

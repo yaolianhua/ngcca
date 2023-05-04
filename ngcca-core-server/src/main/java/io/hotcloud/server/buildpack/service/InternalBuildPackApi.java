@@ -41,7 +41,7 @@ import static io.hotcloud.vendor.kaniko.KanikoJobTemplateRender.parseSecret;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
+class InternalBuildPackApi extends AbstractBuildPackApi {
 
     private final static Pattern CHINESE_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
     private final KubectlClient kubectlApi;
@@ -234,7 +234,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
     protected void doApply(String yaml) {
         List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(yaml));
         for (HasMetadata hasMetadata : metadataList) {
-            Log.info(InternalBuildPackApiV2.class.getName(),
+            Log.info(InternalBuildPackApi.class.getName(),
                     String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
         }
     }
@@ -274,14 +274,14 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
 
         Job kanikoJob = jobApi.read(namespace, job);
         if (Objects.isNull(kanikoJob)) {
-            Log.info(InternalBuildPackApiV2.class.getName(),
+            Log.info(InternalBuildPackApi.class.getName(),
                     String.format("Fetch kaniko log error. job is null namespace:%s job:%s", namespace, job));
             return "";
         }
 
         List<Pod> pods = podApi.readList(namespace, kanikoJob.getMetadata().getLabels()).getItems();
         if (CollectionUtils.isEmpty(pods)) {
-            Log.info(InternalBuildPackApiV2.class.getName(),
+            Log.info(InternalBuildPackApi.class.getName(),
                     String.format("Fetch kaniko log error. list pods is empty namespace:%s job:%s", namespace, job));
             return "";
         }
@@ -296,7 +296,7 @@ class InternalBuildPackApiV2 extends AbstractBuildPackApiV2 {
                 try {
                     return podApi.logs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER, 100);
                 } catch (Exception e3) {
-                    Log.info(InternalBuildPackApiV2.class.getName(),
+                    Log.info(InternalBuildPackApi.class.getName(),
                             String.format("Fetch kaniko init container log error. %s", e3.getMessage()));
                     return "";
                 }
