@@ -51,8 +51,5 @@ ngcca:
     host:
     port:
     domain-name:
-  buildpack:
-    imagebuild:
-      notify-mode: rabbitmq
 server:
   port: 8080

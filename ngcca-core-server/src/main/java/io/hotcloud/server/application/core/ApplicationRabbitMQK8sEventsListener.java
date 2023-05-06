@@ -12,7 +12,6 @@ import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstancePlayer;
 import io.hotcloud.module.application.core.ApplicationInstanceService;
-import io.hotcloud.server.application.ApplicationProperties;
 import io.hotcloud.server.message.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,17 +20,12 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
 @Component
-@ConditionalOnProperty(
-        name = ApplicationProperties.PROPERTIES_TYPE_NAME,
-        havingValue = ApplicationProperties.RABBITMQ
-)
 @RequiredArgsConstructor
 @Slf4j
 public class ApplicationRabbitMQK8sEventsListener {

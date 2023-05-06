@@ -8,12 +8,10 @@ import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.buildpack.*;
-import io.hotcloud.module.buildpack.event.BuildPackStartedEvent;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -31,7 +29,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     private final NamespaceClient namespaceApi;
     private final BuildPackService buildPackService;
     private final BuildPackActivityLogger activityLogger;
-    private final ApplicationEventPublisher eventPublisher;
 
     private void checkBuildTaskHasRunningThenCreateNamespaceOrDefault(User currentUser, BuildImage buildImage) {
         List<BuildPack> buildPacks = buildPackService.findAll(currentUser.getUsername());
@@ -92,11 +89,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         buildPack.setDeleted(false);
         buildPack.setDone(false);
 
-        BuildPack saved = buildPackService.saveOrUpdate(buildPack);
-
-        eventPublisher.publishEvent(new BuildPackStartedEvent(saved));
-
-        return saved;
+        return buildPackService.saveOrUpdate(buildPack);
     }
 
     @Override

@@ -7,12 +7,10 @@ import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.application.template.*;
-import io.hotcloud.module.application.template.event.TemplateInstanceStartedEvent;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.application.template.processor.InstanceTemplateProcessors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -25,7 +23,6 @@ import org.springframework.util.StringUtils;
 public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
     private final InstanceTemplateProcessors instanceTemplateProcessors;
-    private final ApplicationEventPublisher eventPublisher;
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstanceActivityLogger activityLogger;
     private final KubectlClient kubectlApi;
@@ -59,7 +56,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
             return saved;
         }
 
-        eventPublisher.publishEvent(new TemplateInstanceStartedEvent(saved));
         return saved;
 
     }

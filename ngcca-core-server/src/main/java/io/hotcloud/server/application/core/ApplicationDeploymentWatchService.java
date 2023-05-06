@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -95,64 +94,4 @@ public class ApplicationDeploymentWatchService {
         return timeoutMessage;
     }
 
-    public void inProcessWatch(ApplicationInstance instance) {
-
-        if (!applicationDeploymentCacheApi.tryLock(instance.getId())) {
-            return;
-        }
-        try {
-            while (true) {
-
-                TimeUnit.SECONDS.sleep(1);
-                ApplicationInstance applicationInstance = applicationInstanceService.findOne(instance.getId());
-                //if deleted
-                if (applicationInstance.isDeleted()) {
-                    Log.warn(ApplicationDeploymentWatchService.class.getName(), String.format("[%s] user's application instance [%s] has been deleted", instance.getUser(), instance.getName()));
-                    applicationDeploymentCacheApi.unLock(applicationInstance.getId());
-                    return;
-                }
-                if (applicationInstance.isSuccess()) {
-                    applicationDeploymentCacheApi.unLock(applicationInstance.getId());
-                    return;
-                }
-
-                //if timeout
-                int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationDeploymentCacheApi.getTimeoutSeconds()));
-                if (timeout > 0) {
-                    String timeoutMessage = retrieveK8sEventsMessage(applicationInstance);
-                    applicationInstance.setMessage(timeoutMessage);
-                    applicationInstanceService.saveOrUpdate(applicationInstance);
-                    applicationDeploymentCacheApi.unLock(applicationInstance.getId());
-                    return;
-                }
-
-                //流程还未走到deployment
-                Deployment deployment = deploymentApi.read(applicationInstance.getNamespace(), applicationInstance.getName());
-                if (Objects.nonNull(deployment)) {
-                    boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, instance.getReplicas());
-                    if (!ready) {
-                        Log.debug(ApplicationDeploymentWatchService.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
-                    }
-
-                    //deployment success
-                    if (ready) {
-                        Log.info(ApplicationDeploymentWatchService.class.getName(), String.format("[%s] user's application instance deployment [%s] success!", applicationInstance.getUser(), applicationInstance.getName()));
-                        applicationInstance.setMessage(CommonConstant.SUCCESS_MESSAGE);
-                        applicationInstance.setSuccess(true);
-                        applicationInstanceService.saveOrUpdate(applicationInstance);
-                        applicationDeploymentCacheApi.unLock(applicationInstance.getId());
-                        return;
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            Log.error(ApplicationDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
-
-            instance.setMessage(e.getMessage());
-            applicationInstanceService.saveOrUpdate(instance);
-            applicationDeploymentCacheApi.unLock(instance.getId());
-        }
-
-    }
 }
