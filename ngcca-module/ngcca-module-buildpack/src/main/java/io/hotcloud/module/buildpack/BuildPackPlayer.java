@@ -1,5 +1,8 @@
 package io.hotcloud.module.buildpack;
 
+import io.hotcloud.module.buildpack.model.BuildImage;
+import io.hotcloud.module.buildpack.model.BuildPack;
+
 public interface BuildPackPlayer {
 
     /**

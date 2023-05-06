@@ -1,5 +1,7 @@
 package io.hotcloud.module.buildpack;
 
+import io.hotcloud.module.buildpack.model.BuildPack;
+
 import java.util.List;
 
 /**

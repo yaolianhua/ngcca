@@ -3,7 +3,7 @@ package io.hotcloud.server.buildpack.service;
 import io.hotcloud.common.model.ActivityAction;
 import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.common.model.ActivityTarget;
-import io.hotcloud.module.buildpack.BuildPack;
+import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.db.core.activity.ActivityEntity;
 import io.hotcloud.module.db.core.activity.ActivityRepository;
 import org.springframework.stereotype.Component;

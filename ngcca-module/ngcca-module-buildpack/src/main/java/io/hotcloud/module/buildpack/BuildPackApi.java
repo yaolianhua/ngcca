@@ -1,5 +1,9 @@
 package io.hotcloud.module.buildpack;
 
+import io.hotcloud.module.buildpack.model.BuildImage;
+import io.hotcloud.module.buildpack.model.BuildPack;
+import io.hotcloud.module.buildpack.model.JobState;
+
 public interface BuildPackApi {
     /**
      * Deploy kaniko job with the giving {@code buildImage}

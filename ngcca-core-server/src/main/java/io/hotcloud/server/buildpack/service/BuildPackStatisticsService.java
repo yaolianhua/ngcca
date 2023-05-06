@@ -1,8 +1,8 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.module.buildpack.BuildPack;
 import io.hotcloud.module.buildpack.BuildPackService;
-import io.hotcloud.module.buildpack.BuildPackStatistics;
+import io.hotcloud.module.buildpack.model.BuildPack;
+import io.hotcloud.module.buildpack.model.BuildPackStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.module.buildpack.ImageBuildCacheApi;
-import io.hotcloud.module.buildpack.JobState;
+import io.hotcloud.module.buildpack.model.JobState;
 import io.hotcloud.server.cache.Cache;
 import org.springframework.stereotype.Component;
 

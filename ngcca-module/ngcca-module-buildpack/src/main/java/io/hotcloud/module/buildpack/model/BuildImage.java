@@ -1,4 +1,4 @@
-package io.hotcloud.module.buildpack;
+package io.hotcloud.module.buildpack.model;
 
 import io.hotcloud.common.model.JavaRuntime;
 import lombok.AllArgsConstructor;
@@ -61,55 +61,6 @@ public class BuildImage {
         return war != null && !isJar() && !isSourceCode();
     }
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SourceCode {
 
-        private String httpGitUrl;
-        @Builder.Default
-        private String branch = "master";
-        private String submodule;
-        /**
-         * e.g. "-Xms128m -Xmx512m"
-         */
-        private String startOptions;
-        /**
-         * e.g. -Dspring.profiles.active=production
-         */
-        private String startArgs;
-        private JavaRuntime runtime;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Jar {
-        /**
-         * Deploy buildPack from binary jar package
-         */
-        private String packageUrl;
-        /**
-         * e.g. "-Xms128m -Xmx512m"
-         */
-        private String startOptions;
-        /**
-         * e.g. -Dspring.profiles.active=production
-         */
-        private String startArgs;
-
-        private JavaRuntime runtime;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class War {
-        private String packageUrl;
-        private JavaRuntime runtime;
-    }
 
 }

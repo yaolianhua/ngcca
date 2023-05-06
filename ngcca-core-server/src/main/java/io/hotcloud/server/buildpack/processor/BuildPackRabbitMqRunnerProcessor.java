@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.processor;
 
-import io.hotcloud.module.buildpack.BuildPackConstant;
+import io.hotcloud.module.buildpack.model.BuildPackConstant;
 import io.hotcloud.server.NGCCARunnerProcessor;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;

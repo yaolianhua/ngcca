@@ -2,10 +2,10 @@ package io.hotcloud.server.buildpack;
 
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.JavaRuntime;
-import io.hotcloud.module.buildpack.BuildImage;
-import io.hotcloud.module.buildpack.BuildPack;
 import io.hotcloud.module.buildpack.BuildPackPlayer;
 import io.hotcloud.module.buildpack.BuildPackService;
+import io.hotcloud.module.buildpack.model.BuildImage;
+import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaCoreServerApplication;
 import org.junit.Before;

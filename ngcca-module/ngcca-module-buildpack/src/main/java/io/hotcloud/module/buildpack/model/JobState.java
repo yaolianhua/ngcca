@@ -1,4 +1,4 @@
-package io.hotcloud.module.buildpack;
+package io.hotcloud.module.buildpack.model;
 
 public enum JobState {
     //

@@ -1,7 +1,11 @@
 package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.utils.Log;
-import io.hotcloud.module.buildpack.*;
+import io.hotcloud.module.buildpack.BuildPackApi;
+import io.hotcloud.module.buildpack.BuildPackService;
+import io.hotcloud.module.buildpack.ImageBuildCacheApi;
+import io.hotcloud.module.buildpack.model.BuildPack;
+import io.hotcloud.module.buildpack.model.JobState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static io.hotcloud.common.model.CommonConstant.*;
-import static io.hotcloud.module.buildpack.JobState.FAILED;
-import static io.hotcloud.module.buildpack.JobState.SUCCEEDED;
+import static io.hotcloud.module.buildpack.model.JobState.FAILED;
+import static io.hotcloud.module.buildpack.model.JobState.SUCCEEDED;
 
 @Component
 @RequiredArgsConstructor
