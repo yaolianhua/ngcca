@@ -240,10 +240,10 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     }
 
     @Override
-    public ImageBuildStatus getStatus(String namespace, String job) {
+    public JobState getStatus(String namespace, String job) {
         Job readJob = jobApi.read(namespace, job);
         if (Objects.isNull(readJob)) {
-            return ImageBuildStatus.Unknown;
+            return JobState.UNKNOWN;
         }
         Integer active = readJob.getStatus().getActive();
         Integer failed = readJob.getStatus().getFailed();
@@ -251,22 +251,22 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         Integer succeeded = readJob.getStatus().getSucceeded();
 
         if (ready != null && Objects.equals(ready, 1)) {
-            return ImageBuildStatus.Ready;
+            return JobState.READY;
         }
 
         if (active != null && Objects.equals(active, 1)) {
-            return ImageBuildStatus.Active;
+            return JobState.ACTIVE;
         }
 
         if (succeeded != null && Objects.equals(succeeded, 1)) {
-            return ImageBuildStatus.Succeeded;
+            return JobState.SUCCEEDED;
         }
 
         if (failed != null) {
-            return ImageBuildStatus.Failed;
+            return JobState.FAILED;
         }
 
-        return ImageBuildStatus.Unknown;
+        return JobState.UNKNOWN;
     }
 
     @Override

@@ -2,9 +2,9 @@ package io.hotcloud.module.buildpack;
 
 public interface ImageBuildCacheApi {
 
-    void setStatus(String buildPackId, ImageBuildStatus status);
+    void setStatus(String buildPackId, JobState status);
 
-    ImageBuildStatus getStatus(String buildPackId);
+    JobState getStatus(String buildPackId);
 
     boolean tryLock(String buildPackId);
 

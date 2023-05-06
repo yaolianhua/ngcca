@@ -6,7 +6,6 @@ import io.hotcloud.module.buildpack.KanikoFlag;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
@@ -95,12 +94,8 @@ public class KanikoFlagProperties implements KanikoFlag {
         Map<String, String> args = new HashMap<>(64);
         for (Field field : declaredFields) {
             try {
-                field.setAccessible(true);
                 Object o = field.get(this);
-                if (o == null) {
-                    continue;
-                }
-                if (o instanceof String && !StringUtils.hasText(((String) o))) {
+                if (o == null || String.valueOf(o).isBlank()) {
                     continue;
                 }
                 JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);

@@ -2,7 +2,7 @@ package io.hotcloud.server.buildpack.service;
 
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.module.buildpack.ImageBuildCacheApi;
-import io.hotcloud.module.buildpack.ImageBuildStatus;
+import io.hotcloud.module.buildpack.JobState;
 import io.hotcloud.server.cache.Cache;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +20,13 @@ public class ImageBuildCacheManager implements ImageBuildCacheApi {
     }
 
     @Override
-    public void setStatus(String buildPackId, ImageBuildStatus status) {
+    public void setStatus(String buildPackId, JobState status) {
         cache.put(String.format(CK_IMAGEBUILD_STATUS, buildPackId), status);
     }
 
     @Override
-    public ImageBuildStatus getStatus(String buildPackId) {
-        return cache.get(String.format(CommonConstant.CK_IMAGEBUILD_STATUS, buildPackId), ImageBuildStatus.class);
+    public JobState getStatus(String buildPackId) {
+        return cache.get(String.format(CommonConstant.CK_IMAGEBUILD_STATUS, buildPackId), JobState.class);
     }
 
     @Override

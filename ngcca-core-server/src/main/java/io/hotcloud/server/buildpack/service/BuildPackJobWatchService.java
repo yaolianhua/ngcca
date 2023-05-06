@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static io.hotcloud.common.model.CommonConstant.*;
-import static io.hotcloud.module.buildpack.ImageBuildStatus.Failed;
-import static io.hotcloud.module.buildpack.ImageBuildStatus.Succeeded;
+import static io.hotcloud.module.buildpack.JobState.FAILED;
+import static io.hotcloud.module.buildpack.JobState.SUCCEEDED;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class BuildPackJobWatchService {
 
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
-        imageBuildCacheApi.setStatus(buildPack.getId(), ImageBuildStatus.Unknown);
+        imageBuildCacheApi.setStatus(buildPack.getId(), JobState.UNKNOWN);
         boolean timeout = LocalDateTime.now().compareTo(buildPack.getCreatedAt().plusSeconds(imageBuildCacheApi.getTimeoutSeconds())) > 0;
         try {
             if (timeout) {
@@ -32,15 +32,15 @@ public class BuildPackJobWatchService {
                 buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
 
                 buildPackService.saveOrUpdate(buildPack);
-                imageBuildCacheApi.setStatus(buildPack.getId(), Failed);
+                imageBuildCacheApi.setStatus(buildPack.getId(), FAILED);
 
                 return;
             }
 
-            ImageBuildStatus status = buildPackApi.getStatus(namespace, job);
-            if (Objects.equals(Succeeded, status) || Objects.equals(Failed, status)) {
+            JobState status = buildPackApi.getStatus(namespace, job);
+            if (Objects.equals(SUCCEEDED, status) || Objects.equals(FAILED, status)) {
                 buildPack.setDone(true);
-                buildPack.setMessage(Objects.equals(Succeeded, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
+                buildPack.setMessage(Objects.equals(SUCCEEDED, status) ? SUCCESS_MESSAGE : FAILED_MESSAGE);
                 buildPack.setLogs(buildPackApi.fetchLog(namespace, job));
                 buildPackService.saveOrUpdate(buildPack);
 
@@ -57,7 +57,7 @@ public class BuildPackJobWatchService {
             buildPack.setDone(true);
             buildPack.setMessage("exception occur: " + ex.getMessage());
             buildPackService.saveOrUpdate(buildPack);
-            imageBuildCacheApi.setStatus(buildPack.getId(), Failed);
+            imageBuildCacheApi.setStatus(buildPack.getId(), FAILED);
         }
     }
 }

@@ -49,22 +49,22 @@ public class BuildPackApiIT {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
-            ImageBuildStatus status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
+            if (Objects.equals(status, JobState.UNKNOWN)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
+            } else if (Objects.equals(status, JobState.READY)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
+            } else if (Objects.equals(status, JobState.ACTIVE)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Failed)) {
+            } else if (Objects.equals(status, JobState.FAILED)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status, ImageBuildStatus.Succeeded)) {
+            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
@@ -96,22 +96,22 @@ public class BuildPackApiIT {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(6);
-            ImageBuildStatus status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
+            if (Objects.equals(status, JobState.UNKNOWN)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
+            } else if (Objects.equals(status, JobState.READY)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
+            } else if (Objects.equals(status, JobState.ACTIVE)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Failed)) {
+            } else if (Objects.equals(status, JobState.FAILED)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status, ImageBuildStatus.Succeeded)) {
+            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
@@ -145,22 +145,22 @@ public class BuildPackApiIT {
 
         while (loopCount.get() < 60) {
             TimeUnit.SECONDS.sleep(60);
-            ImageBuildStatus status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
 
-            if (Objects.equals(status, ImageBuildStatus.Unknown)) {
+            if (Objects.equals(status, JobState.UNKNOWN)) {
                 System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, ImageBuildStatus.Ready)) {
+            } else if (Objects.equals(status, JobState.READY)) {
                 System.out.println("Kaniko status is [Ready]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Active)) {
+            } else if (Objects.equals(status, JobState.ACTIVE)) {
                 System.out.println("Kaniko status is [Active]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, ImageBuildStatus.Failed)) {
+            } else if (Objects.equals(status, JobState.FAILED)) {
                 System.out.println("Kaniko status is [Failed]");
                 printKanikoLog(namespace, buildPack.getJobResource().getName());
                 cleared(buildPack);
                 return;
-            } else if (Objects.equals(status, ImageBuildStatus.Succeeded)) {
+            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
                 System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
                         buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
                 printKanikoLog(namespace, buildPack.getJobResource().getName());

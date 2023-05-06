@@ -4,7 +4,7 @@ import io.hotcloud.common.utils.Log;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstanceProcessor;
 import io.hotcloud.module.buildpack.ImageBuildCacheApi;
-import io.hotcloud.module.buildpack.ImageBuildStatus;
+import io.hotcloud.module.buildpack.JobState;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -37,12 +37,12 @@ public class ApplicationInstanceProcessors {
                 if (StringUtils.hasText(instance.getBuildPackId())) {
                     while (true) {
                         TimeUnit.SECONDS.sleep(1);
-                        ImageBuildStatus status = imageBuildCacheApi.getStatus(instance.getBuildPackId());
-                        if (Objects.equals(ImageBuildStatus.Succeeded, status)) {
+                        JobState status = imageBuildCacheApi.getStatus(instance.getBuildPackId());
+                        if (Objects.equals(JobState.SUCCEEDED, status)) {
                             Log.info(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
                         }
-                        if (Objects.equals(ImageBuildStatus.Failed, status)) {
+                        if (Objects.equals(JobState.FAILED, status)) {
                             Log.error(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             return;
                         }

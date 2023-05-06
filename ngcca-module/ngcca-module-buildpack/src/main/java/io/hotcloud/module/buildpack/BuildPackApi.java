@@ -15,9 +15,9 @@ public interface BuildPackApi {
      *
      * @param namespace user's k8s namespace
      * @param job       kaniko job name
-     * @return {@link ImageBuildStatus}
+     * @return {@link JobState}
      */
-    ImageBuildStatus getStatus(String namespace, String job);
+    JobState getStatus(String namespace, String job);
 
     /**
      * Fetch Kaniko build logs
