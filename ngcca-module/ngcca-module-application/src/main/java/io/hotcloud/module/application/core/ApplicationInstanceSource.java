@@ -1,6 +1,6 @@
 package io.hotcloud.module.application.core;
 
-import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.JavaRuntime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class ApplicationInstanceSource {
     private Origin origin;
 
     @Builder.Default
-    private RuntimeImages runtime = RuntimeImages.Java17;
+    private JavaRuntime runtime = JavaRuntime.JAVA17;
     /**
      * <ul>
      *   <li/> <a href="http://127.0.0.1:9000/minio-public-buket/demo.jar">http://127.0.0.1:9000/minio-public-buket/demo.jar</a>

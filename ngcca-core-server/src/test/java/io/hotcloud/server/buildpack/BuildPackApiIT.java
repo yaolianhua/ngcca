@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack;
 
-import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.JavaRuntime;
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
@@ -41,7 +41,7 @@ public class BuildPackApiIT {
                 namespace,
                 BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
                         "-Xms128m -Xmx512m",
-                        "-Dspring.profiles.active=production", RuntimeImages.Java11));
+                        "-Dspring.profiles.active=production", JavaRuntime.JAVA11));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());
@@ -88,7 +88,7 @@ public class BuildPackApiIT {
         namespaceApi.create(namespace);
         BuildPack buildPack = buildPackApi.apply(
                 namespace,
-                BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", RuntimeImages.Java11));
+                BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", JavaRuntime.JAVA11));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());
@@ -137,7 +137,7 @@ public class BuildPackApiIT {
         BuildPack buildPack = buildPackApi.apply(
                 namespace,
                 BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
-                        "master", "", "", "", RuntimeImages.Java11));
+                        "master", "", "", "", JavaRuntime.JAVA11));
 
         System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
         System.out.println(buildPack.getYaml());

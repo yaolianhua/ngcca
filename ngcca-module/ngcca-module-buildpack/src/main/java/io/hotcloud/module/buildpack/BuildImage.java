@@ -1,6 +1,6 @@
 package io.hotcloud.module.buildpack;
 
-import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.JavaRuntime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class BuildImage {
     private Jar jar;
     private War war;
 
-    public static BuildImage ofSource(String httpGitUrl, String branch, String submodule, String startOptions, String startArgs, RuntimeImages runtime) {
+    public static BuildImage ofSource(String httpGitUrl, String branch, String submodule, String startOptions, String startArgs, JavaRuntime runtime) {
         return BuildImage.builder().source(
                 SourceCode.builder()
                         .httpGitUrl(httpGitUrl)
@@ -29,7 +29,7 @@ public class BuildImage {
         ).build();
     }
 
-    public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs, RuntimeImages runtime) {
+    public static BuildImage ofJar(String httpUrl, String startOptions, String startArgs, JavaRuntime runtime) {
         return BuildImage.builder().jar(
                 Jar.builder()
                         .packageUrl(httpUrl)
@@ -40,7 +40,7 @@ public class BuildImage {
         ).build();
     }
 
-    public static BuildImage ofWar(String httpUrl, RuntimeImages runtime) {
+    public static BuildImage ofWar(String httpUrl, JavaRuntime runtime) {
         return BuildImage.builder().war(
                 War.builder()
                         .packageUrl(httpUrl)
@@ -79,7 +79,7 @@ public class BuildImage {
          * e.g. -Dspring.profiles.active=production
          */
         private String startArgs;
-        private RuntimeImages runtime;
+        private JavaRuntime runtime;
     }
 
     @Data
@@ -100,7 +100,7 @@ public class BuildImage {
          */
         private String startArgs;
 
-        private RuntimeImages runtime;
+        private JavaRuntime runtime;
     }
 
     @Data
@@ -109,7 +109,7 @@ public class BuildImage {
     @AllArgsConstructor
     public static class War {
         private String packageUrl;
-        private RuntimeImages runtime;
+        private JavaRuntime runtime;
     }
 
 }

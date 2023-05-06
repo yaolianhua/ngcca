@@ -6,8 +6,8 @@ import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstanceProcessor;
 import io.hotcloud.module.application.template.instance.RedisInsightTemplate;
+import io.hotcloud.server.SystemRegistryImageProperties;
 import io.hotcloud.server.application.ApplicationProperties;
-import io.hotcloud.server.registry.DatabaseRegistryImages;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +20,12 @@ import static io.hotcloud.module.application.IngressTemplateRender.render;
 class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     private final ApplicationProperties applicationProperties;
-    private final DatabaseRegistryImages registryImages;
+    private final SystemRegistryImageProperties systemRegistryImageProperties;
 
     public RedisInsightTemplateInstanceProcessor(ApplicationProperties applicationProperties,
-                                                 DatabaseRegistryImages registryImages) {
+                                                 SystemRegistryImageProperties systemRegistryImageProperties) {
         this.applicationProperties = applicationProperties;
-        this.registryImages = registryImages;
+        this.systemRegistryImageProperties = systemRegistryImageProperties;
     }
 
     @Override
@@ -39,7 +39,7 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
         if (!support(template)) {
             return null;
         }
-        String busybox = registryImages.getOrDefault(Template.Busybox.name().toLowerCase(), "busybox:latest");
+        String busybox = systemRegistryImageProperties.getBusybox();
         RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(imageUrl, busybox, namespace);
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()

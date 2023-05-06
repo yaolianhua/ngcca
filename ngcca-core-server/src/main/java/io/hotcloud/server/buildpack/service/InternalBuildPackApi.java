@@ -3,7 +3,7 @@ package io.hotcloud.server.buildpack.service;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.hotcloud.common.model.RuntimeImages;
+import io.hotcloud.common.model.JavaRuntime;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.utils.INet;
 import io.hotcloud.common.utils.Log;
@@ -14,8 +14,8 @@ import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.buildpack.*;
+import io.hotcloud.server.SystemRegistryImageProperties;
 import io.hotcloud.server.files.FileHelper;
-import io.hotcloud.server.registry.DatabaseRegistryImages;
 import io.hotcloud.server.registry.RegistryProperties;
 import io.hotcloud.vendor.kaniko.model.DockerConfigJson;
 import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
@@ -48,7 +48,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     private final JobClient jobApi;
     private final PodClient podApi;
     private final RegistryProperties registryProperties;
-    private final DatabaseRegistryImages registryImagesContainer;
+    private final SystemRegistryImageProperties systemRegistryImageProperties;
 
     private static Map<String, List<String>> resolvedHostAliases(String registry, String httpUrl) {
         Map<String, List<String>> hostAliases = new HashMap<>(8);
@@ -138,17 +138,17 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     private DockerfileJavaArtifactExpressionVariable determinedDockerfileJavaArtifactExpressionVariable(BuildImage buildImage) {
         if (buildImage.isSourceCode()) {
             String jarPath = StringUtils.hasText(buildImage.getSource().getSubmodule()) ? buildImage.getSource().getSubmodule() + "/target/*.jar" : "target/*.jar";
-            RuntimeImages runtime = buildImage.getSource().getRuntime();
-            String mavenKey;
+            JavaRuntime runtime = buildImage.getSource().getRuntime();
+            String maven;
             switch (runtime) {
-                case Java8 -> mavenKey = RuntimeImages.Maven3808.name();
-                case Java11 -> mavenKey = RuntimeImages.Maven3811.name();
-                case Java17 -> mavenKey = RuntimeImages.Maven3817.name();
+                case JAVA8 -> maven = systemRegistryImageProperties.getMaven3808();
+                case JAVA11 -> maven = systemRegistryImageProperties.getMaven3811();
+                case JAVA17 -> maven = systemRegistryImageProperties.getMaven3817();
                 default -> throw new NGCCAPlatformException("Unsupported runtime");
             }
             return DockerfileJavaArtifactExpressionVariable.ofMavenJar(
-                    registryImagesContainer.get(mavenKey.toLowerCase()),
-                    registryImagesContainer.get(runtime.name().toLowerCase()),
+                    maven,
+                    systemRegistryImageProperties.getPropertyValue(runtime.name().toLowerCase()),
                     jarPath,
                     buildImage.getSource().getStartOptions(),
                     buildImage.getSource().getStartArgs());
@@ -157,8 +157,8 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         if (buildImage.isJar() || buildImage.isWar()) {
             String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
             return buildImage.isJar() ?
-                    DockerfileJavaArtifactExpressionVariable.ofUrlJar(registryImagesContainer.get(buildImage.getJar().getRuntime().name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
-                    DockerfileJavaArtifactExpressionVariable.ofUrlWar(registryImagesContainer.get(buildImage.getWar().getRuntime().name().toLowerCase()), httpUrl);
+                    DockerfileJavaArtifactExpressionVariable.ofUrlJar(systemRegistryImageProperties.getPropertyValue(buildImage.getJar().getRuntime().name().toLowerCase()), httpUrl, buildImage.getJar().getStartOptions(), buildImage.getJar().getStartArgs()) :
+                    DockerfileJavaArtifactExpressionVariable.ofUrlWar(systemRegistryImageProperties.getPropertyValue(buildImage.getWar().getRuntime().name().toLowerCase()), httpUrl);
         }
 
         throw new UnsupportedOperationException("Not supported operation for BuildImage");
@@ -183,10 +183,10 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                     k8sName,
                     retrieveSecretName(namespace),
                     destination,
-                    registryImagesContainer.get(RuntimeImages.Kaniko.name().toLowerCase()),
-                    registryImagesContainer.get(RuntimeImages.Alpine.name().toLowerCase()),
+                    systemRegistryImageProperties.getKaniko(),
+                    systemRegistryImageProperties.getAlpine(),
                     DockerfileJava(javaArtifact, true),
-                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImagesContainer.get(RuntimeImages.Git.name().toLowerCase())),
+                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), systemRegistryImageProperties.getGit()),
                     resolvedHostAliases(registryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
             );
         }
@@ -199,8 +199,8 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                     k8sName,
                     retrieveSecretName(namespace),
                     destination,
-                    registryImagesContainer.get(RuntimeImages.Kaniko.name().toLowerCase()),
-                    registryImagesContainer.get(RuntimeImages.Alpine.name().toLowerCase()),
+                    systemRegistryImageProperties.getKaniko(),
+                    systemRegistryImageProperties.getAlpine(),
                     DockerfileJava(javaArtifact, true),
                     null,
                     resolvedHostAliases(registryProperties.getUrl(), httpUrl));

@@ -8,6 +8,7 @@ import io.hotcloud.module.application.template.TemplateDefinition;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
 import io.hotcloud.module.db.core.application.TemplateDefinitionEntity;
 import io.hotcloud.module.db.core.application.TemplateDefinitionRepository;
+import io.hotcloud.server.SystemRegistryImageProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -26,12 +27,12 @@ import java.util.stream.StreamSupport;
 public class TemplateDefinitionServiceImpl implements TemplateDefinitionService {
 
     private final TemplateDefinitionRepository templateDefinitionRepository;
-    private final TemplateImagesProperties templateImagesProperties;
+    private final SystemRegistryImageProperties systemRegistryImageProperties;
 
     public TemplateDefinitionServiceImpl(TemplateDefinitionRepository templateDefinitionRepository,
-                                         TemplateImagesProperties templateImagesProperties) {
+                                         SystemRegistryImageProperties systemRegistryImageProperties) {
         this.templateDefinitionRepository = templateDefinitionRepository;
-        this.templateImagesProperties = templateImagesProperties;
+        this.systemRegistryImageProperties = systemRegistryImageProperties;
     }
 
     private void validateTemplateDefinitionName(String name) {
@@ -47,7 +48,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
     }
 
     private void validateTemplateDefinitionVersion(String name, String version) {
-        String tag = templateImagesProperties.getTag(name);
+        String tag = systemRegistryImageProperties.getTag(name);
         if (!Objects.equals(tag, version)) {
             throw new NGCCAPlatformException("Template [" + name + "] supported version [" + tag + "]", 400);
         }

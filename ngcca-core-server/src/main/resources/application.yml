@@ -19,6 +19,8 @@ spring:
       username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
+  profiles:
+    include: system-registry-image
 ngcca:
   rabbitmq:
     host:
