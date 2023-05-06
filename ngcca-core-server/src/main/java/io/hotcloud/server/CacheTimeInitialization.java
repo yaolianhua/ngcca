@@ -1,7 +1,7 @@
 package io.hotcloud.server;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.common.utils.Log;
 import io.hotcloud.server.cache.Cache;
 import org.springframework.stereotype.Component;
 

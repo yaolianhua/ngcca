@@ -1,6 +1,6 @@
 package io.hotcloud.server.cache;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

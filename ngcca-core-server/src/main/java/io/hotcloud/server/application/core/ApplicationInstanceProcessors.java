@@ -1,6 +1,6 @@
 package io.hotcloud.server.application.core;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstanceProcessor;
 import io.hotcloud.module.buildpack.BuildPackCacheApi;

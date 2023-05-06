@@ -1,7 +1,7 @@
 package io.hotcloud.server.security.configuration.jwt;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.common.utils.Log;
 import io.hotcloud.module.security.jwt.Jwt;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;

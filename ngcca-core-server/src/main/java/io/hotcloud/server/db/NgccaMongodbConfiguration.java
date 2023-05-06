@@ -1,6 +1,6 @@
 package io.hotcloud.server.db;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.db.core.AbstractEntity;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;

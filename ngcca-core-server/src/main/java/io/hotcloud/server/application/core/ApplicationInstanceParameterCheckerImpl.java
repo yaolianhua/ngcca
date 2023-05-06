@@ -1,9 +1,9 @@
 package io.hotcloud.server.application.core;
 
 import io.fabric8.kubernetes.api.model.Namespace;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.model.exception.NGCCAResourceConflictException;
-import io.hotcloud.common.utils.Log;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.module.application.core.*;

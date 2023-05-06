@@ -1,6 +1,6 @@
 package io.hotcloud.server.security.configuration.jwt;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

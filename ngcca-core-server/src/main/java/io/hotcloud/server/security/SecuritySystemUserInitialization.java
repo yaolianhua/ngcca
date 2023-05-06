@@ -1,6 +1,6 @@
 package io.hotcloud.server.security;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import org.springframework.boot.ApplicationArguments;

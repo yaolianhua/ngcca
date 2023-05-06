@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack.service;
 
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.buildpack.BuildPackApi;
 import io.hotcloud.module.buildpack.BuildPackCacheApi;
 import io.hotcloud.module.buildpack.BuildPackService;

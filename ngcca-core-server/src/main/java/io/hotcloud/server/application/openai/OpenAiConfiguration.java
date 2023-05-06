@@ -2,7 +2,7 @@ package io.hotcloud.server.application.openai;
 
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.service.OpenAiService;
-import io.hotcloud.common.utils.Log;
+import io.hotcloud.common.log.Log;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

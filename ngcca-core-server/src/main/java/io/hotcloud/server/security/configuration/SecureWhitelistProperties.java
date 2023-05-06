@@ -1,7 +1,7 @@
 package io.hotcloud.server.security.configuration;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.common.utils.Log;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
