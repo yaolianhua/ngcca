@@ -3,7 +3,6 @@ package io.hotcloud.module.buildpack;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -59,10 +58,6 @@ public class BuildPack {
         return this.jobResource.getJobResourceYaml() +
                 "\n---\n" +
                 this.secretResource.getSecretResourceYaml();
-    }
-
-    public String getClonedId() {
-        return StringUtils.hasText(this.clonedId) ? clonedId : "Deprecated";
     }
 
     public Map<String, String> getAlternative() {

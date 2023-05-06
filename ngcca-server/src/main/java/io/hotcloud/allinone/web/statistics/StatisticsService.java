@@ -48,7 +48,7 @@ public class StatisticsService {
 
         TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
         GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
-        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername(), null);
+        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
         final ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
 
         return Statistics.builder()

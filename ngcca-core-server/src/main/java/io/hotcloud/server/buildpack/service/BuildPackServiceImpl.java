@@ -3,7 +3,10 @@ package io.hotcloud.server.buildpack.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
-import io.hotcloud.module.buildpack.*;
+import io.hotcloud.module.buildpack.BuildPack;
+import io.hotcloud.module.buildpack.BuildPackDockerSecretResource;
+import io.hotcloud.module.buildpack.BuildPackJobResource;
+import io.hotcloud.module.buildpack.BuildPackService;
 import io.hotcloud.module.db.core.buildpack.BuildPackEntity;
 import io.hotcloud.module.db.core.buildpack.BuildPackRepository;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -37,16 +39,13 @@ public class BuildPackServiceImpl implements BuildPackService {
 
         Assert.notNull(buildPack, "BuildPack body is null");
         Assert.hasText(buildPack.getUser(), "BuildPack user is null");
-        Assert.hasText(buildPack.getClonedId(), "BuildPack cloned id is null");
         Assert.notNull(buildPack.getJobResource(), "BuildPack job body is null");
-        Assert.notNull(buildPack.getStorageResource(), "BuildPack storage body is null");
         Assert.notNull(buildPack.getSecretResource(), "BuildPack secret body is null");
 
         BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().toE(buildPack);
 
         entity.setJob(writeJson(buildPack.getJobResource()));
         entity.setSecret(writeJson(buildPack.getSecretResource()));
-        entity.setStorage(writeJson(buildPack.getStorageResource()));
 
         if (StringUtils.hasText(entity.getId())) {
             entity.setModifiedAt(LocalDateTime.now());
@@ -61,26 +60,9 @@ public class BuildPackServiceImpl implements BuildPackService {
     }
 
     @Override
-    public List<BuildPack> findAll(String user, String clonedId) {
-        List<BuildPackEntity> entities = buildPackRepository.findByUserAndClonedId(user, clonedId);
-
-        return entities.stream()
-                .map(this::toBuildPack)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<BuildPack> findAll(String user) {
         List<BuildPackEntity> entities = buildPackRepository.findByUser(user);
 
-        return entities.stream()
-                .map(this::toBuildPack)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BuildPack> findByClonedId(String clonedId) {
-        List<BuildPackEntity> entities = buildPackRepository.findByClonedId(clonedId);
         return entities.stream()
                 .map(this::toBuildPack)
                 .collect(Collectors.toList());
@@ -104,16 +86,6 @@ public class BuildPackServiceImpl implements BuildPackService {
     public BuildPack findByUuid(String uuid) {
         BuildPackEntity entity = buildPackRepository.findByUuid(uuid);
         return entity == null ? null : toBuildPack(entity);
-    }
-
-    @Override
-    public BuildPack findOneOrNullWithNoDone(String user, String clonedId) {
-        List<BuildPackEntity> entities = buildPackRepository.findByUserAndClonedId(user, clonedId);
-        return entities.stream()
-                .filter(e -> Objects.equals(e.isDone(), false))
-                .map(this::toBuildPack)
-                .findFirst()
-                .orElse(null);
     }
 
     @Override
@@ -152,13 +124,11 @@ public class BuildPackServiceImpl implements BuildPackService {
                 .id(entity.getId())
                 .uuid(entity.getUuid())
                 .jobResource(readT(entity.getJob(), BuildPackJobResource.class))
-                .storageResource(readT(entity.getStorage(), BuildPackStorageResourceList.class))
                 .secretResource(readT(entity.getSecret(), BuildPackDockerSecretResource.class))
                 .yaml(entity.getYaml())
                 .user(entity.getUser())
                 .done(entity.isDone())
                 .deleted(entity.isDeleted())
-                .clonedId(entity.getClonedId())
                 .httpGitUrl(entity.getHttpGitUrl())
                 .gitBranch(entity.getGitBranch())
                 .message(entity.getMessage())

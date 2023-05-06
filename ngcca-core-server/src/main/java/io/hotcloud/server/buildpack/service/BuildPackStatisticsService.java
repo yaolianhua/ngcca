@@ -27,30 +27,18 @@ public class BuildPackStatisticsService {
     /**
      * Get BuildPackStatistics
      *
-     * @param user     user's username
-     * @param clonedId git cloned id
+     * @param user user's username
      * @return {@link BuildPackStatistics}
      */
-    public BuildPackStatistics statistics(@Nullable String user, @Nullable String clonedId) {
+    public BuildPackStatistics statistics(@Nullable String user) {
         boolean hasUser = StringUtils.hasText(user);
-        boolean hasClonedId = StringUtils.hasText(clonedId);
-
-        if (hasUser && hasClonedId) {
-            List<BuildPack> buildPacks = buildPackService.findAll(user, clonedId);
-            return statistics(buildPacks);
-        }
-
-        if (!hasUser && !hasClonedId) {
-            List<BuildPack> buildPacks = buildPackService.findAll();
-            return statistics(buildPacks);
-        }
 
         if (hasUser) {
             List<BuildPack> buildPacks = buildPackService.findAll(user);
             return statistics(buildPacks);
         }
 
-        List<BuildPack> buildPacks = buildPackService.findByClonedId(clonedId);
+        List<BuildPack> buildPacks = buildPackService.findAll();
         return statistics(buildPacks);
     }
 

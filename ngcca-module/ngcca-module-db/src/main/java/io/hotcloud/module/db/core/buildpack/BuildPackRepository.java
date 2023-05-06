@@ -10,14 +10,6 @@ import java.util.List;
  **/
 public interface BuildPackRepository extends PagingAndSortingRepository<BuildPackEntity, String>, CrudRepository<BuildPackEntity, String> {
 
-    /**
-     * Find all with giving {@code user} and {@code clonedId}
-     *
-     * @param user     user's username
-     * @param clonedId git cloned id
-     * @return {@link BuildPackEntity}
-     */
-    List<BuildPackEntity> findByUserAndClonedId(String user, String clonedId);
 
     /**
      * Find entity with giving {@code user}
@@ -27,13 +19,6 @@ public interface BuildPackRepository extends PagingAndSortingRepository<BuildPac
      */
     List<BuildPackEntity> findByUser(String user);
 
-    /**
-     * Find entity with giving {@code clonedId}
-     *
-     * @param clonedId git cloned id
-     * @return {@link BuildPackEntity}
-     */
-    List<BuildPackEntity> findByClonedId(String clonedId);
 
     /**
      * Find entity with giving {@code uuid}
