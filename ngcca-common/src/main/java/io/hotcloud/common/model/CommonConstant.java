@@ -16,9 +16,8 @@ public final class CommonConstant {
 
     public static final String TIMEOUT_MESSAGE = "timeout";
     public static final String FAILED_MESSAGE = "failed";
-    public static final String CK_IMAGEBUILD_TIMEOUT_SECONDS = "imagebuild:timeout:seconds";
-    public static final String CK_IMAGEBUILD_STATUS = "imagebuild:status:%s";
-    public static final String CK_IMAGEBUILD_WATCHED = "imagebuild:watched:%s";
+
+
     public static final String CK_APPLICATION_WATCHED = "application:watched:%s";
     public static final String CK_TEMPLATE_WATCHED = "template:watched:%s";
     public static final String CK_DEPLOYMENT_TIMEOUT_SECONDS = "deployment:timeout:seconds";

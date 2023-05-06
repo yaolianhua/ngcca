@@ -3,7 +3,7 @@ package io.hotcloud.server.application.core;
 import io.hotcloud.common.utils.Log;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstanceProcessor;
-import io.hotcloud.module.buildpack.ImageBuildCacheApi;
+import io.hotcloud.module.buildpack.BuildPackCacheApi;
 import io.hotcloud.module.buildpack.model.JobState;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -18,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationInstanceProcessors {
 
     private final List<ApplicationInstanceProcessor<ApplicationInstance>> processors;
-    private final ImageBuildCacheApi imageBuildCacheApi;
+    private final BuildPackCacheApi buildPackCacheApi;
 
-    public ApplicationInstanceProcessors(List<ApplicationInstanceProcessor<ApplicationInstance>> processors, ImageBuildCacheApi imageBuildCacheApi) {
+    public ApplicationInstanceProcessors(List<ApplicationInstanceProcessor<ApplicationInstance>> processors, BuildPackCacheApi buildPackCacheApi) {
         this.processors = processors;
-        this.imageBuildCacheApi = imageBuildCacheApi;
+        this.buildPackCacheApi = buildPackCacheApi;
     }
 
     @SneakyThrows
@@ -37,7 +37,7 @@ public class ApplicationInstanceProcessors {
                 if (StringUtils.hasText(instance.getBuildPackId())) {
                     while (true) {
                         TimeUnit.SECONDS.sleep(1);
-                        JobState status = imageBuildCacheApi.getStatus(instance.getBuildPackId());
+                        JobState status = buildPackCacheApi.getBuildPackState(instance.getBuildPackId());
                         if (Objects.equals(JobState.SUCCEEDED, status)) {
                             Log.info(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
