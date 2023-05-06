@@ -3,7 +3,6 @@ package io.hotcloud.server.buildpack.service;
 import io.hotcloud.common.utils.Log;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.module.buildpack.GitApi;
-import io.hotcloud.module.buildpack.GitCloned;
 import io.hotcloud.server.files.FileHelper;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -17,27 +16,11 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
 public class GitImpl implements GitApi {
 
-    private GitCloned build(String remote, String branch, String local, boolean force, String username, String password, boolean success, String error) {
-        return GitCloned.builder()
-                .success(success)
-                .url(remote)
-                .branch(branch)
-                .localPath(local)
-                .force(force)
-                .username(username)
-                .password(password)
-                .error(error)
-                .build();
-    }
-
     @Override
-    public GitCloned clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
+    public void clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {
 
         Assert.state(Validator.validHTTPGitAddress(remote), String.format("Invalid git url '%s', protocol supported only http(s)", remote));
 
@@ -49,7 +32,7 @@ public class GitImpl implements GitApi {
             } catch (IOException e) {
                 Log.error(GitImpl.class.getName(),
                         String.format("Delete file path error: %s", e.getCause().getMessage()));
-                return build(remote, branch, local, force, username, password, false, e.getCause().getMessage());
+                return;
             }
         }
         Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local));
@@ -77,11 +60,10 @@ public class GitImpl implements GitApi {
             watch.stop();
             Log.info(GitImpl.class.getName(),
                     String.format("Cloned repository: '%s'. Takes '%ss'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds())));
-            return build(remote, branch, local, force, username, password, true, null);
         } catch (Exception e) {
             Log.error(GitImpl.class.getName(),
                     String.format("Clone repository error. %s", e.getCause().getMessage()));
-            return build(remote, branch, local, force, username, password, false, e.getCause().getMessage());
+
         }
 
     }

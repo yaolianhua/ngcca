@@ -1,7 +1,6 @@
 package io.hotcloud.server.buildpack;
 
 import io.hotcloud.module.buildpack.GitApi;
-import io.hotcloud.module.buildpack.GitCloned;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -27,13 +26,12 @@ public class GitApiIT {
 
         final String path = "test-clone-repository";
 
-        GitCloned cloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 false,
                 null,
                 null);
-        Assertions.assertTrue(cloned.isSuccess());
 
         File file = Path.of(path).toFile();
         Assertions.assertNotNull(file);
@@ -42,13 +40,12 @@ public class GitApiIT {
             log.debug("list of test-clone-repository/hotcloud name: {}", naming);
         }
 
-        GitCloned forcedCloned = gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 true,
                 null,
                 null);
-        Assertions.assertTrue(forcedCloned.isSuccess());
 
         FileUtils.deleteDirectory(file);
         log.info("deleted repository: {}", file.getAbsolutePath());

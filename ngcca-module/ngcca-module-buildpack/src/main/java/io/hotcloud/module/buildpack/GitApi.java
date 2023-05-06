@@ -21,7 +21,6 @@ public interface GitApi {
      * @param force    Whether to force cloning, if the specified path is not empty, it will be forcibly deleted and then cloned
      * @param username remote repository username credential
      * @param password remote repository password credential
-     * @return {@link  GitCloned}
      */
-    GitCloned clone(String remote, @Nullable String branch, String local, boolean force, @Nullable String username, @Nullable String password);
+    void clone(String remote, @Nullable String branch, String local, boolean force, @Nullable String username, @Nullable String password);
 }

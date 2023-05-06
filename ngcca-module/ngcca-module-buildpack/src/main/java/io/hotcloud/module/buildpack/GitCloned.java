@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.util.Assert;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -44,18 +41,6 @@ public class GitCloned {
         String originString = substring.substring(1, substring.length() - ".git".length());
 
         String lowerCaseString = originString.toLowerCase();
-        return lowerCaseString.replaceAll("_", "-");
-    }
-
-    public static String retrievePushImage(String remote) {
-        String name = retrieveGitProject(remote);
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String date = dateFormat.format(new Date());
-
-        return String.format("%s:%s", name, date);
-    }
-
-    public static String retrieveImageTarball(String remote) {
-        return retrievePushImage(remote).replace(":", "-") + ".tar";
+        return lowerCaseString.replace("_", "-");
     }
 }
