@@ -78,7 +78,7 @@ public class TemplateRabbitMQK8sEventsListener {
                 log.info("Application error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
             }
         } catch (Exception e) {
-            Log.error(TemplateRabbitMQK8sEventsListener.class.getName(), e.getMessage());
+            Log.error(this, null, e.getMessage());
         }
 
     }

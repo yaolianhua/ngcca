@@ -1,5 +1,6 @@
 package io.hotcloud.server.registry;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
 import jakarta.annotation.PostConstruct;
@@ -14,7 +15,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @ConfigurationProperties(prefix = CONFIG_PREFIX + "registry")
 @Data
 @Properties(prefix = CONFIG_PREFIX + "registry")
-public class RegistryProperties {
+public class SystemRegistryProperties {
 
     /**
      * Registry address. you can set this value e.g.
@@ -44,6 +45,6 @@ public class RegistryProperties {
     public void print() {
         Assert.hasText(url, "Registry url is null");
         Assert.hasText(imagebuildNamespace, "Registry imagebuild namespace is null");
-        Log.info(RegistryProperties.class.getName(), String.format("【Load Registry proeprties. registry='%s' imagebuild-namespace='%s'】", url, imagebuildNamespace));
+        Log.info(this, this, Event.START, "load system registry properties");
     }
 }

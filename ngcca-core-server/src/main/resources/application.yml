@@ -51,5 +51,7 @@ ngcca:
     host:
     port:
     domain-name:
+  buildpack:
+    build-timeout-second: 1200
 server:
   port: 8080

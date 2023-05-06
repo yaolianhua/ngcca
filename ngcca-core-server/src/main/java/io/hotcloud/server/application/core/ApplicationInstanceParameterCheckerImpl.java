@@ -55,7 +55,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
         if (Objects.isNull(readNamespace)) {
             try {
                 namespaceApi.create(namespace);
-                Log.info(ApplicationInstanceParameterCheckerImpl.class.getName(),
+                Log.info(this, null,
                         String.format("[%s] user's k8s namespace create success [%s]", current.getUsername(), namespace));
             } catch (ApiException e) {
                 throw new NGCCAPlatformException("Create [" + current.getUsername() + "] user's k8s namespace error: " + e.getMessage());

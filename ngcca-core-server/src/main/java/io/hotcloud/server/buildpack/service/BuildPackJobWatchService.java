@@ -54,11 +54,11 @@ public class BuildPackJobWatchService {
                 return;
             }
 
-            Log.info(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
+            Log.info(this, null, String.format("[ImageBuild][%s]. namespace:%s | job:%s | buildPack:%s", status, namespace, job, buildPack.getId()));
             buildPackCacheApi.cacheBuildPackState(buildPack.getId(), status);
 
         } catch (Exception ex) {
-            Log.error(BuildPackRabbitMQK8sEventsListener.class.getName(), String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
+            Log.error(this, null, String.format("[ImageBuild] exception occur, namespace:%s | job:%s | buildPack:%s | message:%s", namespace, job, buildPack.getId(), ex.getMessage()));
 
             buildPack.setDone(true);
             buildPack.setMessage("exception occur: " + ex.getMessage());

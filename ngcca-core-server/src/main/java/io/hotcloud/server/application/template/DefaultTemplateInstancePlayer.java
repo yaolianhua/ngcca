@@ -40,9 +40,9 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
-        Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
+        Log.info(this, null, String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
-        Log.debug(DefaultTemplateInstancePlayer.class.getName(), String.format("Activity [%s] saved", activityLog.getId()));
+        Log.debug(this, null, String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
             if (namespaceApi.read(namespace) == null) {
@@ -52,7 +52,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         } catch (Exception ex) {
             saved.setMessage(ex.getMessage());
             templateInstanceService.saveOrUpdate(saved);
-            Log.error(DefaultTemplateInstancePlayer.class.getName(), String.format("template [%s] start failure.", saved.getName()));
+            Log.error(this, null, String.format("template [%s] start failure.", saved.getName()));
             return saved;
         }
 
@@ -67,24 +67,24 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         Assert.notNull(find, "Can not found template [" + id + "]");
 
         templateInstanceService.delete(id);
-        Log.info(DefaultTemplateInstancePlayer.class.getName(),
+        Log.info(this, null,
                 String.format("Delete [%s] template '%s'", find.getName(), id));
         ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
-        Log.debug(DefaultTemplateInstancePlayer.class.getName(),
+        Log.debug(this, null,
                 String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
             templateDeploymentCacheApi.unLock(find.getId());
             Boolean delete = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
-            Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, find.getNamespace(), find.getName()));
+            Log.info(this, null, String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, find.getNamespace(), find.getName()));
 
             if (StringUtils.hasText(find.getIngress())) {
                 Boolean deleteIngress = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getIngress()));
-                Log.info(DefaultTemplateInstancePlayer.class.getName(), String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, find.getNamespace(), find.getName()));
+                Log.info(this, null, String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, find.getNamespace(), find.getName()));
             }
 
         } catch (Exception e) {
-            Log.error(DefaultTemplateInstancePlayer.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(this, null, String.format("%s", e.getMessage()));
         }
     }
 }

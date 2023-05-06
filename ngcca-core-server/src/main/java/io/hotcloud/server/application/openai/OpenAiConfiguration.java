@@ -2,6 +2,7 @@ package io.hotcloud.server.application.openai;
 
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.service.OpenAiService;
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -33,7 +34,6 @@ public class OpenAiConfiguration {
         OpenAiProperties.HttpProxy httpProxy = openAiProperties.getHttpProxy();
         if (Objects.nonNull(httpProxy)) {
             proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(httpProxy.getHostname(), httpProxy.getPort()));
-            Log.info(OpenAiProperties.class.getName(), "【Load openai configuration. use http proxy hostname=" + httpProxy.getHostname() + ", port=" + httpProxy.getPort() + "】");
         }
 
         OkHttpClient client = defaultClient(openAiProperties.getApiKey(), Duration.ofSeconds(openAiProperties.getHttpClientTimeoutSeconds()))
@@ -43,7 +43,7 @@ public class OpenAiConfiguration {
 
         Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper());
         OpenAiApi api = retrofit.create(OpenAiApi.class);
-        Log.info(OpenAiProperties.class.getName(), "【Load openai configuration. http-client-timeout-seconds=" + openAiProperties.getHttpClientTimeoutSeconds() + "】");
+        Log.info(this, openAiProperties, Event.START, "load openAi properties");
         return new OpenAiService(api);
     }
 }

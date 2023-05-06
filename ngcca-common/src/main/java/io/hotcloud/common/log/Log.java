@@ -54,10 +54,6 @@ public class Log implements Serializable {
         }
     }
 
-    public static void info(String component, String message) {
-        info(component, Event.NORMAL, message);
-    }
-
     public static void info(Object component, Object body, String message){
         info(component, body, Event.NORMAL, message);
     }
@@ -70,19 +66,6 @@ public class Log implements Serializable {
                 .component(component == null ? null : component.getClass().getName())
                 .build();
         log.info(writeAsString(msg));
-    }
-    public static void info(String component, Event event, String message) {
-        Log msg = Log.builder()
-                .component(component)
-                .message(message)
-                .event(event)
-                .level(Level.INFO)
-                .build();
-        log.info(writeAsString(msg));
-    }
-
-    public static void debug(String component, String message) {
-        debug(component, Event.NORMAL, message);
     }
 
     public static void debug(Object component, Object body, String message){
@@ -98,19 +81,6 @@ public class Log implements Serializable {
                 .build();
         log.debug(writeAsString(msg));
     }
-    public static void debug(String component, Event event, String message) {
-        Log msg = Log.builder()
-                .component(component)
-                .event(event)
-                .message(message)
-                .level(Level.DEBUG)
-                .build();
-        log.debug(writeAsString(msg));
-    }
-
-    public static void warn(String component, String message) {
-        warn(component, Event.NORMAL, message);
-    }
     public static void warn(Object component, Object body, String message){
         warn(component, body, Event.NORMAL, message);
     }
@@ -124,19 +94,7 @@ public class Log implements Serializable {
                 .build();
         log.warn(writeAsString(msg));
     }
-    public static void warn(String component, Event event, String message) {
-        Log msg = Log.builder()
-                .component(component)
-                .event(event)
-                .message(message)
-                .level(Level.WARN)
-                .build();
-        log.warn(writeAsString(msg));
-    }
 
-    public static void error(String component, String message) {
-        error(component, Event.NORMAL, message);
-    }
     public static void error(Object component, Object body, String message){
         error(component, body, Event.NORMAL, message);
     }
@@ -147,15 +105,6 @@ public class Log implements Serializable {
                 .message(message)
                 .body(body)
                 .component(component == null ? null : component.getClass().getName())
-                .build();
-        log.error(writeAsString(msg));
-    }
-    public static void error(String component, Event event, String message) {
-        Log msg = Log.builder()
-                .component(component)
-                .event(event)
-                .message(message)
-                .level(Level.ERROR)
                 .build();
         log.error(writeAsString(msg));
     }

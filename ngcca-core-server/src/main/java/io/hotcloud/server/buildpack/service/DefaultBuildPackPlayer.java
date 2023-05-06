@@ -104,15 +104,15 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         Assert.notNull(existBuildPack, "Can not found buildPack [" + id + "]");
 
         buildPackService.delete(id, physically);
-        Log.info(DefaultBuildPackPlayer.class.getName(),
+        Log.info(this, null,
                 String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
         activityLogger.log(ActivityAction.Delete, existBuildPack);
 
         try {
             Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
-            Log.info(BuildPackJobWatchService.class.getName(), String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, existBuildPack.getJobResource().getNamespace(), existBuildPack.getJobResource().getName()));
+            Log.info(this, null, String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, existBuildPack.getJobResource().getNamespace(), existBuildPack.getJobResource().getName()));
         } catch (Exception ex) {
-            Log.error(BuildPackJobWatchService.class.getName(), String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
+            Log.error(this, null, String.format("Deleted BuildPack k8s resources exception: [%s]", ex.getMessage()));
         }
     }
 

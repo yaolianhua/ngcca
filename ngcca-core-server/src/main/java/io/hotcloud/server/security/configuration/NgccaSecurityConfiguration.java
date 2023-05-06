@@ -1,5 +1,6 @@
 package io.hotcloud.server.security.configuration;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.UserApi;
@@ -31,7 +32,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Import({
         JwtConfiguration.class,
 })
-public class NgccaSecurityAutoConfiguration {
+public class NgccaSecurityConfiguration {
 
     @Bean("noSecurityFilterChain")
     @ConditionalOnProperty(name = NgccaSecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "false")
@@ -42,8 +43,7 @@ public class NgccaSecurityAutoConfiguration {
         http.logout().disable();
         http.authorizeHttpRequests().anyRequest().permitAll();
 
-        Log.warn(NgccaSecurityAutoConfiguration.class.getName(),
-                "【Spring security disabled. if you want to enable, you need configure the environment 'security.enabled=true'】");
+        Log.warn(this, null, Event.START, "Spring security disabled. if you want to enable, you need configure the environment 'ngcca.security.enabled=true'");
         return http.build();
     }
 
@@ -74,7 +74,7 @@ public class NgccaSecurityAutoConfiguration {
 
         http.exceptionHandling().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
 
-        Log.info(NgccaSecurityAutoConfiguration.class.getName(), "【Spring security enabled. if you want to disable, you need configure the environment 'security.enabled=false'】");
+        Log.info(this, null, Event.START, "Spring security enabled. if you want to disable, you need configure the environment 'ngcca.security.enabled=false'");
         return http.build();
     }
 

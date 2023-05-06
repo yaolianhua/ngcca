@@ -26,11 +26,11 @@ public class GitImpl implements GitApi {
 
         if (force && FileHelper.exists(local)) {
             try {
-                Log.warn(GitImpl.class.getName(),
+                Log.warn(this, null,
                         String.format("The specified path '%s' is not empty, it will be forcibly deleted and then cloned", Path.of(local).toAbsolutePath()));
                 FileHelper.deleteRecursively(Path.of(local));
             } catch (IOException e) {
-                Log.error(GitImpl.class.getName(),
+                Log.error(this, null,
                         String.format("Delete file path error: %s", e.getCause().getMessage()));
                 return;
             }
@@ -38,7 +38,7 @@ public class GitImpl implements GitApi {
         Assert.state(!FileHelper.exists(local), String.format("Repository path '%s' already exist", local));
         boolean needCredential = StringUtils.hasText(username) && StringUtils.hasText(password);
 
-        Log.info(GitImpl.class.getName(),
+        Log.info(this, null,
                 String.format("Cloning from '%s' to '%s', branch [%s]", remote, Path.of(local).toAbsolutePath(), branch));
         final StopWatch watch = new StopWatch();
         watch.start();
@@ -58,10 +58,10 @@ public class GitImpl implements GitApi {
         // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
         try (Git result = cloneCommand.call()) {
             watch.stop();
-            Log.info(GitImpl.class.getName(),
+            Log.info(this, null,
                     String.format("Cloned repository: '%s'. Takes '%ss'", result.getRepository().getDirectory(), ((int) watch.getTotalTimeSeconds())));
         } catch (Exception e) {
-            Log.error(GitImpl.class.getName(),
+            Log.error(this, null,
                     String.format("Clone repository error. %s", e.getCause().getMessage()));
 
         }

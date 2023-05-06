@@ -1,5 +1,6 @@
 package io.hotcloud.server;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.server.files.FileHelper;
 import org.springframework.stereotype.Component;
@@ -20,16 +21,15 @@ public class GlobalRootPathInitialization implements NGCCARunnerProcessor {
             boolean exists = FileHelper.exists(volumePath);
 
             if (exists) {
-                Log.info(GlobalRootPathInitialization.class.getName(),
+                Log.info(this, null, Event.START,
                         String.format("Root storage path '%s' already exist ", ROOT_PATH));
                 return;
             }
             Path directories = Files.createDirectories(volumePath);
-            Log.info(GlobalRootPathInitialization.class.getName(),
+            Log.info(this, null, Event.START,
                     String.format("Root storage path '%s' created ", directories));
         } catch (IOException e) {
-            Log.error(GlobalRootPathInitialization.class.getName(),
-                    String.format("%s", e.getMessage()));
+            Log.error(this, null, Event.START, e.getMessage());
         }
     }
 }

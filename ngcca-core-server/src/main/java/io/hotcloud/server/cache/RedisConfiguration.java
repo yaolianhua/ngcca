@@ -1,5 +1,6 @@
 package io.hotcloud.server.cache;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,8 +23,7 @@ public class RedisConfiguration {
         );
         RedisTemplate<String, Object> jdkSerializedRedisTemplate = RedisHelper.createJdkSerializedRedisTemplate(redisConnectionFactory);
 
-        String redisUrl = String.format("redis://%s:%s", properties.getHost(), properties.getPort());
-        Log.info(RedisConfiguration.class.getName(), String.format("【Load Redis cache Configuration. url='%s', using database '%s'】", redisUrl, properties.getDatabase()));
+        Log.info(this, properties, Event.START, "load redis properties");
         return new RedisCache(jdkSerializedRedisTemplate);
     }
 

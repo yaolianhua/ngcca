@@ -70,7 +70,7 @@ public class ApplicationRabbitMQK8sEventsListener {
                     return;
                 }
                 if (fetched.isDeleted()) {
-                    Log.warn(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's application instance [%s] has been deleted", fetched.getUser(), fetched.getName()));
+                    Log.warn(this, null, String.format("[%s] user's application instance [%s] has been deleted", fetched.getUser(), fetched.getName()));
                     return;
                 }
                 log.info("Application [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
@@ -81,7 +81,7 @@ public class ApplicationRabbitMQK8sEventsListener {
                 log.info("Application error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
             }
         } catch (Exception e) {
-            Log.error(ApplicationRabbitMQK8sEventsListener.class.getName(), e.getMessage());
+            Log.error(this, null, e.getMessage());
         }
 
     }

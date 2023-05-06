@@ -17,7 +17,7 @@ import io.hotcloud.module.buildpack.AbstractBuildPackApi;
 import io.hotcloud.module.buildpack.model.*;
 import io.hotcloud.server.SystemRegistryImageProperties;
 import io.hotcloud.server.files.FileHelper;
-import io.hotcloud.server.registry.RegistryProperties;
+import io.hotcloud.server.registry.SystemRegistryProperties;
 import io.hotcloud.vendor.kaniko.model.DockerConfigJson;
 import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
@@ -48,7 +48,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     private final KubectlClient kubectlApi;
     private final JobClient jobApi;
     private final PodClient podApi;
-    private final RegistryProperties registryProperties;
+    private final SystemRegistryProperties systemRegistryProperties;
     private final SystemRegistryImageProperties systemRegistryImageProperties;
 
     private static Map<String, List<String>> resolvedHostAliases(String registry, String httpUrl) {
@@ -173,7 +173,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         // image-name:image-tag
         String repo = String.format("%s:%s", k8sName, date);
         // harbor.local:5000/image-build-test/jenkins:20221220045021
-        String destination = String.format("%s/%s/%s", registryProperties.getUrl(), registryProperties.getImagebuildNamespace(), repo);
+        String destination = String.format("%s/%s/%s", systemRegistryProperties.getUrl(), systemRegistryProperties.getImagebuildNamespace(), repo);
 
         DockerfileJavaArtifactExpressionVariable javaArtifact = determinedDockerfileJavaArtifactExpressionVariable(buildImage);
 
@@ -188,7 +188,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                     systemRegistryImageProperties.getAlpine(),
                     DockerfileJava(javaArtifact, true),
                     KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), systemRegistryImageProperties.getGit()),
-                    resolvedHostAliases(registryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
+                    resolvedHostAliases(systemRegistryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
             );
         }
 
@@ -204,7 +204,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                     systemRegistryImageProperties.getAlpine(),
                     DockerfileJava(javaArtifact, true),
                     null,
-                    resolvedHostAliases(registryProperties.getUrl(), httpUrl));
+                    resolvedHostAliases(systemRegistryProperties.getUrl(), httpUrl));
         }
 
         throw new UnsupportedOperationException("Not supported operation for BuildImage");
@@ -217,7 +217,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         SecretExpressionVariable secretExpressionVariable = SecretExpressionVariable.of(
                 namespace,
                 k8sName,
-                DockerConfigJson.of(registryProperties.getUrl(), registryProperties.getUsername(), registryProperties.getPassword())
+                DockerConfigJson.of(systemRegistryProperties.getUrl(), systemRegistryProperties.getUsername(), systemRegistryProperties.getPassword())
         );
 
         String secret = parseSecret(secretExpressionVariable);
@@ -235,8 +235,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     protected void doApply(String yaml) {
         List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(yaml));
         for (HasMetadata hasMetadata : metadataList) {
-            Log.info(InternalBuildPackApi.class.getName(),
-                    String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
+            Log.info(this, null, String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
         }
     }
 
@@ -275,15 +274,13 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
         Job kanikoJob = jobApi.read(namespace, job);
         if (Objects.isNull(kanikoJob)) {
-            Log.info(InternalBuildPackApi.class.getName(),
-                    String.format("Fetch kaniko log error. job is null namespace:%s job:%s", namespace, job));
+            Log.warn(this, null, String.format("Fetch kaniko log error. job is null namespace:%s job:%s", namespace, job));
             return "";
         }
 
         List<Pod> pods = podApi.readList(namespace, kanikoJob.getMetadata().getLabels()).getItems();
         if (CollectionUtils.isEmpty(pods)) {
-            Log.info(InternalBuildPackApi.class.getName(),
-                    String.format("Fetch kaniko log error. list pods is empty namespace:%s job:%s", namespace, job));
+            Log.warn(this, null, String.format("Fetch kaniko log error. list pods is empty namespace:%s job:%s", namespace, job));
             return "";
         }
 
@@ -297,8 +294,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                 try {
                     return podApi.logs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER, 100);
                 } catch (Exception e3) {
-                    Log.info(InternalBuildPackApi.class.getName(),
-                            String.format("Fetch kaniko init container log error. %s", e3.getMessage()));
+                    Log.error(this, null, String.format("Fetch kaniko init container log error. %s", e3.getMessage()));
                     return "";
                 }
             }

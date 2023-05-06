@@ -68,12 +68,12 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
 
             applicationInstance.setBuildPackId(Objects.isNull(buildPack) ? null : buildPack.getId());
             applicationInstanceService.saveOrUpdate(applicationInstance);
-            Log.info(ApplicationInstanceImageBuildProcessor.class.getName(),
+            Log.info(this, null,
                     String.format("[%s] user's application instance [%s] buildPack [%s] started", applicationInstance.getUser(), applicationInstance.getName(), applicationInstance.getBuildPackId()));
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);
-            Log.error(ApplicationInstanceImageBuildProcessor.class.getName(),
+            Log.error(this, null,
                     String.format("[%s] user's application instance [%s] buildPack [%s] start error: %s", applicationInstance.getUser(), applicationInstance.getName(), applicationInstance.getBuildPackId(), e.getMessage()));
             throw e;
         }
@@ -82,7 +82,7 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
 
     @Override
     public void processDelete(ApplicationInstance input) {
-        Log.info(ApplicationInstanceImageBuildProcessor.class.getName(), String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
+        Log.info(this, null, String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
         if (StringUtils.hasText(input.getBuildPackId())) {
             buildPackPlayer.delete(input.getBuildPackId(), false);
         }

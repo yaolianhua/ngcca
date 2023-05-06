@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String sign = authorization.substring(7);
             if (!jwtVerifier.valid(sign)) {
-                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization [Bearer Token] invalid ");
+                Log.warn(this, sign, "Authorization [Bearer Token] invalid ");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -52,21 +52,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> attributes = jwtVerifier.retrieveAttributes(sign);
             String username = (String) attributes.get("username");
             if (!StringUtils.hasText(username)) {
-                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization invalid [username null] ");
+                Log.warn(this, sign, "Authorization invalid [username null] ");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null) {
-                Log.debug(JwtAuthenticationFilter.class.getName(), "Authenticated successfully");
+                Log.debug(this, sign, "Authenticated successfully");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (userDetails == null) {
-                Log.warn(JwtAuthenticationFilter.class.getName(), "Authorization failed [retrieve user null]");
+                Log.warn(this, sign, "Authorization failed [retrieve user null]");
                 filterChain.doFilter(request, response);
                 return;
             }

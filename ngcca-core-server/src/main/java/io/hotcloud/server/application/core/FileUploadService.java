@@ -55,7 +55,7 @@ public class FileUploadService {
             minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());
 
             watch.stop();
-            Log.info(FileUploadService.class.getName(),
+            Log.info(this, null,
                     String.format("File [%s] upload success. spend time [%ss]", filename, watch.getTotalTimeSeconds()));
             return String.format("%s/%s/%s", properties.getEndpoint(), bucket, filename);
         } catch (Exception e) {

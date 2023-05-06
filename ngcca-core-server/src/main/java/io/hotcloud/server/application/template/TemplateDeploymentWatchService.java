@@ -49,7 +49,7 @@ public class TemplateDeploymentWatchService {
                 template.setProgress(100);
                 templateInstanceService.saveOrUpdate(template);
 
-                Log.warn(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                Log.warn(this, null, String.format("[%s] user's template [%s] is failed! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
 
                 return;
             }
@@ -60,7 +60,7 @@ public class TemplateDeploymentWatchService {
             if (!ready) {
                 template.setProgress(50);
                 templateInstanceService.saveOrUpdate(template);
-                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
+                Log.info(this, null, String.format("[%s] user's template [%s] is not ready! deployment [%s] namespace [%s]", template.getUser(), template.getId(), template.getName(), template.getNamespace()));
                 return;
             }
 
@@ -97,14 +97,14 @@ public class TemplateDeploymentWatchService {
                 template.setLoadBalancerIngressIp(loadBalancerIngressIp);
                 templateInstanceService.saveOrUpdate(template);
 
-                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template ingress [%s] create success. loadBalanceIngressIp [%s]", template.getUser(), template.getName(), ingress, loadBalancerIngressIp));
+                Log.info(this, null, String.format("[%s] user's [%s] template ingress [%s] create success. loadBalanceIngressIp [%s]", template.getUser(), template.getName(), ingress, loadBalancerIngressIp));
             }
 
-            Log.info(TemplateDeploymentWatchService.class.getName(), String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
+            Log.info(this, null, String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
         } catch (Exception e) {
             templateDeploymentCacheApi.unLock(template.getId());
-            Log.error(TemplateDeploymentWatchService.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(this, null, e.getMessage());
             template.setSuccess(false);
             template.setMessage(e.getMessage());
             template.setProgress(100);
@@ -118,7 +118,7 @@ public class TemplateDeploymentWatchService {
             try {
                 int sleep = (i + 1) * 5;
                 TimeUnit.SECONDS.sleep(sleep);
-                Log.info(TemplateDeploymentWatchService.class.getName(), String.format("Fetch ingress loadBalancer ip. waiting '%ss'", sleep));
+                Log.info(this, null, String.format("Fetch ingress loadBalancer ip. waiting '%ss'", sleep));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

@@ -125,9 +125,9 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
             request.setMetadata(buildDeploymentMetadata(applicationInstance));
             request.setSpec(buildDeploymentSpec(applicationInstance));
             deploymentApi.create(request);
-            Log.info(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
+            Log.info(this, null, String.format("[%s] user's application instance k8s deployment [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
-            Log.error(ApplicationInstanceDeploymentProcessor.class.getName(), String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
+            Log.error(this, null, String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);
             throw e;
@@ -141,7 +141,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         Deployment deployment = deploymentApi.read(input.getNamespace(), input.getName());
         if (Objects.nonNull(deployment)) {
             deploymentApi.delete(input.getNamespace(), input.getName());
-            Log.info(ApplicationInstanceDeploymentProcessor.class.getName(),
+            Log.info(this, null,
                     String.format("[%s] user's application instance  k8s deployment [%s] deleted", input.getUser(), input.getName()));
         }
 

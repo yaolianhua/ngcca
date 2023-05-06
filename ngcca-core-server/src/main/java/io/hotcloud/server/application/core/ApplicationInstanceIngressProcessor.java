@@ -41,7 +41,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
 
         try {
             if (!applicationInstance.isCanHttp()) {
-                Log.info(ApplicationInstanceIngressProcessor.class.getName(),
+                Log.info(this, null,
                         String.format("[%s] user's application instance [%s] does not need expose http service", applicationInstance.getUser(), applicationInstance.getName()));
                 return;
             }
@@ -72,12 +72,12 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
             applicationInstanceService.saveOrUpdate(applicationInstance);
 
             kubectlApi.resourceListCreateOrReplace(applicationInstance.getNamespace(), YamlBody.of(ingress));
-            Log.info(ApplicationInstanceIngressProcessor.class.getName(),
+            Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);
-            Log.error(ApplicationInstanceIngressProcessor.class.getName(),
+            Log.error(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] create error: %s", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
             throw e;
         }
@@ -89,7 +89,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
     public void processDelete(ApplicationInstance input) {
         if (StringUtils.hasText(input.getIngress())) {
             Boolean deleted = kubectlApi.delete(input.getNamespace(), YamlBody.of(input.getIngress()));
-            Log.info(ApplicationInstanceIngressProcessor.class.getName(),
+            Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] deleted [%s]", input.getUser(), input.getName(), deleted));
         }
     }

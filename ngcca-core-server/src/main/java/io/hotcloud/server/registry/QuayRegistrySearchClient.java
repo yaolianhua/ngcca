@@ -64,7 +64,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page", page)
                 .queryParam("query", query)
                 .toUriString();
-        Log.info(QuayRegistrySearchClient.class.getName(), String.format("Quay repository search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Quay repository search. request url '%s'", requestUrl));
 
         HttpEntity<?> httpEntity = HttpEntity.EMPTY;
         if (authentication.isBearerAuth()) {
@@ -109,7 +109,7 @@ public class QuayRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page", page)
                 .queryParam("limit", 100)
                 .build(repository);
-        Log.info(QuayRegistrySearchClient.class.getName(), String.format("Quay repository tags search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Quay repository tags search. request url '%s'", requestUrl));
 
         HttpEntity<?> httpEntity = HttpEntity.EMPTY;
         if (authentication.isBearerAuth()) {

@@ -50,12 +50,12 @@ public class ApplicationDeploymentWatchService {
             if (Objects.nonNull(deployment)) {
                 boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, applicationInstance.getReplicas());
                 if (!ready) {
-                    Log.info(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
+                    Log.info(this, null, String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
                     return;
                 }
 
                 //deployment success
-                Log.info(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("[%s] user's application instance deployment [%s] deploy success!", applicationInstance.getUser(), applicationInstance.getName()));
+                Log.info(this, null, String.format("[%s] user's application instance deployment [%s] deploy success!", applicationInstance.getUser(), applicationInstance.getName()));
                 applicationInstance.setMessage(CommonConstant.SUCCESS_MESSAGE);
                 applicationInstance.setSuccess(true);
                 applicationInstanceService.saveOrUpdate(applicationInstance);
@@ -63,7 +63,7 @@ public class ApplicationDeploymentWatchService {
 
 
         } catch (Exception e) {
-            Log.error(ApplicationRabbitMQK8sEventsListener.class.getName(), String.format("%s", e.getMessage()));
+            Log.error(this, null, e.getMessage());
 
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);

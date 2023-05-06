@@ -1,5 +1,6 @@
 package io.hotcloud.server.security.configuration;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
 import jakarta.annotation.PostConstruct;
@@ -28,7 +29,7 @@ public class SecureWhitelistProperties {
 
     @PostConstruct
     public void print() {
-        Log.info(SecureWhitelistProperties.class.getName(), String.format("【Load SecureWhitelist Properties】ignored urls %s", getUrls()));
+        Log.info(this, this, Event.START, "load secure whitelist properties");
     }
 
     public List<String> getUrls() {

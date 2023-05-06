@@ -39,11 +39,11 @@ public class ApplicationInstanceProcessors {
                         TimeUnit.SECONDS.sleep(1);
                         JobState status = buildPackCacheApi.getBuildPackState(instance.getBuildPackId());
                         if (Objects.equals(JobState.SUCCEEDED, status)) {
-                            Log.info(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            Log.info(this, null, String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
                         }
                         if (Objects.equals(JobState.FAILED, status)) {
-                            Log.error(ApplicationInstanceProcessors.class.getName(), String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            Log.error(this, null, String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             return;
                         }
                     }

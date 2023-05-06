@@ -1,5 +1,6 @@
 package io.hotcloud.server.minio;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -26,9 +27,7 @@ public class MinioConfiguration {
                 .build();
         checkDefaultBucketOrCreate(minioClient, properties.getDefaultBucket());
 
-        Log.info(MinioConfiguration.class.getName(),
-                String.format("【Load Minio Configuration. endpoint = '%s' default-bucket = '%s' max-upload-megabytes = '%sMB'】",
-                        properties.getEndpoint(), properties.getDefaultBucket(), properties.getMaxUploadMegabytes()));
+        Log.info(this, properties, Event.START, "load minio properties");
         return minioClient;
     }
 

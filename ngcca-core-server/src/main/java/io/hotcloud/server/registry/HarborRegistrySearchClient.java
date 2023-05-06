@@ -44,7 +44,7 @@ public class HarborRegistrySearchClient implements RegistrySearchClient {
                 .path("/api/v2.0/search")
                 .queryParam("q", query)
                 .toUriString();
-        Log.info(HarborRegistrySearchClient.class.getName(), String.format("Harbor repository search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Harbor repository search. request url '%s'", requestUrl));
 
         HttpEntity<?> httpEntity = HttpEntity.EMPTY;
         if (authentication.isBasicAuth()) {
@@ -82,7 +82,7 @@ public class HarborRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page_size", pageable.getPageSize())
                 .build(namespace, repositoryNameWithNoNamespace)
                 .toString();
-        Log.info(HarborRegistrySearchClient.class.getName(), String.format("Harbor repository tags search. request url '%s'", requestUrl));
+        Log.debug(this, this, String.format("Harbor repository tags search. request url '%s'", requestUrl));
 
         try {
             HttpEntity<?> httpEntity = HttpEntity.EMPTY;

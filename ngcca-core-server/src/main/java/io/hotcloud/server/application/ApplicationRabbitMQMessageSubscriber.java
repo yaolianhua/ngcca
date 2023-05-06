@@ -49,24 +49,24 @@ public class ApplicationRabbitMQMessageSubscriber {
 
         Message<UserNamespacePair> messageBody = convertUserMessageBody(message);
         UserNamespacePair pair = messageBody.getData();
-        Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+        Log.info(this, message,
                 String.format("[ApplicationRabbitMQMessageSubscriber] received [%s] user deleted message", pair.getUsername()));
         List<TemplateInstance> templateInstances = templateInstanceService.findAll(pair.getUsername());
         try {
             for (TemplateInstance template : templateInstances) {
                 templateInstancePlayer.delete(template.getId());
             }
-            Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+            Log.info(this, message,
                     String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user %s instance template has been deleted", pair.getUsername(), templateInstances.size()));
         } catch (Exception e) {
-            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+            Log.error(this, message,
                     String.format("[ApplicationRabbitMQMessageSubscriber] delete instance template error. %s", e.getMessage()));
         }
 
         try {
             FileHelper.deleteRecursively(Path.of(ROOT_PATH, pair.getNamespace()));
         } catch (Exception e) {
-            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+            Log.error(this, message,
                     String.format("[ApplicationRabbitMQMessageSubscriber] delete local storage error. %s", e.getMessage()));
         }
 
@@ -75,10 +75,10 @@ public class ApplicationRabbitMQMessageSubscriber {
             if (namespace != null) {
                 namespaceApi.delete(pair.getNamespace());
             }
-            Log.info(ApplicationRabbitMQMessageSubscriber.class.getName(),
+            Log.info(this, message,
                     String.format("[ApplicationRabbitMQMessageSubscriber] [%s] user namespace [%s] has been deleted", pair.getUsername(), pair.getNamespace()));
         } catch (Exception e) {
-            Log.error(ApplicationRabbitMQMessageSubscriber.class.getName(),
+            Log.error(this, message,
                     String.format("[ApplicationRabbitMQMessageSubscriber] delete namespace error. %s", e.getMessage()));
         }
 

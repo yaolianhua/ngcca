@@ -25,7 +25,7 @@ public class DefaultApplicationInstancePlayer implements ApplicationInstancePlay
 
         ApplicationInstance saved = applicationInstanceService.saveOrUpdate(applicationInstance);
 
-        Log.info(DefaultApplicationInstancePlayer.class.getName(), String.format("[%s] user's application instance [%s] created, id [%s]", saved.getUser(), saved.getName(), saved.getId()));
+        Log.info(this, form, "create application instance");
 
         executorService.execute(() -> applicationInstanceProcessors.processCreate(saved));
         return saved;
@@ -39,7 +39,7 @@ public class DefaultApplicationInstancePlayer implements ApplicationInstancePlay
 
         applicationInstanceProcessors.processDelete(instance);
 
-        Log.info(DefaultApplicationInstancePlayer.class.getName(), String.format("[%s] user's application instance [%s] deleted, id [%s]", instance.getUser(), instance.getName(), instance.getId()));
+        Log.info(this, null, String.format("[%s] user's application instance [%s] deleted, id [%s]", instance.getUser(), instance.getName(), instance.getId()));
     }
 
     @Override

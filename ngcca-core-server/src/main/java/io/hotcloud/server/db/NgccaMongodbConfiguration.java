@@ -1,5 +1,6 @@
 package io.hotcloud.server.db;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.module.db.core.AbstractEntity;
 import jakarta.annotation.PostConstruct;
@@ -27,8 +28,7 @@ public class NgccaMongodbConfiguration {
 
     @PostConstruct
     public void print() {
-        String mongoUrl = String.format("mongodb://%s:%s/%s", properties.getHost(), properties.getPort(), properties.getDatabase());
-        Log.info(NgccaMongodbConfiguration.class.getName(), String.format("【Load DB configuration. url='%s'】", mongoUrl));
+        Log.info(this, properties, Event.START, "load mongodb properties");
     }
 
     @Bean

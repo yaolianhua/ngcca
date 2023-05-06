@@ -47,7 +47,7 @@ public class DockerRegistrySearchClient implements RegistrySearchClient {
         String requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/_catalog")
                 .toUriString();
-        Log.info(DockerRegistrySearchClient.class.getName(), String.format("Docker registry repository search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Docker registry repository search. request url '%s'", requestUrl));
 
         try {
             HttpEntity<?> httpEntity = HttpEntity.EMPTY;
@@ -84,7 +84,7 @@ public class DockerRegistrySearchClient implements RegistrySearchClient {
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/{repository}/tags/list")
                 .build(namespacedRepository);
-        Log.info(DockerRegistrySearchClient.class.getName(), String.format("Docker registry repository tags search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Docker registry repository tags search. request url '%s'", requestUrl));
         try {
             HttpEntity<?> httpEntity = HttpEntity.EMPTY;
             if (authentication.isBasicAuth()) {

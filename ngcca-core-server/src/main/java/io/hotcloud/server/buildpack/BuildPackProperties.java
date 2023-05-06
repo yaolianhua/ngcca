@@ -1,5 +1,6 @@
 package io.hotcloud.server.buildpack;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
 import jakarta.annotation.PostConstruct;
@@ -15,10 +16,10 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "buildpack")
 public class BuildPackProperties {
 
-    private int buildTimeoutSecond = 1200;
+    private int buildTimeoutSecond;
 
     @PostConstruct
     public void print() {
-        Log.info(BuildPackProperties.class.getName(), String.format("load build timeout times: %ss", buildTimeoutSecond));
+        Log.info(this, this, Event.START, "load buildPack properties");
     }
 }

@@ -84,11 +84,11 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
             applicationInstance.setServicePorts(svcPorts);
 
             applicationInstanceService.saveOrUpdate(applicationInstance);
-            Log.info(ApplicationInstanceServiceProcessor.class.getName(), String.format("[%s] user's application instance k8s service [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
+            Log.info(this, null, String.format("[%s] user's application instance k8s service [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);
-            Log.error(ApplicationInstanceServiceProcessor.class.getName(),
+            Log.error(this, null,
                     String.format("[%s] user's application instance k8s service [%s] created error: %s", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
             throw e;
         }
@@ -101,7 +101,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
         Service service = serviceApi.read(input.getNamespace(), input.getName());
         if (Objects.nonNull(service)) {
             serviceApi.delete(input.getNamespace(), input.getName());
-            Log.info(ApplicationInstanceServiceProcessor.class.getName(), String.format("[%s] user's application instance k8s service [%s] deleted", input.getUser(), input.getName()));
+            Log.info(this, null, String.format("[%s] user's application instance k8s service [%s] deleted", input.getUser(), input.getName()));
         }
     }
 }

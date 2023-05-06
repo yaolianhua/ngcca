@@ -43,7 +43,7 @@ public class DockerHubRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page", pageable.getPage())
                 .queryParam("page_size", pageable.getPageSize())
                 .queryParam("query", query).toUriString();
-        Log.info(DockerHubRegistrySearchClient.class.getName(), String.format("DockerHub repository search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("DockerHub repository search. request url '%s'", requestUrl));
 
         try {
             DockerHubRepositorySearchResult response = restTemplate.exchange(requestUrl,
@@ -77,7 +77,7 @@ public class DockerHubRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page", pageable.getPage())
                 .queryParam("page_size", pageable.getPageSize())
                 .build(namespace, name);
-        Log.info(DockerHubRegistrySearchClient.class.getName(), String.format("DockerHub repository tags search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("DockerHub repository tags search. request url '%s'", requestUrl));
         try {
             DockerHubTagSearchResult response = restTemplate.exchange(requestUrl,
                     HttpMethod.GET,

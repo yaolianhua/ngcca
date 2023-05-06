@@ -75,7 +75,7 @@ public class BuildPackRabbitMQK8sEventsListener {
                 log.info("BuildPack error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
             }
         } catch (Exception e) {
-            Log.error(BuildPackRabbitMQK8sEventsListener.class.getName(), e.getMessage());
+            Log.error(this, null, e.getMessage());
         }
 
     }

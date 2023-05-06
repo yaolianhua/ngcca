@@ -39,7 +39,7 @@ public class KubernetesClusterRabbitMQMessageSubscriber {
             }
     )
     public void subscribe(String message) {
-        Log.info(KubernetesClusterRabbitMQMessageSubscriber.class.getName(), "Received kubernetes cluster registry message " + message);
+        Log.info(this, message, "Received kubernetes cluster registry message ");
         Map<String, List<Node>> result = convertMessageBody(message).getData();
         List<Node> masters = result.get("masters");
         List<Node> nodes = result.get("nodes");

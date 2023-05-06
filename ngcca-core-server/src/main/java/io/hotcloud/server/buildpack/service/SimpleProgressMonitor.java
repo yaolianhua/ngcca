@@ -10,13 +10,13 @@ public class SimpleProgressMonitor implements ProgressMonitor {
 
     @Override
     public void start(int totalTasks) {
-        Log.debug(SimpleProgressMonitor.class.getName(),
+        Log.debug(this, this,
                 String.format("Starting work on '%s' tasks", totalTasks));
     }
 
     @Override
     public void beginTask(String title, int totalWork) {
-        Log.debug(SimpleProgressMonitor.class.getName(),
+        Log.debug(this, this,
                 String.format("Start '%s': '%s'", title, totalWork));
     }
 
@@ -27,7 +27,7 @@ public class SimpleProgressMonitor implements ProgressMonitor {
 
     @Override
     public void endTask() {
-        Log.debug(SimpleProgressMonitor.class.getName(), "Task done!");
+        Log.debug(this, this, "Task done!");
     }
 
     @Override

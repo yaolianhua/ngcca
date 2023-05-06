@@ -2,7 +2,7 @@ package io.hotcloud.server;
 
 import io.hotcloud.module.db.core.registry.RegistryImageEntity;
 import io.hotcloud.module.db.core.registry.RegistryImageRepository;
-import io.hotcloud.server.registry.RegistryProperties;
+import io.hotcloud.server.registry.SystemRegistryProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class SystemRegistryImageRunnerProcessor implements NGCCARunnerProcessor {
 
     private final RegistryImageRepository registryImageRepository;
-    private final RegistryProperties registryProperties;
+    private final SystemRegistryProperties systemRegistryProperties;
     private final SystemRegistryImageProperties systemRegistryImageProperties;
 
     @Override
@@ -28,14 +28,14 @@ public class SystemRegistryImageRunnerProcessor implements NGCCARunnerProcessor 
 
                 saved.setName(name);
                 saved.setTag(systemRegistryImageProperties.getTag(name));
-                saved.setValue(registryProperties.getUrl() + "/" + propertyPair.get(name));
+                saved.setValue(systemRegistryProperties.getUrl() + "/" + propertyPair.get(name));
                 registryImageRepository.save(saved);
                 return;
             }
 
             // update info
             entity.setTag(systemRegistryImageProperties.getTag(name));
-            entity.setValue(registryProperties.getUrl() + "/" + propertyPair.get(name));
+            entity.setValue(systemRegistryProperties.getUrl() + "/" + propertyPair.get(name));
             entity.setModifiedAt(LocalDateTime.now());
             registryImageRepository.save(entity);
 

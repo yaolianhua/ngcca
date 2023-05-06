@@ -1,5 +1,6 @@
 package io.hotcloud.server.security.configuration.jwt;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
 import io.hotcloud.module.security.jwt.Jwt;
@@ -28,6 +29,6 @@ public class JwtProperties {
 
     @PostConstruct
     public void print() {
-        Log.info(JwtProperties.class.getName(), String.format("【Load Jwt Properties】using JWA algorithm name '%s', sign-key '%s'", algorithm, signKey));
+        Log.info(this, this, Event.START, "load jwt properties");
     }
 }

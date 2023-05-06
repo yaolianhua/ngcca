@@ -1,5 +1,6 @@
 package io.hotcloud.server.security;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
@@ -32,7 +33,7 @@ public class SecuritySystemUserInitialization implements ApplicationRunner {
                     .enabled(true)
                     .build();
             User saved = userApi.save(user);
-            Log.info(SecuritySystemUserInitialization.class.getName(), String.format("%s user created", saved.getUsername()));
+            Log.info(this, null, Event.START, String.format("%s user created", saved.getUsername()));
         }
     }
 }
