@@ -1,6 +1,8 @@
 package io.hotcloud.server.application;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +15,18 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Data
 @Configuration(proxyBeanMethods = false)
 public class ApplicationProperties {
-    private String dotSuffixDomain = ".k8s-cluster.local";
+    private String dotSuffixDomain;
+    private int deploymentTimeoutSecond;
 
     public String getDotSuffixDomain() {
         if (StringUtils.hasText(dotSuffixDomain) && !dotSuffixDomain.startsWith(".")) {
             return "." + dotSuffixDomain;
         }
         return dotSuffixDomain;
+    }
+
+    @PostConstruct
+    public void print() {
+        Log.info(this, this, "load application properties");
     }
 }

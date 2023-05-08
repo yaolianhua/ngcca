@@ -24,9 +24,5 @@ ngcca:
     password: QbMufCD@9WVQ^Hv
     port: 27017
     database: ngcca-dev
-  kubernetes-agent:
-    port:
-    host:
-    domain-name: k8s-agent.k8s-cluster.com
 
 

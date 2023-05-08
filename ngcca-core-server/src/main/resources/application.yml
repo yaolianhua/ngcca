@@ -48,10 +48,22 @@ ngcca:
     port:
     database:
   kubernetes-agent:
-    host:
-    port:
+    host: localhost
+    port: 1400
     domain-name:
   buildpack:
     build-timeout-second: 1200
+  application:
+    deployment-timeout-second: 1200
+    dot-suffix-domain: ".k8s.local"
+  security:
+    enabled: true
+    ignored-defaults:
+      - "/swagger**/**"
+      - "/v3/api-docs/**"
+      - "/favicon.ico"
+      - "/pub"
+      - "/**/login"
+    ignored-urls:
 server:
   port: 8080

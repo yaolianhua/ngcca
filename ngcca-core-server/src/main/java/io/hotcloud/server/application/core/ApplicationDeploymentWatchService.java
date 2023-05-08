@@ -8,9 +8,9 @@ import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
-import io.hotcloud.module.application.core.ApplicationDeploymentCacheApi;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstanceService;
+import io.hotcloud.server.application.ApplicationProperties;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class ApplicationDeploymentWatchService {
 
     private final DeploymentClient deploymentApi;
     private final ApplicationInstanceService applicationInstanceService;
-    private final ApplicationDeploymentCacheApi applicationDeploymentCacheApi;
+    private final ApplicationProperties applicationProperties;
     private final PodClient podApi;
     private final KubectlClient kubectlApi;
 
@@ -38,7 +38,7 @@ public class ApplicationDeploymentWatchService {
 
         try {
             //if timeout
-            int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationDeploymentCacheApi.getTimeoutSeconds()));
+            int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(applicationInstance);
                 applicationInstance.setMessage(timeoutMessage);

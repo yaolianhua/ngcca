@@ -7,9 +7,9 @@ import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.kubernetes.client.http.*;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.module.application.template.TemplateDeploymentCacheApi;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstanceService;
+import io.hotcloud.server.application.ApplicationProperties;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TemplateDeploymentWatchService {
     private final TemplateInstanceService templateInstanceService;
-    private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
+    private final ApplicationProperties applicationProperties;
     private final DeploymentClient deploymentApi;
     private final ServiceClient serviceApi;
     private final KubectlClient kubectlApi;
@@ -40,7 +40,7 @@ public class TemplateDeploymentWatchService {
 
         try {
             //if timeout
-            int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(templateDeploymentCacheApi.getTimeoutSeconds()));
+            int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(template);
 
@@ -103,7 +103,6 @@ public class TemplateDeploymentWatchService {
             Log.info(this, null, String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
         } catch (Exception e) {
-            templateDeploymentCacheApi.unLock(template.getId());
             Log.error(this, null, e.getMessage());
             template.setSuccess(false);
             template.setMessage(e.getMessage());

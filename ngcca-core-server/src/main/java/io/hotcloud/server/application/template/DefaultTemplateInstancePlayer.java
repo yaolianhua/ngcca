@@ -6,7 +6,10 @@ import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.module.application.template.*;
+import io.hotcloud.module.application.template.Template;
+import io.hotcloud.module.application.template.TemplateInstance;
+import io.hotcloud.module.application.template.TemplateInstancePlayer;
+import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.application.template.processor.InstanceTemplateProcessors;
@@ -28,7 +31,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
     private final KubectlClient kubectlApi;
     private final NamespaceClient namespaceApi;
     private final UserApi userApi;
-    private final TemplateDeploymentCacheApi templateDeploymentCacheApi;
 
     @Override
     public TemplateInstance play(Template template) {
@@ -74,7 +76,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
                 String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
-            templateDeploymentCacheApi.unLock(find.getId());
             Boolean delete = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
             Log.info(this, null, String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, find.getNamespace(), find.getName()));
 

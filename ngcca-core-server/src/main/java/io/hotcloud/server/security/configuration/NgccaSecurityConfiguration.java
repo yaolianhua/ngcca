@@ -25,7 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
-        SecureWhitelistProperties.class,
         NgccaSecurityProperties.class,
         JwtProperties.class
 })
@@ -50,13 +49,13 @@ public class NgccaSecurityConfiguration {
     @Bean
     @ConditionalOnProperty(name = NgccaSecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "true", matchIfMissing = true)
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   SecureWhitelistProperties whitelistProperties,
+                                                   NgccaSecurityProperties securityProperties,
                                                    JwtVerifier jwtVerifier,
                                                    UserDetailsService userDetailsService) throws Exception {
 
         http.authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();
         //permit all whitelist
-        http.authorizeHttpRequests().requestMatchers(whitelistProperties.getUrls().toArray(new String[0])).permitAll();
+        http.authorizeHttpRequests().requestMatchers(securityProperties.getIgnoredUrls().toArray(new String[0])).permitAll();
 
         http.cors();
         http.csrf().disable();
