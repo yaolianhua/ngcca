@@ -2,7 +2,7 @@ kubernetes:
   in-cluster: false
   enable-workloads-watcher: true
   rabbitmq:
-    host: middleware.local
+    host: linux.local
     username: admin
     password: QbMufCD@9WVQ^Hv
     port: 5672

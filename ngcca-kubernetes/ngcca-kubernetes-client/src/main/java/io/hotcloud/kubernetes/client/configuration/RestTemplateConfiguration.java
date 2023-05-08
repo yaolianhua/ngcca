@@ -3,7 +3,6 @@ package io.hotcloud.kubernetes.client.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -15,11 +14,6 @@ import java.util.Objects;
 @Slf4j
  class RestTemplateConfiguration {
 
-    private final NgccaKubernetesAgentProperties properties;
-
-    public RestTemplateConfiguration(NgccaKubernetesAgentProperties properties) {
-        this.properties = properties;
-    }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -36,7 +30,6 @@ import java.util.Objects;
                     return execution.execute(request, body);
                 })
         );
-        restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(properties.getBasicUsername(), properties.getBasicPassword()));
 
         return restTemplate;
 
