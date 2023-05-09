@@ -17,14 +17,12 @@ import java.net.URI;
 
 @Slf4j
 public class IngressClientImpl implements IngressClient {
-
-    private static final String PATH = "/v1/kubernetes/ingresses";
     private final URI uri;
     private final RestTemplate restTemplate;
 
     public IngressClientImpl(NgccaKubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/ingresses");
         this.restTemplate = restTemplate;
     }
 

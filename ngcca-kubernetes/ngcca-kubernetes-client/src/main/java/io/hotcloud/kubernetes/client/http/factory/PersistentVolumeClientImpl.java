@@ -30,13 +30,12 @@ import java.util.Objects;
 class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/persistentvolumes";
     private final RestTemplate restTemplate;
 
     public PersistentVolumeClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                       RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/persistentvolumes");
     }
 
     @Override

@@ -30,13 +30,12 @@ import java.util.Objects;
 class StatefulSetClientImpl implements StatefulSetClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/statefulsets";
     private final RestTemplate restTemplate;
 
     public StatefulSetClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                  RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/statefulsets");
     }
 
     @Override

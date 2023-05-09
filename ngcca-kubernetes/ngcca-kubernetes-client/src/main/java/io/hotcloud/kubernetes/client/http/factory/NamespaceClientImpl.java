@@ -27,14 +27,13 @@ import java.util.Objects;
 @Slf4j
 class NamespaceClientImpl implements NamespaceClient {
 
-    private static final String PATH = "/v1/kubernetes/namespaces";
     private final URI uri;
     private final RestTemplate restTemplate;
 
     public NamespaceClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/namespaces");
     }
 
     @Override

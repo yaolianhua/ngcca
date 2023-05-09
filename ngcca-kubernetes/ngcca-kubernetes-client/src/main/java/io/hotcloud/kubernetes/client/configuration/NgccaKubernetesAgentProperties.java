@@ -20,7 +20,7 @@ public class NgccaKubernetesAgentProperties {
 
     @PostConstruct
     public void print() {
-        log.info("load kubernetes agent address '{}', ", obtainUrl());
+        log.info("load kubernetes agent address '{}'", obtainUrl());
     }
 
     public String obtainUrl() {

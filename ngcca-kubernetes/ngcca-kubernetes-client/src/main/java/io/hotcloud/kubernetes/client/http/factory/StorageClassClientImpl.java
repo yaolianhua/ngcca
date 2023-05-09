@@ -27,14 +27,13 @@ import java.util.Objects;
  **/
 @Slf4j
 class StorageClassClientImpl implements StorageClassClient {
-    private static final String PATH = "/v1/kubernetes/storageclasses";
     private final URI uri;
     private final RestTemplate restTemplate;
 
     public StorageClassClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                   RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/storageclasses");
     }
 
     @Override

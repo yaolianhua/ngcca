@@ -28,13 +28,12 @@ import java.util.Objects;
 class DeploymentClientImpl implements DeploymentClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/deployments";
     private final RestTemplate restTemplate;
 
     public DeploymentClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                 RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/deployments");
     }
 
 

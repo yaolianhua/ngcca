@@ -31,13 +31,12 @@ class ServiceClientImpl implements ServiceClient {
 
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/services";
     private final RestTemplate restTemplate;
 
     public ServiceClientImpl(NgccaKubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/services");
     }
 
     @Override

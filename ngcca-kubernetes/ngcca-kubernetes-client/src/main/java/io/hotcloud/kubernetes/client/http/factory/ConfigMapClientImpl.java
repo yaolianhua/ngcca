@@ -30,13 +30,12 @@ import java.util.Objects;
 class ConfigMapClientImpl implements ConfigMapClient {
 
     private final URI uri;
-    private static final String PATH = "/v1/kubernetes/configmaps";
     private final RestTemplate restTemplate;
 
     public ConfigMapClientImpl(NgccaKubernetesAgentProperties clientProperties,
                                RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + PATH);
+        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/configmaps");
     }
 
     @Override
