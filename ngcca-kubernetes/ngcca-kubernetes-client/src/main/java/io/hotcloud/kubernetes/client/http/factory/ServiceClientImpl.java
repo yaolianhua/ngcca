@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
@@ -33,10 +33,10 @@ class ServiceClientImpl implements ServiceClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public ServiceClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public ServiceClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/services");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/services");
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.SecretClient;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -32,10 +32,10 @@ class SecretClientImpl implements SecretClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public SecretClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public SecretClientImpl(KubernetesAgentProperties clientProperties,
                             RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/secrets");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/secrets");
     }
 
     @Override

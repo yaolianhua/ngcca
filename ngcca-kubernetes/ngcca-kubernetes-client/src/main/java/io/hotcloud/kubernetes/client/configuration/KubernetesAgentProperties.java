@@ -6,13 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @ConfigurationProperties("ngcca.kubernetes-agent")
 @Slf4j
 @Data
-public class NgccaKubernetesAgentProperties {
+public class KubernetesAgentProperties {
 
     private String host = "localhost";
     private Integer port = 1400;
@@ -20,10 +17,10 @@ public class NgccaKubernetesAgentProperties {
 
     @PostConstruct
     public void print() {
-        log.info("load kubernetes agent address '{}'", obtainUrl());
+        log.info("load kubernetes agent address '{}'", getAgentHttpUrl());
     }
 
-    public String obtainUrl() {
+    public String getAgentHttpUrl() {
         if (StringUtils.hasText(domainName)) {
             return String.format("http://%s", domainName);
         }

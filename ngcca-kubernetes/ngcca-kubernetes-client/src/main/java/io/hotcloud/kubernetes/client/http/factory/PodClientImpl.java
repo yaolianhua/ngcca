@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
@@ -30,10 +30,10 @@ class PodClientImpl implements PodClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public PodClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public PodClientImpl(KubernetesAgentProperties clientProperties,
                          RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/pods");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/pods");
     }
 
     @Override

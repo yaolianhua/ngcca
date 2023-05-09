@@ -1,7 +1,7 @@
 package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.networking.v1.IngressList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.IngressClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,9 +20,9 @@ public class IngressClientImpl implements IngressClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public IngressClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public IngressClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/ingresses");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/ingresses");
         this.restTemplate = restTemplate;
     }
 

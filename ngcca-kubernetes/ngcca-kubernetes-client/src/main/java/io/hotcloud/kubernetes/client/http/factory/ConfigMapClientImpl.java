@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.ConfigMapClient;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -32,10 +32,10 @@ class ConfigMapClientImpl implements ConfigMapClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public ConfigMapClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public ConfigMapClientImpl(KubernetesAgentProperties clientProperties,
                                RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/configmaps");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/configmaps");
     }
 
     @Override

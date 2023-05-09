@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(NgccaKubernetesAgentProperties.class)
+@EnableConfigurationProperties(KubernetesAgentProperties.class)
 @Import({
         KubernetesAgentConfiguration.class
 })
@@ -19,7 +19,7 @@ public class KubernetesAgentAutoConfiguration {
 
     @Bean
     public KubernetesAgentClientFactory clientFactory(RestTemplate restTemplate,
-                                                      NgccaKubernetesAgentProperties properties) {
+                                                      KubernetesAgentProperties properties) {
         return new KubernetesAgentClientFactory(restTemplate, properties);
     }
 

@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.model.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -30,10 +30,10 @@ class DeploymentClientImpl implements DeploymentClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public DeploymentClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public DeploymentClientImpl(KubernetesAgentProperties clientProperties,
                                 RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/deployments");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/deployments");
     }
 
 

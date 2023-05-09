@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.client.http.factory;
 
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,10 +12,10 @@ import java.util.Objects;
 public class KubernetesAgentClientFactory {
 
     private final RestTemplate restTemplate;
-    private final NgccaKubernetesAgentProperties properties;
+    private final KubernetesAgentProperties properties;
 
     public KubernetesAgentClientFactory(RestTemplate restTemplate,
-                                        NgccaKubernetesAgentProperties properties) {
+                                        KubernetesAgentProperties properties) {
         this.restTemplate = restTemplate;
         this.properties = properties;
     }

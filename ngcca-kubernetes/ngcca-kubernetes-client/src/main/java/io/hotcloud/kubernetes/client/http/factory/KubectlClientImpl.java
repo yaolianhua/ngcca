@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -28,10 +28,10 @@ class KubectlClientImpl implements KubectlClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public KubectlClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public KubectlClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/equivalents");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/equivalents");
     }
 
 

@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.CronJobClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
@@ -32,10 +32,10 @@ class CronJobClientImpl implements CronJobClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public CronJobClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public CronJobClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/cronjobs");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/cronjobs");
     }
 
     @Override

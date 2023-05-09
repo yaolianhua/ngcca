@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
@@ -32,10 +32,10 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public PersistentVolumeClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public PersistentVolumeClientImpl(KubernetesAgentProperties clientProperties,
                                       RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/persistentvolumes");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/persistentvolumes");
     }
 
     @Override

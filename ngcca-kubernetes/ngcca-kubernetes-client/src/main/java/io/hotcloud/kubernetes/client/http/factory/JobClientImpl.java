@@ -2,7 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobList;
-import io.hotcloud.kubernetes.client.configuration.NgccaKubernetesAgentProperties;
+import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.JobClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.JobCreateRequest;
@@ -32,10 +32,10 @@ class JobClientImpl implements JobClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
-    public JobClientImpl(NgccaKubernetesAgentProperties clientProperties,
+    public JobClientImpl(KubernetesAgentProperties clientProperties,
                          RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.obtainUrl() + "/v1/kubernetes/jobs");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/jobs");
     }
 
     @Override
