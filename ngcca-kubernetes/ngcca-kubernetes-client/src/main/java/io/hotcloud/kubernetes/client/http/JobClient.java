@@ -53,7 +53,7 @@ public interface JobClient {
      * Delete namespaced Job
      *
      * @param namespace namespace
-     * @param job       job name
+     * @param job    job name
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */

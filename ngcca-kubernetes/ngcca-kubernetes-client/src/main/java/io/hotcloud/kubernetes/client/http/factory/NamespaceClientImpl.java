@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
+import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
@@ -49,7 +50,7 @@ class NamespaceClientImpl implements NamespaceClient {
 
     @Override
     public Void delete(String namespace) throws ApiException {
-        Assert.hasText(namespace, "namespace is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
@@ -63,7 +64,7 @@ class NamespaceClientImpl implements NamespaceClient {
 
     @Override
     public Namespace read(String name) {
-        Assert.hasText(name, "namespace is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(name);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))

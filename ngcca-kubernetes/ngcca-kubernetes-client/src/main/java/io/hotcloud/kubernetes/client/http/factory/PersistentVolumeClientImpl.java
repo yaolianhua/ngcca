@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
+import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -40,7 +41,8 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public PersistentVolume read(String persistentVolume) {
-        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+
+        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))
@@ -73,7 +75,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<PersistentVolume> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -84,7 +86,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public PersistentVolume create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -99,7 +101,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public Void delete(String persistentVolume) throws ApiException {
-        Assert.isTrue(StringUtils.hasText(persistentVolume), "persistentVolume name is null");
+        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))

@@ -44,11 +44,11 @@ public interface DeploymentClient {
     /**
      * Create Deployment from {@code YamlBody}
      *
-     * @param yaml {@link YamlBody}
+     * @param request {@link YamlBody}
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Deployment create(YamlBody yaml) throws ApiException;
+    Deployment create(YamlBody request) throws ApiException;
 
     /**
      * Delete namespaced Deployment

@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
+import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -38,7 +39,7 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public StorageClass create(StorageClassCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<StorageClass> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -49,7 +50,7 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public StorageClass create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -64,7 +65,8 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public Void delete(String storageClass) throws ApiException {
-        Assert.hasText(storageClass, "storageClass name is null");
+
+        ClientRequestParamAssertion.assertResourceNameNotNull(storageClass);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
@@ -78,7 +80,8 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public StorageClass read(String name) {
-        Assert.hasText(name, "storageClass name is null");
+
+        ClientRequestParamAssertion.assertResourceNameNotNull(name);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))

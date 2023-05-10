@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
+import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.StatefulSetClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -40,8 +41,8 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet read(String namespace, String statefulSet) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(statefulSet), "statefulSet name is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        ClientRequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -56,7 +57,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSetList readList(String namespace, Map<String, String> labelSelector) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -75,7 +76,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet create(StatefulSetCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<StatefulSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -86,7 +87,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -101,8 +102,8 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public Void delete(String namespace, String statefulSet) throws ApiException {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(statefulSet), "statefulSet name is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        ClientRequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

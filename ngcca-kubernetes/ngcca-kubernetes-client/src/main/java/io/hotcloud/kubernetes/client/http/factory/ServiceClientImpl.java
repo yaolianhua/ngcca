@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
+import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -41,8 +42,8 @@ class ServiceClientImpl implements ServiceClient {
 
     @Override
     public Service read(String namespace, String service) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(service), "service name is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        ClientRequestParamAssertion.assertResourceNameNotNull(service);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +58,7 @@ class ServiceClientImpl implements ServiceClient {
 
     @Override
     public ServiceList readList(String namespace, Map<String, String> labelSelector) {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -76,7 +77,8 @@ class ServiceClientImpl implements ServiceClient {
 
     @Override
     public Service create(ServiceCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null");
+
+        ClientRequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<Service> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -87,7 +89,7 @@ class ServiceClientImpl implements ServiceClient {
 
     @Override
     public Service create(YamlBody yaml) throws ApiException {
-        Assert.notNull(yaml, "request body is null");
+        ClientRequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -102,8 +104,8 @@ class ServiceClientImpl implements ServiceClient {
 
     @Override
     public Void delete(String namespace, String service) throws ApiException {
-        Assert.isTrue(StringUtils.hasText(namespace), "namespace is null");
-        Assert.isTrue(StringUtils.hasText(service), "service name is null");
+        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        ClientRequestParamAssertion.assertResourceNameNotNull(service);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
