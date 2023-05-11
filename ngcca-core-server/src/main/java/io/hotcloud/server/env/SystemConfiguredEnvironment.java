@@ -3,7 +3,7 @@ package io.hotcloud.server.env;
 import com.google.common.base.CaseFormat;
 import io.hotcloud.common.model.FieldIgnore;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.server.NGCCARunnerProcessor;
+import io.hotcloud.server.RunnerProcessor;
 import lombok.SneakyThrows;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 
 @Component
-public class SystemConfiguredEnvironment extends AbstractConfiguredEnvironment implements NGCCARunnerProcessor {
+public class SystemConfiguredEnvironment extends AbstractConfiguredEnvironment implements RunnerProcessor {
 
     private final ApplicationContext context;
 

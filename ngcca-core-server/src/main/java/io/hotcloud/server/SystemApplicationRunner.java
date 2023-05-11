@@ -10,17 +10,17 @@ import java.util.List;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE - 3)
-public class NGCCAApplicationRunner implements ApplicationRunner {
+public class SystemApplicationRunner implements ApplicationRunner {
 
-    private final List<NGCCARunnerProcessor> processors;
+    private final List<RunnerProcessor> processors;
 
-    public NGCCAApplicationRunner(List<NGCCARunnerProcessor> processors) {
+    public SystemApplicationRunner(List<RunnerProcessor> processors) {
         this.processors = processors;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        for (NGCCARunnerProcessor processor : processors) {
+        for (RunnerProcessor processor : processors) {
             processor.execute();
         }
 

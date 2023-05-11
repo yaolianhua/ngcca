@@ -1,6 +1,6 @@
 package io.hotcloud.server;
 
-public interface NGCCARunnerProcessor {
+public interface RunnerProcessor {
 
     void execute();
 }

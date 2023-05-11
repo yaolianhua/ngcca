@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class SystemRegistryImageRunnerProcessor implements NGCCARunnerProcessor {
+public class SystemRegistryImageRunnerProcessor implements RunnerProcessor {
 
     private final RegistryImageRepository registryImageRepository;
     private final SystemRegistryProperties systemRegistryProperties;
