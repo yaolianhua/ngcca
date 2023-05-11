@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 public class Message<T> implements Serializable {
 
-    private transient T data;
+    private T data;
     private Level level;
     private String description;
     private String subject;

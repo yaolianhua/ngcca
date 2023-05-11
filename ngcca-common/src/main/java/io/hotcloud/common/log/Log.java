@@ -38,7 +38,7 @@ public class Log implements Serializable {
 
     private String message;
 
-    private transient Object body;
+    private Object body;
 
     private String component;
 
