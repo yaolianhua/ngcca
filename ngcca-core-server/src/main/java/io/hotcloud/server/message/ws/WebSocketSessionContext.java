@@ -1,6 +1,6 @@
 package io.hotcloud.server.message.ws;
 
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
+import io.hotcloud.common.model.exception.PlatformException;
 import jakarta.websocket.Session;
 
 import java.util.Objects;
@@ -29,7 +29,7 @@ public final class WebSocketSessionContext {
         return SESSIONS.stream()
                 .filter(e -> Objects.equals(sessionId, e.getId()))
                 .findFirst()
-                .orElseThrow(() -> new NGCCAPlatformException("Can not get session for [" + sessionId + "]", 404));
+                .orElseThrow(() -> new PlatformException("Can not get session for [" + sessionId + "]", 404));
     }
 
     public static Set<Session> getSessions() {

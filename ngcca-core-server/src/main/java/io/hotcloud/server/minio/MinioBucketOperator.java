@@ -1,6 +1,6 @@
 package io.hotcloud.server.minio;
 
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.vendor.minio.MinioBucketApi;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             minioClient.makeBucket(makeBucketArgs);
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("make bucket failed: " + ex.getMessage());
+            throw new PlatformException("make bucket failed: " + ex.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             minioClient.removeBucket(removeBucketArgs);
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("remove bucket failed: " + ex.getMessage());
+            throw new PlatformException("remove bucket failed: " + ex.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build();
             return minioClient.bucketExists(bucketExistsArgs);
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("exist bucket failed: " + ex.getMessage());
+            throw new PlatformException("exist bucket failed: " + ex.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class MinioBucketOperator implements MinioBucketApi {
                     .build()
             );
         } catch (Exception e) {
-            throw new NGCCAPlatformException("Set bucket policy failed: " + e.getMessage());
+            throw new PlatformException("Set bucket policy failed: " + e.getMessage());
         }
     }
 }

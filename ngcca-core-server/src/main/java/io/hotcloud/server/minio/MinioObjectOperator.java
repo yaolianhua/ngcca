@@ -1,6 +1,6 @@
 package io.hotcloud.server.minio;
 
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.vendor.minio.MinioObjectApi;
 import io.minio.*;
 import io.minio.http.Method;
@@ -36,7 +36,7 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .build();
             return minioClient.getPresignedObjectUrl(presignedObjectUrlArgs);
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("get object url failed: " + ex.getMessage());
+            throw new PlatformException("get object url failed: " + ex.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class MinioObjectOperator implements MinioObjectApi {
             minioClient.uploadObject(objectArgs);
             return object;
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("upload failed: " + ex.getMessage());
+            throw new PlatformException("upload failed: " + ex.getMessage());
         }
 
     }
@@ -72,7 +72,7 @@ public class MinioObjectOperator implements MinioObjectApi {
             minioClient.putObject(putObjectArgs);
             return object;
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("upload failed: " + ex.getMessage());
+            throw new PlatformException("upload failed: " + ex.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class MinioObjectOperator implements MinioObjectApi {
                     .build();
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception ex) {
-            throw new NGCCAPlatformException("remove failed: " + ex.getMessage());
+            throw new PlatformException("remove failed: " + ex.getMessage());
         }
 
     }

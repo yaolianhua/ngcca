@@ -6,6 +6,8 @@ public enum Event {
     //
     START,
     //
-    NOTIFY
+    NOTIFY,
+    //
+    EXCEPTION
 
 }

@@ -1,6 +1,6 @@
 package io.hotcloud.common.utils;
 
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
+import io.hotcloud.common.model.exception.PlatformException;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -13,7 +13,7 @@ public class INet {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            throw new NGCCAPlatformException(e.getMessage());
+            throw new PlatformException(e.getMessage());
         }
     }
 
@@ -33,7 +33,7 @@ public class INet {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            throw new NGCCAPlatformException(e.getMessage());
+            throw new PlatformException(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class INet {
         try {
             address = new URL(url);
         } catch (MalformedURLException e) {
-            throw new NGCCAPlatformException(e.getMessage());
+            throw new PlatformException(e.getMessage());
         }
         return address.getHost();
     }
