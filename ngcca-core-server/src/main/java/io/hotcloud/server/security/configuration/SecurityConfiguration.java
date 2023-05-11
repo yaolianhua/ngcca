@@ -25,16 +25,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
-        NgccaSecurityProperties.class,
+        SecurityProperties.class,
         JwtProperties.class
 })
 @Import({
         JwtConfiguration.class,
 })
-public class NgccaSecurityConfiguration {
+public class SecurityConfiguration {
 
     @Bean("noSecurityFilterChain")
-    @ConditionalOnProperty(name = NgccaSecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "false")
+    @ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "false")
     public SecurityFilterChain noSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
@@ -47,9 +47,9 @@ public class NgccaSecurityConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name = NgccaSecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "true", matchIfMissing = true)
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   NgccaSecurityProperties securityProperties,
+                                                   SecurityProperties securityProperties,
                                                    JwtVerifier jwtVerifier,
                                                    UserDetailsService userDetailsService) throws Exception {
 

@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration(proxyBeanMethods = false)
 @Slf4j
-@EnableConfigurationProperties(NgccaMongodbProperties.class)
+@EnableConfigurationProperties(MongodbProperties.class)
 @EnableMongoRepositories(basePackageClasses = AbstractEntity.class)
 @EnableTransactionManagement
-public class NgccaMongodbConfiguration {
+public class MongodbConfiguration {
 
-    private final NgccaMongodbProperties properties;
+    private final MongodbProperties properties;
 
-    public NgccaMongodbConfiguration(NgccaMongodbProperties properties) {
+    public MongodbConfiguration(MongodbProperties properties) {
         this.properties = properties;
     }
 

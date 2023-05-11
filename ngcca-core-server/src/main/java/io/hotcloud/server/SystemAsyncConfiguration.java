@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
 @EnableScheduling
-public class NgccaAsyncConfiguration {
+public class SystemAsyncConfiguration {
     @PostConstruct
     public void print() {
         Log.info(this, null, Event.START, "enable spring async scheduling configuration");

@@ -15,7 +15,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @ConfigurationProperties(prefix = CONFIG_PREFIX + "security")
 @Data
 @Properties(prefix = CONFIG_PREFIX + "security")
-public class NgccaSecurityProperties {
+public class SecurityProperties {
 
     public static final String SECURITY_ENABLED_PROPERTY = CONFIG_PREFIX + "security.enabled";
     private boolean enabled = true;
