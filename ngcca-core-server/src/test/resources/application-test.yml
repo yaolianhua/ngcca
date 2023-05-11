@@ -1,9 +1,4 @@
 ngcca:
-  rabbitmq:
-    host: linux.local
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 5672
   redis:
     database: 1
     password: QbMufCD@9WVQ^Hv

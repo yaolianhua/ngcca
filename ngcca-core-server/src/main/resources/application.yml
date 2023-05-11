@@ -4,12 +4,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  rabbitmq:
-    host: ${ngcca.rabbitmq.host:}
-    port: ${ngcca.rabbitmq.port:}
-    username: ${ngcca.rabbitmq.username:}
-    password: ${ngcca.rabbitmq.password:}
-    virtual-host: /
   data:
     mongodb:
       database: ${ngcca.mongodb.database:}
@@ -22,11 +16,6 @@ spring:
   profiles:
     include: system-registry-image
 ngcca:
-  rabbitmq:
-    host:
-    username:
-    password:
-    port:
   redis:
     database:
     password:
