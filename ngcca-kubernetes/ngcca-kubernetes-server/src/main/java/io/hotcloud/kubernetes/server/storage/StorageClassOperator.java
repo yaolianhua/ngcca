@@ -48,6 +48,7 @@ public class StorageClassOperator implements StorageClassApi {
         log.debug("create storageClass success \n '{}'", v1Sc);
 
         return fabric8Client.storage()
+                .v1()
                 .storageClasses()
                 .withName(Objects.requireNonNull(v1StorageClass.getMetadata(), "get v1StorageClass metadata null").getName())
                 .get();
@@ -59,6 +60,7 @@ public class StorageClassOperator implements StorageClassApi {
 
         return fabric8Client
                 .storage()
+                .v1()
                 .storageClasses()
                 .withLabels(labelSelector)
                 .list();
