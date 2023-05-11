@@ -1,16 +1,13 @@
-package io.hotcloud.server.message;
+package io.hotcloud.common.model;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Data
 public class Message<T> implements Serializable {
 
-    private T data;
+    private transient T data;
     private Level level;
     private String description;
     private String subject;

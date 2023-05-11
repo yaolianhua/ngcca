@@ -1,0 +1,19 @@
+ngcca:
+  system:
+    registry-image:
+      alpine: library/alpine:latest
+      busybox: library/busybox:latest
+      git: library/alpine-git:latest
+      minio: library/minio:20221027
+      redis: library/redis:7.0
+      redisinsight: library/redisinsight:1.14.0
+      rabbitmq: library/rabbitmq:3.9-management
+      mysql: library/mysql:8.0.27
+      mongodb: library/mongo:5.0
+      kaniko: library/kaniko:20221029
+      java8: library/java8-runtime:latest
+      java11: library/java11-runtime:latest
+      java17: library/java17-runtime:latest
+      maven3808: library/maven:3.8-openjdk-8-slim
+      maven3811: library/maven:3.8-openjdk-11-slim
+      maven3817: library/maven:3.8-openjdk-17-slim

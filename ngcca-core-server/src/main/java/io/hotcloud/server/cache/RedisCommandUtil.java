@@ -24,6 +24,32 @@ public class RedisCommandUtil<K,V> implements RedisCommand<K,V> {
         redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Set<K> listKeys() {
+        return redisTemplate.keys((K) "*");
+    }
+
+    @Override
+    public void lpush(K key, V value) {
+        redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    @Override
+    public void rpush(K key, V value) {
+        redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    @Override
+    public V lpop(K key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    @Override
+    public V rpop(K key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
     @Override
     public Boolean hasKey(K key) {
         return redisTemplate.hasKey(key);

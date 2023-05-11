@@ -5,5 +5,7 @@ public enum Event {
     NORMAL,
     //
     START,
+    //
+    NOTIFY
 
 }

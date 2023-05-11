@@ -1,6 +1,6 @@
 package io.hotcloud.server.message.ws.config;
 
-import io.hotcloud.server.message.RabbitmqMessageBroadcaster;
+import io.hotcloud.server.message.RedisMessageBroadcaster;
 import io.hotcloud.server.message.ws.WebSocketMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnMissingBean(RabbitmqMessageBroadcaster.class)
+@ConditionalOnMissingBean(RedisMessageBroadcaster.class)
 @Slf4j
 public class WebSocketConfiguration {
 

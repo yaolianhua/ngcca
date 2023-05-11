@@ -1,5 +1,6 @@
 package io.hotcloud.server.application;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
 import jakarta.annotation.PostConstruct;
@@ -27,6 +28,6 @@ public class ApplicationProperties {
 
     @PostConstruct
     public void print() {
-        Log.info(this, this, "load application properties");
+        Log.info(this, this, Event.START, "load application properties");
     }
 }

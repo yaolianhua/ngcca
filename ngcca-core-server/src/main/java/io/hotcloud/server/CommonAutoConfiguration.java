@@ -1,8 +1,5 @@
 package io.hotcloud.server;
 
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,18 +16,9 @@ import java.util.concurrent.ExecutorService;
  * <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.task-execution-and-scheduling">Task Execution and Scheduling</a>
  */
 @Configuration(proxyBeanMethods = false)
-@EnableRabbit
 @EnableAsync
 @EnableScheduling
 public class CommonAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.setAutoStartup(true);
-        return rabbitAdmin;
-    }
 
     @Bean
     @ConditionalOnMissingBean

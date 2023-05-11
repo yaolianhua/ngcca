@@ -3,7 +3,7 @@ package io.hotcloud.server.message.ws.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.server.message.Message;
+import io.hotcloud.common.model.Message;
 import jakarta.websocket.DecodeException;
 import jakarta.websocket.Decoder;
 import jakarta.websocket.EndpointConfig;

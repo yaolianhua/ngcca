@@ -1,6 +1,6 @@
 package io.hotcloud.server.message.ws;
 
-import io.hotcloud.server.message.Message;
+import io.hotcloud.common.model.Message;
 import io.hotcloud.server.message.ws.config.MessageDecoder;
 import io.hotcloud.server.message.ws.config.MessageEncoder;
 import jakarta.websocket.OnClose;

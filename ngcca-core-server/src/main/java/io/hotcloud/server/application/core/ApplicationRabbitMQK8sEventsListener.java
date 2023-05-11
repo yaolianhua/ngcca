@@ -6,20 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Message;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.module.application.core.ApplicationInstance;
 import io.hotcloud.module.application.core.ApplicationInstancePlayer;
 import io.hotcloud.module.application.core.ApplicationInstanceService;
-import io.hotcloud.server.message.Message;
+import io.hotcloud.server.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.ExchangeTypes;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -28,20 +24,17 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ApplicationRabbitMQK8sEventsListener {
+public class ApplicationRabbitMQK8sEventsListener implements MessageObserver {
     private final ObjectMapper objectMapper;
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationInstancePlayer applicationInstancePlayer;
     private final ApplicationDeploymentWatchService applicationDeploymentWatchService;
 
-    @RabbitListener(
-            bindings = {
-                    @QueueBinding(
-                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_WORKLOADS_DEPLOYMENT_APPLICATION),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT)
-                    )
-            }
-    )
+    @Override
+    public void onMessage(Message<?> message) {
+        //TODO
+    }
+
     public void subscribe(String message) {
 
         try {

@@ -1,8 +1,10 @@
 package io.hotcloud.server.message.ws;
 
-import io.hotcloud.server.message.Message;
-import io.hotcloud.server.message.MessageBroadcaster;
-import io.hotcloud.server.message.RabbitmqMessageBroadcaster;
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.Message;
+import io.hotcloud.common.model.MessageBroadcaster;
+import io.hotcloud.server.message.RedisMessageBroadcaster;
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -13,19 +15,19 @@ import java.io.IOException;
 import java.util.Set;
 
 @Component
-@ConditionalOnMissingBean(RabbitmqMessageBroadcaster.class)
+@ConditionalOnMissingBean(RedisMessageBroadcaster.class)
 @Slf4j
 public class WebSocketMessageBroadcaster implements MessageBroadcaster {
 
     @Override
-    public <T> void broadcast(String exchange, Message<T> message) {
+    public void broadcast(String target, Message<?> message) {
         Set<Session> sessions = WebSocketSessionContext.getSessions();
-        log.debug("Websocket broadcast message: \n {}", message);
+        Log.debug(this, message, Event.NOTIFY, "[" + target + "] message notify");
         for (Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(message);
             } catch (IOException | EncodeException | IllegalStateException e) {
-                log.error("WebSocket broadcast message error. {}", e.getMessage(), e);
+                Log.error(this, message, Event.NOTIFY, "[" + target + "] message notify error");
             }
         }
     }

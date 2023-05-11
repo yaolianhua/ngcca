@@ -7,16 +7,11 @@ import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.NodeAddress;
 import io.fabric8.kubernetes.api.model.NodeSystemInfo;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Message;
 import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.utils.UUIDGenerator;
-import io.hotcloud.server.message.Message;
+import io.hotcloud.server.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.ExchangeTypes;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,19 +20,16 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class KubernetesClusterRabbitMQMessageSubscriber {
+public class KubernetesClusterRabbitMQMessageSubscriber implements MessageObserver {
 
     private final KubernetesClusterManagement kubernetesClusterManagement;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(
-            bindings = {
-                    @QueueBinding(
-                            value = @Queue(value = CommonConstant.MQ_QUEUE_KUBERNETES_CLUSTER_AGENT),
-                            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = CommonConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_CLUSTER_AGENT)
-                    )
-            }
-    )
+    @Override
+    public void onMessage(Message<?> message) {
+        //TODO
+    }
+
     public void subscribe(String message) {
         Log.info(this, message, "Received kubernetes cluster registry message ");
         Map<String, List<Node>> result = convertMessageBody(message).getData();
