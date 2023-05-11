@@ -25,7 +25,7 @@ public class BuildPackJobWatchService {
     private final BuildPackCacheApi buildPackCacheApi;
     private final BuildPackProperties buildPackProperties;
 
-    public void mqWatch(BuildPack buildPack) {
+    public void watch(BuildPack buildPack) {
 
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();

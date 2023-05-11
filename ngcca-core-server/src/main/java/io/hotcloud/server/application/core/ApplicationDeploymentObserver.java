@@ -1,13 +1,9 @@
 package io.hotcloud.server.application.core;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.module.application.core.ApplicationInstance;
@@ -24,21 +20,21 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ApplicationRabbitMQK8sEventsListener implements MessageObserver {
-    private final ObjectMapper objectMapper;
+public class ApplicationDeploymentObserver implements MessageObserver {
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationInstancePlayer applicationInstancePlayer;
     private final ApplicationDeploymentWatchService applicationDeploymentWatchService;
 
     @Override
     public void onMessage(Message<?> message) {
-        //TODO
+        if (message.getData() instanceof WatchMessageBody messageBody) {
+            subscribe(messageBody);
+        }
     }
 
-    public void subscribe(String message) {
+    public void subscribe(WatchMessageBody messageBody) {
 
         try {
-            WatchMessageBody messageBody = convertWatchMessageBody(message).getData();
             if (!Objects.equals(WorkloadsType.Deployment.name(), messageBody.getKind())) {
                 return;
             }
@@ -53,7 +49,7 @@ public class ApplicationRabbitMQK8sEventsListener implements MessageObserver {
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())) {
-                log.info("Application Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("Application Delete events: %s/%s/%s", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
                 applicationInstancePlayer.delete(businessId);
             }
 
@@ -66,27 +62,17 @@ public class ApplicationRabbitMQK8sEventsListener implements MessageObserver {
                     Log.warn(this, null, String.format("[%s] user's application instance [%s] has been deleted", fetched.getUser(), fetched.getName()));
                     return;
                 }
-                log.info("Application [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                applicationDeploymentWatchService.mqWatch(fetched);
+                Log.info(this, null, String.format("Application [%s] %s events: %s/%s/%s", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
+                applicationDeploymentWatchService.watch(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())) {
-                log.info("Application error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("Application error events: %s/%s/%s", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
             }
         } catch (Exception e) {
             Log.error(this, null, e.getMessage());
         }
 
-    }
-
-    private Message<WatchMessageBody> convertWatchMessageBody(String content) {
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {
-            });
-
-        } catch (JsonProcessingException e) {
-            throw new NGCCAPlatformException(e.getMessage());
-        }
     }
 
 }

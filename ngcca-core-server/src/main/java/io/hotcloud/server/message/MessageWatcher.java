@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 @Component
 @Slf4j
@@ -18,14 +17,11 @@ public class MessageWatcher {
 
     private final List<MessageObserver> messageObservers;
     private final RedisCommand<String, Object> redisCommand;
-    private final ExecutorService executorService;
 
     public MessageWatcher(List<MessageObserver> messageObservers,
-                          RedisCommand<String, Object> redisCommand,
-                          ExecutorService executorService) {
+                          RedisCommand<String, Object> redisCommand) {
         this.messageObservers = messageObservers;
         this.redisCommand = redisCommand;
-        this.executorService = executorService;
     }
 
     @Scheduled(cron = "* * * * * *")

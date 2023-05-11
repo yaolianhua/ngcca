@@ -1,13 +1,9 @@
 package io.hotcloud.server.buildpack.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.module.buildpack.BuildPackService;
@@ -23,20 +19,20 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuildPackRabbitMQK8sEventsListener implements MessageObserver {
-    private final ObjectMapper objectMapper;
+public class BuildPackJobObserver implements MessageObserver {
     private final BuildPackService buildPackService;
     private final BuildPackJobWatchService buildPackJobWatchService;
 
     @Override
     public void onMessage(Message<?> message) {
-        //TODO
+        if (message.getData() instanceof WatchMessageBody messageBody) {
+            subscribe(messageBody);
+        }
     }
 
-    public void subscribe(String message) {
+    public void subscribe(WatchMessageBody messageBody) {
 
         try {
-            WatchMessageBody messageBody = convertWatchMessageBody(message).getData();
             if (!Objects.equals(WorkloadsType.Job.name(), messageBody.getKind())) {
                 return;
             }
@@ -51,7 +47,7 @@ public class BuildPackRabbitMQK8sEventsListener implements MessageObserver {
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())) {
-                log.info("BuildPack Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("BuildPack Delete events: %s/%s/%s", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
                 //ignore
             }
 
@@ -60,27 +56,17 @@ public class BuildPackRabbitMQK8sEventsListener implements MessageObserver {
                 if (fetched.isDone() || fetched.isDeleted()) {
                     return;
                 }
-                log.info("BuildPack [{}] {} events: {}/{}/{}", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                buildPackJobWatchService.mqWatch(fetched);
+                Log.info(this, null, String.format("BuildPack [%s] %s events: %s/%s/%s", businessId, messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
+                buildPackJobWatchService.watch(fetched);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())) {
-                log.info("BuildPack error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("BuildPack error events: %s/%s/%s", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
             }
         } catch (Exception e) {
             Log.error(this, null, e.getMessage());
         }
 
-    }
-
-    private Message<WatchMessageBody> convertWatchMessageBody(String content) {
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {
-            });
-
-        } catch (JsonProcessingException e) {
-            throw new NGCCAPlatformException(e.getMessage());
-        }
     }
 
 }

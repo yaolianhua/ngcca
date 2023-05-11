@@ -34,7 +34,7 @@ public class ApplicationDeploymentWatchService {
     private final KubectlClient kubectlApi;
 
 
-    public void mqWatch(ApplicationInstance applicationInstance) {
+    public void watch(ApplicationInstance applicationInstance) {
 
         try {
             //if timeout

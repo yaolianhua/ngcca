@@ -19,16 +19,22 @@ public final class CommonConstant {
     public static final String FAILED_MESSAGE = "failed";
     public static final String MESSAGE_QUEUE_TEST = "message:queue:test";
     public static final String MESSAGE_QUEUE_SECURITY = "message:queue:security";
-    public static final String MESSAGE_QUEUE_TEMPLATE_DEPLOYMENT = "message:queue:template:deployment";
-    public static final String MESSAGE_QUEUE_BUILD_JOB = "message:queue:build:job";
-    public static final String MESSAGE_QUEUE_APPLICATION_DEPLOYMENT = "message:queue:application:deployment";
+    public static final String MESSAGE_QUEUE_K8S_DEPLOYMENT = "message:queue:k8s:deployment";
+    public static final String MESSAGE_QUEUE_K8S_JOB = "message:queue:k8s:job";
+    public static final String MESSAGE_QUEUE_K8S_DAEMONSET = "message:queue:k8s:daemonset";
+    public static final String MESSAGE_QUEUE_K8S_STATEFULSET = "message:queue:k8s:statefulset";
+    public static final String MESSAGE_QUEUE_K8S_CRONJOB = "message:queue:k8s:cronjob";
+    public static final String MESSAGE_QUEUE_K8S_POD = "message:queue:k8s:pod";
     public static final String MESSAGE_QUEUE_K8S_AGENT = "message:queue:k8s:agent";
     public static final List<String> MESSAGE_QUEUE_LIST = List.of(
             CommonConstant.MESSAGE_QUEUE_TEST,
             CommonConstant.MESSAGE_QUEUE_SECURITY,
-            CommonConstant.MESSAGE_QUEUE_TEMPLATE_DEPLOYMENT,
-            CommonConstant.MESSAGE_QUEUE_BUILD_JOB,
-            CommonConstant.MESSAGE_QUEUE_APPLICATION_DEPLOYMENT,
+            CommonConstant.MESSAGE_QUEUE_K8S_DEPLOYMENT,
+            CommonConstant.MESSAGE_QUEUE_K8S_JOB,
+            CommonConstant.MESSAGE_QUEUE_K8S_CRONJOB,
+            CommonConstant.MESSAGE_QUEUE_K8S_DAEMONSET,
+            CommonConstant.MESSAGE_QUEUE_K8S_STATEFULSET,
+            CommonConstant.MESSAGE_QUEUE_K8S_POD,
             CommonConstant.MESSAGE_QUEUE_K8S_AGENT
     );
 }

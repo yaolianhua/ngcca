@@ -36,7 +36,7 @@ public class TemplateDeploymentWatchService {
     private final IngressClient ingressClient;
     private final PodClient podApi;
 
-    public void mqWatch(TemplateInstance template) {
+    public void watch(TemplateInstance template) {
 
         try {
             //if timeout

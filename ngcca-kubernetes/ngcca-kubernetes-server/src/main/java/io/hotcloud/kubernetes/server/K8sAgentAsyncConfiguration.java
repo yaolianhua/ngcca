@@ -1,5 +1,7 @@
-package io.hotcloud.server;
+package io.hotcloud.kubernetes.server;
 
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -18,12 +21,17 @@ import java.util.concurrent.ExecutorService;
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
 @EnableScheduling
-public class CommonAutoConfiguration {
+public class K8sAgentAsyncConfiguration {
+
+    @PostConstruct
+    public void print() {
+        Log.info(this, null, Event.START, "enable k8s agent spring async scheduling configuration");
+    }
 
     @Bean
     @ConditionalOnMissingBean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("common-").build();
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("k8s-").build();
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }

@@ -1,6 +1,8 @@
-package io.hotcloud.kubernetes.server;
+package io.hotcloud.server;
 
-import lombok.extern.slf4j.Slf4j;
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,32 +21,30 @@ import java.util.concurrent.ExecutorService;
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
 @EnableScheduling
-@Slf4j
-public class AsyncConfiguration {
-
+public class NgccaAsyncConfiguration {
     @PostConstruct
     public void print() {
-        log.info("【Enable spring async scheduling configuration】");
+        Log.info(this, null, Event.START, "enable spring async scheduling configuration");
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("k8s-").build();
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("common-").build();
         threadPoolTaskExecutor.initialize();
-        log.info("【Initialed ThreadPoolTaskExecutor】");
         return threadPoolTaskExecutor;
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ExecutorService executorService(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("【Initialed ExecutorService】");
         return threadPoolTaskExecutor.getThreadPoolExecutor();
     }
 
     @Primary
     @Bean
+    @ConditionalOnMissingBean
     public Executor executor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        log.info("【Initialed Executor】");
         return threadPoolTaskExecutor;
     }
 }

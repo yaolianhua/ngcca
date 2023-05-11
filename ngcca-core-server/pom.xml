@@ -36,6 +36,12 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-kubernetes-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-compress</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- vendors -->

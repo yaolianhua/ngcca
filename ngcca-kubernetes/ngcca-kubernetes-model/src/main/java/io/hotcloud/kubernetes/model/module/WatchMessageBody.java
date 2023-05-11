@@ -6,12 +6,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Data
 public class WatchMessageBody implements Serializable {
-
     private String namespace;
     private String kind;
     private String name;
@@ -35,4 +31,5 @@ public class WatchMessageBody implements Serializable {
         watchMessageBody.setLabels(labels);
         return watchMessageBody;
     }
+
 }

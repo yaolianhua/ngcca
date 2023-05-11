@@ -4,22 +4,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  rabbitmq:
-    host: ${kubernetes.rabbitmq.host:}
-    port: ${kubernetes.rabbitmq.port:}
-    username: ${kubernetes.rabbitmq.username:}
-    password: ${kubernetes.rabbitmq.password:}
-    virtual-host: /
-    cache:
-      connection:
-        mode: connection
 kubernetes:
   in-cluster: true
   enable-workloads-watcher: true
-  rabbitmq:
+  redis:
+    database:
     host:
     port:
-    username:
     password:
 server:
   port: 1400

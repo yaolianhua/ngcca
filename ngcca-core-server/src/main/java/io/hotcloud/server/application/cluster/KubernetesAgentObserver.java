@@ -1,41 +1,36 @@
 package io.hotcloud.server.application.cluster;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.NodeAddress;
 import io.fabric8.kubernetes.api.model.NodeSystemInfo;
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.common.utils.UUIDGenerator;
+import io.hotcloud.kubernetes.model.K8sAgentCluster;
 import io.hotcloud.server.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class KubernetesClusterRabbitMQMessageSubscriber implements MessageObserver {
+public class KubernetesAgentObserver implements MessageObserver {
 
     private final KubernetesClusterManagement kubernetesClusterManagement;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void onMessage(Message<?> message) {
-        //TODO
+        if (message.getData() instanceof K8sAgentCluster k8sAgentCluster) {
+            subscribe(k8sAgentCluster);
+        }
     }
 
-    public void subscribe(String message) {
-        Log.info(this, message, "Received kubernetes cluster registry message ");
-        Map<String, List<Node>> result = convertMessageBody(message).getData();
-        List<Node> masters = result.get("masters");
-        List<Node> nodes = result.get("nodes");
+    public void subscribe(K8sAgentCluster k8sAgentCluster) {
 
+        Log.info(this, k8sAgentCluster, Event.NOTIFY, "received k8s agent cluster info message");
         List<KubernetesCluster> kubernetesClusters = kubernetesClusterManagement.list();
         List<String> masterIpList = kubernetesClusters.stream()
                 .flatMap(e -> e.getMasters().stream())
@@ -44,7 +39,7 @@ public class KubernetesClusterRabbitMQMessageSubscriber implements MessageObserv
 
         KubernetesCluster kubernetesCluster = new KubernetesCluster();
 
-        for (Node master : masters) {
+        for (Node master : k8sAgentCluster.getMasters()) {
 
             io.hotcloud.module.db.core.cluster.Node mNode = new io.hotcloud.module.db.core.cluster.Node();
             mNode.setName(master.getMetadata().getName());
@@ -64,7 +59,7 @@ public class KubernetesClusterRabbitMQMessageSubscriber implements MessageObserv
             kubernetesCluster.getMasters().add(mNode);
         }
 
-        for (Node node : nodes) {
+        for (Node node : k8sAgentCluster.getNodes()) {
             io.hotcloud.module.db.core.cluster.Node nNode = new io.hotcloud.module.db.core.cluster.Node();
             nNode.setName(node.getMetadata().getName());
             for (NodeAddress address : node.getStatus().getAddresses()) {
@@ -85,13 +80,4 @@ public class KubernetesClusterRabbitMQMessageSubscriber implements MessageObserv
         kubernetesClusterManagement.save(kubernetesCluster);
     }
 
-    private Message<Map<String, List<Node>>> convertMessageBody(String content) {
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {
-            });
-
-        } catch (JsonProcessingException e) {
-            throw new NGCCAPlatformException(e.getMessage());
-        }
-    }
 }

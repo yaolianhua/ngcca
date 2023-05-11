@@ -1,13 +1,9 @@
 package io.hotcloud.server.application.template;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.common.model.exception.NGCCAPlatformException;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.module.application.template.TemplateInstance;
@@ -24,21 +20,21 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TemplateRabbitMQK8sEventsListener implements MessageObserver {
-    private final ObjectMapper objectMapper;
+public class TemplateDeploymentObserver implements MessageObserver {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstancePlayer templateInstancePlayer;
     private final TemplateDeploymentWatchService templateDeploymentWatchService;
 
     @Override
     public void onMessage(Message<?> message) {
-        //TODO
+        if (message.getData() instanceof WatchMessageBody messageBody) {
+            subscribe(messageBody);
+        }
     }
 
-    public void subscribe(String message) {
+    public void subscribe(WatchMessageBody messageBody) {
 
         try {
-            WatchMessageBody messageBody = convertWatchMessageBody(message).getData();
             if (!Objects.equals(WorkloadsType.Deployment.name(), messageBody.getKind())) {
                 return;
             }
@@ -63,7 +59,7 @@ public class TemplateRabbitMQK8sEventsListener implements MessageObserver {
                     return;
                 }
                 log.info("Template [{}] {} events: {}/{}/{}", template.getId(), messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
-                templateDeploymentWatchService.mqWatch(template);
+                templateDeploymentWatchService.watch(template);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())) {
@@ -73,16 +69,6 @@ public class TemplateRabbitMQK8sEventsListener implements MessageObserver {
             Log.error(this, null, e.getMessage());
         }
 
-    }
-
-    private Message<WatchMessageBody> convertWatchMessageBody(String content) {
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {
-            });
-
-        } catch (JsonProcessingException e) {
-            throw new NGCCAPlatformException(e.getMessage());
-        }
     }
 
 }

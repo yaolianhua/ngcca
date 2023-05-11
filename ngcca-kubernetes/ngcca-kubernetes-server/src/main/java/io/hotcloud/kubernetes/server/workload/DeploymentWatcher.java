@@ -5,13 +5,13 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.Message;
+import io.hotcloud.common.model.MessageBroadcaster;
 import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
 import io.hotcloud.kubernetes.model.WorkloadsType;
-import io.hotcloud.kubernetes.model.module.Message;
-import io.hotcloud.kubernetes.model.module.RabbitMQConstant;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
-import io.hotcloud.kubernetes.server.KubernetesRabbitmqMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +25,10 @@ import java.util.Map;
 public class DeploymentWatcher implements WorkloadsWatchApi {
 
     private final KubernetesApi kubernetesApi;
-    private final KubernetesRabbitmqMessageBroadcaster messageBroadcaster;
+    private final MessageBroadcaster messageBroadcaster;
 
     public DeploymentWatcher(KubernetesApi kubernetesApi,
-                             KubernetesRabbitmqMessageBroadcaster messageBroadcaster) {
+                             MessageBroadcaster messageBroadcaster) {
         this.kubernetesApi = kubernetesApi;
         this.messageBroadcaster = messageBroadcaster;
     }
@@ -58,7 +58,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                                 null,
                                 "Deployment Watch Event Push"
                         );
-                        messageBroadcaster.broadcast(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT, message);
+                        messageBroadcaster.broadcast(CommonConstant.MESSAGE_QUEUE_K8S_DEPLOYMENT, message);
                     }
 
                     @Override
@@ -70,7 +70,7 @@ public class DeploymentWatcher implements WorkloadsWatchApi {
                                 e.getMessage(),
                                 "Deployment Watch Event Push"
                         );
-                        messageBroadcaster.broadcast(RabbitMQConstant.MQ_EXCHANGE_FANOUT_KUBERNETES_WORKLOADS_DEPLOYMENT, message);
+                        messageBroadcaster.broadcast(CommonConstant.MESSAGE_QUEUE_K8S_DEPLOYMENT, message);
                     }
 
                     @Override
