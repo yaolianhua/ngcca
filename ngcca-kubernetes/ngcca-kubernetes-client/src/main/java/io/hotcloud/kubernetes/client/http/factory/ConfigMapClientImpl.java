@@ -2,10 +2,10 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.ConfigMapClient;
 import io.hotcloud.kubernetes.model.ConfigMapCreateRequest;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +41,8 @@ class ConfigMapClientImpl implements ConfigMapClient {
 
     @Override
     public ConfigMap read(String namespace, String configmap) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(configmap);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(configmap);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
 
     @Override
     public ConfigMapList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -76,7 +76,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
 
     @Override
     public ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<ConfigMap> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -87,7 +87,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
 
     @Override
     public ConfigMap create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -102,8 +102,8 @@ class ConfigMapClientImpl implements ConfigMapClient {
 
     @Override
     public Void delete(String namespace, String configmap) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(configmap);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(configmap);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

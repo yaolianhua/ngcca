@@ -1,8 +1,8 @@
-package io.hotcloud.kubernetes.client;
+package io.hotcloud.kubernetes.model;
 
 import java.util.Objects;
 
-public class ClientRequestParamAssertion {
+public class RequestParamAssertion {
 
     public static void assertNamespaceNotNull(String namespace) {
         if (Objects.isNull(namespace) || namespace.isBlank()) {

@@ -3,13 +3,12 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.ConfigMapApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -18,12 +17,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class ConfigMapOperator implements ConfigMapApi {
 
     private final CoreV1Api coreV1Api;
@@ -50,7 +44,7 @@ public class ConfigMapOperator implements ConfigMapApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create configMap success \n '{}'", cm);
+        Log.debug(this, yaml, String.format("create configMap '%s' success", Objects.requireNonNull(cm.getMetadata()).getName()));
 
         return fabric8client.configMaps()
                 .inNamespace(namespace)
@@ -62,7 +56,7 @@ public class ConfigMapOperator implements ConfigMapApi {
     public void delete(String namespace, String configmap) throws ApiException {
         Assert.hasText(namespace, () -> "namespace is null");
         Assert.hasText(configmap, () -> "delete resource name is null");
-        V1Status v1Status = coreV1Api.deleteNamespacedConfigMap(
+        coreV1Api.deleteNamespacedConfigMap(
                 configmap,
                 namespace,
                 "true",
@@ -72,7 +66,7 @@ public class ConfigMapOperator implements ConfigMapApi {
                 null,
                 null
         );
-        log.debug("delete namespaced configMap success \n '{}'", v1Status);
+        Log.debug(this, null, String.format("delete '%s' namespaced configMap '%s' success", namespace, configmap));
     }
 
     @Override

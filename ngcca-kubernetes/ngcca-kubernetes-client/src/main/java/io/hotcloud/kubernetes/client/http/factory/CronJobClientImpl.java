@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.CronJobClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.CronJobCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -41,8 +41,8 @@ class CronJobClientImpl implements CronJobClient {
 
     @Override
     public CronJob read(String namespace, String cronJob) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(cronJob);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(cronJob);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ class CronJobClientImpl implements CronJobClient {
 
     @Override
     public CronJobList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
 
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
@@ -77,7 +77,7 @@ class CronJobClientImpl implements CronJobClient {
 
     @Override
     public CronJob create(CronJobCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<CronJob> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -88,7 +88,7 @@ class CronJobClientImpl implements CronJobClient {
 
     @Override
     public CronJob create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -103,8 +103,8 @@ class CronJobClientImpl implements CronJobClient {
 
     @Override
     public Void delete(String namespace, String cronJob) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(cronJob);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(cronJob);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

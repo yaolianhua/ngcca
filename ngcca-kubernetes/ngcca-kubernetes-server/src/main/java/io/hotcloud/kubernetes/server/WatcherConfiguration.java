@@ -9,9 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
         name = KubernetesProperties.ENABLE_WORKLOADS_WATCHER,

@@ -17,10 +17,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
 public class ServiceOperator implements ServiceApi {
 
@@ -43,7 +39,7 @@ public class ServiceOperator implements ServiceApi {
         }
         String namespace = Objects.requireNonNull(v1Service.getMetadata()).getNamespace();
         namespace = StringUtils.hasText(namespace) ? namespace : "default";
-        V1Service service = coreV1Api.createNamespacedService(namespace,
+        coreV1Api.createNamespacedService(namespace,
                 v1Service,
                 "true",
                 null,

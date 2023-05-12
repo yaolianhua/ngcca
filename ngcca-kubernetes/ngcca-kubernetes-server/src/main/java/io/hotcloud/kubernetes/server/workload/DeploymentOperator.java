@@ -4,14 +4,14 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.TimeoutImageEditReplacePatchable;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.DeploymentApi;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.RollingAction;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -21,12 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class DeploymentOperator implements DeploymentApi {
 
     private final AppsV1Api appsV1Api;
@@ -52,7 +47,7 @@ public class DeploymentOperator implements DeploymentApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create deployment success \n '{}'", created);
+        Log.debug(this, yaml, String.format("create deployment '%s' success", Objects.requireNonNull(created.getMetadata()).getName()));
 
         return fabric8Client.apps()
                 .deployments()
@@ -63,9 +58,9 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public void delete(String namespace, String deployment) throws ApiException {
-        Assert.hasText(namespace, () -> "namespace is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         Assert.hasText(deployment, () -> "delete resource name is null");
-        V1Status v1Status = appsV1Api.deleteNamespacedDeployment(
+       appsV1Api.deleteNamespacedDeployment(
                 deployment,
                 namespace,
                 "true",
@@ -75,7 +70,7 @@ public class DeploymentOperator implements DeploymentApi {
                 "Foreground",
                 null
         );
-        log.debug("delete namespaced deployment success \n '{}'", v1Status);
+        Log.debug(this, null, String.format("delete '%s' namespaced deployment '%s' success", namespace, deployment));
     }
 
     @Override
@@ -102,8 +97,8 @@ public class DeploymentOperator implements DeploymentApi {
                       String deployment,
                       Integer count,
                       boolean wait) {
-        Assert.hasText(namespace, () -> "namespace is null");
-        Assert.hasText(deployment, () -> "deployment name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.state(Objects.nonNull(count), () -> "scale count is null");
 
         fabric8Client.apps()
@@ -112,24 +107,24 @@ public class DeploymentOperator implements DeploymentApi {
                 .withName(deployment)
                 .scale(count, wait);
 
-        log.debug("Deployment '{}' scaled to num of '{}'", deployment, count);
+        Log.debug(this, null, String.format("Deployment '%s' scaled to num of '%s'", deployment, count));
         if (wait) {
-            log.debug("wait for the number of instances to exist - no guarantee is made as to readiness ");
+            Log.debug(this, null, "wait for the number of instances to exist - no guarantee is made as to readiness ");
         }
 
     }
 
     @Override
     public Deployment rolling(RollingAction action, String namespace, String deployment) {
-        Assert.hasText(namespace, () -> "namespace is null");
-        Assert.hasText(deployment, () -> "deployment name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
 
         TimeoutImageEditReplacePatchable<Deployment> patchable = fabric8Client.apps()
                 .deployments()
                 .inNamespace(namespace)
                 .withName(deployment)
                 .rolling();
-        log.debug("Namespaced '{}' Deployment '{}' patched [{}]", namespace, deployment, action);
+        Log.debug(this, null, String.format("'%s' Namespaced Deployment '%s' patched [%s]", namespace, deployment, action));
         switch (action) {
             case PAUSE:
                 return patchable.pause();
@@ -151,11 +146,11 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public Deployment imageUpdate(Map<String, String> containerImage, String namespace, String deployment) {
-        Assert.hasText(namespace, () -> "namespace is null");
-        Assert.hasText(deployment, () -> "deployment name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.state(!CollectionUtils.isEmpty(containerImage), () -> "containerImage map is empty");
 
-        log.debug("Namespaced '{}' Deployment '{}' image patched '{}'", namespace, deployment, containerImage);
+        Log.debug(this, null, String.format("'%s' Namespaced Deployment '%s' image patched '%s'", namespace, deployment, containerImage));
         return fabric8Client.apps()
                 .deployments()
                 .inNamespace(namespace)
@@ -168,11 +163,11 @@ public class DeploymentOperator implements DeploymentApi {
 
     @Override
     public Deployment imageUpdate(String namespace, String deployment, String image) {
-        Assert.hasText(namespace, () -> "namespace is null");
-        Assert.hasText(deployment, () -> "deployment name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.hasText(image, () -> "image name is null");
 
-        log.debug("Namespaced '{}' Deployment '{}' image patched '{}'", namespace, deployment, image);
+        Log.debug(this, null, String.format("'%s' Namespaced Deployment '%s' image patched '%s'", namespace, deployment, image));
         return fabric8Client.apps()
                 .deployments()
                 .inNamespace(namespace)

@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.StorageClassClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -39,7 +39,7 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public StorageClass create(StorageClassCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<StorageClass> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -50,7 +50,7 @@ class StorageClassClientImpl implements StorageClassClient {
 
     @Override
     public StorageClass create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -66,7 +66,7 @@ class StorageClassClientImpl implements StorageClassClient {
     @Override
     public Void delete(String storageClass) throws ApiException {
 
-        ClientRequestParamAssertion.assertResourceNameNotNull(storageClass);
+        RequestParamAssertion.assertResourceNameNotNull(storageClass);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))
@@ -81,7 +81,7 @@ class StorageClassClientImpl implements StorageClassClient {
     @Override
     public StorageClass read(String name) {
 
-        ClientRequestParamAssertion.assertResourceNameNotNull(name);
+        RequestParamAssertion.assertResourceNameNotNull(name);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))

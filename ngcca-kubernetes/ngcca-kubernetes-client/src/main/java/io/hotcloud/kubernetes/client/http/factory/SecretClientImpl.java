@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.SecretClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.kubernetes.client.openapi.ApiException;
@@ -41,8 +41,8 @@ class SecretClientImpl implements SecretClient {
 
     @Override
     public Secret read(String namespace, String secret) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(secret);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(secret);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ class SecretClientImpl implements SecretClient {
 
     @Override
     public SecretList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -76,7 +76,7 @@ class SecretClientImpl implements SecretClient {
 
     @Override
     public Secret create(SecretCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<Secret> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -87,7 +87,7 @@ class SecretClientImpl implements SecretClient {
 
     @Override
     public Secret create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -102,8 +102,8 @@ class SecretClientImpl implements SecretClient {
 
     @Override
     public Void delete(String namespace, String secret) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(secret);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(secret);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

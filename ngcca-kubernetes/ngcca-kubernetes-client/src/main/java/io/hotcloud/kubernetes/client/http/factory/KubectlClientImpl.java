@@ -2,10 +2,10 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.CopyAction;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,8 +38,8 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
@@ -55,7 +55,7 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public Boolean delete(String namespace, YamlBody yaml) {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
@@ -71,8 +71,8 @@ class KubectlClientImpl implements KubectlClient {
     @Override
     public Boolean portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
 
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
 
         Assert.notNull(containerPort, "containerPort is null");
         Assert.notNull(localPort, "localPort is null");
@@ -94,7 +94,7 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<Event> events(String namespace) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", uri))
                 .build(namespace);
@@ -121,8 +121,8 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<Event> namespacedPodEvents(String namespace, String pod) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", uri))
                 .build(namespace, pod);
@@ -138,8 +138,8 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public Event events(String namespace, String name) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(name);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(name);
 
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", uri))
                 .build(namespace, name);
@@ -152,8 +152,8 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.hasText(source, "source path  is null");
         Assert.hasText(target, "target path is null");
         Assert.notNull(action, "action is null");
@@ -174,8 +174,8 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.hasText(source, "source path  is null");
         Assert.hasText(target, "target path is null");
         Assert.notNull(action, "action is null");

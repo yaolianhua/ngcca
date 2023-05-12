@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.StatefulSetClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.StatefulSetCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -41,8 +41,8 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet read(String namespace, String statefulSet) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(statefulSet);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSetList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -76,7 +76,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet create(StatefulSetCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<StatefulSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -87,7 +87,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public StatefulSet create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -102,8 +102,8 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     @Override
     public Void delete(String namespace, String statefulSet) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(statefulSet);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

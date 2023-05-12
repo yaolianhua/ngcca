@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
 import io.hotcloud.common.model.MessageBroadcaster;
@@ -12,16 +13,11 @@ import io.hotcloud.kubernetes.api.KubernetesApi;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class JobWatcher implements WorkloadsWatchApi {
 
     private final KubernetesApi kubernetesApi;
@@ -76,11 +72,11 @@ public class JobWatcher implements WorkloadsWatchApi {
 
                         @Override
                         public void onClose() {
-                            log.info("Watch Job gracefully closed");
+                            Log.info(this, null, "Watch Job gracefully closed");
                         }
                         @Override
                         public boolean reconnecting() {
-                            log.info("Job watcher reconnecting");
+                            Log.info(this, null, "Job watcher reconnecting");
                             return false;
                         }
                     });

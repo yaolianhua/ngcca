@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -41,8 +41,8 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
 
     @Override
     public PersistentVolumeClaim read(String namespace, String persistentVolumeClaim) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -57,7 +57,7 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
 
     @Override
     public PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -77,7 +77,7 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
     @Override
     public PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException {
 
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -88,7 +88,7 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
 
     @Override
     public PersistentVolumeClaim create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -103,8 +103,8 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
 
     @Override
     public Void delete(String namespace, String persistentVolumeClaim) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))

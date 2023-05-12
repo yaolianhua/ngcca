@@ -4,16 +4,11 @@ import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "kubernetes")
-@Slf4j
 @Data
 public class KubernetesProperties {
 

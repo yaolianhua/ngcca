@@ -3,13 +3,12 @@ package io.hotcloud.kubernetes.server.workload;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.CronJobApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.models.V1CronJob;
-import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -18,11 +17,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class CronJobOperator implements CronJobApi {
 
     private final BatchV1Api batchV1Api;
@@ -48,7 +43,7 @@ public class CronJobOperator implements CronJobApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create cronjob success \n '{}'", cronJob);
+        Log.debug(this, yaml, String.format("create cronjob '%s' success", Objects.requireNonNull(cronJob.getMetadata()).getName()));
 
         return fabric8Client.batch()
                 .v1()
@@ -82,7 +77,7 @@ public class CronJobOperator implements CronJobApi {
     public void delete(String namespace, String cronjob) throws ApiException {
         Assert.hasText(namespace, () -> "namespace is null");
         Assert.hasText(cronjob, () -> "delete resource name is null");
-        V1Status v1Status = batchV1Api.deleteNamespacedCronJob(
+        batchV1Api.deleteNamespacedCronJob(
                 cronjob,
                 namespace,
                 "true",
@@ -92,6 +87,6 @@ public class CronJobOperator implements CronJobApi {
                 "Foreground",
                 null
         );
-        log.debug("delete namespaced cronjob success \n '{}'", v1Status);
+        Log.debug(this, null, String.format("delete '%s' namespaced cronjob '%s' success",namespace, cronjob));
     }
 }

@@ -3,12 +3,12 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.PersistentVolumeApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1PersistentVolume;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -16,11 +16,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class PersistentVolumeOperator implements PersistentVolumeApi {
 
     private final CoreV1Api coreV1Api;
@@ -45,7 +41,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create persistentVolume success \n '{}'", v1Pv);
+        Log.debug(this, yaml, String.format("create pv '%s' success", Objects.requireNonNull(v1Pv.getMetadata()).getName()));
 
         return fabric8Client.persistentVolumes()
                 .withName(Objects.requireNonNull(v1PersistentVolume.getMetadata(), "get v1PersistentVolume metadata null").getName())
@@ -65,7 +61,7 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
     @Override
     public void delete(String persistentVolume) throws ApiException {
         Assert.hasText(persistentVolume, () -> "delete resource name is null");
-        V1PersistentVolume v1PersistentVolume = coreV1Api.deletePersistentVolume(
+        coreV1Api.deletePersistentVolume(
                 persistentVolume,
                 "true",
                 null,
@@ -73,6 +69,6 @@ public class PersistentVolumeOperator implements PersistentVolumeApi {
                 null,
                 null,
                 null);
-        log.debug("Delete persistentVolume success \n '{}'", v1PersistentVolume);
+        Log.debug(this, null, String.format("delete pv '%s' success", persistentVolume));
     }
 }

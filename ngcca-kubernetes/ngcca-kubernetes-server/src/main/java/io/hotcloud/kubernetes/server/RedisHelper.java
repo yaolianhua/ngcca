@@ -13,9 +13,6 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 public final class RedisHelper {
 
     private RedisHelper() {

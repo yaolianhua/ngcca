@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.RollingAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
@@ -40,8 +40,8 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public Deployment read(String namespace, String deployment) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -56,7 +56,7 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public DeploymentList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -101,8 +101,8 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public Void delete(String namespace, String deployment) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -116,8 +116,8 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public Void scale(String namespace, String deployment, Integer count, boolean wait) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.isTrue(Objects.nonNull(count), () -> "scale count is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -134,8 +134,8 @@ class DeploymentClientImpl implements DeploymentClient {
     @Override
     public Deployment rolling(RollingAction action, String namespace, String deployment) {
         Assert.notNull(action, "action is null");
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/rolling", uri))
@@ -150,8 +150,8 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public Deployment imageSet(String namespace, String deployment, String image) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.isTrue(StringUtils.hasText(image), () -> "image name is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -167,8 +167,8 @@ class DeploymentClientImpl implements DeploymentClient {
 
     @Override
     public Deployment imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(deployment);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
         Assert.isTrue(!CollectionUtils.isEmpty(containerToImageMap), () -> "containerToImageMap is empty");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();

@@ -3,13 +3,12 @@ package io.hotcloud.kubernetes.server.configurations;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.SecretApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Secret;
-import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -18,11 +17,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class SecretOperator implements SecretApi {
 
     private final CoreV1Api coreV1Api;
@@ -49,7 +44,7 @@ public class SecretOperator implements SecretApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create secret success \n '{}'", cm);
+        Log.debug(this, yaml, String.format("create secret '%s' success", Objects.requireNonNull(cm.getMetadata()).getName()));
 
         return fabric8client.secrets()
                 .inNamespace(namespace)
@@ -61,7 +56,7 @@ public class SecretOperator implements SecretApi {
     public void delete(String namespace, String secret) throws ApiException {
         Assert.hasText(namespace, () -> "namespace is null");
         Assert.hasText(secret, () -> "delete resource name is null");
-        V1Status v1Status = coreV1Api.deleteNamespacedSecret(
+        coreV1Api.deleteNamespacedSecret(
                 secret,
                 namespace,
                 "true",
@@ -71,7 +66,7 @@ public class SecretOperator implements SecretApi {
                 null,
                 null
         );
-        log.debug("delete namespaced secret success \n '{}'", v1Status);
+        Log.debug(this, null, String.format("delete '%s' namespaced secret '%s' success", namespace, secret));
     }
 
     @Override

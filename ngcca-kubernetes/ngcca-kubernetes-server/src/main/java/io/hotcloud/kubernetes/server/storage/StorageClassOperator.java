@@ -3,12 +3,12 @@ package io.hotcloud.kubernetes.server.storage;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.fabric8.kubernetes.api.model.storage.StorageClassList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.StorageClassApi;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.StorageV1Api;
 import io.kubernetes.client.openapi.models.V1StorageClass;
 import io.kubernetes.client.util.Yaml;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -16,11 +16,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class StorageClassOperator implements StorageClassApi {
 
     private final StorageV1Api storageV1Api;
@@ -45,7 +41,7 @@ public class StorageClassOperator implements StorageClassApi {
                 "true",
                 null,
                 null, null);
-        log.debug("create storageClass success \n '{}'", v1Sc);
+        Log.debug(this, yaml, String.format("create storageClass '%s' success", Objects.requireNonNull(v1Sc.getMetadata()).getName()));
 
         return fabric8Client.storage()
                 .v1()
@@ -69,7 +65,7 @@ public class StorageClassOperator implements StorageClassApi {
     @Override
     public void delete(String storageClass) throws ApiException {
         Assert.hasText(storageClass, () -> "delete resource name is null");
-        V1StorageClass v1StorageClass = storageV1Api.deleteStorageClass(
+        storageV1Api.deleteStorageClass(
                 storageClass,
                 "true",
                 null,
@@ -77,6 +73,6 @@ public class StorageClassOperator implements StorageClassApi {
                 null,
                 null,
                 null);
-        log.debug("Delete storageClass success \n '{}'", v1StorageClass);
+        Log.debug(this, null, String.format("delete storageClass '%s' success", storageClass));
     }
 }

@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -39,8 +39,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public String logs(String namespace, String pod, Integer tail) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/log", uri))
@@ -56,8 +56,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public String logs(String namespace, String pod, String container, Integer tailingLine) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.isTrue(StringUtils.hasText(container), "container name is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -74,8 +74,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public List<String> loglines(String namespace, String pod, Integer tail) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/loglines", uri))
@@ -91,8 +91,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Pod read(String namespace, String pod) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
                 .build(namespace, pod);
@@ -106,7 +106,7 @@ class PodClientImpl implements PodClient {
 
     @Override
     public PodList readList(String namespace, Map<String, String> labelSelector) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
         labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -125,7 +125,7 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Pod create(PodCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<Pod> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -136,7 +136,7 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Pod create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -151,8 +151,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Void delete(String namespace, String pod) throws ApiException {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
@@ -166,8 +166,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Pod addAnnotations(String namespace, String pod, Map<String, String> annotations) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.isTrue(!CollectionUtils.isEmpty(annotations), "annotations is empty");
 
         URI uriRequest = UriComponentsBuilder
@@ -182,8 +182,8 @@ class PodClientImpl implements PodClient {
 
     @Override
     public Pod addLabels(String namespace, String pod, Map<String, String> labels) {
-        ClientRequestParamAssertion.assertNamespaceNotNull(namespace);
-        ClientRequestParamAssertion.assertResourceNameNotNull(pod);
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.isTrue(!CollectionUtils.isEmpty(labels), "labels is empty");
 
         URI uriRequest = UriComponentsBuilder

@@ -6,10 +6,11 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.StatusDetails;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.KubectlApi;
 import io.hotcloud.kubernetes.api.PodApi;
 import io.hotcloud.kubernetes.model.CopyAction;
-import lombok.extern.slf4j.Slf4j;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -31,12 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @author yaolianhua789@gmail.com
- *
- **/
 @Component
-@Slf4j
 public class KubectlEquivalent implements KubectlApi {
 
     private final KubernetesClient fabric8Client;
@@ -61,7 +57,7 @@ public class KubectlEquivalent implements KubectlApi {
                 fabric8Client.load(inputStream).createOrReplace();
 
         for (HasMetadata metadata : hasMetadata) {
-            log.debug("{} '{}' create or replace", metadata.getKind(), metadata.getMetadata().getName());
+            Log.debug(this, yaml, String.format("%s %s create or replace, namespace %s", metadata.getKind(), metadata.getMetadata().getName(), namespace));
         }
 
         return hasMetadata;
@@ -83,18 +79,17 @@ public class KubectlEquivalent implements KubectlApi {
     @Override
     public Boolean upload(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
 
-        Assert.hasText(namespace, "namespace is null");
-        Assert.hasText(pod, "pod name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.hasText(source, "source path  is null");
         Assert.hasText(target, "target path is null");
 
         //valid pod exist
-        Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
+        checkPodExist(namespace, pod);
 
         try {
             if (Objects.equals(action, CopyAction.FILE)) {
-                log.debug("Upload local file '{}' to  '{}' of Pod [{}], container '{}'", source, target, pod, container);
+                Log.debug(this, null, String.format("Upload local file '%s' to  '%s' of Pod [%s], container '%s'", source, target, pod, container));
                 return StringUtils.hasText(container) ?
                         fabric8Client.pods()
                                 .inNamespace(namespace)
@@ -109,7 +104,7 @@ public class KubectlEquivalent implements KubectlApi {
                                 .upload(Path.of(source));
             }
             if (Objects.equals(action, CopyAction.DIRECTORY)) {
-                log.debug("Upload local dir '{}' to '{}' of Pod [{}], container '{}'", source, target, pod, container);
+                Log.debug(this, null, String.format("Upload local dir '%s' to '%s' of Pod [%s], container '%s'", source, target, pod, container));
                 return StringUtils.hasText(container) ?
                         fabric8Client.pods()
                                 .inNamespace(namespace)
@@ -124,7 +119,7 @@ public class KubectlEquivalent implements KubectlApi {
                                 .upload(Path.of(source));
             }
         } catch (Exception e) {
-            log.error("upload error '{}'", e.getMessage(), e);
+            Log.error(this, null,String.format("upload error '%s'", e.getMessage()));
             throw new RuntimeException(e.getMessage());
         }
 
@@ -133,18 +128,17 @@ public class KubectlEquivalent implements KubectlApi {
 
     @Override
     public Boolean download(String namespace, String pod, @Nullable String container, String source, String target, CopyAction action) {
-        Assert.hasText(namespace, "namespace is null");
-        Assert.hasText(pod, "pod name is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
         Assert.hasText(source, "source path  is null");
         Assert.hasText(target, "target path is null");
 
         //valid pod exist
-        Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
+        checkPodExist(namespace, pod);
 
         try {
             if (Objects.equals(action, CopyAction.FILE)) {
-                log.debug("Download file '{}' from Pod [{}] to local '{}', container '{}'", source, pod, target, container);
+                Log.debug(this, null, String.format("Download file '%s' from Pod [%s] to local '%s', container '%s'", source, pod, target, container));
                 return StringUtils.hasText(container) ?
                         fabric8Client.pods()
                                 .inNamespace(namespace)
@@ -159,7 +153,7 @@ public class KubectlEquivalent implements KubectlApi {
                                 .copy(Path.of(target));
             }
             if (Objects.equals(action, CopyAction.DIRECTORY)) {
-                log.debug("Download dir '{}' from Pod [{}] to local '{}', container '{}'", source, pod, target, container);
+                Log.debug(this, null, String.format("Download dir '%s' from Pod [%s] to local '%s', container '%s'", source, pod, target, container));
                 return StringUtils.hasText(container) ?
                         fabric8Client.pods()
                                 .inNamespace(namespace)
@@ -174,11 +168,16 @@ public class KubectlEquivalent implements KubectlApi {
                                 .copy(Path.of(target));
             }
         } catch (Exception e) {
-            log.error("download error '{}'", e.getMessage(), e);
+            Log.error(this, null, String.format("download error '%s'", e.getMessage()));
             throw new RuntimeException(e.getMessage());
         }
 
         return false;
+    }
+
+    private void checkPodExist(String namespace, String pod) {
+        Pod read = podApi.read(namespace, pod);
+        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
     }
 
     @Override
@@ -194,8 +193,7 @@ public class KubectlEquivalent implements KubectlApi {
         Assert.state(InetAddressValidator.getInstance().isValid(ipR), "invalid ipv4 address");
 
         //valid pod exist
-        Pod read = podApi.read(namespace, pod);
-        Assert.notNull(read, String.format("Pod '%s' can not be found in namespace '%s'", pod, namespace));
+        checkPodExist(namespace, pod);
 
         //return result
         AtomicBoolean resultBoolean = new AtomicBoolean(true);
@@ -226,16 +224,19 @@ public class KubectlEquivalent implements KubectlApi {
                         .portForward(containerPort, inetAddressReference.get(), localPort);
                 countDownLatch.countDown();
 
-                log.debug("Port forward open for {} {}, ip='{}', containerPort='{}', localPort='{}'", lR, unitR.name().toLowerCase(), ipR, containerPort, localPort);
+                Log.debug(this, null, String.format("Port forward open for %s %s, ip='%s', containerPort='%s', localPort='%s'", lR, unitR.name().toLowerCase(), ipR, containerPort, localPort));
                 unitR.sleep(lR);
 
                 forward.close();
-                log.debug("Closing port forward, ip='{}', containerPort='{}', localPort='{}'", ipR, containerPort, localPort);
+                Log.debug(this, null, String.format("Closing port forward, ip='%s', containerPort='%s', localPort='%s'", ipR, containerPort, localPort));
             } catch (Exception e) {
-                log.error("{}: {}", e.getMessage(), e.getCause().getMessage());
+                Log.error(this, null, String.format("%s: %s", e.getMessage(), e.getCause().getMessage()));
                 errorReference.set(String.format("%s: %s", e.getMessage(), e.getCause().getMessage()));
                 resultBoolean.set(false);
                 countDownLatch.countDown();
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
             }
 
         });
@@ -244,6 +245,7 @@ public class KubectlEquivalent implements KubectlApi {
             countDownLatch.await();
         } catch (InterruptedException e) {
             //
+            Thread.currentThread().interrupt();
         }
         Assert.state(!StringUtils.hasText(errorReference.get()), errorReference.get());
         return resultBoolean.get();

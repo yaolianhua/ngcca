@@ -2,9 +2,9 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.PersistentVolume;
 import io.fabric8.kubernetes.api.model.PersistentVolumeList;
-import io.hotcloud.kubernetes.client.ClientRequestParamAssertion;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
+import io.hotcloud.kubernetes.model.RequestParamAssertion;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
@@ -42,7 +42,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
     @Override
     public PersistentVolume read(String persistentVolume) {
 
-        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolume);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri))
@@ -75,7 +75,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(request);
+        RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<PersistentVolume> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -86,7 +86,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public PersistentVolume create(YamlBody yaml) throws ApiException {
-        ClientRequestParamAssertion.assertBodyNotNull(yaml);
+        RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
@@ -101,7 +101,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
 
     @Override
     public Void delete(String persistentVolume) throws ApiException {
-        ClientRequestParamAssertion.assertResourceNameNotNull(persistentVolume);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{name}", uri.toString()))

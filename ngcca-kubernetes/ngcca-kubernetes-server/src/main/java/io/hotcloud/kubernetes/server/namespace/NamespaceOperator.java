@@ -2,27 +2,22 @@ package io.hotcloud.kubernetes.server.namespace;
 
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.NamespaceApi;
 import io.hotcloud.kubernetes.model.NamespaceCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Namespace;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
-import io.kubernetes.client.openapi.models.V1Status;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
 public class NamespaceOperator implements NamespaceApi {
 
     private final CoreV1Api coreV1Api;
@@ -50,11 +45,12 @@ public class NamespaceOperator implements NamespaceApi {
         List<String> namespaces = namespaceList.stream()
                 .filter(e -> Objects.nonNull(e.getMetadata()))
                 .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
+                .filter(StringUtils::hasText)
+                .toList();
 
         String name = namespaceCreateRequest.getMetadata().getName();
         if (namespaces.contains(name)) {
-            log.warn("Namespace '{}' already exists", name);
+            Log.warn(this, namespaceCreateRequest, String.format("namespace '%s' already exists", name));
             return;
         }
 
@@ -68,14 +64,14 @@ public class NamespaceOperator implements NamespaceApi {
         namespace.setApiVersion("v1");
         namespace.setKind("Namespace");
 
-        V1Namespace v1Namespace = coreV1Api.createNamespace(namespace, "true", null, null, null);
-        log.debug("Namespace '{}' created \n '{}'", name, v1Namespace);
+        coreV1Api.createNamespace(namespace, "true", null, null, null);
+        Log.debug(this, namespaceCreateRequest, String.format("namespace '%s' created", name));
     }
 
     @Override
     public void delete(String namespace) throws ApiException {
         Assert.hasText(namespace, "namespace is null");
-        V1Status aTrue = coreV1Api.deleteNamespace(
+        coreV1Api.deleteNamespace(
                 namespace,
                 "true",
                 null,
@@ -83,7 +79,7 @@ public class NamespaceOperator implements NamespaceApi {
                 null,
                 "Foreground",
                 null);
-        log.debug("delete namespace '{}' success \n '{}'", namespace, aTrue);
+        Log.debug(this, null, String.format("delete namespace '%s' success", namespace));
     }
 
     @Override
