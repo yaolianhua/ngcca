@@ -6,3 +6,6 @@ kubernetes:
     port: 6379
     password: QbMufCD@9WVQ^Hv
     database: 0
+logging:
+  level:
+    io.hotcloud.common.log: debug
