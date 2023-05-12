@@ -25,5 +25,5 @@ ngcca:
     domain-name:
 logging:
   level:
-    io.hotcloud.server.message.RedisMessageBroadcaster: debug
+    io.hotcloud.common.log: debug
 
