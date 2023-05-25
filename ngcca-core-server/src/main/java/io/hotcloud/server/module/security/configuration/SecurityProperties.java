@@ -7,8 +7,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
@@ -20,9 +20,9 @@ public class SecurityProperties {
     public static final String SECURITY_ENABLED_PROPERTY = CONFIG_PREFIX + "security.enabled";
     private boolean enabled = true;
 
-    private List<String> ignoredUrls = new LinkedList<>();
+    private Set<String> ignoredUrls = new HashSet<>();
 
-    private List<String> ignoredDefaults = List.of(
+    private Set<String> ignoredDefaults = Set.of(
             "/swagger**/**",
             "/v3/api-docs/**",
             "/favicon.ico",
@@ -35,7 +35,7 @@ public class SecurityProperties {
         Log.info(this, this, Event.START, "load security properties");
     }
 
-    public List<String> getIgnoredUrls() {
+    public Set<String> getIgnoredUrls() {
         ignoredUrls.addAll(ignoredDefaults);
         return ignoredUrls;
     }
