@@ -11,10 +11,5 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "mongodb")
 public class MongodbProperties {
 
-    private String database = "ngcca";
-    private String username;
-    private String password;
-    private String host;
-    private Integer port = 27017;
-
+    private String uri;
 }

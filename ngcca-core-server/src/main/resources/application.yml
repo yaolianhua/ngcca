@@ -6,13 +6,9 @@ spring:
       matching-strategy: ant_path_matcher
   data:
     mongodb:
-      database: ${ngcca.mongodb.database:}
-      host: ${ngcca.mongodb.host:}
-      port: ${ngcca.mongodb.port:}
-      password: ${ngcca.mongodb.password:}
-      username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
+      uri: ${ngcca.mongodb.uri}
   profiles:
     include: system-registry-image
 ngcca:

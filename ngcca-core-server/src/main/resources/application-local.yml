@@ -7,18 +7,14 @@ ngcca:
   registry:
     url: harbor.linux-local:5000
     username: admin
-    password: QbMufCD@9WVQ^Hv
+    password: "QbMufCD@9WVQ^Hv"
     imagebuild-namespace: image-build-dev
   minio:
     access-key: admin
-    secret-key: QbMufCD@9WVQ^Hv
+    secret-key: "QbMufCD@9WVQ^Hv"
     endpoint: "http://linux.local:9009"
   mongodb:
-    host: linux.local
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 27017
-    database: ngcca-dev
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
 logging:
   level:
     io.hotcloud.common.log: debug
