@@ -49,7 +49,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: k8s-agent.k8s-cluster.com
+    - host: k8s-agent.linux.local
       http:
         paths:
           - path: /
@@ -87,15 +87,15 @@ spec:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
       containers:
-        - image: harbor.local:5000/ngcca/k8s-agent:20221113140055
+        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.05.24.113547
           env:
-            - name: KUBERNETES_RABBITMQ_HOST
-              value: "10.0.0.159"
-            - name: KUBERNETES_RABBITMQ_PORT
-              value: "5672"
-            - name: KUBERNETES_RABBITMQ_USERNAME
-              value: "admin"
-            - name: KUBERNETES_RABBITMQ_PASSWORD
+            - name: KUBERNETES_REDIS_HOST
+              value: "192.168.110.22"
+            - name: KUBERNETES_REDIS_PORT
+              value: "6379"
+            - name: KUBERNETES_REDIS_DATABASE
+              value: "0"
+            - name: KUBERNETES_REDIS_PASSWORD
               value: "QbMufCD@9WVQ^Hv"
           imagePullPolicy: IfNotPresent
           name: k8s-agent
