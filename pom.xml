@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0</version>
     </parent>
 
     <groupId>io.hotcloud</groupId>
@@ -27,7 +27,8 @@
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <springdoc.version>1.6.14</springdoc.version>
+        <springdoc-starter.version>2.1.0</springdoc-starter.version>
+        <javax-servlet.api.version>3.0.1</javax-servlet.api.version>
         <kubernetes.client-version>17.0.0</kubernetes.client-version>
         <fabric8.kubernetes.client-version>6.3.1</fabric8.kubernetes.client-version>
         <lombok.version>1.18.22</lombok.version>
@@ -133,10 +134,17 @@
 
             <!-- Swagger -->
             <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc.version}</version>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <scope>provided</scope>
+                <version>${javax-servlet.api.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-starter.version}</version>
+            </dependency>
+
             <!-- lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>

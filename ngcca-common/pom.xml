@@ -33,12 +33,13 @@
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
-
+        <!-- swagger api -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
+        <!-- commons -->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
