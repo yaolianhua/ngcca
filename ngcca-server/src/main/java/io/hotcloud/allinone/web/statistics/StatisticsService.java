@@ -4,11 +4,9 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;
-import io.hotcloud.module.buildpack.GitClonedStatistics;
 import io.hotcloud.module.buildpack.model.BuildPackStatistics;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.buildpack.service.GitClonedStatisticsService;
 import io.hotcloud.server.module.application.core.ApplicationInstanceStatisticsService;
 import io.hotcloud.server.module.application.template.TemplateInstanceStatisticsService;
 import io.hotcloud.server.module.buildpack.service.BuildPackStatisticsService;
@@ -31,7 +29,6 @@ public class StatisticsService {
 
     private final UserApi userApi;
     private final TemplateInstanceStatisticsService templateInstanceStatisticsService;
-    private final GitClonedStatisticsService gitClonedStatisticsService;
     private final BuildPackStatisticsService buildPackStatisticsService;
     private final ApplicationInstanceStatisticsService applicationInstanceStatisticsService;
 
@@ -47,14 +44,12 @@ public class StatisticsService {
         User user = userApi.find(userid);
 
         TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
-        GitClonedStatistics clonedStatistics = gitClonedStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
         final ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
 
         return Statistics.builder()
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
-                .repositories(clonedStatistics)
                 .applications(applicationInstanceStatistics)
                 .namespace(user.getNamespace())
                 .user(user)

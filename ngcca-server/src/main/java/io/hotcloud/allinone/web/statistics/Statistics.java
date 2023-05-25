@@ -2,7 +2,6 @@ package io.hotcloud.allinone.web.statistics;
 
 import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;
-import io.hotcloud.module.buildpack.GitClonedStatistics;
 import io.hotcloud.module.buildpack.model.BuildPackStatistics;
 import io.hotcloud.module.security.user.User;
 import lombok.AllArgsConstructor;
@@ -24,8 +23,7 @@ public class Statistics {
 
     @Builder.Default
     private TemplateInstanceStatistics templates = new TemplateInstanceStatistics();
-    @Builder.Default
-    private GitClonedStatistics repositories = new GitClonedStatistics();
+
     @Builder.Default
     private BuildPackStatistics buildPacks = new BuildPackStatistics();
     @Builder.Default
