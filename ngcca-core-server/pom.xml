@@ -57,12 +57,7 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-vendor-kaniko</artifactId>
         </dependency>
-        <!-- springboot 3.x swagger-starter dependence -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
         <!-- javafaker -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
