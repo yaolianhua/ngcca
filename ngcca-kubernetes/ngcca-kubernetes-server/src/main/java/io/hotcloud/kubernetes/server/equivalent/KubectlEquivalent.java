@@ -222,13 +222,14 @@ public class KubectlEquivalent implements KubectlApi {
                         .inNamespace(namespace)
                         .withName(pod)
                         .portForward(containerPort, inetAddressReference.get(), localPort);
-                countDownLatch.countDown();
 
-                Log.debug(this, null, String.format("Port forward open for %s %s, ip='%s', containerPort='%s', localPort='%s'", lR, unitR.name().toLowerCase(), ipR, containerPort, localPort));
-                unitR.sleep(lR);
-
+                Log.info(this, null, String.format("Port forward open for %s %s, ip='%s', containerPort='%s', localPort='%s'", lR, unitR.name().toLowerCase(), ipR, containerPort, localPort));
+                boolean await = countDownLatch.await(lR, unitR);
+                if (!await) {
+                    Log.info(this, null, "latch terminated before it's count reaching zero");
+                }
                 forward.close();
-                Log.debug(this, null, String.format("Closing port forward, ip='%s', containerPort='%s', localPort='%s'", ipR, containerPort, localPort));
+                Log.info(this, null, String.format("Closing port forward, ip='%s', containerPort='%s', localPort='%s'", ipR, containerPort, localPort));
             } catch (Exception e) {
                 Log.error(this, null, String.format("%s: %s", e.getMessage(), e.getCause().getMessage()));
                 errorReference.set(String.format("%s: %s", e.getMessage(), e.getCause().getMessage()));
@@ -241,12 +242,6 @@ public class KubectlEquivalent implements KubectlApi {
 
         });
 
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            //
-            Thread.currentThread().interrupt();
-        }
         Assert.state(!StringUtils.hasText(errorReference.get()), errorReference.get());
         return resultBoolean.get();
     }
