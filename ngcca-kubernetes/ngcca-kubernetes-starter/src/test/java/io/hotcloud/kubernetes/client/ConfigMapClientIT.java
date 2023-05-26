@@ -18,14 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 @EnableKubernetesAgentClient
 public class ConfigMapClientIT extends ClientIntegrationTestBase {
 
-    private static final String CONFIGMAP = "myconfig";
+    private static final String CONFIGMAP = "jason-config";
     private static final String NAMESPACE = "default";
 
     @Autowired
@@ -35,13 +32,13 @@ public class ConfigMapClientIT extends ClientIntegrationTestBase {
     public void init() throws ApiException {
         log.info("ConfigMap Client Integration Test Start");
         create();
-        log.info("Create ConfigMap Name: '{}'", CONFIGMAP);
+        log.info("Create ConfigMap: '{}'", CONFIGMAP);
     }
 
     @After
     public void post() throws ApiException {
         configMapClient.delete(NAMESPACE, CONFIGMAP);
-        log.info("Delete ConfigMap Name: '{}'", CONFIGMAP);
+        log.info("Delete ConfigMap: '{}'", CONFIGMAP);
         log.info("ConfigMap Client Integration Test End");
     }
 
@@ -58,7 +55,7 @@ public class ConfigMapClientIT extends ClientIntegrationTestBase {
 
         ConfigMap result = configMapClient.read(NAMESPACE, CONFIGMAP);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, CONFIGMAP);
+        Assert.assertEquals(CONFIGMAP, name);
 
     }
 

@@ -1,5 +1,19 @@
 spring:
   application:
-    name: ngcca-kubernetes-agent
+    name: ngcca-kubernetes-agent-test
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+kubernetes:
+  in-cluster: true
+  enable-workloads-watcher: true
+  redis:
+    database:
+    host:
+    port:
+    password:
 server:
   port: 1401
+logging:
+  level:
+    io.hotcloud.common.log: info

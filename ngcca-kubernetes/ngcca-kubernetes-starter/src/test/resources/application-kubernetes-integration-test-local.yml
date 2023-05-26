@@ -1,12 +1,16 @@
 kubernetes:
   in-cluster: false
   enable-workloads-watcher: false
+  redis:
+    host: linux.local
+    port: 6379
+    password: QbMufCD@9WVQ^Hv
+    database: 0
 logging:
   level:
-    io.hotcloud.kubernetes.server: info
+    io.hotcloud.common.log: debug
 ngcca:
   kubernetes-agent:
-    host: localhost
-    port: 1400
-    basic-username: admin
-    basic-password: e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea
+    domain-name: k8s-agent.linux.local
+#    host: localhost
+#    port: 1400

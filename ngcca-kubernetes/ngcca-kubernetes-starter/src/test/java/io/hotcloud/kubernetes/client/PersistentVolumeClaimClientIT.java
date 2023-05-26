@@ -9,7 +9,6 @@ import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimCreateRequest;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeClaimSpec;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,16 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Slf4j
+
 @EnableKubernetesAgentClient
 public class PersistentVolumeClaimClientIT extends ClientIntegrationTestBase {
 
-    private static final String PERSISTENT_VOLUME_CLAIM = "myclaim";
+    private static final String PERSISTENT_VOLUME_CLAIM = "jason-claim";
     private static final String NAMESPACE = "default";
 
     @Autowired
@@ -35,16 +30,13 @@ public class PersistentVolumeClaimClientIT extends ClientIntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        log.info("PersistentVolumeClaim Client Integration Test Start");
         create();
-        log.info("Create PersistentVolumeClaim Name: '{}'", PERSISTENT_VOLUME_CLAIM);
     }
 
     @After
     public void post() throws ApiException {
         persistentVolumeClaimClient.delete(NAMESPACE, PERSISTENT_VOLUME_CLAIM);
-        log.info("Delete PersistentVolumeClaim Name: '{}'", PERSISTENT_VOLUME_CLAIM);
-        log.info("PersistentVolumeClaim Client Integration Test End");
+        printNamespacedEvents(NAMESPACE, PERSISTENT_VOLUME_CLAIM);
     }
 
     @Test
@@ -54,13 +46,12 @@ public class PersistentVolumeClaimClientIT extends ClientIntegrationTestBase {
         Assert.assertTrue(items.size() > 0);
 
         List<String> names = items.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List PersistentVolumeClaim Name: {}", names);
+                .map(e -> e.getMetadata().getName()).toList();
+        names.forEach(System.out::println);
 
         PersistentVolumeClaim result = persistentVolumeClaimClient.read(NAMESPACE, PERSISTENT_VOLUME_CLAIM);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, PERSISTENT_VOLUME_CLAIM);
+        Assert.assertEquals(PERSISTENT_VOLUME_CLAIM, name);
 
     }
 

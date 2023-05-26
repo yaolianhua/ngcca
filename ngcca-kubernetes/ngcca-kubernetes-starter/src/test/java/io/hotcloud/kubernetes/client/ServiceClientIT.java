@@ -9,7 +9,6 @@ import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,16 +16,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Slf4j
 @EnableKubernetesAgentClient
 public class ServiceClientIT extends ClientIntegrationTestBase {
 
-    private static final String SERVICE = "myservice";
+    private static final String SERVICE = "jason-service";
     private static final String NAMESPACE = "default";
 
     @Autowired
@@ -34,16 +28,13 @@ public class ServiceClientIT extends ClientIntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        log.info("Service Client Integration Test Start");
         create();
-        log.info("Create Service Name: '{}'", SERVICE);
     }
 
     @After
     public void post() throws ApiException {
         serviceClient.delete(NAMESPACE, SERVICE);
-        log.info("Delete Service Name: '{}'", SERVICE);
-        log.info("Service Client Integration Test End");
+        printNamespacedEvents(NAMESPACE, SERVICE);
     }
 
     @Test
@@ -53,13 +44,12 @@ public class ServiceClientIT extends ClientIntegrationTestBase {
         Assert.assertTrue(items.size() > 0);
 
         List<String> names = items.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List Service Name: {}", names);
+                .map(e -> e.getMetadata().getName()).toList();
+        names.forEach(System.out::println);
 
         Service result = serviceClient.read(NAMESPACE, SERVICE);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, SERVICE);
+        Assert.assertEquals(SERVICE, name);
 
     }
 

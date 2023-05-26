@@ -8,7 +8,6 @@ import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.storage.StorageClassCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,32 +15,23 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Slf4j
 @EnableKubernetesAgentClient
 public class StorageClassClientIT extends ClientIntegrationTestBase {
 
-    private static final String STORAGE_CLASS = "local-storage";
+    private static final String STORAGE_CLASS = "jason-storage";
 
     @Autowired
     private StorageClassClient storageClassClient;
 
     @Before
     public void init() throws ApiException {
-        log.info("StorageClass Client Integration Test Start");
         create();
-        log.info("Create StorageClass Name: '{}'", STORAGE_CLASS);
     }
 
     @After
     public void post() throws ApiException {
         storageClassClient.delete(STORAGE_CLASS);
-        log.info("Delete StorageClass Name: '{}'", STORAGE_CLASS);
-        log.info("StorageClass Client Integration Test End");
     }
 
     @Test
@@ -51,13 +41,12 @@ public class StorageClassClientIT extends ClientIntegrationTestBase {
         Assert.assertTrue(items.size() > 0);
 
         List<String> names = items.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List StorageClass Name: {}", names);
+                .map(e -> e.getMetadata().getName()).toList();
+        names.forEach(System.out::println);
 
         StorageClass result = storageClassClient.read(STORAGE_CLASS);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, STORAGE_CLASS);
+        Assert.assertEquals(STORAGE_CLASS, name);
 
     }
 

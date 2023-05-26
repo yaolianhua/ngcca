@@ -7,7 +7,6 @@ import io.hotcloud.kubernetes.client.http.SecretClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.SecretCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,16 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Slf4j
 @EnableKubernetesAgentClient
 public class SecretClientIT extends ClientIntegrationTestBase {
 
-    private static final String SECRET = "mysecret";
+    private static final String SECRET = "jason-secret";
     private static final String NAMESPACE = "default";
 
     @Autowired
@@ -33,16 +27,13 @@ public class SecretClientIT extends ClientIntegrationTestBase {
 
     @Before
     public void init() throws ApiException {
-        log.info("Secret Client Integration Test Start");
         create();
-        log.info("Create Secret Name: '{}'", SECRET);
     }
 
     @After
     public void post() throws ApiException {
         secretClient.delete(NAMESPACE, SECRET);
-        log.info("Delete Secret Name: '{}'", SECRET);
-        log.info("Secret Client Integration Test End");
+        printNamespacedEvents(NAMESPACE, SECRET);
     }
 
     @Test
@@ -53,12 +44,12 @@ public class SecretClientIT extends ClientIntegrationTestBase {
 
         List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List Secret Name: {}", names);
+                .toList();
+        names.forEach(System.out::println);
 
         Secret result = secretClient.read(NAMESPACE, SECRET);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, SECRET);
+        Assert.assertEquals(SECRET, name);
 
     }
 

@@ -9,7 +9,6 @@ import io.hotcloud.kubernetes.model.storage.HostPathVolume;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeCreateRequest;
 import io.hotcloud.kubernetes.model.storage.PersistentVolumeSpec;
 import io.kubernetes.client.openapi.ApiException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,32 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-@Slf4j
 @EnableKubernetesAgentClient
 public class PersistentVolumeClientIT extends ClientIntegrationTestBase {
 
-    private static final String PERSISTENT_VOLUME = "pv0003";
+    private static final String PERSISTENT_VOLUME = "jason-pv";
 
     @Autowired
     private PersistentVolumeClient persistentVolumeClient;
 
     @Before
     public void init() throws ApiException {
-        log.info("PersistentVolume Client Integration Test Start");
         create();
-        log.info("Create PersistentVolume Name: '{}'", PERSISTENT_VOLUME);
     }
 
     @After
     public void post() throws ApiException {
         persistentVolumeClient.delete(PERSISTENT_VOLUME);
-        log.info("Delete PersistentVolume Name: '{}'", PERSISTENT_VOLUME);
-        log.info("PersistentVolume Client Integration Test End");
     }
 
     @Test
@@ -53,13 +43,12 @@ public class PersistentVolumeClientIT extends ClientIntegrationTestBase {
         Assert.assertTrue(items.size() > 0);
 
         List<String> names = items.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List PersistentVolume Name: {}", names);
+                .map(e -> e.getMetadata().getName()).toList();
+        names.forEach(System.out::println);
 
         PersistentVolume result = persistentVolumeClient.read(PERSISTENT_VOLUME);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, PERSISTENT_VOLUME);
+        Assert.assertEquals(PERSISTENT_VOLUME, name);
 
     }
 

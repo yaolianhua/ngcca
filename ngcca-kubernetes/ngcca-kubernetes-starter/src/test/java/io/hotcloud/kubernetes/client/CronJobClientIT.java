@@ -1,12 +1,9 @@
 package io.hotcloud.kubernetes.client;
 
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJobList;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.http.CronJobClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.pod.PodTemplateSpec;
 import io.hotcloud.kubernetes.model.pod.container.Container;
@@ -21,35 +18,28 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 @EnableKubernetesAgentClient
 public class CronJobClientIT extends ClientIntegrationTestBase {
 
-    private static final String CRONJOB = "hello";
+    private static final String CRONJOB = "jason-cronjob";
     private static final String NAMESPACE = "default";
     @Autowired
     private CronJobClient cronJobClient;
-    @Autowired
-    private PodClient podClient;
 
     @Before
     public void init() throws ApiException {
-        log.info("CronJob Client Integration Test Start");
+        //
         create();
-        log.info("Create CronJob Name: '{}'", CRONJOB);
     }
 
     @After
     public void post() throws ApiException {
         cronJobClient.delete(NAMESPACE, CRONJOB);
-        log.info("Delete CronJob Name: '{}'", CRONJOB);
-        log.info("CronJob Client Integration Test End");
+        //
+        printNamespacedEvents(NAMESPACE, CRONJOB);
     }
 
     @Test
@@ -61,28 +51,13 @@ public class CronJobClientIT extends ClientIntegrationTestBase {
         List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
-        log.info("List CronJob Name: {}", names);
+        log.info("List CronJob: {}", names);
 
         CronJob result = cronJobClient.read(NAMESPACE, CRONJOB);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, CRONJOB);
+        Assert.assertEquals(CRONJOB, name);
 
-        log.info("Sleep 30s wait pod created");
-        TimeUnit.SECONDS.sleep(30);
-        PodList podListResult = podClient.readList(NAMESPACE, null);
-        List<Pod> pods = podListResult.getItems();
-        List<String> podNames = pods.stream()
-                .map(e -> e.getMetadata().getName())
-                .filter(e -> e.startsWith(CRONJOB))
-                .collect(Collectors.toList());
-        log.info("List Pod Name: {}", podNames);
-
-        for (String podName : podNames) {
-            String logResult = podClient.logs(NAMESPACE, podName, 100);
-            log.info("Fetch Pod [{}] logs \n {}", podName, logResult);
-        }
-
-
+        waitPodRunningThenFetchContainerLogs(NAMESPACE, CRONJOB, "busybox");
     }
 
     void create() throws ApiException {

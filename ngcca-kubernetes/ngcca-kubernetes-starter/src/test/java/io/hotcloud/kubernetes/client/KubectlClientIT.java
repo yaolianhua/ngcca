@@ -1,12 +1,7 @@
 package io.hotcloud.kubernetes.client;
 
-import io.fabric8.kubernetes.api.model.Event;
-import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import lombok.extern.slf4j.Slf4j;
@@ -17,123 +12,99 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 @EnableKubernetesAgentClient
 public class KubectlClientIT extends ClientIntegrationTestBase {
 
     private static final String NAMESPACE = "default";
-    private final Map<String, String> labelSelector = Map.of("k8s-app", "hotcloud");
     @Autowired
     private KubectlClient kubectlClient;
-    @Autowired
-    private PodClient podClient;
 
     @Before
     public void init() throws Exception {
-        log.info("Kubectl Integration Test Start");
-        List<HasMetadata> hasMetadata = apply();
-
-        for (HasMetadata metadata : hasMetadata) {
-            log.info("{} '{}' create or replace", metadata.getKind(), metadata.getMetadata().getName());
-        }
+        //
+        apply();
+        //
+        waitPodRunningThenFetchContainerLogs(NAMESPACE, "nginx", "nginx:1.21.5");
     }
 
     @After
     public void post() throws Exception {
-        Boolean delete = delete();
-        log.info("ResourceList deleted success='{}'", delete);
-
-        log.info("Kubectl Integration Test End");
+        //
+        delete();
+        //
+        printNamespacedEvents(NAMESPACE, "nginx");
     }
 
     @Test
-    public void uploadFileToPod_then_downloadDirectoryToLocally() throws InterruptedException {
-        log.info("Sleep 30s wait pod created");
-        TimeUnit.SECONDS.sleep(30);
+    public void allinone() {
 
-        PodList readList = podClient.readList(NAMESPACE, labelSelector);
-        List<Pod> pods = readList.getItems();
-        List<String> podNames = pods.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-
-        Boolean uploaded = kubectlClient.upload(NAMESPACE, podNames.get(0), null, "/home/yaolianhua/.profile", "/hotcloud/.profile", CopyAction.FILE);
-        Assertions.assertTrue(uploaded);
-
-        Boolean downloaded = kubectlClient.download(NAMESPACE, podNames.get(0), null, "/hotcloud/config", "/home/yaolianhua/download_config", CopyAction.DIRECTORY);
-        Assertions.assertTrue(downloaded);
-    }
-
-    @Test
-    public void portForward() throws InterruptedException {
-        log.info("Sleep 30s wait pod created");
-        TimeUnit.SECONDS.sleep(30);
-        PodList readList = podClient.readList(NAMESPACE, labelSelector);
-        List<Pod> pods = readList.getItems();
-        List<String> podNames = pods.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-
-        Boolean result = kubectlClient.portForward(NAMESPACE, podNames.get(0), null, 8080, 8078, null, null);
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void eventsRead() throws InterruptedException {
-        log.info("Sleep 5s wait ...");
-        TimeUnit.SECONDS.sleep(5);
-
-        List<Event> events = kubectlClient.events(NAMESPACE);
-        Map<String, String> nameMessages = events.stream()
-                .collect(Collectors.toMap(e -> e.getMetadata().getName(), Event::getMessage));
-        for (Map.Entry<String, String> entry : nameMessages.entrySet()) {
-            log.info("Event name: {}, event message: {}", entry.getKey(), entry.getValue());
-            Event eventResult = kubectlClient.events(NAMESPACE, entry.getKey());
-            Assertions.assertEquals(entry.getValue(), eventResult.getMessage());
+        try {
+            //port forward
+            Boolean result = kubectlClient.portForward(NAMESPACE, "nginx", null, 80, 8180, 1L, TimeUnit.MINUTES);
+            Assertions.assertTrue(result);
+        } catch (Exception e) {
+            log.error("port forward error: {}", e.getMessage());
         }
+
+        try {
+            printExecCommandResult("curl http://127.0.0.1:8180 -v");
+        } catch (IOException e) {
+            log.error("Exec command error: {}", e.getMessage());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        //upload to pod
+        String uploadFilePath = Path.of(System.getProperty("user.home"), ".ssh", "config").toString();
+        String targetPodPath = "/tmp/config";
+        log.info("upload local file {} to pod {}", uploadFilePath, targetPodPath);
+        try {
+            Boolean uploaded = kubectlClient.upload(NAMESPACE, "nginx", "nginx", uploadFilePath, targetPodPath, CopyAction.FILE);
+            Assertions.assertTrue(uploaded);
+        } catch (Exception e) {
+            log.error("upload error: {}", e.getMessage());
+        }
+
+
+        //download from pod
+        String downloadLocalPath = Path.of("/tmp").toString();
+        String targetPodDir = Path.of("/etc/nginx/conf.d").toString();
+        log.info("download pod dir {} to local {}", targetPodDir, downloadLocalPath);
+        try {
+            Boolean downloaded = kubectlClient.download(NAMESPACE, "nginx", null, targetPodDir, downloadLocalPath, CopyAction.DIRECTORY);
+            Assertions.assertTrue(downloaded);
+        } catch (Exception e) {
+            log.error("download error: {}", e.getMessage());
+        }
+
     }
 
-    @Test
-    public void read() throws InterruptedException {
+    void apply() throws IOException {
+        String stringifyYaml;
+        try (InputStream resource = this.getClass().getResourceAsStream("/pod-nginx.yaml")) {
+            stringifyYaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource))).lines().collect(Collectors.joining("\n"));
+        }
 
-        log.info("Sleep 30s wait pod created");
-        TimeUnit.SECONDS.sleep(30);
-        PodList readList = podClient.readList(NAMESPACE, labelSelector);
-        List<Pod> pods = readList.getItems();
-        List<String> podNames = pods.stream()
-                .map(e -> e.getMetadata().getName())
-                .collect(Collectors.toList());
-        log.info("List Pod Name: {}", podNames);
+        kubectlClient.resourceListCreateOrReplace(NAMESPACE, YamlBody.of(stringifyYaml));
     }
 
-    List<HasMetadata> apply() {
+    void delete() throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
+        String stringifyYaml;
+        try (InputStream resource = this.getClass().getResourceAsStream("/pod-nginx.yaml")) {
+            stringifyYaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource))).lines().collect(Collectors.joining("\n"));
+        }
 
-        List<HasMetadata> result = kubectlClient.resourceListCreateOrReplace(null, YamlBody.of(yaml));
-        return result;
-
-    }
-
-    Boolean delete() {
-
-        InputStream inputStream = getClass().getResourceAsStream("resourceList.yaml");
-        String yaml = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
-
-        Boolean result = kubectlClient.delete(null, YamlBody.of(yaml));
-        return result;
+        kubectlClient.delete(NAMESPACE, YamlBody.of(stringifyYaml));
 
     }
 

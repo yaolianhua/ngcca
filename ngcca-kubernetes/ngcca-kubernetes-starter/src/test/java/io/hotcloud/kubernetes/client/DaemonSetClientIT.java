@@ -1,12 +1,9 @@
 package io.hotcloud.kubernetes.client;
 
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.DaemonSet;
 import io.fabric8.kubernetes.api.model.apps.DaemonSetList;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.http.DaemonSetClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.LabelSelector;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
@@ -29,12 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 @EnableKubernetesAgentClient
 public class DaemonSetClientIT extends ClientIntegrationTestBase {
@@ -43,20 +36,18 @@ public class DaemonSetClientIT extends ClientIntegrationTestBase {
     private static final String NAMESPACE = "default";
     @Autowired
     private DaemonSetClient daemonSetClient;
-    @Autowired
-    private PodClient podClient;
 
     @Before
     public void init() throws ApiException {
         log.info("DaemonSet Client Integration Test Start");
         create();
-        log.info("Create DaemonSet Name: '{}'", DAEMONSET);
+        log.info("Create DaemonSet: '{}'", DAEMONSET);
     }
 
     @After
     public void post() throws ApiException {
         daemonSetClient.delete(NAMESPACE, DAEMONSET);
-        log.info("Delete DaemonSet Name: '{}'", DAEMONSET);
+        log.info("Delete DaemonSet: '{}'", DAEMONSET);
         log.info("DaemonSet Client Integration Test End");
     }
 
@@ -69,21 +60,13 @@ public class DaemonSetClientIT extends ClientIntegrationTestBase {
         List<String> names = items.stream()
                 .map(e -> e.getMetadata().getName())
                 .collect(Collectors.toList());
-        log.info("List DaemonSet Name: {}", names);
+        log.info("List DaemonSet: {}", names);
 
         DaemonSet result = daemonSetClient.read(NAMESPACE, DAEMONSET);
         String name = result.getMetadata().getName();
-        Assert.assertEquals(name, DAEMONSET);
+        Assert.assertEquals(DAEMONSET, name);
 
-        log.info("Sleep 30s wait pod created");
-        TimeUnit.SECONDS.sleep(30);
-        PodList podListResult = podClient.readList(NAMESPACE, null);
-        List<Pod> pods = podListResult.getItems();
-        List<String> podNames = pods.stream()
-                .map(e -> e.getMetadata().getName())
-                .filter(e -> e.startsWith(DAEMONSET))
-                .collect(Collectors.toList());
-        log.info("List Pod Name: {}", podNames);
+        waitPodRunningThenFetchContainerLogs(NAMESPACE, DAEMONSET, "quay.io/fluentd_elasticsearch/fluentd:v2.5.2");
     }
 
     void create() throws ApiException {
