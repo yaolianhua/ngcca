@@ -47,7 +47,7 @@ metadata:
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
-  ingressClassName: nginx
+#  ingressClassName: nginx
   rules:
     - host: k8s-agent.linux.local
       http:
@@ -79,6 +79,9 @@ spec:
       labels:
         k8s-app: k8s-agent
     spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -86,8 +89,14 @@ spec:
               - matchExpressions:
                   - key: node-role.kubernetes.io/master
                     operator: Exists
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
+              weight: 1
       containers:
-        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.05.24.113547
+        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.05.26.113721
           env:
             - name: KUBERNETES_REDIS_HOST
               value: "192.168.110.22"
@@ -117,7 +126,4 @@ spec:
               port: 1400
               path: /livez
             periodSeconds: 20
-      tolerations:
-        - effect: NoSchedule
-          operator: Exists
       serviceAccountName: k8s-agent
