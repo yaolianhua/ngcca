@@ -1,8 +1,7 @@
-package io.hotcloud.server.module;
+package io.hotcloud.module.db;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.db.core.AbstractEntity;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

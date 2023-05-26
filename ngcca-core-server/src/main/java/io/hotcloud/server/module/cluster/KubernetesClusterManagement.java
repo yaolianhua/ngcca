@@ -1,8 +1,8 @@
 package io.hotcloud.server.module.cluster;
 
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
-import io.hotcloud.module.db.core.cluster.KubernetesClusterEntity;
-import io.hotcloud.module.db.core.cluster.KubernetesClusterRepository;
+import io.hotcloud.module.db.entity.KubernetesClusterEntity;
+import io.hotcloud.module.db.entity.KubernetesClusterRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

@@ -1,8 +1,8 @@
 package io.hotcloud.server.db;
 
 import com.github.javafaker.Faker;
-import io.hotcloud.module.db.core.user.UserEntity;
-import io.hotcloud.module.db.core.user.UserRepository;
+import io.hotcloud.module.db.entity.UserEntity;
+import io.hotcloud.module.db.entity.UserRepository;
 import io.hotcloud.server.NgccaCoreServerApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;

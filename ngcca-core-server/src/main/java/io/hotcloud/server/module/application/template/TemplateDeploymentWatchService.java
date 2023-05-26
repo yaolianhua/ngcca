@@ -3,6 +3,7 @@ package io.hotcloud.server.module.application.template;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
+import io.fabric8.kubernetes.api.model.networking.v1.IngressLoadBalancerIngress;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.kubernetes.client.http.*;
@@ -127,7 +128,7 @@ public class TemplateDeploymentWatchService {
                     .getLoadBalancer()
                     .getIngress()
                     .stream()
-                    .map(LoadBalancerIngress::getIp)
+                    .map(IngressLoadBalancerIngress::getIp)
                     .collect(Collectors.joining(","));
 
             if (!StringUtils.hasText(loadBalancerIngressIp) || Objects.equals("null", loadBalancerIngressIp)) {
@@ -136,7 +137,7 @@ public class TemplateDeploymentWatchService {
                         .getLoadBalancer()
                         .getIngress()
                         .stream()
-                        .map(LoadBalancerIngress::getHostname)
+                        .map(IngressLoadBalancerIngress::getHostname)
                         .collect(Collectors.joining(","));
             }
 

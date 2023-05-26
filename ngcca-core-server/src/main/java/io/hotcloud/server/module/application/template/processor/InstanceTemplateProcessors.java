@@ -3,8 +3,8 @@ package io.hotcloud.server.module.application.template.processor;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstanceProcessor;
-import io.hotcloud.module.db.core.registry.RegistryImageEntity;
-import io.hotcloud.module.db.core.registry.RegistryImageRepository;
+import io.hotcloud.module.db.entity.RegistryImageEntity;
+import io.hotcloud.module.db.entity.RegistryImageRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

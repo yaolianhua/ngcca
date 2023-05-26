@@ -1,4 +1,4 @@
-package io.hotcloud.module.db.core;
+package io.hotcloud.module.db;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;

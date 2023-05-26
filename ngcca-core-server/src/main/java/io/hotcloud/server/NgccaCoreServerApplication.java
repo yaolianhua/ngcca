@@ -1,10 +1,14 @@
 package io.hotcloud.server;
 
 import io.hotcloud.kubernetes.client.EnableKubernetesAgentClient;
+import io.hotcloud.module.db.MongodbConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"io.hotcloud.common", "io.hotcloud.server"})
+@SpringBootApplication(scanBasePackageClasses = {
+        MongodbConfiguration.class,
+        NgccaCoreServerApplication.class
+})
 @EnableKubernetesAgentClient
 public class NgccaCoreServerApplication {
 

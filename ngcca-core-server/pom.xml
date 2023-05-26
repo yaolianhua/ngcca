@@ -28,10 +28,6 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-module-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-module-db</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>io.hotcloud</groupId>

@@ -1,8 +1,8 @@
 package io.hotcloud.allinone.web.activity;
 
 import io.hotcloud.common.model.*;
-import io.hotcloud.module.db.core.activity.ActivityEntity;
-import io.hotcloud.module.db.core.activity.ActivityRepository;
+import io.hotcloud.module.db.entity.ActivityEntity;
+import io.hotcloud.module.db.entity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;

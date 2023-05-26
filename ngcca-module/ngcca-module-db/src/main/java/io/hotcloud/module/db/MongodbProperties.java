@@ -1,4 +1,4 @@
-package io.hotcloud.server.module;
+package io.hotcloud.module.db;
 
 import io.hotcloud.common.model.Properties;
 import lombok.Data;

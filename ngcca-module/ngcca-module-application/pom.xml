@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-common</artifactId>
+            <artifactId>ngcca-module-db</artifactId>
         </dependency>
 
         <dependency>

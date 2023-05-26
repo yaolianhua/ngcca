@@ -1,4 +1,4 @@
-package io.hotcloud.module.db.core.registry;
+package io.hotcloud.module.db.entity;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;

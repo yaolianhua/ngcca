@@ -1,6 +1,6 @@
-package io.hotcloud.module.db.core.application;
+package io.hotcloud.module.db.entity;
 
-import io.hotcloud.module.db.core.AbstractEntity;
+import io.hotcloud.module.db.AbstractEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

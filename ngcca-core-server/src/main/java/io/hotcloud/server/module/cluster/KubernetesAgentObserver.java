@@ -34,14 +34,14 @@ public class KubernetesAgentObserver implements MessageObserver {
         List<KubernetesCluster> kubernetesClusters = kubernetesClusterManagement.list();
         List<String> masterIpList = kubernetesClusters.stream()
                 .flatMap(e -> e.getMasters().stream())
-                .map(io.hotcloud.module.db.core.cluster.Node::getIp)
+                .map(io.hotcloud.module.db.entity.Node::getIp)
                 .toList();
 
         KubernetesCluster kubernetesCluster = new KubernetesCluster();
 
         for (Node master : k8sAgentCluster.getMasters()) {
 
-            io.hotcloud.module.db.core.cluster.Node mNode = new io.hotcloud.module.db.core.cluster.Node();
+            io.hotcloud.module.db.entity.Node mNode = new io.hotcloud.module.db.entity.Node();
             mNode.setName(master.getMetadata().getName());
             for (NodeAddress address : master.getStatus().getAddresses()) {
                 if (Objects.equals(address.getType(), "InternalIP")) {
@@ -60,7 +60,7 @@ public class KubernetesAgentObserver implements MessageObserver {
         }
 
         for (Node node : k8sAgentCluster.getNodes()) {
-            io.hotcloud.module.db.core.cluster.Node nNode = new io.hotcloud.module.db.core.cluster.Node();
+            io.hotcloud.module.db.entity.Node nNode = new io.hotcloud.module.db.entity.Node();
             nNode.setName(node.getMetadata().getName());
             for (NodeAddress address : node.getStatus().getAddresses()) {
                 if (Objects.equals(address.getType(), "InternalIP")) {

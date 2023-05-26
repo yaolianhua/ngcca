@@ -4,8 +4,8 @@ import io.hotcloud.common.model.ActivityAction;
 import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.common.model.ActivityTarget;
 import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.db.core.activity.ActivityEntity;
-import io.hotcloud.module.db.core.activity.ActivityRepository;
+import io.hotcloud.module.db.entity.ActivityEntity;
+import io.hotcloud.module.db.entity.ActivityRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

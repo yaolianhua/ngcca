@@ -1,7 +1,7 @@
 package io.hotcloud.server.runner;
 
-import io.hotcloud.module.db.core.registry.RegistryImageEntity;
-import io.hotcloud.module.db.core.registry.RegistryImageRepository;
+import io.hotcloud.module.db.entity.RegistryImageEntity;
+import io.hotcloud.module.db.entity.RegistryImageRepository;
 import io.hotcloud.server.module.registry.SystemRegistryImageProperties;
 import io.hotcloud.server.module.registry.SystemRegistryProperties;
 import lombok.RequiredArgsConstructor;
