@@ -8,7 +8,7 @@
         <module>ngcca-kubernetes</module>
         <module>ngcca-common</module>
         <module>ngcca-vendors</module>
-        <module>ngcca-core-server</module>
+        <module>ngcca-service</module>
         <module>ngcca-module</module>
     </modules>
     <parent>
@@ -73,6 +73,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- modules -->
