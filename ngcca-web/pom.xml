@@ -10,15 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>ngcca-server</artifactId>
-    <name>NGCCA :: Server</name>
+    <artifactId>ngcca-web</artifactId>
+    <name>NGCCA :: Web</name>
 
     <dependencies>
 
         <dependency>
             <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-core-server</artifactId>
-            <version>${project.version}</version>
+            <artifactId>ngcca-service</artifactId>
         </dependency>
 
         <dependency>
@@ -38,7 +37,7 @@
     </dependencies>
 
     <build>
-        <finalName>ngcca-server</finalName>
+        <finalName>ngcca-web</finalName>
 
         <plugins>
             <plugin>
