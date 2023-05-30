@@ -10,7 +10,7 @@ import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.buildpack.model.BuildPackConstant;
 import io.hotcloud.module.buildpack.model.JobState;
-import io.hotcloud.server.NgccaCoreServerApplication;
+import io.hotcloud.server.CoreServerApplication;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NgccaCoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class BuildPackApiIT {
 

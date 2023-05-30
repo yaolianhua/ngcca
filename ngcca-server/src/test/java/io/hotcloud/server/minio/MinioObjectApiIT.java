@@ -1,7 +1,7 @@
 package io.hotcloud.server.minio;
 
 
-import io.hotcloud.server.NgccaCoreServerApplication;
+import io.hotcloud.server.CoreServerApplication;
 import io.hotcloud.service.files.FileHelper;
 import io.hotcloud.service.minio.MinioProperties;
 import io.hotcloud.vendor.minio.MinioObjectApi;
@@ -23,7 +23,7 @@ import java.nio.file.Path;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaCoreServerApplication.class
+        classes = CoreServerApplication.class
 )
 @ActiveProfiles("test")
 @Slf4j

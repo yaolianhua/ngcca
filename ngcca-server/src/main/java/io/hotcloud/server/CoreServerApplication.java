@@ -9,12 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackageClasses = {
         MongodbConfiguration.class,
         NgccaServiceModule.class,
-        NgccaCoreServerApplication.class
+        CoreServerApplication.class
 })
 @EnableKubernetesAgentClient
-public class NgccaCoreServerApplication {
+public class CoreServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NgccaCoreServerApplication.class, args);
+        SpringApplication.run(CoreServerApplication.class, args);
     }
 }
