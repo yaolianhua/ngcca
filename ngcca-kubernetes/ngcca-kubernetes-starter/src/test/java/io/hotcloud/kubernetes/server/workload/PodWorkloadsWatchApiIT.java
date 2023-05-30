@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.workload;
 
-import io.hotcloud.kubernetes.NgccaKubernetesAgentApplication;
+import io.hotcloud.kubernetes.KubernetesAgentApplication;
 import io.hotcloud.kubernetes.api.PodApi;
 import io.kubernetes.client.openapi.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaKubernetesAgentApplication.class
+        classes = KubernetesAgentApplication.class
 )
 @ActiveProfiles("kubernetes-integration-test-local")
 @Slf4j

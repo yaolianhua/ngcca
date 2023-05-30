@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaKubernetesAgentApplication.class
+        classes = KubernetesAgentApplication.class
 )
 @ActiveProfiles("kubernetes-integration-test-local")
 public class ClientIntegrationTestBase {
