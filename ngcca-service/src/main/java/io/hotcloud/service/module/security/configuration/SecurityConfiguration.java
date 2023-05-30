@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -37,10 +38,10 @@ public class SecurityConfiguration {
     @ConditionalOnProperty(name = SecurityProperties.SECURITY_ENABLED_PROPERTY, havingValue = "false")
     public SecurityFilterChain noSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
-        http.formLogin().disable();
-        http.logout().disable();
-        http.authorizeHttpRequests().anyRequest().permitAll();
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http.logout(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll());
 
         Log.warn(this, null, Event.START, "Spring security disabled. if you want to enable, you need configure the environment 'ngcca.security.enabled=true'");
         return http.build();
@@ -53,13 +54,13 @@ public class SecurityConfiguration {
                                                    JwtVerifier jwtVerifier,
                                                    UserDetailsService userDetailsService) throws Exception {
 
-        http.authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();
+        http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(HttpMethod.OPTIONS).permitAll());
         //permit all whitelist
-        http.authorizeHttpRequests().requestMatchers(securityProperties.getIgnoredUrls().toArray(new String[0])).permitAll();
+        http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(securityProperties.getIgnoredUrls().toArray(new String[0])).permitAll());
 
-        http.cors();
-        http.csrf().disable();
-        http.sessionManagement().disable();
+        http.cors(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.sessionManagement(AbstractHttpConfigurer::disable);
 
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtVerifier, userDetailsService);
         //enable jwt auth
@@ -67,11 +68,11 @@ public class SecurityConfiguration {
 
         http.securityContext(scc -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL));
         //enable basic auth
-        http.httpBasic().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
+        http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(new Http401UnauthorizedEntryPoint()));
 
-        http.authorizeHttpRequests().anyRequest().authenticated();
+        http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().authenticated());
 
-        http.exceptionHandling().authenticationEntryPoint(new Http401UnauthorizedEntryPoint());
+        http.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new Http401UnauthorizedEntryPoint()));
 
         Log.info(this, null, Event.START, "Spring security enabled. if you want to disable, you need configure the environment 'ngcca.security.enabled=false'");
         return http.build();
