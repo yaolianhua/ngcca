@@ -10,6 +10,7 @@
         <module>ngcca-vendors</module>
         <module>ngcca-service</module>
         <module>ngcca-module</module>
+        <module>ngcca-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -78,6 +79,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- modules -->
