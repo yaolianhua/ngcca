@@ -23,7 +23,7 @@ build_kubernetes_agent(){
     echo "------------------------ commit id ------------------------"
     printf "%s$(git rev-parse HEAD) \n"
 
-    echo "------ jar build ------"
+    echo "------------------------ jar build ------------------------"
     mvn --batch-mode --errors --fail-fast --threads 1C --projects "io.hotcloud:ngcca-kubernetes-starter" --also-make clean package
 
     IMAGE="harbor.local:5000/ngcca/kubernetes-agent:$(date '+%Y.%m.%d.%H%M%S')"
