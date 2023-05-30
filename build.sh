@@ -20,7 +20,7 @@ EOF
 
 
 build_kubernetes_agent(){
-    echo "------ commit id ------"
+    echo "------------------------ commit id ------------------------"
     printf "%s$(git rev-parse HEAD) \n"
 
     echo "------ jar build ------"
@@ -28,26 +28,26 @@ build_kubernetes_agent(){
 
     IMAGE="harbor.local:5000/ngcca/kubernetes-agent:$(date '+%Y.%m.%d.%H%M%S')"
 
-    echo "------ docker build ------"
+    echo "------------------------ docker build ------------------------"
     docker build -f ngcca-kubernetes/Dockerfile -t "${IMAGE}" .
 
-    echo "------ docker push ------"
+    echo "------------------------ docker push ------------------------"
     docker push "${IMAGE}"
 }
 
 build_core_server(){
-    echo "------ commit id ------"
+    echo "------------------------ commit id ------------------------"
     printf "%s$(git rev-parse HEAD) \n"
 
-    echo "------ jar build ------"
+    echo "------------------------ jar build ------------------------"
     mvn --batch-mode --errors --fail-fast --threads 1C --projects "io.hotcloud:ngcca-server" --also-make clean package
 
     IMAGE="harbor.local:5000/ngcca/core-server:$(date '+%Y.%m.%d.%H%M%S')"
 
-    echo "------ docker build ------"
+    echo "------------------------ docker build ------------------------"
     docker build -f ngcca-server/Dockerfile -t "${IMAGE}" .
 
-    echo "------ docker push ------"
+    echo "------------------------ docker push ------------------------"
     docker push "${IMAGE}"
 }
 
