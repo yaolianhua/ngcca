@@ -27,11 +27,7 @@ ngcca:
     secret-key:
     endpoint:
   mongodb:
-    host:
-    username:
-    password:
-    port:
-    database:
+    uri:
   kubernetes-agent:
     host: localhost
     port: 1400
