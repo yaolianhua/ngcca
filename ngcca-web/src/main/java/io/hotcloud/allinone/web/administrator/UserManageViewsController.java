@@ -6,7 +6,7 @@ import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.allinone.web.statistics.StatisticsService;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.module.security.user.UserCollectionQuery;
+import io.hotcloud.service.module.security.user.UserCollectionQuery;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
