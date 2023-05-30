@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: ngcca-server
+  name: ngcca-server
+  namespace: ngcca-system
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  selector:
+    k8s-app: ngcca-server
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ngcca-server
+  namespace: ngcca-system
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  rules:
+    - host: core-server.linux.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ngcca-server
+                port:
+                  number: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: ngcca-server
+  name: ngcca-server
+  namespace: ngcca-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ngcca-server
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        k8s-app: ngcca-server
+    spec:
+      hostAliases:
+        - ip: 192.168.110.22
+          hostnames:
+            - harbor.linux-local
+            - linux.local
+
+      containers:
+        - image: harbor.linux-local:5000/ngcca/core-server:2023.05.30.143449
+          imagePullPolicy: IfNotPresent
+          name: ngcca-server
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /core-server/config
+              name: ngcca-server-config-volume
+              readOnly: false
+      volumes:
+        - configMap:
+            name: ngcca-server-config
+            items:
+              - key: config
+                path: application.yml
+          name: ngcca-server-config-volume
+---
+apiVersion: v1
+data:
+  config: |
+    ngcca:
+      redis:
+        database: 1
+        password: "QbMufCD@9WVQ^Hv"
+        host: linux.local
+        port: 6379
+      registry:
+        url: harbor.linux-local:5000
+        username: admin
+        password: "QbMufCD@9WVQ^Hv"
+        imagebuild-namespace: image-build
+      minio:
+        access-key: admin
+        secret-key: "QbMufCD@9WVQ^Hv"
+        endpoint: "http://linux.local:9009"
+      mongodb:
+        uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-test?authSource=admin"
+      kubernetes-agent:
+        host: k8s-agent
+        port: 1400
+        domain-name:
+      buildpack:
+        build-timeout-second: 1200
+      application:
+        deployment-timeout-second: 1200
+        dot-suffix-domain: ".k8s.local"
+      security:
+        enabled: true
+        ignored-defaults:
+          - "/swagger**/**"
+          - "/v3/api-docs/**"
+          - "/favicon.ico"
+          - "/pub"
+          - "/**/login"
+        ignored-urls:
+      openai:
+        http-client-timeout-seconds: 60
+        http-proxy:
+          hostname: localhost
+          port: 8080
+        api-key: no-key
+    server:
+      port: 8080
+    logging:
+      level:
+        io.hotcloud.common.log: debug
+kind: ConfigMap
+metadata:
+  name: ngcca-server-config
+  namespace: ngcca-system
