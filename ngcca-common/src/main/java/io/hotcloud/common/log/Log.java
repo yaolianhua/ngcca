@@ -2,6 +2,7 @@ package io.hotcloud.common.log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.hotcloud.common.model.exception.PlatformException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class Log implements Serializable {
 
     static {
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
