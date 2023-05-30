@@ -12,23 +12,22 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+ class IngressTemplateRenderUnitTest {
 
-public class IngressTemplateRenderUnitTest {
+     @Test
+     void nginxIngressTemplateRenderTest() throws IOException {
 
-    @Test
-    public void nginxIngressTemplateRenderTest() throws IOException {
+         try (InputStream inputStream = IngressTemplateRenderUnitTest.class.getResourceAsStream("/ingress.yaml")) {
+             String template = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
-        try (InputStream inputStream = IngressTemplateRenderUnitTest.class.getResourceAsStream("ingress.yaml")) {
-            String template = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
-
-            IngressDefinition ingressDefinition = IngressDefinition.builder()
-                    .namespace("namespace")
-                    .name("ingress")
-                    .rules(
-                            List.of(
-                                    IngressDefinition.Rule.builder()
-                                            .port("1000")
-                                            .path("/")
+             IngressDefinition ingressDefinition = IngressDefinition.builder()
+                     .namespace("namespace")
+                     .name("ingress")
+                     .rules(
+                             List.of(
+                                     IngressDefinition.Rule.builder()
+                                             .port("1000")
+                                             .path("/")
                                             .service("management")
                                             .host("nginx-ingress.local")
                                             .build()
@@ -40,20 +39,20 @@ public class IngressTemplateRenderUnitTest {
         }
     }
 
-    @Test
-    public void nginxIngressTemplateRender2RulesTest() throws IOException {
+     @Test
+     void nginxIngressTemplateRender2RulesTest() throws IOException {
 
-        try (InputStream inputStream = IngressTemplateRenderUnitTest.class.getResourceAsStream("ingress-2rules.yaml")) {
-            String template = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
+         try (InputStream inputStream = IngressTemplateRenderUnitTest.class.getResourceAsStream("/ingress-2rules.yaml")) {
+             String template = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream))).lines().collect(Collectors.joining("\n"));
 
-            IngressDefinition ingressDefinition = IngressDefinition.builder()
-                    .name("minio")
-                    .namespace("default")
-                    .rules(
-                            List.of(
-                                    IngressDefinition.Rule.builder()
-                                            .port("9000")
-                                            .path("/")
+             IngressDefinition ingressDefinition = IngressDefinition.builder()
+                     .name("minio")
+                     .namespace("default")
+                     .rules(
+                             List.of(
+                                     IngressDefinition.Rule.builder()
+                                             .port("9000")
+                                             .path("/")
                                             .service("minio")
                                             .host("minio-api.k8s-cluster.local")
                                             .build(),
