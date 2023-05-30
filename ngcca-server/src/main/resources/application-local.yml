@@ -15,6 +15,12 @@ ngcca:
     endpoint: "http://linux.local:9009"
   mongodb:
     uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
+  openai:
+    api-key: no-key
+    http-proxy:
+      hostname: localhost
+      port: 0
+    http-client-timeout-seconds: 60
 logging:
   level:
     io.hotcloud.common.log: debug

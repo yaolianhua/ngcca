@@ -46,6 +46,12 @@ ngcca:
       - "/pub"
       - "/**/login"
     ignored-urls:
+  openai:
+    http-client-timeout-seconds: 60
+    http-proxy:
+      hostname:
+      port:
+    api-key:
 server:
   port: 8080
 logging:
