@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.mvc;
+package io.hotcloud.web.mvc;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

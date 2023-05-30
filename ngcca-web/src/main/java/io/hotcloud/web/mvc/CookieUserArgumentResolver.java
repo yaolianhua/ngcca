@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.mvc;
+package io.hotcloud.web.mvc;
 
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.User;

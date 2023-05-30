@@ -1,10 +1,10 @@
-package io.hotcloud.allinone.web.administrator;
+package io.hotcloud.web.administrator;
 
-import io.hotcloud.allinone.web.Views;
-import io.hotcloud.allinone.web.mvc.WebConstant;
-import io.hotcloud.allinone.web.mvc.WebSession;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
+import io.hotcloud.web.Views;
+import io.hotcloud.web.mvc.WebConstant;
+import io.hotcloud.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

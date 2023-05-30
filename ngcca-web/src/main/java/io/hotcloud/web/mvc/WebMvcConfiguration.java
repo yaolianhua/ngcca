@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.mvc;
+package io.hotcloud.web.mvc;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

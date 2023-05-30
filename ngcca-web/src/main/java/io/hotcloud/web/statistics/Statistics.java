@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.statistics;
+package io.hotcloud.web.statistics;
 
 import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;

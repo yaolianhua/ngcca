@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.mvc;
+package io.hotcloud.web.mvc;
 
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.User;
@@ -33,7 +33,7 @@ public class GlobalSessionAspect {
         this.jwtVerifier = jwtVerifier;
     }
 
-    @Pointcut(value = "@annotation(io.hotcloud.allinone.web.mvc.WebSession)")
+    @Pointcut(value = "@annotation(io.hotcloud.web.mvc.WebSession)")
     public void cut() {
     }
 

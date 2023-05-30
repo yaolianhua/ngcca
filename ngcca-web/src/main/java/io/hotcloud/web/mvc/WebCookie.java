@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.mvc;
+package io.hotcloud.web.mvc;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

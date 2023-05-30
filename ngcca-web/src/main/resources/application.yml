@@ -1,33 +1,60 @@
 spring:
   application:
     name: ngcca
-  config:
-    import:
-      - application-allinone.yml
-  thymeleaf:
-    cache: false
+  profiles:
+    include: system-registry-image
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  rabbitmq:
-    host: ${ngcca.rabbitmq.host:}
-    port: ${ngcca.rabbitmq.port:}
-    username: ${ngcca.rabbitmq.username:}
-    password: ${ngcca.rabbitmq.password:}
-    virtual-host: /
   data:
     mongodb:
-      database: ${ngcca.mongodb.database:}
-      host: ${ngcca.mongodb.host:}
-      port: ${ngcca.mongodb.port:}
-      password: ${ngcca.mongodb.password:}
-      username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
+      uri: ${ngcca.mongodb.uri}
   servlet:
     multipart:
       max-request-size: 1024MB
       max-file-size: 1024MB
+  thymeleaf:
+    cache: false
 server:
-  max-http-header-size: 40KB
   port: 4000
+logging:
+  level:
+    io.hotcloud.common.log: info
+
+ngcca:
+  redis:
+    database:
+    password:
+    host:
+    port:
+  registry:
+    url:
+    username:
+    password:
+    imagebuild-namespace:
+  minio:
+    access-key:
+    secret-key:
+    endpoint:
+  mongodb:
+    uri:
+  kubernetes-agent:
+    host: localhost
+    port: 1400
+    domain-name:
+  buildpack:
+    build-timeout-second: 1200
+  application:
+    deployment-timeout-second: 1200
+    dot-suffix-domain: ".k8s.local"
+  security:
+    enabled: false
+  openai:
+    http-client-timeout-seconds: 60
+    http-proxy:
+      hostname:
+      port:
+    api-key:
+

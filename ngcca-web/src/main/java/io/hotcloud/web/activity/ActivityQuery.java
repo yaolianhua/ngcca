@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.activity;
+package io.hotcloud.web.activity;
 
 import io.hotcloud.common.model.*;
 import io.hotcloud.module.db.entity.ActivityEntity;

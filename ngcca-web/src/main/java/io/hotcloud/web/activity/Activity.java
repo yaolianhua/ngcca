@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.activity;
+package io.hotcloud.web.activity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

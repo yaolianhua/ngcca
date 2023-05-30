@@ -1,9 +1,9 @@
-package io.hotcloud.allinone.web.login;
+package io.hotcloud.web.login;
 
-import io.hotcloud.allinone.web.mvc.WebConstant;
-import io.hotcloud.allinone.web.mvc.WebCookie;
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;
+import io.hotcloud.web.mvc.WebConstant;
+import io.hotcloud.web.mvc.WebCookie;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;

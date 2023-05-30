@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web.statistics;
+package io.hotcloud.web.statistics;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

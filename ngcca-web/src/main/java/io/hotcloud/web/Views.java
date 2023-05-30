@@ -1,4 +1,4 @@
-package io.hotcloud.allinone.web;
+package io.hotcloud.web;
 
 public final class Views {
 

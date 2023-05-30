@@ -1,32 +1,28 @@
 ngcca:
-  rabbitmq:
-    host: localhost
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 5672
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: localhost
+    host: linux.local
     port: 6379
   registry:
-    url: harbor.local:5000
+    url: harbor.linux-local:5000
     username: admin
-    password: QbMufCD@9WVQ^Hv
+    password: "QbMufCD@9WVQ^Hv"
     imagebuild-namespace: image-build-dev
   minio:
     access-key: admin
-    secret-key: QbMufCD@9WVQ^Hv
-    endpoint: "http://localhost:9009"
+    secret-key: "QbMufCD@9WVQ^Hv"
+    endpoint: "http://linux.local:9009"
   mongodb:
-    host: localhost
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 27017
-    database: ngcca-dev
-  kubernetes-agent:
-    port: 1400
-    host: localhost
-    domain-name:
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
+  openai:
+    api-key: no-key
+    http-proxy:
+      hostname: localhost
+      port: 0
+    http-client-timeout-seconds: 60
+logging:
+  level:
+    io.hotcloud.common.log: debug
 
 
