@@ -35,6 +35,22 @@ build_kubernetes_agent(){
     docker push "${IMAGE}"
 }
 
+build_core_server(){
+    echo "------ commit id ------"
+    printf "%s$(git rev-parse HEAD) \n"
+
+    echo "------ jar build ------"
+    mvn --batch-mode --errors --fail-fast --threads 1C --projects "io.hotcloud:ngcca-server" --also-make clean package
+
+    IMAGE="harbor.local:5000/ngcca/core-server:$(date '+%Y.%m.%d.%H%M%S')"
+
+    echo "------ docker build ------"
+    docker build -f ngcca-server/Dockerfile -t "${IMAGE}" .
+
+    echo "------ docker push ------"
+    docker push "${IMAGE}"
+}
+
 project=$1
 if [ -z "$project" ]; then
     show_help_and_exit
@@ -43,6 +59,9 @@ fi
 case $project in
 kubernetes-agent)
   build_kubernetes_agent
+  ;;
+core-server)
+  build_core_server
   ;;
 *)
   printf "unsupported project '%s$project' \n"
