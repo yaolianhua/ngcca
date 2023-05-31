@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/administrator/index")
-public class IndexViewsController {
+public class AdministratorIndexViewsController {
 
     @RequestMapping(value = {"/", ""})
     @WebSession

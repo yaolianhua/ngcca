@@ -17,7 +17,6 @@ import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -68,7 +67,7 @@ public class StatisticsService {
         List<Statistics> statistics = users.stream()
                 .map(User::getId)
                 .map(this::statistics)
-                .collect(Collectors.toList());
+                .toList();
         return PageResult.ofCollectionPage(statistics, pageable);
     }
 

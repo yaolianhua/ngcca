@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/administrator/template-manage")
-public class TemplateManageViewsController {
+public class AdministratorTemplateManageViewsController {
 
     private final TemplateDefinitionService templateDefinitionService;
 
-    public TemplateManageViewsController(TemplateDefinitionService templateDefinitionService) {
+    public AdministratorTemplateManageViewsController(TemplateDefinitionService templateDefinitionService) {
         this.templateDefinitionService = templateDefinitionService;
     }
 

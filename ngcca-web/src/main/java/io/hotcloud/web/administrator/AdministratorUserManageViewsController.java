@@ -16,13 +16,13 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/administrator/user-manage")
-public class UserManageViewsController {
+public class AdministratorUserManageViewsController {
 
     private final UserApi userApi;
     private final UserCollectionQuery userCollectionQuery;
     private final StatisticsService statisticsService;
 
-    public UserManageViewsController(UserApi userApi, UserCollectionQuery userCollectionQuery, StatisticsService statisticsService) {
+    public AdministratorUserManageViewsController(UserApi userApi, UserCollectionQuery userCollectionQuery, StatisticsService statisticsService) {
         this.userApi = userApi;
         this.userCollectionQuery = userCollectionQuery;
         this.statisticsService = statisticsService;

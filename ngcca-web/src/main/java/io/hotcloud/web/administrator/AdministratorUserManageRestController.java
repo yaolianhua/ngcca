@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/security/users")
 @Tag(name = "Security user")
-public class UserManageRestController {
+public class AdministratorUserManageRestController {
 
     private final UserApi userApi;
     private final UserCollectionQuery collectionQuery;
 
-    public UserManageRestController(UserApi userApi,
-                                    UserCollectionQuery collectionQuery) {
+    public AdministratorUserManageRestController(UserApi userApi,
+                                                 UserCollectionQuery collectionQuery) {
         this.userApi = userApi;
         this.collectionQuery = collectionQuery;
     }

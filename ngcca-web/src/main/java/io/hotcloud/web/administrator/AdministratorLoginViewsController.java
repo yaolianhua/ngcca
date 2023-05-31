@@ -15,17 +15,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Controller
 @RequestMapping("/administrator/login")
-public class LoginViewsController {
+public class AdministratorLoginViewsController {
 
     private final LoginApi loginApi;
     private final UserApi userApi;
 
-    public LoginViewsController(LoginApi loginApi, UserApi userApi) {
+    public AdministratorLoginViewsController(LoginApi loginApi, UserApi userApi) {
         this.loginApi = loginApi;
         this.userApi = userApi;
     }

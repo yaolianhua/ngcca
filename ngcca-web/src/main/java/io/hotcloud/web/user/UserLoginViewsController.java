@@ -1,4 +1,4 @@
-package io.hotcloud.web.login;
+package io.hotcloud.web.user;
 
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;
@@ -14,16 +14,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Controller
 @RequestMapping
-public class LoginController {
+public class UserLoginViewsController {
 
     private final LoginApi loginApi;
 
-    public LoginController(LoginApi loginApi) {
+    public UserLoginViewsController(LoginApi loginApi) {
         this.loginApi = loginApi;
     }
 
