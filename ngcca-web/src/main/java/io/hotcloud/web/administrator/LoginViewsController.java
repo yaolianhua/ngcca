@@ -48,7 +48,7 @@ public class LoginViewsController {
             } else {
                 Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
                 response.addCookie(cookie);
-                return "redirect:/administrator/index";
+                return Views.REDIRECT_ADMIN_INDEX;
             }
         } catch (Exception e) {
             model.addAttribute(WebConstant.MESSAGE, e.getMessage());

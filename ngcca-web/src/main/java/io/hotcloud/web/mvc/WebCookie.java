@@ -9,9 +9,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.stream.Stream;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Slf4j
 public final class WebCookie {
 
@@ -21,9 +18,7 @@ public final class WebCookie {
     public static Cookie generate(String authorization) {
         Cookie cookie = new Cookie(WebConstant.AUTHORIZATION, authorization);
         cookie.setPath("/");
-        cookie.setComment("AUTHORIZATION");
         cookie.setHttpOnly(false);
-        cookie.setVersion(1);
         // expires in 7 days
         cookie.setMaxAge(7 * 24 * 60 * 60);
 

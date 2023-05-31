@@ -2,6 +2,7 @@ package io.hotcloud.web.login;
 
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;
+import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
 import jakarta.servlet.http.Cookie;
@@ -28,7 +29,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return Views.LOGIN;
     }
 
     @PostMapping("/login")
@@ -41,10 +42,10 @@ public class LoginController {
             Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
             response.addCookie(cookie);
 
-            return "redirect:/index";
+            return Views.REDIRECT_INDEX;
         } catch (Exception e) {
             model.addAttribute(WebConstant.MESSAGE, e.getMessage());
-            return "login";
+            return Views.LOGIN;
 
         }
 

@@ -4,12 +4,12 @@ import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,17 +21,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Map;
 import java.util.Objects;
 
+import static io.hotcloud.web.Views.*;
+
 @Component
 @Slf4j
 @Aspect
+@RequiredArgsConstructor
 public class GlobalSessionAspect {
     private final UserApi userApi;
     private final JwtVerifier jwtVerifier;
-
-    public GlobalSessionAspect(UserApi userApi, JwtVerifier jwtVerifier) {
-        this.userApi = userApi;
-        this.jwtVerifier = jwtVerifier;
-    }
 
     @Pointcut(value = "@annotation(io.hotcloud.web.mvc.WebSession)")
     public void cut() {
@@ -44,17 +42,17 @@ public class GlobalSessionAspect {
         String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
         if (!StringUtils.hasText(authorization)) {
-            if (request.getRequestURI().startsWith("/administrator")) {
-                return "redirect:/administrator/login";
+            if (request.getRequestURI().startsWith(PREFIX_ADMIN)) {
+                return REDIRECT_ADMIN_LOGIN;
             }
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         if (!jwtVerifier.valid(authorization)) {
-            if (request.getRequestURI().startsWith("/administrator")) {
-                return "redirect:/administrator/login";
+            if (request.getRequestURI().startsWith(PREFIX_ADMIN)) {
+                return REDIRECT_ADMIN_LOGIN;
             }
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
 
@@ -62,13 +60,10 @@ public class GlobalSessionAspect {
         String username = (String) attributes.get("username");
         User user = userApi.retrieve(username);
 
-        if (!userApi.isAdmin(username)) {
-            if (request.getRequestURI().startsWith("/administrator")) {
-                return "redirect:/administrator/login";
-            }
+        if (!userApi.isAdmin(username) && (request.getRequestURI().startsWith(PREFIX_ADMIN))) {
+            return REDIRECT_ADMIN_LOGIN;
         }
 
-        String[] parameterNames = ((CodeSignature) point.getSignature()).getParameterNames();
         Object[] args = point.getArgs();
         for (Object arg : args) {
             if (arg == null) {
@@ -78,7 +73,7 @@ public class GlobalSessionAspect {
             if (arg.getClass().equals(BindingAwareModelMap.class)) {
                 Model model = (BindingAwareModelMap) arg;
                 model.addAttribute(WebConstant.USER, user);
-                model.addAttribute(WebConstant.NGCCA_ENDPOINT, "http://localhost:4000");
+                model.addAttribute(WebConstant.SERVER_ENDPOINT, "http://localhost:4000");
             }
         }
 

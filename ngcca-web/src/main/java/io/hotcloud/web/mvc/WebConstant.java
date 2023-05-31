@@ -10,7 +10,7 @@ public final class WebConstant {
     public static final String TEMPLATE_DEFINITION = "templateDefinition";
 
 
-    public static final String NGCCA_ENDPOINT = "endpoint";
+    public static final String SERVER_ENDPOINT = "endpoint";
     public static final String RESPONSE = "response";
     public static final String PAGE_RESULT = "page";
     public static final String COLLECTION_RESULT = "collection";

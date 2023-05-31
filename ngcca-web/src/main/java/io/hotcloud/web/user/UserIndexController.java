@@ -4,6 +4,7 @@ import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.security.user.User;
+import io.hotcloud.web.Views;
 import io.hotcloud.web.activity.Activity;
 import io.hotcloud.web.activity.ActivityQuery;
 import io.hotcloud.web.mvc.CookieUser;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -40,10 +40,10 @@ public class UserIndexController {
                             @CookieUser User user) {
         Statistics statistics = statisticsService.statistics(user.getId());
         PageResult<ActivityLog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 8));
-        List<Activity> activities = pageResult.getData().stream().map(this::toActivity).collect(Collectors.toList());
+        List<Activity> activities = pageResult.getData().stream().map(this::toActivity).toList();
         model.addAttribute(WebConstant.STATISTICS, statistics);
         model.addAttribute(WebConstant.ACTIVITIES, activities);
-        return "index";
+        return Views.INDEX;
     }
 
     private Activity toActivity(ActivityLog log) {
