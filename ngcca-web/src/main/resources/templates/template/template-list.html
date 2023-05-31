@@ -6,20 +6,20 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>NGCCA | 模板实例</title>
 
-  <link th:include="global-link">
+  <link th:insert="~{global-link}">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <div th:include="navbar"></div>
+  <div th:insert="navbar"></div>
 
-  <div th:include="sidebar"></div>
+  <div th:insert="sidebar"></div>
 
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div th:include="content-header"></div>
+    <div th:insert="~{content-header}"></div>
     <!-- /.content-header -->
 
     <!-- Main content -->
@@ -73,7 +73,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <div th:include="footer"></div>
+  <div th:insert="~{footer}"></div>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -84,7 +84,7 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<div th:include="global-script"></div>
+<div th:insert="~{global-script}"></div>
 <script th:src="@{/js/template-instance.js}">
 </script>
 </body>
