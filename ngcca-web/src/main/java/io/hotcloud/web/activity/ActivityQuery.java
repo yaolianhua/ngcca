@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -35,7 +36,7 @@ public class ActivityQuery {
         List<ActivityEntity> entities = activityRepository.findByUser(user);
         List<ActivityLog> activityLogs = entities.stream()
                 .map(e -> e.toT(ActivityLog.class))
-                .toList();
+                .collect(Collectors.toList());
 
         List<ActivityLog> filtered = filter(activityLogs, target, action);
         //desc sorted
@@ -53,18 +54,18 @@ public class ActivityQuery {
             return activities.stream()
                     .filter(e -> target.name().equals(e.getTarget()))
                     .filter(e -> action.name().equals(e.getAction()))
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
         if (target != null) {
             return activities.stream()
                     .filter(e -> target.name().equals(e.getTarget()))
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
         return activities.stream()
                 .filter(e -> action.name().equals(e.getAction()))
-                .toList();
+                .collect(Collectors.toList());
     }
 
 }

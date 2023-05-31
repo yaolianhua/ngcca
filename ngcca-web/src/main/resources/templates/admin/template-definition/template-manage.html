@@ -21,14 +21,14 @@
 
     <!-- Main content -->
     <section class="content" id="templates-fragment" th:fragment="content">
-      <div th:insert="admin/template-definition/template-list"></div>
+      <div th:insert="~{admin/template-definition/template-list}"></div>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <div th:insert="~{footer}"></div>
 
-  <div th:insert="admin/template-definition/template-new-modal"></div>
+  <div th:insert="~{admin/template-definition/template-new-modal}"></div>
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
