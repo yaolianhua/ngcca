@@ -62,7 +62,7 @@ spec:
             - linux.local
 
       containers:
-        - image: harbor.linux-local:5000/ngcca/web-server:2023.06.01.140740
+        - image: harbor.linux-local:5000/ngcca/web-server:2023.06.01.142241
           imagePullPolicy: IfNotPresent
           name: web-server
           ports:
