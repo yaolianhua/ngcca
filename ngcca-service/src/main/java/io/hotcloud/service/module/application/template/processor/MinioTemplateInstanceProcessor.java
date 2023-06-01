@@ -27,7 +27,7 @@ class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Minio);
+        return Objects.equals(template, Template.MINIO);
     }
 
     @Override

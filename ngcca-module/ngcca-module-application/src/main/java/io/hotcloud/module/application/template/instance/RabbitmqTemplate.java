@@ -26,10 +26,10 @@ public class RabbitmqTemplate {
         }
     }
 
-    private String name = Template.Rabbitmq.name().toLowerCase();
+    private String name = Template.RABBITMQ.name().toLowerCase();
     private String image = "rabbitmq:3.9-management";
     private String namespace;
-    private String service = Template.Rabbitmq.name().toLowerCase();
+    private String service = Template.RABBITMQ.name().toLowerCase();
     private String username = "admin";
     private String password = "passw0rd";
 

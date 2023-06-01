@@ -26,11 +26,11 @@ public class RedisInsightTemplate {
         }
     }
 
-    private String name = Template.RedisInsight.name().toLowerCase();
+    private String name = Template.REDIS_INSIGHT.name().toLowerCase();
     private String image = "redislabs/redisinsight:latest";
     private String initContainerImage = "busybox:latest";
     private String namespace;
-    private String service = Template.RedisInsight.name().toLowerCase() + "-service";
+    private String service = Template.REDIS_INSIGHT.name().toLowerCase() + "-service";
 
     public RedisInsightTemplate(String namespace) {
         this.namespace = namespace;

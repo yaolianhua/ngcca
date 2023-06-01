@@ -26,10 +26,10 @@ public class MinioTemplate {
         }
     }
 
-    private String name = Template.Minio.name().toLowerCase();
+    private String name = Template.MINIO.name().toLowerCase();
     private String image = "quay.io/minio/minio:latest";
     private String namespace;
-    private String service = Template.Minio.name().toLowerCase();
+    private String service = Template.MINIO.name().toLowerCase();
     private String accessKey = "admin";
     private String accessSecret = "passw0rd";
 

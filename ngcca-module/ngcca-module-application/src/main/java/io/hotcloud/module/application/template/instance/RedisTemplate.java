@@ -26,10 +26,10 @@ public class RedisTemplate {
         }
     }
 
-    private String name = Template.Redis.name().toLowerCase();
+    private String name = Template.REDIS.name().toLowerCase();
     private String image = "redis:7.0";
     private String namespace;
-    private String service = Template.Redis.name().toLowerCase();
+    private String service = Template.REDIS.name().toLowerCase();
 
     private String password = "passw0rd";
 

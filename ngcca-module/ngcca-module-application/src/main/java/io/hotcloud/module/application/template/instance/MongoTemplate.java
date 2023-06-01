@@ -26,10 +26,10 @@ public class MongoTemplate {
         }
     }
 
-    private String name = Template.Mongodb.name().toLowerCase();
+    private String name = Template.MONGODB.name().toLowerCase();
     private String image = "mongo:5.0";
     private String namespace;
-    private String service = Template.Mongodb.name().toLowerCase();
+    private String service = Template.MONGODB.name().toLowerCase();
     private String username = "admin";
     private String password = "passw0rd";
 

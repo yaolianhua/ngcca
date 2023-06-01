@@ -14,7 +14,7 @@ class MongoTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Mongodb);
+        return Objects.equals(template, Template.MONGODB);
     }
 
     @Override

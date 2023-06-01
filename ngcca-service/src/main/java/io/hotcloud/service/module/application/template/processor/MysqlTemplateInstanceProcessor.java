@@ -14,7 +14,7 @@ class MysqlTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Mysql);
+        return Objects.equals(template, Template.MYSQL);
     }
 
     @Override

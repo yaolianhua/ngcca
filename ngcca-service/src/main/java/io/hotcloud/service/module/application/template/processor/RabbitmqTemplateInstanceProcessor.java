@@ -26,7 +26,7 @@ class RabbitmqTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Rabbitmq);
+        return Objects.equals(template, Template.RABBITMQ);
     }
 
     @Override

@@ -30,7 +30,7 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.RedisInsight);
+        return Objects.equals(template, Template.REDIS_INSIGHT);
     }
 
     @Override

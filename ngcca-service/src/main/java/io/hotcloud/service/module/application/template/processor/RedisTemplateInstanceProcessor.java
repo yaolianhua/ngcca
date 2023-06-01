@@ -14,7 +14,7 @@ class RedisTemplateInstanceProcessor implements TemplateInstanceProcessor {
 
     @Override
     public boolean support(Template template) {
-        return Objects.equals(template, Template.Redis);
+        return Objects.equals(template, Template.REDIS);
     }
 
     @Override

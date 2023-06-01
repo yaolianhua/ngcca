@@ -26,10 +26,10 @@ public class MysqlTemplate {
         }
     }
 
-    private String name = Template.Mysql.name().toLowerCase();
+    private String name = Template.MYSQL.name().toLowerCase();
     private String image = "mysql:8.0";
     private String namespace;
-    private String service = Template.Mysql.name().toLowerCase();
+    private String service = Template.MYSQL.name().toLowerCase();
     private String password = "passw0rd";
 
     public MysqlTemplate(String namespace) {
