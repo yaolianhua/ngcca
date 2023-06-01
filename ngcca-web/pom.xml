@@ -37,7 +37,7 @@
     </dependencies>
 
     <build>
-        <finalName>ngcca-web</finalName>
+        <finalName>web-server</finalName>
 
         <plugins>
             <plugin>
