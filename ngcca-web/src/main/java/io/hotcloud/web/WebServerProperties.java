@@ -19,7 +19,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 public class WebServerProperties {
 
     private String host = "web-server";
-    private int port = 4000;
+    private Integer port = 4000;
 
     private String endpoint;
 
