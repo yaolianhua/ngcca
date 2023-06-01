@@ -50,7 +50,20 @@ ngcca:
     deployment-timeout-second: 1200
     dot-suffix-domain: ".k8s.local"
   security:
-    enabled: false
+    enabled: true
+    ignored-defaults:
+      - "/swagger**/**"
+      - "/v3/api-docs/**"
+      - "/favicon.ico"
+      - "/pub"
+      - "/**/login"
+      - "/plugins/**"
+      - "/js/**"
+      - "/dist/**"
+    ignored-urls:
+      - "/index"
+      - "/administrator/**"
+      - "/template/**"
   openai:
     http-client-timeout-seconds: 60
     http-proxy:
