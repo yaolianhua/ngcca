@@ -62,7 +62,7 @@ spec:
             - linux.local
 
       containers:
-        - image: harbor.linux-local:5000/ngcca/web-server:2023.06.01.142241
+        - image: harbor.linux-local:5000/ngcca/web-server:2023.06.01.180516
           imagePullPolicy: IfNotPresent
           name: web-server
           ports:
@@ -134,6 +134,7 @@ data:
           - "/index"
           - "/administrator/**"
           - "/template/**"
+          - "/"
       openai:
         http-client-timeout-seconds: 60
         http-proxy:
@@ -141,9 +142,9 @@ data:
           port: 4000
         api-key: no-key
       web-server:
-        host: web-server
-        port: 4000
-        endpoint:
+        host: 
+        port: 
+        endpoint: http://web-server.linux.local
     server:
       port: 4000
     logging:
