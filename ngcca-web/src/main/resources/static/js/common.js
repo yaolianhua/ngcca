@@ -1,4 +1,6 @@
 axios.defaults.baseURL = $('#server-endpoint').data('server-endpoint');
+axios.defaults.withCredentials = true;
+
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {
