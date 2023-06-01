@@ -7,16 +7,6 @@ $(function () {
     };
 });
 
-function ok(response) {
-    console.log(response);
-    toastr.success('操作成功!')
-}
-
-function fail(error) {
-    console.log(error);
-    toastr.error('操作失败[' + error.response.data.message + ']');
-}
-
 //deploy template instance
 function instanceDeploy(name) {
     axios.post(TEMPLATE_INSTANCE_API + "?template=" + name)

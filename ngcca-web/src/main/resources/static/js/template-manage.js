@@ -30,16 +30,6 @@ function templatePaging() {
     });
 }
 
-function ok(response) {
-    console.log(response);
-    toastr.success('操作成功!')
-}
-
-function fail(error) {
-    console.log(error);
-    toastr.error('操作失败[' + error.response.data.message + ']');
-}
-
 //template save
 function templateS() {
     let data = {};

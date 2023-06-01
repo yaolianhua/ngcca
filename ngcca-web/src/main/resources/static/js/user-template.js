@@ -21,16 +21,6 @@ const swal = Swal.mixin({
     buttonsStyling: false
 })
 
-function ok(response) {
-    console.log(response);
-    toastr.success('操作成功!')
-}
-
-function fail(error) {
-    console.log(error);
-    toastr.error('操作失败[' + error.response.data.message + ']');
-}
-
 //user template instance detail view
 function instanceDetail(id) {
     clearInterval(intervalId);
