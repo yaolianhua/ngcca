@@ -39,16 +39,17 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         if (!StringUtils.hasText(name)) {
             return;
         }
-        List<String> names = Arrays.stream(Template.values())
+        List<String> names = Arrays
+                .stream(Template.values())
                 .map(Enum::name)
-                .collect(Collectors.toList());
-        if (!names.contains(name)) {
+                .toList();
+        if (!names.contains(name.toUpperCase())) {
             throw new PlatformException("Supported template " + names);
         }
     }
 
     private void validateTemplateDefinitionVersion(String name, String version) {
-        String tag = systemRegistryImageProperties.getTag(name);
+        String tag = systemRegistryImageProperties.getTag(name.toLowerCase());
         if (!Objects.equals(tag, version)) {
             throw new PlatformException("Template [" + name + "] supported version [" + tag + "]", 400);
         }
