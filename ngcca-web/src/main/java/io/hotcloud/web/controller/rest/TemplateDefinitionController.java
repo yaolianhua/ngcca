@@ -21,11 +21,11 @@ import static io.hotcloud.common.model.WebResponse.*;
 @RestController
 @RequestMapping("/v1/definition/templates")
 @Tag(name = "Template definition")
-public class TemplateDefinitionRestController {
+public class TemplateDefinitionController {
 
     private final TemplateDefinitionService templateDefinitionService;
 
-    public TemplateDefinitionRestController(TemplateDefinitionService templateDefinitionService) {
+    public TemplateDefinitionController(TemplateDefinitionService templateDefinitionService) {
         this.templateDefinitionService = templateDefinitionService;
     }
 
