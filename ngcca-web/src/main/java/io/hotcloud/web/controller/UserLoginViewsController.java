@@ -1,4 +1,4 @@
-package io.hotcloud.web.user;
+package io.hotcloud.web.controller;
 
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;

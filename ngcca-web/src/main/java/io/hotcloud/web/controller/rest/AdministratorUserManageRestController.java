@@ -1,4 +1,4 @@
-package io.hotcloud.web.administrator;
+package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

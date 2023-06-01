@@ -1,4 +1,4 @@
-package io.hotcloud.web.administrator;
+package io.hotcloud.web.controller;
 
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateDefinitionService;

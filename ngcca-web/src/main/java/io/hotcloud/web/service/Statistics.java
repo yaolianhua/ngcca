@@ -1,4 +1,4 @@
-package io.hotcloud.web.statistics;
+package io.hotcloud.web.service;
 
 import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;

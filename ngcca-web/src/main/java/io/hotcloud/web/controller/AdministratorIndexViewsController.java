@@ -1,4 +1,4 @@
-package io.hotcloud.web.administrator;
+package io.hotcloud.web.controller;
 
 import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.WebSession;

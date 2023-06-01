@@ -1,4 +1,4 @@
-package io.hotcloud.web.template;
+package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.module.application.template.Template;

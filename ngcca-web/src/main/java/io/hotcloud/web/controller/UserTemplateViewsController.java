@@ -1,4 +1,4 @@
-package io.hotcloud.web.template;
+package io.hotcloud.web.controller;
 
 import io.hotcloud.module.application.template.TemplateDefinition;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
@@ -18,13 +18,13 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/template")
-public class TemplateViewsController {
+public class UserTemplateViewsController {
 
     private final TemplateDefinitionService templateDefinitionService;
     private final TemplateInstanceService templateInstanceService;
 
-    public TemplateViewsController(TemplateDefinitionService templateDefinitionService,
-                                   TemplateInstanceService templateInstanceService) {
+    public UserTemplateViewsController(TemplateDefinitionService templateDefinitionService,
+                                       TemplateInstanceService templateInstanceService) {
         this.templateDefinitionService = templateDefinitionService;
         this.templateInstanceService = templateInstanceService;
     }

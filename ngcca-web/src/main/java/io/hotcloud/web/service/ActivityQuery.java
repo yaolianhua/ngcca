@@ -1,4 +1,4 @@
-package io.hotcloud.web.activity;
+package io.hotcloud.web.service;
 
 import io.hotcloud.common.model.*;
 import io.hotcloud.module.db.entity.ActivityEntity;

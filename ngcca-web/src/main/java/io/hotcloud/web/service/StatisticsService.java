@@ -1,4 +1,4 @@
-package io.hotcloud.web.statistics;
+package io.hotcloud.web.service;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

@@ -1,4 +1,4 @@
-package io.hotcloud.web.administrator;
+package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.security.user.UserApi;
@@ -6,7 +6,7 @@ import io.hotcloud.service.module.security.user.UserCollectionQuery;
 import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
-import io.hotcloud.web.statistics.StatisticsService;
+import io.hotcloud.web.service.StatisticsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
