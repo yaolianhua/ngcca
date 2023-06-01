@@ -7,12 +7,12 @@ Usage: $0 <project>
 projects:
   kubernetes-agent                kubernetes-agent server service
   core-server                     core server service
-  web                             web server service
+  web-server                      web server service
 
 demo：
   $0 kubernetes-agent
   $0 core-server
-  $0 web
+  $0 web-server
 
 EOF
   exit 0
@@ -51,6 +51,22 @@ build_core_server(){
     docker push "${IMAGE}"
 }
 
+build_web_server(){
+    echo "------------------------ commit id ------------------------"
+    printf "%s$(git rev-parse HEAD) \n"
+
+    echo "------------------------ jar build ------------------------"
+    mvn --batch-mode --errors --fail-fast --threads 1C --projects "io.hotcloud:ngcca-web" --also-make clean package
+
+    IMAGE="harbor.local:5000/ngcca/web-server:$(date '+%Y.%m.%d.%H%M%S')"
+
+    echo "------------------------ docker build ------------------------"
+    docker build -f ngcca-web/Dockerfile -t "${IMAGE}" .
+
+    echo "------------------------ docker push ------------------------"
+    docker push "${IMAGE}"
+}
+
 project=$1
 if [ -z "$project" ]; then
     show_help_and_exit
@@ -62,6 +78,9 @@ kubernetes-agent)
   ;;
 core-server)
   build_core_server
+  ;;
+web-server)
+  build_web_server
   ;;
 *)
   printf "unsupported project '%s$project' \n"
