@@ -2,6 +2,8 @@
 const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
 const USER_TEMPLATE_LIST_VIEWS = "/template/instances?action=list";
 const USER_TEMPLATE_DETAIL_VIEWS = "/template/instances?action=detail&id=";
+
+axios.defaults.baseURL = $('#server-endpoint').data('server-endpoint');
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {

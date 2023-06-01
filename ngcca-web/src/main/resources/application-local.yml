@@ -21,6 +21,10 @@ ngcca:
       hostname: localhost
       port: 0
     http-client-timeout-seconds: 60
+  web-server:
+    host: localhost
+    port: 4000
+    endpoint:
 logging:
   level:
     io.hotcloud.common.log: debug

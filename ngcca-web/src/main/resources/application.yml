@@ -19,9 +19,6 @@ spring:
     cache: false
 server:
   port: 4000
-logging:
-  level:
-    io.hotcloud.common.log: info
 
 ngcca:
   redis:
@@ -41,8 +38,8 @@ ngcca:
   mongodb:
     uri:
   kubernetes-agent:
-    host: localhost
-    port: 1400
+    host:
+    port:
     domain-name:
   buildpack:
     build-timeout-second: 1200
@@ -70,4 +67,11 @@ ngcca:
       hostname:
       port:
     api-key:
+  web-server:
+    host:
+    port:
+    endpoint:
+logging:
+  level:
+    io.hotcloud.common.log: info
 

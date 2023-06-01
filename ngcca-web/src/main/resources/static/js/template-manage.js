@@ -1,6 +1,8 @@
 //初始化常量
 const TEMPLATE_DEFINITION_API = "/v1/definition/templates";
 const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage?action=list";
+
+axios.defaults.baseURL = $('#server-endpoint').data('server-endpoint');
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {

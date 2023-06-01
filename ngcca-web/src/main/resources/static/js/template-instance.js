@@ -1,5 +1,7 @@
 //初始化常量
 const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
+
+axios.defaults.baseURL = $('#server-endpoint').data('server-endpoint');
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {

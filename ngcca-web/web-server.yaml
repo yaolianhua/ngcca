@@ -140,6 +140,10 @@ data:
           hostname: localhost
           port: 4000
         api-key: no-key
+      web-server:
+        host: web-server
+        port: 4000
+        endpoint:
     server:
       port: 4000
     logging:

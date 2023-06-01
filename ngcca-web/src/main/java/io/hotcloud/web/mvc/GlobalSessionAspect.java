@@ -3,6 +3,7 @@ package io.hotcloud.web.mvc;
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.web.WebServerProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import static io.hotcloud.web.Views.*;
 public class GlobalSessionAspect {
     private final UserApi userApi;
     private final JwtVerifier jwtVerifier;
+    private final WebServerProperties webServerProperties;
 
     @Pointcut(value = "@annotation(io.hotcloud.web.mvc.WebSession)")
     public void cut() {
@@ -73,7 +75,7 @@ public class GlobalSessionAspect {
             if (arg.getClass().equals(BindingAwareModelMap.class)) {
                 Model model = (BindingAwareModelMap) arg;
                 model.addAttribute(WebConstant.USER, user);
-                model.addAttribute(WebConstant.SERVER_ENDPOINT, "http://localhost:4000");
+                model.addAttribute(WebConstant.SERVER_ENDPOINT, webServerProperties.getEndpoint());
             }
         }
 
