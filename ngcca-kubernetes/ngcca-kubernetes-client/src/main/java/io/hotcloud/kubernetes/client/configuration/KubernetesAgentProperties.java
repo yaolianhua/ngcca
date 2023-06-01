@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 @Data
 public class KubernetesAgentProperties {
 
-    private String host = "localhost";
+    private String host = "k8s-agent";
     private Integer port = 1400;
     private String domainName;
 
