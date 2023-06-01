@@ -21,6 +21,7 @@ import static io.hotcloud.common.model.WebResponse.*;
 @RestController
 @RequestMapping("/v1/definition/templates")
 @Tag(name = "Template definition")
+@CrossOrigin
 public class TemplateDefinitionController {
 
     private final TemplateDefinitionService templateDefinitionService;

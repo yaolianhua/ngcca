@@ -21,6 +21,7 @@ import static io.hotcloud.common.model.WebResponse.*;
 @RestController
 @RequestMapping("/v1/templates/instance")
 @Tag(name = "Template instance")
+@CrossOrigin
 public class TemplateInstanceController {
 
     private final TemplateInstancePlayer templateInstancePlayer;

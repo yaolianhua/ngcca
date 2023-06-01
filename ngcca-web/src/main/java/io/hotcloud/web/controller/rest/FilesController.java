@@ -16,6 +16,7 @@ import static io.hotcloud.common.model.WebResponse.created;
 @RestController
 @RequestMapping("/v1/files")
 @Tag(name = "Files")
+@CrossOrigin
 public class FilesController {
 
 

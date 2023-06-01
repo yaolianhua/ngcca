@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/security/users")
 @Tag(name = "Security user")
+@CrossOrigin
 public class UserManageController {
 
     private final UserApi userApi;
