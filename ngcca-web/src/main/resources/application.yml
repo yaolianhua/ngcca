@@ -61,6 +61,7 @@ ngcca:
       - "/index"
       - "/administrator/**"
       - "/template/**"
+      - "/"
   openai:
     http-client-timeout-seconds: 60
     http-proxy:
