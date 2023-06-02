@@ -3,7 +3,7 @@ package io.hotcloud.vendor.registry.model;
 import io.hotcloud.vendor.registry.model.dockerhub.DockerHub;
 import lombok.Data;
 
-import static io.hotcloud.vendor.registry.model.RegistryUtil.retrieveRepositoryNameWithNamespace;
+import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImage;
 
 @Data
 public class RegistryRepositoryTag {
@@ -30,11 +30,11 @@ public class RegistryRepositoryTag {
     private String repository;
 
     public static RegistryRepositoryTag of(String tag, String registry, String repository) {
-        String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);
+        String namespacedImage = getNamespacedImage(repository);
         RegistryRepositoryTag registryRepositoryTag = new RegistryRepositoryTag();
         registryRepositoryTag.setRegistry(registry);
         registryRepositoryTag.setRepository(repository);
-        registryRepositoryTag.setImage(String.format("%s:%s", namespacedRepository, tag));
+        registryRepositoryTag.setImage(String.format("%s:%s", namespacedImage, tag));
         registryRepositoryTag.setTag(tag);
         registryRepositoryTag.setImageName(String.format("%s/%s:%s", DockerHub.HTTP_URL.contains(registry) ? DockerHub.REGISTRY_HOST : registry, repository, tag));
 

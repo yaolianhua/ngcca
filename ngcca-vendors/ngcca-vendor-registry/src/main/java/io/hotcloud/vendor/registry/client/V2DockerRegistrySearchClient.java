@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.vendor.registry.model.RegistryUtil.retrieveRepositoryNameWithNamespace;
+import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImage;
 
 class V2DockerRegistrySearchClient implements RegistrySearchClient {
 
@@ -79,10 +79,10 @@ class V2DockerRegistrySearchClient implements RegistrySearchClient {
      */
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
-        String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);
+        String namespacedImage = getNamespacedImage(repository);
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/{repository}/tags/list")
-                .build(namespacedRepository);
+                .build(namespacedImage);
         Log.debug(this, null, String.format("Docker registry repository tags search. request url '%s'", requestUrl));
         try {
             HttpEntity<?> httpEntity = HttpEntity.EMPTY;
@@ -98,7 +98,7 @@ class V2DockerRegistrySearchClient implements RegistrySearchClient {
 
             String resolvedRegistry = uri.getPort() > 0 ? String.format("%s:%s", uri.getHost(), uri.getPort()) : uri.getHost();
             List<RegistryRepositoryTag> tags = Objects.requireNonNull(registryTags).getTags().stream()
-                    .map(e -> RegistryRepositoryTag.of(e, resolvedRegistry, namespacedRepository))
+                    .map(e -> RegistryRepositoryTag.of(e, resolvedRegistry, namespacedImage))
                     .collect(Collectors.toList());
             return PageResult.ofCollectionPage(tags, pageable);
         } catch (Exception e) {

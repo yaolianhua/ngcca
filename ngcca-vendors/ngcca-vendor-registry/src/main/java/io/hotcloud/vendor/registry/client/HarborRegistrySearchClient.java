@@ -72,14 +72,14 @@ class HarborRegistrySearchClient implements RegistrySearchClient {
 
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
-        String namespace = retrieveRepositoryNamespace(repository);
-        String repositoryNameWithNoNamespace = retrieveRepositoryNameWithNoNamespace(repository);
-        String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);
+        String namespace = getNamespace(repository);
+        String imageName = getImageNameOnly(repository);
+        String namespacedImage = getNamespacedImage(repository);
         String requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/api/v2.0/projects/{namespace}/repositories/{repository}/artifacts")
                 .queryParam("page", pageable.getPage())
                 .queryParam("page_size", pageable.getPageSize())
-                .build(namespace, repositoryNameWithNoNamespace)
+                .build(namespace, imageName)
                 .toString();
         Log.debug(this, this, String.format("Harbor repository tags search. request url '%s'", requestUrl));
 
@@ -107,7 +107,7 @@ class HarborRegistrySearchClient implements RegistrySearchClient {
             String resolvedRegistry = uri.getPort() > 0 ? String.format("%s:%s", uri.getHost(), uri.getPort()) : uri.getHost();
             List<RegistryRepositoryTag> tags = artifacts.stream()
                     .flatMap(e -> e.getTags().stream())
-                    .map(e -> RegistryRepositoryTag.of(e.getName(), resolvedRegistry, namespacedRepository))
+                    .map(e -> RegistryRepositoryTag.of(e.getName(), resolvedRegistry, namespacedImage))
                     .collect(Collectors.toList());
 
             return new PageResult<>(200, "success", tags, count, pageable.getPage(), pageable.getPageSize());

@@ -8,12 +8,12 @@ public final class RegistryUtil {
     }
 
     /**
-     * 检索仓库namespace
+     * 从repository名称获取仓库命名空间
      *
-     * @param repository 镜像仓库名称 e.g. library/nginx
-     * @return namespace
+     * @param repository 不能包含仓库地址和镜像标签 e.g. library/nginx
+     * @return library
      */
-    public static String retrieveRepositoryNamespace(String repository) {
+    public static String getNamespace(String repository) {
         Assert.hasText(repository, "repository is null");
         if (!repository.contains("/")) {
             return DockerHub.OFFICIAL_IMAGE_PREFIX;
@@ -23,12 +23,12 @@ public final class RegistryUtil {
     }
 
     /**
-     * 检索不带有namespace的仓库镜像名
+     * 从repository名称获取不带有命名空间的镜像名称
      *
-     * @param repository e.g. library/nginx
-     * @return repository name
+     * @param repository 不能包含仓库地址和镜像标签 e.g. library/nginx
+     * @return nginx
      */
-    public static String retrieveRepositoryNameWithNoNamespace(String repository) {
+    public static String getImageNameOnly(String repository) {
         Assert.hasText(repository, "repository is null");
         if (!repository.contains("/")) {
             return repository;
@@ -38,12 +38,12 @@ public final class RegistryUtil {
     }
 
     /**
-     * 检索带有namespace的仓库镜像名
+     * 从repository名称获取带有命名空间的镜像名称
      *
-     * @param repository e.g. library/nginx nginx
-     * @return repository name
+     * @param repository 不能包含仓库地址和镜像标签 e.g. library/nginx，nginx
+     * @return library/nginx
      */
-    public static String retrieveRepositoryNameWithNamespace(String repository) {
+    public static String getNamespacedImage(String repository) {
         Assert.hasText(repository, "repository is null");
         if (!repository.contains("/")) {
             return String.format("%s/%s", DockerHub.OFFICIAL_IMAGE_PREFIX, repository);

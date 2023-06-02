@@ -65,9 +65,9 @@ class DockerHubRegistrySearchClient implements RegistrySearchClient {
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
 
-        String namespace = retrieveRepositoryNamespace(repository);
-        String name = retrieveRepositoryNameWithNoNamespace(repository);
-        String namespacedRepository = retrieveRepositoryNameWithNamespace(repository);
+        String namespace = getNamespace(repository);
+        String name = getImageNameOnly(repository);
+        String namespacedImage = getNamespacedImage(repository);
 
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/namespaces/{namespace}/repositories/{repository}/tags")
@@ -83,7 +83,7 @@ class DockerHubRegistrySearchClient implements RegistrySearchClient {
                     }).getBody();
 
             List<RegistryRepositoryTag> tags = Objects.requireNonNull(response).getResults().stream()
-                    .map(e -> RegistryRepositoryTag.of(e.getName(), uri.getHost(), namespacedRepository))
+                    .map(e -> RegistryRepositoryTag.of(e.getName(), uri.getHost(), namespacedImage))
                     .collect(Collectors.toList());
             return new PageResult<>(200, "success", tags, response.getCount(), pageable.getPage(), pageable.getPageSize());
         } catch (Exception e) {
