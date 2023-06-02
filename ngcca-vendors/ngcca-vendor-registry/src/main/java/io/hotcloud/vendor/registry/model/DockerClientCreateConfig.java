@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.registry.client;
+package io.hotcloud.vendor.registry.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
