@@ -29,7 +29,7 @@ public class RegistrySearchServiceImpl implements RegistrySearchService {
     }
 
     private static String validateRegistryUrl(RegistryType type, String registry) {
-        if (Objects.equals(type, RegistryType.DockerHub)) {
+        if (Objects.equals(type, RegistryType.DOCKER_HUB)) {
             registry = DockerHub.HTTP_URL;
         }
         if (!StringUtils.hasText(registry)) {

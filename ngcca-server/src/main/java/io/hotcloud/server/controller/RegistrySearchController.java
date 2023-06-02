@@ -34,7 +34,7 @@ public class RegistrySearchController {
             summary = "List Repositories",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
-                    @Parameter(name = "type", required = true, description = "Registry type", schema = @Schema(allowableValues = {"Registry", "Harbor", "Quay", "DockerHub"})),
+                    @Parameter(name = "type", required = true, description = "Registry type", schema = @Schema(allowableValues = {"docker_registry", "harbor", "quay", "docker_hub"})),
                     @Parameter(name = "registry", required = false, example = "http://harbor.local:5000"),
                     @Parameter(name = "q", required = true, description = "search keyword", example = "nginx")
             }
@@ -55,7 +55,7 @@ public class RegistrySearchController {
             summary = "List Repository tags",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
-                    @Parameter(name = "type", required = true, description = "Registry type", schema = @Schema(allowableValues = {"Registry", "Harbor", "Quay", "DockerHub"})),
+                    @Parameter(name = "type", required = true, description = "Registry type", schema = @Schema(allowableValues = {"docker_registry", "harbor", "quay", "docker_hub"})),
                     @Parameter(name = "registry", required = false, example = "http://harbor.local:5000"),
                     @Parameter(name = "repository", description = "The full path of the repository", example = " e.g. namespace/name")
             }

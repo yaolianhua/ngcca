@@ -27,19 +27,19 @@ public class RegistrySearchClientProviderManager implements RegistrySearchClient
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.acceptsUntrustedCertsHttpClient());
         restTemplate.setRequestFactory(httpRequestFactory);
 
-        if (Objects.equals(type, RegistryType.Registry)) {
+        if (Objects.equals(type, RegistryType.DOCKER_REGISTRY)) {
             return new V2DockerRegistrySearchClient(restTemplate, uri);
         }
 
-        if (Objects.equals(type, RegistryType.DockerHub)) {
+        if (Objects.equals(type, RegistryType.DOCKER_HUB)) {
             return new DockerHubRegistrySearchClient(restTemplate, uri);
         }
 
-        if (Objects.equals(type, RegistryType.Harbor)) {
+        if (Objects.equals(type, RegistryType.HARBOR)) {
             return new HarborRegistrySearchClient(restTemplate, uri);
         }
 
-        if (Objects.equals(type, RegistryType.Quay)) {
+        if (Objects.equals(type, RegistryType.QUAY)) {
             return new QuayRegistrySearchClient(restTemplate, uri);
         }
 

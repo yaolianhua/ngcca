@@ -6,13 +6,13 @@ import java.util.Arrays;
 
 public enum RegistryType {
     //
-    Harbor,
+    HARBOR,
     //
-    Registry,
+    DOCKER_REGISTRY,
     //
-    DockerHub,
+    DOCKER_HUB,
     //
-    Quay;
+    QUAY;
 
     public static RegistryType of(String name) {
         return Arrays.stream(RegistryType.values())
