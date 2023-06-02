@@ -1,4 +1,4 @@
-package io.hotcloud.service.minio;
+package io.hotcloud.vendor.minio;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;

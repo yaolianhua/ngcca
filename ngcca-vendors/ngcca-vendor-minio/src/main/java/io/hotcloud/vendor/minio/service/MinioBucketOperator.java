@@ -1,9 +1,7 @@
-package io.hotcloud.service.minio;
+package io.hotcloud.vendor.minio.service;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.vendor.minio.MinioBucketApi;
 import io.minio.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -15,12 +13,8 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
-public class MinioBucketOperator implements MinioBucketApi {
+class MinioBucketOperator implements MinioBucketApi {
 
     private final MinioClient minioClient;
 

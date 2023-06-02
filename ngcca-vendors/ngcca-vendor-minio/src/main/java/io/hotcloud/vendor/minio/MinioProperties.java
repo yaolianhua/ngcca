@@ -1,4 +1,4 @@
-package io.hotcloud.service.minio;
+package io.hotcloud.vendor.minio;
 
 import io.hotcloud.common.model.Properties;
 import lombok.Data;

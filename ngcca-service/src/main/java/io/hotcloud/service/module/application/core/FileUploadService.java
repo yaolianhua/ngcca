@@ -2,9 +2,9 @@ package io.hotcloud.service.module.application.core;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.service.minio.MinioProperties;
-import io.hotcloud.vendor.minio.MinioBucketApi;
-import io.hotcloud.vendor.minio.MinioObjectApi;
+import io.hotcloud.vendor.minio.MinioProperties;
+import io.hotcloud.vendor.minio.service.MinioBucketApi;
+import io.hotcloud.vendor.minio.service.MinioObjectApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

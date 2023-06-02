@@ -3,8 +3,8 @@ package io.hotcloud.server.minio;
 
 import io.hotcloud.server.CoreServerApplication;
 import io.hotcloud.service.files.FileHelper;
-import io.hotcloud.service.minio.MinioProperties;
-import io.hotcloud.vendor.minio.MinioObjectApi;
+import io.hotcloud.vendor.minio.MinioProperties;
+import io.hotcloud.vendor.minio.service.MinioObjectApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

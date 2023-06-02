@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.minio;
+package io.hotcloud.vendor.minio.service;
 
 import java.io.InputStream;
 

@@ -1,22 +1,16 @@
-package io.hotcloud.service.minio;
+package io.hotcloud.vendor.minio.service;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.vendor.minio.MinioObjectApi;
 import io.minio.*;
 import io.minio.http.Method;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Component
-@Slf4j
-public class MinioObjectOperator implements MinioObjectApi {
+class MinioObjectOperator implements MinioObjectApi {
 
     private final MinioClient minioClient;
 
