@@ -28,12 +28,12 @@ import java.util.stream.Collectors;
 
 import static io.hotcloud.vendor.registry.model.RegistryUtil.retrieveRepositoryNameWithNamespace;
 
-public class DockerRegistrySearchClient implements RegistrySearchClient {
+public class V2DockerRegistrySearchClient implements RegistrySearchClient {
 
     private final RestTemplate restTemplate;
     private final URI uri;
 
-    public DockerRegistrySearchClient(RestTemplate restTemplate, URI uri) {
+    public V2DockerRegistrySearchClient(RestTemplate restTemplate, URI uri) {
         this.restTemplate = restTemplate;
         this.uri = uri;
     }

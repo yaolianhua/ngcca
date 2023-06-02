@@ -28,7 +28,7 @@ public class RegistrySearchClientProviderManager implements RegistrySearchClient
         restTemplate.setRequestFactory(httpRequestFactory);
 
         if (Objects.equals(type, RegistryType.Registry)) {
-            return new DockerRegistrySearchClient(restTemplate, uri);
+            return new V2DockerRegistrySearchClient(restTemplate, uri);
         }
 
         if (Objects.equals(type, RegistryType.DockerHub)) {
