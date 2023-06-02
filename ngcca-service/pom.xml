@@ -82,21 +82,7 @@
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
         </dependency>
-        <!-- minio -->
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>checker-qual</artifactId>
-                    <groupId>org.checkerframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>error_prone_annotations</artifactId>
-                    <groupId>com.google.errorprone</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <!-- http clients-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
