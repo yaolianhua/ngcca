@@ -49,6 +49,7 @@
         <httpclient5.version>5.2.1</httpclient5.version>
         <openfeign.version>4.0.1</openfeign.version>
         <openai-gpt3.version>0.11.1</openai-gpt3.version>
+        <docker-java.version>3.3.1</docker-java.version>
     </properties>
 
     <dependencyManagement>
@@ -200,6 +201,12 @@
                 <groupId>com.github.javafaker</groupId>
                 <artifactId>javafaker</artifactId>
                 <version>${java-faker-version}</version>
+            </dependency>
+            <!-- docker-java -->
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java</artifactId>
+                <version>${docker-java.version}</version>
             </dependency>
 
             <!-- jwt -->
