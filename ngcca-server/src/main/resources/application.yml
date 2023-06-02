@@ -52,11 +52,7 @@ ngcca:
       hostname:
       port:
     api-key:
-  docker:
-    host:
-    registry-url:
-    registry-username:
-    registry-password:
+
 server:
   port: 8080
 logging:

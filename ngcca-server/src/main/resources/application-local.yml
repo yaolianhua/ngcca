@@ -21,11 +21,7 @@ ngcca:
       hostname: localhost
       port: 0
     http-client-timeout-seconds: 60
-  docker:
-    host: "unix:///var/run/docker.sock"
-    registry-url: "http://registry.local:6000"
-    registry-username: admin
-    registry-password: "QbMufCD@9WVQ^Hv"
+
 logging:
   level:
     io.hotcloud.common.log: debug
