@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.registry;
+package io.hotcloud.vendor.registry.client;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

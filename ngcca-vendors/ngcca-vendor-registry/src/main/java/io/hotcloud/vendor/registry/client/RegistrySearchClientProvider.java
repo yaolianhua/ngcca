@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.registry;
+package io.hotcloud.vendor.registry.client;
 
 
 import io.hotcloud.vendor.registry.model.RegistryType;

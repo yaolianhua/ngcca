@@ -1,4 +1,4 @@
-package io.hotcloud.service.module.registry;
+package io.hotcloud.vendor.registry.client;
 
 import lombok.SneakyThrows;
 import org.apache.hc.client5.http.classic.HttpClient;
@@ -13,6 +13,8 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import javax.net.ssl.SSLContext;
 
 public class HttpClients {
+    private HttpClients() {
+    }
 
     @SneakyThrows
     public static HttpClient acceptsUntrustedCertsHttpClient() {

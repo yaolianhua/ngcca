@@ -1,10 +1,9 @@
-package io.hotcloud.service.module.registry;
+package io.hotcloud.vendor.registry.client;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.vendor.registry.RegistrySearchClient;
 import io.hotcloud.vendor.registry.model.RegistryAuthentication;
 import io.hotcloud.vendor.registry.model.RegistryRepository;
 import io.hotcloud.vendor.registry.model.RegistryRepositoryTag;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static io.hotcloud.vendor.registry.model.RegistryUtil.*;
 
-public class HarborRegistrySearchClient implements RegistrySearchClient {
+class HarborRegistrySearchClient implements RegistrySearchClient {
 
     private final RestTemplate restTemplate;
     private final URI uri;

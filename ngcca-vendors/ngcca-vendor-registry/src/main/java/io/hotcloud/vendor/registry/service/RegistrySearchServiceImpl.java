@@ -1,12 +1,11 @@
-package io.hotcloud.service.module.registry;
+package io.hotcloud.vendor.registry.service;
 
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.vendor.registry.RegistrySearchClient;
-import io.hotcloud.vendor.registry.RegistrySearchClientProvider;
-import io.hotcloud.vendor.registry.RegistrySearchService;
+import io.hotcloud.vendor.registry.client.RegistrySearchClient;
+import io.hotcloud.vendor.registry.client.RegistrySearchClientProvider;
 import io.hotcloud.vendor.registry.model.RegistryAuthentication;
 import io.hotcloud.vendor.registry.model.RegistryRepository;
 import io.hotcloud.vendor.registry.model.RegistryRepositoryTag;
@@ -20,7 +19,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 @Component
-public class RegistrySearchServiceImpl implements RegistrySearchService {
+class RegistrySearchServiceImpl implements RegistrySearchService {
 
     private final RegistrySearchClientProvider registrySearchClientProvider;
 

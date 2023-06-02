@@ -1,8 +1,6 @@
-package io.hotcloud.service.module.registry;
+package io.hotcloud.vendor.registry.client;
 
 
-import io.hotcloud.vendor.registry.RegistrySearchClient;
-import io.hotcloud.vendor.registry.RegistrySearchClientProvider;
 import io.hotcloud.vendor.registry.model.RegistryType;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -13,7 +11,7 @@ import java.net.URI;
 import java.util.Objects;
 
 @Component
-public class RegistrySearchClientProviderManager implements RegistrySearchClientProvider {
+class RegistrySearchClientProviderManager implements RegistrySearchClientProvider {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
