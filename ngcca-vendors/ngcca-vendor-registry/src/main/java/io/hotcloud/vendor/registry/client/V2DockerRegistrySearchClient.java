@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImage;
+import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImageName;
 
 class V2DockerRegistrySearchClient implements RegistrySearchClient {
 
@@ -79,7 +79,7 @@ class V2DockerRegistrySearchClient implements RegistrySearchClient {
      */
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
-        String namespacedImage = getNamespacedImage(repository);
+        String namespacedImage = getNamespacedImageName(repository);
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/{repository}/tags/list")
                 .build(namespacedImage);

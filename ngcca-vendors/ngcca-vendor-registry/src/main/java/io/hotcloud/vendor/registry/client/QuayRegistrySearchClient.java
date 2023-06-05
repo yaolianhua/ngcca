@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImage;
+import static io.hotcloud.vendor.registry.model.RegistryUtil.getNamespacedImageName;
 
 class QuayRegistrySearchClient implements RegistrySearchClient {
 
@@ -84,7 +84,7 @@ class QuayRegistrySearchClient implements RegistrySearchClient {
 
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
-        String namespacedImage = getNamespacedImage(repository);
+        String namespacedImage = getNamespacedImageName(repository);
         List<QuayRepositoryTag> containers = new LinkedList<>();
         try {
             //始终查询所有，对结果集手动分页

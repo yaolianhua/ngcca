@@ -66,8 +66,8 @@ class DockerHubRegistrySearchClient implements RegistrySearchClient {
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
 
         String namespace = getNamespace(repository);
-        String name = getImageNameOnly(repository);
-        String namespacedImage = getNamespacedImage(repository);
+        String name = getImageName(repository);
+        String namespacedImage = getNamespacedImageName(repository);
 
         URI requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/v2/namespaces/{namespace}/repositories/{repository}/tags")

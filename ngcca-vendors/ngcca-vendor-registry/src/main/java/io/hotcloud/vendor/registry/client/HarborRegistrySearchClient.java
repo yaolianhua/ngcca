@@ -73,8 +73,8 @@ class HarborRegistrySearchClient implements RegistrySearchClient {
     @Override
     public PageResult<RegistryRepositoryTag> searchTags(RegistryAuthentication authentication, Pageable pageable, String repository) {
         String namespace = getNamespace(repository);
-        String imageName = getImageNameOnly(repository);
-        String namespacedImage = getNamespacedImage(repository);
+        String imageName = getImageName(repository);
+        String namespacedImage = getNamespacedImageName(repository);
         String requestUrl = UriComponentsBuilder.fromUri(uri)
                 .path("/api/v2.0/projects/{namespace}/repositories/{repository}/artifacts")
                 .queryParam("page", pageable.getPage())
