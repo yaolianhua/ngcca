@@ -21,6 +21,9 @@ ngcca:
       hostname: localhost
       port: 0
     http-client-timeout-seconds: 60
+  docker:
+    host: "tcp://linux.local:2375"
+    pull-timeout-seconds: 300
 
   kubernetes-agent:
     host: localhost

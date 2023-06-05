@@ -68,6 +68,9 @@ ngcca:
       hostname:
       port:
     api-key:
+  docker:
+    host:
+    pull-timeout-seconds:
 
   web-server:
     host:
