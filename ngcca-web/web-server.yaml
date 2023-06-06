@@ -56,7 +56,7 @@ spec:
         k8s-app: web-server
     spec:
       hostAliases:
-        - ip: 192.168.110.22
+        - ip: 192.168.110.233
           hostnames:
             - harbor.linux-local
             - linux.local
@@ -141,6 +141,10 @@ data:
           hostname: localhost
           port: 4000
         api-key: no-key
+      docker:
+        host: "tcp://linux.local:2375"
+        pull-timeout-seconds: 300
+        push-timeout-seconds: 300
       web-server:
         host: 
         port: 
@@ -150,6 +154,8 @@ data:
     logging:
       level:
         io.hotcloud.common.log: debug
+        com.github.dockerjava.api.command: debug
+        com.github.dockerjava.core.command: debug
 kind: ConfigMap
 metadata:
   name: web-server-config

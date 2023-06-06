@@ -56,13 +56,13 @@ spec:
         k8s-app: ngcca-server
     spec:
       hostAliases:
-        - ip: 192.168.110.22
+        - ip: 192.168.110.233
           hostnames:
             - harbor.linux-local
             - linux.local
 
       containers:
-        - image: harbor.linux-local:5000/ngcca/core-server:2023.05.30.143449
+        - image: harbor.linux-local:5000/ngcca/core-server:2023.06.06.165020
           imagePullPolicy: IfNotPresent
           name: ngcca-server
           ports:
@@ -134,11 +134,17 @@ data:
           hostname: localhost
           port: 8080
         api-key: no-key
+      docker:
+        host: "tcp://linux.local:2375"
+        pull-timeout-seconds: 300
+        push-timeout-seconds: 300
     server:
       port: 8080
     logging:
       level:
         io.hotcloud.common.log: debug
+        com.github.dockerjava.api.command: debug
+        com.github.dockerjava.core.command: debug
 kind: ConfigMap
 metadata:
   name: ngcca-server-config
