@@ -47,7 +47,7 @@ public class DockerPullClient {
 
         try (DockerClient dockerClient = DockerClientFactory.create(dockerClientCreateConfig)) {
 
-            Log.info(this, dockerClientCreateConfig, "create docker client");
+            Log.debug(this, dockerClientCreateConfig, "create docker client");
 
             String registry = RegistryUtil.getRegistry(target.getName());
             AuthConfig authConfig = new AuthConfig();
@@ -56,7 +56,7 @@ public class DockerPullClient {
                 authConfig.withUsername(target.getAuthentication().getUsername());
                 authConfig.withPassword(target.getAuthentication().getPassword());
             }
-            Log.info(this, authConfig, "init registry auth config");
+            Log.debug(this, authConfig, "init registry auth config");
             Future<Boolean> future = executorService.submit(() -> {
                 try {
                     return dockerClient.pullImageCmd(target.getName())
@@ -76,7 +76,7 @@ public class DockerPullClient {
                         Log.info(this, target, "image pull success, times " + watch.getTotalTimeSeconds() + "s");
                         return true;
                     }
-                    Log.info(this, target, "image pull failed, times " + watch.getTotalTimeSeconds() + "s");
+                    Log.warn(this, target, "image pull failed, times " + watch.getTotalTimeSeconds() + "s");
                     return false;
                 }
             }
