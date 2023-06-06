@@ -5,7 +5,7 @@ public enum Template {
     MONGODB,
     MINIO,
     REDIS,
-    REDIS_INSIGHT,
+    REDISINSIGHT,
     MYSQL,
     RABBITMQ,
     BUSYBOX
