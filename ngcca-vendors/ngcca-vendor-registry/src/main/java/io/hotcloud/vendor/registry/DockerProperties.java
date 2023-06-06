@@ -16,6 +16,7 @@ public class DockerProperties {
 
     private String host = "unix:///var/run/docker.sock";
     private int pullTimeoutSeconds = 120;
+    private int pushTimeoutSeconds = 120;
 
     @PostConstruct
     public void print() {
