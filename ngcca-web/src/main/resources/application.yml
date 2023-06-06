@@ -71,6 +71,7 @@ ngcca:
   docker:
     host:
     pull-timeout-seconds:
+    push-timeout-seconds:
 
   web-server:
     host:

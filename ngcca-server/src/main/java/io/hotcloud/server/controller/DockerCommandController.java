@@ -3,6 +3,7 @@ package io.hotcloud.server.controller;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.vendor.registry.client.DockerPullClient;
 import io.hotcloud.vendor.registry.client.DockerPushClient;
+import io.hotcloud.vendor.registry.model.DockerPushRequest;
 import io.hotcloud.vendor.registry.model.RegistryImage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,6 +38,16 @@ public class DockerCommandController {
     )
     public ResponseEntity<Result<Boolean>> pull(@RequestBody RegistryImage body) {
         return ok(dockerPullClient.pull(body));
+    }
+
+    @PostMapping("/push")
+    @Operation(
+            summary = "push docker image",
+            responses = {@ApiResponse(responseCode = "200")},
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "docker push request body")
+    )
+    public ResponseEntity<Result<Boolean>> push(@RequestBody DockerPushRequest body) {
+        return ok(dockerPushClient.push(body.getSource(), body.getTarget()));
     }
 
 }

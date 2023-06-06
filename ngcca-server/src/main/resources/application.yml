@@ -55,6 +55,7 @@ ngcca:
   docker:
     host:
     pull-timeout-seconds:
+    push-timeout-seconds:
 server:
   port: 8080
 logging:

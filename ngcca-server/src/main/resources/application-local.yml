@@ -24,6 +24,7 @@ ngcca:
   docker:
     host: "tcp://linux.local:2375"
     pull-timeout-seconds: 300
+    push-timeout-seconds: 300
 logging:
   level:
     io.hotcloud.common.log: debug
