@@ -61,4 +61,5 @@ server:
 logging:
   level:
     io.hotcloud.common.log: info
-    com.github.dockerjava.api.command: debug
+    com.github.dockerjava.api.command: info
+    com.github.dockerjava.core.command: info

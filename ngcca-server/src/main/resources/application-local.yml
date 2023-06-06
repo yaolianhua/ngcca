@@ -28,5 +28,7 @@ ngcca:
 logging:
   level:
     io.hotcloud.common.log: debug
+    com.github.dockerjava.api.command: debug
+    com.github.dockerjava.core.command: debug
 
 
