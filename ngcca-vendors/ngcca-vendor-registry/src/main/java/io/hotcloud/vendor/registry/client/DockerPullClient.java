@@ -6,13 +6,10 @@ import com.github.dockerjava.api.model.AuthConfig;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.vendor.registry.DockerProperties;
-import io.hotcloud.vendor.registry.model.DockerClientCreateConfig;
 import io.hotcloud.vendor.registry.model.RegistryImage;
-import io.hotcloud.vendor.registry.model.RegistryUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -24,10 +21,14 @@ public class DockerPullClient {
 
     private final DockerProperties dockerProperties;
     private final ExecutorService executorService;
+    private final DockerClient dockerClient;
 
-    public DockerPullClient(DockerProperties dockerProperties, ExecutorService executorService) {
+    public DockerPullClient(DockerProperties dockerProperties,
+                            ExecutorService executorService,
+                            DockerClient dockerClient) {
         this.dockerProperties = dockerProperties;
         this.executorService = executorService;
+        this.dockerClient = dockerClient;
     }
 
     /**
@@ -37,21 +38,12 @@ public class DockerPullClient {
      */
     public boolean pull(RegistryImage target) {
 
-        DockerClientCreateConfig dockerClientCreateConfig = DockerClientCreateConfig.builder()
-                .host(dockerProperties.getHost())
-                .tlsVerify(false)
-                .build();
-
         StopWatch watch = new StopWatch();
         watch.start();
 
-        try (DockerClient dockerClient = DockerClientFactory.create(dockerClientCreateConfig)) {
-
-            Log.debug(this, dockerClientCreateConfig, "[pull]create docker client");
-
-            String registry = RegistryUtil.getRegistry(target.getName());
+        try {
             AuthConfig authConfig = new AuthConfig();
-            authConfig.withRegistryAddress(registry);
+            authConfig.withRegistryAddress(target.getRegistry());
             if (Objects.nonNull(target.getAuthentication())) {
                 authConfig.withUsername(target.getAuthentication().getUsername());
                 authConfig.withPassword(target.getAuthentication().getPassword());
@@ -81,7 +73,7 @@ public class DockerPullClient {
                 }
             }
 
-        } catch (IOException | ExecutionException e) {
+        } catch (ExecutionException e) {
             throw new PlatformException(e.getMessage(), 500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

@@ -11,4 +11,22 @@ public class RegistryImage {
     private String name;
 
     private RegistryAuthentication authentication;
+
+    public String getRegistry() {
+        return RegistryUtil.getRegistry(this.name);
+    }
+
+    public String getNamespacedImageName() {
+        return RegistryUtil.getNamespacedImageName(this.name);
+    }
+
+    public String getImageTag() {
+        return RegistryUtil.getImageTag(this.name);
+    }
+
+    public String getRegistryImageWithNoTag() {
+        String registry = getRegistry();
+        String namespacedImageName = getNamespacedImageName();
+        return String.format("%s/%s", registry, namespacedImageName);
+    }
 }
