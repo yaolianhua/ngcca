@@ -1,4 +1,4 @@
-package io.hotcloud.module.application.core;
+package io.hotcloud.module.application;
 
 import java.util.List;
 

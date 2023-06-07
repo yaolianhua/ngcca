@@ -1,6 +1,6 @@
 package io.hotcloud.server.controller;
 
-import io.hotcloud.module.application.core.ApplicationYamlService;
+import io.hotcloud.module.application.ApplicationYamlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

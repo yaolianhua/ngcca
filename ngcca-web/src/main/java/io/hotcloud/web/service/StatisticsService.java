@@ -2,7 +2,7 @@ package io.hotcloud.web.service;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.module.application.core.ApplicationInstanceStatistics;
+import io.hotcloud.module.application.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;
 import io.hotcloud.module.buildpack.model.BuildPackStatistics;
 import io.hotcloud.module.security.user.User;

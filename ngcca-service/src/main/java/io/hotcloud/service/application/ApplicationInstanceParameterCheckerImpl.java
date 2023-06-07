@@ -6,7 +6,7 @@ import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.model.exception.ResourceConflictException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
-import io.hotcloud.module.application.core.*;
+import io.hotcloud.module.application.*;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;

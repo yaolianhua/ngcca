@@ -1,10 +1,10 @@
 package io.hotcloud.service.application;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.application.core.ApplicationInstance;
-import io.hotcloud.module.application.core.ApplicationInstanceProcessor;
-import io.hotcloud.module.application.core.ApplicationInstanceService;
-import io.hotcloud.module.application.core.ApplicationInstanceSource;
+import io.hotcloud.module.application.ApplicationInstance;
+import io.hotcloud.module.application.ApplicationInstanceProcessor;
+import io.hotcloud.module.application.ApplicationInstanceService;
+import io.hotcloud.module.application.ApplicationInstanceSource;
 import io.hotcloud.module.buildpack.BuildPackPlayer;
 import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;

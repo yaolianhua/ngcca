@@ -1,6 +1,6 @@
 package io.hotcloud.server.application;
 
-import io.hotcloud.module.application.core.*;
+import io.hotcloud.module.application.*;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.CoreServerApplication;
 import org.junit.Before;

@@ -3,7 +3,7 @@ package io.hotcloud.service.openai;
 import com.theokanning.openai.Usage;
 import com.theokanning.openai.completion.chat.*;
 import com.theokanning.openai.service.OpenAiService;
-import io.hotcloud.module.application.openai.ChatService;
+import io.hotcloud.module.application.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
