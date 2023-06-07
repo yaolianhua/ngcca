@@ -1,4 +1,6 @@
-package io.hotcloud.common.model;
+package io.hotcloud.common;
+
+import io.hotcloud.common.model.Message;
 
 import static io.hotcloud.common.model.CommonConstant.MESSAGE_QUEUE_NGCCA;
 
