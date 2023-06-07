@@ -1,7 +1,6 @@
 package io.hotcloud.service.application.template;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.activity.ALog;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
@@ -42,9 +41,8 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
-        Log.info(this, null, String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
-        ALog aLog = activityLogger.log(Action.CREATE, saved);
-        Log.debug(this, null, String.format("Activity [%s] saved", aLog.getId()));
+        Log.info(this, null, String.format("[%s] user's [%s] template [%s] save", current.getUsername(), templateInstance.getName(), saved.getId()));
+        activityLogger.log(Action.CREATE, saved);
 
         try {
             if (namespaceApi.read(namespace) == null) {
@@ -70,18 +68,16 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
         templateInstanceService.delete(id);
         Log.info(this, null,
-                String.format("Delete [%s] template '%s'", find.getName(), id));
-        ALog aLog = activityLogger.log(Action.DELETE, find);
-        Log.debug(this, null,
-                String.format("Activity [%s] saved", aLog.getId()));
+                String.format("[%s] template '%s' delete ", find.getName(), id));
+        activityLogger.log(Action.DELETE, find);
 
         try {
-            Boolean delete = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
-            Log.info(this, null, String.format("Delete template k8s resource success [%s], namespace:%s, name:%s", delete, find.getNamespace(), find.getName()));
+            kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
+            Log.info(this, null, String.format("[%s] template k8s resource delete, namespace:%s", find.getName(), find.getNamespace()));
 
             if (StringUtils.hasText(find.getIngress())) {
-                Boolean deleteIngress = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getIngress()));
-                Log.info(this, null, String.format("Delete template ingress success [%s], namespace:%s, name:%s", deleteIngress, find.getNamespace(), find.getName()));
+                kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getIngress()));
+                Log.info(this, null, String.format("[%s] template ingress delete, namespace:%s", find.getName(), find.getNamespace()));
             }
 
         } catch (Exception e) {
