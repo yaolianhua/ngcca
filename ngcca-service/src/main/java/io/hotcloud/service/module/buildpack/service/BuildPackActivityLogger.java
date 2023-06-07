@@ -9,7 +9,6 @@ import io.hotcloud.module.db.entity.ActivityRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -24,15 +23,10 @@ public class BuildPackActivityLogger {
     }
 
     public ALog log(Action action, BuildPack buildPack) {
-        String description = "Unknown Activity";
+
         String namespace = buildPack.getJobResource().getNamespace();
         String name = buildPack.getJobResource().getName();
-        if (Objects.equals(action, Action.CREATE) || Objects.equals(action, Action.UPDATE)) {
-            description = String.format("创建或更新命名空间【%s】下构建面板【%s】", namespace, name);
-        }
-        if (Objects.equals(action, Action.DELETE)) {
-            description = String.format("删除命名空间【%s】下构建面板【%s】", namespace, name);
-        }
+        String description = String.format("[%s]-[%s]-[%s]-[%s]", action, namespace, Target.BUILDPACK, name);
         ALog aLog = ALog.builder()
                 .action(action.name())
                 .target(Target.BUILDPACK.name())
