@@ -7,14 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityLog {
+public class ALog {
 
     private String id;
 
@@ -31,11 +28,11 @@ public class ActivityLog {
      */
     private String namespace;
     /**
-     * activity target {@link ActivityTarget}
+     * activity target {@link Target}
      */
     private String target;
     /**
-     * activity action {@link ActivityAction}
+     * activity action {@link Action}
      */
     private String action;
     /**

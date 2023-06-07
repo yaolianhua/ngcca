@@ -2,9 +2,9 @@ package io.hotcloud.web.service;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.activity.ActivityAction;
-import io.hotcloud.common.model.activity.ActivityLog;
-import io.hotcloud.common.model.activity.ActivityTarget;
+import io.hotcloud.common.model.activity.ALog;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,20 +29,20 @@ public class ActivityQuery {
      * Paging query activity log
      *
      * @param user     user's username
-     * @param target   {@link ActivityTarget}
-     * @param action   {@link ActivityAction}
+     * @param target   {@link Target}
+     * @param action   {@link Action}
      * @param pageable {@link Pageable}
      * @return activity log collection
      */
-    public PageResult<ActivityLog> pagingQuery(String user, @Nullable ActivityTarget target, @Nullable ActivityAction action, Pageable pageable) {
+    public PageResult<ALog> pagingQuery(String user, @Nullable Target target, @Nullable Action action, Pageable pageable) {
         Assert.hasText(user, "user is null");
 
         List<ActivityEntity> entities = activityRepository.findByUser(user);
-        List<ActivityLog> activityLogs = entities.stream()
-                .map(e -> e.toT(ActivityLog.class))
+        List<ALog> aLogs = entities.stream()
+                .map(e -> e.toT(ALog.class))
                 .collect(Collectors.toList());
 
-        List<ActivityLog> filtered = filter(activityLogs, target, action);
+        List<ALog> filtered = filter(aLogs, target, action);
         //desc sorted
         filtered.sort((e1, e2) -> e2.getCreatedAt().compareTo(e1.getCreatedAt()));
 
@@ -50,7 +50,7 @@ public class ActivityQuery {
 
     }
 
-    public List<ActivityLog> filter(List<ActivityLog> activities, ActivityTarget target, ActivityAction action) {
+    public List<ALog> filter(List<ALog> activities, Target target, Action action) {
         if (null == target && action == null) {
             return activities;
         }

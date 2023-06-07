@@ -1,6 +1,6 @@
 package io.hotcloud.common.model.activity;
 
-public enum ActivityTarget {
+public enum Target {
     //
     BUILDPACK,
     INSTANCE_TEMPLATE,

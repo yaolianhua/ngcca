@@ -1,6 +1,6 @@
 package io.hotcloud.common.model.activity;
 
-public enum ActivityAction {
+public enum Action {
     //
     CREATE,
     UPDATE,

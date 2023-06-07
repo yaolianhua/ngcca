@@ -1,7 +1,7 @@
 package io.hotcloud.service.module.buildpack.service;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.activity.ActivityAction;
+import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
@@ -106,7 +106,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         buildPackService.delete(id, physically);
         Log.info(this, null,
                 String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
-        activityLogger.log(ActivityAction.DELETE, existBuildPack);
+        activityLogger.log(Action.DELETE, existBuildPack);
 
         try {
             Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));

@@ -2,7 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.activity.ActivityLog;
+import io.hotcloud.common.model.activity.ALog;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.CookieUser;
@@ -34,8 +34,8 @@ public class UserIndexViewsController {
     public String indexPage(Model model,
                             @CookieUser User user) {
         Statistics statistics = statisticsService.statistics(user.getId());
-        PageResult<ActivityLog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 8));
-        List<ActivityLog> activities = pageResult.getData().stream().toList();
+        PageResult<ALog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 8));
+        List<ALog> activities = pageResult.getData().stream().toList();
         model.addAttribute(WebConstant.STATISTICS, statistics);
         model.addAttribute(WebConstant.ACTIVITIES, activities);
         return Views.INDEX;

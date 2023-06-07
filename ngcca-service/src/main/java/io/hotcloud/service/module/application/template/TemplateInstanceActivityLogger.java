@@ -1,8 +1,8 @@
 package io.hotcloud.service.module.application.template;
 
-import io.hotcloud.common.model.activity.ActivityAction;
-import io.hotcloud.common.model.activity.ActivityLog;
-import io.hotcloud.common.model.activity.ActivityTarget;
+import io.hotcloud.common.model.activity.ALog;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;
@@ -23,19 +23,19 @@ public class TemplateInstanceActivityLogger {
         this.activityRepository = activityRepository;
     }
 
-    public ActivityLog log(ActivityAction action, TemplateInstance template) {
+    public ALog log(Action action, TemplateInstance template) {
         String description = "Unknown Activity";
         String namespace = template.getNamespace();
         String name = template.getName();
-        if (Objects.equals(action, ActivityAction.CREATE) || Objects.equals(action, ActivityAction.UPDATE)) {
+        if (Objects.equals(action, Action.CREATE) || Objects.equals(action, Action.UPDATE)) {
             description = String.format("创建或更新命名空间【%s】下实例模板【%s】", namespace, name);
         }
-        if (Objects.equals(action, ActivityAction.DELETE)) {
+        if (Objects.equals(action, Action.DELETE)) {
             description = String.format("删除命名空间【%s】下实例模板【%s】", namespace, name);
         }
-        ActivityLog activityLog = ActivityLog.builder()
+        ALog aLog = ALog.builder()
                 .action(action.name())
-                .target(ActivityTarget.INSTANCE_TEMPLATE.name())
+                .target(Target.INSTANCE_TEMPLATE.name())
                 .targetId(template.getId())
                 .targetName(name)
                 .user(template.getUser())
@@ -44,10 +44,10 @@ public class TemplateInstanceActivityLogger {
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
                 .build();
-        ActivityEntity entity = (ActivityEntity) new ActivityEntity().toE(activityLog);
+        ActivityEntity entity = (ActivityEntity) new ActivityEntity().toE(aLog);
         ActivityEntity saved = activityRepository.save(entity);
 
-        return saved.toT(ActivityLog.class);
+        return saved.toT(ALog.class);
     }
 
 }

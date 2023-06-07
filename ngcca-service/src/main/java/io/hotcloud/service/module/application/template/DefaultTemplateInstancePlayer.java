@@ -1,8 +1,8 @@
 package io.hotcloud.service.module.application.template;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.activity.ActivityAction;
-import io.hotcloud.common.model.activity.ActivityLog;
+import io.hotcloud.common.model.activity.ALog;
+import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -43,8 +43,8 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
         Log.info(this, null, String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.CREATE, saved);
-        Log.debug(this, null, String.format("Activity [%s] saved", activityLog.getId()));
+        ALog aLog = activityLogger.log(Action.CREATE, saved);
+        Log.debug(this, null, String.format("Activity [%s] saved", aLog.getId()));
 
         try {
             if (namespaceApi.read(namespace) == null) {
@@ -71,9 +71,9 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         templateInstanceService.delete(id);
         Log.info(this, null,
                 String.format("Delete [%s] template '%s'", find.getName(), id));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.DELETE, find);
+        ALog aLog = activityLogger.log(Action.DELETE, find);
         Log.debug(this, null,
-                String.format("Activity [%s] saved", activityLog.getId()));
+                String.format("Activity [%s] saved", aLog.getId()));
 
         try {
             Boolean delete = kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));
