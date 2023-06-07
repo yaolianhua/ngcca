@@ -7,23 +7,46 @@ ngcca:
   registry:
     url: harbor.linux-local:5000
     username: admin
-    password: QbMufCD@9WVQ^Hv
+    password: "QbMufCD@9WVQ^Hv"
     imagebuild-namespace: image-build-dev
   minio:
     access-key: admin
-    secret-key: QbMufCD@9WVQ^Hv
+    secret-key: "QbMufCD@9WVQ^Hv"
     endpoint: "http://linux.local:9009"
   mongodb:
-    host: linux.local
-    username: admin
-    password: QbMufCD@9WVQ^Hv
-    port: 27017
-    database: ngcca-integration-test
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-integration-test?authSource=admin"
   kubernetes-agent:
-    port: 1400
-    host: localhost
-    domain-name:
+    host:
+    port:
+    domain-name: k8s-agent.linux.local
+  buildpack:
+    build-timeout-second: 1200
+  application:
+    deployment-timeout-second: 1200
+    dot-suffix-domain: ".k8s.local"
+  security:
+    enabled: true
+    ignored-defaults:
+      - "/swagger**/**"
+      - "/v3/api-docs/**"
+      - "/favicon.ico"
+      - "/pub"
+      - "/**/login"
+    ignored-urls:
+  openai:
+    api-key: no-key
+    http-proxy:
+      hostname: localhost
+      port: 0
+    http-client-timeout-seconds: 60
+  docker:
+    host: "tcp://linux.local:2375"
+    pull-timeout-seconds: 300
+    push-timeout-seconds: 300
 logging:
   level:
     io.hotcloud.common.log: debug
+    com.github.dockerjava.api.command: debug
+    com.github.dockerjava.core.command: debug
+
 

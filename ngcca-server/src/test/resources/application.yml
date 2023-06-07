@@ -1,18 +1,14 @@
 spring:
   application:
-    name: test
+    name: core-server
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   data:
     mongodb:
-      database: ${ngcca.mongodb.database:}
-      host: ${ngcca.mongodb.host:}
-      port: ${ngcca.mongodb.port:}
-      password: ${ngcca.mongodb.password:}
-      username: ${ngcca.mongodb.username:}
       auto-index-creation: true
       authentication-database: admin
+      uri: ${ngcca.mongodb.uri}
   profiles:
     include: system-registry-image
 ngcca:
@@ -31,11 +27,7 @@ ngcca:
     secret-key:
     endpoint:
   mongodb:
-    host:
-    username:
-    password:
-    port:
-    database:
+    uri:
   kubernetes-agent:
     host: localhost
     port: 1400
@@ -54,5 +46,20 @@ ngcca:
       - "/pub"
       - "/**/login"
     ignored-urls:
+  openai:
+    http-client-timeout-seconds: 60
+    http-proxy:
+      hostname:
+      port:
+    api-key:
+  docker:
+    host:
+    pull-timeout-seconds:
+    push-timeout-seconds:
 server:
   port: 8080
+logging:
+  level:
+    io.hotcloud.common.log: info
+    com.github.dockerjava.api.command: info
+    com.github.dockerjava.core.command: info

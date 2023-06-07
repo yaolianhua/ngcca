@@ -15,6 +15,24 @@ ngcca:
     endpoint: "http://linux.local:9009"
   mongodb:
     uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
+  kubernetes-agent:
+    host:
+    port:
+    domain-name: k8s-agent.linux.local
+  buildpack:
+    build-timeout-second: 1200
+  application:
+    deployment-timeout-second: 1200
+    dot-suffix-domain: ".k8s.local"
+  security:
+    enabled: true
+    ignored-defaults:
+      - "/swagger**/**"
+      - "/v3/api-docs/**"
+      - "/favicon.ico"
+      - "/pub"
+      - "/**/login"
+    ignored-urls:
   openai:
     api-key: no-key
     http-proxy:
