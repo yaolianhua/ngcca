@@ -1,8 +1,8 @@
 package io.hotcloud.service.runner;
 
+import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.service.files.FileHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

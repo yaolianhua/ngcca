@@ -1,6 +1,6 @@
-package io.hotcloud.service.files;
+package io.hotcloud.common.file;
 
-import lombok.extern.slf4j.Slf4j;
+import io.hotcloud.common.log.Log;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * <li>The watch is not recursive - changes to subdirectories will not trigger a callback.</li>
  * </ul>
  */
-@Slf4j
 public class FileChangeWatcher {
 
     private final WatcherThread watcherThread;
@@ -40,7 +39,7 @@ public class FileChangeWatcher {
         FileSystem fs = dirPath.getFileSystem();
         WatchService watchService = fs.newWatchService();
 
-        log.debug("Registering with watch service: {}", dirPath);
+        Log.debug(this, null, String.format("Registering with watch service: %s", dirPath));
 
         dirPath.register(watchService,
                 StandardWatchEventKinds.ENTRY_CREATE,
@@ -174,27 +173,27 @@ public class FileChangeWatcher {
         @Override
         public void run() {
             try {
-                log.info("{} thread started", getName());
+                Log.info(this, null, String.format("%s thread started", getName()));
                 if (!compareAndSetState(FileChangeWatcher.State.STARTING, FileChangeWatcher.State.RUNNING)) {
                     // stop() called shortly after start(), before
                     // this thread started running.
-                    FileChangeWatcher.State state = FileChangeWatcher.this.getState();
-                    if (state != FileChangeWatcher.State.STOPPING) {
-                        throw new IllegalStateException("Unexpected state: " + state);
+                    FileChangeWatcher.State stateN = FileChangeWatcher.this.getState();
+                    if (stateN != FileChangeWatcher.State.STOPPING) {
+                        throw new IllegalStateException("Unexpected state: " + stateN);
                     }
                     return;
                 }
                 runLoop();
             } catch (Exception e) {
-                log.warn("Error in runLoop()", e);
+                Log.warn(this, null, String.format("Error in runLoop(), %s", e.getMessage()));
                 throw e;
             } finally {
                 try {
                     watchService.close();
                 } catch (IOException e) {
-                    log.warn("Error closing watch service", e);
+                    Log.warn(this, null, String.format("Error closing watch service, %s", e.getMessage()));
                 }
-                log.info("{} thread finished", getName());
+                Log.info(this, null, String.format("%s thread finished", getName()));
                 FileChangeWatcher.this.setState(FileChangeWatcher.State.STOPPED);
             }
         }
@@ -205,15 +204,16 @@ public class FileChangeWatcher {
                 try {
                     key = watchService.take();
                 } catch (InterruptedException | ClosedWatchServiceException e) {
-                    log.debug("{} was interrupted and is shutting down...", getName());
-                    break;
+                    Log.debug(this, null, String.format("%s was interrupted and is shutting down...", getName()));
+                    Thread.currentThread().interrupt();
+                    return;
                 }
                 for (WatchEvent<?> event : key.pollEvents()) {
-                    log.debug("Got file changed event: {} with context: {}", event.kind(), event.context());
+                    Log.debug(this, null, String.format("Got file changed event: %s with context: %s", event.kind(), event.context()));
                     try {
                         callback.accept(event);
-                    } catch (Throwable e) {
-                        log.error("Error from callback", e);
+                    } catch (Exception e) {
+                        Log.error(this, null, String.format("Error from callback, %s", e.getMessage()));
                     }
                 }
                 boolean isKeyValid = key.reset();
@@ -222,8 +222,8 @@ public class FileChangeWatcher {
                     // directory we are watching was deleted or otherwise became inaccessible (unmounted, permissions
                     // changed, ???).
                     // For now, we log an error and exit the watcher thread.
-                    log.error("Watch key no longer valid, maybe the directory is inaccessible?");
-                    break;
+                    Log.error(this, null, "Watch key no longer valid, maybe the directory is inaccessible?");
+                    return;
                 }
             }
         }

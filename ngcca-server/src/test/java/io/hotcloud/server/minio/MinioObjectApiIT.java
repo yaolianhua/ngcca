@@ -1,8 +1,8 @@
 package io.hotcloud.server.minio;
 
 
+import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.server.CoreServerApplication;
-import io.hotcloud.service.files.FileHelper;
 import io.hotcloud.vendor.minio.MinioProperties;
 import io.hotcloud.vendor.minio.service.MinioObjectApi;
 import lombok.extern.slf4j.Slf4j;

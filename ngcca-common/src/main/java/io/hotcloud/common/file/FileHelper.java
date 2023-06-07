@@ -1,4 +1,4 @@
-package io.hotcloud.service.files;
+package io.hotcloud.common.file;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -11,9 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 public final class FileHelper {
 
     private FileHelper() {
@@ -28,17 +25,17 @@ public final class FileHelper {
     }
 
     public static boolean exists(String path) {
-        Assert.hasText(path, "path is null");
+        Assert.hasText(path, "path data is null");
         return Files.exists(Path.of(path));
     }
 
     public static boolean exists(Path path) {
-        Assert.notNull(path, "path is null");
+        Assert.notNull(path, "input path is null");
         return Files.exists(path);
     }
 
     public static void createDirectories(Path path) throws IOException {
-        Assert.notNull(path, "path is null");
+        Assert.notNull(path, "path param is null");
         Files.createDirectories(path);
     }
 

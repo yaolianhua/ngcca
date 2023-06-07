@@ -1,7 +1,7 @@
 package io.hotcloud.server.files;
 
-import io.hotcloud.service.files.FileChangeWatcher;
-import io.hotcloud.service.files.FileHelper;
+import io.hotcloud.common.file.FileChangeWatcher;
+import io.hotcloud.common.file.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Disabled;
