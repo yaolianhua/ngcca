@@ -43,7 +43,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
         Log.info(this, null, String.format("Saved [%s] user's [%s] template [%s]", current.getUsername(), templateInstance.getName(), saved.getId()));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.Create, saved);
+        ActivityLog activityLog = activityLogger.log(ActivityAction.CREATE, saved);
         Log.debug(this, null, String.format("Activity [%s] saved", activityLog.getId()));
 
         try {
@@ -71,7 +71,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         templateInstanceService.delete(id);
         Log.info(this, null,
                 String.format("Delete [%s] template '%s'", find.getName(), id));
-        ActivityLog activityLog = activityLogger.log(ActivityAction.Delete, find);
+        ActivityLog activityLog = activityLogger.log(ActivityAction.DELETE, find);
         Log.debug(this, null,
                 String.format("Activity [%s] saved", activityLog.getId()));
 

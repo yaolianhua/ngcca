@@ -27,15 +27,15 @@ public class BuildPackActivityLogger {
         String description = "Unknown Activity";
         String namespace = buildPack.getJobResource().getNamespace();
         String name = buildPack.getJobResource().getName();
-        if (Objects.equals(action, ActivityAction.Create) || Objects.equals(action, ActivityAction.Update)) {
+        if (Objects.equals(action, ActivityAction.CREATE) || Objects.equals(action, ActivityAction.UPDATE)) {
             description = String.format("创建或更新命名空间【%s】下构建面板【%s】", namespace, name);
         }
-        if (Objects.equals(action, ActivityAction.Delete)) {
+        if (Objects.equals(action, ActivityAction.DELETE)) {
             description = String.format("删除命名空间【%s】下构建面板【%s】", namespace, name);
         }
         ActivityLog activityLog = ActivityLog.builder()
                 .action(action.name())
-                .target(ActivityTarget.BuildPack.name())
+                .target(ActivityTarget.BUILDPACK.name())
                 .targetId(buildPack.getId())
                 .targetName(name)
                 .user(buildPack.getUser())

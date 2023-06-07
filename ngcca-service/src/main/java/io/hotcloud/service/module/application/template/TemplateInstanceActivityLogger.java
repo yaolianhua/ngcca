@@ -27,15 +27,15 @@ public class TemplateInstanceActivityLogger {
         String description = "Unknown Activity";
         String namespace = template.getNamespace();
         String name = template.getName();
-        if (Objects.equals(action, ActivityAction.Create) || Objects.equals(action, ActivityAction.Update)) {
+        if (Objects.equals(action, ActivityAction.CREATE) || Objects.equals(action, ActivityAction.UPDATE)) {
             description = String.format("创建或更新命名空间【%s】下实例模板【%s】", namespace, name);
         }
-        if (Objects.equals(action, ActivityAction.Delete)) {
+        if (Objects.equals(action, ActivityAction.DELETE)) {
             description = String.format("删除命名空间【%s】下实例模板【%s】", namespace, name);
         }
         ActivityLog activityLog = ActivityLog.builder()
                 .action(action.name())
-                .target(ActivityTarget.Instance_Template.name())
+                .target(ActivityTarget.INSTANCE_TEMPLATE.name())
                 .targetId(template.getId())
                 .targetName(name)
                 .user(template.getUser())

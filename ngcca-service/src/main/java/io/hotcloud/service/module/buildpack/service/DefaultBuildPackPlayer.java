@@ -106,7 +106,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         buildPackService.delete(id, physically);
         Log.info(this, null,
                 String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
-        activityLogger.log(ActivityAction.Delete, existBuildPack);
+        activityLogger.log(ActivityAction.DELETE, existBuildPack);
 
         try {
             Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
