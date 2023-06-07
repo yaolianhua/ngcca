@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
-import io.hotcloud.service.module.application.core.FileUploadService;
+import io.hotcloud.service.application.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

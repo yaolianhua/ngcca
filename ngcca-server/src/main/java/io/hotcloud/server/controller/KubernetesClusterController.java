@@ -1,8 +1,8 @@
 package io.hotcloud.server.controller;
 
 
-import io.hotcloud.service.module.cluster.KubernetesCluster;
-import io.hotcloud.service.module.cluster.KubernetesClusterManagement;
+import io.hotcloud.service.cluster.KubernetesCluster;
+import io.hotcloud.service.cluster.KubernetesClusterManagement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -6,7 +6,7 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.WebResponse;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.service.module.security.user.UserCollectionQuery;
+import io.hotcloud.service.security.user.UserCollectionQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

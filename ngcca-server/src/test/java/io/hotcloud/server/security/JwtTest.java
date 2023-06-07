@@ -4,7 +4,7 @@ import io.hotcloud.module.security.jwt.Jwt;
 import io.hotcloud.module.security.jwt.JwtBody;
 import io.hotcloud.module.security.jwt.JwtSigner;
 import io.hotcloud.module.security.jwt.JwtVerifier;
-import io.hotcloud.service.module.security.configuration.jwt.JwtManager;
+import io.hotcloud.service.security.jwt.JwtManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

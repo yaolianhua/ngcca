@@ -1,8 +1,8 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
-import io.hotcloud.service.module.env.ConfiguredEnvironmentQuery;
-import io.hotcloud.service.module.env.EnvironmentProperty;
+import io.hotcloud.service.env.ConfiguredEnvironmentQuery;
+import io.hotcloud.service.env.EnvironmentProperty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -6,7 +6,7 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.module.buildpack.BuildPackPlayer;
 import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;
-import io.hotcloud.service.module.buildpack.service.BuildPackCollectionQuery;
+import io.hotcloud.service.buildpack.BuildPackCollectionQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

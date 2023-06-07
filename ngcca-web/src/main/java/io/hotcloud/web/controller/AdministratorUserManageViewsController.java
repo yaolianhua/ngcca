@@ -2,7 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.service.module.security.user.UserCollectionQuery;
+import io.hotcloud.service.security.user.UserCollectionQuery;
 import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;

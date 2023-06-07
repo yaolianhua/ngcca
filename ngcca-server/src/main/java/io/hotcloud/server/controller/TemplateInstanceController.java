@@ -6,7 +6,7 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
-import io.hotcloud.service.module.application.template.TemplateInstanceCollectionQuery;
+import io.hotcloud.service.application.template.TemplateInstanceCollectionQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
