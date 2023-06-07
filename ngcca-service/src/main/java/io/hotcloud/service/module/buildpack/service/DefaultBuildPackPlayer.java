@@ -1,7 +1,7 @@
 package io.hotcloud.service.module.buildpack.service;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.ActivityAction;
+import io.hotcloud.common.model.activity.ActivityAction;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;

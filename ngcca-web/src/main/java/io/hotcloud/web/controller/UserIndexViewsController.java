@@ -1,8 +1,8 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.common.model.ActivityLog;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
+import io.hotcloud.common.model.activity.ActivityLog;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.web.Views;
 import io.hotcloud.web.mvc.CookieUser;

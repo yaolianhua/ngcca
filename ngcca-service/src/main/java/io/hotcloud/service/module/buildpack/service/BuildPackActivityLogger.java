@@ -1,8 +1,8 @@
 package io.hotcloud.service.module.buildpack.service;
 
-import io.hotcloud.common.model.ActivityAction;
-import io.hotcloud.common.model.ActivityLog;
-import io.hotcloud.common.model.ActivityTarget;
+import io.hotcloud.common.model.activity.ActivityAction;
+import io.hotcloud.common.model.activity.ActivityLog;
+import io.hotcloud.common.model.activity.ActivityTarget;
 import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;

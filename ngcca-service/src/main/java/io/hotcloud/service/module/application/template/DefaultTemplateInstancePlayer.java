@@ -1,8 +1,8 @@
 package io.hotcloud.service.module.application.template;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.ActivityAction;
-import io.hotcloud.common.model.ActivityLog;
+import io.hotcloud.common.model.activity.ActivityAction;
+import io.hotcloud.common.model.activity.ActivityLog;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;

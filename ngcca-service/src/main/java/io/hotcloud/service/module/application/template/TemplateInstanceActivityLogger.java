@@ -1,8 +1,8 @@
 package io.hotcloud.service.module.application.template;
 
-import io.hotcloud.common.model.ActivityAction;
-import io.hotcloud.common.model.ActivityLog;
-import io.hotcloud.common.model.ActivityTarget;
+import io.hotcloud.common.model.activity.ActivityAction;
+import io.hotcloud.common.model.activity.ActivityLog;
+import io.hotcloud.common.model.activity.ActivityTarget;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;
