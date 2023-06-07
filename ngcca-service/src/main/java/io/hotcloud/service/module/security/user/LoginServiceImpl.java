@@ -15,11 +15,8 @@ import org.springframework.util.Assert;
 
 import java.util.Map;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Service
-public class HotCloudLoginService implements LoginApi {
+public class LoginServiceImpl implements LoginApi {
 
     private final UserApi userApi;
     private final JwtSigner jwtSigner;
@@ -27,10 +24,10 @@ public class HotCloudLoginService implements LoginApi {
 
     private final PasswordEncoder passwordEncoder;
 
-    public HotCloudLoginService(UserApi userApi,
-                                JwtSigner jwtSigner,
-                                JwtVerifier jwtVerifier,
-                                PasswordEncoder passwordEncoder) {
+    public LoginServiceImpl(UserApi userApi,
+                            JwtSigner jwtSigner,
+                            JwtVerifier jwtVerifier,
+                            PasswordEncoder passwordEncoder) {
         this.userApi = userApi;
         this.jwtSigner = jwtSigner;
         this.jwtVerifier = jwtVerifier;
