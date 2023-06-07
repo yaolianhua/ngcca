@@ -1,5 +1,7 @@
 package io.hotcloud.common.model;
 
+import static io.hotcloud.common.model.CommonConstant.MESSAGE_QUEUE_NGCCA;
+
 @FunctionalInterface
 public interface MessageBroadcaster {
 
@@ -9,7 +11,7 @@ public interface MessageBroadcaster {
      * @param message message body {@link Message}
      */
     default void broadcast(Message<?> message) {
-        this.broadcast("hotcloud.message.broadcast", message);
+        this.broadcast(MESSAGE_QUEUE_NGCCA, message);
     }
 
 
