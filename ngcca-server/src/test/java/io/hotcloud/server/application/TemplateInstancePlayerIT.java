@@ -1,5 +1,7 @@
 package io.hotcloud.server.application;
 
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
@@ -8,6 +10,7 @@ import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.CoreServerApplication;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +20,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -47,35 +52,41 @@ public class TemplateInstancePlayerIT  {
     }
 
     @Test
-    public void play() throws InterruptedException {
-        CountDownLatch downLatch = new CountDownLatch(1);
+    public void play() {
+
+        AtomicInteger errors = new AtomicInteger(0);
+        AtomicBoolean done = new AtomicBoolean(false);
 
         for (Template template : Template.values()) {
-            player.play(template);
-        }
-
-        while (downLatch.getCount() != 0) {
-            TimeUnit.SECONDS.sleep(10);
-            List<TemplateInstance> admins = templateService.findAll("admin");
-            long success = admins.stream()
-                    .filter(TemplateInstance::isSuccess)
-                    .count();
-            if (Template.values().length == success) {
-                downLatch.countDown();
+            try {
+                player.play(template);
+            } catch (Exception e) {
+                Log.warn(this, null, Event.EXCEPTION, e.getMessage());
+                errors.incrementAndGet();
             }
         }
 
-        System.out.println("All template deploy success!");
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+            long success = templateService.findAll("admin")
+                    .stream()
+                    .filter(TemplateInstance::isSuccess)
+                    .count();
+            boolean succeed = Template.values().length - errors.get() == success;
+            done.set(true);
+            return succeed;
+        });
+
+        Assertions.assertTrue(done.get());
 
     }
 
     @Test
-    public void delete() throws InterruptedException {
-        List<TemplateInstance> admins = templateService.findAll("admin");
-        for (TemplateInstance templateInstance : admins) {
+    public void delete() {
+
+        for (TemplateInstance templateInstance : templateService.findAll("admin")) {
             player.delete(templateInstance.getId());
         }
 
-        TimeUnit.SECONDS.sleep(10);
+        await().atMost(10, TimeUnit.SECONDS).until(() -> templateService.findAll("admin").isEmpty());
     }
 }

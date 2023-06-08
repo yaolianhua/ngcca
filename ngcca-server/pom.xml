@@ -17,6 +17,12 @@
         <dependency>
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-service</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- javafaker -->
@@ -46,6 +52,11 @@
                     <artifactId>hamcrest-core</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
