@@ -1,6 +1,7 @@
 package io.hotcloud.service.application.template;
 
 import io.fabric8.kubernetes.client.Watcher;
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
@@ -11,7 +12,6 @@ import io.hotcloud.module.application.template.TemplateInstancePlayer;
 import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.service.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +19,6 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class TemplateDeploymentObserver implements MessageObserver {
     private final TemplateInstanceService templateInstanceService;
     private final TemplateInstancePlayer templateInstancePlayer;
@@ -49,7 +48,7 @@ public class TemplateDeploymentObserver implements MessageObserver {
             }
 
             if (Objects.equals(Watcher.Action.DELETED.name(), messageBody.getAction())) {
-                log.info("Template Delete events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("received [%s] template delete events: %s/%s/%s", template.getName(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
                 templateInstancePlayer.delete(template.getId());
             }
 
@@ -58,15 +57,15 @@ public class TemplateDeploymentObserver implements MessageObserver {
                 if (template.isSuccess()) {
                     return;
                 }
-                log.info("Template [{}] {} events: {}/{}/{}", template.getId(), messageBody.getAction(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("received [%s] template events: %s/%s/%s", template.getName(), messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
                 templateDeploymentWatchService.watch(template);
             }
 
             if (Objects.equals(Watcher.Action.ERROR.name(), messageBody.getAction())) {
-                log.info("Application error events: {}/{}/{}", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName());
+                Log.info(this, null, String.format("received error events: %s/%s/%s", messageBody.getNamespace(), messageBody.getAction(), messageBody.getName()));
             }
         } catch (Exception e) {
-            Log.error(this, null, e.getMessage());
+            Log.error(this, null, Event.EXCEPTION, "template deployment observer error: " + e.getMessage());
         }
 
     }

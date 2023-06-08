@@ -104,7 +104,7 @@ public class TemplateDeploymentWatchService {
             Log.info(this, null, String.format("[%s] user's [%s] template [%s] deploy success.", template.getUser(), template.getName(), template.getId()));
 
         } catch (Exception e) {
-            Log.error(this, null, e.getMessage());
+            Log.error(this, null, io.hotcloud.common.log.Event.EXCEPTION, "template deployment watch error: " + e.getMessage());
             template.setSuccess(false);
             template.setMessage(e.getMessage());
             template.setProgress(100);
