@@ -72,7 +72,9 @@ public class TemplateInstancePlayerIT  {
                     .filter(TemplateInstance::isSuccess)
                     .count();
             boolean succeed = Template.values().length - errors.get() == success;
-            done.set(true);
+            if (succeed) {
+                done.set(true);
+            }
             return succeed;
         });
 
