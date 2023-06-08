@@ -38,7 +38,7 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
+
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
