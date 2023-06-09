@@ -1,5 +1,6 @@
 package io.hotcloud.server.buildpack;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.JavaRuntime;
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
@@ -11,8 +12,11 @@ import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.buildpack.model.BuildPackConstant;
 import io.hotcloud.module.buildpack.model.JobState;
 import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.vendor.minio.MinioProperties;
 import io.kubernetes.client.openapi.ApiException;
+import org.junit.After;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +25,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackApiIT {
 
@@ -34,162 +40,115 @@ public class BuildPackApiIT {
     private KubectlClient kubectlApi;
     @Autowired
     private NamespaceClient namespaceApi;
+    @Autowired
+    private MinioProperties minioProperties;
+
     public final String namespace = UUIDGenerator.uuidNoDash();
 
-    @Test
-    public void jarArtifactApply() throws ApiException, InterruptedException {
-        AtomicInteger loopCount = new AtomicInteger(0);
-
-        namespaceApi.create(namespace);
-        BuildPack buildPack = buildPackApi.apply(
-                namespace,
-                BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
-                        "-Xms128m -Xmx512m",
-                        "-Dspring.profiles.active=production", JavaRuntime.JAVA11));
-
-        System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
-        System.out.println(buildPack.getYaml());
-        System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
-
-        while (loopCount.get() < 60) {
-            TimeUnit.SECONDS.sleep(6);
-            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
-
-            if (Objects.equals(status, JobState.UNKNOWN)) {
-                System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, JobState.READY)) {
-                System.out.println("Kaniko status is [Ready]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.ACTIVE)) {
-                System.out.println("Kaniko status is [Active]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.FAILED)) {
-                System.out.println("Kaniko status is [Failed]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-                cleared(buildPack);
-                return;
-            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
-                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
-                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-
-                cleared(buildPack);
-                return;
-            }
-
-            loopCount.incrementAndGet();
-        }
-
-        System.out.println("Kaniko job has been timeout.");
-        printKanikoLog(namespace, buildPack.getJobResource().getName());
-        cleared(buildPack);
-    }
-
-    @Test
-    public void warArtifactApply() throws ApiException, InterruptedException {
-        AtomicInteger loopCount = new AtomicInteger(0);
-
-        namespaceApi.create(namespace);
-        BuildPack buildPack = buildPackApi.apply(
-                namespace,
-                BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", JavaRuntime.JAVA11));
-
-        System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
-        System.out.println(buildPack.getYaml());
-        System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
-
-        while (loopCount.get() < 60) {
-            TimeUnit.SECONDS.sleep(6);
-            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
-
-            if (Objects.equals(status, JobState.UNKNOWN)) {
-                System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, JobState.READY)) {
-                System.out.println("Kaniko status is [Ready]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.ACTIVE)) {
-                System.out.println("Kaniko status is [Active]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.FAILED)) {
-                System.out.println("Kaniko status is [Failed]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-                cleared(buildPack);
-                return;
-            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
-                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
-                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-
-                cleared(buildPack);
-                return;
-            }
-
-            loopCount.incrementAndGet();
-        }
-
-        System.out.println("Kaniko job has been timeout.");
-        printKanikoLog(namespace, buildPack.getJobResource().getName());
-        cleared(buildPack);
-    }
-
-    @Test
-    public void sourceApply() throws InterruptedException, ApiException {
-        AtomicInteger loopCount = new AtomicInteger(0);
-
-        namespaceApi.create(namespace);
-
-        BuildPack buildPack = buildPackApi.apply(
-                namespace,
-                BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
-                        "master", "", "", "", JavaRuntime.JAVA11));
-
-        System.out.println("\n***************************** Print Kaniko Job Yaml Start ******************************\n");
-        System.out.println(buildPack.getYaml());
-        System.out.println("\n***************************** Print Kaniko Job Yaml End ******************************\n");
-
-        while (loopCount.get() < 60) {
-            TimeUnit.SECONDS.sleep(60);
-            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
-
-            if (Objects.equals(status, JobState.UNKNOWN)) {
-                System.out.println("Kaniko status is [Unknown]");
-            } else if (Objects.equals(status, JobState.READY)) {
-                System.out.println("Kaniko status is [Ready]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.ACTIVE)) {
-                System.out.println("Kaniko status is [Active]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-            } else if (Objects.equals(status, JobState.FAILED)) {
-                System.out.println("Kaniko status is [Failed]");
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-                cleared(buildPack);
-                return;
-            } else if (Objects.equals(status, JobState.SUCCEEDED)) {
-                System.out.printf("Kaniko status is [Succeeded] imagebuild artifact url [%s]%n",
-                        buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT));
-                printKanikoLog(namespace, buildPack.getJobResource().getName());
-
-                cleared(buildPack);
-                return;
-            }
-
-            loopCount.incrementAndGet();
-        }
-
-        System.out.println("Kaniko job has been timeout.");
-        printKanikoLog(namespace, buildPack.getJobResource().getName());
-        cleared(buildPack);
-    }
-
-    private void printKanikoLog(String namespace, String job) {
-        System.out.println("\n***************************** Print Kaniko Job log Start ******************************\n");
-        System.out.println(buildPackApi.fetchLog(namespace, job));
-    }
-
-    private void cleared(BuildPack buildPack) throws ApiException {
-        Boolean delete = kubectlApi.delete(namespace, YamlBody.of(buildPack.getYaml()));
-        System.out.printf("Delete kaniko job [%s]%n", delete);
+    @After
+    public void after() throws ApiException {
         namespaceApi.delete(namespace);
-        System.out.printf("Delete namespace [%s]%n", namespace);
+        Log.info(this, namespace, "delete namespace");
     }
+
+    @Test
+    public void jarArtifactApply() throws ApiException {
+
+        AtomicBoolean succeeded = new AtomicBoolean(false);
+        //manual upload
+        String jarUrl = minioProperties.getEndpoint() + "/files/thymeleaf-fragments.jar";
+        BuildImage jar = BuildImage.ofJar(jarUrl,
+                "-Xms128m -Xmx512m",
+                "-Dspring.profiles.active=production",
+                JavaRuntime.JAVA11);
+
+        //create namespace
+        namespaceApi.create(namespace);
+        //apply
+        BuildPack buildPack = buildPackApi.apply(namespace, jar);
+
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            boolean succeed = Objects.equals(status, JobState.SUCCEEDED);
+            if (succeed) {
+                succeeded.set(true);
+            }
+            return succeed;
+        });
+
+        Assertions.assertTrue(succeeded.get());
+        Log.info(this, buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT), "image build artifact url");
+        //
+        System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+        System.out.println(buildPackApi.fetchLog(namespace, buildPack.getJobResource().getName()));
+        //
+        Boolean deleted = kubectlApi.delete(namespace, YamlBody.of(buildPack.getYaml()));
+        Log.info(this, deleted, "delete kaniko job");
+    }
+
+    @Test
+    public void warArtifactApply() throws ApiException {
+        AtomicBoolean succeeded = new AtomicBoolean(false);
+        //manual upload file
+        String warUrl = minioProperties.getEndpoint() + "/files/jenkins.war";
+        BuildImage war = BuildImage.ofWar(warUrl, JavaRuntime.JAVA17);
+        //create namespace
+        namespaceApi.create(namespace);
+        //apply
+        BuildPack buildPack = buildPackApi.apply(namespace, war);
+
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            boolean succeed = Objects.equals(status, JobState.SUCCEEDED);
+            if (succeed) {
+                succeeded.set(true);
+            }
+            return succeed;
+        });
+
+        Assertions.assertTrue(succeeded.get());
+        Log.info(this, buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT), "image build artifact url");
+        //
+        System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+        System.out.println(buildPackApi.fetchLog(namespace, buildPack.getJobResource().getName()));
+        //
+        Boolean deleted = kubectlApi.delete(namespace, YamlBody.of(buildPack.getYaml()));
+        Log.info(this, deleted, "delete kaniko job");
+    }
+
+    @Test
+    public void sourceApply() throws ApiException {
+        AtomicBoolean succeeded = new AtomicBoolean(false);
+
+        BuildImage code = BuildImage.ofSource(
+                "https://gitlab.com/yaolianhua/devops-jdk11.git",
+                "master",
+                "",
+                "-Xms128m -Xmx512m",
+                "-Dspring.profiles.active=container",
+                JavaRuntime.JAVA11);
+        //create namespace
+        namespaceApi.create(namespace);
+        //apply
+        BuildPack buildPack = buildPackApi.apply(namespace, code);
+
+        await().atMost(20, TimeUnit.MINUTES).until(() -> {
+            JobState status = buildPackApi.getStatus(namespace, buildPack.getJobResource().getName());
+            boolean succeed = Objects.equals(status, JobState.SUCCEEDED);
+            if (succeed) {
+                succeeded.set(true);
+            }
+            return succeed;
+        });
+
+        Assertions.assertTrue(succeeded.get());
+        Log.info(this, buildPack.getAlternative().get(BuildPackConstant.IMAGEBUILD_ARTIFACT), "image build artifact url");
+        //
+        System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+        System.out.println(buildPackApi.fetchLog(namespace, buildPack.getJobResource().getName()));
+        //
+        Boolean deleted = kubectlApi.delete(namespace, YamlBody.of(buildPack.getYaml()));
+        Log.info(this, deleted, "delete kaniko job");
+    }
+
 }
