@@ -38,7 +38,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
 
     @Override
     public Type getType() {
-        return Type.INGRESS;
+        return Type.SERVICE;
     }
 
     @SneakyThrows
