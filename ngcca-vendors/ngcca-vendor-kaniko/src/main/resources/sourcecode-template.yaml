@@ -35,7 +35,6 @@ spec:
             - --verbosity=info
             - --cache=true
             - --cache-run-layers=true
-            - --cache-copy-layers=true
           image: #{[ KANIKO_IMAGE ]}
           imagePullPolicy: IfNotPresent
           name: #{[ KANIKO_CONTAINER_NAME ]}
