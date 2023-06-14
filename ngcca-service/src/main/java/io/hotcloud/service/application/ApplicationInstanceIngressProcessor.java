@@ -28,7 +28,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
 
     @Override
     public Type getType() {
-        return Type.Ingress;
+        return Type.INGRESS;
     }
 
     @Override

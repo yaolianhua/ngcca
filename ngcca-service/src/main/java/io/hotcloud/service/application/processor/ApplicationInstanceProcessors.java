@@ -32,7 +32,7 @@ public class ApplicationInstanceProcessors {
 
         for (ApplicationInstanceProcessor<ApplicationInstance> processor : processors) {
             //wait build image done!
-            if (Objects.equals(processor.getType(), ApplicationInstanceProcessor.Type.ImageBuild)) {
+            if (Objects.equals(processor.getType(), ApplicationInstanceProcessor.Type.IMAGE_BUILD)) {
                 processor.processCreate(instance);
                 if (StringUtils.hasText(instance.getBuildPackId())) {
                     while (true) {

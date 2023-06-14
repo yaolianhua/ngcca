@@ -28,7 +28,7 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
 
     @Override
     public Type getType() {
-        return Type.ImageBuild;
+        return Type.IMAGE_BUILD;
     }
 
     @Override

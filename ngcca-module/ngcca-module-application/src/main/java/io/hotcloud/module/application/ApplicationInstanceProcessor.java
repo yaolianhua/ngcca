@@ -14,12 +14,12 @@ public interface ApplicationInstanceProcessor<I> {
 
     enum Type {
         //
-        Service,
+        SERVICE,
         //
-        Ingress,
+        INGRESS,
         //
-        ImageBuild,
+        IMAGE_BUILD,
         //
-        Deployment
+        DEPLOYMENT
     }
 }

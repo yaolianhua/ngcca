@@ -46,7 +46,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
     @Override
     public Type getType() {
-        return Type.Deployment;
+        return Type.DEPLOYMENT;
     }
 
     private ObjectMetadata buildDeploymentMetadata(ApplicationInstance applicationInstance) {
