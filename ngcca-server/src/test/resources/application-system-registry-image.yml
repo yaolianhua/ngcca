@@ -4,13 +4,13 @@ ngcca:
       alpine: library/alpine:latest
       busybox: library/busybox:latest
       git: library/alpine-git:latest
-      minio: library/minio:20221027
+      minio: library/minio:RELEASE.2023-06-09T07-32-12Z
       redis: library/redis:7.0
       redisinsight: library/redisinsight:1.14.0
       rabbitmq: library/rabbitmq:3.9-management
       mysql: library/mysql:8.0.27
       mongodb: library/mongo:5.0
-      kaniko: library/kaniko:20221029
+      kaniko: library/kaniko:v1.11.0
       java8: library/java8-runtime:latest
       java11: library/java11-runtime:latest
       java17: library/java17-runtime:latest
