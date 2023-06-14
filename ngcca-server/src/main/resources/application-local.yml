@@ -23,7 +23,7 @@ ngcca:
     build-timeout-second: 1200
   application:
     deployment-timeout-second: 1200
-    dot-suffix-domain: ".k8s.local"
+    dot-suffix-domain: ".k8s.linux-local"
   security:
     enabled: true
     ignored-defaults:
