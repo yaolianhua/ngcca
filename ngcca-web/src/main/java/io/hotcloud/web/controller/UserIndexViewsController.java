@@ -34,7 +34,7 @@ public class UserIndexViewsController {
     public String indexPage(Model model,
                             @CookieUser User user) {
         Statistics statistics = statisticsService.statistics(user.getId());
-        PageResult<ALog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 8));
+        PageResult<ALog> pageResult = activityQuery.pagingQuery(user.getUsername(), null, null, Pageable.of(1, 12));
         List<ALog> activities = pageResult.getData().stream().toList();
         model.addAttribute(WebConstant.STATISTICS, statistics);
         model.addAttribute(WebConstant.ACTIVITIES, activities);

@@ -47,4 +47,17 @@ public class ALog {
      * activity target name
      */
     private String targetName;
+
+    public String getIcon() {
+        if (Target.BUILDPACK.name().equalsIgnoreCase(target)) {
+            return "fa-wrench";
+        }
+        if (Target.INSTANCE_TEMPLATE.name().equalsIgnoreCase(target)) {
+            return "fa-cubes";
+        }
+        if (Target.APPLICATION.name().equalsIgnoreCase(target)) {
+            return "fa-cloud";
+        }
+        return "fa-circle";
+    }
 }

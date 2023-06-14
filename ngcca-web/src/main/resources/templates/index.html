@@ -28,7 +28,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
+          <div class="col-12 col-sm-6 col-md-4">
             <div class="info-box mb-3">
               <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
 
@@ -45,7 +45,7 @@
           <!-- fix for small devices only -->
           <div class="clearfix hidden-md-up"></div>
 
-          <div class="col-12 col-sm-6 col-md-3">
+          <div class="col-12 col-sm-6 col-md-4">
             <div class="info-box mb-3">
               <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
 
@@ -58,7 +58,7 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
+          <div class="col-12 col-sm-6 col-md-4">
             <div class="info-box mb-3">
               <span class="info-box-icon"><i class="fas fa-cloud"></i></span>
 
@@ -84,7 +84,7 @@
                   <div class="timeline-item">
                     <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
                     <h3 class="timeline-header">
-                      <a href="#" th:text="${activity.display}"></a>
+                      <a href="#" th:text="${activity.description}"></a>
                     </h3>
 
                     <div class="timeline-body" th:text="${activity.description}">
@@ -118,6 +118,7 @@
                         <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
                         <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
                         <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
+                        <li><i class="fas fa-cloud text-warning"></i> 应用删除</li>
                       </ul>
                     </div>
                     <!-- /.col -->
@@ -190,6 +191,7 @@
     data[4] = [[${statistics.templates.failed}]];
     data[5] = [[${statistics.applications.success}]];
     data[6] = [[${statistics.applications.failed}]];
+    data[7] = [[${statistics.applications.deleted}]];
 
     let pieData = {
       labels: [
@@ -199,7 +201,8 @@
         '实例模板部署成功',
         '实例模板部署失败',
         '应用发布成功',
-        '应用发布失败'
+        '应用发布失败',
+        '应用删除'
       ],
       datasets: [
         {
@@ -208,7 +211,7 @@
                   [
                     '#03f689', '#f56954', '#f39c12',
                     '#03f689', '#f56954',
-                    '#03f689', '#f56954',
+                    '#03f689', '#f56954', '#f39c12'
                   ]
         }
       ]
