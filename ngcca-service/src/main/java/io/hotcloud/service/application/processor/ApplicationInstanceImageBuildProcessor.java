@@ -1,4 +1,4 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.module.application.ApplicationInstance;

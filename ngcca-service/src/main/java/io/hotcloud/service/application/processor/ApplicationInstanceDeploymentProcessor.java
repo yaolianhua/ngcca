@@ -1,4 +1,4 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.application.processor;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.common.log.Log;
