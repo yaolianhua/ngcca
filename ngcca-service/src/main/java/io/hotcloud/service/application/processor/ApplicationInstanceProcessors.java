@@ -5,7 +5,6 @@ import io.hotcloud.module.application.ApplicationInstance;
 import io.hotcloud.module.application.ApplicationInstanceProcessor;
 import io.hotcloud.module.buildpack.BuildPackCacheApi;
 import io.hotcloud.module.buildpack.model.JobState;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +24,6 @@ public class ApplicationInstanceProcessors {
         this.buildPackCacheApi = buildPackCacheApi;
     }
 
-    @SneakyThrows
     public void processCreate(ApplicationInstance instance) {
 
         processors.sort(Comparator.comparingInt(ApplicationInstanceProcessor::order));
@@ -36,14 +34,19 @@ public class ApplicationInstanceProcessors {
                 processor.processCreate(instance);
                 if (StringUtils.hasText(instance.getBuildPackId())) {
                     while (true) {
-                        TimeUnit.SECONDS.sleep(1);
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            //
+                            Thread.currentThread().interrupt();
+                        }
                         JobState status = buildPackCacheApi.getBuildPackState(instance.getBuildPackId());
                         if (Objects.equals(JobState.SUCCEEDED, status)) {
-                            Log.info(this, null, String.format("[%s] user's application instance [%s] image build pipeline succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            Log.info(this, null, String.format("[%s] user's application instance [%s] image build succeed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             break;
                         }
                         if (Objects.equals(JobState.FAILED, status)) {
-                            Log.error(this, null, String.format("[%s] user's application instance [%s] pipeline stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            Log.error(this, null, String.format("[%s] user's application instance [%s] stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
                             return;
                         }
                     }

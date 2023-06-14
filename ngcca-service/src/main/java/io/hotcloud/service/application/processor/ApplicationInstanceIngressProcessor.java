@@ -1,9 +1,10 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.module.application.*;
+import io.hotcloud.service.application.ApplicationProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
