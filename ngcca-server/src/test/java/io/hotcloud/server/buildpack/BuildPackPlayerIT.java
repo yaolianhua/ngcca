@@ -1,5 +1,6 @@
 package io.hotcloud.server.buildpack;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.JavaRuntime;
 import io.hotcloud.module.buildpack.BuildPackPlayer;
@@ -8,8 +9,10 @@ import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.vendor.minio.MinioProperties;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +24,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackPlayerIT {
 
@@ -34,6 +39,8 @@ public class BuildPackPlayerIT {
     private BuildPackService buildPackService;
     @Autowired
     private UserApi userApi;
+    @Autowired
+    private MinioProperties minioProperties;
 
     @Before
     public void before() {
@@ -46,109 +53,101 @@ public class BuildPackPlayerIT {
     }
 
     @Test
-    public void playWarArtifact() throws InterruptedException {
+    public void playWarArtifact() {
+        AtomicBoolean succeeded = new AtomicBoolean(false);
         List<String> buildPackIds = buildPackService.findAll("admin")
                 .stream()
                 .filter(e -> !e.isDone())
                 .map(BuildPack::getId)
-                .collect(Collectors.toList());
+                .toList();
         for (String buildPackId : buildPackIds) {
             buildPackPlayer.delete(buildPackId, false);
         }
-        BuildPack buildPack = buildPackPlayer.play(BuildImage.ofWar("http://minio.docker.local:9009/files/jenkins.war", JavaRuntime.JAVA11));
+        String warUrl = minioProperties.getEndpoint() + "/files/jenkins.war";
+        BuildImage war = BuildImage.ofWar(warUrl, JavaRuntime.JAVA17);
+        BuildPack buildPack = buildPackPlayer.play(war);
 
-        while (true) {
-            TimeUnit.SECONDS.sleep(10);
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
             BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("War package [%s] build successful. artifact url [%s]%n",
-                        one.getPackageUrl(), one.getArtifact());
-                System.out.println("Kaniko logs print: \n" + one.getLogs());
-
-                break;
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
+                Log.info(this, one.getArtifact(), "image build artifact url");
+                //
+                System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+                System.out.println(one.getLogs());
+                succeeded.set(true);
             }
 
-            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("War package [%s] build failed%n",
-                        one.getPackageUrl());
-                System.out.println("Build message: \n" + one.getLogs());
+            return succeeded.get();
+        });
+        Assertions.assertTrue(succeeded.get());
+    }
 
-                break;
-            }
+
+    @Test
+    public void playJarArtifact() {
+        AtomicBoolean succeeded = new AtomicBoolean(false);
+        List<String> buildPackIds = buildPackService.findAll("admin")
+                .stream()
+                .filter(e -> !e.isDone())
+                .map(BuildPack::getId)
+                .toList();
+        for (String buildPackId : buildPackIds) {
+            buildPackPlayer.delete(buildPackId, false);
         }
+
+        String jarUrl = minioProperties.getEndpoint() + "/files/thymeleaf-fragments.jar";
+        BuildImage jar = BuildImage.ofJar(jarUrl, "-Xms128m -Xmx512m", "-Dspring.profiles.active=production", JavaRuntime.JAVA11);
+        BuildPack buildPack = buildPackPlayer.play(jar);
+
+        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+            BuildPack one = buildPackService.findOne(buildPack.getId());
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
+                Log.info(this, one.getArtifact(), "image build artifact url");
+                //
+                System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+                System.out.println(one.getLogs());
+                succeeded.set(true);
+            }
+
+            return succeeded.get();
+        });
+
+        Assertions.assertTrue(succeeded.get());
     }
 
     @Test
-    public void playJarArtifact() throws InterruptedException {
+    public void playSourceCode() {
+        AtomicBoolean succeeded = new AtomicBoolean(false);
         List<String> buildPackIds = buildPackService.findAll("admin")
                 .stream()
                 .filter(e -> !e.isDone())
-                .map(BuildPack::getId)
-                .collect(Collectors.toList());
+                .map(BuildPack::getId).toList();
         for (String buildPackId : buildPackIds) {
             buildPackPlayer.delete(buildPackId, false);
         }
 
-        BuildPack buildPack = buildPackPlayer.play(
-                BuildImage.ofJar("http://minio.docker.local:9009/files/thymeleaf-fragments.jar",
-                        "-Xms128m -Xmx512m",
-                        "-Dspring.profiles.active=production", JavaRuntime.JAVA11)
-        );
+        BuildImage code = BuildImage.ofSource(
+                "https://gitlab.com/yaolianhua/devops-jdk11.git",
+                "master",
+                "",
+                "-Xms128m -Xmx512m",
+                "-Dspring.profiles.active=container",
+                JavaRuntime.JAVA11);
+        BuildPack buildPack = buildPackPlayer.play(code);
 
-        while (true) {
-            TimeUnit.SECONDS.sleep(10);
+        await().atMost(20, TimeUnit.MINUTES).until(() -> {
             BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("Jar package [%s] build successful. artifact url [%s]%n",
-                        one.getPackageUrl(), one.getArtifact());
-                System.out.println("Kaniko logs print: \n" + one.getLogs());
-
-                break;
+            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
+                Log.info(this, one.getArtifact(), "image build artifact url");
+                //
+                System.out.println("\n***************************** Print Kaniko Job log ******************************\n");
+                System.out.println(one.getLogs());
+                succeeded.set(true);
             }
 
-            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("Jar package [%s] build failed%n",
-                        one.getPackageUrl());
-                System.out.println("Build message: \n" + one.getLogs());
+            return succeeded.get();
+        });
 
-                break;
-            }
-        }
-    }
-
-    @Test
-    public void playSourceCode() throws InterruptedException {
-        List<String> buildPackIds = buildPackService.findAll("admin")
-                .stream()
-                .filter(e -> !e.isDone())
-                .map(BuildPack::getId)
-                .collect(Collectors.toList());
-        for (String buildPackId : buildPackIds) {
-            buildPackPlayer.delete(buildPackId, false);
-        }
-        BuildPack buildPack = buildPackPlayer.play(
-                BuildImage.ofSource("https://git.docker.local/self-host/thymeleaf-fragments.git",
-                        "master", "", "", "", JavaRuntime.JAVA11)
-        );
-
-        while (true) {
-            TimeUnit.SECONDS.sleep(10);
-            BuildPack one = buildPackService.findOne(buildPack.getId());
-            if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("Git repository [%s][%s] build successful. artifact url [%s]%n",
-                        one.getHttpGitUrl(), one.getGitBranch(), one.getArtifact());
-                System.out.println("Kaniko logs print: \n" + one.getLogs());
-
-                break;
-            }
-
-            if (one.isDone() && !CommonConstant.SUCCESS_MESSAGE.equals(one.getMessage())) {
-                System.out.printf("Git repository [%s][%s] build failed%n",
-                        one.getHttpGitUrl(), one.getGitBranch());
-                System.out.println("Build message: \n" + one.getLogs());
-
-                break;
-            }
-        }
+        Assertions.assertTrue(succeeded.get());
     }
 }
