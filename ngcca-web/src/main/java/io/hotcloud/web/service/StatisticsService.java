@@ -10,6 +10,8 @@ import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.service.application.ApplicationInstanceStatisticsService;
 import io.hotcloud.service.application.template.TemplateInstanceStatisticsService;
 import io.hotcloud.service.buildpack.BuildPackStatisticsService;
+import io.hotcloud.service.cluster.KubernetesClusterStatistics;
+import io.hotcloud.service.cluster.KubernetesClusterStatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,6 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class StatisticsService {
     private final TemplateInstanceStatisticsService templateInstanceStatisticsService;
     private final BuildPackStatisticsService buildPackStatisticsService;
     private final ApplicationInstanceStatisticsService applicationInstanceStatisticsService;
+    private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
 
 
     /**
@@ -44,12 +44,14 @@ public class StatisticsService {
 
         TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
-        final ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
+        ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
+        KubernetesClusterStatistics kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics(user.getUsername());
 
         return Statistics.builder()
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .applications(applicationInstanceStatistics)
+                .clusterStatistics(kubernetesClusterStatistics)
                 .namespace(user.getNamespace())
                 .user(user)
                 .build();

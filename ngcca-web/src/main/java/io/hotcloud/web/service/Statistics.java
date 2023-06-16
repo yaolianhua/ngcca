@@ -4,6 +4,7 @@ import io.hotcloud.module.application.ApplicationInstanceStatistics;
 import io.hotcloud.module.application.template.TemplateInstanceStatistics;
 import io.hotcloud.module.buildpack.model.BuildPackStatistics;
 import io.hotcloud.module.security.user.User;
+import io.hotcloud.service.cluster.KubernetesClusterStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,7 @@ public class Statistics {
     private BuildPackStatistics buildPacks = new BuildPackStatistics();
     @Builder.Default
     private ApplicationInstanceStatistics applications = new ApplicationInstanceStatistics();
+    @Builder.Default
+    private KubernetesClusterStatistics clusterStatistics = new KubernetesClusterStatistics();
 
 }
