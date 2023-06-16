@@ -96,7 +96,7 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.06.16.160955
+        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.06.16.185609
           env:
             - name: KUBERNETES_REDIS_HOST
               value: "192.168.110.233"
