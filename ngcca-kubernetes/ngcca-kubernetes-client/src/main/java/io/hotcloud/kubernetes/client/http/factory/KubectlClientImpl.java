@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
@@ -215,6 +216,19 @@ class KubectlClientImpl implements KubectlClient {
         URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/podmetrics", uri)).build().toUri();
 
         ResponseEntity<List<PodMetrics>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public List<Node> listNode() {
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodes", uri)).build().toUri();
+
+        ResponseEntity<List<Node>> response = restTemplate.exchange(
                 uriRequest,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,

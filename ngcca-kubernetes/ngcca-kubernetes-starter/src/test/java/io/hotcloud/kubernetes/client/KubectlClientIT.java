@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -61,20 +62,30 @@ public class KubectlClientIT extends ClientIntegrationTestBase {
 
     void printNodeMetrics(List<NodeMetrics> nodeMetrics) {
         System.out.println("--------------------- Print Node Metrics --------------------");
-        System.out.printf("%50s%10s%10s%n", "NAME", "CPU", "MEMORY");
+        System.out.printf("%50s%10s%10s%20s%10s%n", "NAME", "CPU（m）", "CPU%", "MEMORY（Mi）", "MEMORY%");
         for (NodeMetrics nodeMetric : nodeMetrics) {
             String node = nodeMetric.getMetadata().getName();
-            String cpu = Math.round(nodeMetric.getUsage().get("cpu").getNumericalAmount().doubleValue() * 1000) + "m";
-            String memory = Math.round(nodeMetric.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024)) + "Mi";
-            System.out.printf("%50s%10s%10s%n", node, cpu, memory);
+            long nodeCpuCapacity = Math.round(kubectlClient.getNode(node).getStatus().getCapacity().get("cpu").getNumericalAmount().doubleValue() * 1000);
+            long nodeMemoryCapacity = Math.round(kubectlClient.getNode(node).getStatus().getCapacity().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024));
+
+            long cpu = Math.round(nodeMetric.getUsage().get("cpu").getNumericalAmount().doubleValue() * 1000);
+            double cpuPercentage = (double) cpu / nodeCpuCapacity * 100;
+            String cpuPercentageString = Double.parseDouble(new DecimalFormat("0.00").format(cpuPercentage)) + "%";
+
+            long memory = Math.round(nodeMetric.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024));
+            double memoryPercentage = (double) memory / nodeMemoryCapacity * 100;
+            String memoryPercentageString = Double.parseDouble(new DecimalFormat("0.00").format(memoryPercentage)) + "%";
+
+            System.out.printf("%50s%10s%10s%20s%10s%n", node, cpu, cpuPercentageString, memory, memoryPercentageString);
         }
     }
 
     void printPodMetrics(List<PodMetrics> podMetrics) {
         System.out.println("--------------------- Print Pod Metrics --------------------");
-        System.out.printf("%50s%10s%10s%n", "NAME", "CPU", "MEMORY");
+        System.out.printf("%20s%50s%10s%10s%n", "NAMESPACE", "NAME", "CPU（m）", "MEMORY（Mi）");
         for (PodMetrics podMetric : podMetrics) {
             String pod = podMetric.getMetadata().getName();
+            String namespace = podMetric.getMetadata().getNamespace();
 
             Double cpu = podMetric.getContainers().stream()
                     .map(e -> e.getUsage().get("cpu").getNumericalAmount())
@@ -89,7 +100,7 @@ public class KubectlClientIT extends ClientIntegrationTestBase {
             String memoryString = Math.round(memory / (1024 * 1024)) + "Mi";
 
 
-            System.out.printf("%50s%10s%10s%n", pod, cpuString, memoryString);
+            System.out.printf("%20s%50s%10s%10s%n", namespace, pod, cpuString, memoryString);
         }
     }
 
