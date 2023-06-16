@@ -58,9 +58,9 @@ public class ClientIntegrationTestBase {
         var events = kubectlClient.events(namespace)
                 .stream()
                 .filter(e -> e.getInvolvedObject().getName().contains(resourceName))
-                .map(e -> String.format("%s\t\t%s\t\t\t\t%s\t\t\t\t\t%s", e.getType(), e.getReason(), e.getInvolvedObject().getKind() + "/" + e.getInvolvedObject().getName(), e.getMessage()))
+                .map(e -> String.format("%20s%20s%20s%100s", e.getType(), e.getReason(), e.getInvolvedObject().getKind() + "/" + e.getInvolvedObject().getName(), e.getMessage()))
                 .collect(Collectors.joining("\n"));
-        System.out.println("TYPE\t\tREASON\t\t\t\tOBJECT\t\t\t\t\t\t\t\t\t\tMESSAGE");
+        System.out.printf("%20s%20s%20s%100s%n", "TYPE", "REASON", "OBJECT", "MESSAGE");
         System.out.println(events);
 
     }

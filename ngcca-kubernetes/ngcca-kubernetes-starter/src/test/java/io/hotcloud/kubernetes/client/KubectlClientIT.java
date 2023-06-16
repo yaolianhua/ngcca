@@ -1,5 +1,7 @@
 package io.hotcloud.kubernetes.client;
 
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.CopyAction;
@@ -15,7 +17,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -42,6 +46,51 @@ public class KubectlClientIT extends ClientIntegrationTestBase {
         delete();
         //
         printNamespacedEvents(NAMESPACE, "nginx");
+    }
+
+    @Test
+    public void metrics() {
+        List<NodeMetrics> nodeMetrics = kubectlClient.topNode();
+        Assertions.assertTrue(nodeMetrics.size() > 0);
+        printNodeMetrics(nodeMetrics);
+
+        List<PodMetrics> podMetrics = kubectlClient.topPod();
+        Assertions.assertTrue(podMetrics.size() > 0);
+        printPodMetrics(podMetrics);
+    }
+
+    void printNodeMetrics(List<NodeMetrics> nodeMetrics) {
+        System.out.println("--------------------- Print Node Metrics --------------------");
+        System.out.printf("%50s%10s%10s%n", "NAME", "CPU", "MEMORY");
+        for (NodeMetrics nodeMetric : nodeMetrics) {
+            String node = nodeMetric.getMetadata().getName();
+            String cpu = Math.round(nodeMetric.getUsage().get("cpu").getNumericalAmount().doubleValue() * 1000) + "m";
+            String memory = Math.round(nodeMetric.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024)) + "Mi";
+            System.out.printf("%50s%10s%10s%n", node, cpu, memory);
+        }
+    }
+
+    void printPodMetrics(List<PodMetrics> podMetrics) {
+        System.out.println("--------------------- Print Pod Metrics --------------------");
+        System.out.printf("%50s%10s%10s%n", "NAME", "CPU", "MEMORY");
+        for (PodMetrics podMetric : podMetrics) {
+            String pod = podMetric.getMetadata().getName();
+
+            Double cpu = podMetric.getContainers().stream()
+                    .map(e -> e.getUsage().get("cpu").getNumericalAmount())
+                    .map(BigDecimal::doubleValue)
+                    .reduce(0.0, Double::sum);
+            String cpuString = Math.round(cpu * 1000) + "m";
+
+            Double memory = podMetric.getContainers().stream()
+                    .map(e -> e.getUsage().get("memory").getNumericalAmount())
+                    .map(BigDecimal::doubleValue)
+                    .reduce(0.0, Double::sum);
+            String memoryString = Math.round(memory / (1024 * 1024)) + "Mi";
+
+
+            System.out.printf("%50s%10s%10s%n", pod, cpuString, memoryString);
+        }
     }
 
     @Test

@@ -2,6 +2,8 @@ package io.hotcloud.kubernetes.client.http.factory;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.client.configuration.KubernetesAgentProperties;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.CopyAction;
@@ -189,6 +191,33 @@ class KubectlClientImpl implements KubectlClient {
                 .build(namespace, pod);
 
         ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public List<NodeMetrics> topNode() {
+
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodemetrics", uri)).build().toUri();
+
+        ResponseEntity<List<NodeMetrics>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public List<PodMetrics> topPod() {
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/podmetrics", uri)).build().toUri();
+
+        ResponseEntity<List<PodMetrics>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
