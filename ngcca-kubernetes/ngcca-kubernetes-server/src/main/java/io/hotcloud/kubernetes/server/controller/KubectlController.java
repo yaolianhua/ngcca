@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.api.KubectlApi;
@@ -243,4 +244,24 @@ public class KubectlController {
         return ResponseEntity.ok(kubectlApi.topPod(namespace));
     }
 
+    @GetMapping("/nodes/{node}")
+    @Operation(
+            summary = "Get cluster node",
+            parameters = {
+                    @Parameter(name = "node", description = "node name")
+            },
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<Node> getNode(@PathVariable(value = "node") String node) {
+        return ResponseEntity.ok(kubectlApi.getNode(node));
+    }
+
+    @GetMapping("/nodes")
+    @Operation(
+            summary = "List cluster nodes",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<List<Node>> listNodes() {
+        return ResponseEntity.ok(kubectlApi.listNode());
+    }
 }

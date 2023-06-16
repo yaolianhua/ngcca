@@ -2,6 +2,7 @@ package io.hotcloud.kubernetes.api;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.model.CopyAction;
@@ -146,6 +147,27 @@ public interface KubectlApi {
                 .filter(e -> Objects.equals(e.getMetadata().getName(), pod))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * List cluster nodes. Equivalent to using kubectl get node
+     *
+     * @return {@link Node}
+     */
+    List<Node> listNode();
+
+    /**
+     * Get node. Equivalent to using kubectl get node {@code node_name}
+     *
+     * @param node node name
+     * @return {@link Node}
+     */
+    default Node getNode(String node) {
+        return this.listNode()
+                .stream()
+                .filter(e -> Objects.equals(e.getMetadata().getName(), node))
+                .findFirst()
+                .orElseThrow(null);
     }
 
     /**

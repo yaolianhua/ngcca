@@ -1,9 +1,6 @@
 package io.hotcloud.kubernetes.server.equivalent;
 
-import io.fabric8.kubernetes.api.model.Event;
-import io.fabric8.kubernetes.api.model.HasMetadata;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.StatusDetails;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -280,5 +277,10 @@ public class KubectlEquivalent implements KubectlApi {
                 .pods()
                 .metrics()
                 .getItems();
+    }
+
+    @Override
+    public List<Node> listNode() {
+        return fabric8Client.nodes().list().getItems();
     }
 }
