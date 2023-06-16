@@ -2,6 +2,8 @@ package io.hotcloud.kubernetes.server.controller;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.api.KubectlApi;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -183,6 +185,62 @@ public class KubectlController {
     public ResponseEntity<Event> events(@PathVariable(value = "namespace") String namespace,
                                         @PathVariable(value = "event") String name) {
         return ResponseEntity.ok(kubectlApi.events(namespace, name));
+    }
+
+    @GetMapping("/nodemetrics")
+    @Operation(
+            summary = "List node metrics",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<List<NodeMetrics>> nodemetrics() {
+        return ResponseEntity.ok(kubectlApi.topNode());
+    }
+
+    @GetMapping("/{node}/nodemetrics")
+    @Operation(
+            summary = "Get node metrics",
+            parameters = {
+                    @Parameter(name = "node", description = "kubernetes node name")
+            },
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<NodeMetrics> nodemetrics(@PathVariable(value = "node") String node) {
+        return ResponseEntity.ok(kubectlApi.topNode(node));
+    }
+
+    @GetMapping("/podmetrics")
+    @Operation(
+            summary = "List all namespaced pod metrics",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<List<PodMetrics>> podmetrics() {
+        return ResponseEntity.ok(kubectlApi.topPod());
+    }
+
+    @GetMapping("/{namespace}/{pod}/podmetrics")
+    @Operation(
+            summary = "Get namespaced pod metrics",
+            parameters = {
+                    @Parameter(name = "namespace", description = "kubernetes namespace"),
+                    @Parameter(name = "pod", description = "pod name")
+            },
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<PodMetrics> podmetrics(@PathVariable(value = "namespace") String namespace,
+                                                 @PathVariable(value = "pod") String pod) {
+        return ResponseEntity.ok(kubectlApi.topPod(namespace, pod));
+    }
+
+    @GetMapping("/{namespace}/podmetrics")
+    @Operation(
+            summary = "List all namespaced pod metrics",
+            parameters = {
+                    @Parameter(name = "namespace", description = "kubernetes namespace")
+            },
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<List<PodMetrics>> podmetrics(@PathVariable(value = "namespace") String namespace) {
+        return ResponseEntity.ok(kubectlApi.topPod(namespace));
     }
 
 }

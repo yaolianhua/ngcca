@@ -2,6 +2,8 @@ package io.hotcloud.kubernetes.api;
 
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.model.CopyAction;
 import org.springframework.util.Assert;
 
@@ -93,6 +95,58 @@ public interface KubectlApi {
      * @return {@link Event}
      */
     List<Event> events();
+
+    /**
+     * List node metrics. Equivalent to using kubectl top node
+     *
+     * @return {@link NodeMetrics}
+     */
+    List<NodeMetrics> topNode();
+
+    /**
+     * Get node metrics. Equivalent to using kubectl top node {@code node_name}
+     *
+     * @return {@link NodeMetrics}
+     */
+    default NodeMetrics topNode(String node) {
+        return this.topNode()
+                .stream()
+                .filter(e -> Objects.equals(e.getMetadata().getName(), node))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * List all namespaced pod metrics. Equivalent to using kubectl top pod -A
+     *
+     * @return {@link PodMetrics}
+     */
+    List<PodMetrics> topPod();
+
+    /**
+     * List namespaced pod metrics. Equivalent to using kubectl top pod -n {@code namespace}
+     *
+     * @return {@link PodMetrics}
+     */
+    default List<PodMetrics> topPod(String namespace) {
+        return this.topPod()
+                .stream()
+                .filter(e -> Objects.equals(e.getMetadata().getNamespace(), namespace))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get namespaced pod metrics. Equivalent to using kubectl top pod {@code pod_name} -n {@code namespace}
+     *
+     * @return {@link PodMetrics}
+     */
+    default PodMetrics topPod(String namespace, String pod) {
+        return this.topPod(namespace)
+                .stream()
+                .filter(e -> Objects.equals(e.getMetadata().getName(), pod))
+                .findFirst()
+                .orElse(null);
+    }
 
     /**
      * List namespaced pod events

@@ -4,6 +4,8 @@ import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.StatusDetails;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
 import io.hotcloud.common.log.Log;
@@ -261,6 +263,22 @@ public class KubectlEquivalent implements KubectlApi {
         return fabric8Client.v1().events()
                 .inAnyNamespace()
                 .list()
+                .getItems();
+    }
+
+    @Override
+    public List<NodeMetrics> topNode() {
+        return fabric8Client.top()
+                .nodes()
+                .metrics()
+                .getItems();
+    }
+
+    @Override
+    public List<PodMetrics> topPod() {
+        return fabric8Client.top()
+                .pods()
+                .metrics()
                 .getItems();
     }
 }
