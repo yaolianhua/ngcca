@@ -161,7 +161,7 @@ public class PodController {
 
     @GetMapping("/{namespace}")
     @Operation(
-            summary = "Pod collection read",
+            summary = "List namespaced pod",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
                     @Parameter(name = "namespace", description = "kubernetes namespace")
@@ -171,6 +171,15 @@ public class PodController {
                                                @RequestParam(required = false) Map<String, String> labelSelector) {
         PodList list = podApi.read(namespace, labelSelector);
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced pod",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<PodList> podListRead() {
+        return ResponseEntity.ok(podApi.read());
     }
 
     @DeleteMapping("/{namespace}/{pod}")

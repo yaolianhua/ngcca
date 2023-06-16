@@ -64,6 +64,13 @@ public interface PodClient {
     PodList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * List all namespaced PodList
+     *
+     * @return {@link PodList}
+     */
+    PodList readList();
+
+    /**
      * Create Pod from {@code PodCreateRequest}
      *
      * @param request {@link PodCreateRequest}

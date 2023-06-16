@@ -124,6 +124,19 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public PodList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<PodList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Pod create(PodCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
