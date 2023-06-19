@@ -47,6 +47,15 @@ public class DaemonSetController {
         return ResponseEntity.ok(read);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced daemonSet",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<DaemonSetList> listDaemonSetList() {
+        return ResponseEntity.ok(daemonSetApi.read());
+    }
+
     @GetMapping("/{namespace}")
     @Operation(
             summary = "DaemonSet collection read",

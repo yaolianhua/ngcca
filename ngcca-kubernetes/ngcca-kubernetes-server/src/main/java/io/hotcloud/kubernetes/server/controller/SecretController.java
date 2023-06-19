@@ -83,6 +83,15 @@ public class SecretController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced Secret collection",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<SecretList> listSecretList() {
+        return ResponseEntity.ok(secretApi.read());
+    }
+
     @DeleteMapping("/{namespace}/{secret}")
     @Operation(
             summary = "Secret delete",

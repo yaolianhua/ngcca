@@ -83,6 +83,15 @@ public class JobController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced Job collection",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<JobList> listJobList() {
+        return ResponseEntity.ok(jobApi.read());
+    }
+
     @DeleteMapping("/{namespace}/{job}")
     @Operation(
             summary = "Job delete",

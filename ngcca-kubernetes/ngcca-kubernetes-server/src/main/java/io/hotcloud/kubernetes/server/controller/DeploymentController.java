@@ -63,6 +63,15 @@ public class DeploymentController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced deployment",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<DeploymentList> listDeploymentList() {
+        return ResponseEntity.ok(deploymentApi.read());
+    }
+
     @PostMapping
     @Operation(
             summary = "Deployment create with request body",

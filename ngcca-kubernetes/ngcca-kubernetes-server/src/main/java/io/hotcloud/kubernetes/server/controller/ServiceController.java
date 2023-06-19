@@ -83,6 +83,15 @@ public class ServiceController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced Service collection",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<ServiceList> listServiceList() {
+        return ResponseEntity.ok(serviceApi.read());
+    }
+
     @DeleteMapping("/{namespace}/{service}")
     @Operation(
             summary = "Service delete",

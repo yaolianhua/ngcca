@@ -83,6 +83,15 @@ public class ConfigMapController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced configMap",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<ConfigMapList> listConfigMapList() {
+        return ResponseEntity.ok(configMapApi.read());
+    }
+
     @DeleteMapping("/{namespace}/{configmap}")
     @Operation(
             summary = "ConfigMap delete",

@@ -61,6 +61,15 @@ public class StatefulSetController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced StatefulSet collection",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<StatefulSetList> listStatefulSetList() {
+        return ResponseEntity.ok(statefulSetApi.read());
+    }
+
     @PostMapping
     @Operation(
             summary = "StatefulSet create with request body",

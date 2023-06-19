@@ -83,6 +83,15 @@ public class CronJobController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping
+    @Operation(
+            summary = "List all namespaced cronJob",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<CronJobList> listCronjobList() {
+        return ResponseEntity.ok(cronJobApi.read());
+    }
+
     @DeleteMapping("/{namespace}/{cronjob}")
     @Operation(
             summary = "CronJob delete",

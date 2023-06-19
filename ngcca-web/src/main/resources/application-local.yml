@@ -14,7 +14,7 @@ ngcca:
     secret-key: "QbMufCD@9WVQ^Hv"
     endpoint: "http://linux.local:9009"
   mongodb:
-    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-integration-test?authSource=admin"
   openai:
     api-key: no-key
     http-proxy:
@@ -27,9 +27,9 @@ ngcca:
     push-timeout-seconds: 300
 
   kubernetes-agent:
-    host: localhost
-    port: 1400
-    domain-name:
+    host:
+    port:
+    domain-name: k8s-agent.linux.local
   web-server:
     host: localhost
     port: 4000
