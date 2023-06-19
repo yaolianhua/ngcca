@@ -84,7 +84,7 @@
                   <div class="timeline-item">
                     <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
                     <h3 class="timeline-header">
-                      <a href="#" th:text="${activity.description}"></a>
+                      <span th:text="${activity.displayName}"></span>
                     </h3>
 
                     <div class="timeline-body" th:text="${activity.description}">
