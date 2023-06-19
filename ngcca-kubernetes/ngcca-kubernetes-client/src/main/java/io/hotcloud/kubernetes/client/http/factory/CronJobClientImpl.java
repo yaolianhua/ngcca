@@ -76,6 +76,19 @@ class CronJobClientImpl implements CronJobClient {
     }
 
     @Override
+    public CronJobList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<CronJobList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public CronJob create(CronJobCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 

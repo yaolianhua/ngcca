@@ -32,6 +32,13 @@ public interface CronJobClient {
     CronJobList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced CronJobList
+     *
+     * @return {@link CronJobList}
+     */
+    CronJobList readList();
+
+    /**
      * Create CronJob from {@code CronJobCreateRequest}
      *
      * @param request {@link CronJobCreateRequest}

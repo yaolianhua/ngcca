@@ -75,6 +75,19 @@ class ConfigMapClientImpl implements ConfigMapClient {
     }
 
     @Override
+    public ConfigMapList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<ConfigMapList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 

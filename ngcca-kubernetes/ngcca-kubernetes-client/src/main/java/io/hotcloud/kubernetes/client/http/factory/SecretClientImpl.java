@@ -75,6 +75,19 @@ class SecretClientImpl implements SecretClient {
     }
 
     @Override
+    public SecretList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<SecretList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Secret create(SecretCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 

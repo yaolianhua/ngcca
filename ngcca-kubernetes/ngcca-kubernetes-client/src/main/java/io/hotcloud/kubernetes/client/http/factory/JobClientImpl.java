@@ -75,6 +75,19 @@ class JobClientImpl implements JobClient {
     }
 
     @Override
+    public JobList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<JobList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Job create(JobCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 

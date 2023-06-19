@@ -75,6 +75,19 @@ class DaemonSetClientImpl implements DaemonSetClient {
     }
 
     @Override
+    public DaemonSetList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<DaemonSetList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 

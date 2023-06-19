@@ -75,6 +75,19 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
+    public StatefulSetList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<StatefulSetList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public StatefulSet create(StatefulSetCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 

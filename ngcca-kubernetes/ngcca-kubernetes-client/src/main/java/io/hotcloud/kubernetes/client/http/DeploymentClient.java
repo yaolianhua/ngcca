@@ -33,6 +33,13 @@ public interface DeploymentClient {
     DeploymentList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced DeploymentList
+     *
+     * @return {@link DeploymentList}
+     */
+    DeploymentList readList();
+
+    /**
      * Create Deployment from {@code DeploymentCreateRequest}
      *
      * @param request {@link DeploymentCreateRequest}

@@ -32,6 +32,13 @@ public interface DaemonSetClient {
     DaemonSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced DaemonSetList
+     *
+     * @return {@link DaemonSetList}
+     */
+    DaemonSetList readList();
+
+    /**
      * Create DaemonSet from {@code DaemonSetCreateRequest}
      *
      * @param request {@link DaemonSetCreateRequest}

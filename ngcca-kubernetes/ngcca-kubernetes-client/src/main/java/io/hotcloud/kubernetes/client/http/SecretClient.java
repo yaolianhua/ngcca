@@ -32,6 +32,13 @@ public interface SecretClient {
     SecretList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced SecretList
+     *
+     * @return {@link SecretList}
+     */
+    SecretList readList();
+
+    /**
      * Create Secret from {@code SecretCreateRequest}
      *
      * @param request {@link SecretCreateRequest}

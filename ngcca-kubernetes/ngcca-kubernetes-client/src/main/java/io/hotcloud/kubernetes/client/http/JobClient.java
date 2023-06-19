@@ -32,6 +32,13 @@ public interface JobClient {
     JobList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced JobList
+     *
+     * @return {@link JobList}
+     */
+    JobList readList();
+
+    /**
      * Create Job from {@code JobCreateRequest}
      *
      * @param request {@link JobCreateRequest}

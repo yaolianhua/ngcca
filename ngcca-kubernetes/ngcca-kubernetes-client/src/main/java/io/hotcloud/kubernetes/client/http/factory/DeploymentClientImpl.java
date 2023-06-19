@@ -74,6 +74,19 @@ class DeploymentClientImpl implements DeploymentClient {
     }
 
     @Override
+    public DeploymentList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<DeploymentList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Deployment create(DeploymentCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 

@@ -76,6 +76,19 @@ class ServiceClientImpl implements ServiceClient {
     }
 
     @Override
+    public ServiceList readList() {
+        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<ServiceList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Service create(ServiceCreateRequest request) throws ApiException {
 
         RequestParamAssertion.assertBodyNotNull(request);

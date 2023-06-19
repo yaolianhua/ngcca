@@ -32,6 +32,13 @@ public interface StatefulSetClient {
     StatefulSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced StatefulSetList
+     *
+     * @return {@link StatefulSetList}
+     */
+    StatefulSetList readList();
+
+    /**
      * Create StatefulSet from {@code StatefulSetCreateRequest}
      *
      * @param request {@link StatefulSetCreateRequest}

@@ -32,6 +32,13 @@ public interface ConfigMapClient {
     ConfigMapList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced ConfigMapList
+     *
+     * @return {@link ConfigMapList}
+     */
+    ConfigMapList readList();
+
+    /**
      * Create ConfigMap from {@code ConfigMapCreateRequest}
      *
      * @param request {@link ConfigMapCreateRequest}

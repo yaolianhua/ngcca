@@ -32,6 +32,13 @@ public interface ServiceClient {
     ServiceList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read all namespaced ServiceList
+     *
+     * @return {@link ServiceList}
+     */
+    ServiceList readList();
+
+    /**
      * Create Service from {@code ServiceCreateRequest}
      *
      * @param request {@link ServiceCreateRequest}
