@@ -2,8 +2,7 @@ package io.hotcloud.service.cluster;
 
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
-import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.kubernetes.client.http.*;
 import io.hotcloud.module.security.user.UserApi;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,28 @@ public class KubernetesClusterStatisticsService {
 
     private final KubectlClient kubectlClient;
     private final PodClient podClient;
+    private final DeploymentClient deploymentClient;
+    private final CronJobClient cronJobClient;
+    private final JobClient jobClient;
+    private final DaemonSetClient daemonSetClient;
+    private final StatefulSetClient statefulSetClient;
     private final UserApi userApi;
 
     public KubernetesClusterStatisticsService(KubectlClient kubectlClient,
                                               PodClient podClient,
+                                              DeploymentClient deploymentClient,
+                                              CronJobClient cronJobClient,
+                                              JobClient jobClient,
+                                              DaemonSetClient daemonSetClient,
+                                              StatefulSetClient statefulSetClient,
                                               UserApi userApi) {
         this.kubectlClient = kubectlClient;
         this.podClient = podClient;
+        this.deploymentClient = deploymentClient;
+        this.cronJobClient = cronJobClient;
+        this.jobClient = jobClient;
+        this.daemonSetClient = daemonSetClient;
+        this.statefulSetClient = statefulSetClient;
         this.userApi = userApi;
     }
 
@@ -32,6 +46,11 @@ public class KubernetesClusterStatisticsService {
         String namespace = userApi.retrieve(username).getNamespace();
 
         List<KubernetesClusterStatistics.Pod> pods;
+        List<KubernetesClusterStatistics.Deployment> deployments;
+        List<KubernetesClusterStatistics.Job> jobs;
+        List<KubernetesClusterStatistics.Cronjob> cronjobs;
+        List<KubernetesClusterStatistics.DaemonSet> daemonSets;
+        List<KubernetesClusterStatistics.StatefulSet> statefulSets;
         List<KubernetesClusterStatistics.PodMetrics> podMetrics;
 
         if (admin) {
@@ -39,6 +58,31 @@ public class KubernetesClusterStatisticsService {
                     .getItems()
                     .parallelStream()
                     .map(e -> KubernetesClusterStatistics.Pod.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            deployments = deploymentClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Deployment.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            jobs = jobClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Job.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            cronjobs = cronJobClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Cronjob.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            daemonSets = daemonSetClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.DaemonSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            statefulSets = statefulSetClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.StatefulSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
                     .collect(Collectors.toList());
 
             podMetrics = kubectlClient.topPod()
@@ -50,6 +94,31 @@ public class KubernetesClusterStatisticsService {
                     .getItems()
                     .parallelStream()
                     .map(e -> KubernetesClusterStatistics.Pod.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            deployments = deploymentClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Deployment.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            jobs = jobClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Job.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            cronjobs = cronJobClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Cronjob.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            daemonSets = daemonSetClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.DaemonSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            statefulSets = statefulSetClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.StatefulSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
                     .collect(Collectors.toList());
 
             podMetrics = kubectlClient.topPod(namespace)
@@ -67,6 +136,11 @@ public class KubernetesClusterStatisticsService {
                 .podMetrics(podMetrics)
                 .nodeMetrics(nodeMetrics)
                 .pods(pods)
+                .deployments(deployments)
+                .jobs(jobs)
+                .cronJobs(cronjobs)
+                .daemonSets(daemonSets)
+                .statefulSets(statefulSets)
                 .build();
 
     }

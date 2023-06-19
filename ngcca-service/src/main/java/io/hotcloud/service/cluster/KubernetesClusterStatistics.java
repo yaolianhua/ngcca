@@ -19,6 +19,11 @@ public class KubernetesClusterStatistics {
 
     private List<PodMetrics> podMetrics = new ArrayList<>();
     private List<Pod> pods = new ArrayList<>();
+    private List<Deployment> deployments = new ArrayList<>();
+    private List<Job> jobs = new ArrayList<>();
+    private List<Cronjob> cronJobs = new ArrayList<>();
+    private List<DaemonSet> daemonSets = new ArrayList<>();
+    private List<StatefulSet> statefulSets = new ArrayList<>();
 
     public long getTotalNode() {
         return nodeMetrics.size();
@@ -27,6 +32,27 @@ public class KubernetesClusterStatistics {
     public long getTotalPod() {
         return pods.size();
     }
+
+    public long getTotalDeployment() {
+        return deployments.size();
+    }
+
+    public long getTotalJob() {
+        return jobs.size();
+    }
+
+    public long getTotalCronJob() {
+        return cronJobs.size();
+    }
+
+    public long getTotalDaemonSet() {
+        return daemonSets.size();
+    }
+
+    public long getTotalStatefulSet() {
+        return statefulSets.size();
+    }
+
 
     public long getTotalCpuMilliCoresCapacity() {
         return this.nodeMetrics
@@ -68,6 +94,51 @@ public class KubernetesClusterStatistics {
                 .stream()
                 .map(NodeMetrics::getMemoryUsagePercentage)
                 .reduce(0.00, Double::sum);
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Deployment {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DaemonSet {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Job {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Cronjob {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class StatefulSet {
+        private String namespace;
+        private String name;
     }
 
     @Data
