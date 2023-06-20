@@ -75,27 +75,8 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-            <div class="col-md-6">
-              <!-- The time line -->
-              <div class="timeline">
 
-                <div th:each="activity: ${activities}">
-                  <i class="fas" th:classappend="${activity.icon}"></i>
-                  <div class="timeline-item">
-                    <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
-                    <h3 class="timeline-header">
-                      <span th:text="${activity.displayName}"></span>
-                    </h3>
-
-                    <div class="timeline-body" th:text="${activity.description}">
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
+            <!-- 图表 -->
             <div class="col-md-6">
               <div class="card">
 
@@ -351,7 +332,28 @@
                 <!-- /.card-body -->
               </div>
             </div>
-            <!-- /.col -->
+
+          <!-- timeline -->
+          <div class="col-md-6">
+            <!-- The time line -->
+            <div class="timeline">
+
+              <div th:each="activity: ${activities}">
+                <i class="fas" th:classappend="${activity.icon}"></i>
+                <div class="timeline-item">
+                  <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
+                  <h3 class="timeline-header">
+                    <span th:text="${activity.displayName}"></span>
+                  </h3>
+
+                  <div class="timeline-body" th:text="${activity.description}">
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
