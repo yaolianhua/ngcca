@@ -212,6 +212,12 @@ public class KubernetesClusterStatistics {
     @Builder
     public static class NodeMetrics {
         private String node;
+        private String ip;
+        private String status;
+        private String containerRuntime;
+        private String kubeletVersion;
+        private String architecture;
+        private String osImage;
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
         private long cpuMilliCoresCapacity;

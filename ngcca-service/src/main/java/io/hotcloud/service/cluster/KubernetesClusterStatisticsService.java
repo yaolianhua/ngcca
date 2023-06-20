@@ -1,5 +1,9 @@
 package io.hotcloud.service.cluster;
 
+import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeAddress;
+import io.fabric8.kubernetes.api.model.NodeCondition;
+import io.fabric8.kubernetes.api.model.NodeStatus;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.client.http.*;
@@ -230,17 +234,35 @@ public class KubernetesClusterStatisticsService {
     private KubernetesClusterStatistics.NodeMetrics build(NodeMetrics fabric8NodeMetrics) {
 
         String node = fabric8NodeMetrics.getMetadata().getName();
+        Node fabric8Node = kubectlClient.getNode(node);
+        NodeStatus nodeStatus = fabric8Node.getStatus();
 
-        long cpuMilliCoresCapacity = Math.round(kubectlClient.getNode(node).getStatus().getCapacity().get("cpu").getNumericalAmount().doubleValue() * 1000);
+        long cpuMilliCoresCapacity = Math.round(nodeStatus.getCapacity().get("cpu").getNumericalAmount().doubleValue() * 1000);
 
-        long memoryMegabyteCapacity = Math.round(kubectlClient.getNode(node).getStatus().getCapacity().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024));
+        long memoryMegabyteCapacity = Math.round(nodeStatus.getCapacity().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024));
 
         long cpuMilliCoresUsage = Math.round(fabric8NodeMetrics.getUsage().get("cpu").getNumericalAmount().doubleValue() * 1000);
 
         long memoryMegabyteUsage = Math.round(fabric8NodeMetrics.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024));
 
+        NodeAddress internalAddress = nodeStatus.getAddresses().stream()
+                .filter(e -> "InternalIP".equals(e.getType()))
+                .findFirst()
+                .orElse(null);
+        NodeCondition nodeConditionReady = nodeStatus.getConditions().stream()
+                .filter(e -> "Ready".equals(e.getType()) && "True".equals(e.getStatus()))
+                .findFirst()
+                .orElse(null);
+
+
         return KubernetesClusterStatistics.NodeMetrics.builder()
                 .node(node)
+                .ip(internalAddress == null ? "unknown" : internalAddress.getAddress())
+                .status(nodeConditionReady == null ? "unknown" : "Ready")
+                .architecture(nodeStatus.getNodeInfo().getArchitecture())
+                .osImage(nodeStatus.getNodeInfo().getOsImage())
+                .containerRuntime(nodeStatus.getNodeInfo().getContainerRuntimeVersion())
+                .kubeletVersion(nodeStatus.getNodeInfo().getKubeletVersion())
                 .cpuMilliCoresCapacity(cpuMilliCoresCapacity)
                 .memoryMegabyteCapacity(memoryMegabyteCapacity)
                 .cpuMilliCoresUsage(cpuMilliCoresUsage)
