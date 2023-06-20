@@ -20,9 +20,15 @@ public class AdministratorKubernetesResourceViewsController {
 
     @RequestMapping("/node-list")
     @WebSession
-    public String resources(Model model) {
+    public String nodeList(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getNodeMetrics());
         return Views.K8S_NODE_LIST;
     }
 
+    @RequestMapping("/pod-list")
+    @WebSession
+    public String podList(Model model) {
+        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getPodMetrics());
+        return Views.K8S_POD_LIST;
+    }
 }

@@ -10,6 +10,7 @@ public final class Views {
     public static final String USER_TEMPLATE_INSTANCE_LIST_FRAGMENT = "template/user-template-instance-list::content";
     public static final String USER_TEMPLATE_INSTANCE_DETAIL_FRAGMENT = "template/user-template-instance-detail::content";
     public static final String K8S_NODE_LIST = "admin/k8s/node-list";
+    public static final String K8S_POD_LIST = "admin/k8s/pod-list";
     public static final String USER_MANAGE_LIST_FRAGMENT = "admin/user-manage/user-list::content";
     public static final String USER_MANAGE_EDIT_FRAGMENT = "admin/user-manage/user-edit::content";
     public static final String USER_MANAGE_DETAIL_FRAGMENT = "admin/user-manage/user-detail::content";
