@@ -68,8 +68,10 @@ public class StatisticsService {
         BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics("");
         ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
         KubernetesClusterStatistics kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics();
+        Collection<User> users = userApi.users();
 
         return Statistics.builder()
+                .users(users)
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .applications(applicationInstanceStatistics)

@@ -10,9 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +21,9 @@ public class Statistics {
 
     private User user;
     private String namespace;
+
+    @Builder.Default
+    private Collection<User> users = new ArrayList<>();
 
     @Builder.Default
     private TemplateInstanceStatistics templates = new TemplateInstanceStatistics();

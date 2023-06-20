@@ -1,0 +1,60 @@
+<div class="row">
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon"><i class="fas fa-user"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">用户个数</span>
+                <span class="info-box-number" th:text="${statistics.users.size()}"></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">构建面板</span>
+                <span class="info-box-number" th:text="${statistics.buildPacks.total}"></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">模板实例</span>
+                <span class="info-box-number" th:text="${statistics.templates.total}"></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon"><i class="fas fa-cloud"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">应用实例</span>
+                <span class="info-box-number" th:text="${statistics.applications.total}"></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
