@@ -24,6 +24,10 @@ public class KubernetesClusterStatistics {
     private List<Cronjob> cronJobs = new ArrayList<>();
     private List<DaemonSet> daemonSets = new ArrayList<>();
     private List<StatefulSet> statefulSets = new ArrayList<>();
+    private List<Service> services = new ArrayList<>();
+    private List<ConfigMap> configMaps = new ArrayList<>();
+    private List<Secret> secrets = new ArrayList<>();
+    private List<Ingress> ingresses = new ArrayList<>();
 
     public long getTotalNode() {
         return nodeMetrics.size();
@@ -51,6 +55,22 @@ public class KubernetesClusterStatistics {
 
     public long getTotalStatefulSet() {
         return statefulSets.size();
+    }
+
+    public long getTotalService() {
+        return services.size();
+    }
+
+    public long getTotalSecret() {
+        return secrets.size();
+    }
+
+    public long getTotalConfigMap() {
+        return configMaps.size();
+    }
+
+    public long getTotalIngress() {
+        return ingresses.size();
     }
 
 
@@ -146,6 +166,42 @@ public class KubernetesClusterStatistics {
     @AllArgsConstructor
     @Builder
     public static class Pod {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Service {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ConfigMap {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Secret {
+        private String namespace;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Ingress {
         private String namespace;
         private String name;
     }

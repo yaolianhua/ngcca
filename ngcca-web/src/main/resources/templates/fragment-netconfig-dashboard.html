@@ -1,0 +1,83 @@
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            网络/配置
+        </h3>
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+
+            <!-- ./col -->
+            <div class="col-6 col-md-3 text-center">
+
+                <label for="service">
+                    <input class="knob" data-fgColor="#00a65a" data-height="100"
+                           data-min="0"
+                           data-readonly="true"
+                           data-thickness="0.1"
+                           data-width="100"
+                           id="service"
+                           th:data-max="${statistics.clusterStatistics.totalService}"
+                           th:value="${statistics.clusterStatistics.totalService}"
+                           type="text">
+                </label>
+
+                <div class="knob-label">Service（[[${statistics.clusterStatistics.totalService}]]）</div>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+
+                <label for="secret">
+                    <input class="knob" data-fgColor="#00a65a" data-height="100"
+                           data-min="0"
+                           data-readonly="true"
+                           data-thickness="0.1"
+                           data-width="100"
+                           id="secret"
+                           th:data-max="${statistics.clusterStatistics.totalSecret}"
+                           th:value="${statistics.clusterStatistics.totalSecret}"
+                           type="text">
+                </label>
+
+                <div class="knob-label">Secret（[[${statistics.clusterStatistics.totalSecret}]]）</div>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+
+                <label for="configmap">
+                    <input class="knob" data-fgColor="#00a65a" data-height="100"
+                           data-min="0"
+                           data-readonly="true"
+                           data-thickness="0.1"
+                           data-width="100"
+                           id="configmap"
+                           th:data-max="${statistics.clusterStatistics.totalConfigMap}"
+                           th:value="${statistics.clusterStatistics.totalConfigMap}"
+                           type="text">
+                </label>
+
+                <div class="knob-label">ConfigMap（[[${statistics.clusterStatistics.totalConfigMap}]]）</div>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+
+                <label for="ingress">
+                    <input class="knob" data-fgColor="#00a65a" data-height="100"
+                           data-min="0"
+                           data-readonly="true"
+                           data-thickness="0.1"
+                           data-width="100"
+                           id="ingress"
+                           th:data-max="${statistics.clusterStatistics.totalIngress}"
+                           th:value="${statistics.clusterStatistics.totalIngress}"
+                           type="text">
+                </label>
+
+                <div class="knob-label">Ingress（[[${statistics.clusterStatistics.totalIngress}]]）</div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.card-body -->
+</div>

@@ -20,6 +20,10 @@ public class KubernetesClusterStatisticsService {
     private final JobClient jobClient;
     private final DaemonSetClient daemonSetClient;
     private final StatefulSetClient statefulSetClient;
+    private final ServiceClient serviceClient;
+    private final ConfigMapClient configMapClient;
+    private final SecretClient secretClient;
+    private final IngressClient ingressClient;
     private final UserApi userApi;
 
     public KubernetesClusterStatisticsService(KubectlClient kubectlClient,
@@ -29,6 +33,10 @@ public class KubernetesClusterStatisticsService {
                                               JobClient jobClient,
                                               DaemonSetClient daemonSetClient,
                                               StatefulSetClient statefulSetClient,
+                                              ServiceClient serviceClient,
+                                              ConfigMapClient configMapClient,
+                                              SecretClient secretClient,
+                                              IngressClient ingressClient,
                                               UserApi userApi) {
         this.kubectlClient = kubectlClient;
         this.podClient = podClient;
@@ -37,6 +45,10 @@ public class KubernetesClusterStatisticsService {
         this.jobClient = jobClient;
         this.daemonSetClient = daemonSetClient;
         this.statefulSetClient = statefulSetClient;
+        this.serviceClient = serviceClient;
+        this.configMapClient = configMapClient;
+        this.secretClient = secretClient;
+        this.ingressClient = ingressClient;
         this.userApi = userApi;
     }
 
@@ -51,6 +63,10 @@ public class KubernetesClusterStatisticsService {
         List<KubernetesClusterStatistics.Cronjob> cronjobs;
         List<KubernetesClusterStatistics.DaemonSet> daemonSets;
         List<KubernetesClusterStatistics.StatefulSet> statefulSets;
+        List<KubernetesClusterStatistics.Service> services;
+        List<KubernetesClusterStatistics.Secret> secrets;
+        List<KubernetesClusterStatistics.ConfigMap> configMaps;
+        List<KubernetesClusterStatistics.Ingress> ingresses;
         List<KubernetesClusterStatistics.PodMetrics> podMetrics;
 
         if (admin) {
@@ -83,6 +99,26 @@ public class KubernetesClusterStatisticsService {
                     .getItems()
                     .parallelStream()
                     .map(e -> KubernetesClusterStatistics.StatefulSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            services = serviceClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Service.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            secrets = secretClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Secret.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            configMaps = configMapClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.ConfigMap.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            ingresses = ingressClient.readList()
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Ingress.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
                     .collect(Collectors.toList());
 
             podMetrics = kubectlClient.topPod()
@@ -120,6 +156,26 @@ public class KubernetesClusterStatisticsService {
                     .parallelStream()
                     .map(e -> KubernetesClusterStatistics.StatefulSet.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
                     .collect(Collectors.toList());
+            services = serviceClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Service.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            secrets = secretClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Secret.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            configMaps = configMapClient.readList(namespace, Map.of())
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.ConfigMap.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
+            ingresses = ingressClient.readList(namespace)
+                    .getItems()
+                    .parallelStream()
+                    .map(e -> KubernetesClusterStatistics.Ingress.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
+                    .collect(Collectors.toList());
 
             podMetrics = kubectlClient.topPod(namespace)
                     .parallelStream()
@@ -141,6 +197,10 @@ public class KubernetesClusterStatisticsService {
                 .cronJobs(cronjobs)
                 .daemonSets(daemonSets)
                 .statefulSets(statefulSets)
+                .services(services)
+                .secrets(secrets)
+                .configMaps(configMaps)
+                .ingresses(ingresses)
                 .build();
 
     }
