@@ -9,11 +9,12 @@ import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 @Slf4j
@@ -34,10 +35,15 @@ public class ActivityQuery {
      * @param pageable {@link Pageable}
      * @return activity log collection
      */
-    public PageResult<ALog> pagingQuery(String user, @Nullable Target target, @Nullable Action action, Pageable pageable) {
-        Assert.hasText(user, "user is null");
+    public PageResult<ALog> pagingQuery(@Nullable String user, @Nullable Target target, @Nullable Action action, Pageable pageable) {
+        List<ActivityEntity> entities;
+        if (StringUtils.hasText(user)) {
+            entities = activityRepository.findByUser(user);
+        } else {
+            entities = StreamSupport.stream(activityRepository.findAll().spliterator(), false)
+                    .collect(Collectors.toList());
+        }
 
-        List<ActivityEntity> entities = activityRepository.findByUser(user);
         List<ALog> aLogs = entities.stream()
                 .map(e -> e.toT(ALog.class))
                 .collect(Collectors.toList());
