@@ -249,7 +249,18 @@ public class KubernetesClusterStatistics {
     public static class PodMetrics {
         private String namespace;
         private String pod;
+        private String status;
+        private RefNode refNode;
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        public static class RefNode {
+            private String ip;
+            private String name;
+        }
     }
 }

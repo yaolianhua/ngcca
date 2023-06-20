@@ -1,9 +1,6 @@
 package io.hotcloud.service.cluster;
 
-import io.fabric8.kubernetes.api.model.Node;
-import io.fabric8.kubernetes.api.model.NodeAddress;
-import io.fabric8.kubernetes.api.model.NodeCondition;
-import io.fabric8.kubernetes.api.model.NodeStatus;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.client.http.*;
@@ -283,9 +280,17 @@ public class KubernetesClusterStatisticsService {
                 .map(e -> e.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024))
                 .reduce(0.0, Double::sum);
 
+        Pod podInfo = podClient.read(namespace, pod);
+        KubernetesClusterStatistics.PodMetrics.RefNode refNode = KubernetesClusterStatistics.PodMetrics.RefNode.builder()
+                .ip(podInfo.getStatus().getHostIP())
+                .name(podInfo.getSpec().getNodeName())
+                .build();
+
         return KubernetesClusterStatistics.PodMetrics.builder()
                 .namespace(namespace)
                 .pod(pod)
+                .status(podInfo.getStatus().getPhase())
+                .refNode(refNode)
                 .cpuMilliCoresUsage(Math.round(cpu))
                 .memoryMegabyteUsage(Math.round(memory))
                 .build();
