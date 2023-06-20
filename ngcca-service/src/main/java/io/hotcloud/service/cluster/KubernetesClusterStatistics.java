@@ -83,17 +83,17 @@ public class KubernetesClusterStatistics {
     }
 
     public double getTotalCpuUsagePercentage() {
-        return this.nodeMetrics
-                .stream()
-                .map(NodeMetrics::getCpuUsagePercentage)
-                .reduce(0.00, Double::sum);
+        long totalCpuMilliCoresUsage = getTotalCpuMilliCoresUsage();
+        long totalCpuMilliCoresCapacity = getTotalCpuMilliCoresCapacity();
+        double percentage = (double) totalCpuMilliCoresUsage / totalCpuMilliCoresCapacity * 100;
+        return Double.parseDouble(new DecimalFormat("0.00").format(percentage));
     }
 
     public double getTotalMemoryUsagePercentage() {
-        return this.nodeMetrics
-                .stream()
-                .map(NodeMetrics::getMemoryUsagePercentage)
-                .reduce(0.00, Double::sum);
+        long totalMemoryMegabyteUsage = getTotalMemoryMegabyteUsage();
+        long totalMemoryMegabyteCapacity = getTotalMemoryMegabyteCapacity();
+        double percentage = (double) totalMemoryMegabyteUsage / totalMemoryMegabyteCapacity * 100;
+        return Double.parseDouble(new DecimalFormat("0.00").format(percentage));
     }
 
     @Data
