@@ -58,6 +58,28 @@ public class StatisticsService {
     }
 
     /**
+     * Get statistics
+     *
+     * @return {@link Statistics}
+     */
+    public Statistics statistics() {
+
+        TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics("");
+        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics("");
+        ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
+        KubernetesClusterStatistics kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics();
+
+        return Statistics.builder()
+                .buildPacks(buildPackStatistics)
+                .templates(templateStatistics)
+                .applications(applicationInstanceStatistics)
+                .clusterStatistics(kubernetesClusterStatistics)
+                .namespace(null)
+                .user(null)
+                .build();
+    }
+
+    /**
      * Get statistics with all users
      *
      * @param pageable {@link  Pageable}
