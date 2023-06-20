@@ -65,37 +65,37 @@ public class ALog {
     public String getDisplayName() {
         if (Objects.equals(target, Target.APPLICATION.name())) {
             if (Objects.equals(action, Action.CREATE.name())) {
-                return "创建应用";
+                return user + "创建应用";
             }
             if (Objects.equals(action, Action.UPDATE.name())) {
-                return "更新应用";
+                return user + "更新应用";
             }
             if (Objects.equals(action, Action.DELETE.name())) {
-                return "删除应用";
+                return user + "删除应用";
             }
         }
 
         if (Objects.equals(target, Target.INSTANCE_TEMPLATE.name())) {
             if (Objects.equals(action, Action.CREATE.name())) {
-                return "创建模板实例";
+                return user + "创建模板实例";
             }
             if (Objects.equals(action, Action.UPDATE.name())) {
-                return "更新模板实例";
+                return user + "更新模板实例";
             }
             if (Objects.equals(action, Action.DELETE.name())) {
-                return "删除模板实例";
+                return user + "删除模板实例";
             }
         }
 
         if (Objects.equals(target, Target.BUILDPACK.name())) {
             if (Objects.equals(action, Action.CREATE.name())) {
-                return "创建构建面板";
+                return user + "创建构建面板";
             }
             if (Objects.equals(action, Action.UPDATE.name())) {
-                return "更新构建面板";
+                return user + "更新构建面板";
             }
             if (Objects.equals(action, Action.DELETE.name())) {
-                return "删除构建面板";
+                return user + "删除构建面板";
             }
         }
 
