@@ -25,317 +25,28 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="info-box mb-3">
-              <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">构建面板</span>
-                <span class="info-box-number" th:text="${statistics.buildPacks.total}"></span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-
-          <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
-
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="info-box mb-3">
-              <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">模板实例</span>
-                <span class="info-box-number" th:text="${statistics.templates.total}"></span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="info-box mb-3">
-              <span class="info-box-icon"><i class="fas fa-cloud"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">应用实例</span>
-                <span class="info-box-number" th:text="${statistics.applications.total}"></span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
+        <div th:insert="~{fragment-appcount-dashboard}"></div>
         <!-- Main row -->
         <div class="row">
 
             <!-- 图表 -->
-            <div class="col-md-6">
-              <div class="card">
+          <div class="col-md-6">
 
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="chart-responsive">
-                        <canvas height="150" id="pieChart"></canvas>
-                      </div>
-                      <!-- ./chart-responsive -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-4">
-                      <ul class="chart-legend clearfix">
-                        <li><i class="fas fa-wrench text-success"></i> 构建成功</li>
-                        <li><i class="fas fa-wrench text-danger"></i> 构建失败</li>
-                        <li><i class="fas fa-wrench text-warning"></i> 构建删除</li>
-                        <li><i class="fas fa-cubes text-success"></i> 实例模板部署成功</li>
-                        <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
-                        <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
-                        <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
-                        <li><i class="fas fa-cloud text-warning"></i> 应用删除</li>
-                      </ul>
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                  <!-- /.row -->
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer p-0">
-                  <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-cubes text-sm"></i>
-                        <span class="float-right">
-                        [[${statistics.templates.total}]]
-                      </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-wrench text-sm"></i>
-                        <span class="float-right">
-                         [[${statistics.buildPacks.total}]]
-                      </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-cloud text-sm"></i>
-                        <span class="float-right">
-                        [[${statistics.applications.total}]]
-                      </span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- /.footer -->
-              </div>
-              <!-- /.card -->
-              <!-- 集群资源 -->
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">
-                    <i class="far fa-chart-bar"></i>
-                    集群资源
-                  </h3>
+            <!-- 业务统计 -->
+            <div th:insert="~{fragment-appchart-dashboard}"></div>
 
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="row">
+            <!-- 集群资源 -->
+            <div th:insert="~{fragment-cluster-dashboard}"></div>
 
-                    <div class="col-6 col-md-4 text-center">
+            <!-- 工作负载 -->
+            <div th:insert="~{fragment-workload-dashboard}"></div>
 
-                      <label for="node">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="1"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="node"
-                               th:data-max="${statistics.clusterStatistics.totalNode}"
-                               th:value="${statistics.clusterStatistics.totalNode}"
-                               type="text">
-                      </label>
 
-                      <div class="knob-label">节点数（[[${statistics.clusterStatistics.totalNode}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-4 text-center">
-
-                      <label for="cpu">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-max="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="cpu"
-                               th:value="${statistics.clusterStatistics.totalCpuUsagePercentage}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">cpu核心（[[${statistics.clusterStatistics.totalCpuMilliCoresCapacity}]]m）
-                      </div>
-                      <div class="knob-label">使用核心（[[${statistics.clusterStatistics.totalCpuMilliCoresUsage}]]m）
-                      </div>
-                      <div class="knob-label">使用率（[[${statistics.clusterStatistics.totalCpuUsagePercentage}]]%）</div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-6 col-md-4 text-center">
-
-                      <label for="memory">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-max="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="memory"
-                               th:value="${statistics.clusterStatistics.totalMemoryUsagePercentage}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">内存（[[${statistics.clusterStatistics.totalMemoryMegabyteCapacity}]]Mi）
-                      </div>
-                      <div class="knob-label">使用内存（[[${statistics.clusterStatistics.totalMemoryMegabyteUsage}]]Mi）
-                      </div>
-                      <div class="knob-label">使用率（[[${statistics.clusterStatistics.totalMemoryUsagePercentage}]]%）
-                      </div>
-                    </div>
-                    <!-- ./col -->
-                  </div>
-                  <!-- /.row -->
-                </div>
-                <!-- /.card-body -->
-              </div>
-
-              <!-- 工作负载 -->
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">
-                    <i class="far fa-chart-bar"></i>
-                    工作负载
-                  </h3>
-
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="row">
-
-                    <!-- ./col -->
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="pod">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="pod"
-                               th:data-max="${statistics.clusterStatistics.totalPod}"
-                               th:value="${statistics.clusterStatistics.totalPod}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">Pod（[[${statistics.clusterStatistics.totalPod}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="deployment">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="deployment"
-                               th:data-max="${statistics.clusterStatistics.totalDeployment}"
-                               th:value="${statistics.clusterStatistics.totalDeployment}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">Deployment（[[${statistics.clusterStatistics.totalDeployment}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="job">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="job"
-                               th:data-max="${statistics.clusterStatistics.totalJob}"
-                               th:value="${statistics.clusterStatistics.totalJob}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">Job（[[${statistics.clusterStatistics.totalJob}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="cronjob">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="cronjob"
-                               th:data-max="${statistics.clusterStatistics.totalCronJob}"
-                               th:value="${statistics.clusterStatistics.totalCronJob}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">CronJob（[[${statistics.clusterStatistics.totalCronJob}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="daemonset">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="daemonset"
-                               th:data-max="${statistics.clusterStatistics.totalDaemonSet}"
-                               th:value="${statistics.clusterStatistics.totalDaemonSet}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">DaemonSet（[[${statistics.clusterStatistics.totalDaemonSet}]]）</div>
-                    </div>
-                    <div class="col-6 col-md-2 text-center">
-
-                      <label for="statefulset">
-                        <input class="knob" data-fgColor="#00a65a" data-height="100"
-                               data-min="0"
-                               data-readonly="true"
-                               data-thickness="0.1"
-                               data-width="100"
-                               id="statefulset"
-                               th:data-max="${statistics.clusterStatistics.totalStatefulSet}"
-                               th:value="${statistics.clusterStatistics.totalStatefulSet}"
-                               type="text">
-                      </label>
-
-                      <div class="knob-label">StatefulSet（[[${statistics.clusterStatistics.totalStatefulSet}]]）</div>
-                    </div>
-                  </div>
-                  <!-- /.row -->
-                </div>
-                <!-- /.card-body -->
-              </div>
-            </div>
+          </div>
 
           <!-- timeline -->
           <div class="col-md-6">
-            <!-- The time line -->
             <div class="timeline">
 
               <div th:each="activity: ${activities}">
@@ -351,9 +62,10 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
+
+
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->

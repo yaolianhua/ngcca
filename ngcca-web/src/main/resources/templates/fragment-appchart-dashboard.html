@@ -1,0 +1,59 @@
+<div class="card">
+
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="chart-responsive">
+                    <canvas height="150" id="pieChart"></canvas>
+                </div>
+                <!-- ./chart-responsive -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-4">
+                <ul class="chart-legend clearfix">
+                    <li><i class="fas fa-wrench text-success"></i> 构建成功</li>
+                    <li><i class="fas fa-wrench text-danger"></i> 构建失败</li>
+                    <li><i class="fas fa-wrench text-warning"></i> 构建删除</li>
+                    <li><i class="fas fa-cubes text-success"></i> 实例模板部署成功</li>
+                    <li><i class="fas fa-cubes text-danger"></i> 实例模板部署失败</li>
+                    <li><i class="fas fa-cloud text-success"></i> 应用发布成功</li>
+                    <li><i class="fas fa-cloud text-danger"></i> 应用发布失败</li>
+                    <li><i class="fas fa-cloud text-warning"></i> 应用删除</li>
+                </ul>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer p-0">
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cubes text-sm"></i>
+                    <span class="float-right">
+                        [[${statistics.templates.total}]]
+                      </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-wrench text-sm"></i>
+                    <span class="float-right">
+                         [[${statistics.buildPacks.total}]]
+                      </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cloud text-sm"></i>
+                    <span class="float-right">
+                        [[${statistics.applications.total}]]
+                      </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- /.footer -->
+</div>
