@@ -29,13 +29,7 @@
         <div th:insert="~{fragment-appcount-dashboard}"></div>
         <!-- Main row -->
         <div class="row">
-
-            <!-- 图表 -->
-          <div class="col-md-6">
-
-            <!-- 业务统计 -->
-            <div th:insert="~{fragment-appchart-dashboard}"></div>
-
+          <div class="col-md-12">
             <!-- 集群资源 -->
             <div th:insert="~{fragment-cluster-dashboard}"></div>
 
@@ -44,11 +38,21 @@
 
             <!-- 网络配置 -->
             <div th:insert="~{fragment-netconfig-dashboard}"></div>
+          </div>
+        </div>
 
+        <div class="row">
+          <!-- 图表 -->
+          <div class="col-md-12">
+            <!-- 业务统计 -->
+            <div th:insert="~{fragment-appchart-dashboard}"></div>
           </div>
 
-          <!-- timeline -->
-          <div class="col-md-6">
+        </div>
+
+        <!--<div class="row">
+          &lt;!&ndash; timeline &ndash;&gt;
+          <div class="col-md-12">
             <div class="timeline">
 
               <div th:each="activity: ${activities}">
@@ -67,8 +71,8 @@
             </div>
           </div>
 
+        </div>-->
 
-        </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
