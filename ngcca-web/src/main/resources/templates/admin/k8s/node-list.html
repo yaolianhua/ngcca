@@ -58,10 +58,10 @@
             <th style="width: 10%">
               节点状态
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
               CPU使用（m Cores）
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
               内存使用（Mi）
             </th>
             <th style="width: 10%">
@@ -75,6 +75,9 @@
             </th>
             <th style="width: 10%">
               操作系统
+            </th>
+            <th style="width: 10%">
+              操作
             </th>
           </tr>
           </thead>
@@ -123,6 +126,10 @@
             <td>
               <a th:text="${nodemetrics.osImage}"></a>
             </td>
+            <td>
+              <a data-placement="top" data-toggle="tooltip" data-trigger="hover focus" href="#" id="node-label"
+                 th:title="${nodemetrics.labelShow}">标签</a>
+            </td>
           </tr>
 
           </tbody>
@@ -140,11 +147,17 @@
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
+
 </div>
 <!-- ./wrapper -->
 
 <!-- jQuery -->
 <div th:insert="~{global-script}"></div>
+<script>
+  $(function () {
+    $('#node-label').tooltip();
+  })
 
+</script>
 </body>
 </html>
