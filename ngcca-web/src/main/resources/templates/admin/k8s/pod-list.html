@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>NGCCA | 节点列表</title>
+  <title>NGCCA | Pod列表</title>
 
   <link th:insert="~{global-link}">
 </head>
@@ -15,7 +15,7 @@
 
   <div th:insert="~{admin/sidebar}"></div>
 
-
+  <div th:insert="~{admin/k8s/pod-log-modal}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -58,10 +58,10 @@
             <th style="width: 10%">
               Pod状态
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
               CPU使用（m Cores）
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
               内存使用（Mi）
             </th>
             <th style="width: 10%">
@@ -69,6 +69,9 @@
             </th>
             <th style="width: 10%">
               节点名称
+            </th>
+            <th style="width: 10%">
+              操作
             </th>
 
           </tr>
@@ -99,6 +102,12 @@
             <td>
               <a th:text="${podmetrics.refNode.name}"></a>
             </td>
+            <td>
+              <button class="btn btn-info" data-target="#modal-pod-log"
+                      th:attr="onclick=|logs('${podmetrics.namespace}','${podmetrics.pod}')|"
+                      th:disabled="${!podmetrics.onlyOneContainer}">日志
+              </button>
+            </td>
 
           </tr>
 
@@ -122,20 +131,7 @@
 
 <!-- jQuery -->
 <div th:insert="~{global-script}"></div>
-<script>
-  $(function () {
-    $('#pod-list').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      "responsive": true,
-    });
-
-  });
-
+<script th:src="@{/js/pod-list.js}">
 </script>
 </body>
 </html>
