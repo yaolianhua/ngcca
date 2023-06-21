@@ -260,10 +260,15 @@ public class KubernetesClusterStatistics {
     public static class PodMetrics {
         private String namespace;
         private String pod;
+        private List<Container> containers = new ArrayList<>();
         private String status;
         private RefNode refNode;
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
+
+        public boolean onlyOneContainer() {
+            return containers.size() == 1;
+        }
 
         @Data
         @NoArgsConstructor
@@ -273,5 +278,13 @@ public class KubernetesClusterStatistics {
             private String ip;
             private String name;
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Container {
+        private String name;
     }
 }

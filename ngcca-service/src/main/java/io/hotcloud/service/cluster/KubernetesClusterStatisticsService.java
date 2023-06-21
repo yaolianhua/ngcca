@@ -287,9 +287,15 @@ public class KubernetesClusterStatisticsService {
                 .name(podInfo.getSpec().getNodeName())
                 .build();
 
+        List<KubernetesClusterStatistics.Container> containers = podInfo.getSpec().getContainers()
+                .stream()
+                .map(e -> KubernetesClusterStatistics.Container.builder().name(e.getName()).build())
+                .toList();
+
         return KubernetesClusterStatistics.PodMetrics.builder()
                 .namespace(namespace)
                 .pod(pod)
+                .containers(containers)
                 .status(podInfo.getStatus().getPhase())
                 .refNode(refNode)
                 .cpuMilliCoresUsage(Math.round(cpu))
