@@ -1,5 +1,7 @@
 package io.hotcloud.web.service;
 
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.module.application.ApplicationInstanceStatistics;
@@ -42,18 +44,29 @@ public class StatisticsService {
         Assert.hasText(userid, "user id is null");
         User user = userApi.find(userid);
 
-        TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
-        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
-        ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
-        KubernetesClusterStatistics kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics(user.getUsername());
+        TemplateInstanceStatistics templateStatistics;
+        BuildPackStatistics buildPackStatistics;
+        ApplicationInstanceStatistics applicationInstanceStatistics;
+        KubernetesClusterStatistics kubernetesClusterStatistics;
+        Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
-        return Statistics.builder()
+        templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
+        buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
+        applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
+
+        try {
+            kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics(user.getUsername());
+        } catch (Exception e) {
+            Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
+            kubernetesClusterStatistics = new KubernetesClusterStatistics();
+        }
+        return statisticsBuilder
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .applications(applicationInstanceStatistics)
                 .clusterStatistics(kubernetesClusterStatistics)
-                .namespace(user.getNamespace())
-                .user(user)
+                .namespace(null)
+                .user(null)
                 .build();
     }
 
@@ -64,13 +77,23 @@ public class StatisticsService {
      */
     public Statistics statistics() {
 
-        TemplateInstanceStatistics templateStatistics = templateInstanceStatisticsService.statistics("");
-        BuildPackStatistics buildPackStatistics = buildPackStatisticsService.statistics("");
-        ApplicationInstanceStatistics applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
-        KubernetesClusterStatistics kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics();
-        Collection<User> users = userApi.users();
+        TemplateInstanceStatistics templateStatistics;
+        BuildPackStatistics buildPackStatistics;
+        ApplicationInstanceStatistics applicationInstanceStatistics;
+        KubernetesClusterStatistics kubernetesClusterStatistics;
+        Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
-        return Statistics.builder()
+        templateStatistics = templateInstanceStatisticsService.statistics("");
+        buildPackStatistics = buildPackStatisticsService.statistics("");
+        applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
+        Collection<User> users = userApi.users();
+        try {
+            kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics();
+        } catch (Exception e) {
+            Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
+            kubernetesClusterStatistics = new KubernetesClusterStatistics();
+        }
+        return statisticsBuilder
                 .users(users)
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
@@ -79,6 +102,7 @@ public class StatisticsService {
                 .namespace(null)
                 .user(null)
                 .build();
+
     }
 
     /**
