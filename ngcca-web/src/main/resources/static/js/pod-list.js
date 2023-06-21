@@ -23,11 +23,12 @@ $(function () {
 
 
 function logs(namespace, pod) {
+    $('#modal-pod-log').modal('show');
     axios.get(POD_API + "/" + namespace + '/' + pod + "/log?tail=500")
         .then(response => {
             // Populate data into table
             codemirror.setValue(response.data)
-            $('#modal-pod-log').modal('show');
+            codemirror.refresh();
         })
         .catch(error => {
             fail(error);
