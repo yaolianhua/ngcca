@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -218,10 +221,18 @@ public class KubernetesClusterStatistics {
         private String kubeletVersion;
         private String architecture;
         private String osImage;
+
+        private Map<String, String> labels = new HashMap<>();
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
         private long cpuMilliCoresCapacity;
         private long memoryMegabyteCapacity;
+
+        public String getLabelShow() {
+            return this.labels.entrySet().stream()
+                    .map(l -> String.format("%s:%s", l.getKey(), l.getValue()))
+                    .collect(Collectors.joining("\n"));
+        }
 
         public double getCpuUsagePercentage() {
             if (this.cpuMilliCoresUsage == 0 || this.cpuMilliCoresCapacity == 0) {

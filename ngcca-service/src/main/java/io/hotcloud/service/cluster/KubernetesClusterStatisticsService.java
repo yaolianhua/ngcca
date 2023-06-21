@@ -254,6 +254,7 @@ public class KubernetesClusterStatisticsService {
 
         return KubernetesClusterStatistics.NodeMetrics.builder()
                 .node(node)
+                .labels(fabric8Node.getMetadata().getLabels())
                 .ip(internalAddress == null ? "unknown" : internalAddress.getAddress())
                 .status(nodeConditionReady == null ? "unknown" : "Ready")
                 .architecture(nodeStatus.getNodeInfo().getArchitecture())
