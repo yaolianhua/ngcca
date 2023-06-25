@@ -109,8 +109,12 @@
                       th:disabled="${!podmetrics.onlyOneContainer}">日志
               </button>
               <button class="btn btn-secondary" data-target="#modal-pod-yaml"
-                      th:attr="onclick=|yaml('${podmetrics.namespace}','${podmetrics.pod}')|">
-                Yaml
+                      th:attr="onclick=|yaml('${podmetrics.namespace}','${podmetrics.pod}')|">Yaml
+              </button>
+              <button class="btn btn-success" data-placement="top" data-toggle="tooltip" data-trigger="hover focus"
+                      id="pod-svc"
+                      th:disabled="${!podmetrics.existedPodService}"
+                      th:title="${podmetrics.serviceShow}">svc
               </button>
             </td>
 

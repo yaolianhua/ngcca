@@ -27,6 +27,8 @@ $(function () {
         lineNumbers: true,
         readOnly: true
     });
+
+    $('#pod-svc').tooltip();
 });
 
 
