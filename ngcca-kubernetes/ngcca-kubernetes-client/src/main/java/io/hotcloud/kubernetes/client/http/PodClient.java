@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.kubernetes.model.pod.PodCreateRequest;
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.util.Yaml;
 
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,17 @@ public interface PodClient {
      * @return {@link Pod}
      */
     Pod read(String namespace, String pod);
+
+    /**
+     * Read namespaced pod yaml
+     *
+     * @param namespace namespace
+     * @param pod       pod name
+     * @return pod yaml
+     */
+    default String readYaml(String namespace, String pod) {
+        return Yaml.dump(this.read(namespace, pod));
+    }
 
     /**
      * Read namespaced PodList
