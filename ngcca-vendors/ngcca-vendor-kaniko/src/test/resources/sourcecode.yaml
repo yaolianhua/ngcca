@@ -30,8 +30,11 @@ spec:
             - --push-retry=3
             - --dockerfile=/workspace/Dockerfile
             - --log-format=color
+            - --log-timestamp=true
             - --force=false
             - --verbosity=info
+            - --cache=true
+            - --cache-run-layers=true
           image: harbor.local:5000/library/kaniko:20221029
           imagePullPolicy: IfNotPresent
           name: kaniko
