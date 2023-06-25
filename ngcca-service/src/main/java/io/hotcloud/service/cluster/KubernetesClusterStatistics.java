@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -263,11 +260,16 @@ public class KubernetesClusterStatistics {
         private List<Container> containers = new ArrayList<>();
         private String status;
         private RefNode refNode;
+        private Set<RefService> refServices = new HashSet<>();
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
 
         public boolean onlyOneContainer() {
             return containers.size() == 1;
+        }
+
+        public boolean existedPodService() {
+            return !refServices.isEmpty();
         }
 
         @Data
@@ -277,6 +279,35 @@ public class KubernetesClusterStatistics {
         public static class RefNode {
             private String ip;
             private String name;
+        }
+
+        public String getServiceShow() {
+            StringBuilder show = new StringBuilder();
+            for (RefService refService : this.getRefServices()) {
+                if (refService == null) {
+                    return "<none>";
+                }
+
+                String svc = "name: " + refService.getName() + "\n" +
+                        "type: " + refService.getType() + "\n" +
+                        "clusterIP: " + refService.getClusterIp() + "\n" +
+                        "ports: " + refService.getPorts() + "\n" +
+                        "--------------------------------------\n";
+                show.append(svc);
+            }
+
+            return show.toString();
+        }
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        public static class RefService {
+            private String type;
+            private String name;
+            private String clusterIp;
+            private String ports;
         }
     }
 

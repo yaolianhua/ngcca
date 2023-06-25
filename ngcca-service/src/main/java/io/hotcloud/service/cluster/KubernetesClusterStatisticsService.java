@@ -9,9 +9,7 @@ import io.hotcloud.kubernetes.client.http.*;
 import io.hotcloud.module.security.user.UserApi;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -427,6 +425,32 @@ public class KubernetesClusterStatisticsService {
                 .name(podInfo.getSpec().getNodeName())
                 .build();
 
+        //
+        List<io.fabric8.kubernetes.api.model.Service> serviceList = serviceClient.readList(namespace, Map.of()).getItems();
+        Set<KubernetesClusterStatistics.PodMetrics.RefService> refServices = new HashSet<>();
+        for (io.fabric8.kubernetes.api.model.Service service : serviceList) {
+            Map<String, String> podLabels = podInfo.getMetadata().getLabels();
+            Map<String, String> serviceSelector = service.getSpec().getSelector();
+
+            for (Map.Entry<String, String> entry : serviceSelector.entrySet()) {
+                if (podLabels.containsKey(entry.getKey()) && podLabels.get(entry.getKey()).equals(entry.getValue())) {
+                    String ports = service.getSpec().getPorts()
+                            .stream()
+                            .map(e -> String.format("%s:%s/%s", e.getPort(), e.getNodePort() == null ? "<none>" : e.getNodePort(), e.getProtocol()))
+                            .collect(Collectors.joining(","));
+                    //
+                    KubernetesClusterStatistics.PodMetrics.RefService refService = KubernetesClusterStatistics.PodMetrics.RefService.builder()
+                            .clusterIp(service.getSpec().getClusterIP())
+                            .type(service.getSpec().getType())
+                            .name(service.getMetadata().getName())
+                            .ports(ports)
+                            .build();
+                    refServices.add(refService);
+                }
+            }
+        }
+
+
         List<KubernetesClusterStatistics.Container> containers = podInfo.getSpec().getContainers()
                 .stream()
                 .map(e -> KubernetesClusterStatistics.Container.builder().name(e.getName()).build())
@@ -438,6 +462,7 @@ public class KubernetesClusterStatisticsService {
                 .containers(containers)
                 .status(podInfo.getStatus().getPhase())
                 .refNode(refNode)
+                .refServices(refServices)
                 .cpuMilliCoresUsage(Math.round(cpu))
                 .memoryMegabyteUsage(Math.round(memory))
                 .build();
