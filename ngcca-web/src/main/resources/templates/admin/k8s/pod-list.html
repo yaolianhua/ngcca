@@ -16,6 +16,7 @@
   <div th:insert="~{admin/sidebar}"></div>
 
   <div th:insert="~{admin/k8s/pod-log-modal}"></div>
+  <div th:insert="~{admin/k8s/pod-yaml-modal}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -106,6 +107,10 @@
               <button class="btn btn-info" data-target="#modal-pod-log"
                       th:attr="onclick=|logs('${podmetrics.namespace}','${podmetrics.pod}')|"
                       th:disabled="${!podmetrics.onlyOneContainer}">日志
+              </button>
+              <button class="btn btn-secondary" data-target="#modal-pod-yaml"
+                      th:attr="onclick=|yaml('${podmetrics.namespace}','${podmetrics.pod}')|">
+                Yaml
               </button>
             </td>
 
