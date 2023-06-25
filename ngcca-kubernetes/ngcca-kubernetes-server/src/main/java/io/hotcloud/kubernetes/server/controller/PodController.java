@@ -125,6 +125,21 @@ public class PodController {
         return ResponseEntity.ok(read);
     }
 
+    @GetMapping("/{namespace}/{pod}/yaml")
+    @Operation(
+            summary = "Pod yaml read",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "namespace", description = "kubernetes namespace"),
+                    @Parameter(name = "pod", description = "pod name")
+            }
+    )
+    public ResponseEntity<String> podYamlRead(@PathVariable String namespace,
+                                              @PathVariable String pod) {
+        String yaml = podApi.readYaml(namespace, pod);
+        return ResponseEntity.ok(yaml);
+    }
+
     @PatchMapping("/{namespace}/{pod}/annotations")
     @Operation(
             summary = "Pod annotation add",

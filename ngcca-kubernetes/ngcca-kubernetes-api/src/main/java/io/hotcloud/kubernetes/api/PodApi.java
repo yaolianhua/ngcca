@@ -120,6 +120,17 @@ public interface PodApi {
     }
 
     /**
+     * Read namespaced pod yaml
+     *
+     * @param namespace namespace
+     * @param pod       pod name
+     * @return pod yaml
+     */
+    default String readYaml(String namespace, String pod) {
+        return Yaml.dump(this.read(namespace, pod));
+    }
+
+    /**
      * Read PodList all namespace
      *
      * @return {@link PodList}
