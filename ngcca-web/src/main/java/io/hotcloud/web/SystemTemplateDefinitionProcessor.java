@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -49,6 +50,18 @@ public class SystemTemplateDefinitionProcessor implements RunnerProcessor {
 
         for (TemplateDefinition definition : templateDefinitions) {
             try {
+                TemplateDefinition existed = templateDefinitionService.findByName(definition.getName());
+                if (Objects.nonNull(existed)) {
+                    existed.setVersion(definition.getVersion());
+                    existed.setShortDesc(definition.getShortDesc());
+                    existed.setDescription(definition.getDescription());
+                    existed.setLogo(definition.getLogo());
+                    existed.setName(definition.getName());
+                    //update definition
+                    templateDefinitionService.saveOrUpdate(existed);
+                    continue;
+                }
+                //save definition
                 templateDefinitionService.saveOrUpdate(definition);
             } catch (Exception e) {
                 Log.error(this, null, Event.EXCEPTION, "[" + definition.getName() + "] template definition save or update error: " + e.getMessage());
