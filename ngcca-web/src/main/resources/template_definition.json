@@ -1,0 +1,44 @@
+[
+  {
+    "name": "MONGODB",
+    "version": "5.0",
+    "logo": "/dist/img/template/mongodb.png",
+    "shortDesc": "MongoDB 是一种广泛使用的文档数据库，采用分布式文件存储格式，能够快速处理大量结构化和非结构化数据",
+    "description": "MongoDB 是一种广泛使用的文档数据库，采用分布式文件存储格式，能够快速处理大量结构化和非结构化数据。它是一种开源、高性能、可扩展、分布式的 NoSQL 数据库，并支持复杂查询、单元测试和数据聚合等多种功能。MongoDB 采用 BSON（一种二进制编码格式）来存储和表示数据，可以通过类似 SQL 的查询语言进行查询和操作。MongoDB 还具有灵活的数据模型和高可用性、自动分片等特点，使得它在互联网应用开发中被广泛应用"
+  },
+  {
+    "name": "MINIO",
+    "version": "RELEASE.2023-06-09T07-32-12Z",
+    "logo": "/dist/img/template/minio.png",
+    "shortDesc": "MinIO是一种开源的对象存储服务，可以在任何硬件和操作系统上运行",
+    "description": "MinIO是一种开源的对象存储服务，可以在任何硬件和操作系统上运行。它具有高可用性、高性能和可扩展性，并兼容Amazon S3 API，因此与AWS生态系统中的各种工具和应用程序无缝集成。 MinIO采用分布式架构，可以将数据存储在多个节点上，保证数据冗余和可靠性。它还支持数据加密、访问控制、版本控制等高级功能。MinIO适用于云原生应用程序、大数据分析、备份和恢复等场景"
+  },
+  {
+    "name": "REDIS",
+    "version": "7.0",
+    "logo": "/dist/img/template/redis.png",
+    "shortDesc": "Redis是一种开源的高性能键值存储系统，可以支持多种数据结构，例如：字符串、哈希表、列表、集合和有序集合等",
+    "description": "Redis是一种开源的高性能键值存储系统，可以支持多种数据结构，例如：字符串、哈希表、列表、集合和有序集合等。Redis 的特点包括：内存存储、持久化、高速读写、分布式部署和自带复制等，使得它在缓存、队列、实时统计分析等场景下被广泛应用。Redis还提供了丰富的命令和客户端库，支持多种编程语言和应用程序。除此之外，Redis 还提供了事务、Lua 脚本、发布/订阅等高级功能，可以满足各种复杂的数据处理需求"
+  },
+  {
+    "name": "REDISINSIGHT",
+    "version": "1.14.0",
+    "logo": "/dist/img/template/redisinsight.png",
+    "shortDesc": "RedisInsight是一种开源的GUI管理工具，用于监视、管理和调试Redis数据库",
+    "description": "RedisInsight是一种开源的GUI管理工具，用于监视、管理和调试Redis数据库。它提供了直观的Web界面，支持多个Redis实例的管理，并提供了实时监控、性能分析、键值查看和操作等功能。RedisInsight可以帮助用户更方便地理解和管理Redis数据，例如：查看内存占用情况、慢查询、命令执行时间和热点键等信息，从而优化应用程序的性能和可靠性。RedisInsight还支持在云端或本地部署，以满足不同场景下的需求"
+  },
+  {
+    "name": "MYSQL",
+    "version": "8.0.27",
+    "logo": "/dist/img/template/mysql.png",
+    "shortDesc": "MySQL是一种开源的关系型数据库管理系统，由Oracle公司维护和支持",
+    "description": "MySQL是一种开源的关系型数据库管理系统，由Oracle公司维护和支持。它是最流行的关系型数据库之一，用于存储结构化数据，并提供了广泛的功能，例如：ACID事务、索引、视图、备份和复制等。MySQL 支持多种编程语言和操作系统，具有高速、稳定和可扩展性等优点。MySQL还提供了多个版本，包括社区版和企业版等，可以根据需求选择不同的版本。MySQL 适用于Web应用程序、企业应用程序和大数据分析等领域"
+  },
+  {
+    "name": "RABBITMQ",
+    "version": "3.9-management",
+    "logo": "/dist/img/template/rabbitmq.png",
+    "shortDesc": "RabbitMQ是一种开源的消息中间件，实现了高效、可靠的异步消息传递",
+    "description": "RabbitMQ是一种开源的消息中间件，实现了高效、可靠的异步消息传递。它采用AMQP（Advanced Message Queuing Protocol）协议作为消息传递的标准，支持多种编程语言和平台，并提供了许多高级特性，例如：灵活的路由规则、确认机制、持久化、事务支持和集群部署等。RabbitMQ 可以用于解耦分布式应用程序之间的通信，降低系统间依赖性，也可以用于实现消息队列、任务调度等应用场景"
+  }
+]
