@@ -34,7 +34,7 @@ function userPaging() {
 }
 
 //user save
-function userS() {
+function userSave() {
     let data = {};
     let value = $('#user-form').serializeArray();
     $.each(value, function (index, item) {
@@ -58,7 +58,7 @@ function userS() {
 }
 
 //user edit
-function userES() {
+function userEditSave() {
     let data = {};
     let value = $('#user-edit-form').serializeArray();
     $.each(value, function (index, item) {
@@ -81,28 +81,32 @@ function userES() {
 }
 
 //user edit view
-function userEP(id) {
+function userEditPage(e) {
+    let id = $(e).data("user-id");
     $('#users-fragment').load(USER_EDIT_VIEWS + id, function () {
 
     });
 }
 
 //user detail view
-function userDP(id, endpoint) {
+function userDetailPage(e) {
+    let id = $(e).data("user-id");
+    let endpoint = $(e).data("endpoint");
     $('#users-fragment').load(USER_DETAIL_VIEWS + id, function () {
         dropzone(id, endpoint);
     });
 }
 
 //user list
-function users() {
+function usersPage() {
     $('#users-fragment').load(USER_LIST_VIEWS, function () {
         userPaging();
     });
 }
 
 //user delete
-function userD(id) {
+function userDelete(e) {
+    let id = $(e).data("user-id");
     swal.fire({
         title: '确认删除?',
         text: '删除用户会删除所有与此用户相关的数据和资源，谨慎操作!',
@@ -130,7 +134,8 @@ function userD(id) {
 }
 
 //user on
-function userOn(user) {
+function userOn(e) {
+    let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/true')
         .then(response => {
             $('#users-fragment').load(USER_LIST_VIEWS, function () {
@@ -144,7 +149,8 @@ function userOn(user) {
 }
 
 //user off
-function userOff(user) {
+function userOff(e) {
+    let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/false')
         .then(response => {
             $('#users-fragment').load(USER_LIST_VIEWS, function () {
@@ -160,7 +166,7 @@ function userOff(user) {
 //user avatar save
 let avatar;
 
-function useravatarS() {
+function avatarSave() {
     if (avatar === '' || avatar === undefined || avatar === null || avatar === 'null') {
         fail('请上传头像');
         return;
