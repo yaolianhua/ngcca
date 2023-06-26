@@ -228,7 +228,7 @@ public class KubernetesClusterStatistics {
         public String getLabelShow() {
             return this.labels.entrySet().stream()
                     .map(l -> String.format("%s:%s", l.getKey(), l.getValue()))
-                    .collect(Collectors.joining("\n"));
+                    .collect(Collectors.joining("<br>"));
         }
 
         public double getCpuUsagePercentage() {

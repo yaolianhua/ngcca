@@ -127,8 +127,9 @@
               <a th:text="${nodemetrics.osImage}"></a>
             </td>
             <td>
-              <a data-placement="top" data-toggle="tooltip" data-trigger="hover focus" href="#" id="node-label"
-                 th:title="${nodemetrics.labelShow}">标签</a>
+              <button class="btn btn-info" id="node-label" onclick="showlabels(this)"
+                      th:data-node-label="${nodemetrics.labelShow}">标签
+              </button>
             </td>
           </tr>
 
@@ -153,11 +154,7 @@
 
 <!-- jQuery -->
 <div th:insert="~{global-script}"></div>
-<script>
-  $(function () {
-    $('#node-label').tooltip();
-  })
-
+<script th:src="@{/js/node-list.js}">
 </script>
 </body>
 </html>
