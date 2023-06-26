@@ -27,8 +27,8 @@ ngcca:
     push-timeout-seconds: 300
 
   kubernetes-agent:
-    host:
-    port:
+#    host: localhost
+    #    port: 1400
     domain-name: k8s-agent.linux.local
   web-server:
     host: localhost
