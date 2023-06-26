@@ -1,5 +1,6 @@
 const POD_API = "/v1/kubernetes/pods";
-let codemirror;
+let logcodemirror;
+let yamlcodemirror;
 $(function () {
     //分页
     $('#pod-list').DataTable({
