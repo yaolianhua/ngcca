@@ -53,9 +53,10 @@
                 </div>
                 <div class="card-footer">
                   <div class="text-right">
-                    <a class="btn btn-sm bg-teal" th:attr="onclick=|instanceDeploy('${definition.name}')|">
+                    <button class="btn btn-sm bg-teal" onclick="instanceDeploy(this)"
+                            th:data-definition-name="${definition.name}">
                       <i class="fas fa-cloud">部署</i>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
