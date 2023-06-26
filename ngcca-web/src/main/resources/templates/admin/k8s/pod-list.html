@@ -111,10 +111,9 @@
               <button class="btn btn-secondary" data-target="#modal-pod-yaml"
                       th:attr="onclick=|yaml('${podmetrics.namespace}','${podmetrics.pod}')|">Yaml
               </button>
-              <button class="btn btn-success" data-placement="top" data-toggle="tooltip" data-trigger="hover focus"
-                      id="pod-svc"
-                      th:disabled="${!podmetrics.existedPodService}"
-                      th:title="${podmetrics.serviceShow}">服务端口
+              <button class="btn btn-success" id="pod-svc" onclick="showsvc(this)"
+                      th:data-svc-show="${podmetrics.serviceShow}"
+                      th:disabled="${!podmetrics.existedPodService}">服务端口
               </button>
             </td>
 

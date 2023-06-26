@@ -35,3 +35,12 @@ function fail(error) {
     console.log(error);
     toastr.error('操作失败[' + error.response.data.message + ']');
 }
+
+const animate_swal = Swal.mixin({
+    showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+    }
+})

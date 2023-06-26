@@ -28,9 +28,15 @@ $(function () {
         readOnly: true
     });
 
-    $('#pod-svc').tooltip();
 });
 
+function showsvc(e) {
+    let svc = $(e).data("svc-show");
+    animate_swal.fire({
+        title: "服务端口信息",
+        html: svc
+    })
+}
 
 function logs(namespace, pod) {
     $('#modal-pod-log').modal('show');
