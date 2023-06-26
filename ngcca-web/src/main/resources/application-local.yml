@@ -27,13 +27,15 @@ ngcca:
     push-timeout-seconds: 300
 
   kubernetes-agent:
-#    host: localhost
+    #    host: localhost
     #    port: 1400
     domain-name: k8s-agent.linux.local
   web-server:
     host: localhost
     port: 4000
     endpoint:
+  application:
+    dot-suffix-domain: ".k8s.linux-local"
 logging:
   level:
     io.hotcloud.common.log: debug
