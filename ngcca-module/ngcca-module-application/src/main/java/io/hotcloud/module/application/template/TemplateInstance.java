@@ -47,4 +47,8 @@ public class TemplateInstance {
     public boolean isDeploying() {
         return !success && progress != 100;
     }
+
+    public boolean hasIngress() {
+        return this.ingress != null && !this.ingress.isBlank();
+    }
 }

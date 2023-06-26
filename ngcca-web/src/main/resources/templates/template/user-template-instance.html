@@ -11,15 +11,17 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    <div th:insert="~{navbar}"></div>
+  <div th:insert="~{navbar}"></div>
 
   <div th:insert="~{sidebar}"></div>
 
+  <div th:insert="~{template/template-instance-yaml-modal}"></div>
+  <div th:insert="~{template/template-instanceIngress-yaml-modal}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-      <div th:insert="~{content-header}"></div>
+    <div th:insert="~{content-header}"></div>
     <!-- /.content-header -->
 
     <!-- Main content -->

@@ -1,8 +1,6 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.module.application.template.TemplateDefinition;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
-import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.web.Views;
@@ -45,13 +43,6 @@ public class UserTemplateViewsController {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
             return Views.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
-        }
-        if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            TemplateInstance instance = templateInstanceService.findOne(id);
-            model.addAttribute(WebConstant.TEMPLATE_INSTANCE, instance);
-            TemplateDefinition definition = templateDefinitionService.findByNameIgnoreCase(instance.getName());
-            model.addAttribute(WebConstant.TEMPLATE_DEFINITION, definition);
-            return Views.USER_TEMPLATE_INSTANCE_DETAIL_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
         return Views.USER_TEMPLATE_INSTANCE;

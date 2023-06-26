@@ -13,35 +13,51 @@
             <table class="table table-striped projects">
                 <thead>
                 <tr>
-                    <th style="width: 20%">
-                        实例名称
+                    <th style="width: 10%">
+                        实例
                     </th>
-                    <th style="width: 20%">
-                        版本
+                    <th style="width: 10%">
+                        命名空间
                     </th>
-                    <th style="width: 20%">
+                    <th style="width: 10%">
+                        服务端口
+                    </th>
+                    <th style="width: 10%">
                         进度
                     </th>
-                    <th class="text-center" style="width: 20%">
+                    <th style="width: 10%">
                         部署结果
                     </th>
-                    <th class="text-center" style="width: 20%">
+                    <th style="width: 20%">
+                        Ingress
+                    </th>
+                    <th style="width: 10%">
+                        LoadBalancer IP
+                    </th>
+                    <th style="width: 15%">
                         操作
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="instance: ${collection}">
-                    <td>
-                        <a th:text="${instance.name}">
-                        </a>
+                    <td class="project-state text-left">
+                        <span class="badge badge-info" th:text="${instance.name}"></span>
                         <br/>
-                        <small th:text="${instance.createdAt}">
-                        </small>
+                        <small class="badge badge-primary" th:text="${instance.createdAt}"></small>
+                        <br/>
+                        <small class="badge badge-secondary" th:text="${instance.version}"></small>
                     </td>
                     <td>
-                        <a th:text="${instance.version}">
+                        <a th:text="${instance.namespace}">
                         </a>
+                    </td>
+                    <td class="project-state text-left">
+                        <span class="badge badge-info" th:text="${instance.service}"></span>
+                        <br>
+                        Port：<span class="badge badge-primary" th:text="${instance.targetPorts}"></span>
+                        <br>
+                        NodePort：<span class="badge badge-secondary" th:text="${instance.nodePorts}"></span>
                     </td>
                     <td class="project_progress">
                         <div class="progress progress-sm">
@@ -51,21 +67,37 @@
                         </div>
                         <small th:text="${instance.progress} + '% complete'"></small>
                     </td>
-                    <td class="project-state">
-                <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"
-                      th:text="${instance.deploying} ? '部署中' : (${instance.success} ? '部署成功' : '部署失败')"></span>
+                    <td class="project-state text-left">
+                        <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"
+                              th:text="${instance.deploying} ? '部署中' : (${instance.success} ? '部署成功' : '部署失败')">
+                        </span>
+                        <span data-placement="top" data-toggle="tooltip" data-trigger="hover focus" id="instance-msg"
+                              th:title="${instance.message}"><i class="fa-solid fa-comment-dots"></i></span>
                     </td>
-                    <td class="project-actions text-right">
-                        <a class="btn btn-primary btn-sm" th:attr="onclick=|instanceDetail('${instance.id}')|">
-                            <i class="fas fa-folder">
-                            </i>
-                            详情
-                        </a>
-                        <a class="btn btn-danger btn-sm" th:attr="onclick=|instanceDelete('${instance.id}')|">
-                            <i class="fas fa-trash">
-                            </i>
-                            删除
-                        </a>
+                    <td class="project-state text-left">
+                        <span class="badge badge-secondary"
+                              th:text="${#strings.isEmpty(instance.host) ? '<none>' : instance.host}"></span>
+                    </td>
+                    <td>
+                        <a th:text="${#strings.isEmpty(instance.loadBalancerIngressIp) ? '<none>' : instance.loadBalancerIngressIp}"></a>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm"
+                                onclick="instanceYaml(this)"
+                                th:data-instance-id="${instance.id}">
+                            实例 Yaml
+                        </button>
+                        <button class="btn btn-secondary btn-sm"
+                                onclick="instanceIngressYaml(this)"
+                                th:data-instance-id="${instance.id}"
+                                th:disable="${!instance.hasIngress}">
+                            Ingress Yaml
+                        </button>
+                        <button class="btn btn-danger btn-sm"
+                                onclick="instanceDelete(this)"
+                                th:data-instance-id="${instance.id}">
+                            删除实例
+                        </button>
                     </td>
                 </tr>
                 </tbody>

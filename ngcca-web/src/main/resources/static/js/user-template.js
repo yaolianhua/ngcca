@@ -1,15 +1,34 @@
 //初始化常量
 const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
 const USER_TEMPLATE_LIST_VIEWS = "/template/instances?action=list";
-const USER_TEMPLATE_DETAIL_VIEWS = "/template/instances?action=detail&id=";
 
 let intervalId;
 
+let instanceYamlCodeMirror;
+let instanceIngressYamlCodeMirror;
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
     intervalId = setInterval('instances()', 5000);
+
+    //instance yaml
+    instanceYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-template-instance-yaml"), {
+        mode: "yaml",
+        theme: "monokai",
+        lineNumbers: true,
+        readOnly: true
+    });
+    //instance ingress yaml
+    instanceIngressYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-template-instanceIngress-yaml"), {
+        mode: "yaml",
+        theme: "monokai",
+        lineNumbers: true,
+        readOnly: true
+    });
+
+    //tooltip
+    $('#instance-msg').tooltip();
 });
 
 
@@ -21,20 +40,32 @@ const swal = Swal.mixin({
     buttonsStyling: false
 })
 
-//user template instance detail view
-function instanceDetail(id) {
-    clearInterval(intervalId);
-    $('#user-instance-fragment').load(USER_TEMPLATE_DETAIL_VIEWS + id, function () {
-        // CodeMirror
-        CodeMirror.fromTextArea(document.getElementById("codemirror-yaml"), {
-            mode: "yaml",
-            theme: "monokai"
+function instanceYaml(e) {
+    let id = $(e).data("instance-id");
+    $('#modal-template-instance-yaml').modal('show');
+    axios.get(TEMPLATE_INSTANCE_API + "/" + id)
+        .then(response => {
+            // Populate data into table
+            instanceYamlCodeMirror.setValue(response.data.yaml)
+            instanceYamlCodeMirror.refresh();
+        })
+        .catch(error => {
+            fail(error);
         });
-        CodeMirror.fromTextArea(document.getElementById("codemirror-ingress"), {
-            mode: "yaml",
-            theme: "monokai"
+}
+
+function instanceIngressYaml(e) {
+    let id = $(e).data("instance-id");
+    $('#modal-template-instanceIngress-yaml').modal('show');
+    axios.get(TEMPLATE_INSTANCE_API + "/" + id)
+        .then(response => {
+            // Populate data into table
+            instanceIngressYamlCodeMirror.setValue(response.data.ingress)
+            instanceIngressYamlCodeMirror.refresh();
+        })
+        .catch(error => {
+            fail(error);
         });
-    });
 }
 
 //user template instance list
@@ -45,7 +76,8 @@ function instances() {
 }
 
 //user template instance delete
-function instanceDelete(id) {
+function instanceDelete(e) {
+    let id = $(e).data("instance-id");
     swal.fire({
         title: '确认删除?',
         text: '删除实例会删除所有实例相关的服务组件，谨慎操作!',

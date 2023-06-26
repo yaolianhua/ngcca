@@ -6,6 +6,7 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
+import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.service.application.template.TemplateInstanceCollectionQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,11 +26,14 @@ import static io.hotcloud.common.model.WebResponse.*;
 public class TemplateInstanceController {
 
     private final TemplateInstancePlayer templateInstancePlayer;
+    private final TemplateInstanceService templateInstanceService;
     private final TemplateInstanceCollectionQuery collectionQuery;
 
     public TemplateInstanceController(TemplateInstancePlayer templateInstancePlayer,
+                                      TemplateInstanceService templateInstanceService,
                                       TemplateInstanceCollectionQuery collectionQuery) {
         this.templateInstancePlayer = templateInstancePlayer;
+        this.templateInstanceService = templateInstanceService;
         this.collectionQuery = collectionQuery;
     }
 
@@ -57,6 +61,18 @@ public class TemplateInstanceController {
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         templateInstancePlayer.delete(id);
         return accepted();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Get template instance",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "id", description = "template instance id")
+            }
+    )
+    public ResponseEntity<TemplateInstance> findOne(@PathVariable("id") String id) {
+        return ResponseEntity.ok(templateInstanceService.findOne(id));
     }
 
     @GetMapping
