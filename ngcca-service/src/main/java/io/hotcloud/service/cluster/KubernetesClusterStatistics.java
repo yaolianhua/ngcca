@@ -288,11 +288,11 @@ public class KubernetesClusterStatistics {
                     return "<none>";
                 }
 
-                String svc = "name: " + refService.getName() + "\n" +
-                        "type: " + refService.getType() + "\n" +
-                        "clusterIP: " + refService.getClusterIp() + "\n" +
-                        "ports: " + refService.getPorts() + "\n" +
-                        "--------------------------------------\n";
+                String svc = "name: " + refService.getName() + "<br>" +
+                        "type: " + refService.getType() + "<br>" +
+                        "clusterIP: " + refService.getClusterIp() + "<br>" +
+                        "ports: " + refService.getPorts() + "<br>" +
+                        "------------------------------------------------<br>";
                 show.append(svc);
             }
 
