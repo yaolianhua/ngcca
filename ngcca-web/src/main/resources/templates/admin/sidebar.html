@@ -12,7 +12,9 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img alt="User avatar" class="img-circle elevation-2" th:src="${user.avatar}">
+                 <span data-target="#modal-upload-avatar" data-toggle="modal">
+                    <img alt="User Image" class="img-circle elevation-2" th:src="${user.avatar}">
+                </span>
             </div>
             <div class="info">
                 <a class="d-block" href="#"><p th:text="${user.username}"></p></a>

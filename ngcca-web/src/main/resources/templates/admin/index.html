@@ -11,6 +11,7 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
+  <div th:insert="~{avatar-upload-modal}"></div>
   <div th:insert="~{admin/navbar}"></div>
 
   <div th:insert="~{admin/sidebar}"></div>
@@ -178,6 +179,9 @@
       }
     })
 
+    let id = [[ ${user.id}]];
+    let endpoint = [[ ${endpoint}]];
+    dropzone(id, endpoint);
 
   })
 
