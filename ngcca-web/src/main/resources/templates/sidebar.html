@@ -12,11 +12,15 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img alt="User Image" class="img-circle elevation-2" th:src="${user.avatar}">
+                <span data-target="#modal-upload-avatar" data-toggle="modal">
+                    <img alt="User Image" class="img-circle elevation-2" th:src="${user.avatar}">
+                </span>
+
             </div>
             <div class="info">
                 <a class="d-block" href="#" th:text="${user.username}"></a>
             </div>
+            <div id="server-endpoint" th:attr="data-server-endpoint=${endpoint}"></div>
         </div>
 
         <!-- Sidebar Menu -->
@@ -62,3 +66,8 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+<script th:inline="javascript" type="text/javascript">
+    function uploadShow(e) {
+        $('#modal-upload-avatar').modal('show');
+    }
+</script>
