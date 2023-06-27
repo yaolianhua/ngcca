@@ -47,13 +47,15 @@ const animate_swal = Swal.mixin({
 
 //user avatar save
 let avatar;
+const AVATAR_UPLOAD = "/v1/files/upload?bucket=avatar";
 
-function avatarSave() {
+function avatarSave(e) {
     if (avatar === '' || avatar === undefined || avatar === null || avatar === 'null') {
         alert('请上传头像');
         return;
     }
-    let userid = $('#bind-userid').data("userid");
+
+    let userid = $(e).data("user-id");
     let data = {
         "id": userid,
         "avatar": avatar
