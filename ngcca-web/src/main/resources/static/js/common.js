@@ -48,6 +48,7 @@ const animate_swal = Swal.mixin({
 //user avatar save
 let avatar;
 const AVATAR_UPLOAD = "/v1/files/upload?bucket=avatar";
+const USER_API = "/v1/security/users";
 
 function avatarSave(e) {
     if (avatar === '' || avatar === undefined || avatar === null || avatar === 'null') {

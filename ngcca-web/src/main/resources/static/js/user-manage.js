@@ -1,5 +1,4 @@
 //初始化常量
-const USER_API = "/v1/security/users";
 const USER_LIST_VIEWS = "/administrator/user-manage?action=list";
 const USER_EDIT_VIEWS = "/administrator/user-manage?action=edit&id=";
 const USER_DETAIL_VIEWS = "/administrator/user-manage?action=detail&id=";
