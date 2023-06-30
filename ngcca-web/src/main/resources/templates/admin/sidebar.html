@@ -17,7 +17,8 @@
                 </span>
             </div>
             <div class="info">
-                <a class="d-block" href="#"><p th:text="${user.username}"></p></a>
+                <a class="d-block" data-target="#modal-user-profile" data-toggle="modal" href="#"><p
+                        th:text="${user.username}"></p></a>
             </div>
             <div id="server-endpoint" th:attr="data-server-endpoint=${endpoint}"></div>
         </div>

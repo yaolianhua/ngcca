@@ -1,0 +1,34 @@
+<!-- new user modal -->
+<div class="modal fade" id="modal-user-profile">
+
+    <div class="modal-dialog modal-default">
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img alt="User profile picture"
+                         class="profile-user-img img-fluid img-circle"
+                         th:src="${user.avatar}">
+                </div>
+
+                <h3 class="profile-username text-center" th:text="${user.username}"></h3>
+
+                <p class="text-muted text-center" th:text="${user.nickname}"></p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>联系方式</b> <a class="float-right" th:text="${user.mobile}"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>邮箱</b> <a class="float-right" th:text="${user.email}"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>用户状态</b> <a class="float-right"
+                                           th:text="${user.enabled} ? '正常' : '禁用'"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

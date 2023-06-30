@@ -18,7 +18,8 @@
 
             </div>
             <div class="info">
-                <a class="d-block" href="#" th:text="${user.username}"></a>
+                <a class="d-block" data-target="#modal-user-profile" data-toggle="modal" href="#"
+                   th:text="${user.username}"></a>
             </div>
             <div id="server-endpoint" th:attr="data-server-endpoint=${endpoint}"></div>
         </div>
@@ -66,8 +67,3 @@
     </div>
     <!-- /.sidebar -->
 </aside>
-<script th:inline="javascript" type="text/javascript">
-    function uploadShow(e) {
-        $('#modal-upload-avatar').modal('show');
-    }
-</script>
