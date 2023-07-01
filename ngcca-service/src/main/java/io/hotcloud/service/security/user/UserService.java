@@ -1,5 +1,6 @@
 package io.hotcloud.service.security.user;
 
+import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.module.db.entity.UserEntity;
@@ -145,7 +146,10 @@ public class UserService implements UserApi {
     @Override
     public User retrieve(String username) {
         UserEntity entity = userRepository.findByUsername(username);
-        Assert.notNull(entity, "Retrieve user null [" + username + "]");
+        if (entity == null) {
+            Log.warn(this, username, "retrieve user null");
+            return null;
+        }
 
         return buildUser(entity);
     }
