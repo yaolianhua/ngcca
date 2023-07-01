@@ -106,15 +106,15 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
 
     @Override
     public TemplateDefinition findById(String id) {
-        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Template definition not found [" + id + "]"));
-        return existed.toT(TemplateDefinition.class);
+        TemplateDefinitionEntity existed = templateDefinitionRepository.findById(id).orElse(null);
+        return existed == null ? null : existed.toT(TemplateDefinition.class);
     }
 
     @Override
     public TemplateDefinition findByName(String name) {
         TemplateDefinitionEntity entity = templateDefinitionRepository.findByName(name);
         if (null == entity) {
-            throw new ResourceNotFoundException("Template definition not found [" + name + "]");
+            return null;
         }
         return entity.toT(TemplateDefinition.class);
     }
@@ -130,7 +130,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
                 return definition;
             }
         }
-        throw new ResourceNotFoundException("Template definition not found [" + name + "]");
+        return null;
     }
 
     @Override
