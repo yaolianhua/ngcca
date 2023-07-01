@@ -1,0 +1,45 @@
+ngcca:
+  redis:
+    database: 0
+    password: QbMufCD@9WVQ^Hv
+    host: macos.local
+    port: 6379
+  registry:
+    url: harbor.local:5000
+    username: admin
+    password: "QbMufCD@9WVQ^Hv"
+    imagebuild-namespace: image-build-dev
+  minio:
+    access-key: admin
+    secret-key: "QbMufCD@9WVQ^Hv"
+    endpoint: "http://macos.local:9009"
+  mongodb:
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@macos.local:27017/ngcca-integration-test?authSource=admin"
+  openai:
+    api-key: no-key
+    http-proxy:
+      hostname: localhost
+      port: 0
+    http-client-timeout-seconds: 60
+  docker:
+    host: "tcp://macos.local:2375"
+    pull-timeout-seconds: 300
+    push-timeout-seconds: 300
+
+  kubernetes-agent:
+    #    host: localhost
+    #    port: 1400
+    domain-name: k8s-agent.macos.local
+  web-server:
+    host: localhost
+    port: 4000
+    endpoint:
+  application:
+    dot-suffix-domain: ".k8s.macos-local"
+logging:
+  level:
+    io.hotcloud.common.log: debug
+    com.github.dockerjava.api.command: debug
+    com.github.dockerjava.core.command: debug
+
+
