@@ -61,6 +61,12 @@ public class GlobalSessionAspect {
         Map<String, Object> attributes = jwtVerifier.retrieveAttributes(authorization);
         String username = (String) attributes.get("username");
         User user = userApi.retrieve(username);
+        if (Objects.isNull(user)) {
+            if (request.getRequestURI().startsWith(PREFIX_ADMIN)) {
+                return REDIRECT_ADMIN_LOGIN;
+            }
+            return REDIRECT_LOGIN;
+        }
 
         if (!userApi.isAdmin(username) && (request.getRequestURI().startsWith(PREFIX_ADMIN))) {
             return REDIRECT_ADMIN_LOGIN;
