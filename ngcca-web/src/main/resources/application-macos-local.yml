@@ -29,7 +29,7 @@ ngcca:
   kubernetes-agent:
     #    host: localhost
     #    port: 1400
-    domain-name: k8s-agent.macos.local
+    domain-name: k8s-agent.macos-local
   web-server:
     host: localhost
     port: 4000
