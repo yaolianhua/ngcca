@@ -1,7 +1,6 @@
 package io.hotcloud.service.application.template;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
@@ -26,7 +25,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
     private final InstanceTemplateProcessors instanceTemplateProcessors;
     private final TemplateInstanceService templateInstanceService;
-    private final TemplateInstanceActivityLogger activityLogger;
     private final KubectlClient kubectlApi;
     private final NamespaceClient namespaceApi;
     private final UserApi userApi;
@@ -42,7 +40,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
 
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);
         Log.info(this, null, String.format("[%s] user's [%s] template [%s] save", current.getUsername(), templateInstance.getName(), saved.getId()));
-        activityLogger.log(Action.CREATE, saved);
 
         try {
             if (namespaceApi.read(namespace) == null) {
@@ -69,7 +66,6 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         templateInstanceService.delete(id);
         Log.info(this, null,
                 String.format("[%s] template '%s' delete ", find.getName(), id));
-        activityLogger.log(Action.DELETE, find);
 
         try {
             kubectlApi.delete(find.getNamespace(), YamlBody.of(find.getYaml()));

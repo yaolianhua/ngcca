@@ -1,7 +1,6 @@
 package io.hotcloud.service.buildpack;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
@@ -33,7 +32,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
     private final KubectlClient kubectlApi;
     private final NamespaceClient namespaceApi;
     private final BuildPackService buildPackService;
-    private final BuildPackActivityLogger activityLogger;
 
     private void checkBuildTaskHasRunningThenCreateNamespaceOrDefault(User currentUser, BuildImage buildImage) {
         List<BuildPack> buildPacks = buildPackService.findAll(currentUser.getUsername());
@@ -106,7 +104,6 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
         buildPackService.delete(id, physically);
         Log.info(this, null,
                 String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
-        activityLogger.log(Action.DELETE, existBuildPack);
 
         try {
             Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
