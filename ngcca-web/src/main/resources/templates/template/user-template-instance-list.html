@@ -13,16 +13,13 @@
             <table class="table table-striped projects">
                 <thead>
                 <tr>
-                    <th style="width: 10%">
+                    <th style="width: 15%">
                         实例
-                    </th>
-                    <th style="width: 10%">
-                        命名空间
                     </th>
                     <th style="width: 10%">
                         服务端口
                     </th>
-                    <th style="width: 10%">
+                    <th style="width: 15%">
                         进度
                     </th>
                     <th style="width: 10%">
@@ -34,7 +31,7 @@
                     <th style="width: 10%">
                         LoadBalancer IP
                     </th>
-                    <th style="width: 15%">
+                    <th style="width: 20%">
                         操作
                     </th>
                 </tr>
@@ -47,17 +44,15 @@
                         <small class="badge badge-primary" th:text="${instance.createdAt}"></small>
                         <br/>
                         <small class="badge badge-secondary" th:text="${instance.version}"></small>
-                    </td>
-                    <td>
-                        <a th:text="${instance.namespace}">
-                        </a>
+                        <br/>
+                        <small class="badge badge-success" th:text="${instance.namespace}"></small>
                     </td>
                     <td class="project-state text-left">
                         <span class="badge badge-info" th:text="${instance.service}"></span>
                         <br>
-                        Port：<span class="badge badge-primary" th:text="${instance.targetPorts}"></span>
+                        <span class="badge badge-primary" th:text="${instance.targetPorts}"></span>
                         <br>
-                        NodePort：<span class="badge badge-secondary" th:text="${instance.nodePorts}"></span>
+                        <span class="badge badge-secondary" th:text="${instance.nodePorts}"></span>
                     </td>
                     <td class="project_progress">
                         <div class="progress progress-sm">
@@ -75,8 +70,9 @@
                               th:title="${instance.message}"><i class="fa-solid fa-comment-dots"></i></span>
                     </td>
                     <td class="project-state text-left">
-                        <span class="badge badge-secondary"
-                              th:text="${#strings.isEmpty(instance.host) ? '<none>' : instance.host}"></span>
+                        <a class="badge badge-secondary" target="_blank" th:each="ingress : ${instance.ingressList}"
+                           th:href="${'http://' + ingress}"
+                           th:text="${ingress}"></a>
                     </td>
                     <td>
                         <a th:text="${#strings.isEmpty(instance.loadBalancerIngressIp) ? '<none>' : instance.loadBalancerIngressIp}"></a>

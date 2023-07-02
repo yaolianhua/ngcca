@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -50,5 +53,12 @@ public class TemplateInstance {
 
     public boolean hasIngress() {
         return this.ingress != null && !this.ingress.isBlank();
+    }
+
+    public List<String> getIngressList() {
+        if (this.host == null || this.host.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(host.split(",")).collect(Collectors.toList());
     }
 }
