@@ -31,7 +31,7 @@ public class SystemRegistryImageProcessor implements RunnerProcessor {
                 saved.setTag(systemRegistryImageProperties.getTag(name));
                 saved.setValue(systemRegistryProperties.getUrl() + "/" + propertyPair.get(name));
                 registryImageRepository.save(saved);
-                return;
+                continue;
             }
 
             // update info
