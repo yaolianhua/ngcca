@@ -4,5 +4,8 @@ public enum Target {
     //
     BUILDPACK,
     INSTANCE_TEMPLATE,
-    APPLICATION
+    APPLICATION,
+    MINIO,
+    POD,
+    USER
 }

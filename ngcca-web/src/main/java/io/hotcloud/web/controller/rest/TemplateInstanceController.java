@@ -3,11 +3,14 @@ package io.hotcloud.web.controller.rest;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
 import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.service.application.template.TemplateInstanceCollectionQuery;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,6 +48,7 @@ public class TemplateInstanceController {
                     @Parameter(name = "template", description = "template enums", required = true)
             }
     )
+    @Log(action = Action.CREATE, target = Target.INSTANCE_TEMPLATE, activity = "发布模板实例")
     public ResponseEntity<Result<TemplateInstance>> apply(Template template) {
         TemplateInstance templateInstance = templateInstancePlayer.play(template);
         return created(templateInstance);
@@ -58,6 +62,7 @@ public class TemplateInstanceController {
                     @Parameter(name = "id", description = "template instance id")
             }
     )
+    @Log(action = Action.DELETE, target = Target.INSTANCE_TEMPLATE, activity = "删除模板实例")
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         templateInstancePlayer.delete(id);
         return accepted();
@@ -71,6 +76,7 @@ public class TemplateInstanceController {
                     @Parameter(name = "id", description = "template instance id")
             }
     )
+    @Log(action = Action.QUERY, target = Target.INSTANCE_TEMPLATE, activity = "查询模板实例")
     public ResponseEntity<TemplateInstance> findOne(@PathVariable("id") String id) {
         return ResponseEntity.ok(templateInstanceService.findOne(id));
     }
@@ -86,6 +92,7 @@ public class TemplateInstanceController {
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
     )
+    @Log(action = Action.QUERY, target = Target.INSTANCE_TEMPLATE, activity = "查询模板实例列表")
     public ResponseEntity<PageResult<TemplateInstance>> page(@RequestParam(value = "user", required = false) String user,
                                                              @RequestParam(value = "success", required = false) Boolean success,
                                                              @RequestParam(value = "page", required = false) Integer page,

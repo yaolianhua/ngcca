@@ -1,7 +1,10 @@
 package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.application.FileUploadService;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,6 +37,7 @@ public class FilesController {
                     @Parameter(name = "bucket", description = "bucket name")
             }
     )
+    @Log(action = Action.CREATE, target = Target.MINIO, activity = "上传文件")
     public ResponseEntity<Result<String>> upload(@RequestPart("file") MultipartFile file,
                                                  @RequestParam(value = "bucket", required = false) String bucket) {
         String upload = fileUploadService.upload(file, bucket);

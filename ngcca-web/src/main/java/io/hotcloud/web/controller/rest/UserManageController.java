@@ -4,9 +4,12 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.WebResponse;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.service.security.user.UserCollectionQuery;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,6 +39,7 @@ public class UserManageController {
             responses = {@ApiResponse(responseCode = "202")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User object, id can not be null!")
     )
+    @Log(action = Action.UPDATE, target = Target.USER, activity = "编辑用户信息")
     public ResponseEntity<Result<User>> update(@RequestBody User user) {
         User updated = userApi.update(user);
         return WebResponse.accepted(updated);
@@ -50,6 +54,7 @@ public class UserManageController {
                     @Parameter(name = "enable", description = "The giving username will be disable if enable=false", schema = @Schema(allowableValues = {"true", "false"}))
             }
     )
+    @Log(action = Action.UPDATE, target = Target.USER, activity = "编辑用户信息")
     public ResponseEntity<Result<Void>> onOff(@PathVariable("username") String username,
                                               @PathVariable("enable") Boolean enable) {
         userApi.switchUser(username, enable);
@@ -62,6 +67,7 @@ public class UserManageController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User object, id will be auto generate")
     )
+    @Log(action = Action.CREATE, target = Target.USER, activity = "创建用户")
     public ResponseEntity<Result<User>> save(@RequestBody User user) {
         User saved = userApi.save(user);
         return WebResponse.created(saved);
@@ -75,6 +81,7 @@ public class UserManageController {
                     @Parameter(name = "id", description = "user id")
             }
     )
+    @Log(action = Action.DELETE, target = Target.USER, activity = "删除用户信息")
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         userApi.deleteByUserid(id, true);
         return WebResponse.accepted();
@@ -88,6 +95,7 @@ public class UserManageController {
                     @Parameter(name = "id", description = "user id")
             }
     )
+    @Log(action = Action.QUERY, target = Target.USER, activity = "查询用户信息")
     public ResponseEntity<Result<User>> user(@PathVariable("id") String id) {
         User user = userApi.find(id);
         return WebResponse.ok(user);
@@ -101,6 +109,7 @@ public class UserManageController {
                     @Parameter(name = "username", description = "username queried")
             }
     )
+    @Log(action = Action.QUERY, target = Target.USER, activity = "查询用户信息")
     public ResponseEntity<Result<User>> username(@PathVariable("username") String username) {
         User user = userApi.retrieve(username);
         return WebResponse.ok(user);
@@ -117,6 +126,7 @@ public class UserManageController {
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
     )
+    @Log(action = Action.QUERY, target = Target.USER, activity = "查询用户信息列表")
     public ResponseEntity<PageResult<User>> page(@RequestParam(value = "username", required = false) String username,
                                                  @RequestParam(value = "enabled", required = false) Boolean enabled,
                                                  @RequestParam(value = "page", required = false) Integer page,

@@ -1,6 +1,9 @@
 package io.hotcloud.web.controller.rest;
 
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +34,7 @@ public class PodController {
                     @Parameter(name = "tail", description = "tail number")
             }
     )
+    @Log(action = Action.QUERY, target = Target.POD, activity = "查询Pod日志")
     public ResponseEntity<String> podlogs(@PathVariable String namespace,
                                           @PathVariable String pod,
                                           @RequestParam(value = "tail", required = false) Integer tailing) {
@@ -49,6 +53,7 @@ public class PodController {
                     @Parameter(name = "tail", description = "tail number")
             }
     )
+    @Log(action = Action.QUERY, target = Target.POD, activity = "查询Pod日志")
     public ResponseEntity<String> containerLogs(@PathVariable String namespace,
                                                 @PathVariable String pod,
                                                 @PathVariable String container,
@@ -66,6 +71,7 @@ public class PodController {
                     @Parameter(name = "pod", description = "pod name")
             }
     )
+    @Log(action = Action.QUERY, target = Target.POD, activity = "查询Pod资源清单（Yaml）")
     public ResponseEntity<String> podYamlRead(@PathVariable String namespace,
                                               @PathVariable String pod) {
         String yaml = podClient.readYaml(namespace, pod);
