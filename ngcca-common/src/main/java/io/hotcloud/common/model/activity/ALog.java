@@ -48,6 +48,9 @@ public class ALog {
      * activity target name
      */
     private String targetName;
+    private int executeMills;
+    private String method;
+    private String requestIp;
 
     public String getIcon() {
         if (Target.BUILDPACK.name().equalsIgnoreCase(target)) {

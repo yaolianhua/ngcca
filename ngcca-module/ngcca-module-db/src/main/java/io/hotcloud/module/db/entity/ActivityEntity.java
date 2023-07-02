@@ -25,5 +25,8 @@ public class ActivityEntity extends AbstractEntity {
     @Indexed
     private String targetId;
     private String targetName;
+    private int executeMills;
+    private String method;
+    private String requestIp;
 
 }

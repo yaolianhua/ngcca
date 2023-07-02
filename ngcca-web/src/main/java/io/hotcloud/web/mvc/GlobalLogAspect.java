@@ -1,5 +1,6 @@
 package io.hotcloud.web.mvc;
 
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.db.entity.ActivityEntity;
@@ -9,9 +10,9 @@ import io.hotcloud.module.security.user.UserApi;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -36,25 +37,31 @@ public class GlobalLogAspect {
     public void cut() {
     }
 
-    @AfterReturning(value = "cut()", returning = "result")
-    private void log(JoinPoint point, Object result) {
+    @Around(value = "cut()")
+    public Object log(ProceedingJoinPoint point) throws Throwable {
 
+        long start = System.currentTimeMillis();
+        Object result = point.proceed(point.getArgs());
+        long end = System.currentTimeMillis();
         Signature signature = point.getSignature();
         if (!(signature instanceof MethodSignature)) {
-            return;
+            return result;
         }
         Method method = ((MethodSignature) signature).getMethod();
         Log logAnnotation = method.getAnnotation(Log.class);
         if (Objects.isNull(logAnnotation)) {
-            return;
+            return result;
         }
+
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
 
         Action action = logAnnotation.action();
         Target target = logAnnotation.target();
         String activity = logAnnotation.activity();
         String username = "未知";
 
-        if (isLoginMethod()) {
+        if (request.getRequestURI().contains("/login")) {
             for (int i = 0; i < method.getParameters().length; i++) {
                 if ("username".equalsIgnoreCase(method.getParameters()[i].getName())) {
                     username = ((String) point.getArgs()[i]);
@@ -70,16 +77,34 @@ public class GlobalLogAspect {
         entity.setAction(action == null ? "未知" : action.name());
         entity.setTarget(target == null ? "未知" : target.name());
         entity.setDescription(activity == null ? "未知" : activity);
+        entity.setExecuteMills((int) (end - start));
+        entity.setMethod(request.getMethod());
+        entity.setRequestIp(getClientIp(request));
 
         entity.setUser(username);
 
         activityRepository.save(entity);
+
+        return result;
     }
 
-    private boolean isLoginMethod() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
-        return request.getRequestURI().contains("/login");
+    private String getClientIp(HttpServletRequest request) {
+        try {
+            String ip = request.getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+            return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+        } catch (Exception e) {
+            io.hotcloud.common.log.Log.error(this, e.getMessage(), Event.EXCEPTION, "get client ip error");
+            return "unknown";
+        }
     }
 
 }
