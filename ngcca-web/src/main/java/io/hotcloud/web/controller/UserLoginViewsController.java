@@ -1,8 +1,11 @@
 package io.hotcloud.web.controller;
 
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;
 import io.hotcloud.web.Views;
+import io.hotcloud.web.mvc.Log;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
 import jakarta.servlet.http.Cookie;
@@ -30,6 +33,7 @@ public class UserLoginViewsController {
     }
 
     @PostMapping("/login")
+    @Log(action = Action.LOGIN, target = Target.USER, activity = "用户登录")
     public String login(Model model,
                         HttpServletResponse response,
                         @ModelAttribute("username") String username,

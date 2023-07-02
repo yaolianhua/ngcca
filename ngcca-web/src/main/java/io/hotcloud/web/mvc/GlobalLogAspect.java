@@ -6,6 +6,7 @@ import io.hotcloud.module.db.entity.ActivityEntity;
 import io.hotcloud.module.db.entity.ActivityRepository;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -15,7 +16,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -38,7 +43,8 @@ public class GlobalLogAspect {
         if (!(signature instanceof MethodSignature)) {
             return;
         }
-        Log logAnnotation = ((MethodSignature) signature).getMethod().getAnnotation(Log.class);
+        Method method = ((MethodSignature) signature).getMethod();
+        Log logAnnotation = method.getAnnotation(Log.class);
         if (Objects.isNull(logAnnotation)) {
             return;
         }
@@ -46,8 +52,18 @@ public class GlobalLogAspect {
         Action action = logAnnotation.action();
         Target target = logAnnotation.target();
         String activity = logAnnotation.activity();
-        User user = userApi.current();
+        String username = "未知";
 
+        if (isLoginMethod()) {
+            for (int i = 0; i < method.getParameters().length; i++) {
+                if ("username".equalsIgnoreCase(method.getParameters()[i].getName())) {
+                    username = ((String) point.getArgs()[i]);
+                }
+            }
+        } else {
+            User user = userApi.current();
+            username = user.getUsername();
+        }
 
         ActivityEntity entity = new ActivityEntity();
         entity.setCreatedAt(LocalDateTime.now());
@@ -55,10 +71,15 @@ public class GlobalLogAspect {
         entity.setTarget(target == null ? "未知" : target.name());
         entity.setDescription(activity == null ? "未知" : activity);
 
-        entity.setUser(user.getUsername());
-        entity.setNamespace(user.getNamespace());
+        entity.setUser(username);
 
         activityRepository.save(entity);
+    }
+
+    private boolean isLoginMethod() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
+        return request.getRequestURI().contains("/login");
     }
 
 }
