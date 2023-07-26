@@ -32,8 +32,52 @@
                         </li>
                     </ul>
                 </li>
-                <!-- 节点列表 -->
                 <li class="nav-item menu-open">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-gear nav-icon"></i>
+                        <p>
+                            系统管理
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/user-manage}">
+                                <i class="far fa-user-circle nav-icon"></i>
+                                <p>用户管理</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/registryimage}">
+                                <i class="fa-brands fa-docker nav-icon"></i>
+                                <p>镜像列表</p>
+                            </a>
+                        </li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/activity/activity-list}">
+                                <i class="fa-regular fa-file-lines nav-icon"></i>
+                                <p>操作日志</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/administrator/template-manage}">
+                                <i class="fas fa-cubes nav-icon"></i>
+                                <p>模板管理</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item menu-open">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-cloud nav-icon"></i>
+                        <p>
+                            集群管理
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/administrator/k8s-resource/node-list}">
@@ -41,11 +85,6 @@
                                 <p>节点列表</p>
                             </a>
                         </li>
-                    </ul>
-                </li>
-                <!-- Pod列表 -->
-                <li class="nav-item menu-open">
-                    <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/administrator/k8s-resource/pod-list}">
                                 <i class="fa-solid fa-box-open nav-icon"></i>
@@ -55,51 +94,6 @@
                     </ul>
                 </li>
 
-                <!-- 用户管理 -->
-                <li class="nav-item menu-open">
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/administrator/user-manage}">
-                                <i class="far fa-user-circle nav-icon"></i>
-                                <p>用户管理</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- 模板管理 -->
-                <li class="nav-item menu-open">
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/administrator/template-manage}">
-                                <i class="fas fa-cubes nav-icon"></i>
-                                <p>模板管理</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- 镜像管理 -->
-                <li class="nav-item menu-open">
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/administrator/registryimage}">
-                                <i class="fa-brands fa-docker nav-icon"></i>
-                                <p>镜像管理</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- 审计日志 -->
-                <li class="nav-item menu-open">
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/administrator/activity/activity-list}">
-                                <i class="fa-regular fa-file-lines nav-icon"></i>
-                                <p>操作日志</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
