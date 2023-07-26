@@ -11,6 +11,8 @@ public final class Views {
     public static final String K8S_NODE_LIST = "admin/k8s/node-list";
     public static final String K8S_POD_LIST = "admin/k8s/pod-list";
     public static final String REGISTRY_IMAGE_LIST = "admin/registryimage-list";
+    public static final String SYSTEM_ENVIRONMENT_LIST = "admin/env/system-environment-list";
+    public static final String APP_ENVIRONMENT_LIST = "admin/env/app-environment-list";
     public static final String ADMIN_ACTIVITY_LIST = "admin/activity-list";
     public static final String USER_MANAGE_LIST_FRAGMENT = "admin/user-manage/user-list::content";
     public static final String USER_MANAGE_EDIT_FRAGMENT = "admin/user-manage/user-edit::content";
