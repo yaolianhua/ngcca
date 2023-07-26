@@ -1,6 +1,7 @@
 package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateDefinition;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static io.hotcloud.common.model.WebResponse.*;
 
-
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/definition/templates")
 @Tag(name = "Template definition")

@@ -1,6 +1,7 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.service.registry.RegistryImage;
 import io.hotcloud.service.registry.RegistryImageQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import java.util.Collection;
 
 import static io.hotcloud.common.model.WebResponse.ok;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/registryimages")
 @Tag(name = "Registry image")

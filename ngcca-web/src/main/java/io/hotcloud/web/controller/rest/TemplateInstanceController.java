@@ -3,6 +3,7 @@ package io.hotcloud.web.controller.rest;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.application.template.Template;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static io.hotcloud.common.model.WebResponse.*;
 
-
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/templates/instance")
 @Tag(name = "Template instance")

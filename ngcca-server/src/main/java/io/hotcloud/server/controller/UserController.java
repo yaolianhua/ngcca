@@ -1,9 +1,6 @@
 package io.hotcloud.server.controller;
 
-import io.hotcloud.common.model.PageResult;
-import io.hotcloud.common.model.Pageable;
-import io.hotcloud.common.model.Result;
-import io.hotcloud.common.model.WebResponse;
+import io.hotcloud.common.model.*;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.service.security.user.UserCollectionQuery;
@@ -15,9 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/security/users")
 @Tag(name = "Security user")

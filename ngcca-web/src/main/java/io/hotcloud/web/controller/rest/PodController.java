@@ -1,5 +1,6 @@
 package io.hotcloud.web.controller.rest;
 
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.kubernetes.client.http.PodClient;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/kubernetes/pods")
 @Tag(name = "Kubernetes Pod")

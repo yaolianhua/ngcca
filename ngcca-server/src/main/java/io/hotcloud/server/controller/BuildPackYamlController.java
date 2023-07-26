@@ -1,5 +1,6 @@
 package io.hotcloud.server.controller;
 
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.module.buildpack.BuildPackYamlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/buildpacks/yaml")
 @Tag(name = "BuildPack template yaml")

@@ -3,6 +3,7 @@ package io.hotcloud.server.controller;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.module.application.ApplicationForm;
 import io.hotcloud.module.application.ApplicationInstance;
 import io.hotcloud.module.application.ApplicationInstancePlayer;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import static io.hotcloud.common.model.WebResponse.*;
 
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/applications/instance")
 @Tag(name = "Application instance")

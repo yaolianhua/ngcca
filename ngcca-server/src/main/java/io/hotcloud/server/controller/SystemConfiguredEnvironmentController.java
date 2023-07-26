@@ -1,6 +1,7 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.service.env.ConfiguredEnvironmentQuery;
 import io.hotcloud.service.env.EnvironmentProperty;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import java.util.Collection;
 
 import static io.hotcloud.common.model.WebResponse.ok;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/configuredenvironments")
 @Tag(name = "System configured environment")

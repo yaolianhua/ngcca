@@ -2,6 +2,7 @@ package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.vendor.registry.model.RegistryAuthentication;
 import io.hotcloud.vendor.registry.model.RegistryRepository;
 import io.hotcloud.vendor.registry.model.RegistryRepositoryTag;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static io.hotcloud.common.model.WebResponse.okPage;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/registries")
 @Tag(name = "Registry query")

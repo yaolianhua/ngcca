@@ -12,9 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
 @RestController
 @RequestMapping("/v1/security/login")
 @Tag(name = "User login")

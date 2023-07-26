@@ -1,6 +1,7 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.vendor.registry.client.DockerPullClient;
 import io.hotcloud.vendor.registry.client.DockerPushClient;
 import io.hotcloud.vendor.registry.model.DockerPushRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static io.hotcloud.common.model.WebResponse.ok;
 
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/docker/cmd")
 @Tag(name = "Docker command")

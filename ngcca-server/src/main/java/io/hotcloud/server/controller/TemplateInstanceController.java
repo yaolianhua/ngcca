@@ -3,6 +3,7 @@ package io.hotcloud.server.controller;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
@@ -17,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static io.hotcloud.common.model.WebResponse.*;
 
-
-/**
- * @author yaolianhua789@gmail.com
- **/
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/templates/instance")
 @Tag(name = "Template instance")

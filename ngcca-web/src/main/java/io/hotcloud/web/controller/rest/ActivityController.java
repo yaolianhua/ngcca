@@ -1,5 +1,6 @@
 package io.hotcloud.web.controller.rest;
 
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.module.db.entity.ActivityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/activities")
 @Tag(name = "Activity")

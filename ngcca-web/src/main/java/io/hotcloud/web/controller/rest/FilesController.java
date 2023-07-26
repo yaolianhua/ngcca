@@ -1,6 +1,7 @@
 package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.application.FileUploadService;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static io.hotcloud.common.model.WebResponse.created;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/files")
 @Tag(name = "Files")

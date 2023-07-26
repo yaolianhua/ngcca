@@ -1,6 +1,7 @@
 package io.hotcloud.server.controller;
 
 
+import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.service.cluster.KubernetesCluster;
 import io.hotcloud.service.cluster.KubernetesClusterManagement;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@SwaggerBearerAuth
 @RestController
 @RequestMapping("/v1/kubernetes/clusters")
 @Tag(name = "Kubernetes Cluster")
