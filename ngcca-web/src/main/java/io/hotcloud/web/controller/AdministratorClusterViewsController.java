@@ -9,23 +9,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/administrator/k8s-resource")
-public class AdministratorKubernetesResourceViewsController {
+@RequestMapping("/administrator/cluster")
+public class AdministratorClusterViewsController {
 
     private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
 
-    public AdministratorKubernetesResourceViewsController(KubernetesClusterStatisticsService kubernetesClusterStatisticsService) {
+    public AdministratorClusterViewsController(KubernetesClusterStatisticsService kubernetesClusterStatisticsService) {
         this.kubernetesClusterStatisticsService = kubernetesClusterStatisticsService;
     }
 
-    @RequestMapping("/node-list")
+    @RequestMapping("/node")
     @WebSession
     public String nodeList(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getNodeMetrics());
         return AdminViews.Cluster.CLUSTER_NODE_LIST;
     }
 
-    @RequestMapping("/pod-list")
+    @RequestMapping("/pod")
     @WebSession
     public String podList(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getPodMetrics());
