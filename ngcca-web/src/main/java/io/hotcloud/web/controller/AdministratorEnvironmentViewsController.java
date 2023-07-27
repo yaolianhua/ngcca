@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.service.env.SystemConfiguredEnvironmentQuery;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
@@ -22,13 +22,13 @@ public class AdministratorEnvironmentViewsController {
     @WebSession
     public String appenvironment(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, systemConfiguredEnvironmentQuery.list(false));
-        return Views.APP_ENVIRONMENT_LIST;
+        return AdminViews.Environment.APP_ENVIRONMENT_LIST;
     }
 
     @RequestMapping("/system")
     @WebSession
     public String systemenvironment(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, systemConfiguredEnvironmentQuery.list(true));
-        return Views.SYSTEM_ENVIRONMENT_LIST;
+        return AdminViews.Environment.SYSTEM_ENVIRONMENT_LIST;
     }
 }

@@ -3,7 +3,7 @@ package io.hotcloud.web.controller;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
 import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.module.security.user.User;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.UserViews;
 import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
@@ -31,7 +31,7 @@ public class UserTemplateViewsController {
     @WebSession
     public String template(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll());
-        return Views.TEMPLATE_LIST;
+        return UserViews.TEMPLATE_LIST;
     }
 
     @RequestMapping("/instances")
@@ -42,9 +42,9 @@ public class UserTemplateViewsController {
                            @CookieUser User user) {
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
-            return Views.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
+            return UserViews.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
-        return Views.USER_TEMPLATE_INSTANCE;
+        return UserViews.USER_TEMPLATE_INSTANCE;
     }
 }

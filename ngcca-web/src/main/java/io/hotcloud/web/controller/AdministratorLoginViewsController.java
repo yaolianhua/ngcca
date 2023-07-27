@@ -5,7 +5,7 @@ import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.module.security.login.BearerToken;
 import io.hotcloud.module.security.login.LoginApi;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.Log;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
@@ -32,7 +32,7 @@ public class AdministratorLoginViewsController {
 
     @GetMapping
     public String adminLoginPage() {
-        return Views.ADMIN_LOGIN;
+        return AdminViews.ADMIN_LOGIN;
     }
 
     @PostMapping
@@ -45,15 +45,15 @@ public class AdministratorLoginViewsController {
             BearerToken bearerToken = loginApi.basicLogin(username, password);
             if (!userApi.isAdmin(username)) {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
-                return Views.ADMIN_LOGIN;
+                return AdminViews.ADMIN_LOGIN;
             } else {
                 Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
                 response.addCookie(cookie);
-                return Views.REDIRECT_ADMIN_INDEX;
+                return AdminViews.REDIRECT_ADMIN_INDEX;
             }
         } catch (Exception e) {
             model.addAttribute(WebConstant.MESSAGE, e.getMessage());
-            return Views.ADMIN_LOGIN;
+            return AdminViews.ADMIN_LOGIN;
         }
 
     }

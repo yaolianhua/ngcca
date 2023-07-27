@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.service.ActivityQuery;
@@ -23,7 +23,7 @@ public class AdministratorActivityViewsController {
     @WebSession
     public String activities(Model model) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, activityQuery.pagingQuery(null, null, null, new Pageable(1, Integer.MAX_VALUE)).getData());
-        return Views.ADMIN_ACTIVITY_LIST;
+        return AdminViews.ADMIN_ACTIVITY_LIST;
     }
 
 }

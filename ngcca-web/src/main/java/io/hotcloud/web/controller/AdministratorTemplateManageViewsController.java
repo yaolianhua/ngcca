@@ -2,7 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.module.application.template.Template;
 import io.hotcloud.module.application.template.TemplateDefinitionService;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import org.springframework.stereotype.Controller;
@@ -44,11 +44,11 @@ public class AdministratorTemplateManageViewsController {
         model.addAttribute(WebConstant.TEMPLATE_LOGOS, STATIC_IMAGES);
         if (Objects.equals(WebConstant.VIEW_LIST, action)) {
             model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
-            return Views.TEMPLATE_DEFINITION_LIST_FRAGMENT;
+            return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_LIST_FRAGMENT;
         }
 
         model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
-        return Views.TEMPLATE_DEFINITION_MANAGE;
+        return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_MANAGE;
     }
 
 }

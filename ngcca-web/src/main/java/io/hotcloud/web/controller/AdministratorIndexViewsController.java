@@ -3,7 +3,7 @@ package io.hotcloud.web.controller;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.activity.ALog;
-import io.hotcloud.web.Views;
+import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.service.ActivityQuery;
@@ -37,6 +37,6 @@ public class AdministratorIndexViewsController {
         model.addAttribute(WebConstant.STATISTICS, statistics);
         model.addAttribute(WebConstant.ACTIVITIES, activities);
 
-        return Views.ADMIN_INDEX;
+        return AdminViews.ADMIN_INDEX;
     }
 }
