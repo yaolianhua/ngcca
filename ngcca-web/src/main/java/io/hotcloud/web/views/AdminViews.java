@@ -1,4 +1,4 @@
-package io.hotcloud.web;
+package io.hotcloud.web.views;
 
 public final class AdminViews {
 

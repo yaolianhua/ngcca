@@ -3,8 +3,8 @@ package io.hotcloud.web.mvc;
 import io.hotcloud.module.security.jwt.JwtVerifier;
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.web.UserViews;
 import io.hotcloud.web.WebServerProperties;
+import io.hotcloud.web.views.UserViews;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.hotcloud.web.AdminViews.PREFIX_ADMIN;
-import static io.hotcloud.web.AdminViews.REDIRECT_ADMIN_LOGIN;
+import static io.hotcloud.web.views.AdminViews.PREFIX_ADMIN;
+import static io.hotcloud.web.views.AdminViews.REDIRECT_ADMIN_LOGIN;
 
 @Component
 @Slf4j

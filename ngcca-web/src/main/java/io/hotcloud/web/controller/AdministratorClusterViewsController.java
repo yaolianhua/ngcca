@@ -1,9 +1,9 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.service.cluster.KubernetesClusterStatisticsService;
-import io.hotcloud.web.AdminViews;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
+import io.hotcloud.web.views.AdminViews;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
