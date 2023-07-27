@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
-public class SystemTemplateDefinitionProcessor implements RunnerProcessor {
+public class SystemTemplateDefinitionInitializer implements RunnerProcessor {
 
     public static final String TEMPLATE_DEFINITION;
 
@@ -34,7 +34,7 @@ public class SystemTemplateDefinitionProcessor implements RunnerProcessor {
     private final TemplateDefinitionService templateDefinitionService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public SystemTemplateDefinitionProcessor(TemplateDefinitionService templateDefinitionService) {
+    public SystemTemplateDefinitionInitializer(TemplateDefinitionService templateDefinitionService) {
         this.templateDefinitionService = templateDefinitionService;
     }
 
