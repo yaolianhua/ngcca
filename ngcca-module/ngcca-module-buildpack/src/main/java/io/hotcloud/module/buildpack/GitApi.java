@@ -1,6 +1,6 @@
 package io.hotcloud.module.buildpack;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author yaolianhua789@gmail.com
