@@ -1,6 +1,6 @@
 //初始化常量
-const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
-const USER_TEMPLATE_LIST_VIEWS = "/user/templates?action=list";
+const APPLICATION_INSTANCE_API = "/v1/applications/instance";
+const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;
 
@@ -13,14 +13,14 @@ $(function () {
     intervalId = setInterval('instances()', 5000);
 
     //instance yaml
-    instanceYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-template-instance-yaml"), {
+    instanceYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-application-yaml"), {
         mode: "yaml",
         theme: "monokai",
         lineNumbers: true,
         readOnly: true
     });
     //instance ingress yaml
-    instanceIngressYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-template-instanceIngress-yaml"), {
+    instanceIngressYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-application-ingress-yaml"), {
         mode: "yaml",
         theme: "monokai",
         lineNumbers: true,
@@ -43,7 +43,7 @@ const swal = Swal.mixin({
 function instanceYaml(e) {
     let id = $(e).data("instance-id");
     $('#modal-template-instance-yaml').modal('show');
-    axios.get(TEMPLATE_INSTANCE_API + "/" + id)
+    axios.get(APPLICATION_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
             instanceYamlCodeMirror.setValue(response.data.yaml)
@@ -57,7 +57,7 @@ function instanceYaml(e) {
 function instanceIngressYaml(e) {
     let id = $(e).data("instance-id");
     $('#modal-template-instanceIngress-yaml').modal('show');
-    axios.get(TEMPLATE_INSTANCE_API + "/" + id)
+    axios.get(APPLICATION_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
             instanceIngressYamlCodeMirror.setValue(response.data.ingress)
@@ -70,7 +70,7 @@ function instanceIngressYaml(e) {
 
 //user template instance list
 function instances() {
-    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+    $('#user-instance-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
 
     });
 }
@@ -88,9 +88,9 @@ function instanceDelete(e) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete(TEMPLATE_INSTANCE_API + "/" + id)
+            axios.delete(APPLICATION_INSTANCE_API + "/" + id)
                 .then(response => {
-                    $('#user-instance-fragment').load(USER_TEMPLATE_LIST_VIEWS, function () {
+                    $('#user-instance-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
 
                     });
                     ok(response);

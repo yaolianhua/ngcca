@@ -60,7 +60,9 @@ ngcca:
     ignored-urls:
       - "/index"
       - "/administrator/**"
-      - "/template/**"
+      - "/templates/**"
+      - "/user/templates/**"
+      - "/user/applications/**"
       - "/"
   openai:
     http-client-timeout-seconds: 60

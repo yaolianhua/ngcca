@@ -36,6 +36,7 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private boolean canHttp;
     private String host;
     private String ingress;
+    private String loadBalancerIngressIp;
 
     private String source;
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>NGCCA | 我的应用</title>
+
+  <link th:insert="~{global-link}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <div th:insert="~{navbar}"></div>
+
+  <div th:insert="~{sidebar}"></div>
+
+  <div th:insert="~{user/application/application-yaml-modal}"></div>
+  <div th:insert="~{user/application/application-ingress-yaml-modal}"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div th:insert="~{content-header}"></div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content" id="user-application-fragment" th:fragment="content">
+      <div th:insert="~{user/application/user-application-list}"></div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <div th:insert="~{footer}"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<div th:insert="~{global-script}"></div>
+<script th:src="@{/js/user-application.js}">
+</script>
+</body>
+</html>
