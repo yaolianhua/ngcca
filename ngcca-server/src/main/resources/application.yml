@@ -56,6 +56,16 @@ ngcca:
     host:
     pull-timeout-seconds:
     push-timeout-seconds:
+  gitapi:
+    gitlab:
+      url:
+      username:
+      password:
+      access-token:
+    proxy:
+      server:
+      username:
+      password:
 server:
   port: 8080
 logging:

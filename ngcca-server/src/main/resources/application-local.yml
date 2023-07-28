@@ -43,6 +43,16 @@ ngcca:
     host: "tcp://linux.local:2375"
     pull-timeout-seconds: 300
     push-timeout-seconds: 300
+  gitapi:
+    gitlab:
+      url: "http://10.10.14.80"
+      username:
+      password:
+      access-token: "Tr1ZGNaXzBKiJ8RxuqAS"
+    proxy:
+      server:
+      username:
+      password:
 logging:
   level:
     io.hotcloud.common.log: debug
