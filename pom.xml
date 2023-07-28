@@ -53,6 +53,7 @@
         <docker-java.version>3.3.1</docker-java.version>
         <awaitility.version>4.2.0</awaitility.version>
         <gitlab4j.version>6.0.0-rc.2</gitlab4j.version>
+        <jaxb.api-version>2.3.1</jaxb.api-version>
     </properties>
 
     <dependencyManagement>
@@ -305,10 +306,16 @@
                 <version>${awaitility.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- gitlab4j -->
             <dependency>
                 <groupId>org.gitlab4j</groupId>
                 <artifactId>gitlab4j-api</artifactId>
                 <version>${gitlab4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.api-version}</version>
             </dependency>
         </dependencies>
 
