@@ -42,7 +42,8 @@
         <jjwt.version>0.11.2</jjwt.version>
         <jgit.version>6.1.0.202203080745-r</jgit.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <jackson-datatype-jsr310.version>2.15.1</jackson-datatype-jsr310.version>
+        <jackson-datatype-jsr310.version>2.15.2</jackson-datatype-jsr310.version>
+        <jackson.annotations-version>2.15.2</jackson.annotations-version>
         <caffeine.version>3.0.6</caffeine.version>
         <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
@@ -51,6 +52,7 @@
         <openai-gpt3.version>0.12.0</openai-gpt3.version>
         <docker-java.version>3.3.1</docker-java.version>
         <awaitility.version>4.2.0</awaitility.version>
+        <gitlab4j.version>6.0.0-rc.2</gitlab4j.version>
     </properties>
 
     <dependencyManagement>
@@ -125,6 +127,11 @@
             <dependency>
                 <groupId>io.hotcloud</groupId>
                 <artifactId>ngcca-vendor-kaniko</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hotcloud</groupId>
+                <artifactId>ngcca-vendor-gitapi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- Kubernetes -->
@@ -250,6 +257,12 @@
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson-datatype-jsr310.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.annotations-version}</version>
+            </dependency>
+
 
             <!-- cache -->
             <dependency>
@@ -291,6 +304,11 @@
                 <artifactId>awaitility</artifactId>
                 <version>${awaitility.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.gitlab4j</groupId>
+                <artifactId>gitlab4j-api</artifactId>
+                <version>${gitlab4j.version}</version>
             </dependency>
         </dependencies>
 
