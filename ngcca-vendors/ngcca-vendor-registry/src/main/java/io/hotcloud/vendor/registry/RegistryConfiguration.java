@@ -1,6 +1,7 @@
 package io.hotcloud.vendor.registry;
 
 import com.github.dockerjava.api.DockerClient;
+import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.vendor.registry.client.DockerClientFactory;
 import io.hotcloud.vendor.registry.model.DockerClientCreateConfig;
@@ -21,7 +22,7 @@ public class RegistryConfiguration {
                 .tlsVerify(false)
                 .build();
         DockerClient dockerClient = DockerClientFactory.create(dockerClientCreateConfig);
-        Log.info(this, dockerProperties, "init docker client configuration");
+        Log.info(this, dockerProperties, Event.START, "load docker client configuration");
         return dockerClient;
     }
 }
