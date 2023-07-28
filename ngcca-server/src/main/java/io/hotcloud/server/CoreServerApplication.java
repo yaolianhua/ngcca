@@ -3,7 +3,7 @@ package io.hotcloud.server;
 import io.hotcloud.kubernetes.client.EnableKubernetesAgentClient;
 import io.hotcloud.module.db.MongodbConfiguration;
 import io.hotcloud.service.NgccaServiceModule;
-import io.hotcloud.vendor.gitapi.GitApiConfiguration;
+import io.hotcloud.vendor.gitapi.GitProxyProperties;
 import io.hotcloud.vendor.minio.MinioConfiguration;
 import io.hotcloud.vendor.registry.RegistryConfiguration;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         MongodbConfiguration.class,
         MinioConfiguration.class,
         RegistryConfiguration.class,
-        GitApiConfiguration.class,
+        GitProxyProperties.class,
         NgccaServiceModule.class,
         CoreServerApplication.class
 })

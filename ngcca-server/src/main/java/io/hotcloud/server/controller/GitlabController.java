@@ -2,6 +2,7 @@ package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
+import io.hotcloud.vendor.gitapi.gitlab.GitLabRequestParameter;
 import io.hotcloud.vendor.gitapi.gitlab.GitlabService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.gitlab4j.api.models.Branch;
 import org.gitlab4j.api.models.Project;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +38,18 @@ public class GitlabController {
             summary = "Get gitlab projects",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<Result<List<Project>>> projects() {
-        return ok(gitlabService.listProjects());
+    public ResponseEntity<Result<List<Project>>> projects(@ParameterObject GitLabRequestParameter parameter) {
+
+        return ok(gitlabService.listProjects(parameter));
+    }
+
+    @GetMapping("/ownedprojects")
+    @Operation(
+            summary = "Get gitlab owned projects",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<Result<List<Project>>> ownedprojects(@ParameterObject GitLabRequestParameter parameter) {
+        return ok(gitlabService.listOwnedProjects(parameter));
     }
 
     @GetMapping("/{projectIdOrPath}/branches")
@@ -46,7 +58,8 @@ public class GitlabController {
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {@Parameter(name = "projectIdOrPath", description = "project id or path")}
     )
-    public ResponseEntity<Result<List<Branch>>> branches(@PathVariable("projectIdOrPath") Object projectIdOrPath) {
-        return ok(gitlabService.listBranches(projectIdOrPath));
+    public ResponseEntity<Result<List<Branch>>> branches(@PathVariable("projectIdOrPath") Object projectIdOrPath,
+                                                         @ParameterObject GitLabRequestParameter parameter) {
+        return ok(gitlabService.listBranches(projectIdOrPath, parameter));
     }
 }

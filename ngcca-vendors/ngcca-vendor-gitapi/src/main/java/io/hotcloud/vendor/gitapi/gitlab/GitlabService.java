@@ -12,25 +12,59 @@ import java.util.List;
 @Service
 public class GitlabService {
 
-    private final GitLabApi gitLabApi;
+    private final GitLabApiFactory gitLabApiFactory;
 
-    public GitlabService(GitLabApi gitLabApi) {
-        this.gitLabApi = gitLabApi;
+    public GitlabService(GitLabApiFactory gitLabApiFactory) {
+        this.gitLabApiFactory = gitLabApiFactory;
     }
 
-    public List<Project> listProjects() {
+    public List<Project> listProjects(GitLabRequestParameter parameter) {
+        GitLabApi gitLabApi;
+        if (parameter.isBasicAuth()) {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getUsername(), parameter.getPassword());
+        } else {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getAccessToken());
+        }
+
         try {
             return gitLabApi.getProjectApi().getProjects();
         } catch (GitLabApiException e) {
             throw new PlatformException("Get gitlab projects error：" + e.getMessage(), 500);
+        } finally {
+            gitLabApi.close();
         }
     }
 
-    public List<Branch> listBranches(Object projectIdOrPath) {
+    public List<Project> listOwnedProjects(GitLabRequestParameter parameter) {
+        GitLabApi gitLabApi;
+        if (parameter.isBasicAuth()) {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getUsername(), parameter.getPassword());
+        } else {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getAccessToken());
+        }
+        try {
+            return gitLabApi.getProjectApi().getOwnedProjects();
+        } catch (GitLabApiException e) {
+            throw new PlatformException("Get gitlab projects error：" + e.getMessage(), 500);
+        } finally {
+            gitLabApi.close();
+        }
+    }
+
+    public List<Branch> listBranches(Object projectIdOrPath, GitLabRequestParameter parameter) {
+        GitLabApi gitLabApi;
+        if (parameter.isBasicAuth()) {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getUsername(), parameter.getPassword());
+        } else {
+            gitLabApi = gitLabApiFactory.create(parameter.getHost(), parameter.getAccessToken());
+        }
+
         try {
             return gitLabApi.getRepositoryApi().getBranches(projectIdOrPath);
         } catch (GitLabApiException e) {
             throw new PlatformException("Get gitlab branches error：" + e.getMessage(), 500);
+        } finally {
+            gitLabApi.close();
         }
     }
 }
