@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 import java.util.Map;
 
 @Service
-public class LoginServiceImpl implements LoginApi {
+public class LoginHelper implements LoginApi {
 
     private final UserApi userApi;
     private final JwtSigner jwtSigner;
@@ -24,10 +24,10 @@ public class LoginServiceImpl implements LoginApi {
 
     private final PasswordEncoder passwordEncoder;
 
-    public LoginServiceImpl(UserApi userApi,
-                            JwtSigner jwtSigner,
-                            JwtVerifier jwtVerifier,
-                            PasswordEncoder passwordEncoder) {
+    public LoginHelper(UserApi userApi,
+                       JwtSigner jwtSigner,
+                       JwtVerifier jwtVerifier,
+                       PasswordEncoder passwordEncoder) {
         this.userApi = userApi;
         this.jwtSigner = jwtSigner;
         this.jwtVerifier = jwtVerifier;
