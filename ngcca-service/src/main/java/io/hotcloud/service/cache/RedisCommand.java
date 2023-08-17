@@ -7,6 +7,20 @@ import java.util.concurrent.TimeUnit;
 
 public interface RedisCommand<K, V> {
 
+    default void set(K key, V value) {
+        this.set(key, value, null, 0L);
+    }
+
+    void set(K key, V value, TimeUnit timeUnit, long ttl);
+
+    default V get(K key) {
+        return this.get(key, null);
+    }
+
+    <T> T get(K key, Class<T> type);
+
+    Boolean delete(K key);
+
     void ttlKey(K key, V value, TimeUnit timeUnit, long ttl);
 
     Set<K> listKeys();

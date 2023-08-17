@@ -65,5 +65,13 @@ class RedisCommandTest {
         Assertions.assertTrue(hmDelete);
 
 
+        commandUtil.set("MY-KEY", cacheData);
+        Object cachedData = commandUtil.get("MY-KEY");
+        Assertions.assertNotNull(cachedData);
+        CacheObjectTest data = commandUtil.get("MY-KEY", CacheObjectTest.class);
+        Assertions.assertEquals(cacheData, data);
+
+        Boolean deleted = commandUtil.delete("MY-KEY");
+        Assertions.assertTrue(deleted);
     }
 }

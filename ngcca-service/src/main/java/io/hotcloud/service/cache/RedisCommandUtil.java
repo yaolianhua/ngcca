@@ -2,6 +2,7 @@ package io.hotcloud.service.cache;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -17,6 +18,32 @@ public class RedisCommandUtil<K,V> implements RedisCommand<K,V> {
 
     public RedisCommandUtil(RedisTemplate<K, V> redisTemplate) {
         this.redisTemplate = redisTemplate;
+    }
+
+
+    @Override
+    public void set(K key, V value, TimeUnit timeUnit, long ttl) {
+        if (Objects.isNull(timeUnit)) {
+            redisTemplate.opsForValue().set(key, value);
+            return;
+        }
+        redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(K key, Class<T> type) {
+        Object v = redisTemplate.opsForValue().get(key);
+        if (Objects.isNull(type)) {
+            return (T) v;
+        }
+        Assert.state(type.isInstance(v), "redis cached value is not of required type [" + type.getName() + "]: " + v);
+        return ((T) v);
+    }
+
+    @Override
+    public Boolean delete(K key) {
+        return redisTemplate.delete(key);
     }
 
     @Override
