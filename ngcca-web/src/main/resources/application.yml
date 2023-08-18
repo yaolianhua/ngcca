@@ -1,8 +1,6 @@
 spring:
   application:
-    name: ngcca
-  profiles:
-    include: system-registry-image
+    name: @artifactId@
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -17,71 +15,20 @@ spring:
       max-file-size: 1024MB
   thymeleaf:
     cache: false
+  config:
+    import:
+      - optional:nacos:application-web.yml
+      - optional:nacos:application-system-registry-image.yml
+      - optional:nacos:${spring.application.name}.yml
+  cloud:
+    nacos:
+      config:
+        namespace: ${NACOS_NAMESPACE:08046fe8-abcd-4abd-9b77-120fbdfb9b95}
+        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+    compatibility-verifier:
+      enabled: false
 server:
   port: 4000
-
-ngcca:
-  redis:
-    database:
-    password:
-    host:
-    port:
-  registry:
-    url:
-    username:
-    password:
-    imagebuild-namespace:
-  minio:
-    access-key:
-    secret-key:
-    endpoint:
-  mongodb:
-    uri:
-  kubernetes-agent:
-    host:
-    port:
-    domain-name:
-  buildpack:
-    build-timeout-second: 1200
-  application:
-    deployment-timeout-second: 1200
-    dot-suffix-domain: ".k8s.local"
-  security:
-    enabled: true
-    ignored-defaults:
-      - "/swagger**/**"
-      - "/v3/api-docs/**"
-      - "/favicon.ico"
-      - "/pub"
-      - "/**/login"
-      - "/plugins/**"
-      - "/js/**"
-      - "/dist/**"
-    ignored-urls:
-      - "/index"
-      - "/administrator/**"
-      - "/templates/**"
-      - "/user/templates/**"
-      - "/user/applications/**"
-      - "/"
-  openai:
-    http-client-timeout-seconds: 60
-    http-proxy:
-      hostname:
-      port:
-    api-key:
-  docker:
-    host:
-    pull-timeout-seconds:
-    push-timeout-seconds:
-
-  web-server:
-    host:
-    port:
-    endpoint:
-logging:
-  level:
-    io.hotcloud.common.log: info
-    com.github.dockerjava.api.command: info
-    com.github.dockerjava.core.command: info
 

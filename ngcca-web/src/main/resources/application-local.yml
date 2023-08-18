@@ -36,6 +36,24 @@ ngcca:
     endpoint:
   application:
     dot-suffix-domain: ".k8s.linux-local"
+  security:
+    enabled: true
+    ignored-defaults:
+      - "/swagger**/**"
+      - "/v3/api-docs/**"
+      - "/favicon.ico"
+      - "/pub"
+      - "/**/login"
+      - "/plugins/**"
+      - "/js/**"
+      - "/dist/**"
+    ignored-urls:
+      - "/index"
+      - "/administrator/**"
+      - "/templates/**"
+      - "/user/templates/**"
+      - "/user/applications/**"
+      - "/"
 logging:
   level:
     io.hotcloud.common.log: debug
