@@ -54,6 +54,7 @@
         <awaitility.version>4.2.0</awaitility.version>
         <gitlab4j.version>6.0.0-rc.2</gitlab4j.version>
         <jaxb.api-version>2.3.1</jaxb.api-version>
+        <nacos.config-version>2022.0.0.0</nacos.config-version>
     </properties>
 
     <dependencyManagement>
@@ -317,6 +318,13 @@
                 <artifactId>jaxb-api</artifactId>
                 <version>${jaxb.api-version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>${nacos.config-version}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
