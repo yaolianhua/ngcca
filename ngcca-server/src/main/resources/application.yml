@@ -1,6 +1,6 @@
 spring:
   application:
-    name: core-server
+    name: @artifactId@
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -9,61 +9,18 @@ spring:
       auto-index-creation: true
       authentication-database: admin
       uri: ${ngcca.mongodb.uri}
-  profiles:
-    include: system-registry-image
-ngcca:
-  redis:
-    database:
-    password:
-    host:
-    port:
-  registry:
-    url:
-    username:
-    password:
-    imagebuild-namespace:
-  minio:
-    access-key:
-    secret-key:
-    endpoint:
-  mongodb:
-    uri:
-  kubernetes-agent:
-    host: localhost
-    port: 1400
-    domain-name:
-  buildpack:
-    build-timeout-second: 1200
-  application:
-    deployment-timeout-second: 1200
-    dot-suffix-domain: ".k8s.local"
-  security:
-    enabled: true
-    ignored-defaults:
-      - "/swagger**/**"
-      - "/v3/api-docs/**"
-      - "/favicon.ico"
-      - "/pub"
-      - "/**/login"
-    ignored-urls:
-  openai:
-    http-client-timeout-seconds: 60
-    http-proxy:
-      hostname:
-      port:
-    api-key:
-  docker:
-    host:
-    pull-timeout-seconds:
-    push-timeout-seconds:
-  git-proxy:
-    server:
-    username:
-    password:
-server:
-  port: 8080
-logging:
-  level:
-    io.hotcloud.common.log: info
-    com.github.dockerjava.api.command: info
-    com.github.dockerjava.core.command: info
+  config:
+    import:
+      - optional:nacos:application-server.yml
+      - optional:nacos:application-system-registry-image.yml
+      - optional:nacos:${spring.application.name}.yml
+  cloud:
+    nacos:
+      config:
+        namespace: ${NACOS_NAMESPACE:08046fe8-abcd-4abd-9b77-120fbdfb9b95}
+        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+    compatibility-verifier:
+      enabled: false
+
