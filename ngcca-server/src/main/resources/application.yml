@@ -11,7 +11,6 @@ spring:
       uri: ${ngcca.mongodb.uri}
   config:
     import:
-      - optional:nacos:application-server.yml
       - optional:nacos:application-system-registry-image.yml
       - optional:nacos:${spring.application.name}.yml
   cloud:

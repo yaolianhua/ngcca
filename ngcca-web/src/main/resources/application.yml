@@ -17,7 +17,6 @@ spring:
     cache: false
   config:
     import:
-      - optional:nacos:application-web.yml
       - optional:nacos:application-system-registry-image.yml
       - optional:nacos:${spring.application.name}.yml
   cloud:

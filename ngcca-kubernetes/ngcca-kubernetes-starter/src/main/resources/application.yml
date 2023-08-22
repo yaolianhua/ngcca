@@ -1,13 +1,12 @@
 spring:
   application:
-    name: @artifactId@
+    name: k8s-agent
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   config:
     import:
       - optional:nacos:application-kubernetes.yml
-      - optional:nacos:${spring.application.name}.yml
   cloud:
     nacos:
       config:
