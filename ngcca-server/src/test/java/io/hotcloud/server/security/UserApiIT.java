@@ -2,7 +2,7 @@ package io.hotcloud.server.security;
 
 import io.hotcloud.module.security.user.User;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.server.NgccaServerApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +22,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @Slf4j

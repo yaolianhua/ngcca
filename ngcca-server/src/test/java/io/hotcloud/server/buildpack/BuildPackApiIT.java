@@ -11,7 +11,7 @@ import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.buildpack.model.BuildPackConstant;
 import io.hotcloud.module.buildpack.model.JobState;
-import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.server.NgccaServerApplication;
 import io.hotcloud.vendor.minio.MinioProperties;
 import io.kubernetes.client.openapi.ApiException;
 import org.junit.After;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackApiIT {
 

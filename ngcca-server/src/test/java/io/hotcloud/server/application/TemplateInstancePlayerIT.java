@@ -7,7 +7,7 @@ import io.hotcloud.module.application.template.TemplateInstance;
 import io.hotcloud.module.application.template.TemplateInstancePlayer;
 import io.hotcloud.module.application.template.TemplateInstanceService;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.server.NgccaServerApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ import static org.awaitility.Awaitility.await;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = CoreServerApplication.class
+        classes = NgccaServerApplication.class
 )
 @ActiveProfiles("test")
 public class TemplateInstancePlayerIT  {

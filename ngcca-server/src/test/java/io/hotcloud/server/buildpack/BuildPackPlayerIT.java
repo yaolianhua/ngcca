@@ -8,7 +8,7 @@ import io.hotcloud.module.buildpack.BuildPackService;
 import io.hotcloud.module.buildpack.model.BuildImage;
 import io.hotcloud.module.buildpack.model.BuildPack;
 import io.hotcloud.module.security.user.UserApi;
-import io.hotcloud.server.CoreServerApplication;
+import io.hotcloud.server.NgccaServerApplication;
 import io.hotcloud.vendor.minio.MinioProperties;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CoreServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackPlayerIT {
 

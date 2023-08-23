@@ -15,12 +15,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         RegistryConfiguration.class,
         GitProxyProperties.class,
         NgccaServiceModule.class,
-        CoreServerApplication.class
+        NgccaServerApplication.class
 })
 @EnableKubernetesAgentClient
-public class CoreServerApplication {
+public class NgccaServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CoreServerApplication.class, args);
+        SpringApplication.run(NgccaServerApplication.class, args);
     }
 }
