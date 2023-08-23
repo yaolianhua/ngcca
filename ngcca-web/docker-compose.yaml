@@ -1,0 +1,96 @@
+version: '3'
+services:
+  ## web
+  ngcca-web:
+    restart: always
+    image: ngcca/web-server:latest
+    container_name: ngcca_web
+    hostname: ngcca-web.local
+    volumes:
+      - ngcca_web_volume:/web-server
+    ports:
+      - "4000:4000"
+    env_file:
+      - docker.env
+    depends_on:
+      - ngcca-minio
+      - ngcca-mongo
+      - ngcca-redis
+    networks:
+      - ngcca
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/login" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  ## minio
+  ngcca-minio:
+    restart: always
+    image: minio/minio:RELEASE.2023-06-09T07-32-12Z
+    container_name: ngcca_minio
+    hostname: minio.local
+    volumes:
+      - ngcca_minio_volume:/data
+    ports:
+      - "9009:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=QbMufCD@9WVQ^Hv
+    command: server /data --console-address ":9001"
+    networks:
+      - ngcca
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  ## redis
+  ngcca-redis:
+    image: bitnami/redis:7.0
+    container_name: ngcca_redis
+    hostname: redis.local
+    user: root
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ngcca_redis_volume:/bitnami/redis/data
+    environment:
+      - REDIS_PASSWORD=QbMufCD@9WVQ^Hv
+    networks:
+      - ngcca
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  ## mongodb
+  ngcca-mongo:
+    image: mongo:5.0
+    restart: always
+    hostname: mongo.local
+    container_name: ngcca_mongo
+    environment:
+      - MONGO_ROOT_USER=admin
+      - MONGO_ROOT_PASSWORD=QbMufCD@9WVQ^Hv
+    networks:
+      - ngcca
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "27017:27017"
+    volumes:
+      - ngcca_mongo_volume:/data/db
+    # - ./mongodb/mongod.conf:/etc/mongo/mongod.conf
+volumes:
+  ngcca_minio_volume:
+  ngcca_mongo_volume:
+  ngcca_redis_volume:
+  ngcca_web_volume:
+networks:
+  ngcca:
+    external: true
