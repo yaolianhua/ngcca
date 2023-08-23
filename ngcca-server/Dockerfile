@@ -2,13 +2,13 @@ FROM openjdk:17-slim-buster AS builder
 
 WORKDIR /build/
 
-COPY ngcca-server/target/core-server.jar .
-RUN java -Djarmode=layertools -jar core-server.jar extract
+COPY ngcca-server/target/ngcca-server.jar .
+RUN java -Djarmode=layertools -jar ngcca-server.jar extract
 
 FROM openjdk:17-slim-buster
 LABEL maintainer="<yaolianhua789@gmail.com>"
 
-WORKDIR /core-server/
+WORKDIR /ngcca-server/
 COPY --from=builder /build/dependencies/ .
 COPY --from=builder /build/spring-boot-loader/ .
 COPY --from=builder /build/snapshot-dependencies/ ./

@@ -6,12 +6,12 @@ Usage: $0 <project>
 
 projects:
   kubernetes-agent                kubernetes-agent server service
-  core-server                     core server service
+  ngcca-server                     core server service
   web-server                      web server service
 
 demo：
   $0 kubernetes-agent
-  $0 core-server
+  $0 ngcca-server
   $0 web-server
 
 EOF
@@ -35,14 +35,14 @@ build_kubernetes_agent(){
     docker push "${IMAGE}"
 }
 
-build_core_server(){
+build_ngcca_server(){
     echo "------------------------ commit id ------------------------"
     printf "%s$(git rev-parse HEAD) \n"
 
     echo "------------------------ jar build ------------------------"
     mvn --batch-mode --errors --fail-fast --threads 1C --projects "io.hotcloud:ngcca-server" --also-make clean package
 
-    IMAGE="harbor.local:5000/ngcca/core-server:$(date '+%Y.%m.%d.%H%M%S')"
+    IMAGE="harbor.local:5000/ngcca/ngcca-server:$(date '+%Y.%m.%d.%H%M%S')"
 
     echo "------------------------ docker build ------------------------"
     docker build -f ngcca-server/Dockerfile -t "${IMAGE}" .
@@ -76,8 +76,8 @@ case $project in
 kubernetes-agent)
   build_kubernetes_agent
   ;;
-core-server)
-  build_core_server
+ngcca-server)
+  build_ngcca_server
   ;;
 web-server)
   build_web_server
