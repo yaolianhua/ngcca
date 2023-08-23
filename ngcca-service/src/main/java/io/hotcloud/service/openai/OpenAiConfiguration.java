@@ -1,6 +1,6 @@
 package io.hotcloud.service.openai;
 
-import com.theokanning.openai.OpenAiApi;
+import com.theokanning.openai.client.OpenAiApi;
 import com.theokanning.openai.service.OpenAiService;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
@@ -14,8 +14,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.Objects;
-
-import static com.theokanning.openai.service.OpenAiService.*;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OpenAiProperties.class)
@@ -36,12 +34,11 @@ public class OpenAiConfiguration {
             proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(httpProxy.getHostname(), httpProxy.getPort()));
         }
 
-        OkHttpClient client = defaultClient(openAiProperties.getApiKey(), Duration.ofSeconds(openAiProperties.getHttpClientTimeoutSeconds()))
-                .newBuilder()
+        OkHttpClient client = OpenAiService.defaultClient(openAiProperties.getApiKey(), Duration.ofSeconds(openAiProperties.getHttpClientTimeoutSeconds())).newBuilder()
                 .proxy(proxy)
                 .build();
 
-        Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper());
+        Retrofit retrofit = OpenAiService.defaultRetrofit(client, OpenAiService.defaultObjectMapper());
         OpenAiApi api = retrofit.create(OpenAiApi.class);
         Log.info(this, openAiProperties, Event.START, "load openAi properties");
         return new OpenAiService(api);
