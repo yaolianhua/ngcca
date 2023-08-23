@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.service;
+package io.hotcloud.kubernetes.server.mq;
 
 import io.hotcloud.common.MessageBroadcaster;
 import io.hotcloud.common.model.Message;

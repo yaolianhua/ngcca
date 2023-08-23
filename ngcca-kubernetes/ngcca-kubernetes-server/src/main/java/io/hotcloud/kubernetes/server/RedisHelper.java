@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.service;
+package io.hotcloud.kubernetes.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.resource.ClientResources;

@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.service;
+package io.hotcloud.kubernetes.server.config;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;

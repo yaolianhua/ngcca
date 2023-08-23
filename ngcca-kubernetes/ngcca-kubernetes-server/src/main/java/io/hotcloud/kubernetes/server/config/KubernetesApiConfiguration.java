@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.service;
+package io.hotcloud.kubernetes.server.config;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.hotcloud.kubernetes.api.KubernetesApi;

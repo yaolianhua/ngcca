@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.service;
+package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.hotcloud.common.log.Event;
