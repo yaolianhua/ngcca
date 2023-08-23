@@ -4,6 +4,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    nacos:
+      config:
+        import-check:
+          enabled: false
 kubernetes:
   in-cluster: true
   enable-workloads-watcher: true

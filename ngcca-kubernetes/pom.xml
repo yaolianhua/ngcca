@@ -17,8 +17,8 @@
         <module>ngcca-kubernetes-model</module>
         <module>ngcca-kubernetes-api</module>
         <module>ngcca-kubernetes-client</module>
+        <module>ngcca-kubernetes-service</module>
         <module>ngcca-kubernetes-server</module>
-        <module>ngcca-kubernetes-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -40,12 +40,12 @@
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-kubernetes-server</artifactId>
+                <artifactId>ngcca-kubernetes-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-kubernetes-starter</artifactId>
+                <artifactId>ngcca-kubernetes-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
