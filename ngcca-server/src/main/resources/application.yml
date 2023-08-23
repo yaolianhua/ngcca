@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: system-registry-image
   application:
     name: @artifactId@
   mvc:
@@ -9,17 +11,11 @@ spring:
       auto-index-creation: true
       authentication-database: admin
       uri: ${ngcca.mongodb.uri}
-  config:
-    import:
-      - optional:nacos:application-system-registry-image.yml
-      - optional:nacos:${spring.application.name}.yml
   cloud:
-    nacos:
-      config:
-        namespace: ${NACOS_NAMESPACE:08046fe8-abcd-4abd-9b77-120fbdfb9b95}
-        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
-      username: ${NACOS_USERNAME:nacos}
-      password: ${NACOS_PASSWORD:nacos}
     compatibility-verifier:
       enabled: false
+    nacos:
+      config:
+        import-check:
+          enabled: false
 

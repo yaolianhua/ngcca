@@ -4,18 +4,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  config:
-    import:
-      - optional:nacos:application-kubernetes.yml
   cloud:
-    nacos:
-      config:
-        namespace: ${NACOS_NAMESPACE:08046fe8-abcd-4abd-9b77-120fbdfb9b95}
-        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
-      username: ${NACOS_USERNAME:nacos}
-      password: ${NACOS_PASSWORD:nacos}
     compatibility-verifier:
       enabled: false
+    nacos:
+      config:
+        import-check:
+          enabled: false
 server:
   port: 1400
 logging:
