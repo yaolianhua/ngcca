@@ -3,7 +3,6 @@ package io.hotcloud.service.security.jwt;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Properties;
-import io.hotcloud.module.security.jwt.Jwt;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;

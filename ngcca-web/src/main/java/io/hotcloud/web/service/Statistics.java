@@ -1,10 +1,10 @@
 package io.hotcloud.web.service;
 
-import io.hotcloud.module.application.ApplicationInstanceStatistics;
-import io.hotcloud.module.application.template.TemplateInstanceStatistics;
-import io.hotcloud.module.buildpack.model.BuildPackStatistics;
-import io.hotcloud.module.security.user.User;
+import io.hotcloud.service.application.ApplicationInstanceStatistics;
+import io.hotcloud.service.application.template.TemplateInstanceStatistics;
+import io.hotcloud.service.buildpack.model.BuildPackStatistics;
 import io.hotcloud.service.cluster.KubernetesClusterStatistics;
+import io.hotcloud.service.security.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

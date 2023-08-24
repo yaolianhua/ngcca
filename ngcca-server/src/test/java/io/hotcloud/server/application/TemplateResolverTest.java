@@ -1,6 +1,6 @@
 package io.hotcloud.server.application;
 
-import io.hotcloud.module.application.template.instance.*;
+import io.hotcloud.service.application.template.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

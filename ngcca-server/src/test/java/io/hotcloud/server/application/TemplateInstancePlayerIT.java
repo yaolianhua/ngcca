@@ -2,12 +2,12 @@ package io.hotcloud.server.application;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.application.template.Template;
-import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.application.template.TemplateInstancePlayer;
-import io.hotcloud.module.application.template.TemplateInstanceService;
-import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.service.application.template.Template;
+import io.hotcloud.service.application.template.TemplateInstance;
+import io.hotcloud.service.application.template.TemplateInstancePlayer;
+import io.hotcloud.service.application.template.TemplateInstanceService;
+import io.hotcloud.service.security.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

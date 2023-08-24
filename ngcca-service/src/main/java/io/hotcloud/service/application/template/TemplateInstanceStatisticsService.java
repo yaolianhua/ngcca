@@ -1,8 +1,5 @@
 package io.hotcloud.service.application.template;
 
-import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.application.template.TemplateInstanceService;
-import io.hotcloud.module.application.template.TemplateInstanceStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

@@ -2,7 +2,7 @@ package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.module.application.ChatService;
+import io.hotcloud.service.application.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

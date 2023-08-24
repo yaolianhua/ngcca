@@ -1,8 +1,8 @@
 package io.hotcloud.server.security;
 
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.service.security.user.User;
+import io.hotcloud.service.security.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;

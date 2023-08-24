@@ -5,8 +5,6 @@ import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.common.utils.Validator;
 import io.hotcloud.module.db.entity.UserEntity;
 import io.hotcloud.module.db.entity.UserRepository;
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

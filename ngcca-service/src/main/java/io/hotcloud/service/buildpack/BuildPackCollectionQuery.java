@@ -2,8 +2,7 @@ package io.hotcloud.service.buildpack;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.module.buildpack.BuildPackService;
-import io.hotcloud.module.buildpack.model.BuildPack;
+import io.hotcloud.service.buildpack.model.BuildPack;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

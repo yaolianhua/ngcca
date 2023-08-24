@@ -1,9 +1,7 @@
 package io.hotcloud.service.application;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.module.application.ApplicationYamlService;
-import io.hotcloud.module.application.IngressTemplateRender;
-import io.hotcloud.module.application.template.instance.*;
+import io.hotcloud.service.application.template.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

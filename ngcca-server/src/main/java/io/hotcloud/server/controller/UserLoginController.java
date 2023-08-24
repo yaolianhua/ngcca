@@ -2,9 +2,9 @@ package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.WebResponse;
-import io.hotcloud.module.security.login.BearerToken;
-import io.hotcloud.module.security.login.LoginApi;
-import io.hotcloud.module.security.user.User;
+import io.hotcloud.service.security.login.BearerToken;
+import io.hotcloud.service.security.login.LoginApi;
+import io.hotcloud.service.security.user.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

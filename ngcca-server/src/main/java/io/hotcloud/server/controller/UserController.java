@@ -1,8 +1,8 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.*;
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.service.security.user.User;
+import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.service.security.user.UserCollectionQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

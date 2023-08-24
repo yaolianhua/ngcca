@@ -1,8 +1,8 @@
 package io.hotcloud.web.mvc;
 
-import io.hotcloud.module.security.jwt.JwtVerifier;
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.service.security.jwt.JwtVerifier;
+import io.hotcloud.service.security.user.User;
+import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.web.WebServerProperties;
 import io.hotcloud.web.views.UserViews;
 import jakarta.servlet.http.HttpServletRequest;

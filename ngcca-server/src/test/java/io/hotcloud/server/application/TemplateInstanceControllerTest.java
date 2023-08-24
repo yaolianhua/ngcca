@@ -2,10 +2,10 @@ package io.hotcloud.server.application;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.application.template.TemplateInstancePlayer;
 import io.hotcloud.server.controller.TemplateInstanceController;
+import io.hotcloud.service.application.template.TemplateInstance;
 import io.hotcloud.service.application.template.TemplateInstanceCollectionQuery;
+import io.hotcloud.service.application.template.TemplateInstancePlayer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;

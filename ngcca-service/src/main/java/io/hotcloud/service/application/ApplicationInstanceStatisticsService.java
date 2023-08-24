@@ -1,8 +1,5 @@
 package io.hotcloud.service.application;
 
-import io.hotcloud.module.application.ApplicationInstance;
-import io.hotcloud.module.application.ApplicationInstanceService;
-import io.hotcloud.module.application.ApplicationInstanceStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

@@ -1,11 +1,11 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.module.application.template.Template;
-import io.hotcloud.module.application.template.TemplateDefinitionService;
-import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.service.application.template.Template;
+import io.hotcloud.service.application.template.TemplateDefinitionService;
 import io.hotcloud.service.env.SystemConfiguredEnvironmentQuery;
 import io.hotcloud.service.registry.RegistryImageQueryService;
+import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.service.security.user.UserCollectionQuery;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;

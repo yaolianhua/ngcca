@@ -2,8 +2,6 @@ package io.hotcloud.service.security.user;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

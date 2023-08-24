@@ -1,13 +1,13 @@
 package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.application.ApplicationInstance;
-import io.hotcloud.module.application.ApplicationInstanceProcessor;
-import io.hotcloud.module.application.ApplicationInstanceService;
-import io.hotcloud.module.application.ApplicationInstanceSource;
-import io.hotcloud.module.buildpack.BuildPackPlayer;
-import io.hotcloud.module.buildpack.model.BuildImage;
-import io.hotcloud.module.buildpack.model.BuildPack;
+import io.hotcloud.service.application.ApplicationInstance;
+import io.hotcloud.service.application.ApplicationInstanceProcessor;
+import io.hotcloud.service.application.ApplicationInstanceService;
+import io.hotcloud.service.application.ApplicationInstanceSource;
+import io.hotcloud.service.buildpack.BuildPackPlayer;
+import io.hotcloud.service.buildpack.model.BuildImage;
+import io.hotcloud.service.buildpack.model.BuildPack;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

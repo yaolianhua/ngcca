@@ -3,7 +3,7 @@ package io.hotcloud.web.controller;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.activity.ALog;
-import io.hotcloud.module.security.user.User;
+import io.hotcloud.service.security.user.User;
 import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;

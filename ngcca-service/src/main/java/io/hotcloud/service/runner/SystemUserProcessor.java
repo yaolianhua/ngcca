@@ -2,8 +2,8 @@ package io.hotcloud.service.runner;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.security.user.User;
-import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.service.security.user.User;
+import io.hotcloud.service.security.user.UserApi;
 import org.springframework.stereotype.Component;
 
 @Component

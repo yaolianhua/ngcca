@@ -1,7 +1,6 @@
 package io.hotcloud.service.buildpack;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.module.buildpack.BuildPackYamlService;
 import io.hotcloud.vendor.kaniko.DockerfileTemplateRender;
 import io.hotcloud.vendor.kaniko.KanikoJobTemplateRender;
 import org.springframework.stereotype.Service;

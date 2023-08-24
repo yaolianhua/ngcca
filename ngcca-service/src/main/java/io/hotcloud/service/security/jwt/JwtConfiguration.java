@@ -1,7 +1,5 @@
 package io.hotcloud.service.security.jwt;
 
-import io.hotcloud.module.security.jwt.JwtSigner;
-import io.hotcloud.module.security.jwt.JwtVerifier;
 import org.springframework.context.annotation.Bean;
 
 public class JwtConfiguration {

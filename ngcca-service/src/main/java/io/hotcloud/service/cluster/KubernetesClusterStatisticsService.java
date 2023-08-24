@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.*;
-import io.hotcloud.module.security.user.UserApi;
+import io.hotcloud.service.security.user.UserApi;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,10 +1,10 @@
 package io.hotcloud.service.application.template.processor;
 
-import io.hotcloud.module.application.template.Template;
-import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.application.template.TemplateInstanceProcessor;
 import io.hotcloud.module.db.entity.RegistryImageEntity;
 import io.hotcloud.module.db.entity.RegistryImageRepository;
+import io.hotcloud.service.application.template.Template;
+import io.hotcloud.service.application.template.TemplateInstance;
+import io.hotcloud.service.application.template.TemplateInstanceProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 

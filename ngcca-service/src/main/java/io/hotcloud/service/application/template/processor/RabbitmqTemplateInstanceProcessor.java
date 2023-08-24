@@ -1,19 +1,19 @@
 package io.hotcloud.service.application.template.processor;
 
 import io.hotcloud.common.utils.UUIDGenerator;
-import io.hotcloud.module.application.IngressDefinition;
-import io.hotcloud.module.application.template.Template;
-import io.hotcloud.module.application.template.TemplateInstance;
-import io.hotcloud.module.application.template.TemplateInstanceProcessor;
-import io.hotcloud.module.application.template.instance.RabbitmqTemplate;
 import io.hotcloud.service.application.ApplicationProperties;
+import io.hotcloud.service.application.IngressDefinition;
+import io.hotcloud.service.application.template.RabbitmqTemplate;
+import io.hotcloud.service.application.template.Template;
+import io.hotcloud.service.application.template.TemplateInstance;
+import io.hotcloud.service.application.template.TemplateInstanceProcessor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
-import static io.hotcloud.module.application.IngressTemplateRender.render;
+import static io.hotcloud.service.application.IngressTemplateRender.render;
 
 @Component
 class RabbitmqTemplateInstanceProcessor implements TemplateInstanceProcessor {

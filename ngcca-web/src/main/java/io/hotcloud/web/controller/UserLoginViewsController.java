@@ -2,8 +2,8 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
-import io.hotcloud.module.security.login.BearerToken;
-import io.hotcloud.module.security.login.LoginApi;
+import io.hotcloud.service.security.login.BearerToken;
+import io.hotcloud.service.security.login.LoginApi;
 import io.hotcloud.web.mvc.Log;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;

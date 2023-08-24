@@ -9,8 +9,8 @@
         <module>ngcca-common</module>
         <module>ngcca-vendors</module>
         <module>ngcca-service</module>
-        <module>ngcca-module</module>
         <module>ngcca-server</module>
+        <module>ngcca-db</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -93,27 +93,12 @@
                 <artifactId>ngcca-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- modules -->
             <dependency>
                 <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-module-buildpack</artifactId>
+                <artifactId>ngcca-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-module-application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-module-security</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-module-db</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
 
             <!-- vendors -->
             <dependency>

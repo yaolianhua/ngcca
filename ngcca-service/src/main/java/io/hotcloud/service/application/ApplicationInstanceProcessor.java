@@ -1,0 +1,25 @@
+package io.hotcloud.service.application;
+
+public interface ApplicationInstanceProcessor<I> {
+
+    Integer DEFAULT_ORDER = 0;
+
+    void processCreate(I input);
+
+    void processDelete(I input);
+
+    int order();
+
+    Type getType();
+
+    enum Type {
+        //
+        SERVICE,
+        //
+        INGRESS,
+        //
+        IMAGE_BUILD,
+        //
+        DEPLOYMENT
+    }
+}

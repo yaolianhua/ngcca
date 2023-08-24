@@ -1,7 +1,7 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.module.buildpack.BuildPackYamlService;
+import io.hotcloud.service.buildpack.BuildPackYamlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

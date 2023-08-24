@@ -2,11 +2,11 @@ package io.hotcloud.service.security;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.security.jwt.JwtVerifier;
-import io.hotcloud.module.security.user.UserApi;
 import io.hotcloud.service.security.jwt.JwtAuthenticationFilter;
 import io.hotcloud.service.security.jwt.JwtConfiguration;
 import io.hotcloud.service.security.jwt.JwtProperties;
+import io.hotcloud.service.security.jwt.JwtVerifier;
+import io.hotcloud.service.security.user.UserApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

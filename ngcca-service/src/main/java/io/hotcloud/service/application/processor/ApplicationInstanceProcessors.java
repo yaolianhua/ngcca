@@ -1,10 +1,10 @@
 package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.module.application.ApplicationInstance;
-import io.hotcloud.module.application.ApplicationInstanceProcessor;
-import io.hotcloud.module.buildpack.BuildPackCacheApi;
-import io.hotcloud.module.buildpack.model.JobState;
+import io.hotcloud.service.application.ApplicationInstance;
+import io.hotcloud.service.application.ApplicationInstanceProcessor;
+import io.hotcloud.service.buildpack.BuildPackCacheApi;
+import io.hotcloud.service.buildpack.model.JobState;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
