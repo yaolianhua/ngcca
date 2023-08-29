@@ -1,9 +1,27 @@
 version: '3'
 services:
+  ## server
+  ngcca-server:
+    restart: always
+    image: 119.91.214.25:5000/ngcca/ngcca-server:2023.08.23.180546
+    container_name: ngcca_server
+    hostname: ngcca-server.local
+    volumes:
+      - ngcca_server_volume:/ngcca-server
+    ports:
+      - "8080:8080"
+    env_file:
+      - env
+    depends_on:
+      - ngcca-minio
+      - ngcca-mongo
+      - ngcca-redis
+    networks:
+      - ngcca
   ## web
   ngcca-web:
     restart: always
-    image: ngcca/web-server:latest
+    image: 119.91.214.25:5000/ngcca/web-server:2023.08.24.163329
     container_name: ngcca_web
     hostname: ngcca-web.local
     volumes:
@@ -11,18 +29,13 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - docker.env
+      - env
     depends_on:
       - ngcca-minio
       - ngcca-mongo
       - ngcca-redis
     networks:
       - ngcca
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/login" ]
-      interval: 30s
-      timeout: 20s
-      retries: 3
   ## minio
   ngcca-minio:
     restart: always
@@ -72,8 +85,8 @@ services:
     hostname: mongo.local
     container_name: ngcca_mongo
     environment:
-      - MONGO_ROOT_USER=admin
-      - MONGO_ROOT_PASSWORD=QbMufCD@9WVQ^Hv
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=QbMufCD@9WVQ^Hv
     networks:
       - ngcca
     healthcheck:
@@ -91,6 +104,7 @@ volumes:
   ngcca_mongo_volume:
   ngcca_redis_volume:
   ngcca_web_volume:
+  ngcca_server_volume:
 networks:
   ngcca:
     external: true
