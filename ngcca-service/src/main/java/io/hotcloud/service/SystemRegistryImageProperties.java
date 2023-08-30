@@ -5,7 +5,6 @@ import io.hotcloud.common.model.Properties;
 import io.hotcloud.common.model.exception.PlatformException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import java.util.Map;
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
 @ConfigurationProperties(prefix = CONFIG_PREFIX + "system.registry-image")
-@Configuration(proxyBeanMethods = false)
 @Properties(prefix = CONFIG_PREFIX + "system.registry-image")
 @Data
 public class SystemRegistryImageProperties {

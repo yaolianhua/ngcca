@@ -6,12 +6,10 @@ import io.hotcloud.common.model.Properties;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
-@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = CONFIG_PREFIX + "registry")
 @Data
 @Properties(prefix = CONFIG_PREFIX + "registry")
