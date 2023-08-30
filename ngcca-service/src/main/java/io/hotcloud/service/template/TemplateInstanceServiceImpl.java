@@ -1,4 +1,4 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template;
 
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.TemplateInstanceEntity;

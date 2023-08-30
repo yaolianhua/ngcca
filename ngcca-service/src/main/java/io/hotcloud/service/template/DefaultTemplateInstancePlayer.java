@@ -1,10 +1,10 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.service.application.template.processor.InstanceTemplateProcessors;
+import io.hotcloud.service.template.processor.InstanceTemplateProcessors;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template.model;
 
+import io.hotcloud.service.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -13,30 +14,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class MongoTemplate {
+public class RedisTemplate {
 
     public static final String TEMPLATE;
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("mongodb.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("redis.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String name = Template.MONGODB.name().toLowerCase();
-    private String image = "mongo:5.0";
+    private String name = Template.REDIS.name().toLowerCase();
+    private String image = "redis:7.0";
     private String namespace;
-    private String service = Template.MONGODB.name().toLowerCase();
-    private String username = "admin";
+    private String service = Template.REDIS.name().toLowerCase();
+
     private String password = "passw0rd";
 
-    public MongoTemplate(String namespace) {
+    public RedisTemplate(String namespace) {
         this.namespace = namespace;
     }
 
-    public MongoTemplate(String image, String namespace) {
+    public RedisTemplate(String image, String namespace) {
         if (StringUtils.hasText(image)) {
             this.image = image;
         }
@@ -47,12 +48,11 @@ public class MongoTemplate {
         return new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("MONGO", name,
+                        Map.of("REDIS", name,
                                 "ID", id,
                                 "NAMESPACE", namespace,
-                                "MONGO_IMAGE", image,
-                                "MONGO_ROOT_USERNAME", username,
-                                "MONGO_ROOT_PASSWORD", password),
+                                "REDIS_IMAGE", image,
+                                "REDIS_PASSWORD", password),
                         String.class
                 );
     }

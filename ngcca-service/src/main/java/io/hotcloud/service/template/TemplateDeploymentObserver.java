@@ -1,4 +1,4 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template;
 
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Event;

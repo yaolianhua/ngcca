@@ -1,4 +1,4 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template;
 
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.model.exception.ResourceConflictException;

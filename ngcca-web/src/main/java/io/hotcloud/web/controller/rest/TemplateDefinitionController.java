@@ -2,9 +2,9 @@ package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.service.application.template.Template;
-import io.hotcloud.service.application.template.TemplateDefinition;
-import io.hotcloud.service.application.template.TemplateDefinitionService;
+import io.hotcloud.service.template.Template;
+import io.hotcloud.service.template.TemplateDefinition;
+import io.hotcloud.service.template.TemplateDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

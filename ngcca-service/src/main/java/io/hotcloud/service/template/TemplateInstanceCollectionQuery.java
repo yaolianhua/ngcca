@@ -1,4 +1,4 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template;
 
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;

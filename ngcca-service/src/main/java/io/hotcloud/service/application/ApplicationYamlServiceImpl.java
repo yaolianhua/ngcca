@@ -1,7 +1,7 @@
 package io.hotcloud.service.application;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.service.application.template.*;
+import io.hotcloud.service.template.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

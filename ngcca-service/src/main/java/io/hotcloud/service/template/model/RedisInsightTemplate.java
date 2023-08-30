@@ -1,5 +1,6 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template.model;
 
+import io.hotcloud.service.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -13,32 +14,34 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class RedisTemplate {
+public class RedisInsightTemplate {
 
     public static final String TEMPLATE;
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("redis.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("redisinsight.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String name = Template.REDIS.name().toLowerCase();
-    private String image = "redis:7.0";
+    private String name = Template.REDISINSIGHT.name().toLowerCase();
+    private String image = "redislabs/redisinsight:latest";
+    private String initContainerImage = "busybox:latest";
     private String namespace;
-    private String service = Template.REDIS.name().toLowerCase();
+    private String service = Template.REDISINSIGHT.name().toLowerCase() + "-service";
 
-    private String password = "passw0rd";
-
-    public RedisTemplate(String namespace) {
+    public RedisInsightTemplate(String namespace) {
         this.namespace = namespace;
     }
 
-    public RedisTemplate(String image, String namespace) {
+    public RedisInsightTemplate(String image, String initContainerImage, String namespace) {
         if (StringUtils.hasText(image)) {
             this.image = image;
+        }
+        if (StringUtils.hasText(initContainerImage)) {
+            this.initContainerImage = initContainerImage;
         }
         this.namespace = namespace;
     }
@@ -47,11 +50,11 @@ public class RedisTemplate {
         return new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("REDIS", name,
+                        Map.of("REDISINSIGHT", name,
                                 "ID", id,
                                 "NAMESPACE", namespace,
-                                "REDIS_IMAGE", image,
-                                "REDIS_PASSWORD", password),
+                                "REDISINSIGHT_IMAGE", image,
+                                "BUSYBOX_IMAGE", initContainerImage),
                         String.class
                 );
     }

@@ -1,10 +1,10 @@
-package io.hotcloud.service.application.template.processor;
+package io.hotcloud.service.template.processor;
 
 import io.hotcloud.common.utils.UUIDGenerator;
-import io.hotcloud.service.application.template.MysqlTemplate;
-import io.hotcloud.service.application.template.Template;
-import io.hotcloud.service.application.template.TemplateInstance;
-import io.hotcloud.service.application.template.TemplateInstanceProcessor;
+import io.hotcloud.service.template.model.MysqlTemplate;
+import io.hotcloud.service.template.Template;
+import io.hotcloud.service.template.TemplateInstance;
+import io.hotcloud.service.template.TemplateInstanceProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

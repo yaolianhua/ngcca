@@ -2,8 +2,8 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.service.application.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceService;
-import io.hotcloud.service.application.template.TemplateDefinitionService;
-import io.hotcloud.service.application.template.TemplateInstanceService;
+import io.hotcloud.service.template.TemplateDefinitionService;
+import io.hotcloud.service.template.TemplateInstanceService;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.WebConstant;

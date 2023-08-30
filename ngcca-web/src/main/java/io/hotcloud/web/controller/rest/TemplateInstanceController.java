@@ -6,7 +6,7 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
-import io.hotcloud.service.application.template.*;
+import io.hotcloud.service.template.*;
 import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

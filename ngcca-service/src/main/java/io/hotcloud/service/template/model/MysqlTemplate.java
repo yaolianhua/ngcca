@@ -1,5 +1,6 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template.model;
 
+import io.hotcloud.service.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -13,30 +14,29 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class MinioTemplate {
+public class MysqlTemplate {
 
     public static final String TEMPLATE;
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("minio.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("mysql.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String name = Template.MINIO.name().toLowerCase();
-    private String image = "quay.io/minio/minio:latest";
+    private String name = Template.MYSQL.name().toLowerCase();
+    private String image = "mysql:8.0";
     private String namespace;
-    private String service = Template.MINIO.name().toLowerCase();
-    private String accessKey = "admin";
-    private String accessSecret = "passw0rd";
+    private String service = Template.MYSQL.name().toLowerCase();
+    private String password = "passw0rd";
 
-    public MinioTemplate(String namespace) {
+    public MysqlTemplate(String namespace) {
         this.namespace = namespace;
     }
 
-    public MinioTemplate(String image, String namespace) {
+    public MysqlTemplate(String image, String namespace) {
         if (StringUtils.hasText(image)) {
             this.image = image;
         }
@@ -47,12 +47,11 @@ public class MinioTemplate {
         return new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("ID", id,
-                                "MINIO", name,
+                        Map.of("MYSQL", name,
+                                "ID", id,
                                 "NAMESPACE", namespace,
-                                "MINIO_IMAGE", image,
-                                "MINIO_ROOT_USER", accessKey,
-                                "MINIO_ROOT_PASSWORD", accessSecret),
+                                "MYSQL_IMAGE", image,
+                                "MYSQL_ROOT_PASSWORD", password),
                         String.class
                 );
     }

@@ -1,5 +1,6 @@
-package io.hotcloud.service.application.template;
+package io.hotcloud.service.template.model;
 
+import io.hotcloud.service.template.Template;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.expression.common.TemplateParserContext;
@@ -13,34 +14,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
-public class RedisInsightTemplate {
+public class RabbitmqTemplate {
 
     public static final String TEMPLATE;
 
     static {
         try {
-            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("redisinsight.template").getInputStream())).lines().collect(Collectors.joining("\n"));
+            TEMPLATE = new BufferedReader(new InputStreamReader(new ClassPathResource("rabbitmq.template").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String name = Template.REDISINSIGHT.name().toLowerCase();
-    private String image = "redislabs/redisinsight:latest";
-    private String initContainerImage = "busybox:latest";
+    private String name = Template.RABBITMQ.name().toLowerCase();
+    private String image = "rabbitmq:3.9-management";
     private String namespace;
-    private String service = Template.REDISINSIGHT.name().toLowerCase() + "-service";
+    private String service = Template.RABBITMQ.name().toLowerCase();
+    private String username = "admin";
+    private String password = "passw0rd";
 
-    public RedisInsightTemplate(String namespace) {
+    public RabbitmqTemplate(String namespace) {
         this.namespace = namespace;
     }
 
-    public RedisInsightTemplate(String image, String initContainerImage, String namespace) {
+    public RabbitmqTemplate(String image, String namespace) {
         if (StringUtils.hasText(image)) {
             this.image = image;
-        }
-        if (StringUtils.hasText(initContainerImage)) {
-            this.initContainerImage = initContainerImage;
         }
         this.namespace = namespace;
     }
@@ -49,11 +48,13 @@ public class RedisInsightTemplate {
         return new SpelExpressionParser()
                 .parseExpression(TEMPLATE, new TemplateParserContext())
                 .getValue(
-                        Map.of("REDISINSIGHT", name,
+                        Map.of("RABBITMQ", name,
                                 "ID", id,
                                 "NAMESPACE", namespace,
-                                "REDISINSIGHT_IMAGE", image,
-                                "BUSYBOX_IMAGE", initContainerImage),
+                                "RABBITMQ_IMAGE", image,
+                                "RABBITMQ_DEFAULT_PASSWORD", password,
+                                "RABBITMQ_DEFAULT_USER", username,
+                                "RABBITMQ_MANAGEMENT", "management"),
                         String.class
                 );
     }
