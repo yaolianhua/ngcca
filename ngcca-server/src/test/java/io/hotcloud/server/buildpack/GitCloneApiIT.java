@@ -1,6 +1,6 @@
 package io.hotcloud.server.buildpack;
 
-import io.hotcloud.service.buildpack.GitApi;
+import io.hotcloud.service.git.GitCloneApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -16,17 +16,17 @@ import java.util.Objects;
  * @author yaolianhua789@gmail.com
  **/
 @Slf4j
-public class GitApiIT {
+public class GitCloneApiIT {
 
     @Autowired
-    private GitApi gitApi;
+    private GitCloneApi gitCloneApi;
 
     @Test
     public void cloneRepository() throws IOException {
 
         final String path = "test-clone-repository";
 
-        gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        gitCloneApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 false,
@@ -40,7 +40,7 @@ public class GitApiIT {
             log.debug("list of test-clone-repository/hotcloud name: {}", naming);
         }
 
-        gitApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
+        gitCloneApi.clone("https://gitlab.com/yaolianhua/hotcloud.git",
                 null,
                 path,
                 true,

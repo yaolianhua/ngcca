@@ -1,8 +1,9 @@
-package io.hotcloud.service.buildpack;
+package io.hotcloud.service.git;
 
 import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.utils.Validator;
+import io.hotcloud.service.buildpack.SimpleProgressMonitor;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
-public class GitImpl implements GitApi {
+public class GitCloneImpl implements GitCloneApi {
 
     @Override
     public void clone(String remote, String branch, String local, boolean force, @Nullable String username, @Nullable String password) {

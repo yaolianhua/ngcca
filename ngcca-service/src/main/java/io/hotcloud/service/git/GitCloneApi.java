@@ -1,11 +1,8 @@
-package io.hotcloud.service.buildpack;
+package io.hotcloud.service.git;
 
 import jakarta.annotation.Nullable;
 
-/**
- * @author yaolianhua789@gmail.com
- **/
-public interface GitApi {
+public interface GitCloneApi {
 
     /**
      * Clone git repository
