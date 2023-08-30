@@ -6,7 +6,7 @@ import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.service.buildpack.BuildPackApi;
 import io.hotcloud.service.buildpack.model.BuildImage;
 import io.hotcloud.service.buildpack.model.BuildPack;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = ServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackApiIT {
 

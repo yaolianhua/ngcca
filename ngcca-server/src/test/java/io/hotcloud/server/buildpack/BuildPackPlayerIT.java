@@ -3,7 +3,7 @@ package io.hotcloud.server.buildpack;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.JavaRuntime;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.service.buildpack.BuildPackPlayer;
 import io.hotcloud.service.buildpack.BuildPackService;
 import io.hotcloud.service.buildpack.model.BuildImage;
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.awaitility.Awaitility.await;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = ServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class BuildPackPlayerIT {
 

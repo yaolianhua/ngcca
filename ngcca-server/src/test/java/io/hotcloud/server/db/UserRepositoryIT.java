@@ -3,7 +3,7 @@ package io.hotcloud.server.db;
 import com.github.javafaker.Faker;
 import io.hotcloud.db.entity.UserEntity;
 import io.hotcloud.db.entity.UserRepository;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NgccaServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = ServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 @ActiveProfiles("test")
 public class UserRepositoryIT {

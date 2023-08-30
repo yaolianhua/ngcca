@@ -1,6 +1,6 @@
 package io.hotcloud.server.minio;
 
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.vendor.minio.service.MinioBucketApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaServerApplication.class
+        classes = ServerApplication.class
 )
 @ActiveProfiles("test")
 @Slf4j

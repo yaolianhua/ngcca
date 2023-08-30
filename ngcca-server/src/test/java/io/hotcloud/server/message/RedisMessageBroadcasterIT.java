@@ -2,7 +2,7 @@ package io.hotcloud.server.message;
 
 import com.github.javafaker.Faker;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.service.message.RedisMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static io.hotcloud.common.model.CommonConstant.MESSAGE_QUEUE_TEST;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaServerApplication.class
+        classes = ServerApplication.class
 )
 @Import(RedisMessageTestObserver.class)
 @ActiveProfiles("test")

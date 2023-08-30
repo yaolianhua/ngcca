@@ -2,7 +2,7 @@ package io.hotcloud.server.application;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.JavaRuntime;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.service.application.*;
 import io.hotcloud.service.registry.SystemRegistryProperties;
 import io.hotcloud.service.security.user.UserApi;
@@ -28,7 +28,7 @@ import static org.awaitility.Awaitility.await;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaServerApplication.class
+        classes = ServerApplication.class
 )
 @ActiveProfiles("test")
 public class ApplicationInstancePlayerIT {

@@ -2,7 +2,7 @@ package io.hotcloud.server.application;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.server.NgccaServerApplication;
+import io.hotcloud.server.ServerApplication;
 import io.hotcloud.service.application.template.Template;
 import io.hotcloud.service.application.template.TemplateInstance;
 import io.hotcloud.service.application.template.TemplateInstancePlayer;
@@ -29,7 +29,7 @@ import static org.awaitility.Awaitility.await;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = NgccaServerApplication.class
+        classes = ServerApplication.class
 )
 @ActiveProfiles("test")
 public class TemplateInstancePlayerIT  {
