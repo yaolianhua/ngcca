@@ -1,4 +1,4 @@
-package io.hotcloud.service.git;
+package io.hotcloud.service.git.clone;
 
 import jakarta.annotation.Nullable;
 

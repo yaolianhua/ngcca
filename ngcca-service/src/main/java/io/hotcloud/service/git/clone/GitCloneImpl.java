@@ -1,9 +1,8 @@
-package io.hotcloud.service.git;
+package io.hotcloud.service.git.clone;
 
 import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.utils.Validator;
-import io.hotcloud.service.buildpack.SimpleProgressMonitor;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;

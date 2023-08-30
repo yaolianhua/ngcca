@@ -1,4 +1,4 @@
-package io.hotcloud.service.buildpack;
+package io.hotcloud.service.git.clone;
 
 import io.hotcloud.common.log.Log;
 import org.eclipse.jgit.lib.ProgressMonitor;
