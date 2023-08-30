@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.hotcloud</groupId>
         <artifactId>ngcca</artifactId>
-        <version>0.3</version>
+        <version>freedom</version>
     </parent>
 
     <artifactId>ngcca-db</artifactId>
