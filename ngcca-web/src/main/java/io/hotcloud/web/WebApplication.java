@@ -4,9 +4,7 @@ import io.hotcloud.kubernetes.client.EnableKubernetesAgentClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackageClasses = {
-        WebApplication.class
-})
+@SpringBootApplication
 @EnableKubernetesAgentClient
 public class WebApplication {
 
