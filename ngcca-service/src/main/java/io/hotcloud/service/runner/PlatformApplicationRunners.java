@@ -10,11 +10,11 @@ import java.util.List;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE - 3)
-public class SystemApplicationRunner implements ApplicationRunner {
+public class PlatformApplicationRunners implements ApplicationRunner {
 
     private final List<RunnerProcessor> processors;
 
-    public SystemApplicationRunner(List<RunnerProcessor> processors) {
+    public PlatformApplicationRunners(List<RunnerProcessor> processors) {
         this.processors = processors;
     }
 

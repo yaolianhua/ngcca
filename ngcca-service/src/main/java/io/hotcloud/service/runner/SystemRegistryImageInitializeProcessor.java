@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class SystemRegistryImageProcessor implements RunnerProcessor {
+public class SystemRegistryImageInitializeProcessor implements RunnerProcessor {
 
     private final RegistryImageRepository registryImageRepository;
     private final SystemRegistryProperties systemRegistryProperties;

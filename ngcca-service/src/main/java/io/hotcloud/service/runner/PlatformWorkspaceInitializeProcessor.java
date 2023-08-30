@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import static io.hotcloud.common.model.CommonConstant.ROOT_PATH;
 
 @Component
-public class SystemWorkspaceProcessor implements RunnerProcessor {
+public class PlatformWorkspaceInitializeProcessor implements RunnerProcessor {
 
     @Override
     public void execute() {

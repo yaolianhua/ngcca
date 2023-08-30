@@ -2,31 +2,31 @@ package io.hotcloud.service.runner;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SystemUserProcessor implements RunnerProcessor {
+public class AdminUserInitializeProcessor implements RunnerProcessor {
 
     private final UserApi userApi;
 
-    public SystemUserProcessor(UserApi userApi) {
+    public AdminUserInitializeProcessor(UserApi userApi) {
         this.userApi = userApi;
     }
 
     @Override
     public void execute() {
-        String username = "admin";
-        boolean exist = userApi.exist(username);
+        boolean exist = userApi.exist(CommonConstant.ADMIN_USERNAME);
         if (exist) {
             return;
         }
 
         User user = User.builder()
-                .username(username)
-                .password("e2c20178-1f6b-4860-b9d2-7ac4a9f2a2ea")
-                .nickname(username)
+                .username(CommonConstant.ADMIN_USERNAME)
+                .password(CommonConstant.ADMIN_INIT_PASSWORD)
+                .nickname(CommonConstant.ADMIN_USERNAME)
                 .enabled(true)
                 .build();
         User saved = userApi.save(user);
