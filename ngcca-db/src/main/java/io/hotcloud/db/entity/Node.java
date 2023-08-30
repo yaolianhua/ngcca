@@ -1,4 +1,4 @@
-package io.hotcloud.module.db.entity;
+package io.hotcloud.db.entity;
 
 import lombok.Data;
 

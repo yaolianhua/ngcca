@@ -14,7 +14,7 @@ import io.hotcloud.kubernetes.client.http.JobClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.module.db.entity.RegistryImageRepository;
+import io.hotcloud.db.entity.RegistryImageRepository;
 import io.hotcloud.service.SystemRegistryProperties;
 import io.hotcloud.service.SystemRuntimeImage;
 import io.hotcloud.service.buildpack.model.*;

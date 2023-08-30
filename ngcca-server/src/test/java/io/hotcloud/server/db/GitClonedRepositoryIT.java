@@ -1,7 +1,7 @@
 package io.hotcloud.server.db;
 
-import io.hotcloud.module.db.entity.GitClonedEntity;
-import io.hotcloud.module.db.entity.GitClonedRepository;
+import io.hotcloud.db.entity.GitClonedEntity;
+import io.hotcloud.db.entity.GitClonedRepository;
 import io.hotcloud.server.NgccaServerApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;

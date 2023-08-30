@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller.rest;
 
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.module.db.entity.ActivityRepository;
+import io.hotcloud.db.entity.ActivityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

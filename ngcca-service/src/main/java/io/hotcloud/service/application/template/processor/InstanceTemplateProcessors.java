@@ -1,7 +1,7 @@
 package io.hotcloud.service.application.template.processor;
 
-import io.hotcloud.module.db.entity.RegistryImageEntity;
-import io.hotcloud.module.db.entity.RegistryImageRepository;
+import io.hotcloud.db.entity.RegistryImageEntity;
+import io.hotcloud.db.entity.RegistryImageRepository;
 import io.hotcloud.service.application.template.Template;
 import io.hotcloud.service.application.template.TemplateInstance;
 import io.hotcloud.service.application.template.TemplateInstanceProcessor;

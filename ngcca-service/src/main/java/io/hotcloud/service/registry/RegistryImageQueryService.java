@@ -1,7 +1,7 @@
 package io.hotcloud.service.registry;
 
-import io.hotcloud.module.db.entity.RegistryImageEntity;
-import io.hotcloud.module.db.entity.RegistryImageRepository;
+import io.hotcloud.db.entity.RegistryImageEntity;
+import io.hotcloud.db.entity.RegistryImageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

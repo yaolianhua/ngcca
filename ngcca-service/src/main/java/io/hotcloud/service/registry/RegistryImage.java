@@ -1,6 +1,6 @@
 package io.hotcloud.service.registry;
 
-import io.hotcloud.module.db.entity.RegistryImageEntity;
+import io.hotcloud.db.entity.RegistryImageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

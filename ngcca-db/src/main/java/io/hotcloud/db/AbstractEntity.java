@@ -1,4 +1,4 @@
-package io.hotcloud.module.db;
+package io.hotcloud.db;
 
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;

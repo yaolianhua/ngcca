@@ -1,6 +1,6 @@
-package io.hotcloud.module.db.entity;
+package io.hotcloud.db.entity;
 
-import io.hotcloud.module.db.AbstractEntity;
+import io.hotcloud.db.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;

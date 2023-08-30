@@ -1,6 +1,6 @@
 package io.hotcloud.service.cluster;
 
-import io.hotcloud.module.db.entity.Node;
+import io.hotcloud.db.entity.Node;
 import lombok.Data;
 
 import java.util.ArrayList;

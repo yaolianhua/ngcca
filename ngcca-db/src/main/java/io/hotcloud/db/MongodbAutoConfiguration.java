@@ -1,4 +1,4 @@
-package io.hotcloud.module.db;
+package io.hotcloud.db;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;

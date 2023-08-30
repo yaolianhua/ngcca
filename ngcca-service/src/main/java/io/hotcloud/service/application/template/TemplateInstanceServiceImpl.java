@@ -1,8 +1,8 @@
 package io.hotcloud.service.application.template;
 
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
-import io.hotcloud.module.db.entity.TemplateInstanceEntity;
-import io.hotcloud.module.db.entity.TemplateInstanceRepository;
+import io.hotcloud.db.entity.TemplateInstanceEntity;
+import io.hotcloud.db.entity.TemplateInstanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
