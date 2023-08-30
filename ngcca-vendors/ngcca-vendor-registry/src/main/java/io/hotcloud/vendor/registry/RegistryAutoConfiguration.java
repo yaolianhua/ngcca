@@ -5,14 +5,16 @@ import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.vendor.registry.client.DockerClientFactory;
 import io.hotcloud.vendor.registry.model.DockerClientCreateConfig;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ComponentScan;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
+@ComponentScan
 @EnableConfigurationProperties(DockerProperties.class)
-public class RegistryConfiguration {
+public class RegistryAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
