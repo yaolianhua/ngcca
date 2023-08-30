@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.gitapi.gitlab;
+package io.hotcloud.service.git.gitlab;
 
 import io.hotcloud.common.model.exception.PlatformException;
 import org.gitlab4j.api.GitLabApi;

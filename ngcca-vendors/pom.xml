@@ -17,7 +17,6 @@
         <module>ngcca-vendor-minio</module>
         <module>ngcca-vendor-registry</module>
         <module>ngcca-vendor-kaniko</module>
-        <module>ngcca-vendor-gitapi</module>
     </modules>
 
 </project>

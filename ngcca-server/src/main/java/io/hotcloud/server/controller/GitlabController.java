@@ -2,8 +2,8 @@ package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.vendor.gitapi.gitlab.GitLabRequestParameter;
-import io.hotcloud.vendor.gitapi.gitlab.GitlabService;
+import io.hotcloud.service.git.gitlab.GitLabRequestParameter;
+import io.hotcloud.service.git.gitlab.GitlabService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

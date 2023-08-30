@@ -1,7 +1,7 @@
-package io.hotcloud.vendor.gitapi.gitlab;
+package io.hotcloud.service.git.gitlab;
 
 import io.hotcloud.common.model.exception.PlatformException;
-import io.hotcloud.vendor.gitapi.GitProxyProperties;
+import io.hotcloud.service.git.GitProxyProperties;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.ProxyClientConfig;

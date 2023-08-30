@@ -116,11 +116,7 @@
                 <artifactId>ngcca-vendor-kaniko</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.hotcloud</groupId>
-                <artifactId>ngcca-vendor-gitapi</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <!-- Kubernetes -->
             <dependency>
                 <groupId>io.kubernetes</groupId>

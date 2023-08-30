@@ -53,9 +53,15 @@
             <groupId>io.hotcloud</groupId>
             <artifactId>ngcca-vendor-kaniko</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>io.hotcloud</groupId>
-            <artifactId>ngcca-vendor-gitapi</artifactId>
+            <groupId>org.gitlab4j</groupId>
+            <artifactId>gitlab4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <dependency>

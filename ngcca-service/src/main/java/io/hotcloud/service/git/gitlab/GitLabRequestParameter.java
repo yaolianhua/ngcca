@@ -1,4 +1,4 @@
-package io.hotcloud.vendor.gitapi.gitlab;
+package io.hotcloud.service.git.gitlab;
 
 import lombok.Data;
 

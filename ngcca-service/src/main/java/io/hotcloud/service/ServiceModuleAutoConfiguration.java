@@ -1,5 +1,6 @@
 package io.hotcloud.service;
 
+import io.hotcloud.service.git.GitProxyProperties;
 import io.hotcloud.service.registry.SystemRegistryImageProperties;
 import io.hotcloud.service.registry.SystemRegistryProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -20,7 +21,8 @@ import java.util.concurrent.ExecutorService;
 @ComponentScan
 @EnableConfigurationProperties({
         SystemRegistryImageProperties.class,
-        SystemRegistryProperties.class
+        SystemRegistryProperties.class,
+        GitProxyProperties.class
 })
 @EnableAsync
 @EnableScheduling
