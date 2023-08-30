@@ -1,4 +1,4 @@
-package io.hotcloud.service;
+package io.hotcloud.service.registry;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;

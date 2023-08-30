@@ -1,13 +1,13 @@
 package io.hotcloud.service.application.template.processor;
 
 import io.hotcloud.common.utils.UUIDGenerator;
-import io.hotcloud.service.SystemRegistryImageProperties;
 import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.application.IngressDefinition;
 import io.hotcloud.service.application.template.RedisInsightTemplate;
 import io.hotcloud.service.application.template.Template;
 import io.hotcloud.service.application.template.TemplateInstance;
 import io.hotcloud.service.application.template.TemplateInstanceProcessor;
+import io.hotcloud.service.registry.SystemRegistryImageProperties;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 

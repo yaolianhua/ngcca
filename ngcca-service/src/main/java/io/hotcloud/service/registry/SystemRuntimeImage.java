@@ -1,4 +1,4 @@
-package io.hotcloud.service;
+package io.hotcloud.service.registry;
 
 public enum SystemRuntimeImage {
     //

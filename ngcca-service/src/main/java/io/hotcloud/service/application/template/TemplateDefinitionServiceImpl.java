@@ -5,7 +5,7 @@ import io.hotcloud.common.model.exception.ResourceConflictException;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.TemplateDefinitionEntity;
 import io.hotcloud.db.entity.TemplateDefinitionRepository;
-import io.hotcloud.service.SystemRegistryImageProperties;
+import io.hotcloud.service.registry.SystemRegistryImageProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;

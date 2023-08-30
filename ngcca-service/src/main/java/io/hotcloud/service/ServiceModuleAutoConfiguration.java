@@ -1,5 +1,7 @@
 package io.hotcloud.service;
 
+import io.hotcloud.service.registry.SystemRegistryImageProperties;
+import io.hotcloud.service.registry.SystemRegistryProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

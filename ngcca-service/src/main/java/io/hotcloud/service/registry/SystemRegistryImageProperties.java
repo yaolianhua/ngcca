@@ -1,4 +1,4 @@
-package io.hotcloud.service;
+package io.hotcloud.service.registry;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hotcloud.common.model.Properties;

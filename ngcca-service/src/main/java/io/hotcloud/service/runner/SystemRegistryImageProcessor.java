@@ -2,8 +2,8 @@ package io.hotcloud.service.runner;
 
 import io.hotcloud.db.entity.RegistryImageEntity;
 import io.hotcloud.db.entity.RegistryImageRepository;
-import io.hotcloud.service.SystemRegistryImageProperties;
-import io.hotcloud.service.SystemRegistryProperties;
+import io.hotcloud.service.registry.SystemRegistryImageProperties;
+import io.hotcloud.service.registry.SystemRegistryProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
