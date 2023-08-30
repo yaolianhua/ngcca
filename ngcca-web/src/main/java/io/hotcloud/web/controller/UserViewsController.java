@@ -1,6 +1,6 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.service.application.ApplicationInstance;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.template.TemplateInstanceService;

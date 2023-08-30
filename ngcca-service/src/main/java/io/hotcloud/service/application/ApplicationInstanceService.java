@@ -1,5 +1,7 @@
 package io.hotcloud.service.application;
 
+import io.hotcloud.service.application.model.ApplicationInstance;
+
 import java.util.List;
 
 public interface ApplicationInstanceService {

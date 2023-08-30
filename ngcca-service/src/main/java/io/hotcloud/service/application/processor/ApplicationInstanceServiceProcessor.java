@@ -9,7 +9,7 @@ import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
 import io.hotcloud.kubernetes.model.network.ServiceSpec;
-import io.hotcloud.service.application.ApplicationInstance;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import lombok.RequiredArgsConstructor;

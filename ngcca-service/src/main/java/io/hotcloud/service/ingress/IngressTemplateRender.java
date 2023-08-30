@@ -1,4 +1,4 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.ingress;
 
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;

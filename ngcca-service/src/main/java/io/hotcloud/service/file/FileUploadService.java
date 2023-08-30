@@ -1,4 +1,4 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.file;
 
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.exception.PlatformException;

@@ -6,6 +6,8 @@ import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.ApplicationInstanceEntity;
 import io.hotcloud.db.entity.ApplicationInstanceRepository;
+import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.application.model.ApplicationInstanceSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

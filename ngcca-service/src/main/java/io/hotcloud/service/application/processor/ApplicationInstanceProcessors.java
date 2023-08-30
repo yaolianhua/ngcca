@@ -1,7 +1,7 @@
 package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.service.application.ApplicationInstance;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.buildpack.BuildPackCacheApi;
 import io.hotcloud.service.buildpack.model.JobState;

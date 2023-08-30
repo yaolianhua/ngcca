@@ -1,6 +1,6 @@
 package io.hotcloud.web.service;
 
-import io.hotcloud.service.application.ApplicationInstanceStatistics;
+import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import io.hotcloud.service.template.TemplateInstanceStatistics;
 import io.hotcloud.service.buildpack.model.BuildPackStatistics;
 import io.hotcloud.service.cluster.KubernetesClusterStatistics;

@@ -1,6 +1,8 @@
 package io.hotcloud.service.application;
 
 import io.hotcloud.common.log.Log;
+import io.hotcloud.service.application.model.ApplicationForm;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.processor.ApplicationInstanceProcessors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

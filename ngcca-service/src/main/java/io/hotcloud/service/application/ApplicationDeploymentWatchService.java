@@ -8,6 +8,7 @@ import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

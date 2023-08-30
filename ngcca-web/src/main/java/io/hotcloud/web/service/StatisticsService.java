@@ -4,7 +4,7 @@ import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.service.application.ApplicationInstanceStatistics;
+import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import io.hotcloud.service.application.ApplicationInstanceStatisticsService;
 import io.hotcloud.service.template.TemplateInstanceStatistics;
 import io.hotcloud.service.template.TemplateInstanceStatisticsService;

@@ -2,7 +2,7 @@ package io.hotcloud.service.template.processor;
 
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.service.application.ApplicationProperties;
-import io.hotcloud.service.application.IngressDefinition;
+import io.hotcloud.service.ingress.IngressDefinition;
 import io.hotcloud.service.template.model.MinioTemplate;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.service.application.IngressTemplateRender.render;
+import static io.hotcloud.service.ingress.IngressTemplateRender.render;
 
 @Component
 class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {

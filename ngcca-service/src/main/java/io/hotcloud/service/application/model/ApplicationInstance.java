@@ -1,4 +1,4 @@
-package io.hotcloud.service.application;
+package io.hotcloud.service.application.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
