@@ -7,7 +7,6 @@ import io.hotcloud.common.log.Log;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 
 import java.net.InetSocketAddress;
@@ -15,7 +14,6 @@ import java.net.Proxy;
 import java.time.Duration;
 import java.util.Objects;
 
-@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OpenAiProperties.class)
 public class OpenAiConfiguration {
 
