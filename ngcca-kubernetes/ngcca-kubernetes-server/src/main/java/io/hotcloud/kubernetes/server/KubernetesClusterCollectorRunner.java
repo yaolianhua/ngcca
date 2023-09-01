@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.server.mq;
+package io.hotcloud.kubernetes.server;
 
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.client.KubernetesClient;
