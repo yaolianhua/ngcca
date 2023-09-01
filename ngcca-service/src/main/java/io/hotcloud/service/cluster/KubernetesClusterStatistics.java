@@ -15,18 +15,29 @@ import java.util.stream.Collectors;
 @Builder
 public class KubernetesClusterStatistics {
 
+    @Builder.Default
     private List<NodeMetrics> nodeMetrics = new ArrayList<>();
-
+    @Builder.Default
     private List<PodMetrics> podMetrics = new ArrayList<>();
+    @Builder.Default
     private List<Pod> pods = new ArrayList<>();
+    @Builder.Default
     private List<Deployment> deployments = new ArrayList<>();
+    @Builder.Default
     private List<Job> jobs = new ArrayList<>();
+    @Builder.Default
     private List<Cronjob> cronJobs = new ArrayList<>();
+    @Builder.Default
     private List<DaemonSet> daemonSets = new ArrayList<>();
+    @Builder.Default
     private List<StatefulSet> statefulSets = new ArrayList<>();
+    @Builder.Default
     private List<Service> services = new ArrayList<>();
+    @Builder.Default
     private List<ConfigMap> configMaps = new ArrayList<>();
+    @Builder.Default
     private List<Secret> secrets = new ArrayList<>();
+    @Builder.Default
     private List<Ingress> ingresses = new ArrayList<>();
 
     public long getTotalNode() {
@@ -219,6 +230,7 @@ public class KubernetesClusterStatistics {
         private String architecture;
         private String osImage;
 
+        @Builder.Default
         private Map<String, String> labels = new HashMap<>();
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
@@ -257,9 +269,11 @@ public class KubernetesClusterStatistics {
     public static class PodMetrics {
         private String namespace;
         private String pod;
+        @Builder.Default
         private List<Container> containers = new ArrayList<>();
         private String status;
         private RefNode refNode;
+        @Builder.Default
         private Set<RefService> refServices = new HashSet<>();
         private long cpuMilliCoresUsage;
         private long memoryMegabyteUsage;
