@@ -1,8 +1,9 @@
-package io.hotcloud.common.message;
+package io.hotcloud.service.message;
 
 import io.hotcloud.common.cache.RedisCommand;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.message.MessageObserver;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
 import org.springframework.scheduling.annotation.Scheduled;
