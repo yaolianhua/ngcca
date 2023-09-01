@@ -1,10 +1,9 @@
-package io.hotcloud.service.message;
+package io.hotcloud.common.message;
 
-import io.hotcloud.common.MessageBroadcaster;
+import io.hotcloud.common.cache.RedisCommand;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.service.cache.RedisCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package io.hotcloud.service.message;
+package io.hotcloud.common.message;
 
 import io.hotcloud.common.model.Message;
 

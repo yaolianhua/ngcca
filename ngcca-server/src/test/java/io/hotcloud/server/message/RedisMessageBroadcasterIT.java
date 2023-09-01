@@ -1,9 +1,9 @@
 package io.hotcloud.server.message;
 
 import com.github.javafaker.Faker;
+import io.hotcloud.common.message.RedisMessageBroadcaster;
 import io.hotcloud.common.model.Message;
 import io.hotcloud.server.ServerApplication;
-import io.hotcloud.service.message.RedisMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

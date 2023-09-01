@@ -1,13 +1,13 @@
-package io.hotcloud.service.cache;
+package io.hotcloud.common.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.hotcloud.common.model.exception.PlatformException;
+import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.util.Assert;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 
 /**

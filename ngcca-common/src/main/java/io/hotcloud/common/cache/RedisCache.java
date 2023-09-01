@@ -1,4 +1,4 @@
-package io.hotcloud.service.cache;
+package io.hotcloud.common.cache;
 
 import io.hotcloud.common.model.exception.PlatformException;
 import lombok.extern.slf4j.Slf4j;

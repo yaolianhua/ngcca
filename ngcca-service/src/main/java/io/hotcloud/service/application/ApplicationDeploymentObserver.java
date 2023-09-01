@@ -2,12 +2,12 @@ package io.hotcloud.service.application;
 
 import io.fabric8.kubernetes.client.Watcher;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.message.MessageObserver;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
 import io.hotcloud.kubernetes.model.WorkloadsType;
 import io.hotcloud.kubernetes.model.module.WatchMessageBody;
 import io.hotcloud.service.application.model.ApplicationInstance;
-import io.hotcloud.service.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

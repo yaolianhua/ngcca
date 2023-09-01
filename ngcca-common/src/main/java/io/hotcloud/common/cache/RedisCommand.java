@@ -1,4 +1,4 @@
-package io.hotcloud.service.cache;
+package io.hotcloud.common.cache;
 
 import java.util.List;
 import java.util.Map;

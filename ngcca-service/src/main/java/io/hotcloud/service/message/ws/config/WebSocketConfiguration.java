@@ -1,6 +1,6 @@
 package io.hotcloud.service.message.ws.config;
 
-import io.hotcloud.service.message.RedisMessageBroadcaster;
+import io.hotcloud.common.message.RedisMessageBroadcaster;
 import io.hotcloud.service.message.ws.WebSocketMessageBroadcaster;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

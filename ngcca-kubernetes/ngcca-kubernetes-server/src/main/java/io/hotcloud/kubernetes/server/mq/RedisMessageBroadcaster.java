@@ -1,6 +1,6 @@
 package io.hotcloud.kubernetes.server.mq;
 
-import io.hotcloud.common.MessageBroadcaster;
+import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.common.model.Message;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

@@ -1,15 +1,8 @@
-package io.hotcloud.service;
+package io.hotcloud.common;
 
-import io.hotcloud.service.application.ApplicationProperties;
-import io.hotcloud.service.buildpack.BuildPackProperties;
-import io.hotcloud.service.git.GitProxyProperties;
-import io.hotcloud.service.openai.OpenAiConfiguration;
-import io.hotcloud.service.registry.SystemRegistryImageProperties;
-import io.hotcloud.service.registry.SystemRegistryProperties;
-import io.hotcloud.service.security.SecurityConfiguration;
+import io.hotcloud.common.cache.RedisConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,20 +17,12 @@ import java.util.concurrent.ExecutorService;
 
 @AutoConfiguration
 @ComponentScan
-@EnableConfigurationProperties({
-        SystemRegistryImageProperties.class,
-        SystemRegistryProperties.class,
-        GitProxyProperties.class,
-        ApplicationProperties.class,
-        BuildPackProperties.class
-})
 @Import({
-        OpenAiConfiguration.class,
-        SecurityConfiguration.class
+        RedisConfiguration.class
 })
 @EnableAsync
 @EnableScheduling
-public class ServiceModuleAutoConfiguration {
+public class CommonModuleAutoConfiguration {
 
 
     /**
@@ -46,7 +31,7 @@ public class ServiceModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(TaskExecutorBuilder taskExecutorBuilder) {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("common-").build();
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = taskExecutorBuilder.threadNamePrefix("ngcca-").build();
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }

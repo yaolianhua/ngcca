@@ -1,7 +1,7 @@
 package io.hotcloud.server.cache;
 
-import io.hotcloud.service.cache.Cache;
-import io.hotcloud.service.cache.CaffeineCache;
+import io.hotcloud.common.cache.Cache;
+import io.hotcloud.common.cache.CaffeineCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

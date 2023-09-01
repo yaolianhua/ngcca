@@ -5,10 +5,10 @@ import io.fabric8.kubernetes.api.model.NodeAddress;
 import io.fabric8.kubernetes.api.model.NodeSystemInfo;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.message.MessageObserver;
 import io.hotcloud.common.model.Message;
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.model.K8sAgentCluster;
-import io.hotcloud.service.message.MessageObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

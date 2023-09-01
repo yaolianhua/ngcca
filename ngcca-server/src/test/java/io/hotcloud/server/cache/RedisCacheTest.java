@@ -1,7 +1,7 @@
 package io.hotcloud.server.cache;
 
-import io.hotcloud.service.cache.Cache;
-import io.hotcloud.service.cache.RedisCache;
+import io.hotcloud.common.cache.Cache;
+import io.hotcloud.common.cache.RedisCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

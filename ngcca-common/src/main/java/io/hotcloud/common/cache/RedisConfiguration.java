@@ -1,7 +1,8 @@
-package io.hotcloud.service.cache;
+package io.hotcloud.common.cache;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.utils.RedisHelper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

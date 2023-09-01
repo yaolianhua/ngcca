@@ -1,4 +1,4 @@
-package io.hotcloud.service.cache;
+package io.hotcloud.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.resource.ClientResources;
