@@ -23,6 +23,25 @@
             <artifactId>ngcca-kubernetes-client</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>logback-adapter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>error_prone_annotations</artifactId>
+                    <groupId>com.google.errorprone</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>proto-google-common-protos</artifactId>
+                    <groupId>com.google.api.grpc</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>protobuf-java</artifactId>
+                    <groupId>com.google.protobuf</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

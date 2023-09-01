@@ -55,6 +55,7 @@
         <gitlab4j.version>6.0.0-rc.2</gitlab4j.version>
         <jaxb.api-version>2.3.1</jaxb.api-version>
         <nacos.config-version>2022.0.0.0</nacos.config-version>
+        <nacos.logback.adapter-version>1.0.0</nacos.logback.adapter-version>
     </properties>
 
     <dependencyManagement>
@@ -304,6 +305,11 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
                 <version>${nacos.config-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>logback-adapter</artifactId>
+                <version>${nacos.logback.adapter-version}</version>
             </dependency>
 
         </dependencies>
