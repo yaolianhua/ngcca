@@ -32,8 +32,6 @@ public class KubernetesProperties {
      */
     private boolean enableWorkloadsWatcher;
 
-    private RedisProperties redis;
-
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
     }
