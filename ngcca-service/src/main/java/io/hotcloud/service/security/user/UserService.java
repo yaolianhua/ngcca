@@ -162,10 +162,11 @@ public class UserService implements UserApi {
     public User current() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Assert.notNull(authentication, "Authentication is null");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Assert.notNull(userDetails, "UserDetails is null");
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+            return retrieve(userDetails.getUsername());
+        }
 
-        return retrieve(userDetails.getUsername());
+        return null;
     }
 
     @Override
