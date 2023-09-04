@@ -9,6 +9,7 @@ import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
 import io.hotcloud.web.views.UserViews;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,8 @@ public class UserLoginViewsController {
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(HttpServletRequest request,
+                            HttpServletResponse response) {
         return UserViews.LOGIN;
     }
 
@@ -40,7 +42,7 @@ public class UserLoginViewsController {
                         @ModelAttribute("password") String password) {
         try {
             BearerToken bearerToken = loginApi.basicLogin(username, password);
-            Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
+            Cookie cookie = WebCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
             response.addCookie(cookie);
 
             return UserViews.REDIRECT_INDEX;

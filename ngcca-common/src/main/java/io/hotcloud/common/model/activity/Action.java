@@ -6,5 +6,6 @@ public enum Action {
     UPDATE,
     DELETE,
     LOGIN,
+    LOGOUT,
     QUERY
 }

@@ -2,6 +2,7 @@ package io.hotcloud.web.mvc;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,7 +16,7 @@ public final class WebCookie {
     private WebCookie() {
     }
 
-    public static Cookie generate(String authorization) {
+    public static Cookie generateAuthorizationCookie(String authorization) {
         Cookie cookie = new Cookie(WebConstant.AUTHORIZATION, authorization);
         cookie.setPath("/");
         cookie.setHttpOnly(false);
@@ -23,6 +24,18 @@ public final class WebCookie {
         cookie.setMaxAge(7 * 24 * 60 * 60);
 
         return cookie;
+    }
+
+    public static void removeAuthorizationCookie(HttpServletRequest request, HttpServletResponse response) {
+
+        Cookie cookie = new Cookie(WebConstant.AUTHORIZATION, null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+
+        request.getSession().invalidate();
     }
 
     public static String retrieveCurrentHttpServletRequestAuthorization() {

@@ -67,6 +67,13 @@ public class GlobalLogAspect {
                     username = ((String) point.getArgs()[i]);
                 }
             }
+        } else if (request.getRequestURI().contains("/logout")) {
+            for (int i = 0; i < method.getParameters().length; i++) {
+                if (method.getParameters()[i].isAnnotationPresent(CookieUser.class)) {
+                    User cookieUser = (User) point.getArgs()[i];
+                    username = cookieUser.getUsername();
+                }
+            }
         } else {
             User user = userApi.current();
             username = user.getUsername();

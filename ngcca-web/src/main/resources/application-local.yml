@@ -29,13 +29,13 @@ ngcca:
   kubernetes-agent:
     #    host: localhost
     #    port: 1400
-    domain-name: k8s-agent.linux.local
+    domain-name: k8s-agent.vps.linux
   web-server:
     host: localhost
     port: 4000
     endpoint:
   application:
-    dot-suffix-domain: ".k8s.linux-local"
+    dot-suffix-domain: ".vps.linux"
   security:
     enabled: true
     ignored-defaults:
@@ -49,6 +49,7 @@ ngcca:
       - "/dist/**"
     ignored-urls:
       - "/index"
+      - "/**/logout"
       - "/administrator/**"
       - "/templates/**"
       - "/user/templates/**"

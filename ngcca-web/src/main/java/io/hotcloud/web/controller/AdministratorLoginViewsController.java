@@ -10,6 +10,7 @@ import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
 import io.hotcloud.web.views.AdminViews;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,8 @@ public class AdministratorLoginViewsController {
     }
 
     @GetMapping
-    public String adminLoginPage() {
+    public String adminLoginPage(HttpServletRequest request,
+                                 HttpServletResponse response) {
         return AdminViews.ADMIN_LOGIN;
     }
 
@@ -47,7 +49,7 @@ public class AdministratorLoginViewsController {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
                 return AdminViews.ADMIN_LOGIN;
             } else {
-                Cookie cookie = WebCookie.generate(bearerToken.getAuthorization());
+                Cookie cookie = WebCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
                 response.addCookie(cookie);
                 return AdminViews.REDIRECT_ADMIN_INDEX;
             }
