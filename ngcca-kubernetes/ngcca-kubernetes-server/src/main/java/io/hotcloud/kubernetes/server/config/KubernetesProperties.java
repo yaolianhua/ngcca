@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
 @Configuration(proxyBeanMethods = false)
-@ConfigurationProperties(prefix = "kubernetes")
+@ConfigurationProperties(prefix = CONFIG_PREFIX + "kubernetes")
 @Data
 @Properties(prefix = CONFIG_PREFIX + "kubernetes")
 public class KubernetesProperties {
@@ -26,6 +26,8 @@ public class KubernetesProperties {
      * in-cluster mode, default is {@code true}
      */
     private boolean inCluster = true;
+
+    private String clusterId = "default-cluster";
 
     /**
      * enable global-event watch event for workloads, default is {@code false}

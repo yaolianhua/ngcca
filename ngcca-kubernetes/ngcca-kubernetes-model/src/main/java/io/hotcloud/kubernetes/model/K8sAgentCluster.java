@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class K8sAgentCluster implements Serializable {
 
+    private String id;
     @Builder.Default
     private List<Node> masters = new ArrayList<>();
 

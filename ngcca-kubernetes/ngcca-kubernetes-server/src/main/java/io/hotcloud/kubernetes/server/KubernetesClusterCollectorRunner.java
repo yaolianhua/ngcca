@@ -8,6 +8,7 @@ import io.hotcloud.common.message.MessageBroadcaster;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
 import io.hotcloud.kubernetes.model.K8sAgentCluster;
+import io.hotcloud.kubernetes.server.config.KubernetesProperties;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -17,17 +18,21 @@ import java.util.List;
 @Component
 public class KubernetesClusterCollectorRunner implements ApplicationRunner {
 
-    private final KubernetesClient kubernetesClient;
+    private final KubernetesClusterApiBeanManager kubernetesClusterApiBeanManager;
     private final MessageBroadcaster messageBroadcaster;
+    private final KubernetesProperties kubernetesProperties;
 
-    public KubernetesClusterCollectorRunner(KubernetesClient kubernetesClient,
-                                            MessageBroadcaster messageBroadcaster) {
-        this.kubernetesClient = kubernetesClient;
+    public KubernetesClusterCollectorRunner(KubernetesClusterApiBeanManager kubernetesClusterApiBeanManager,
+                                            MessageBroadcaster messageBroadcaster,
+                                            KubernetesProperties kubernetesProperties) {
+        this.kubernetesClusterApiBeanManager = kubernetesClusterApiBeanManager;
         this.messageBroadcaster = messageBroadcaster;
+        this.kubernetesProperties = kubernetesProperties;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        KubernetesClient kubernetesClient = kubernetesClusterApiBeanManager.getBean(kubernetesProperties.getClusterId(), KubernetesClient.class);
         List<Node> allNodeList = kubernetesClient.nodes()
                 .list()
                 .getItems();
@@ -44,6 +49,7 @@ public class KubernetesClusterCollectorRunner implements ApplicationRunner {
         allNodeList.removeAll(masters);
 
         K8sAgentCluster agentCluster = K8sAgentCluster.builder()
+                .id(kubernetesProperties.getClusterId())
                 .masters(masters)
                 .nodes(allNodeList)
                 .build();
