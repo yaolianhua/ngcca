@@ -1,4 +1,4 @@
-package io.hotcloud.kubernetes.server;
+package io.hotcloud.kubernetes.service;
 
 import org.springframework.stereotype.Component;
 
