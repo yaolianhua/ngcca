@@ -2,8 +2,8 @@ package io.hotcloud.server.controller;
 
 
 import io.hotcloud.common.model.SwaggerBearerAuth;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.cluster.KubernetesCluster;
-import io.hotcloud.service.cluster.KubernetesClusterManagement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,9 +22,9 @@ import java.util.List;
 @Tag(name = "Kubernetes Cluster")
 public class KubernetesClusterController {
 
-    private final KubernetesClusterManagement clusterManagement;
+    private final DatabasedKubernetesClusterService clusterManagement;
 
-    public KubernetesClusterController(KubernetesClusterManagement clusterManagement) {
+    public KubernetesClusterController(DatabasedKubernetesClusterService clusterManagement) {
         this.clusterManagement = clusterManagement;
     }
 
@@ -47,7 +47,7 @@ public class KubernetesClusterController {
             }
     )
     public ResponseEntity<KubernetesCluster> one(@PathVariable("id") String id) {
-        KubernetesCluster kubernetesCluster = clusterManagement.one(id);
+        KubernetesCluster kubernetesCluster = clusterManagement.findOne(id);
         return ResponseEntity.ok(kubernetesCluster);
     }
 }

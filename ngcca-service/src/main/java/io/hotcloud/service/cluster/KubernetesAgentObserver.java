@@ -7,19 +7,17 @@ import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.message.MessageObserver;
 import io.hotcloud.common.model.Message;
-import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.kubernetes.model.K8sAgentCluster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 public class KubernetesAgentObserver implements MessageObserver {
 
-    private final KubernetesClusterManagement kubernetesClusterManagement;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
     @Override
     public void onMessage(Message<?> message) {
@@ -31,11 +29,6 @@ public class KubernetesAgentObserver implements MessageObserver {
     public void subscribe(K8sAgentCluster k8sAgentCluster) {
 
         Log.info(this, k8sAgentCluster, Event.NOTIFY, "received k8s agent cluster info message");
-        List<KubernetesCluster> kubernetesClusters = kubernetesClusterManagement.list();
-        List<String> masterIpList = kubernetesClusters.stream()
-                .flatMap(e -> e.getMasters().stream())
-                .map(io.hotcloud.db.entity.Node::getIp)
-                .toList();
 
         KubernetesCluster kubernetesCluster = new KubernetesCluster();
 
@@ -45,9 +38,6 @@ public class KubernetesAgentObserver implements MessageObserver {
             mNode.setName(master.getMetadata().getName());
             for (NodeAddress address : master.getStatus().getAddresses()) {
                 if (Objects.equals(address.getType(), "InternalIP")) {
-                    if (masterIpList.contains(address.getAddress())) {
-                        return;
-                    }
                     mNode.setIp(address.getAddress());
                 }
             }
@@ -75,9 +65,9 @@ public class KubernetesAgentObserver implements MessageObserver {
             kubernetesCluster.getNodes().add(nNode);
         }
 
-        kubernetesCluster.setName(UUIDGenerator.uuidNoDash("cluster"));
+        kubernetesCluster.setName(k8sAgentCluster.getId());
 
-        kubernetesClusterManagement.save(kubernetesCluster);
+        databasedKubernetesClusterService.saveOrUpdate(kubernetesCluster);
     }
 
 }

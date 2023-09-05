@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 public class KubernetesCluster {
 
-    private String id;
     private String name;
     private List<Node> masters = new ArrayList<>();
     private List<Node> nodes = new ArrayList<>();
