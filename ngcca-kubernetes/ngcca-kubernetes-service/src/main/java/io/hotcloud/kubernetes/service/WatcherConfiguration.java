@@ -4,16 +4,11 @@ import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.WorkloadsWatchApi;
 import jakarta.annotation.PostConstruct;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-        name = KubernetesProperties.ENABLE_WORKLOADS_WATCHER,
-        havingValue = "true"
-)
 public class WatcherConfiguration {
 
     private final Map<String, WorkloadsWatchApi> watchApiContainer;

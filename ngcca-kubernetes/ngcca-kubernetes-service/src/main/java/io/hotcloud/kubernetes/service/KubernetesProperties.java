@@ -16,8 +16,6 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "kubernetes")
 public class KubernetesProperties {
 
-    public static final String ENABLE_WORKLOADS_WATCHER = "ngcca.kubernetes.enable-workloads-watcher";
-
     /**
      * kube config path, default is {@code $HOME/.kube/config}
      */
@@ -28,11 +26,6 @@ public class KubernetesProperties {
     private boolean inCluster = true;
 
     private String clusterId = "default-cluster";
-
-    /**
-     * enable global-event watch event for workloads, default is {@code false}
-     */
-    private boolean enableWorkloadsWatcher = true;
 
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
