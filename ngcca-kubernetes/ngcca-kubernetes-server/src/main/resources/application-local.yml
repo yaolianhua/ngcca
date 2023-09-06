@@ -1,4 +1,3 @@
-
 ngcca:
   redis:
     host: linux.local
@@ -7,7 +6,6 @@ ngcca:
     database: 0
   kubernetes:
     in-cluster: false
-    enable-workloads-watcher: true
     cluster-id: default-cluster
 logging:
   level:
