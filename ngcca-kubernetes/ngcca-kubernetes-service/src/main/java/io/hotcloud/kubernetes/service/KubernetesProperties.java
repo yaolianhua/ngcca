@@ -16,7 +16,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "kubernetes")
 public class KubernetesProperties {
 
-    public static final String ENABLE_WORKLOADS_WATCHER = "kubernetes.enable-workloads-watcher";
+    public static final String ENABLE_WORKLOADS_WATCHER = "ngcca.kubernetes.enable-workloads-watcher";
 
     /**
      * kube config path, default is {@code $HOME/.kube/config}
