@@ -32,7 +32,7 @@ public class KubernetesProperties {
     /**
      * enable global-event watch event for workloads, default is {@code false}
      */
-    private boolean enableWorkloadsWatcher;
+    private boolean enableWorkloadsWatcher = true;
 
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
