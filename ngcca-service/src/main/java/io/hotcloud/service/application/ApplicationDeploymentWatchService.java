@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class ApplicationDeploymentWatchService {
 
         try {
             //if timeout
-            int timeout = LocalDateTime.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
+            int timeout = Instant.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(applicationInstance);
                 applicationInstance.setMessage(timeoutMessage);

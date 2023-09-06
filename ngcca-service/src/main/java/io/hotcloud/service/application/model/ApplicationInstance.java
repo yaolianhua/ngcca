@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,8 +46,8 @@ public class ApplicationInstance {
     private boolean success;
     private String message;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private Instant createdAt;
+    private Instant modifiedAt;
 
     public boolean isDeploying() {
         return !success && !StringUtils.hasText(message);

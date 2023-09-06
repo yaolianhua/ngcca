@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 @Component
@@ -77,7 +77,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
                 .user(current.getUsername())
                 .name(applicationForm.getName())
                 .canHttp(applicationForm.isCanHttp())
-                .createdAt(LocalDateTime.now())
+                .createdAt(Instant.now())
                 .targetPorts(String.valueOf(applicationForm.getServerPort()))
                 .envs(applicationForm.getEnvs())
                 .build();

@@ -6,7 +6,7 @@ import io.hotcloud.service.buildpack.model.JobState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 import static io.hotcloud.common.model.CommonConstant.*;
@@ -26,7 +26,7 @@ public class BuildPackJobWatchService {
         String namespace = buildPack.getJobResource().getNamespace();
         String job = buildPack.getJobResource().getName();
         buildPackCacheApi.cacheBuildPackState(buildPack.getId(), JobState.UNKNOWN);
-        boolean timeout = LocalDateTime.now().isAfter(buildPack.getCreatedAt().plusSeconds(buildPackProperties.getBuildTimeoutSecond()));
+        boolean timeout = Instant.now().isAfter(buildPack.getCreatedAt().plusSeconds(buildPackProperties.getBuildTimeoutSecond()));
         try {
             if (timeout) {
                 buildPack.setDone(true);

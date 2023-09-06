@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 
 /**
@@ -48,8 +48,8 @@ public class BuildPack {
      */
     private String packageUrl;
 
-    private LocalDateTime modifiedAt;
-    private LocalDateTime createdAt;
+    private Instant modifiedAt;
+    private Instant createdAt;
 
     public BuildPack() {
     }
