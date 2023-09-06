@@ -96,15 +96,15 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: harbor.linux-local:5000/ngcca/kubernetes-agent:2023.06.19.195926
+        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.09.01.143915
           env:
-            - name: KUBERNETES_REDIS_HOST
+            - name: NGCCA_REDIS_HOST
               value: "192.168.110.233"
-            - name: KUBERNETES_REDIS_PORT
+            - name: NGCCA_REDIS_PORT
               value: "6379"
-            - name: KUBERNETES_REDIS_DATABASE
+            - name: NGCCA_REDIS_DATABASE
               value: "0"
-            - name: KUBERNETES_REDIS_PASSWORD
+            - name: NGCCA_REDIS_PASSWORD
               value: "QbMufCD@9WVQ^Hv"
           imagePullPolicy: IfNotPresent
           name: k8s-agent
