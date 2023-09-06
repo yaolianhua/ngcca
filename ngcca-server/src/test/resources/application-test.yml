@@ -2,19 +2,19 @@ ngcca:
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: linux.local
+    host: mid.vps-a.linux
     port: 6379
   registry:
-    url: harbor.linux-local:5000
+    url: 119.91.214.25:5000
     username: admin
     password: "QbMufCD@9WVQ^Hv"
-    imagebuild-namespace: image-build-dev
+    imagebuild-namespace: image-build
   minio:
     access-key: admin
     secret-key: "QbMufCD@9WVQ^Hv"
     endpoint: "http://linux.local:9009"
   mongodb:
-    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-integration-test?authSource=admin"
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca?authSource=admin"
   kubernetes-agent:
     host:
     port:
@@ -45,7 +45,7 @@ ngcca:
     push-timeout-seconds: 300
 logging:
   level:
-    io.hotcloud.common.log: debug
+    io.hotcloud.common.log: info
     com.github.dockerjava.api.command: debug
     com.github.dockerjava.core.command: debug
 
