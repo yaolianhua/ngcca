@@ -4,7 +4,7 @@ import io.hotcloud.db.entity.KubernetesClusterEntity;
 import io.hotcloud.db.entity.KubernetesClusterRepository;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,13 +26,13 @@ public class DatabasedKubernetesClusterService {
             KubernetesClusterEntity fetched = optional.get();
             fetched.setMasters(info.getMasters());
             fetched.setNodes(info.getNodes());
-            fetched.setModifiedAt(LocalDateTime.now());
+            fetched.setModifiedAt(Instant.now());
             kubernetesClusterRepository.save(fetched);
             return;
         }
 
         KubernetesClusterEntity entity = (KubernetesClusterEntity) new KubernetesClusterEntity().toE(info);
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
         kubernetesClusterRepository.save(entity);
     }
 

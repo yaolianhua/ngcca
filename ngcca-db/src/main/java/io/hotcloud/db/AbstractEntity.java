@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -26,10 +26,10 @@ public class AbstractEntity implements Serializable {
     private String id;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    private Instant modifiedAt;
 
     public <T> AbstractEntity toE(T data) {
         BeanUtils.copyProperties(data, this);
@@ -52,11 +52,11 @@ public class AbstractEntity implements Serializable {
         this.id = id;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
+    public void setModifiedAt(Instant modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 

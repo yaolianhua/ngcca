@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -51,7 +51,7 @@ public class UserService implements UserApi {
         UserEntity entity = (UserEntity) new UserEntity().toE(user);
 
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
         UserEntity saved = userRepository.save(entity);
 
         return buildUser(saved);
@@ -79,7 +79,7 @@ public class UserService implements UserApi {
             existEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        existEntity.setModifiedAt(LocalDateTime.now());
+        existEntity.setModifiedAt(Instant.now());
         UserEntity updated = userRepository.save(existEntity);
 
         return buildUser(updated);

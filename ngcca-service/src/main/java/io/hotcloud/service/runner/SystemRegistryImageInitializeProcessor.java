@@ -7,7 +7,7 @@ import io.hotcloud.service.registry.SystemRegistryProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 
 @Component
@@ -37,7 +37,7 @@ public class SystemRegistryImageInitializeProcessor implements RunnerProcessor {
             // update info
             entity.setTag(systemRegistryImageProperties.getTag(name));
             entity.setValue(systemRegistryProperties.getUrl() + "/" + propertyPair.get(name));
-            entity.setModifiedAt(LocalDateTime.now());
+            entity.setModifiedAt(Instant.now());
             registryImageRepository.save(entity);
 
         }

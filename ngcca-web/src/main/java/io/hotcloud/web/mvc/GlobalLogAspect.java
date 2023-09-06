@@ -22,7 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 @Component
@@ -80,7 +80,7 @@ public class GlobalLogAspect {
         }
 
         ActivityEntity entity = new ActivityEntity();
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
         entity.setAction(action == null ? "未知" : action.name());
         entity.setTarget(target == null ? "未知" : target.name());
         entity.setDescription(activity == null ? "未知" : activity);

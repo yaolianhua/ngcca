@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -77,7 +77,7 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
                 existed.setLogo(definition.getLogo());
             }
 
-            existed.setModifiedAt(LocalDateTime.now());
+            existed.setModifiedAt(Instant.now());
 
             TemplateDefinitionEntity updated = templateDefinitionRepository.save(existed);
             return updated.toT(TemplateDefinition.class);
@@ -94,8 +94,8 @@ public class TemplateDefinitionServiceImpl implements TemplateDefinitionService 
         }
 
         TemplateDefinitionEntity saveEntity = (TemplateDefinitionEntity) new TemplateDefinitionEntity().toE(definition);
-        saveEntity.setCreatedAt(LocalDateTime.now());
-        saveEntity.setModifiedAt(LocalDateTime.now());
+        saveEntity.setCreatedAt(Instant.now());
+        saveEntity.setModifiedAt(Instant.now());
         TemplateDefinitionEntity saved = templateDefinitionRepository.save(saveEntity);
 
         return saved.toT(TemplateDefinition.class);

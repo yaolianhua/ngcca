@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -47,12 +47,12 @@ public class BuildPackServiceImpl implements BuildPackService {
         entity.setSecret(writeJson(buildPack.getSecretResource()));
 
         if (StringUtils.hasText(entity.getId())) {
-            entity.setModifiedAt(LocalDateTime.now());
+            entity.setModifiedAt(Instant.now());
             BuildPackEntity saveOrUpdate = buildPackRepository.save(entity);
             return toBuildPack(saveOrUpdate);
         }
 
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
         BuildPackEntity saveOrUpdate = buildPackRepository.save(entity);
 
         return toBuildPack(saveOrUpdate);
@@ -113,7 +113,7 @@ public class BuildPackServiceImpl implements BuildPackService {
             return;
         }
         entity.setDeleted(true);
-        entity.setModifiedAt(LocalDateTime.now());
+        entity.setModifiedAt(Instant.now());
         buildPackRepository.save(entity);
 
     }

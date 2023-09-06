@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -31,7 +31,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
         if (StringUtils.hasText(instance.getId())) {
             TemplateInstanceEntity find = templateInstanceRepository.findById(instance.getId()).orElseThrow(() -> new ResourceNotFoundException("instance template not found [" + instance.getId() + "]"));
 
-            find.setModifiedAt(LocalDateTime.now());
+            find.setModifiedAt(Instant.now());
             find.setSuccess(instance.isSuccess());
             find.setMessage(instance.getMessage());
             find.setNodePorts(instance.getNodePorts());
@@ -48,7 +48,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
         }
 
         TemplateInstanceEntity entity = (TemplateInstanceEntity) new TemplateInstanceEntity().toE(instance);
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
 
         TemplateInstanceEntity saved = templateInstanceRepository.save(entity);
 

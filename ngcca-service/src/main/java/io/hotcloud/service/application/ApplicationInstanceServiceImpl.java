@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -91,7 +91,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setCanHttp(applicationInstance.isCanHttp());
             fetched.setReplicas(applicationInstance.getReplicas());
 
-            fetched.setModifiedAt(LocalDateTime.now());
+            fetched.setModifiedAt(Instant.now());
 
             ApplicationInstanceEntity updated = applicationInstanceRepository.save(fetched);
             return toApplicationInstance(updated);
@@ -100,7 +100,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         ApplicationInstanceEntity entity = (ApplicationInstanceEntity) new ApplicationInstanceEntity().toE(applicationInstance);
         entity.setEnvs(applicationInstance.getEnvs());
         entity.setSource(applicationInstance.getSource());
-        entity.setCreatedAt(LocalDateTime.now());
+        entity.setCreatedAt(Instant.now());
 
         ApplicationInstanceEntity saved = applicationInstanceRepository.save(entity);
 

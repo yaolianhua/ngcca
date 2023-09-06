@@ -18,12 +18,12 @@ ngcca:
   kubernetes-agent:
     host:
     port:
-    domain-name: k8s-agent.linux.local
+    domain-name: k8s-agent.vps.linux
   buildpack:
     build-timeout-second: 1200
   application:
     deployment-timeout-second: 1200
-    dot-suffix-domain: ".k8s.linux-local"
+    dot-suffix-domain: ".vps.linux"
   security:
     enabled: true
     ignored-defaults:

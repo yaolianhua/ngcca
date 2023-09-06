@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
@@ -71,7 +71,7 @@ public class GitClonedRepositoryIT {
         entity.setSuccess(false);
         entity.setError("error!");
         TimeUnit.MILLISECONDS.sleep(500);
-        entity.setModifiedAt(LocalDateTime.now());
+        entity.setModifiedAt(Instant.now());
 
         gitClonedRepository.save(entity);
         GitClonedEntity updated = gitClonedRepository.findByUserAndProject("admin", "devops-thymeleaf");
