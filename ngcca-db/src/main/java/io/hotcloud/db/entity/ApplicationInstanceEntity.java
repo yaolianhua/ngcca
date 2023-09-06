@@ -1,12 +1,16 @@
 package io.hotcloud.db.entity;
 
 import io.hotcloud.db.AbstractEntity;
+import io.hotcloud.db.model.ApplicationInstanceSource;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Document(collection = "application_instance")
@@ -38,11 +42,12 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private String ingress;
     private String loadBalancerIngressIp;
 
-    private String source;
+    private ApplicationInstanceSource source;
 
     @Builder.Default
     private Integer replicas = 1;
-    private String envs;
+    @Builder.Default
+    private Map<String, String> envs = new HashMap<>();
 
     private boolean success;
     private String message;

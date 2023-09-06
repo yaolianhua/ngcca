@@ -1,5 +1,6 @@
 package io.hotcloud.service.application.model;
 
+import io.hotcloud.db.model.ApplicationInstanceSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

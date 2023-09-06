@@ -1,5 +1,7 @@
 package io.hotcloud.service.application.model;
 
+import io.hotcloud.db.entity.ApplicationInstanceEntity;
+import io.hotcloud.db.model.ApplicationInstanceSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -63,5 +62,34 @@ public class ApplicationInstance {
             return List.of();
         }
         return Arrays.stream(host.split(",")).collect(Collectors.toList());
+    }
+
+    public static ApplicationInstance toApplicationInstance(ApplicationInstanceEntity entity) {
+        if (Objects.isNull(entity)) {
+            return null;
+        }
+        return ApplicationInstance.builder()
+                .id(entity.getId())
+                .buildPackId(entity.getBuildPackId())
+                .user(entity.getUser())
+                .name(entity.getName())
+                .namespace(entity.getNamespace())
+                .service(entity.getService())
+                .targetPorts(entity.getTargetPorts())
+                .host(entity.getHost())
+                .servicePorts(entity.getServicePorts())
+                .ingress(entity.getIngress())
+                .loadBalancerIngressIp(entity.getLoadBalancerIngressIp())
+                .nodePorts(entity.getNodePorts())
+                .success(entity.isSuccess())
+                .canHttp(entity.isCanHttp())
+                .deleted(entity.isDeleted())
+                .replicas(entity.getReplicas())
+                .source(entity.getSource())
+                .envs(entity.getEnvs())
+                .message(entity.getMessage())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
+                .build();
     }
 }

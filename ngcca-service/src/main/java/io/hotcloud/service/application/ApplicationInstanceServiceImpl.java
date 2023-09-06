@@ -1,35 +1,31 @@
 package io.hotcloud.service.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.ApplicationInstanceEntity;
 import io.hotcloud.db.entity.ApplicationInstanceRepository;
 import io.hotcloud.service.application.model.ApplicationInstance;
-import io.hotcloud.service.application.model.ApplicationInstanceSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static io.hotcloud.service.application.model.ApplicationInstance.toApplicationInstance;
 
 @Service
 @RequiredArgsConstructor
 public class ApplicationInstanceServiceImpl implements ApplicationInstanceService {
 
     private final ApplicationInstanceRepository applicationInstanceRepository;
-    private final ObjectMapper objectMapper;
 
     @Override
     public List<ApplicationInstance> find(String user, String name) {
         List<ApplicationInstanceEntity> entities = applicationInstanceRepository.findByNameAndUser(name, user);
-        return entities.stream().map(this::toApplicationInstance).collect(Collectors.toList());
+        return entities.stream().map(ApplicationInstance::toApplicationInstance).collect(Collectors.toList());
     }
 
     @Override
@@ -102,58 +98,12 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         }
 
         ApplicationInstanceEntity entity = (ApplicationInstanceEntity) new ApplicationInstanceEntity().toE(applicationInstance);
-        entity.setEnvs(writeJson(applicationInstance.getEnvs()));
-        entity.setSource(writeJson(applicationInstance.getSource()));
+        entity.setEnvs(applicationInstance.getEnvs());
+        entity.setSource(applicationInstance.getSource());
         entity.setCreatedAt(LocalDateTime.now());
 
         ApplicationInstanceEntity saved = applicationInstanceRepository.save(entity);
 
         return toApplicationInstance(saved);
-    }
-
-    @SuppressWarnings("unchecked")
-    private ApplicationInstance toApplicationInstance(ApplicationInstanceEntity entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        return ApplicationInstance.builder()
-                .id(entity.getId())
-                .buildPackId(entity.getBuildPackId())
-                .user(entity.getUser())
-                .name(entity.getName())
-                .namespace(entity.getNamespace())
-                .service(entity.getService())
-                .targetPorts(entity.getTargetPorts())
-                .host(entity.getHost())
-                .servicePorts(entity.getServicePorts())
-                .ingress(entity.getIngress())
-                .loadBalancerIngressIp(entity.getLoadBalancerIngressIp())
-                .nodePorts(entity.getNodePorts())
-                .success(entity.isSuccess())
-                .canHttp(entity.isCanHttp())
-                .deleted(entity.isDeleted())
-                .replicas(entity.getReplicas())
-                .source(readT(entity.getSource(), ApplicationInstanceSource.class))
-                .envs(readT(entity.getEnvs(), Map.class))
-                .message(entity.getMessage())
-                .createdAt(entity.getCreatedAt())
-                .modifiedAt(entity.getModifiedAt())
-                .build();
-    }
-
-    private <T> String writeJson(T data) {
-        try {
-            return objectMapper.writeValueAsString(data);
-        } catch (JsonProcessingException e) {
-            throw new PlatformException("Write value error. " + e.getCause().getMessage());
-        }
-    }
-
-    private <T> T readT(String content, Class<T> clazz) {
-        try {
-            return objectMapper.readValue(content, clazz);
-        } catch (JsonProcessingException e) {
-            throw new PlatformException("Read value error. " + e.getCause().getMessage());
-        }
     }
 }
