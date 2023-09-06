@@ -11,14 +11,7 @@ spring:
       config:
         import-check:
           enabled: false
-kubernetes:
-  in-cluster: true
-  enable-workloads-watcher: true
-  redis:
-    database:
-    host:
-    port:
-    password:
+
 server:
   port: 1401
 logging:
