@@ -34,6 +34,9 @@ public class RedisCommandUtil<K,V> implements RedisCommand<K,V> {
     @Override
     public <T> T get(K key, Class<T> type) {
         Object v = redisTemplate.opsForValue().get(key);
+        if (Objects.isNull(v)) {
+            return null;
+        }
         if (Objects.isNull(type)) {
             return (T) v;
         }
