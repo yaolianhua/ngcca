@@ -2,10 +2,10 @@ package io.hotcloud.service.buildpack;
 
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.utils.UUIDGenerator;
+import io.hotcloud.db.model.BuildPackDockerSecretResource;
+import io.hotcloud.db.model.BuildPackJobResource;
 import io.hotcloud.service.buildpack.model.BuildImage;
 import io.hotcloud.service.buildpack.model.BuildPack;
-import io.hotcloud.service.buildpack.model.BuildPackDockerSecretResource;
-import io.hotcloud.service.buildpack.model.BuildPackJobResource;
 
 public abstract class AbstractBuildPackApi implements BuildPackApi {
 

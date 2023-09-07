@@ -1,5 +1,7 @@
 package io.hotcloud.service.buildpack.model;
 
+import io.hotcloud.db.model.BuildPackDockerSecretResource;
+import io.hotcloud.db.model.BuildPackJobResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

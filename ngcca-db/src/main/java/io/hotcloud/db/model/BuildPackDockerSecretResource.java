@@ -1,4 +1,4 @@
-package io.hotcloud.service.buildpack.model;
+package io.hotcloud.db.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,19 +14,22 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildPackJobResource {
+public class BuildPackDockerSecretResource {
 
     /**
-     * The job name be created
+     * The name secret be created
      */
-    @JsonProperty("job")
     private String name;
     /**
-     * In which namespace the job be created
+     * In which namespace the secret be created
      */
     private String namespace;
     /**
-     * The job labels be created
+     * secret data be created
+     */
+    private Map<String, String> data;
+    /**
+     * secret labels be created
      */
     private Map<String, String> labels;
 
@@ -35,13 +38,12 @@ public class BuildPackJobResource {
      */
     @Builder.Default
     private Map<String, String> alternative = new HashMap<>();
-
     /**
-     * Generated job resource yaml
+     * generated secret yaml resource
      */
     @JsonProperty("yaml")
-    private String jobResourceYaml;
+    private String secretResourceYaml;
 
-    public BuildPackJobResource() {
+    public BuildPackDockerSecretResource() {
     }
 }
