@@ -1,5 +1,6 @@
 package io.hotcloud.service.buildpack.model;
 
+import io.hotcloud.db.entity.BuildPackEntity;
 import io.hotcloud.db.model.BuildPackDockerSecretResource;
 import io.hotcloud.db.model.BuildPackJobResource;
 import lombok.AllArgsConstructor;
@@ -64,5 +65,26 @@ public class BuildPack {
 
     public Map<String, String> getAlternative() {
         return this.jobResource.getAlternative();
+    }
+
+    public static BuildPack toBuildPack(BuildPackEntity entity) {
+        return BuildPack.builder()
+                .id(entity.getId())
+                .uuid(entity.getUuid())
+                .jobResource(entity.getJob())
+                .secretResource(entity.getSecret())
+                .yaml(entity.getYaml())
+                .user(entity.getUser())
+                .done(entity.isDone())
+                .deleted(entity.isDeleted())
+                .httpGitUrl(entity.getHttpGitUrl())
+                .gitBranch(entity.getGitBranch())
+                .message(entity.getMessage())
+                .logs(entity.getLogs())
+                .artifact(entity.getArtifact())
+                .packageUrl(entity.getPackageUrl())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
+                .build();
     }
 }

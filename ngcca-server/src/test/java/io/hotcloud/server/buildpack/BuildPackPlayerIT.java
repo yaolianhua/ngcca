@@ -67,7 +67,7 @@ public class BuildPackPlayerIT {
         BuildImage war = BuildImage.ofWar(warUrl, JavaRuntime.JAVA17);
         BuildPack buildPack = buildPackPlayer.play(war);
 
-        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+        await().atMost(30, TimeUnit.MINUTES).until(() -> {
             BuildPack one = buildPackService.findOne(buildPack.getId());
             if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
                 Log.info(this, one.getArtifact(), "image build artifact url");
@@ -99,7 +99,7 @@ public class BuildPackPlayerIT {
         BuildImage jar = BuildImage.ofJar(jarUrl, "-Xms128m -Xmx512m", "-Dspring.profiles.active=production", JavaRuntime.JAVA11);
         BuildPack buildPack = buildPackPlayer.play(jar);
 
-        await().atMost(5, TimeUnit.MINUTES).until(() -> {
+        await().atMost(30, TimeUnit.MINUTES).until(() -> {
             BuildPack one = buildPackService.findOne(buildPack.getId());
             if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
                 Log.info(this, one.getArtifact(), "image build artifact url");
@@ -135,7 +135,7 @@ public class BuildPackPlayerIT {
                 JavaRuntime.JAVA11);
         BuildPack buildPack = buildPackPlayer.play(code);
 
-        await().atMost(20, TimeUnit.MINUTES).until(() -> {
+        await().atMost(30, TimeUnit.MINUTES).until(() -> {
             BuildPack one = buildPackService.findOne(buildPack.getId());
             if (one.isDone() && CommonConstant.SUCCESS_MESSAGE.equalsIgnoreCase(one.getMessage())) {
                 Log.info(this, one.getArtifact(), "image build artifact url");

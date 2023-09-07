@@ -1,12 +1,8 @@
 package io.hotcloud.service.buildpack;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.BuildPackEntity;
 import io.hotcloud.db.entity.BuildPackRepository;
-import io.hotcloud.db.model.BuildPackDockerSecretResource;
-import io.hotcloud.db.model.BuildPackJobResource;
 import io.hotcloud.service.buildpack.model.BuildPack;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -16,6 +12,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static io.hotcloud.service.buildpack.model.BuildPack.toBuildPack;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -43,8 +41,8 @@ public class BuildPackServiceImpl implements BuildPackService {
 
         BuildPackEntity entity = (BuildPackEntity) new BuildPackEntity().toE(buildPack);
 
-        entity.setJob(writeJson(buildPack.getJobResource()));
-        entity.setSecret(writeJson(buildPack.getSecretResource()));
+        entity.setJob(buildPack.getJobResource());
+        entity.setSecret(buildPack.getSecretResource());
 
         if (StringUtils.hasText(entity.getId())) {
             entity.setModifiedAt(Instant.now());
@@ -63,7 +61,7 @@ public class BuildPackServiceImpl implements BuildPackService {
         List<BuildPackEntity> entities = buildPackRepository.findByUser(user);
 
         return entities.stream()
-                .map(this::toBuildPack)
+                .map(BuildPack::toBuildPack)
                 .collect(Collectors.toList());
     }
 
@@ -71,7 +69,7 @@ public class BuildPackServiceImpl implements BuildPackService {
     public List<BuildPack> findAll() {
         Iterable<BuildPackEntity> all = buildPackRepository.findAll();
         return StreamSupport.stream(all.spliterator(), false)
-                .map(this::toBuildPack)
+                .map(BuildPack::toBuildPack)
                 .collect(Collectors.toList());
     }
 
@@ -118,40 +116,4 @@ public class BuildPackServiceImpl implements BuildPackService {
 
     }
 
-    private BuildPack toBuildPack(BuildPackEntity entity) {
-        return BuildPack.builder()
-                .id(entity.getId())
-                .uuid(entity.getUuid())
-                .jobResource(readT(entity.getJob(), BuildPackJobResource.class))
-                .secretResource(readT(entity.getSecret(), BuildPackDockerSecretResource.class))
-                .yaml(entity.getYaml())
-                .user(entity.getUser())
-                .done(entity.isDone())
-                .deleted(entity.isDeleted())
-                .httpGitUrl(entity.getHttpGitUrl())
-                .gitBranch(entity.getGitBranch())
-                .message(entity.getMessage())
-                .logs(entity.getLogs())
-                .artifact(entity.getArtifact())
-                .packageUrl(entity.getPackageUrl())
-                .createdAt(entity.getCreatedAt())
-                .modifiedAt(entity.getModifiedAt())
-                .build();
-    }
-
-    private <T> String writeJson(T data) {
-        try {
-            return objectMapper.writeValueAsString(data);
-        } catch (JsonProcessingException e) {
-            throw new PlatformException("Write value error. " + e.getCause().getMessage());
-        }
-    }
-
-    private <T> T readT(String content, Class<T> clazz) {
-        try {
-            return objectMapper.readValue(content, clazz);
-        } catch (JsonProcessingException e) {
-            throw new PlatformException("Read value error. " + e.getCause().getMessage());
-        }
-    }
 }

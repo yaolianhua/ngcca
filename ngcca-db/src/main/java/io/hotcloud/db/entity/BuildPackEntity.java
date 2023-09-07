@@ -1,6 +1,8 @@
 package io.hotcloud.db.entity;
 
 import io.hotcloud.db.AbstractEntity;
+import io.hotcloud.db.model.BuildPackDockerSecretResource;
+import io.hotcloud.db.model.BuildPackJobResource;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -23,9 +25,9 @@ public class BuildPackEntity extends AbstractEntity {
     private String httpGitUrl;
     private String gitBranch;
 
-    private String job;
-    private String storage;
-    private String secret;
+    private BuildPackJobResource job;
+
+    private BuildPackDockerSecretResource secret;
 
     private String yaml;
 

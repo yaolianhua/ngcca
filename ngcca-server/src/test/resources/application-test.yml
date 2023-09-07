@@ -12,9 +12,9 @@ ngcca:
   minio:
     access-key: admin
     secret-key: "QbMufCD@9WVQ^Hv"
-    endpoint: "http://linux.local:9009"
+    endpoint: "http://mid.vps-a.linux:9009"
   mongodb:
-    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca?authSource=admin"
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@mid.vps-a.linux:27017/ngcca?authSource=admin"
   kubernetes-agent:
     host:
     port:
