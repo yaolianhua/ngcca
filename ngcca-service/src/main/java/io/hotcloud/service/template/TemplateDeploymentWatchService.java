@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class TemplateDeploymentWatchService {
 
         try {
             //if timeout
-            int timeout = LocalDateTime.now().compareTo(template.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
+            int timeout = Instant.now().compareTo(template.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(template);
 

@@ -15,7 +15,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Data
 public class ApplicationProperties {
     private String dotSuffixDomain;
-    private int deploymentTimeoutSecond;
+    private int deploymentTimeoutSecond = 1200;
 
     public String getDotSuffixDomain() {
         if (StringUtils.hasText(dotSuffixDomain) && !dotSuffixDomain.startsWith(".")) {

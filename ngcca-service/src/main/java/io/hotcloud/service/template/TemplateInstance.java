@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,9 +43,9 @@ public class TemplateInstance {
 
     private String message;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
-    private LocalDateTime modifiedAt;
+    private Instant modifiedAt;
 
     public boolean isDeploying() {
         return !success && progress != 100;

@@ -36,6 +36,7 @@ ngcca:
     endpoint:
   application:
     dot-suffix-domain: ".vps.linux"
+    deployment-timeout-second: 1200
   security:
     enabled: true
     ignored-defaults:
