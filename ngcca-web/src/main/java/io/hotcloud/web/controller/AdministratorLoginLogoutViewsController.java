@@ -4,7 +4,9 @@ import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.security.login.BearerToken;
 import io.hotcloud.service.security.login.LoginApi;
+import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
+import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.Log;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
@@ -20,24 +22,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/administrator/login")
-public class AdministratorLoginViewsController {
+@RequestMapping("/administrator")
+public class AdministratorLoginLogoutViewsController {
 
     private final LoginApi loginApi;
     private final UserApi userApi;
 
-    public AdministratorLoginViewsController(LoginApi loginApi, UserApi userApi) {
+    public AdministratorLoginLogoutViewsController(LoginApi loginApi, UserApi userApi) {
         this.loginApi = loginApi;
         this.userApi = userApi;
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public String adminLoginPage(HttpServletRequest request,
                                  HttpServletResponse response) {
         return AdminViews.ADMIN_LOGIN;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     @Log(action = Action.LOGIN, target = Target.USER, activity = "用户登录")
     public String adminLogin(Model model,
                              HttpServletResponse response,
@@ -58,6 +60,19 @@ public class AdministratorLoginViewsController {
             return AdminViews.ADMIN_LOGIN;
         }
 
+    }
+
+    @RequestMapping("/logout")
+    @Log(action = Action.LOGOUT, target = Target.USER, activity = "用户登出")
+    public String adminLogout(HttpServletRequest request,
+                              HttpServletResponse response,
+                              @CookieUser User user) {
+        try {
+            WebCookie.removeAuthorizationCookie(request, response);
+        } catch (Exception e) {
+            //
+        }
+        return AdminViews.REDIRECT_ADMIN_LOGIN;
     }
 
 }

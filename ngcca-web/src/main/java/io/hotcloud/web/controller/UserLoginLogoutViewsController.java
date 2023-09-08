@@ -4,6 +4,8 @@ import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.security.login.BearerToken;
 import io.hotcloud.service.security.login.LoginApi;
+import io.hotcloud.service.security.user.User;
+import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.Log;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebCookie;
@@ -20,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping
-public class UserLoginViewsController {
+public class UserLoginLogoutViewsController {
 
     private final LoginApi loginApi;
 
-    public UserLoginViewsController(LoginApi loginApi) {
+    public UserLoginLogoutViewsController(LoginApi loginApi) {
         this.loginApi = loginApi;
     }
 
@@ -52,6 +54,19 @@ public class UserLoginViewsController {
 
         }
 
+    }
+
+    @RequestMapping("/user/logout")
+    @Log(action = Action.LOGOUT, target = Target.USER, activity = "用户登出")
+    public String adminLogout(HttpServletRequest request,
+                              HttpServletResponse response,
+                              @CookieUser User user) {
+        try {
+            WebCookie.removeAuthorizationCookie(request, response);
+        } catch (Exception e) {
+            //
+        }
+        return UserViews.REDIRECT_LOGIN;
     }
 
 }
