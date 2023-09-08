@@ -63,7 +63,7 @@
                         <small th:text="${instance.progress} + '% complete'"></small>
                     </td>
                     <td class="project-state text-left">
-                        <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"
+                        <span th:class="${instance.deploying} ? 'badge badge-secondary' : (${instance.success} ? 'badge badge-success' : 'badge badge-danger')"
                               th:text="${instance.deploying} ? '部署中' : (${instance.success} ? '部署成功' : '部署失败')">
                         </span>
                         <span data-placement="top" data-toggle="tooltip" data-trigger="hover focus" id="instance-msg"
