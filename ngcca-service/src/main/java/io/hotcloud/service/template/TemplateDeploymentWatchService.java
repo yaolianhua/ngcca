@@ -2,13 +2,15 @@ package io.hotcloud.service.template;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
-import io.fabric8.kubernetes.api.model.networking.v1.IngressLoadBalancerIngress;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
-import io.hotcloud.kubernetes.client.http.*;
+import io.hotcloud.kubernetes.client.http.DeploymentClient;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.service.application.ApplicationProperties;
+import io.hotcloud.service.ingress.IngressHelper;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,8 +33,9 @@ public class TemplateDeploymentWatchService {
     private final DeploymentClient deploymentApi;
     private final ServiceClient serviceApi;
     private final KubectlClient kubectlApi;
-    private final IngressClient ingressClient;
+
     private final PodClient podApi;
+    private final IngressHelper ingressHelper;
 
     public void watch(TemplateInstance template) {
 
@@ -92,7 +94,7 @@ public class TemplateDeploymentWatchService {
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
 
-                String loadBalancerIngressIp = getLoadBalancerIngressIp(template, ingress);
+                String loadBalancerIngressIp = ingressHelper.getLoadBalancerIpString(template.getNamespace(), ingress);
                 template.setLoadBalancerIngressIp(loadBalancerIngressIp);
                 templateInstanceService.saveOrUpdate(template);
 
@@ -108,44 +110,6 @@ public class TemplateDeploymentWatchService {
             template.setProgress(100);
             templateInstanceService.saveOrUpdate(template);
         }
-    }
-
-    @NotNull
-    private String getLoadBalancerIngressIp(TemplateInstance template, String ingress) {
-        for (int i = 0; i < 10; i++) {
-            try {
-                int sleep = (i + 1) * 5;
-                TimeUnit.SECONDS.sleep(sleep);
-                Log.info(this, null, String.format("Fetch ingress loadBalancer ip. waiting '%ss'", sleep));
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            Ingress ingressRead = ingressClient.read(template.getNamespace(), ingress);
-            String loadBalancerIngressIp = ingressRead
-                    .getStatus()
-                    .getLoadBalancer()
-                    .getIngress()
-                    .stream()
-                    .map(IngressLoadBalancerIngress::getIp)
-                    .collect(Collectors.joining(","));
-
-            if (!StringUtils.hasText(loadBalancerIngressIp) || Objects.equals("null", loadBalancerIngressIp)) {
-                loadBalancerIngressIp = ingressRead
-                        .getStatus()
-                        .getLoadBalancer()
-                        .getIngress()
-                        .stream()
-                        .map(IngressLoadBalancerIngress::getHostname)
-                        .collect(Collectors.joining(","));
-            }
-
-            if (StringUtils.hasText(loadBalancerIngressIp) && !Objects.equals("null", loadBalancerIngressIp)) {
-                return loadBalancerIngressIp;
-            }
-
-        }
-
-        return "pending";
     }
 
     @NotNull
