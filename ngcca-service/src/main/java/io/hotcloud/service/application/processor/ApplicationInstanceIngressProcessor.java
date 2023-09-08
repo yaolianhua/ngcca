@@ -3,9 +3,12 @@ package io.hotcloud.service.application.processor;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.service.application.*;
+import io.hotcloud.service.application.ApplicationInstanceProcessor;
+import io.hotcloud.service.application.ApplicationInstanceService;
+import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.ingress.IngressDefinition;
+import io.hotcloud.service.ingress.IngressHelper;
 import io.hotcloud.service.ingress.IngressTemplateRender;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,6 +26,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
     private final ApplicationProperties applicationProperties;
     private final KubectlClient kubectlApi;
     private final ApplicationInstanceService applicationInstanceService;
+    private final IngressHelper ingressHelper;
 
     @Override
     public int order() {
@@ -62,16 +66,20 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
                     .build();
 
 
-            String hosts = definition.getRules().stream().map(IngressDefinition.Rule::getHost).collect(Collectors.joining(","));
-
             String ingress = IngressTemplateRender.render(definition);
-            applicationInstance.setIngress(ingress);
-            applicationInstance.setHost(hosts);
-            applicationInstanceService.saveOrUpdate(applicationInstance);
 
             kubectlApi.resourceListCreateOrReplace(applicationInstance.getNamespace(), YamlBody.of(ingress));
             Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
+
+            String loadBalancerIpString = ingressHelper.getLoadBalancerIpString(applicationInstance.getNamespace(), definition.getName());
+
+            String hosts = definition.getRules().stream().map(IngressDefinition.Rule::getHost).collect(Collectors.joining(","));
+
+            applicationInstance.setIngress(ingress);
+            applicationInstance.setHost(hosts);
+            applicationInstance.setLoadBalancerIngressIp(loadBalancerIpString);
+            applicationInstanceService.saveOrUpdate(applicationInstance);
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
             applicationInstanceService.saveOrUpdate(applicationInstance);

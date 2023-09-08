@@ -1,6 +1,7 @@
 package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.db.model.ApplicationInstanceSource;
 import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
@@ -29,6 +30,14 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
     @Override
     public Type getType() {
         return Type.IMAGE_BUILD;
+    }
+
+
+    @Override
+    public void processFailed(ApplicationInstance input) {
+        input.setProgress(100);
+        input.setMessage(CommonConstant.APPLICATION_BUILD_FAILED_MESSAGE);
+        applicationInstanceService.saveOrUpdate(input);
     }
 
     @Override

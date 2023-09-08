@@ -8,6 +8,10 @@ public interface ApplicationInstanceProcessor<I> {
 
     void processDelete(I input);
 
+    default void processFailed(I input) {
+
+    }
+
     int order();
 
     Type getType();

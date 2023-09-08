@@ -1,8 +1,8 @@
 package io.hotcloud.service.application.processor;
 
 import io.hotcloud.common.log.Log;
-import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceProcessor;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.buildpack.BuildPackCacheApi;
 import io.hotcloud.service.buildpack.model.JobState;
 import org.springframework.stereotype.Component;
@@ -46,7 +46,8 @@ public class ApplicationInstanceProcessors {
                             break;
                         }
                         if (Objects.equals(JobState.FAILED, status)) {
-                            Log.error(this, null, String.format("[%s] user's application instance [%s] stop. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            Log.error(this, null, String.format("[%s] user's application instance [%s] deploy failed. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
+                            processor.processFailed(instance);
                             return;
                         }
                     }

@@ -17,6 +17,7 @@ public final class CommonConstant {
 
     public static final String SUCCESS_MESSAGE = "success";
     public static final String APPLICATION_DEPLOYING_MESSAGE = "deploying";
+    public static final String APPLICATION_BUILD_FAILED_MESSAGE = "build failed";
 
     public static final String TIMEOUT_MESSAGE = "timeout";
     public static final String FAILED_MESSAGE = "failed";
