@@ -42,7 +42,7 @@ const swal = Swal.mixin({
 
 function instanceYaml(e) {
     let id = $(e).data("instance-id");
-    $('#modal-template-instance-yaml').modal('show');
+    $('#modal-application-yaml').modal('show');
     axios.get(APPLICATION_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
@@ -56,7 +56,7 @@ function instanceYaml(e) {
 
 function instanceIngressYaml(e) {
     let id = $(e).data("instance-id");
-    $('#modal-template-instanceIngress-yaml').modal('show');
+    $('#modal-application-ingress-yaml').modal('show');
     axios.get(APPLICATION_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
@@ -70,7 +70,7 @@ function instanceIngressYaml(e) {
 
 //user template instance list
 function instances() {
-    $('#user-instance-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
 
     });
 }
