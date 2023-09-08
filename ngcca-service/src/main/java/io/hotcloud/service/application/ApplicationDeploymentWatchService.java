@@ -40,6 +40,7 @@ public class ApplicationDeploymentWatchService {
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(applicationInstance);
                 applicationInstance.setMessage(timeoutMessage);
+                applicationInstance.setProgress(100);
                 applicationInstanceService.saveOrUpdate(applicationInstance);
                 return;
             }
@@ -49,6 +50,9 @@ public class ApplicationDeploymentWatchService {
                 boolean ready = ApplicationInstanceDeploymentStatus.isReady(deployment, applicationInstance.getReplicas());
                 if (!ready) {
                     Log.info(this, null, String.format("[%s] user's application instance deployment [%s] is not ready!", applicationInstance.getUser(), applicationInstance.getName()));
+                    applicationInstance.setMessage(CommonConstant.APPLICATION_DEPLOYING_MESSAGE);
+                    applicationInstance.setProgress(80);
+                    applicationInstanceService.saveOrUpdate(applicationInstance);
                     return;
                 }
 
@@ -56,6 +60,7 @@ public class ApplicationDeploymentWatchService {
                 Log.info(this, null, String.format("[%s] user's application instance deployment [%s] deploy success!", applicationInstance.getUser(), applicationInstance.getName()));
                 applicationInstance.setMessage(CommonConstant.SUCCESS_MESSAGE);
                 applicationInstance.setSuccess(true);
+                applicationInstance.setProgress(100);
                 applicationInstanceService.saveOrUpdate(applicationInstance);
             }
 
@@ -64,6 +69,7 @@ public class ApplicationDeploymentWatchService {
             Log.error(this, null, e.getMessage());
 
             applicationInstance.setMessage(e.getMessage());
+            applicationInstance.setProgress(100);
             applicationInstanceService.saveOrUpdate(applicationInstance);
         }
 

@@ -88,6 +88,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setBuildPackId(applicationInstance.getBuildPackId());
             fetched.setHost(applicationInstance.getHost());
             fetched.setName(applicationInstance.getName());
+            fetched.setProgress(applicationInstance.getProgress());
             fetched.setCanHttp(applicationInstance.isCanHttp());
             fetched.setReplicas(applicationInstance.getReplicas());
 

@@ -28,6 +28,7 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private String user;
     @Indexed
     private String name;
+    private int progress;
 
     private String namespace;
     private String service;

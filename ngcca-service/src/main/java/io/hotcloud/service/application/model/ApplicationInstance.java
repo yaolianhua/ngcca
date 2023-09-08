@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 import java.util.*;
@@ -22,6 +21,7 @@ public class ApplicationInstance {
     private String buildPackId;
     private String user;
     private String name;
+    private int progress;
 
     private String namespace;
     private String service;
@@ -49,21 +49,6 @@ public class ApplicationInstance {
     private Instant createdAt;
     private Instant modifiedAt;
 
-    public boolean isDeploying() {
-        return !success && !StringUtils.hasText(message);
-    }
-
-    public boolean hasIngress() {
-        return this.ingress != null && !this.ingress.isBlank();
-    }
-
-    public List<String> getIngressList() {
-        if (this.host == null || this.host.isBlank()) {
-            return List.of();
-        }
-        return Arrays.stream(host.split(",")).collect(Collectors.toList());
-    }
-
     public static ApplicationInstance toApplicationInstance(ApplicationInstanceEntity entity) {
         if (Objects.isNull(entity)) {
             return null;
@@ -73,6 +58,7 @@ public class ApplicationInstance {
                 .buildPackId(entity.getBuildPackId())
                 .user(entity.getUser())
                 .name(entity.getName())
+                .progress(entity.getProgress())
                 .namespace(entity.getNamespace())
                 .service(entity.getService())
                 .targetPorts(entity.getTargetPorts())
@@ -91,5 +77,20 @@ public class ApplicationInstance {
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
                 .build();
+    }
+
+    public boolean hasIngress() {
+        return this.ingress != null && !this.ingress.isBlank();
+    }
+
+    public List<String> getIngressList() {
+        if (this.host == null || this.host.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(host.split(",")).collect(Collectors.toList());
+    }
+
+    public boolean isDeploying() {
+        return !success && progress != 100;
     }
 }

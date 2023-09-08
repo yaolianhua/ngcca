@@ -55,13 +55,12 @@
                         <span class="badge badge-secondary" th:text="${instance.nodePorts}"></span>
                     </td>
                     <td class="project_progress">
-                        <!--                        <div class="progress progress-sm">-->
-                        <!--                            <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-green"-->
-                        <!--                                 role="progressbar" th:style="'width: ' + ${instance.progress} + '%'">-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
-                        <!--                        <small th:text="${instance.progress} + '% complete'"></small>-->
-                        0%
+                        <div class="progress progress-sm">
+                            <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-green"
+                                 role="progressbar" th:style="'width: ' + ${instance.progress} + '%'">
+                            </div>
+                        </div>
+                        <small th:text="${instance.progress} + '% complete'"></small>
                     </td>
                     <td class="project-state text-left">
                         <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"

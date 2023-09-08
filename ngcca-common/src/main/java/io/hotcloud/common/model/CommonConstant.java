@@ -16,6 +16,7 @@ public final class CommonConstant {
     public static final String K8S_APP_BUSINESS_DATA_ID = "app.business.data/id";
 
     public static final String SUCCESS_MESSAGE = "success";
+    public static final String APPLICATION_DEPLOYING_MESSAGE = "deploying";
 
     public static final String TIMEOUT_MESSAGE = "timeout";
     public static final String FAILED_MESSAGE = "failed";
