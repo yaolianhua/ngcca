@@ -56,6 +56,8 @@ ngcca:
       - "/user/templates/**"
       - "/user/applications/**"
       - "/"
+  buildpack:
+    build-timeout-second: 1800
 logging:
   level:
     io.hotcloud.common.log: debug
