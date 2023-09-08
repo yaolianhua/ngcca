@@ -49,7 +49,7 @@ metadata:
 spec:
 #  ingressClassName: nginx
   rules:
-    - host: k8s-agent.linux.local
+    - host: k8s-agent.vps.linux
       http:
         paths:
           - path: /
@@ -96,16 +96,18 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.09.01.143915
+        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.09.06.183418
           env:
             - name: NGCCA_REDIS_HOST
-              value: "192.168.110.233"
+              value: "192.168.110.94"
             - name: NGCCA_REDIS_PORT
               value: "6379"
             - name: NGCCA_REDIS_DATABASE
               value: "0"
             - name: NGCCA_REDIS_PASSWORD
               value: "QbMufCD@9WVQ^Hv"
+            - name: LOGGING_LEVEL_IO_HOTCLOUD_COMMON_LOG
+              value: debug
           imagePullPolicy: IfNotPresent
           name: k8s-agent
           ports:
