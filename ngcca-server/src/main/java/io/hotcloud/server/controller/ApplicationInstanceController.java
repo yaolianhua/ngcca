@@ -4,10 +4,11 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.service.application.model.ApplicationForm;
-import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceCollectionQuery;
 import io.hotcloud.service.application.ApplicationInstancePlayer;
+import io.hotcloud.service.application.ApplicationInstanceService;
+import io.hotcloud.service.application.model.ApplicationForm;
+import io.hotcloud.service.application.model.ApplicationInstance;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,11 +28,14 @@ public class ApplicationInstanceController {
 
     private final ApplicationInstancePlayer applicationInstancePlayer;
     private final ApplicationInstanceCollectionQuery collectionQuery;
+    private final ApplicationInstanceService applicationInstanceService;
 
     public ApplicationInstanceController(ApplicationInstancePlayer applicationInstancePlayer,
-                                         ApplicationInstanceCollectionQuery collectionQuery) {
+                                         ApplicationInstanceCollectionQuery collectionQuery,
+                                         ApplicationInstanceService applicationInstanceService) {
         this.applicationInstancePlayer = applicationInstancePlayer;
         this.collectionQuery = collectionQuery;
+        this.applicationInstanceService = applicationInstanceService;
     }
 
     @PostMapping
@@ -71,6 +75,17 @@ public class ApplicationInstanceController {
         return accepted();
     }
 
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Get application instance",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "id", description = "application instance id")
+            }
+    )
+    public ResponseEntity<ApplicationInstance> findOne(@PathVariable("id") String id) {
+        return ResponseEntity.ok(applicationInstanceService.findOne(id));
+    }
     @GetMapping
     @Operation(
             summary = "application instance paging query",
