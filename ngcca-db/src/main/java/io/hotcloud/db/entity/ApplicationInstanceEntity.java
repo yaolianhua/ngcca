@@ -44,6 +44,7 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private String loadBalancerIngressIp;
 
     private ApplicationInstanceSource source;
+    private String yaml;
 
     @Builder.Default
     private Integer replicas = 1;

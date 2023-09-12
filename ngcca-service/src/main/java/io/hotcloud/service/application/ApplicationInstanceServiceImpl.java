@@ -91,6 +91,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setProgress(applicationInstance.getProgress());
             fetched.setCanHttp(applicationInstance.isCanHttp());
             fetched.setReplicas(applicationInstance.getReplicas());
+            fetched.setYaml(applicationInstance.getYaml());
 
             fetched.setModifiedAt(Instant.now());
 

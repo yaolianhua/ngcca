@@ -20,6 +20,7 @@ import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.buildpack.BuildPackService;
 import io.hotcloud.service.buildpack.model.BuildPack;
+import io.kubernetes.client.util.Yaml;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -124,7 +125,13 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
 
             request.setMetadata(buildDeploymentMetadata(applicationInstance));
             request.setSpec(buildDeploymentSpec(applicationInstance));
-            deploymentApi.create(request);
+            Deployment deployment = deploymentApi.create(request);
+            try {
+                applicationInstance.setYaml(Yaml.dump(deployment));
+                applicationInstanceService.saveOrUpdate(applicationInstance);
+            } catch (Exception e) {
+                Log.error(this, null, "dump deployment failed");
+            }
             Log.info(this, null, String.format("[%s] user's application instance k8s deployment [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
             Log.error(this, null, String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
