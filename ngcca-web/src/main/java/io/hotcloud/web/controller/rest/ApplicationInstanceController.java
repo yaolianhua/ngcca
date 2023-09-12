@@ -4,10 +4,14 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.application.ApplicationInstanceCollectionQuery;
 import io.hotcloud.service.application.ApplicationInstancePlayer;
+import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationForm;
 import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,11 +31,14 @@ public class ApplicationInstanceController {
 
     private final ApplicationInstancePlayer applicationInstancePlayer;
     private final ApplicationInstanceCollectionQuery collectionQuery;
+    private final ApplicationInstanceService applicationInstanceService;
 
     public ApplicationInstanceController(ApplicationInstancePlayer applicationInstancePlayer,
-                                         ApplicationInstanceCollectionQuery collectionQuery) {
+                                         ApplicationInstanceCollectionQuery collectionQuery,
+                                         ApplicationInstanceService applicationInstanceService) {
         this.applicationInstancePlayer = applicationInstancePlayer;
         this.collectionQuery = collectionQuery;
+        this.applicationInstanceService = applicationInstanceService;
     }
 
     @PostMapping
@@ -40,6 +47,7 @@ public class ApplicationInstanceController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Deploy application instance form")
     )
+    @Log(action = Action.CREATE, target = Target.APPLICATION, activity = "创建应用实例")
     public ResponseEntity<Result<ApplicationInstance>> apply(@RequestBody ApplicationForm form) {
         ApplicationInstance instance = applicationInstancePlayer.play(form);
         return created(instance);
@@ -53,6 +61,7 @@ public class ApplicationInstanceController {
                     @Parameter(name = "id", description = "application instance id")
             }
     )
+    @Log(action = Action.DELETE, target = Target.APPLICATION, activity = "删除应用实例")
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         applicationInstancePlayer.delete(id);
         return accepted();
@@ -66,9 +75,23 @@ public class ApplicationInstanceController {
                     @Parameter(name = "user", description = "delete specified user, it will be delete all if user is null")
             }
     )
+    @Log(action = Action.DELETE, target = Target.APPLICATION, activity = "删除应用实例集")
     public ResponseEntity<Result<Void>> deleteAll(@RequestParam(value = "user", required = false) String user) {
         applicationInstancePlayer.deleteAll(user);
         return accepted();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Get application instance",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "id", description = "application instance id")
+            }
+    )
+    @Log(action = Action.QUERY, target = Target.APPLICATION, activity = "查询应用实例")
+    public ResponseEntity<ApplicationInstance> findOne(@PathVariable("id") String id) {
+        return ResponseEntity.ok(applicationInstanceService.findOne(id));
     }
 
     @GetMapping
@@ -83,6 +106,7 @@ public class ApplicationInstanceController {
                     @Parameter(name = "page_size", description = "pageSize", schema = @Schema(defaultValue = "10"))
             }
     )
+    @Log(action = Action.QUERY, target = Target.APPLICATION, activity = "查询应用实例集")
     public ResponseEntity<PageResult<ApplicationInstance>> page(@RequestParam(value = "user", required = false) String user,
                                                                 @RequestParam(value = "success", required = false) Boolean success,
                                                                 @RequestParam(value = "deleted", required = false) Boolean deleted,
