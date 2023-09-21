@@ -29,7 +29,6 @@ public final class CommonConstant {
     public static final String MESSAGE_QUEUE_K8S_STATEFULSET = "message:queue:k8s:statefulset";
     public static final String MESSAGE_QUEUE_K8S_CRONJOB = "message:queue:k8s:cronjob";
     public static final String MESSAGE_QUEUE_K8S_POD = "message:queue:k8s:pod";
-    public static final String MESSAGE_QUEUE_K8S_AGENT = "message:queue:k8s:agent";
     public static final String MESSAGE_QUEUE_NGCCA = "message:queue:ngcca";
     public static final List<String> MESSAGE_QUEUE_LIST = List.of(
             MESSAGE_QUEUE_TEST,
@@ -40,7 +39,6 @@ public final class CommonConstant {
             MESSAGE_QUEUE_K8S_DAEMONSET,
             MESSAGE_QUEUE_K8S_STATEFULSET,
             MESSAGE_QUEUE_K8S_POD,
-            MESSAGE_QUEUE_K8S_AGENT,
             MESSAGE_QUEUE_NGCCA
     );
 }
