@@ -236,4 +236,17 @@ class KubectlClientImpl implements KubectlClient {
                 });
         return response.getBody();
     }
+
+    @Override
+    public List<Node> listNode(String agentUrl) {
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodes", URI.create(agentUrl + "/v1/kubernetes/equivalents"))).build().toUri();
+
+        ResponseEntity<List<Node>> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
 }

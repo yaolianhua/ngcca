@@ -34,7 +34,7 @@ public class KubernetesClusterController {
         this.kubernetesClusterCreateService = kubernetesClusterCreateService;
     }
 
-    @GetMapping
+    @PostMapping
     @Operation(
             summary = "Kubernetes cluster create",
             responses = {@ApiResponse(responseCode = "201")}

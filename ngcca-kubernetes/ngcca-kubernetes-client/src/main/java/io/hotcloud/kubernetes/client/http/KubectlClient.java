@@ -177,6 +177,8 @@ public interface KubectlClient {
      */
     List<Node> listNode();
 
+    List<Node> listNode(String agentUrl);
+
     /**
      * Get node. Equivalent to using kubectl get node {@code node_name}
      *

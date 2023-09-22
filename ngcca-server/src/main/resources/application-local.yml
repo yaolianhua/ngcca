@@ -2,19 +2,19 @@ ngcca:
   redis:
     database: 0
     password: QbMufCD@9WVQ^Hv
-    host: linux.local
+    host: mid.vps-a.linux
     port: 6379
   registry:
-    url: harbor.linux-local:5000
+    url: 119.91.214.25:5000
     username: admin
     password: "QbMufCD@9WVQ^Hv"
-    imagebuild-namespace: image-build-dev
+    imagebuild-namespace: image-build
   minio:
     access-key: admin
     secret-key: "QbMufCD@9WVQ^Hv"
-    endpoint: "http://linux.local:9009"
+    endpoint: "http://mid.vps-a.linux:9009"
   mongodb:
-    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-dev?authSource=admin"
+    uri: "mongodb://admin:QbMufCD%409WVQ^Hv@mid.vps-a.linux:27017/ngcca?authSource=admin"
   kubernetes-agent:
     host:
     port:
@@ -40,7 +40,7 @@ ngcca:
       port: 0
     http-client-timeout-seconds: 60
   docker:
-    host: "tcp://linux.local:2375"
+    host: "tcp://mid.vps-a.linux:2375"
     pull-timeout-seconds: 300
     push-timeout-seconds: 300
   git-proxy:
