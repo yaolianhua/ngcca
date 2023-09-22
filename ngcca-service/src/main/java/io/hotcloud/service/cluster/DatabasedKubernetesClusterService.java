@@ -1,8 +1,10 @@
 package io.hotcloud.service.cluster;
 
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.KubernetesClusterEntity;
 import io.hotcloud.db.entity.KubernetesClusterRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,14 +23,24 @@ public class DatabasedKubernetesClusterService {
 
     public void saveOrUpdate(KubernetesCluster info) {
 
-        Optional<KubernetesClusterEntity> optional = kubernetesClusterRepository.findByName(info.getName());
-        if (optional.isPresent()) {
-            KubernetesClusterEntity fetched = optional.get();
+        if (StringUtils.hasText(info.getId())) {
+            Optional<KubernetesClusterEntity> optionalKubernetesCluster = kubernetesClusterRepository.findById(info.getId());
+            if (optionalKubernetesCluster.isEmpty()) {
+                throw new PlatformException("cluster not found: id=" + info.getId());
+            }
+            KubernetesClusterEntity fetched = optionalKubernetesCluster.get();
             fetched.setMasters(info.getMasters());
             fetched.setNodes(info.getNodes());
+            fetched.setAgentUrl(info.getAgentUrl());
             fetched.setModifiedAt(Instant.now());
             kubernetesClusterRepository.save(fetched);
             return;
+        }
+        if (!StringUtils.hasText(info.getName())) {
+            throw new PlatformException("cluster name is null");
+        }
+        if (!StringUtils.hasText(info.getAgentUrl())) {
+            throw new PlatformException("cluster agent url is null");
         }
 
         KubernetesClusterEntity entity = (KubernetesClusterEntity) new KubernetesClusterEntity().toE(info);
@@ -43,7 +55,12 @@ public class DatabasedKubernetesClusterService {
     }
 
 
-    public KubernetesCluster findOne(String name) {
+    public KubernetesCluster findByName(String name) {
+        KubernetesClusterEntity entity = kubernetesClusterRepository.findByName(name).orElse(null);
+        return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);
+    }
+
+    public KubernetesCluster findById(String name) {
         KubernetesClusterEntity entity = kubernetesClusterRepository.findByName(name).orElse(null);
         return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);
     }
