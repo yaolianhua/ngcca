@@ -58,4 +58,8 @@ public class DatabasedKubernetesClusterService {
         KubernetesClusterEntity entity = kubernetesClusterRepository.findById(id).orElse(null);
         return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);
     }
+
+    public void deleteById(String id) {
+        kubernetesClusterRepository.deleteById(id);
+    }
 }

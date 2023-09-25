@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.hotcloud.common.model.WebResponse.created;
-import static io.hotcloud.common.model.WebResponse.ok;
+import static io.hotcloud.common.model.WebResponse.*;
 
 @SwaggerBearerAuth
 @RestController
@@ -65,5 +64,18 @@ public class KubernetesClusterController {
     public ResponseEntity<Result<KubernetesCluster>> queryOne(@PathVariable("id") String id) {
         KubernetesCluster kubernetesCluster = databasedKubernetesClusterService.findById(id);
         return ok(kubernetesCluster);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(
+            summary = "delete kubernetes cluster",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "id", description = "cluster id")
+            }
+    )
+    public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
+        databasedKubernetesClusterService.deleteById(id);
+        return none();
     }
 }
