@@ -1,5 +1,6 @@
 package io.hotcloud.web.controller;
 
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.cluster.KubernetesClusterStatisticsService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
@@ -13,9 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdministratorClusterViewsController {
 
     private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
-    public AdministratorClusterViewsController(KubernetesClusterStatisticsService kubernetesClusterStatisticsService) {
+    public AdministratorClusterViewsController(KubernetesClusterStatisticsService kubernetesClusterStatisticsService,
+                                               DatabasedKubernetesClusterService databasedKubernetesClusterService) {
         this.kubernetesClusterStatisticsService = kubernetesClusterStatisticsService;
+        this.databasedKubernetesClusterService = databasedKubernetesClusterService;
+    }
+
+    @RequestMapping({"/", ""})
+    @WebSession
+    public String clusters(Model model) {
+        model.addAttribute(WebConstant.COLLECTION_RESULT, databasedKubernetesClusterService.list());
+        return AdminViews.Cluster.CLUSTER_LIST;
     }
 
     @RequestMapping("/node")
