@@ -62,8 +62,8 @@ public class KubernetesClusterController {
                     @Parameter(name = "id", description = "cluster id")
             }
     )
-    public ResponseEntity<Result<KubernetesCluster>> one(@PathVariable("id") String id) {
-        KubernetesCluster kubernetesCluster = databasedKubernetesClusterService.findByName(id);
+    public ResponseEntity<Result<KubernetesCluster>> queryOne(@PathVariable("id") String id) {
+        KubernetesCluster kubernetesCluster = databasedKubernetesClusterService.findById(id);
         return ok(kubernetesCluster);
     }
 }

@@ -54,14 +54,8 @@ public class DatabasedKubernetesClusterService {
                 .toList();
     }
 
-
-    public KubernetesCluster findByName(String name) {
-        KubernetesClusterEntity entity = kubernetesClusterRepository.findByName(name).orElse(null);
-        return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);
-    }
-
-    public KubernetesCluster findById(String name) {
-        KubernetesClusterEntity entity = kubernetesClusterRepository.findByName(name).orElse(null);
+    public KubernetesCluster findById(String id) {
+        KubernetesClusterEntity entity = kubernetesClusterRepository.findById(id).orElse(null);
         return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);
     }
 }
