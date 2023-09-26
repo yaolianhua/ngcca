@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class KubernetesClusterCreateService {
+public class KubernetesClusterService {
 
     private final KubectlClient kubectlClient;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;

@@ -5,8 +5,8 @@ import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.cluster.KubernetesCluster;
-import io.hotcloud.service.cluster.KubernetesClusterCreateService;
 import io.hotcloud.service.cluster.KubernetesClusterRequestCreateParameter;
+import io.hotcloud.service.cluster.KubernetesClusterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,12 +25,12 @@ import static io.hotcloud.common.model.WebResponse.*;
 public class KubernetesClusterController {
 
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
-    private final KubernetesClusterCreateService kubernetesClusterCreateService;
+    private final KubernetesClusterService kubernetesClusterService;
 
     public KubernetesClusterController(DatabasedKubernetesClusterService databasedKubernetesClusterService,
-                                       KubernetesClusterCreateService kubernetesClusterCreateService) {
+                                       KubernetesClusterService kubernetesClusterService) {
         this.databasedKubernetesClusterService = databasedKubernetesClusterService;
-        this.kubernetesClusterCreateService = kubernetesClusterCreateService;
+        this.kubernetesClusterService = kubernetesClusterService;
     }
 
     @PostMapping
@@ -39,7 +39,7 @@ public class KubernetesClusterController {
             responses = {@ApiResponse(responseCode = "201")}
     )
     public ResponseEntity<Result<Void>> create(@RequestBody KubernetesClusterRequestCreateParameter body) {
-        kubernetesClusterCreateService.createOrUpdate(body);
+        kubernetesClusterService.createOrUpdate(body);
         return created();
     }
 
