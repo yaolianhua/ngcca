@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
@@ -32,6 +33,7 @@ public class DatabasedKubernetesClusterService {
             fetched.setMasters(info.getMasters());
             fetched.setNodes(info.getNodes());
             fetched.setAgentUrl(info.getAgentUrl());
+            fetched.setHealth(info.isHealth());
             fetched.setModifiedAt(Instant.now());
             kubernetesClusterRepository.save(fetched);
             return;
@@ -52,6 +54,10 @@ public class DatabasedKubernetesClusterService {
         return StreamSupport.stream(kubernetesClusterRepository.findAll().spliterator(), false)
                 .map(e -> e.toT(KubernetesCluster.class))
                 .toList();
+    }
+
+    public List<KubernetesCluster> listUnHealth() {
+        return this.list().stream().filter(e -> !e.isHealth()).collect(Collectors.toList());
     }
 
     public KubernetesCluster findById(String id) {
