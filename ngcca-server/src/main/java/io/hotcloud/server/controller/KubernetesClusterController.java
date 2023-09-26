@@ -35,11 +35,11 @@ public class KubernetesClusterController {
 
     @PostMapping
     @Operation(
-            summary = "Kubernetes cluster create",
+            summary = "Kubernetes cluster create  or update",
             responses = {@ApiResponse(responseCode = "201")}
     )
     public ResponseEntity<Result<Void>> create(@RequestBody KubernetesClusterRequestCreateParameter body) {
-        kubernetesClusterCreateService.create(body);
+        kubernetesClusterCreateService.createOrUpdate(body);
         return created();
     }
 

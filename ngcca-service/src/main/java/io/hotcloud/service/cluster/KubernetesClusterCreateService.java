@@ -34,7 +34,7 @@ public class KubernetesClusterCreateService {
 
     }
 
-    public void create(KubernetesClusterRequestCreateParameter parameter) {
+    public void createOrUpdate(KubernetesClusterRequestCreateParameter parameter) {
 
         parameterValidation(parameter);
 
@@ -47,7 +47,7 @@ public class KubernetesClusterCreateService {
                     .toList();
 
             if (masters.isEmpty()) {
-                throw new RuntimeException("Master node not found");
+                throw new PlatformException("Master node not found");
             }
 
             allNodeList.removeAll(masters);
@@ -90,6 +90,7 @@ public class KubernetesClusterCreateService {
             kubernetesCluster.setId(parameter.getId());
             kubernetesCluster.setName(parameter.getName());
             kubernetesCluster.setAgentUrl(parameter.getHttpEndpoint());
+            kubernetesCluster.setHealth(true);
             databasedKubernetesClusterService.saveOrUpdate(kubernetesCluster);
         } catch (Exception e) {
             Log.error(this, parameter, Event.EXCEPTION, e.getMessage());

@@ -20,6 +20,8 @@ public class KubernetesClusterEntity extends AbstractEntity {
 
     private String agentUrl;
 
+    private boolean health;
+
     private List<Node> masters = new ArrayList<>();
     private List<Node> nodes = new ArrayList<>();
 
