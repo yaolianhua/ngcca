@@ -30,11 +30,12 @@ class DeploymentClientImpl implements DeploymentClient {
 
     private final URI uri;
     private final RestTemplate restTemplate;
+    private static final String API = "/v1/kubernetes/deployments";
 
     public DeploymentClientImpl(KubernetesAgentProperties clientProperties,
                                 RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/deployments");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
 
@@ -45,6 +46,22 @@ class DeploymentClientImpl implements DeploymentClient {
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, deployment);
+
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public Deployment read(String agentUrl, String namespace, String deployment) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
                 .build(namespace, deployment);
 
         ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
@@ -74,8 +91,40 @@ class DeploymentClientImpl implements DeploymentClient {
     }
 
     @Override
+    public DeploymentList readList(String agentUrl, String namespace, Map<String, String> labelSelector) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<DeploymentList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public DeploymentList readList() {
         URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<DeploymentList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public DeploymentList readList(String agentUrl) {
+        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agentUrl + API)).build().toUri();
 
         ResponseEntity<DeploymentList> response = restTemplate.exchange(
                 uriRequest,
@@ -98,12 +147,38 @@ class DeploymentClientImpl implements DeploymentClient {
     }
 
     @Override
+    public Deployment create(String agentUrl, DeploymentCreateRequest request) throws ApiException {
+        Assert.notNull(request, "request body is null");
+
+        ResponseEntity<Deployment> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Deployment create(YamlBody request) throws ApiException {
         Assert.notNull(request, "request body is null");
         Assert.isTrue(StringUtils.hasText(request.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/yaml", uri))
+                .build().toUri();
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public Deployment create(String agentUrl, YamlBody request) throws ApiException {
+        Assert.notNull(request, "request body is null");
+        Assert.isTrue(StringUtils.hasText(request.getYaml()), "yaml content is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", URI.create(agentUrl + API)))
                 .build().toUri();
         ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
@@ -128,6 +203,38 @@ class DeploymentClientImpl implements DeploymentClient {
     }
 
     @Override
+    public Void delete(String agentUrl, String namespace, String deployment) throws ApiException {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .build(namespace, deployment);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Void scale(String agentUrl, String namespace, String deployment, Integer count, boolean wait) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+        Assert.isTrue(Objects.nonNull(count), () -> "scale count is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/{count}/scale", URI.create(agentUrl + API)))
+                .queryParam("wait", wait)
+                .build(namespace, deployment, count);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Void scale(String namespace, String deployment, Integer count, boolean wait) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(deployment);
@@ -139,6 +246,23 @@ class DeploymentClientImpl implements DeploymentClient {
                 .build(namespace, deployment, count);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Deployment rolling(String agentUrl, RollingAction action, String namespace, String deployment) {
+        Assert.notNull(action, "action is null");
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/rolling", URI.create(agentUrl + API)))
+                .queryParam("action", action)
+                .build(namespace, deployment);
+
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
@@ -162,6 +286,23 @@ class DeploymentClientImpl implements DeploymentClient {
     }
 
     @Override
+    public Deployment imageSet(String agentUrl, String namespace, String deployment, String image) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+        Assert.isTrue(StringUtils.hasText(image), () -> "image name is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/image", URI.create(agentUrl + API)))
+                .queryParam("image", image)
+                .build(namespace, deployment);
+
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Deployment imageSet(String namespace, String deployment, String image) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(deployment);
@@ -170,6 +311,26 @@ class DeploymentClientImpl implements DeploymentClient {
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/image", uri))
                 .queryParam("image", image)
+                .build(namespace, deployment);
+
+        ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Deployment imagesSet(String agentUrl, String namespace, String deployment, Map<String, String> containerToImageMap) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(deployment);
+        Assert.isTrue(!CollectionUtils.isEmpty(containerToImageMap), () -> "containerToImageMap is empty");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        containerToImageMap.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/images", URI.create(agentUrl + API)))
+                .queryParams(params)
                 .build(namespace, deployment);
 
         ResponseEntity<Deployment> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, HttpEntity.EMPTY,
