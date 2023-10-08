@@ -30,11 +30,12 @@ class PodClientImpl implements PodClient {
 
     private final URI uri;
     private final RestTemplate restTemplate;
+    private static final String API = "/v1/kubernetes/pods";
 
     public PodClientImpl(KubernetesAgentProperties clientProperties,
                          RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/pods");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
     @Override
@@ -46,6 +47,24 @@ class PodClientImpl implements PodClient {
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/log", uri))
                 .queryParam("tail", tail)
                 .build(namespace, pod);
+
+        ResponseEntity<String> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public String logs(String agentUrl, String namespace, String pod, String container, Integer tailingLine) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+        Assert.isTrue(StringUtils.hasText(container), "container name is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{pod}/{container}/log", URI.create(agentUrl + API)))
+                .queryParam("tail", tailingLine)
+                .build(namespace, pod, container);
 
         ResponseEntity<String> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
@@ -73,6 +92,23 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public String logs(String namespace, String pod, Integer tail, String agentUrl) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/log", URI.create(agentUrl + API)))
+                .queryParam("tail", tail)
+                .build(namespace, pod);
+
+        ResponseEntity<String> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public List<String> loglines(String namespace, String pod, Integer tail) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(pod);
@@ -90,11 +126,43 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public List<String> loglines(String agentUrl, String namespace, String pod, Integer tail) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/loglines", URI.create(agentUrl + API)))
+                .queryParam("tail", tail)
+                .build(namespace, pod);
+
+        ResponseEntity<List<String>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Pod read(String namespace, String pod) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(pod);
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public Pod read(String agentUrl, String namespace, String pod) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
                 .build(namespace, pod);
 
         ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
@@ -124,8 +192,40 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public PodList readList(String agentUrl, String namespace, Map<String, String> labelSelector) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<PodList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public PodList readList() {
         URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<PodList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public PodList readList(String agentUrl) {
+        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agentUrl + API)).build().toUri();
 
         ResponseEntity<PodList> response = restTemplate.exchange(
                 uriRequest,
@@ -148,6 +248,17 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public Pod create(String agentUrl, PodCreateRequest request) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(request);
+
+        ResponseEntity<Pod> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Pod create(YamlBody yaml) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
@@ -163,12 +274,42 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public Pod create(String agentUrl, YamlBody yaml) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(yaml);
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", URI.create(agentUrl + API)))
+                .build().toUri();
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Void delete(String namespace, String pod) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(pod);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Void delete(String agentUrl, String namespace, String pod) throws ApiException {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
                 .build(namespace, pod);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
@@ -194,6 +335,22 @@ class PodClientImpl implements PodClient {
     }
 
     @Override
+    public Pod addAnnotations(String agentUrl, String namespace, String pod, Map<String, String> annotations) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+        Assert.isTrue(!CollectionUtils.isEmpty(annotations), "annotations is empty");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/annotations", URI.create(agentUrl + API)))
+                .build(namespace, pod);
+
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(annotations),
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public Pod addLabels(String namespace, String pod, Map<String, String> labels) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(pod);
@@ -201,6 +358,22 @@ class PodClientImpl implements PodClient {
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}/labels", uri))
+                .build(namespace, pod);
+
+        ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(labels),
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Pod addLabels(String agentUrl, String namespace, String pod, Map<String, String> labels) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+        Assert.isTrue(!CollectionUtils.isEmpty(labels), "labels is empty");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/labels", URI.create(agentUrl + API)))
                 .build(namespace, pod);
 
         ResponseEntity<Pod> response = restTemplate.exchange(uriRequest, HttpMethod.PATCH, new HttpEntity<>(labels),
