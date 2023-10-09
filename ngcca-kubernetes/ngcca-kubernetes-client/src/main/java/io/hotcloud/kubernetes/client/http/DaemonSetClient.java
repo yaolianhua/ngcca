@@ -23,6 +23,15 @@ public interface DaemonSetClient {
     DaemonSet read(String namespace, String daemonSet);
 
     /**
+     * Read namespaced DaemonSet
+     *
+     * @param namespace namespace
+     * @param daemonSet daemonSet name
+     * @return {@link DaemonSet}
+     */
+    DaemonSet read(String agentUrl, String namespace, String daemonSet);
+
+    /**
      * Read namespaced DaemonSetList
      *
      * @param namespace     namespace
@@ -32,11 +41,27 @@ public interface DaemonSetClient {
     DaemonSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read namespaced DaemonSetList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link DaemonSetList}
+     */
+    DaemonSetList readList(String agentUrl, String namespace, Map<String, String> labelSelector);
+
+    /**
      * Read all namespaced DaemonSetList
      *
      * @return {@link DaemonSetList}
      */
     DaemonSetList readList();
+
+    /**
+     * Read all namespaced DaemonSetList
+     *
+     * @return {@link DaemonSetList}
+     */
+    DaemonSetList readList(String agentUrl);
 
     /**
      * Create DaemonSet from {@code DaemonSetCreateRequest}
@@ -48,6 +73,15 @@ public interface DaemonSetClient {
     DaemonSet create(DaemonSetCreateRequest request) throws ApiException;
 
     /**
+     * Create DaemonSet from {@code DaemonSetCreateRequest}
+     *
+     * @param request {@link DaemonSetCreateRequest}
+     * @return {@link DaemonSet}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    DaemonSet create(String agentUrl, DaemonSetCreateRequest request) throws ApiException;
+
+    /**
      * Create DaemonSet from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -55,6 +89,15 @@ public interface DaemonSetClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     DaemonSet create(YamlBody yaml) throws ApiException;
+
+    /**
+     * Create DaemonSet from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link DaemonSet}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    DaemonSet create(String agentUrl, YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced DaemonSet
@@ -65,5 +108,15 @@ public interface DaemonSetClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String namespace, String daemonSet) throws ApiException;
+
+    /**
+     * Delete namespaced DaemonSet
+     *
+     * @param namespace namespace
+     * @param daemonSet daemonSet name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agentUrl, String namespace, String daemonSet) throws ApiException;
 
 }
