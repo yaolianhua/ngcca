@@ -39,22 +39,12 @@ class KubectlClientImpl implements KubectlClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-    @Override
-    public List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
-
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.hasText(yaml.getYaml(), "yaml content is null");
-
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
-        URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
-                : uriComponentsBuilder.build().toUri();
-
-        ResponseEntity<List<HasMetadata>> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -62,7 +52,7 @@ class KubectlClientImpl implements KubectlClient {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(URI.create(agentUrl + API));
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(getApiUri(agentUrl));
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
                 : uriComponentsBuilder.build().toUri();
 
@@ -70,21 +60,6 @@ class KubectlClientImpl implements KubectlClient {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public Boolean delete(String namespace, YamlBody yaml) {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.hasText(yaml.getYaml(), "yaml content is null");
-
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(uri);
-        URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
-                : uriComponentsBuilder.build().toUri();
-
-        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, new HttpEntity<>(yaml),
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -93,35 +68,11 @@ class KubectlClientImpl implements KubectlClient {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(URI.create(agentUrl + API));
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUri(getApiUri(agentUrl));
         URI uriRequest = StringUtils.hasText(namespace) ? uriComponentsBuilder.queryParam("namespace", namespace).build().toUri()
                 : uriComponentsBuilder.build().toUri();
 
         ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, new HttpEntity<>(yaml),
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public Boolean portForward(String namespace, String pod, String ipv4Address, Integer containerPort, Integer localPort, Long time, TimeUnit timeUnit) {
-
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(pod);
-
-        Assert.notNull(containerPort, "containerPort is null");
-        Assert.notNull(localPort, "localPort is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/forward", uri))
-                .queryParam("ipv4Address", ipv4Address)
-                .queryParam("containerPort", containerPort)
-                .queryParam("localPort", localPort)
-                .queryParam("alive", time)
-                .queryParam("timeUnit", timeUnit)
-                .build(namespace, pod);
-
-        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
@@ -136,7 +87,7 @@ class KubectlClientImpl implements KubectlClient {
         Assert.notNull(localPort, "localPort is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/forward", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/forward", getApiUri(agentUrl)))
                 .queryParam("ipv4Address", ipv4Address)
                 .queryParam("containerPort", containerPort)
                 .queryParam("localPort", localPort)
@@ -151,40 +102,13 @@ class KubectlClientImpl implements KubectlClient {
     }
 
     @Override
-    public List<Event> namespacedEvents(String namespace) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", uri))
-                .build(namespace);
-
-        ResponseEntity<List<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public List<Event> namespacedEvents(String agentUrl, String namespace) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
 
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", URI.create(agentUrl + API)))
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events", getApiUri(agentUrl)))
                 .build(namespace);
 
         ResponseEntity<List<Event>> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public List<Event> events() {
-
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/events", uri)).build().toUri();
-
-        ResponseEntity<List<Event>> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
@@ -192,24 +116,7 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<Event> events(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/events", URI.create(agentUrl + API))).build().toUri();
-
-        ResponseEntity<List<Event>> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public List<Event> namespacedPodEvents(String namespace, String pod) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(pod);
-
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", uri))
-                .build(namespace, pod);
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/events", getApiUri(agentUrl))).build().toUri();
 
         ResponseEntity<List<Event>> response = restTemplate.exchange(
                 uriRequest,
@@ -225,7 +132,7 @@ class KubectlClientImpl implements KubectlClient {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(pod);
 
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", URI.create(agentUrl + API)))
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/{pod}/events", getApiUri(agentUrl)))
                 .build(namespace, pod);
 
         ResponseEntity<List<Event>> response = restTemplate.exchange(
@@ -238,50 +145,14 @@ class KubectlClientImpl implements KubectlClient {
     }
 
     @Override
-    public Event event(String namespace, String name) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(name);
-
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", uri))
-                .build(namespace, name);
-
-        ResponseEntity<Event> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Event event(String agentUrl, String namespace, String name) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(name);
 
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", URI.create(agentUrl + API)))
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/{namespace}/events/{name}", getApiUri(agentUrl)))
                 .build(namespace, name);
 
         ResponseEntity<Event> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(pod);
-        Assert.hasText(source, "source path  is null");
-        Assert.hasText(target, "target path is null");
-        Assert.notNull(action, "action is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/upload", uri))
-                .queryParam("container", container)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("action", action)
-                .build(namespace, pod);
-
-        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getBody();
@@ -296,29 +167,7 @@ class KubectlClientImpl implements KubectlClient {
         Assert.notNull(action, "action is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/upload", URI.create(agentUrl + API)))
-                .queryParam("container", container)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("action", action)
-                .build(namespace, pod);
-
-        ResponseEntity<Boolean> response = restTemplate.exchange(uriRequest, HttpMethod.POST, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(pod);
-        Assert.hasText(source, "source path  is null");
-        Assert.hasText(target, "target path is null");
-        Assert.notNull(action, "action is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/download", uri))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/upload", getApiUri(agentUrl)))
                 .queryParam("container", container)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -340,7 +189,7 @@ class KubectlClientImpl implements KubectlClient {
         Assert.notNull(action, "action is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}/download", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}/download", getApiUri(agentUrl)))
                 .queryParam("container", container)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -354,37 +203,10 @@ class KubectlClientImpl implements KubectlClient {
     }
 
     @Override
-    public List<NodeMetrics> topNodes() {
-
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodemetrics", uri)).build().toUri();
-
-        ResponseEntity<List<NodeMetrics>> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public List<NodeMetrics> topNodes(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodemetrics", URI.create(agentUrl + API))).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodemetrics", getApiUri(agentUrl))).build().toUri();
 
         ResponseEntity<List<NodeMetrics>> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
-    public List<PodMetrics> topPods() {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/podmetrics", uri)).build().toUri();
-
-        ResponseEntity<List<PodMetrics>> response = restTemplate.exchange(
                 uriRequest,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -395,7 +217,7 @@ class KubectlClientImpl implements KubectlClient {
 
     @Override
     public List<PodMetrics> topPods(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/podmetrics", URI.create(agentUrl + API))).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/podmetrics", getApiUri(agentUrl))).build().toUri();
 
         ResponseEntity<List<PodMetrics>> response = restTemplate.exchange(
                 uriRequest,
@@ -407,21 +229,8 @@ class KubectlClientImpl implements KubectlClient {
     }
 
     @Override
-    public List<Node> listNode() {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodes", uri)).build().toUri();
-
-        ResponseEntity<List<Node>> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public List<Node> listNode(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodes", URI.create(agentUrl + "/v1/kubernetes/equivalents"))).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromHttpUrl(String.format("%s/nodes", getApiUri(agentUrl))).build().toUri();
 
         ResponseEntity<List<Node>> response = restTemplate.exchange(
                 uriRequest,

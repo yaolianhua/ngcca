@@ -20,7 +20,9 @@ public interface JobClient {
      * @param job       job name
      * @return {@link Job}
      */
-    Job read(String namespace, String job);
+    default Job read(String namespace, String job) {
+        return read(null, namespace, job);
+    }
 
     /**
      * Read namespaced Job
@@ -38,7 +40,9 @@ public interface JobClient {
      * @param labelSelector label selector
      * @return {@link JobList}
      */
-    JobList readList(String namespace, Map<String, String> labelSelector);
+    default JobList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced JobList
@@ -54,7 +58,9 @@ public interface JobClient {
      *
      * @return {@link JobList}
      */
-    JobList readList();
+    default JobList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced JobList
@@ -70,7 +76,9 @@ public interface JobClient {
      * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Job create(JobCreateRequest request) throws ApiException;
+    default Job create(JobCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Job from {@code JobCreateRequest}
@@ -88,7 +96,9 @@ public interface JobClient {
      * @return {@link Job}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Job create(YamlBody yaml) throws ApiException;
+    default Job create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create Job from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface JobClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String job) throws ApiException;
+    default Void delete(String namespace, String job) throws ApiException {
+        return delete(null, namespace, job);
+    }
 
     /**
      * Delete namespaced Job

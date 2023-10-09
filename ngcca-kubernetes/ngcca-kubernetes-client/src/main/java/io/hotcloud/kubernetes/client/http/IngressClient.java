@@ -13,7 +13,9 @@ public interface IngressClient {
      * @param namespace k8s namespace
      * @return {@link IngressList}
      */
-    IngressList readNamespacedList(String namespace);
+    default IngressList readNamespacedList(String namespace) {
+        return readNamespacedList(null, namespace);
+    }
 
     /**
      * Read namespaced ingress list
@@ -28,7 +30,9 @@ public interface IngressClient {
      *
      * @return {@link IngressList}
      */
-    IngressList readList();
+    default IngressList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all ingress

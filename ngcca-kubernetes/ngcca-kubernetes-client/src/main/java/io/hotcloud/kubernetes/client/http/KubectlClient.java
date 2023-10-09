@@ -25,7 +25,9 @@ public interface KubectlClient {
      * @param yaml      yaml wrapper {@link YamlBody}
      * @return {@link HasMetadata}
      */
-    List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml);
+    default List<HasMetadata> resourceListCreateOrReplace(String namespace, YamlBody yaml) {
+        return resourceListCreateOrReplace(null, namespace, yaml);
+    }
 
     /**
      * Create or replace resourceList. Equivalent to using kubectl apply yaml
@@ -43,7 +45,9 @@ public interface KubectlClient {
      * @param yaml      yaml wrapper {@link YamlBody}
      * @return {@link Boolean}
      */
-    Boolean delete(String namespace, YamlBody yaml);
+    default Boolean delete(String namespace, YamlBody yaml) {
+        return delete(null, namespace, yaml);
+    }
 
     /**
      * Delete resourceList. Equivalent to using kubectl delete yaml
@@ -67,13 +71,15 @@ public interface KubectlClient {
      * @param timeUnit      timeunit default {@code  TimeUnit.MINUTES}
      * @return {@link Boolean}
      */
-    Boolean portForward(String namespace,
+    default Boolean portForward(String namespace,
                         String pod,
                         String ipv4Address,
                         Integer containerPort,
                         Integer localPort,
                         Long time,
-                        TimeUnit timeUnit);
+                                TimeUnit timeUnit) {
+        return portForward(null, namespace, pod, ipv4Address, containerPort, localPort, time, timeUnit);
+    }
 
     /**
      * Listen on port localPort on selected IP inetAddress, forwarding to port in the pod
@@ -109,7 +115,9 @@ public interface KubectlClient {
      * @param action    {@link  CopyAction}
      * @return {@link Boolean}
      */
-    Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action);
+    default Boolean upload(String namespace, String pod, String container, String source, String target, CopyAction action) {
+        return upload(null, namespace, pod, container, source, target, action);
+    }
 
     /**
      * Upload local file/dir to inside Pod
@@ -137,7 +145,9 @@ public interface KubectlClient {
      * @param action    {@link  CopyAction}
      * @return {@link Boolean}
      */
-    Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action);
+    default Boolean download(String namespace, String pod, String container, String source, String target, CopyAction action) {
+        return download(null, namespace, pod, container, source, target, action);
+    }
 
     /**
      * Download remote Pod file/dir to locally
@@ -159,7 +169,9 @@ public interface KubectlClient {
      * @param namespace namespace
      * @return {@link Event}
      */
-    List<Event> namespacedEvents(String namespace);
+    default List<Event> namespacedEvents(String namespace) {
+        return namespacedEvents(null, namespace);
+    }
 
     /**
      * List namespaced events. Equivalent to using kubectl get events -n {@code namespace}
@@ -174,7 +186,9 @@ public interface KubectlClient {
      *
      * @return {@link Event}
      */
-    List<Event> events();
+    default List<Event> events() {
+        return events(null);
+    }
 
     /**
      * List events in any namespace
@@ -191,7 +205,9 @@ public interface KubectlClient {
      * @param pod       pod name
      * @return {@link Event}
      */
-    List<Event> namespacedPodEvents(String namespace, String pod);
+    default List<Event> namespacedPodEvents(String namespace, String pod) {
+        return namespacedPodEvents(null, namespace, pod);
+    }
 
     /**
      * List namespaced pod events
@@ -209,7 +225,9 @@ public interface KubectlClient {
      * @param name      event name
      * @return {@link Event}
      */
-    Event event(String namespace, String name);
+    default Event event(String namespace, String name) {
+        return event(null, namespace, name);
+    }
 
     /**
      * Get namespaced events. Equivalent to using kubectl get events {@code name} -n {@code namespace}
@@ -225,7 +243,9 @@ public interface KubectlClient {
      *
      * @return {@link NodeMetrics}
      */
-    List<NodeMetrics> topNodes();
+    default List<NodeMetrics> topNodes() {
+        return topNodes(null);
+    }
 
     /**
      * List node metrics. Equivalent to using kubectl top node
@@ -265,7 +285,9 @@ public interface KubectlClient {
      *
      * @return {@link PodMetrics}
      */
-    List<PodMetrics> topPods();
+    default List<PodMetrics> topPods() {
+        return topPods(null);
+    }
 
     /**
      * List all namespaced pod metrics. Equivalent to using kubectl top pod -A
@@ -329,7 +351,9 @@ public interface KubectlClient {
      *
      * @return {@link Node}
      */
-    List<Node> listNode();
+    default List<Node> listNode() {
+        return listNode(null);
+    }
 
     List<Node> listNode(String agentUrl);
 

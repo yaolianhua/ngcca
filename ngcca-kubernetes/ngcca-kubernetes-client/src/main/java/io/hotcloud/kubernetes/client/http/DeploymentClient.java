@@ -21,7 +21,9 @@ public interface DeploymentClient {
      * @param deployment deployment name
      * @return {@link Deployment}
      */
-    Deployment read(String namespace, String deployment);
+    default Deployment read(String namespace, String deployment) {
+        return read(null, namespace, deployment);
+    }
 
     /**
      * Read namespaced Deployment
@@ -39,7 +41,9 @@ public interface DeploymentClient {
      * @param labelSelector label selector
      * @return {@link DeploymentList}
      */
-    DeploymentList readList(String namespace, Map<String, String> labelSelector);
+    default DeploymentList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced DeploymentList
@@ -55,7 +59,9 @@ public interface DeploymentClient {
      *
      * @return {@link DeploymentList}
      */
-    DeploymentList readList();
+    default DeploymentList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced DeploymentList
@@ -71,7 +77,9 @@ public interface DeploymentClient {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Deployment create(DeploymentCreateRequest request) throws ApiException;
+    default Deployment create(DeploymentCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Deployment from {@code DeploymentCreateRequest}
@@ -89,7 +97,9 @@ public interface DeploymentClient {
      * @return {@link Deployment}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Deployment create(YamlBody request) throws ApiException;
+    default Deployment create(YamlBody request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Deployment from {@code YamlBody}
@@ -108,7 +118,9 @@ public interface DeploymentClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String deployment) throws ApiException;
+    default Void delete(String namespace, String deployment) throws ApiException {
+        return delete(null, namespace, deployment);
+    }
 
     /**
      * Delete namespaced Deployment
@@ -129,7 +141,9 @@ public interface DeploymentClient {
      * @param wait       if true, wait for the number of instances to exist - no guarantee is made as to readiness
      * @return {@link Void}
      */
-    Void scale(String namespace, String deployment, Integer count, boolean wait);
+    default Void scale(String namespace, String deployment, Integer count, boolean wait) {
+        return scale(null, namespace, deployment, count, wait);
+    }
 
     /**
      * Scale namespaced Deployment
@@ -150,7 +164,9 @@ public interface DeploymentClient {
      * @param deployment deployment name
      * @return {@link Deployment}
      */
-    Deployment rolling(RollingAction action, String namespace, String deployment);
+    default Deployment rolling(RollingAction action, String namespace, String deployment) {
+        return rolling(null, action, namespace, deployment);
+    }
 
     /**
      * Rolling namespaced Deployment
@@ -170,7 +186,9 @@ public interface DeploymentClient {
      * @param image      image to be updated
      * @return {@link Deployment}
      */
-    Deployment imageSet(String namespace, String deployment, String image);
+    default Deployment imageSet(String namespace, String deployment, String image) {
+        return imageSet(null, namespace, deployment, image);
+    }
 
     /**
      * Update existing container image of single container resource
@@ -190,7 +208,9 @@ public interface DeploymentClient {
      * @param containerToImageMap Map with keys as container name and value as image
      * @return {@link Deployment}
      */
-    Deployment imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap);
+    default Deployment imagesSet(String namespace, String deployment, Map<String, String> containerToImageMap) {
+        return imagesSet(null, namespace, deployment, containerToImageMap);
+    }
 
     /**
      * Update existing container image(s) of resources
