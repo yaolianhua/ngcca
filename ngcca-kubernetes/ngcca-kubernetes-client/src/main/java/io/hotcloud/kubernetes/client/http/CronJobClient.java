@@ -23,6 +23,15 @@ public interface CronJobClient {
     CronJob read(String namespace, String cronJob);
 
     /**
+     * Read namespaced CronJob
+     *
+     * @param namespace namespace
+     * @param cronJob   cronJob name
+     * @return {@link CronJob}
+     */
+    CronJob read(String agentUrl, String namespace, String cronJob);
+
+    /**
      * Read namespaced CronJobList
      *
      * @param namespace     namespace
@@ -32,11 +41,27 @@ public interface CronJobClient {
     CronJobList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read namespaced CronJobList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link CronJobList}
+     */
+    CronJobList readList(String agentUrl, String namespace, Map<String, String> labelSelector);
+
+    /**
      * Read all namespaced CronJobList
      *
      * @return {@link CronJobList}
      */
     CronJobList readList();
+
+    /**
+     * Read all namespaced CronJobList
+     *
+     * @return {@link CronJobList}
+     */
+    CronJobList readList(String agentUrl);
 
     /**
      * Create CronJob from {@code CronJobCreateRequest}
@@ -48,6 +73,15 @@ public interface CronJobClient {
     CronJob create(CronJobCreateRequest request) throws ApiException;
 
     /**
+     * Create CronJob from {@code CronJobCreateRequest}
+     *
+     * @param request {@link CronJobCreateRequest}
+     * @return {@link CronJob}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    CronJob create(String agentUrl, CronJobCreateRequest request) throws ApiException;
+
+    /**
      * Create CronJob from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -55,6 +89,15 @@ public interface CronJobClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     CronJob create(YamlBody yaml) throws ApiException;
+
+    /**
+     * Create CronJob from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link CronJob}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    CronJob create(String agentUrl, YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced CronJob
@@ -65,5 +108,15 @@ public interface CronJobClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String namespace, String cronJob) throws ApiException;
+
+    /**
+     * Delete namespaced CronJob
+     *
+     * @param namespace namespace
+     * @param cronJob   cronJob name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agentUrl, String namespace, String cronJob) throws ApiException;
 
 }
