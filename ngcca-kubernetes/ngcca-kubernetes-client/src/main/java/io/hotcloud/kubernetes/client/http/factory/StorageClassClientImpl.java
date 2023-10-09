@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -38,37 +39,19 @@ class StorageClassClientImpl implements StorageClassClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public StorageClass create(StorageClassCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        ResponseEntity<StorageClass> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
     public StorageClass create(String agent, StorageClassCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<StorageClass> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public StorageClass create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.hasText(yaml.getYaml(), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<StorageClass> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<StorageClass> response = restTemplate.exchange(getApiUri(agent), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -81,7 +64,7 @@ class StorageClassClientImpl implements StorageClassClient {
         Assert.hasText(yaml.getYaml(), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agent)))
                 .build().toUri();
         ResponseEntity<StorageClass> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -91,47 +74,16 @@ class StorageClassClientImpl implements StorageClassClient {
     }
 
     @Override
-    public Void delete(String storageClass) throws ApiException {
-
-        RequestParamAssertion.assertResourceNameNotNull(storageClass);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
-                .build(storageClass);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agent, String storageClass) throws ApiException {
         RequestParamAssertion.assertResourceNameNotNull(storageClass);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agent)))
                 .build(storageClass);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public StorageClass read(String name) {
-
-        RequestParamAssertion.assertResourceNameNotNull(name);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri))
-                .build(name);
-
-        ResponseEntity<StorageClass> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -140,31 +92,13 @@ class StorageClassClientImpl implements StorageClassClient {
         RequestParamAssertion.assertResourceNameNotNull(name);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agent)))
                 .build(name);
 
         ResponseEntity<StorageClass> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public StorageClassList readList(Map<String, String> labelSelector) {
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(uri.toString())
-                .queryParams(params)
-                .build().toUri();
-
-        ResponseEntity<StorageClassList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -176,7 +110,7 @@ class StorageClassClientImpl implements StorageClassClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(URI.create(agent + API).toString())
+                .fromHttpUrl(getApiUri(agent).toString())
                 .queryParams(params)
                 .build().toUri();
 

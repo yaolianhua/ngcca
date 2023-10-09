@@ -20,7 +20,9 @@ public interface CronJobClient {
      * @param cronJob   cronJob name
      * @return {@link CronJob}
      */
-    CronJob read(String namespace, String cronJob);
+    default CronJob read(String namespace, String cronJob) {
+        return read(null, namespace, cronJob);
+    }
 
     /**
      * Read namespaced CronJob
@@ -38,7 +40,9 @@ public interface CronJobClient {
      * @param labelSelector label selector
      * @return {@link CronJobList}
      */
-    CronJobList readList(String namespace, Map<String, String> labelSelector);
+    default CronJobList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced CronJobList
@@ -54,7 +58,9 @@ public interface CronJobClient {
      *
      * @return {@link CronJobList}
      */
-    CronJobList readList();
+    default CronJobList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced CronJobList
@@ -70,7 +76,9 @@ public interface CronJobClient {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    CronJob create(CronJobCreateRequest request) throws ApiException;
+    default CronJob create(CronJobCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create CronJob from {@code CronJobCreateRequest}
@@ -88,7 +96,9 @@ public interface CronJobClient {
      * @return {@link CronJob}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    CronJob create(YamlBody yaml) throws ApiException;
+    default CronJob create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create CronJob from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface CronJobClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String cronJob) throws ApiException;
+    default Void delete(String namespace, String cronJob) throws ApiException {
+        return delete(null, namespace, cronJob);
+    }
 
     /**
      * Delete namespaced CronJob

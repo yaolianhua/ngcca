@@ -41,20 +41,12 @@ class DaemonSetClientImpl implements DaemonSetClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public DaemonSet read(String namespace, String daemonSet) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(daemonSet);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, daemonSet);
-
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -63,32 +55,13 @@ class DaemonSetClientImpl implements DaemonSetClient {
         RequestParamAssertion.assertResourceNameNotNull(daemonSet);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, daemonSet);
 
         ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public DaemonSetList readList(String namespace, Map<String, String> labelSelector) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
-                .queryParams(params)
-                .build(namespace);
-
-        ResponseEntity<DaemonSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -101,7 +74,7 @@ class DaemonSetClientImpl implements DaemonSetClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}", getApiUri(agentUrl)))
                 .queryParams(params)
                 .build(namespace);
 
@@ -112,21 +85,8 @@ class DaemonSetClientImpl implements DaemonSetClient {
     }
 
     @Override
-    public DaemonSetList readList() {
-        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
-
-        ResponseEntity<DaemonSetList> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public DaemonSetList readList(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agentUrl + API)).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromUri(getApiUri(agentUrl)).build().toUri();
 
         ResponseEntity<DaemonSetList> response = restTemplate.exchange(
                 uriRequest,
@@ -134,17 +94,6 @@ class DaemonSetClientImpl implements DaemonSetClient {
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -152,21 +101,7 @@ class DaemonSetClientImpl implements DaemonSetClient {
     public DaemonSet create(String agentUrl, DaemonSetCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public DaemonSet create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<DaemonSet> response = restTemplate.exchange(getApiUri(agentUrl), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -178,7 +113,7 @@ class DaemonSetClientImpl implements DaemonSetClient {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agentUrl)))
                 .build().toUri();
         ResponseEntity<DaemonSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -188,25 +123,11 @@ class DaemonSetClientImpl implements DaemonSetClient {
     }
 
     @Override
-    public Void delete(String namespace, String daemonSet) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(daemonSet);
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, daemonSet);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agentUrl, String namespace, String daemonSet) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(daemonSet);
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, daemonSet);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

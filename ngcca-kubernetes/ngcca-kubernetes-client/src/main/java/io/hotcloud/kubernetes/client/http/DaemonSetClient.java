@@ -20,7 +20,9 @@ public interface DaemonSetClient {
      * @param daemonSet daemonSet name
      * @return {@link DaemonSet}
      */
-    DaemonSet read(String namespace, String daemonSet);
+    default DaemonSet read(String namespace, String daemonSet) {
+        return read(null, namespace, daemonSet);
+    }
 
     /**
      * Read namespaced DaemonSet
@@ -38,7 +40,9 @@ public interface DaemonSetClient {
      * @param labelSelector label selector
      * @return {@link DaemonSetList}
      */
-    DaemonSetList readList(String namespace, Map<String, String> labelSelector);
+    default DaemonSetList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced DaemonSetList
@@ -54,7 +58,9 @@ public interface DaemonSetClient {
      *
      * @return {@link DaemonSetList}
      */
-    DaemonSetList readList();
+    default DaemonSetList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced DaemonSetList
@@ -70,7 +76,9 @@ public interface DaemonSetClient {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    DaemonSet create(DaemonSetCreateRequest request) throws ApiException;
+    default DaemonSet create(DaemonSetCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create DaemonSet from {@code DaemonSetCreateRequest}
@@ -88,7 +96,9 @@ public interface DaemonSetClient {
      * @return {@link DaemonSet}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    DaemonSet create(YamlBody yaml) throws ApiException;
+    default DaemonSet create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create DaemonSet from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface DaemonSetClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String daemonSet) throws ApiException;
+    default Void delete(String namespace, String daemonSet) throws ApiException {
+        return delete(null, namespace, daemonSet);
+    }
 
     /**
      * Delete namespaced DaemonSet

@@ -41,20 +41,12 @@ class ConfigMapClientImpl implements ConfigMapClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public ConfigMap read(String namespace, String configmap) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(configmap);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, configmap);
-
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -63,32 +55,13 @@ class ConfigMapClientImpl implements ConfigMapClient {
         RequestParamAssertion.assertResourceNameNotNull(configmap);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, configmap);
 
         ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public ConfigMapList readList(String namespace, Map<String, String> labelSelector) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
-                .queryParams(params)
-                .build(namespace);
-
-        ResponseEntity<ConfigMapList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -101,7 +74,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}", getApiUri(agentUrl)))
                 .queryParams(params)
                 .build(namespace);
 
@@ -112,21 +85,8 @@ class ConfigMapClientImpl implements ConfigMapClient {
     }
 
     @Override
-    public ConfigMapList readList() {
-        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
-
-        ResponseEntity<ConfigMapList> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public ConfigMapList readList(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agentUrl + API)).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromUri(getApiUri(agentUrl)).build().toUri();
 
         ResponseEntity<ConfigMapList> response = restTemplate.exchange(
                 uriRequest,
@@ -134,17 +94,6 @@ class ConfigMapClientImpl implements ConfigMapClient {
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -152,22 +101,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
     public ConfigMap create(String agentUrl, ConfigMapCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public ConfigMap create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<ConfigMap> response = restTemplate.exchange(getApiUri(agentUrl), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -180,7 +114,7 @@ class ConfigMapClientImpl implements ConfigMapClient {
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agentUrl)))
                 .build().toUri();
         ResponseEntity<ConfigMap> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -190,27 +124,12 @@ class ConfigMapClientImpl implements ConfigMapClient {
     }
 
     @Override
-    public Void delete(String namespace, String configmap) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(configmap);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, configmap);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agentUrl, String namespace, String configmap) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(configmap);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, configmap);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

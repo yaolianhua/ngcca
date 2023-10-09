@@ -20,7 +20,9 @@ public interface ConfigMapClient {
      * @param configmap configmap name
      * @return {@link ConfigMap}
      */
-    ConfigMap read(String namespace, String configmap);
+    default ConfigMap read(String namespace, String configmap) {
+        return read(null, namespace, configmap);
+    }
 
     /**
      * Read namespaced ConfigMap
@@ -38,7 +40,9 @@ public interface ConfigMapClient {
      * @param labelSelector label selector
      * @return {@link ConfigMapList}
      */
-    ConfigMapList readList(String namespace, Map<String, String> labelSelector);
+    default ConfigMapList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced ConfigMapList
@@ -54,7 +58,9 @@ public interface ConfigMapClient {
      *
      * @return {@link ConfigMapList}
      */
-    ConfigMapList readList();
+    default ConfigMapList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced ConfigMapList
@@ -70,7 +76,9 @@ public interface ConfigMapClient {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    ConfigMap create(ConfigMapCreateRequest request) throws ApiException;
+    default ConfigMap create(ConfigMapCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create ConfigMap from {@code ConfigMapCreateRequest}
@@ -88,7 +96,9 @@ public interface ConfigMapClient {
      * @return {@link ConfigMap}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    ConfigMap create(YamlBody yaml) throws ApiException;
+    default ConfigMap create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create ConfigMap from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface ConfigMapClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String configmap) throws ApiException;
+    default Void delete(String namespace, String configmap) throws ApiException {
+        return delete(null, namespace, configmap);
+    }
 
     /**
      * Delete namespaced ConfigMap

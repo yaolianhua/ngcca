@@ -40,20 +40,12 @@ class StatefulSetClientImpl implements StatefulSetClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public StatefulSet read(String namespace, String statefulSet) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, statefulSet);
-
-        ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -62,32 +54,13 @@ class StatefulSetClientImpl implements StatefulSetClient {
         RequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agent)))
                 .build(namespace, statefulSet);
 
         ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public StatefulSetList readList(String namespace, Map<String, String> labelSelector) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
-                .queryParams(params)
-                .build(namespace);
-
-        ResponseEntity<StatefulSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -100,7 +73,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}", getApiUri(agent)))
                 .queryParams(params)
                 .build(namespace);
 
@@ -111,21 +84,8 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
-    public StatefulSetList readList() {
-        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
-
-        ResponseEntity<StatefulSetList> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public StatefulSetList readList(String agent) {
-        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agent + API)).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromUri(getApiUri(agent)).build().toUri();
 
         ResponseEntity<StatefulSetList> response = restTemplate.exchange(
                 uriRequest,
@@ -133,17 +93,6 @@ class StatefulSetClientImpl implements StatefulSetClient {
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public StatefulSet create(StatefulSetCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<StatefulSet> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -151,22 +100,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
     public StatefulSet create(String agent, StatefulSetCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<StatefulSet> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public StatefulSet create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<StatefulSet> response = restTemplate.exchange(getApiUri(agent), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -179,7 +113,7 @@ class StatefulSetClientImpl implements StatefulSetClient {
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agent)))
                 .build().toUri();
         ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -189,27 +123,12 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
-    public Void delete(String namespace, String statefulSet) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, statefulSet);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agent, String namespace, String statefulSet) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agent)))
                 .build(namespace, statefulSet);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

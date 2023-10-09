@@ -20,7 +20,9 @@ public interface StorageClassClient {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    StorageClass create(StorageClassCreateRequest request) throws ApiException;
+    default StorageClass create(StorageClassCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create StorageClass from {@code StorageClassCreateRequest}
@@ -38,7 +40,9 @@ public interface StorageClassClient {
      * @return {@link StorageClass}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    StorageClass create(YamlBody yaml) throws ApiException;
+    default StorageClass create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create StorageClass from yaml
@@ -56,7 +60,9 @@ public interface StorageClassClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String storageClass) throws ApiException;
+    default Void delete(String storageClass) throws ApiException {
+        return delete(null, storageClass);
+    }
 
     /**
      * Delete named StorageClass
@@ -73,7 +79,9 @@ public interface StorageClassClient {
      * @param name StorageClass name
      * @return {@link StorageClass}
      */
-    StorageClass read(String name);
+    default StorageClass read(String name) {
+        return read(null, name);
+    }
 
     /**
      * Read named StorageClass
@@ -89,7 +97,9 @@ public interface StorageClassClient {
      * @param labelSelector label selector
      * @return {@link StorageClassList}
      */
-    StorageClassList readList(Map<String, String> labelSelector);
+    default StorageClassList readList(Map<String, String> labelSelector) {
+        return readList(null, labelSelector);
+    }
 
     /**
      * Read StorageClassList

@@ -41,20 +41,12 @@ class CronJobClientImpl implements CronJobClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public CronJob read(String namespace, String cronJob) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(cronJob);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, cronJob);
-
-        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -63,33 +55,13 @@ class CronJobClientImpl implements CronJobClient {
         RequestParamAssertion.assertResourceNameNotNull(cronJob);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, cronJob);
 
         ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public CronJobList readList(String namespace, Map<String, String> labelSelector) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
-                .queryParams(params)
-                .build(namespace);
-
-        ResponseEntity<CronJobList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -103,7 +75,7 @@ class CronJobClientImpl implements CronJobClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}", getApiUri(agentUrl)))
                 .queryParams(params)
                 .build(namespace);
 
@@ -114,21 +86,8 @@ class CronJobClientImpl implements CronJobClient {
     }
 
     @Override
-    public CronJobList readList() {
-        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
-
-        ResponseEntity<CronJobList> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public CronJobList readList(String agentUrl) {
-        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agentUrl + API)).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromUri(getApiUri(agentUrl)).build().toUri();
 
         ResponseEntity<CronJobList> response = restTemplate.exchange(
                 uriRequest,
@@ -136,17 +95,6 @@ class CronJobClientImpl implements CronJobClient {
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public CronJob create(CronJobCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<CronJob> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -154,22 +102,7 @@ class CronJobClientImpl implements CronJobClient {
     public CronJob create(String agentUrl, CronJobCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<CronJob> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public CronJob create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<CronJob> response = restTemplate.exchange(getApiUri(agentUrl), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -182,7 +115,7 @@ class CronJobClientImpl implements CronJobClient {
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agentUrl)))
                 .build().toUri();
         ResponseEntity<CronJob> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -192,27 +125,12 @@ class CronJobClientImpl implements CronJobClient {
     }
 
     @Override
-    public Void delete(String namespace, String cronJob) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(cronJob);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, cronJob);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agentUrl, String namespace, String cronJob) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(cronJob);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agentUrl)))
                 .build(namespace, cronJob);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
