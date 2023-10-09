@@ -23,6 +23,15 @@ public interface JobClient {
     Job read(String namespace, String job);
 
     /**
+     * Read namespaced Job
+     *
+     * @param namespace namespace
+     * @param job       job name
+     * @return {@link Job}
+     */
+    Job read(String agentUrl, String namespace, String job);
+
+    /**
      * Read namespaced JobList
      *
      * @param namespace     namespace
@@ -32,11 +41,27 @@ public interface JobClient {
     JobList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read namespaced JobList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link JobList}
+     */
+    JobList readList(String agentUrl, String namespace, Map<String, String> labelSelector);
+
+    /**
      * Read all namespaced JobList
      *
      * @return {@link JobList}
      */
     JobList readList();
+
+    /**
+     * Read all namespaced JobList
+     *
+     * @return {@link JobList}
+     */
+    JobList readList(String agentUrl);
 
     /**
      * Create Job from {@code JobCreateRequest}
@@ -48,6 +73,15 @@ public interface JobClient {
     Job create(JobCreateRequest request) throws ApiException;
 
     /**
+     * Create Job from {@code JobCreateRequest}
+     *
+     * @param request {@link JobCreateRequest}
+     * @return {@link Job}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Job create(String agentUrl, JobCreateRequest request) throws ApiException;
+
+    /**
      * Create Job from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -55,6 +89,15 @@ public interface JobClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Job create(YamlBody yaml) throws ApiException;
+
+    /**
+     * Create Job from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link Job}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Job create(String agentUrl, YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced Job
@@ -65,5 +108,15 @@ public interface JobClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String namespace, String job) throws ApiException;
+
+    /**
+     * Delete namespaced Job
+     *
+     * @param namespace namespace
+     * @param job       job name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agentUrl, String namespace, String job) throws ApiException;
 
 }
