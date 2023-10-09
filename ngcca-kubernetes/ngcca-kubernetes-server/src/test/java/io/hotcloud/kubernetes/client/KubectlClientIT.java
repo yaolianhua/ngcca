@@ -51,11 +51,11 @@ public class KubectlClientIT extends ClientIntegrationTestBase {
 
     @Test
     public void metrics() {
-        List<NodeMetrics> nodeMetrics = kubectlClient.topNode();
+        List<NodeMetrics> nodeMetrics = kubectlClient.topNodes();
         Assertions.assertTrue(nodeMetrics.size() > 0);
         printNodeMetrics(nodeMetrics);
 
-        List<PodMetrics> podMetrics = kubectlClient.topPod();
+        List<PodMetrics> podMetrics = kubectlClient.topPods();
         Assertions.assertTrue(podMetrics.size() > 0);
         printPodMetrics(podMetrics);
     }

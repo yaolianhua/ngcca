@@ -174,7 +174,7 @@ public class KubernetesClusterStatisticsService {
         }
         //
         try {
-            podMetrics = kubectlClient.topPod()
+            podMetrics = kubectlClient.topPods()
                     .parallelStream()
                     .map(this::build)
                     .collect(Collectors.toList());
@@ -183,7 +183,7 @@ public class KubernetesClusterStatisticsService {
         }
         //
         try {
-            nodeMetrics = kubectlClient.topNode()
+            nodeMetrics = kubectlClient.topNodes()
                     .stream()
                     .map(this::build)
                     .collect(Collectors.toList());
@@ -332,7 +332,7 @@ public class KubernetesClusterStatisticsService {
         }
         //
         try {
-            podMetrics = kubectlClient.topPod(namespace)
+            podMetrics = kubectlClient.topNamespacedPods(namespace)
                     .parallelStream()
                     .map(this::build)
                     .collect(Collectors.toList());
@@ -341,7 +341,7 @@ public class KubernetesClusterStatisticsService {
         }
         //
         try {
-            nodeMetrics = kubectlClient.topNode()
+            nodeMetrics = kubectlClient.topNodes()
                     .stream()
                     .map(this::build)
                     .collect(Collectors.toList());

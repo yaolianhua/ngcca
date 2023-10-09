@@ -55,7 +55,7 @@ public class ClientIntegrationTestBase {
 
     protected void printNamespacedEvents(String namespace, String resourceName) {
         System.out.println("--------------------- Print events --------------------");
-        var events = kubectlClient.events(namespace)
+        var events = kubectlClient.namespacedEvents(namespace)
                 .stream()
                 .filter(e -> e.getInvolvedObject().getName().contains(resourceName))
                 .map(e -> String.format("%20s%20s%20s%100s", e.getType(), e.getReason(), e.getInvolvedObject().getKind() + "/" + e.getInvolvedObject().getName(), e.getMessage()))
