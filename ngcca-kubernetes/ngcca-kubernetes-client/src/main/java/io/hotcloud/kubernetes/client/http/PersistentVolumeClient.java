@@ -22,12 +22,28 @@ public interface PersistentVolumeClient {
     PersistentVolume read(String persistentVolume);
 
     /**
+     * Read named PersistentVolume
+     *
+     * @param persistentVolume persistentVolume name
+     * @return {@link PersistentVolume}
+     */
+    PersistentVolume read(String agent, String persistentVolume);
+
+    /**
      * Read PersistentVolumeList
      *
      * @param labelSelector label selector
      * @return {@link PersistentVolumeList}
      */
     PersistentVolumeList readList(Map<String, String> labelSelector);
+
+    /**
+     * Read PersistentVolumeList
+     *
+     * @param labelSelector label selector
+     * @return {@link PersistentVolumeList}
+     */
+    PersistentVolumeList readList(String agent, Map<String, String> labelSelector);
 
     /**
      * Create PersistentVolume from {@code PersistentVolumeCreateRequest}
@@ -39,6 +55,15 @@ public interface PersistentVolumeClient {
     PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException;
 
     /**
+     * Create PersistentVolume from {@code PersistentVolumeCreateRequest}
+     *
+     * @param request {@link PersistentVolumeCreateRequest}
+     * @return {@link PersistentVolume}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    PersistentVolume create(String agent, PersistentVolumeCreateRequest request) throws ApiException;
+
+    /**
      * Create PersistentVolume from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -48,6 +73,15 @@ public interface PersistentVolumeClient {
     PersistentVolume create(YamlBody yaml) throws ApiException;
 
     /**
+     * Create PersistentVolume from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link PersistentVolume}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    PersistentVolume create(String agent, YamlBody yaml) throws ApiException;
+
+    /**
      * Delete named PersistentVolume
      *
      * @param persistentVolume persistentVolume name
@@ -55,5 +89,14 @@ public interface PersistentVolumeClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String persistentVolume) throws ApiException;
+
+    /**
+     * Delete named PersistentVolume
+     *
+     * @param persistentVolume persistentVolume name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agent, String persistentVolume) throws ApiException;
 
 }
