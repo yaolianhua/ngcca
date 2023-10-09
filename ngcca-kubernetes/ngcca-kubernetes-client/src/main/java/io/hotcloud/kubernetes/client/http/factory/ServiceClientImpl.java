@@ -34,10 +34,12 @@ class ServiceClientImpl implements ServiceClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
+    private static final String API = "/v1/kubernetes/services";
+
     public ServiceClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/services");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
     @Override
@@ -47,6 +49,22 @@ class ServiceClientImpl implements ServiceClient {
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, service);
+
+        ResponseEntity<Service> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public Service read(String agent, String namespace, String service) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(service);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, service);
 
         ResponseEntity<Service> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
@@ -76,8 +94,40 @@ class ServiceClientImpl implements ServiceClient {
     }
 
     @Override
+    public ServiceList readList(String agent, String namespace, Map<String, String> labelSelector) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agent + API)))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<ServiceList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public ServiceList readList() {
         URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<ServiceList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public ServiceList readList(String agent) {
+        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agent + API)).build().toUri();
 
         ResponseEntity<ServiceList> response = restTemplate.exchange(
                 uriRequest,
@@ -101,6 +151,17 @@ class ServiceClientImpl implements ServiceClient {
     }
 
     @Override
+    public Service create(String agent, ServiceCreateRequest request) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(request);
+
+        ResponseEntity<Service> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Service create(YamlBody yaml) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
@@ -116,12 +177,42 @@ class ServiceClientImpl implements ServiceClient {
     }
 
     @Override
+    public Service create(String agent, YamlBody yaml) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(yaml);
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .build().toUri();
+        ResponseEntity<Service> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Void delete(String namespace, String service) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(service);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, service);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Void delete(String agent, String namespace, String service) throws ApiException {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(service);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, service);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
