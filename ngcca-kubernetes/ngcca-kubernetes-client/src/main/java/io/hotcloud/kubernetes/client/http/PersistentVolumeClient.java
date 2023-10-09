@@ -19,7 +19,9 @@ public interface PersistentVolumeClient {
      * @param persistentVolume persistentVolume name
      * @return {@link PersistentVolume}
      */
-    PersistentVolume read(String persistentVolume);
+    default PersistentVolume read(String persistentVolume) {
+        return read(null, persistentVolume);
+    }
 
     /**
      * Read named PersistentVolume
@@ -35,7 +37,9 @@ public interface PersistentVolumeClient {
      * @param labelSelector label selector
      * @return {@link PersistentVolumeList}
      */
-    PersistentVolumeList readList(Map<String, String> labelSelector);
+    default PersistentVolumeList readList(Map<String, String> labelSelector) {
+        return readList(null, labelSelector);
+    }
 
     /**
      * Read PersistentVolumeList
@@ -52,7 +56,9 @@ public interface PersistentVolumeClient {
      * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException;
+    default PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create PersistentVolume from {@code PersistentVolumeCreateRequest}
@@ -70,7 +76,9 @@ public interface PersistentVolumeClient {
      * @return {@link PersistentVolume}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    PersistentVolume create(YamlBody yaml) throws ApiException;
+    default PersistentVolume create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create PersistentVolume from {@code YamlBody}
@@ -88,7 +96,9 @@ public interface PersistentVolumeClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String persistentVolume) throws ApiException;
+    default Void delete(String persistentVolume) throws ApiException {
+        return delete(null, persistentVolume);
+    }
 
     /**
      * Delete named PersistentVolume

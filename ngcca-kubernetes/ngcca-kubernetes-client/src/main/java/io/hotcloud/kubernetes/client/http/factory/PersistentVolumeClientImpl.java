@@ -41,20 +41,12 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public PersistentVolume read(String persistentVolume) {
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri))
-                .build(persistentVolume);
-
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -62,31 +54,13 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
         RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agent)))
                 .build(persistentVolume);
 
         ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public PersistentVolumeList readList(Map<String, String> labelSelector) {
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(uri.toString())
-                .queryParams(params)
-                .build().toUri();
-
-        ResponseEntity<PersistentVolumeList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -98,7 +72,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(URI.create(agent + API).toString())
+                .fromHttpUrl(getApiUri(agent).toString())
                 .queryParams(params)
                 .build().toUri();
 
@@ -109,36 +83,10 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
     }
 
     @Override
-    public PersistentVolume create(PersistentVolumeCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
     public PersistentVolume create(String agent, PersistentVolumeCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public PersistentVolume create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<PersistentVolume> response = restTemplate.exchange(getApiUri(agent), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -151,7 +99,7 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agent)))
                 .build().toUri();
         ResponseEntity<PersistentVolume> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -161,25 +109,11 @@ class PersistentVolumeClientImpl implements PersistentVolumeClient {
     }
 
     @Override
-    public Void delete(String persistentVolume) throws ApiException {
-        RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
-                .build(persistentVolume);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public Void delete(String agent, String persistentVolume) throws ApiException {
         RequestParamAssertion.assertResourceNameNotNull(persistentVolume);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agent)))
                 .build(persistentVolume);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

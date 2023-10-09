@@ -94,7 +94,7 @@ public class ClientIntegrationTestBase {
         String logResult = null;
         while (logResult == null || logResult.isBlank()) {
             try {
-                logResult = podClient.logs(namespace, podName, 100);
+                logResult = podClient.podLogs(namespace, podName, 100);
             } catch (Exception e) {
                 //
             }

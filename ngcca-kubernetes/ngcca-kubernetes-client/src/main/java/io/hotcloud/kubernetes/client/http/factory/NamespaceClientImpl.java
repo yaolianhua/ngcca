@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -39,39 +40,22 @@ class NamespaceClientImpl implements NamespaceClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public Void create(NamespaceCreateRequest request) throws ApiException {
-        Assert.notNull(request, "request body is null");
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
     public Void create(String agentUrl, NamespaceCreateRequest request) throws ApiException {
         Assert.notNull(request, "request body is null");
 
-        ResponseEntity<Void> response = restTemplate.exchange(URI.create(agentUrl + API), HttpMethod.POST, new HttpEntity<>(request),
+        ResponseEntity<Void> response = restTemplate.exchange(getApiUri(agentUrl), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public Void delete(String namespace) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri.toString()))
-                .build(namespace);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -80,7 +64,7 @@ class NamespaceClientImpl implements NamespaceClient {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agentUrl + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agentUrl)))
                 .build(namespace);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
@@ -90,50 +74,17 @@ class NamespaceClientImpl implements NamespaceClient {
     }
 
     @Override
-    public Namespace read(String name) {
-        RequestParamAssertion.assertNamespaceNotNull(name);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", uri))
-                .build(name);
-
-        ResponseEntity<Namespace> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
     public Namespace read(String agent, String name) {
         RequestParamAssertion.assertNamespaceNotNull(name);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{name}", getApiUri(agent)))
                 .build(name);
 
         ResponseEntity<Namespace> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public NamespaceList readList(Map<String, String> labelSelector) {
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(uri.toString())
-                .queryParams(params)
-                .build().toUri();
-
-        ResponseEntity<NamespaceList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -145,7 +96,7 @@ class NamespaceClientImpl implements NamespaceClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(URI.create(agent + API).toString())
+                .fromHttpUrl(getApiUri(agent).toString())
                 .queryParams(params)
                 .build().toUri();
 

@@ -20,7 +20,9 @@ public interface PersistentVolumeClaimClient {
      * @param persistentVolumeClaim persistentVolumeClaim name
      * @return {@link PersistentVolumeClaim}
      */
-    PersistentVolumeClaim read(String namespace, String persistentVolumeClaim);
+    default PersistentVolumeClaim read(String namespace, String persistentVolumeClaim) {
+        return read(null, namespace, persistentVolumeClaim);
+    }
 
     /**
      * Read namespaced PersistentVolumeClaim
@@ -38,7 +40,9 @@ public interface PersistentVolumeClaimClient {
      * @param labelSelector label selector
      * @return {@link PersistentVolumeClaimList}
      */
-    PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector);
+    default PersistentVolumeClaimList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced PersistentVolumeClaimList
@@ -56,7 +60,9 @@ public interface PersistentVolumeClaimClient {
      * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException;
+    default PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create PersistentVolumeClaim from {@code PersistentVolumeClaimCreateRequest}
@@ -74,7 +80,9 @@ public interface PersistentVolumeClaimClient {
      * @return {@link PersistentVolumeClaim}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    PersistentVolumeClaim create(YamlBody yaml) throws ApiException;
+    default PersistentVolumeClaim create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create PersistentVolumeClaim from {@code YamlBody}
@@ -93,7 +101,9 @@ public interface PersistentVolumeClaimClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String persistentVolumeClaim) throws ApiException;
+    default Void delete(String namespace, String persistentVolumeClaim) throws ApiException {
+        return delete(null, namespace, persistentVolumeClaim);
+    }
 
     /**
      * Delete namespaced PersistentVolumeClaim

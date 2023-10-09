@@ -23,7 +23,9 @@ public interface PodClient {
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link String}
      */
-    String logs(String namespace, String pod, Integer tail);
+    default String podLogs(String namespace, String pod, Integer tail) {
+        return podLogs(null, namespace, pod, tail);
+    }
 
     /**
      * Get namespaced pod logs
@@ -33,7 +35,7 @@ public interface PodClient {
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link String}
      */
-    String logs(String namespace, String pod, Integer tail, String agentUrl);
+    String podLogs(String agentUrl, String namespace, String pod, Integer tail);
 
     /**
      * Get container logs
@@ -44,7 +46,9 @@ public interface PodClient {
      * @param tailingLine tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link String}
      */
-    String logs(String namespace, String pod, String container, Integer tailingLine);
+    default String containerLogs(String namespace, String pod, String container, Integer tailingLine) {
+        return containerLogs(null, namespace, pod, container, tailingLine);
+    }
 
     /**
      * Get container logs
@@ -55,7 +59,7 @@ public interface PodClient {
      * @param tailingLine tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link String}
      */
-    String logs(String agentUrl, String namespace, String pod, String container, Integer tailingLine);
+    String containerLogs(String agentUrl, String namespace, String pod, String container, Integer tailingLine);
 
     /**
      * Get namespaced pod logs
@@ -65,7 +69,9 @@ public interface PodClient {
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link List}
      */
-    List<String> loglines(String namespace, String pod, Integer tail);
+    default List<String> podLogList(String namespace, String pod, Integer tail) {
+        return podLogList(null, namespace, pod, tail);
+    }
 
     /**
      * Get namespaced pod logs
@@ -75,7 +81,7 @@ public interface PodClient {
      * @param tail      tail numbers of logs, it will be set {@code Integer.MAX_VALUE } if null
      * @return {@link List}
      */
-    List<String> loglines(String agentUrl, String namespace, String pod, Integer tail);
+    List<String> podLogList(String agentUrl, String namespace, String pod, Integer tail);
 
     /**
      * Read namespaced Pod
@@ -84,7 +90,9 @@ public interface PodClient {
      * @param pod       pod name
      * @return {@link Pod}
      */
-    Pod read(String namespace, String pod);
+    default Pod read(String namespace, String pod) {
+        return read(null, namespace, pod);
+    }
 
     /**
      * Read namespaced Pod
@@ -124,7 +132,9 @@ public interface PodClient {
      * @param labelSelector label selector
      * @return {@link PodList}
      */
-    PodList readList(String namespace, Map<String, String> labelSelector);
+    default PodList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced PodList
@@ -140,7 +150,9 @@ public interface PodClient {
      *
      * @return {@link PodList}
      */
-    PodList readList();
+    default PodList readList() {
+        return readList(null);
+    }
 
     /**
      * List all namespaced PodList
@@ -156,7 +168,9 @@ public interface PodClient {
      * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Pod create(PodCreateRequest request) throws ApiException;
+    default Pod create(PodCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Pod from {@code PodCreateRequest}
@@ -176,7 +190,9 @@ public interface PodClient {
      * @param annotations map of annotations
      * @return {@link Pod}
      */
-    Pod addAnnotations(String namespace, String pod, Map<String, String> annotations);
+    default Pod addAnnotations(String namespace, String pod, Map<String, String> annotations) {
+        return addAnnotations(null, namespace, pod, annotations);
+    }
 
     /**
      * Annotate annotations for pod
@@ -198,7 +214,9 @@ public interface PodClient {
      * @param labels    map of labels
      * @return {@link Pod}
      */
-    Pod addLabels(String namespace, String pod, Map<String, String> labels);
+    default Pod addLabels(String namespace, String pod, Map<String, String> labels) {
+        return addLabels(null, namespace, pod, labels);
+    }
 
     /**
      * Tag labels for pod
@@ -218,7 +236,9 @@ public interface PodClient {
      * @return {@link Pod}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Pod create(YamlBody yaml) throws ApiException;
+    default Pod create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create Pod from {@code YamlBody}
@@ -237,7 +257,9 @@ public interface PodClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String pod) throws ApiException;
+    default Void delete(String namespace, String pod) throws ApiException {
+        return delete(null, namespace, pod);
+    }
 
     /**
      * Delete namespaced Pod

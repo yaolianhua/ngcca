@@ -40,7 +40,7 @@ public class PodController {
     public ResponseEntity<String> podlogs(@PathVariable String namespace,
                                           @PathVariable String pod,
                                           @RequestParam(value = "tail", required = false) Integer tailing) {
-        String log = podClient.logs(namespace, pod, tailing);
+        String log = podClient.podLogs(namespace, pod, tailing);
         return ResponseEntity.ok(log);
     }
 
@@ -60,7 +60,7 @@ public class PodController {
                                                 @PathVariable String pod,
                                                 @PathVariable String container,
                                                 @RequestParam(value = "tail", required = false) Integer tailing) {
-        String log = podClient.logs(namespace, pod, container, tailing);
+        String log = podClient.containerLogs(namespace, pod, container, tailing);
         return ResponseEntity.ok(log);
     }
 

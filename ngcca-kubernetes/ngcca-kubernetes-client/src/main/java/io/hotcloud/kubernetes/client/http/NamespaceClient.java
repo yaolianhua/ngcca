@@ -21,7 +21,9 @@ public interface NamespaceClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void create(NamespaceCreateRequest namespaceCreateRequest) throws ApiException;
+    default Void create(NamespaceCreateRequest namespaceCreateRequest) throws ApiException {
+        return create(null, namespaceCreateRequest);
+    }
 
     /**
      * Create namespace from {@code NamespaceCreateRequest}
@@ -71,7 +73,9 @@ public interface NamespaceClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace) throws ApiException;
+    default Void delete(String namespace) throws ApiException {
+        return delete(null, namespace);
+    }
 
     /**
      * Delete namespace
@@ -88,7 +92,9 @@ public interface NamespaceClient {
      * @param name Namespace name
      * @return {@link Namespace}
      */
-    Namespace read(String name);
+    default Namespace read(String name) {
+        return read(null, name);
+    }
 
     /**
      * Read named Namespace
@@ -104,7 +110,9 @@ public interface NamespaceClient {
      * @param labelSelector label selector
      * @return {@link NamespaceList}
      */
-    NamespaceList readList(Map<String, String> labelSelector);
+    default NamespaceList readList(Map<String, String> labelSelector) {
+        return readList(null, labelSelector);
+    }
 
     /**
      * Read NamespaceList
