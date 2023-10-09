@@ -18,19 +18,37 @@ import java.net.URI;
 public class IngressClientImpl implements IngressClient {
     private final URI uri;
     private final RestTemplate restTemplate;
+    private static final String API = "/v1/kubernetes/ingresses";
 
     public IngressClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/ingresses");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
         this.restTemplate = restTemplate;
     }
 
     @Override
-    public IngressList readList(String namespace) {
+    public IngressList readNamespacedList(String namespace) {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}", uri))
+                .build(namespace);
+
+        ResponseEntity<IngressList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public IngressList readNamespacedList(String agentUrl, String namespace) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agentUrl + API)))
                 .build(namespace);
 
         ResponseEntity<IngressList> response = restTemplate.exchange(
@@ -53,4 +71,14 @@ public class IngressClientImpl implements IngressClient {
         return response.getBody();
     }
 
+    @Override
+    public IngressList readList(String agentUrl) {
+        ResponseEntity<IngressList> response = restTemplate.exchange(
+                URI.create(agentUrl + API),
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
 }

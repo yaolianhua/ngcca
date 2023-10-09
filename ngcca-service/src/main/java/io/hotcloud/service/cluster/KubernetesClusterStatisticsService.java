@@ -322,7 +322,7 @@ public class KubernetesClusterStatisticsService {
         }
         //
         try {
-            ingresses = ingressClient.readList(namespace)
+            ingresses = ingressClient.readNamespacedList(namespace)
                     .getItems()
                     .parallelStream()
                     .map(e -> KubernetesClusterStatistics.Ingress.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
