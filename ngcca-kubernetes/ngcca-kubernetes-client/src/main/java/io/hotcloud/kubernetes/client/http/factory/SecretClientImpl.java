@@ -41,20 +41,12 @@ class SecretClientImpl implements SecretClient {
         uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
-    @Override
-    public Secret read(String namespace, String secret) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(secret);
+    private URI getApiUri(String agent) {
+        if (StringUtils.hasText(agent)) {
+            return URI.create(agent + API);
+        }
 
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, secret);
-
-        ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+        return uri;
     }
 
     @Override
@@ -63,32 +55,13 @@ class SecretClientImpl implements SecretClient {
         RequestParamAssertion.assertResourceNameNotNull(secret);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agent)))
                 .build(namespace, secret);
 
         ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
-    }
-
-    @Override
-    public SecretList readList(String namespace, Map<String, String> labelSelector) {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        labelSelector.forEach(params::add);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", uri))
-                .queryParams(params)
-                .build(namespace);
-
-        ResponseEntity<SecretList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
         return response.getBody();
     }
 
@@ -101,7 +74,7 @@ class SecretClientImpl implements SecretClient {
         labelSelector.forEach(params::add);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}", getApiUri(agent)))
                 .queryParams(params)
                 .build(namespace);
 
@@ -112,21 +85,8 @@ class SecretClientImpl implements SecretClient {
     }
 
     @Override
-    public SecretList readList() {
-        URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
-
-        ResponseEntity<SecretList> response = restTemplate.exchange(
-                uriRequest,
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
-
-    @Override
     public SecretList readList(String agent) {
-        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agent + API)).build().toUri();
+        URI uriRequest = UriComponentsBuilder.fromUri(getApiUri(agent)).build().toUri();
 
         ResponseEntity<SecretList> response = restTemplate.exchange(
                 uriRequest,
@@ -134,17 +94,6 @@ class SecretClientImpl implements SecretClient {
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<>() {
                 });
-        return response.getBody();
-    }
-
-    @Override
-    public Secret create(SecretCreateRequest request) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(request);
-
-        ResponseEntity<Secret> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
         return response.getBody();
     }
 
@@ -152,22 +101,7 @@ class SecretClientImpl implements SecretClient {
     public Secret create(String agent, SecretCreateRequest request) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(request);
 
-        ResponseEntity<Secret> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
-    }
-
-    @Override
-    public Secret create(YamlBody yaml) throws ApiException {
-        RequestParamAssertion.assertBodyNotNull(yaml);
-        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", uri))
-                .build().toUri();
-        ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+        ResponseEntity<Secret> response = restTemplate.exchange(getApiUri(agent), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -180,7 +114,7 @@ class SecretClientImpl implements SecretClient {
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/yaml", getApiUri(agent)))
                 .build().toUri();
         ResponseEntity<Secret> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
                 new ParameterizedTypeReference<>() {
@@ -189,20 +123,6 @@ class SecretClientImpl implements SecretClient {
         return response.getBody();
     }
 
-    @Override
-    public Void delete(String namespace, String secret) throws ApiException {
-        RequestParamAssertion.assertNamespaceNotNull(namespace);
-        RequestParamAssertion.assertResourceNameNotNull(secret);
-
-        URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
-                .build(namespace, secret);
-
-        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
-    }
 
     @Override
     public Void delete(String agent, String namespace, String secret) throws ApiException {
@@ -210,7 +130,7 @@ class SecretClientImpl implements SecretClient {
         RequestParamAssertion.assertResourceNameNotNull(secret);
 
         URI uriRequest = UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", getApiUri(agent)))
                 .build(namespace, secret);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,

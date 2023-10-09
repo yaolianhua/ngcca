@@ -20,7 +20,9 @@ public interface ServiceClient {
      * @param service   service name
      * @return {@link Service}
      */
-    Service read(String namespace, String service);
+    default Service read(String namespace, String service) {
+        return read(null, namespace, service);
+    }
 
     /**
      * Read namespaced Service
@@ -38,7 +40,9 @@ public interface ServiceClient {
      * @param labelSelector label selector
      * @return {@link ServiceList}
      */
-    ServiceList readList(String namespace, Map<String, String> labelSelector);
+    default ServiceList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced ServiceList
@@ -54,7 +58,9 @@ public interface ServiceClient {
      *
      * @return {@link ServiceList}
      */
-    ServiceList readList();
+    default ServiceList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced ServiceList
@@ -70,7 +76,9 @@ public interface ServiceClient {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Service create(ServiceCreateRequest request) throws ApiException;
+    default Service create(ServiceCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Service from {@code ServiceCreateRequest}
@@ -88,7 +96,9 @@ public interface ServiceClient {
      * @return {@link Service}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Service create(YamlBody yaml) throws ApiException;
+    default Service create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create Service from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface ServiceClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String service) throws ApiException;
+    default Void delete(String namespace, String service) throws ApiException {
+        return delete(null, namespace, service);
+    }
 
     /**
      * Delete namespaced Service

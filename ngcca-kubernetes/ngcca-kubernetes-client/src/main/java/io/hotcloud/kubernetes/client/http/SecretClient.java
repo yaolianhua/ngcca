@@ -20,7 +20,9 @@ public interface SecretClient {
      * @param secret    secret name
      * @return {@link Secret}
      */
-    Secret read(String namespace, String secret);
+    default Secret read(String namespace, String secret) {
+        return read(null, namespace, secret);
+    }
 
     /**
      * Read namespaced Secret
@@ -38,7 +40,9 @@ public interface SecretClient {
      * @param labelSelector label selector
      * @return {@link SecretList}
      */
-    SecretList readList(String namespace, Map<String, String> labelSelector);
+    default SecretList readList(String namespace, Map<String, String> labelSelector) {
+        return readList(null, namespace, labelSelector);
+    }
 
     /**
      * Read namespaced SecretList
@@ -54,7 +58,9 @@ public interface SecretClient {
      *
      * @return {@link SecretList}
      */
-    SecretList readList();
+    default SecretList readList() {
+        return readList(null);
+    }
 
     /**
      * Read all namespaced SecretList
@@ -70,7 +76,9 @@ public interface SecretClient {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Secret create(SecretCreateRequest request) throws ApiException;
+    default Secret create(SecretCreateRequest request) throws ApiException {
+        return create(null, request);
+    }
 
     /**
      * Create Secret from {@code SecretCreateRequest}
@@ -88,7 +96,9 @@ public interface SecretClient {
      * @return {@link Secret}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Secret create(YamlBody yaml) throws ApiException;
+    default Secret create(YamlBody yaml) throws ApiException {
+        return create(null, yaml);
+    }
 
     /**
      * Create Secret from {@code YamlBody}
@@ -107,7 +117,9 @@ public interface SecretClient {
      * @return {@link Void}
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
-    Void delete(String namespace, String secret) throws ApiException;
+    default Void delete(String namespace, String secret) throws ApiException {
+        return delete(null, namespace, secret);
+    }
 
     /**
      * Delete namespaced Secret
