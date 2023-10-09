@@ -23,6 +23,15 @@ public interface StatefulSetClient {
     StatefulSet read(String namespace, String statefulSet);
 
     /**
+     * Read namespaced StatefulSet
+     *
+     * @param namespace   namespace
+     * @param statefulSet statefulSet name
+     * @return {@link StatefulSet}
+     */
+    StatefulSet read(String agent, String namespace, String statefulSet);
+
+    /**
      * Read namespaced StatefulSetList
      *
      * @param namespace     namespace
@@ -32,11 +41,27 @@ public interface StatefulSetClient {
     StatefulSetList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read namespaced StatefulSetList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link StatefulSetList}
+     */
+    StatefulSetList readList(String agent, String namespace, Map<String, String> labelSelector);
+
+    /**
      * Read all namespaced StatefulSetList
      *
      * @return {@link StatefulSetList}
      */
     StatefulSetList readList();
+
+    /**
+     * Read all namespaced StatefulSetList
+     *
+     * @return {@link StatefulSetList}
+     */
+    StatefulSetList readList(String agent);
 
     /**
      * Create StatefulSet from {@code StatefulSetCreateRequest}
@@ -48,6 +73,15 @@ public interface StatefulSetClient {
     StatefulSet create(StatefulSetCreateRequest request) throws ApiException;
 
     /**
+     * Create StatefulSet from {@code StatefulSetCreateRequest}
+     *
+     * @param request {@link StatefulSetCreateRequest}
+     * @return {@link StatefulSet}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    StatefulSet create(String agent, StatefulSetCreateRequest request) throws ApiException;
+
+    /**
      * Create StatefulSet from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -55,6 +89,15 @@ public interface StatefulSetClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     StatefulSet create(YamlBody yaml) throws ApiException;
+
+    /**
+     * Create StatefulSet from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link StatefulSet}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    StatefulSet create(String agent, YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced StatefulSet
@@ -65,5 +108,15 @@ public interface StatefulSetClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String namespace, String statefulSet) throws ApiException;
+
+    /**
+     * Delete namespaced StatefulSet
+     *
+     * @param namespace   namespace
+     * @param statefulSet statefulSet name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agent, String namespace, String statefulSet) throws ApiException;
 
 }

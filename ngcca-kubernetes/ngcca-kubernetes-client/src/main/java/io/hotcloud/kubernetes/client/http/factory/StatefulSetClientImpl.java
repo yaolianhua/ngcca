@@ -32,11 +32,12 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
     private final URI uri;
     private final RestTemplate restTemplate;
+    private static final String API = "/v1/kubernetes/statefulsets";
 
     public StatefulSetClientImpl(KubernetesAgentProperties clientProperties,
                                  RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/statefulsets");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
     @Override
@@ -46,6 +47,22 @@ class StatefulSetClientImpl implements StatefulSetClient {
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, statefulSet);
+
+        ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public StatefulSet read(String agent, String namespace, String statefulSet) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, statefulSet);
 
         ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
@@ -75,8 +92,40 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
+    public StatefulSetList readList(String agent, String namespace, Map<String, String> labelSelector) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agent + API)))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<StatefulSetList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public StatefulSetList readList() {
         URI uriRequest = UriComponentsBuilder.fromUri(uri).build().toUri();
+
+        ResponseEntity<StatefulSetList> response = restTemplate.exchange(
+                uriRequest,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public StatefulSetList readList(String agent) {
+        URI uriRequest = UriComponentsBuilder.fromUri(URI.create(agent + API)).build().toUri();
 
         ResponseEntity<StatefulSetList> response = restTemplate.exchange(
                 uriRequest,
@@ -99,6 +148,17 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
+    public StatefulSet create(String agent, StatefulSetCreateRequest request) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(request);
+
+        ResponseEntity<StatefulSet> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public StatefulSet create(YamlBody yaml) throws ApiException {
         RequestParamAssertion.assertBodyNotNull(yaml);
         Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
@@ -114,12 +174,42 @@ class StatefulSetClientImpl implements StatefulSetClient {
     }
 
     @Override
+    public StatefulSet create(String agent, YamlBody yaml) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(yaml);
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .build().toUri();
+        ResponseEntity<StatefulSet> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Void delete(String namespace, String statefulSet) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(statefulSet);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, statefulSet);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Void delete(String agent, String namespace, String statefulSet) throws ApiException {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(statefulSet);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, statefulSet);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
