@@ -33,10 +33,12 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
     private final URI uri;
     private final RestTemplate restTemplate;
 
+    private static final String API = "/v1/kubernetes/persistentvolumeclaims";
+
     public PersistentVolumeClaimClientImpl(KubernetesAgentProperties clientProperties,
                                            RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + "/v1/kubernetes/persistentvolumeclaims");
+        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
     }
 
     @Override
@@ -46,6 +48,22 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, persistentVolumeClaim);
+
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public PersistentVolumeClaim read(String agent, String namespace, String persistentVolumeClaim) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, persistentVolumeClaim);
 
         ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
@@ -75,11 +93,41 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
     }
 
     @Override
+    public PersistentVolumeClaimList readList(String agent, String namespace, Map<String, String> labelSelector) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        labelSelector = Objects.isNull(labelSelector) ? Map.of() : labelSelector;
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        labelSelector.forEach(params::add);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}", URI.create(agent + API)))
+                .queryParams(params)
+                .build(namespace);
+
+        ResponseEntity<PersistentVolumeClaimList> response = restTemplate.exchange(uriRequest, HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
     public PersistentVolumeClaim create(PersistentVolumeClaimCreateRequest request) throws ApiException {
 
         RequestParamAssertion.assertBodyNotNull(request);
 
         ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(request),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public PersistentVolumeClaim create(String agent, PersistentVolumeClaimCreateRequest request) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(request);
+
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(URI.create(agent + API), HttpMethod.POST, new HttpEntity<>(request),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -102,12 +150,42 @@ class PersistentVolumeClaimClientImpl implements PersistentVolumeClaimClient {
     }
 
     @Override
+    public PersistentVolumeClaim create(String agent, YamlBody yaml) throws ApiException {
+        RequestParamAssertion.assertBodyNotNull(yaml);
+        Assert.isTrue(StringUtils.hasText(yaml.getYaml()), "yaml content is null");
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/yaml", URI.create(agent + API)))
+                .build().toUri();
+        ResponseEntity<PersistentVolumeClaim> response = restTemplate.exchange(uriRequest, HttpMethod.POST, new HttpEntity<>(yaml),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
     public Void delete(String namespace, String persistentVolumeClaim) throws ApiException {
         RequestParamAssertion.assertNamespaceNotNull(namespace);
         RequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
 
         URI uriRequest = UriComponentsBuilder
                 .fromHttpUrl(String.format("%s/{namespace}/{name}", uri))
+                .build(namespace, persistentVolumeClaim);
+
+        ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+        return response.getBody();
+    }
+
+    @Override
+    public Void delete(String agent, String namespace, String persistentVolumeClaim) throws ApiException {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(persistentVolumeClaim);
+
+        URI uriRequest = UriComponentsBuilder
+                .fromHttpUrl(String.format("%s/{namespace}/{name}", URI.create(agent + API)))
                 .build(namespace, persistentVolumeClaim);
 
         ResponseEntity<Void> response = restTemplate.exchange(uriRequest, HttpMethod.DELETE, HttpEntity.EMPTY,
