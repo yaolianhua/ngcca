@@ -23,6 +23,15 @@ public interface SecretClient {
     Secret read(String namespace, String secret);
 
     /**
+     * Read namespaced Secret
+     *
+     * @param namespace namespace
+     * @param secret    secret name
+     * @return {@link Secret}
+     */
+    Secret read(String agent, String namespace, String secret);
+
+    /**
      * Read namespaced SecretList
      *
      * @param namespace     namespace
@@ -32,11 +41,27 @@ public interface SecretClient {
     SecretList readList(String namespace, Map<String, String> labelSelector);
 
     /**
+     * Read namespaced SecretList
+     *
+     * @param namespace     namespace
+     * @param labelSelector label selector
+     * @return {@link SecretList}
+     */
+    SecretList readList(String agent, String namespace, Map<String, String> labelSelector);
+
+    /**
      * Read all namespaced SecretList
      *
      * @return {@link SecretList}
      */
     SecretList readList();
+
+    /**
+     * Read all namespaced SecretList
+     *
+     * @return {@link SecretList}
+     */
+    SecretList readList(String agent);
 
     /**
      * Create Secret from {@code SecretCreateRequest}
@@ -48,6 +73,15 @@ public interface SecretClient {
     Secret create(SecretCreateRequest request) throws ApiException;
 
     /**
+     * Create Secret from {@code SecretCreateRequest}
+     *
+     * @param request {@link SecretCreateRequest}
+     * @return {@link Secret}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Secret create(String agent, SecretCreateRequest request) throws ApiException;
+
+    /**
      * Create Secret from {@code YamlBody}
      *
      * @param yaml {@link YamlBody}
@@ -55,6 +89,15 @@ public interface SecretClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Secret create(YamlBody yaml) throws ApiException;
+
+    /**
+     * Create Secret from {@code YamlBody}
+     *
+     * @param yaml {@link YamlBody}
+     * @return {@link Secret}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Secret create(String agent, YamlBody yaml) throws ApiException;
 
     /**
      * Delete namespaced Secret
@@ -65,5 +108,15 @@ public interface SecretClient {
      * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
      */
     Void delete(String namespace, String secret) throws ApiException;
+
+    /**
+     * Delete namespaced Secret
+     *
+     * @param namespace namespace
+     * @param secret    secret name
+     * @return {@link Void}
+     * @throws ApiException throws {@code ApiException} if the request could not be processed correctly from k8s api server
+     */
+    Void delete(String agent, String namespace, String secret) throws ApiException;
 
 }
