@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
-import io.hotcloud.service.cluster.KubernetesClusterStatisticsService;
+import io.hotcloud.service.cluster.statistic.KubernetesClusterStatisticsService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.views.AdminViews;
