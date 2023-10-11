@@ -60,6 +60,10 @@ public class DatabasedKubernetesClusterService {
         return this.list().stream().filter(e -> !e.isHealth()).collect(Collectors.toList());
     }
 
+    public List<KubernetesCluster> listHealth() {
+        return this.list().stream().filter(KubernetesCluster::isHealth).collect(Collectors.toList());
+    }
+
     public KubernetesCluster findById(String id) {
         KubernetesClusterEntity entity = kubernetesClusterRepository.findById(id).orElse(null);
         return Objects.isNull(entity) ? null : entity.toT(KubernetesCluster.class);

@@ -50,12 +50,15 @@
           <thead>
           <tr>
             <th style="width: 10%">
+              集群名称
+            </th>
+            <th style="width: 10%">
               节点名称
             </th>
             <th style="width: 10%">
               节点IP
             </th>
-            <th style="width: 10%">
+            <th style="width: 5%">
               节点状态
             </th>
             <th style="width: 10%">
@@ -76,13 +79,16 @@
             <th style="width: 10%">
               操作系统
             </th>
-            <th style="width: 10%">
+            <th style="width: 5%">
               操作
             </th>
           </tr>
           </thead>
           <tbody>
           <tr th:each="nodemetrics: ${collection}">
+            <td>
+              <a th:text="${nodemetrics.cluster.name}"></a>
+            </td>
             <td>
               <a th:text="${nodemetrics.node}"></a>
             </td>

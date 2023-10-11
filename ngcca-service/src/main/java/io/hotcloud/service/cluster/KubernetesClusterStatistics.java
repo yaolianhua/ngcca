@@ -222,6 +222,9 @@ public class KubernetesClusterStatistics {
     @AllArgsConstructor
     @Builder
     public static class NodeMetrics {
+        @Builder.Default
+        private KubernetesCluster cluster = new KubernetesCluster();
+
         private String node;
         private String ip;
         private String status;
