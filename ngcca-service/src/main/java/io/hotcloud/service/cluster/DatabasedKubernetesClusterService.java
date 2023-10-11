@@ -31,6 +31,7 @@ public class DatabasedKubernetesClusterService {
             }
             KubernetesClusterEntity fetched = optionalKubernetesCluster.get();
             fetched.setMasters(info.getMasters());
+            fetched.setName(StringUtils.hasText(info.getName()) ? info.getName() : fetched.getName());
             fetched.setNodes(info.getNodes());
             fetched.setAgentUrl(info.getAgentUrl());
             fetched.setHealth(info.isHealth());
