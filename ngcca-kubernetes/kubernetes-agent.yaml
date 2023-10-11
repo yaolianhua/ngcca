@@ -49,7 +49,7 @@ metadata:
 spec:
 #  ingressClassName: nginx
   rules:
-    - host: k8s-agent.vps.linux
+    - host: k8s-agent.docker.desktop
       http:
         paths:
           - path: /
@@ -96,7 +96,7 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.09.06.183418
+        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.10.11.173551
           env:
             - name: NGCCA_REDIS_HOST
               value: "192.168.110.94"
