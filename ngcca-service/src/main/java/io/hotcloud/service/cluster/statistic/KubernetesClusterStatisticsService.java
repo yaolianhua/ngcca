@@ -180,7 +180,7 @@ public class KubernetesClusterStatisticsService {
             try {
                 final List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetricsList = kubectlClient.topPods(agent)
                         .parallelStream()
-                        .map(this::build)
+                        .map(e -> this.build(kubernetesCluster, e))
                         .collect(Collectors.toList());
 
                 podMetrics.addAll(podMetricsList);
@@ -346,7 +346,7 @@ public class KubernetesClusterStatisticsService {
         try {
             podMetrics = kubectlClient.topNamespacedPods(namespace)
                     .parallelStream()
-                    .map(this::build)
+                    .map(e -> this.build(new KubernetesCluster(), e))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get pod metrics statistics error: " + e.getMessage());
@@ -381,7 +381,7 @@ public class KubernetesClusterStatisticsService {
     private io.hotcloud.service.cluster.statistic.NodeMetrics build(KubernetesCluster cluster, NodeMetrics fabric8NodeMetrics) {
 
         String node = fabric8NodeMetrics.getMetadata().getName();
-        Node fabric8Node = kubectlClient.getNode(node);
+        Node fabric8Node = kubectlClient.getNode(cluster.getAgentUrl(), node);
         NodeStatus nodeStatus = fabric8Node.getStatus();
 
         long cpuMilliCoresCapacity = Math.round(nodeStatus.getCapacity().get("cpu").getNumericalAmount().doubleValue() * 1000);
@@ -420,7 +420,7 @@ public class KubernetesClusterStatisticsService {
 
     }
 
-    private io.hotcloud.service.cluster.statistic.PodMetrics build(PodMetrics fabric8PodMetrics) {
+    private io.hotcloud.service.cluster.statistic.PodMetrics build(KubernetesCluster cluster, PodMetrics fabric8PodMetrics) {
         String pod = fabric8PodMetrics.getMetadata().getName();
         String namespace = fabric8PodMetrics.getMetadata().getNamespace();
 
@@ -432,14 +432,14 @@ public class KubernetesClusterStatisticsService {
                 .map(e -> e.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024))
                 .reduce(0.0, Double::sum);
 
-        Pod podInfo = podClient.read(namespace, pod);
+        Pod podInfo = podClient.read(cluster.getAgentUrl(), namespace, pod);
         io.hotcloud.service.cluster.statistic.PodMetrics.RefNode refNode = io.hotcloud.service.cluster.statistic.PodMetrics.RefNode.builder()
                 .ip(podInfo.getStatus().getHostIP())
                 .name(podInfo.getSpec().getNodeName())
                 .build();
 
         //
-        List<io.fabric8.kubernetes.api.model.Service> serviceList = serviceClient.readList(namespace, Map.of()).getItems();
+        List<io.fabric8.kubernetes.api.model.Service> serviceList = serviceClient.readList(cluster.getAgentUrl(), namespace, Map.of()).getItems();
         Set<io.hotcloud.service.cluster.statistic.PodMetrics.RefService> refServices = new HashSet<>();
         for (io.fabric8.kubernetes.api.model.Service service : serviceList) {
             Map<String, String> podLabels = podInfo.getMetadata().getLabels();
@@ -475,6 +475,7 @@ public class KubernetesClusterStatisticsService {
                 .containers(containers)
                 .status(podInfo.getStatus().getPhase())
                 .refNode(refNode)
+                .cluster(cluster)
                 .refServices(refServices)
                 .cpuMilliCoresUsage(Math.round(cpu))
                 .memoryMegabyteUsage(Math.round(memory))

@@ -1,5 +1,6 @@
 package io.hotcloud.service.cluster.statistic;
 
+import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class PodMetrics {
     private List<Container> containers = new ArrayList<>();
     private String status;
     private RefNode refNode;
+    @Builder.Default
+    private KubernetesCluster cluster = new KubernetesCluster();
     @Builder.Default
     private Set<RefService> refServices = new HashSet<>();
     private long cpuMilliCoresUsage;

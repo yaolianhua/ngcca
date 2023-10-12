@@ -71,6 +71,9 @@
             <th style="width: 10%">
               节点名称
             </th>
+              <th style="width: 10%">
+                  集群名称
+              </th>
             <th style="width: 20%">
               操作
             </th>
@@ -103,6 +106,9 @@
             <td>
               <a th:text="${podmetrics.refNode.name}"></a>
             </td>
+              <td>
+                  <a th:text="${podmetrics.cluster.name}"></a>
+              </td>
             <td>
               <button class="btn btn-info" data-target="#modal-pod-log"
                       th:attr="onclick=|logs('${podmetrics.namespace}','${podmetrics.pod}')|"
