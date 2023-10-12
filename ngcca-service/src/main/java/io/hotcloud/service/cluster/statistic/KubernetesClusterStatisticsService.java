@@ -148,19 +148,23 @@ public class KubernetesClusterStatisticsService {
             ingresses.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.INGRESS, namespace));
             //
             try {
-                podMetrics = kubectlClient.topNamespacedPods(cluster.getAgentUrl(), namespace)
+                final List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetricsList = kubectlClient.topNamespacedPods(cluster.getAgentUrl(), namespace)
                         .parallelStream()
                         .map(e -> this.build(cluster, e))
-                        .collect(Collectors.toList());
+                        .toList();
+
+                podMetrics.addAll(podMetricsList);
             } catch (Exception e) {
                 Log.warn(this, null, Event.EXCEPTION, "get pod metrics statistics error: " + e.getMessage());
             }
             //
             try {
-                nodeMetrics = kubectlClient.topNodes(cluster.getAgentUrl())
+                final List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetricsList = kubectlClient.topNodes(cluster.getAgentUrl())
                         .stream()
                         .map(e -> this.build(cluster, e))
-                        .collect(Collectors.toList());
+                        .toList();
+
+                nodeMetrics.addAll(nodeMetricsList);
             } catch (Exception e) {
                 Log.warn(this, null, Event.EXCEPTION, "get node metrics statistics error: " + e.getMessage());
             }
