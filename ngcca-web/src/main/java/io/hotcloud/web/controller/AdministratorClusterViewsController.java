@@ -32,14 +32,14 @@ public class AdministratorClusterViewsController {
     @RequestMapping("/node")
     @WebSession
     public String nodeList(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getNodeMetrics());
+        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allStatistics().getNodeMetrics());
         return AdminViews.Cluster.CLUSTER_NODE_LIST;
     }
 
     @RequestMapping("/pod")
     @WebSession
     public String podList(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.statistics().getPodMetrics());
+        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allStatistics().getPodMetrics());
         return AdminViews.Cluster.CLUSTER_POD_LIST;
     }
 }

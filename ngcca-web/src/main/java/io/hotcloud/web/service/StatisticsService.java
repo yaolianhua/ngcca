@@ -55,7 +55,7 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
 
         try {
-            kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics(user.getUsername());
+            kubernetesClusterStatistics = kubernetesClusterStatisticsService.namespacedStatistics(user.getNamespace());
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
             kubernetesClusterStatistics = new KubernetesClusterStatistics();
@@ -88,7 +88,7 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
         Collection<User> users = userApi.users();
         try {
-            kubernetesClusterStatistics = kubernetesClusterStatisticsService.statistics();
+            kubernetesClusterStatistics = kubernetesClusterStatisticsService.allStatistics();
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
             kubernetesClusterStatistics = new KubernetesClusterStatistics();

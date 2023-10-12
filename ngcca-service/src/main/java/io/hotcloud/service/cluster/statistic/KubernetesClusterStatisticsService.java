@@ -32,13 +32,14 @@ public class KubernetesClusterStatisticsService {
     private final IngressClient ingressClient;
     private final UserApi userApi;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
+    private final WorkloadObjectQueryService workloadObjectQueryService;
 
     /**
-     * 管理员视图数据
+     *
      *
      * @return {@link KubernetesClusterStatistics}
      */
-    public KubernetesClusterStatistics statistics() {
+    public KubernetesClusterStatistics allStatistics() {
         List<WorkloadObject> pods = new ArrayList<>();
         List<WorkloadObject> deployments = new ArrayList<>();
         List<WorkloadObject> jobs = new ArrayList<>();
@@ -52,136 +53,26 @@ public class KubernetesClusterStatisticsService {
         List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetrics = new ArrayList<>();
         List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetrics = new ArrayList<>();
 
-        for (KubernetesCluster kubernetesCluster : databasedKubernetesClusterService.listHealth()) {
-            String agent = kubernetesCluster.getAgentUrl();
-            //all pods
-            try {
-                List<WorkloadObject> podList = podClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
+        for (KubernetesCluster cluster : databasedKubernetesClusterService.listHealth()) {
 
-                pods.addAll(podList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get pod statistics error: " + e.getMessage());
-            }
+            pods.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD));
+            deployments.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT));
+            jobs.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.JOB));
+            cronjobs.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CRONJOB));
+            daemonSets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DAEMONSET));
+            statefulSets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.STATEFULSET));
+            services.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SERVICE));
+            secrets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SECRET));
+            configMaps.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CONFIGMAP));
+            ingresses.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.INGRESS));
 
-            //all deployment
-            try {
-                List<WorkloadObject> deploymentList = deploymentClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-
-                deployments.addAll(deploymentList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get  deployment statistics error: " + e.getMessage());
-            }
-
-            //all jobs
-            try {
-                final List<WorkloadObject> jobList = jobClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                jobs.addAll(jobList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get job statistics error: " + e.getMessage());
-            }
-
-            //all cronjobs
-            try {
-                final List<WorkloadObject> cronjobList = cronJobClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                cronjobs.addAll(cronjobList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get cronjob statistics error: " + e.getMessage());
-            }
-
-            //all daemonSets
-            try {
-                final List<WorkloadObject> daemonSetList = daemonSetClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                daemonSets.addAll(daemonSetList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get daemonset statistics error: " + e.getMessage());
-            }
 
             //
             try {
-                final List<WorkloadObject> statefulSetList = statefulSetClient.readList(agent)
-                        .getItems()
+                List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetricsList = kubectlClient.topPods(cluster.getAgentUrl())
                         .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                statefulSets.addAll(statefulSetList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get statefulset statistics error: " + e.getMessage());
-            }
-
-            //
-            try {
-                final List<WorkloadObject> serviceList = serviceClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                services.addAll(serviceList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get service statistics error: " + e.getMessage());
-            }
-
-            //
-            try {
-                final List<WorkloadObject> secretList = secretClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                secrets.addAll(secretList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get secret statistics error: " + e.getMessage());
-            }
-
-            //
-            try {
-                final List<WorkloadObject> configMapList = configMapClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                configMaps.addAll(configMapList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get configmap statistics error: " + e.getMessage());
-            }
-
-            //
-            try {
-                final List<WorkloadObject> ingressList = ingressClient.readList(agent)
-                        .getItems()
-                        .parallelStream()
-                        .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                        .collect(Collectors.toList());
-                ingresses.addAll(ingressList);
-            } catch (Exception e) {
-                Log.warn(this, null, Event.EXCEPTION, "get ingress statistics error: " + e.getMessage());
-            }
-
-            //
-            try {
-                final List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetricsList = kubectlClient.topPods(agent)
-                        .parallelStream()
-                        .map(e -> this.build(kubernetesCluster, e))
-                        .collect(Collectors.toList());
+                        .map(e -> this.build(cluster, e))
+                        .toList();
 
                 podMetrics.addAll(podMetricsList);
             } catch (Exception e) {
@@ -191,10 +82,10 @@ public class KubernetesClusterStatisticsService {
             //
             try {
 
-                final List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetricsList = kubectlClient.topNodes(agent)
+                List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetricsList = kubectlClient.topNodes(cluster.getAgentUrl())
                         .stream()
-                        .map(e -> this.build(kubernetesCluster, e))
-                        .collect(Collectors.toList());
+                        .map(e -> this.build(cluster, e))
+                        .toList();
 
                 nodeMetrics.addAll(nodeMetricsList);
             } catch (Exception e) {
@@ -221,14 +112,10 @@ public class KubernetesClusterStatisticsService {
     }
 
     /**
-     * 用户视图数据
      *
-     * @param username 用户名
      * @return {@link KubernetesClusterStatistics}
      */
-    public KubernetesClusterStatistics statistics(String username) {
-
-        String namespace = userApi.retrieve(username).getNamespace();
+    public KubernetesClusterStatistics namespacedStatistics(String namespace) {
 
         List<WorkloadObject> pods = new ArrayList<>();
         List<WorkloadObject> deployments = new ArrayList<>();
@@ -243,123 +130,37 @@ public class KubernetesClusterStatisticsService {
         List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetrics = new ArrayList<>();
         List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetrics = new ArrayList<>();
 
-        try {
-            pods = podClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get pod statistics error: " + e.getMessage());
+        for (KubernetesCluster cluster : databasedKubernetesClusterService.listHealth()) {
+            pods.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD, namespace));
+            deployments.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT, namespace));
+            jobs.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.JOB, namespace));
+            cronjobs.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CRONJOB, namespace));
+            daemonSets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DAEMONSET, namespace));
+            statefulSets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.STATEFULSET, namespace));
+            services.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SERVICE, namespace));
+            secrets.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SECRET, namespace));
+            configMaps.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CONFIGMAP, namespace));
+            ingresses.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.INGRESS, namespace));
+            //
+            try {
+                podMetrics = kubectlClient.topNamespacedPods(cluster.getAgentUrl(), namespace)
+                        .parallelStream()
+                        .map(e -> this.build(cluster, e))
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                Log.warn(this, null, Event.EXCEPTION, "get pod metrics statistics error: " + e.getMessage());
+            }
+            //
+            try {
+                nodeMetrics = kubectlClient.topNodes(cluster.getAgentUrl())
+                        .stream()
+                        .map(e -> this.build(cluster, e))
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                Log.warn(this, null, Event.EXCEPTION, "get node metrics statistics error: " + e.getMessage());
+            }
         }
-        //
-        try {
-            deployments = deploymentClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get  deployment statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            jobs = jobClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get job statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            cronjobs = cronJobClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get cronjob statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            daemonSets = daemonSetClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get daemonset statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            statefulSets = statefulSetClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get statefulset statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            services = serviceClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get service statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            secrets = secretClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get secret statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            configMaps = configMapClient.readList(namespace, Map.of())
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get configmap statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            ingresses = ingressClient.readNamespacedList(namespace)
-                    .getItems()
-                    .parallelStream()
-                    .map(e -> WorkloadObject.builder().namespace(e.getMetadata().getNamespace()).name(e.getMetadata().getName()).build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get ingress statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            podMetrics = kubectlClient.topNamespacedPods(namespace)
-                    .parallelStream()
-                    .map(e -> this.build(new KubernetesCluster(), e))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get pod metrics statistics error: " + e.getMessage());
-        }
-        //
-        try {
-            nodeMetrics = kubectlClient.topNodes()
-                    .stream()
-                    .map(e -> this.build(new KubernetesCluster(), e))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            Log.warn(this, null, Event.EXCEPTION, "get node metrics statistics error: " + e.getMessage());
-        }
+
 
         return KubernetesClusterStatistics.builder()
                 .podMetrics(podMetrics)
