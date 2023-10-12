@@ -1,5 +1,6 @@
 package io.hotcloud.service.cluster.statistic;
 
+import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,8 @@ import java.util.List;
 @Builder
 public class KubernetesClusterStatistics {
 
+    @Builder.Default
+    private List<KubernetesCluster> clusters = new ArrayList<>();
     @Builder.Default
     private List<NodeMetrics> nodeMetrics = new ArrayList<>();
     @Builder.Default
@@ -85,6 +88,9 @@ public class KubernetesClusterStatistics {
     }
 
 
+    public long getTotalCluster() {
+        return clusters.size();
+    }
     public long getTotalCpuMilliCoresCapacity() {
         return this.nodeMetrics
                 .stream()

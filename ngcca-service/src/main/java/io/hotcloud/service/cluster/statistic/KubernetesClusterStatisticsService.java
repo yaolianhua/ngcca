@@ -53,7 +53,9 @@ public class KubernetesClusterStatisticsService {
         List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetrics = new ArrayList<>();
         List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetrics = new ArrayList<>();
 
-        for (KubernetesCluster cluster : databasedKubernetesClusterService.listHealth()) {
+        final List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
+
+        for (KubernetesCluster cluster : kubernetesClusters) {
 
             pods.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD));
             deployments.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT));
@@ -95,6 +97,7 @@ public class KubernetesClusterStatisticsService {
 
 
         return KubernetesClusterStatistics.builder()
+                .clusters(kubernetesClusters)
                 .podMetrics(podMetrics)
                 .nodeMetrics(nodeMetrics)
                 .pods(pods)
@@ -130,7 +133,9 @@ public class KubernetesClusterStatisticsService {
         List<io.hotcloud.service.cluster.statistic.PodMetrics> podMetrics = new ArrayList<>();
         List<io.hotcloud.service.cluster.statistic.NodeMetrics> nodeMetrics = new ArrayList<>();
 
-        for (KubernetesCluster cluster : databasedKubernetesClusterService.listHealth()) {
+        final List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
+
+        for (KubernetesCluster cluster : kubernetesClusters) {
             pods.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD, namespace));
             deployments.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT, namespace));
             jobs.addAll(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.JOB, namespace));
@@ -163,6 +168,7 @@ public class KubernetesClusterStatisticsService {
 
 
         return KubernetesClusterStatistics.builder()
+                .clusters(kubernetesClusters)
                 .podMetrics(podMetrics)
                 .nodeMetrics(nodeMetrics)
                 .pods(pods)

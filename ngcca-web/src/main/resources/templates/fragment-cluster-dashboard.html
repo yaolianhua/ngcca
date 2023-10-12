@@ -9,8 +9,24 @@
     <!-- /.card-header -->
     <div class="card-body">
         <div class="row">
+            <div class="col-6 col-md-3 text-center">
 
-            <div class="col-6 col-md-4 text-center">
+                <label for="cluster">
+                    <input class="knob" data-fgColor="#00a65a" data-height="100"
+                           data-min="1"
+                           data-readonly="true"
+                           data-thickness="0.1"
+                           data-width="100"
+                           id="cluster"
+                           th:data-max="${statistics.clusterStatistics.totalCluster}"
+                           th:value="${statistics.clusterStatistics.totalCluster}"
+                           type="text">
+                </label>
+
+                <div class="knob-label">集群数（[[${statistics.clusterStatistics.totalCluster}]]）</div>
+            </div>
+
+            <div class="col-6 col-md-3 text-center">
 
                 <label for="node">
                     <input class="knob" data-fgColor="#00a65a" data-height="100"
@@ -26,7 +42,7 @@
 
                 <div class="knob-label">节点数（[[${statistics.clusterStatistics.totalNode}]]）</div>
             </div>
-            <div class="col-6 col-md-4 text-center">
+            <div class="col-6 col-md-3 text-center">
 
                 <label for="cpu">
                     <input class="knob" data-fgColor="#00a65a" data-height="100"
@@ -47,7 +63,7 @@
                 <div class="knob-label">使用率（[[${statistics.clusterStatistics.totalCpuUsagePercentage}]]%）</div>
             </div>
             <!-- ./col -->
-            <div class="col-6 col-md-4 text-center">
+            <div class="col-6 col-md-3 text-center">
 
                 <label for="memory">
                     <input class="knob" data-fgColor="#00a65a" data-height="100"
