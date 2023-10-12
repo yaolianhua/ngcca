@@ -7,5 +7,6 @@ public enum Target {
     APPLICATION,
     MINIO,
     POD,
-    USER
+    USER,
+    DASHBOARD
 }

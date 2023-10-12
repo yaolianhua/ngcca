@@ -17,6 +17,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -59,7 +60,7 @@ public class GlobalLogAspect {
         Action action = logAnnotation.action();
         Target target = logAnnotation.target();
         String activity = logAnnotation.activity();
-        String username = "未知";
+        String username = retrieveUsername(point);
 
         if (request.getRequestURI().contains("/login")) {
             for (int i = 0; i < method.getParameters().length; i++) {
@@ -67,16 +68,6 @@ public class GlobalLogAspect {
                     username = ((String) point.getArgs()[i]);
                 }
             }
-        } else if (request.getRequestURI().contains("/logout")) {
-            for (int i = 0; i < method.getParameters().length; i++) {
-                if (method.getParameters()[i].isAnnotationPresent(CookieUser.class)) {
-                    User cookieUser = (User) point.getArgs()[i];
-                    username = cookieUser.getUsername();
-                }
-            }
-        } else {
-            User user = userApi.current();
-            username = user.getUsername();
         }
 
         ActivityEntity entity = new ActivityEntity();
@@ -93,6 +84,29 @@ public class GlobalLogAspect {
         activityRepository.save(entity);
 
         return result;
+    }
+
+    private String retrieveUsername(ProceedingJoinPoint point) {
+        Signature signature = point.getSignature();
+        Method method = ((MethodSignature) signature).getMethod();
+        String username = null;
+        for (int i = 0; i < method.getParameters().length; i++) {
+            if (method.getParameters()[i].isAnnotationPresent(CookieUser.class)) {
+                User cookieUser = (User) point.getArgs()[i];
+                if (Objects.nonNull(cookieUser)) {
+                    username = cookieUser.getUsername();
+                }
+            }
+        }
+        if (!StringUtils.hasText(username)) {
+            User user = userApi.current();
+            if (Objects.nonNull(user)) {
+                username = user.getUsername();
+            }
+        }
+
+        return username;
+
     }
 
     private String getClientIp(HttpServletRequest request) {
