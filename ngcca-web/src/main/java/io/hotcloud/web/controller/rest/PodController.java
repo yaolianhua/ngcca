@@ -39,8 +39,9 @@ public class PodController {
     @Log(action = Action.QUERY, target = Target.POD, activity = "查询Pod日志")
     public ResponseEntity<String> podlogs(@PathVariable String namespace,
                                           @PathVariable String pod,
+                                          @RequestParam(value = "agentUrl") String agent,
                                           @RequestParam(value = "tail", required = false) Integer tailing) {
-        String log = podClient.podLogs(namespace, pod, tailing);
+        String log = podClient.podLogs(agent, namespace, pod, tailing);
         return ResponseEntity.ok(log);
     }
 
@@ -59,8 +60,9 @@ public class PodController {
     public ResponseEntity<String> containerLogs(@PathVariable String namespace,
                                                 @PathVariable String pod,
                                                 @PathVariable String container,
+                                                @RequestParam(value = "agentUrl") String agent,
                                                 @RequestParam(value = "tail", required = false) Integer tailing) {
-        String log = podClient.containerLogs(namespace, pod, container, tailing);
+        String log = podClient.containerLogs(agent, namespace, pod, container, tailing);
         return ResponseEntity.ok(log);
     }
 
@@ -75,8 +77,9 @@ public class PodController {
     )
     @Log(action = Action.QUERY, target = Target.POD, activity = "查询Pod资源清单（Yaml）")
     public ResponseEntity<String> podYamlRead(@PathVariable String namespace,
-                                              @PathVariable String pod) {
-        String yaml = podClient.readYaml(namespace, pod);
+                                              @PathVariable String pod,
+                                              @RequestParam(value = "agentUrl") String agent) {
+        String yaml = podClient.readYaml(agent, namespace, pod);
         return ResponseEntity.ok(yaml);
     }
 

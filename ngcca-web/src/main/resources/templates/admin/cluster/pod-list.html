@@ -111,11 +111,12 @@
               </td>
             <td>
               <button class="btn btn-info" data-target="#modal-pod-log"
-                      th:attr="onclick=|logs('${podmetrics.namespace}','${podmetrics.pod}')|"
+                      th:attr="onclick=|logs('${podmetrics.cluster.agentUrl}','${podmetrics.namespace}','${podmetrics.pod}')|"
                       th:disabled="${!podmetrics.onlyOneContainer}">日志
               </button>
               <button class="btn btn-secondary" data-target="#modal-pod-yaml"
-                      th:attr="onclick=|yaml('${podmetrics.namespace}','${podmetrics.pod}')|">Yaml
+                      th:attr="onclick=|yaml('${podmetrics.cluster.agentUrl}','${podmetrics.namespace}','${podmetrics.pod}')|">
+                Yaml
               </button>
               <button class="btn btn-success" id="pod-svc" onclick="showsvc(this)"
                       th:data-svc-show="${podmetrics.serviceShow}"

@@ -39,9 +39,9 @@ function showsvc(e) {
     })
 }
 
-function logs(namespace, pod) {
+function logs(agentUrl, namespace, pod) {
     $('#modal-pod-log').modal('show');
-    axios.get(POD_API + "/" + namespace + '/' + pod + "/log?tail=500")
+    axios.get(POD_API + "/" + namespace + '/' + pod + "/log?tail=500&agentUrl=" + agentUrl)
         .then(response => {
             // Populate data into table
             logcodemirror.setValue(response.data)
@@ -52,9 +52,9 @@ function logs(namespace, pod) {
         });
 }
 
-function yaml(namespace, pod) {
+function yaml(agentUrl, namespace, pod) {
     $('#modal-pod-yaml').modal('show');
-    axios.get(POD_API + "/" + namespace + '/' + pod + "/yaml")
+    axios.get(POD_API + "/" + namespace + '/' + pod + "/yaml?agentUrl=" + agentUrl)
         .then(response => {
             // Populate data into table
             yamlcodemirror.setValue(response.data)
