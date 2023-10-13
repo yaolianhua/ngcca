@@ -1,11 +1,11 @@
 package io.hotcloud.service.application;
 
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,22 +23,22 @@ public class ApplicationInstanceStatisticsService {
     /**
      * Get ApplicationInstanceStatistics
      *
-     * @param user user's username
+     * @param username username
      * @return {@link ApplicationInstanceStatistics}
      */
-    public ApplicationInstanceStatistics statistics(@Nullable String user) {
-        boolean hasUser = StringUtils.hasText(user);
-
-        if (hasUser) {
-            List<ApplicationInstance> instances = applicationInstanceService.findAll(user);
-            return statistics(instances);
+    public ApplicationInstanceStatistics userStatistics(String username) {
+        if (!StringUtils.hasText(username)) {
+            throw new PlatformException("username is missing");
         }
 
-
-        List<ApplicationInstance> instances = applicationInstanceService.findAll();
+        List<ApplicationInstance> instances = applicationInstanceService.findAll(username);
         return statistics(instances);
     }
 
+    public ApplicationInstanceStatistics allStatistics() {
+        List<ApplicationInstance> instances = applicationInstanceService.findAll();
+        return statistics(instances);
+    }
     public ApplicationInstanceStatistics statistics(List<ApplicationInstance> instances) {
 
         int deleted = ((int) instances.stream().filter(ApplicationInstance::isDeleted).count());

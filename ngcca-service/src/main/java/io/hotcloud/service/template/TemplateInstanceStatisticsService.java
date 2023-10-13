@@ -1,9 +1,9 @@
 package io.hotcloud.service.template;
 
+import io.hotcloud.common.model.exception.PlatformException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -21,17 +21,20 @@ public class TemplateInstanceStatisticsService {
     /**
      * Get InstanceTemplateStatistics
      *
-     * @param user user's username
+     * @param username username
      * @return {@link TemplateInstanceStatistics}
      */
-    public TemplateInstanceStatistics statistics(@Nullable String user) {
-        boolean hasUser = StringUtils.hasText(user);
-
-        if (hasUser) {
-            List<TemplateInstance> list = templateInstanceService.findAll(user);
-            return statistics(list);
+    public TemplateInstanceStatistics userStatistics(String username) {
+        if (!StringUtils.hasText(username)) {
+            throw new PlatformException("username is missing");
         }
 
+        List<TemplateInstance> list = templateInstanceService.findAll(username);
+        return statistics(list);
+
+    }
+
+    public TemplateInstanceStatistics allStatistics() {
         List<TemplateInstance> list = templateInstanceService.findAll();
         return statistics(list);
     }

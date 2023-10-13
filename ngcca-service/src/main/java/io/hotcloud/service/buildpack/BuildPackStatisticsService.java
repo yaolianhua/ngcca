@@ -1,11 +1,11 @@
 package io.hotcloud.service.buildpack;
 
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.service.buildpack.model.BuildPack;
 import io.hotcloud.service.buildpack.model.BuildPackStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,20 +26,23 @@ public class BuildPackStatisticsService {
     /**
      * Get BuildPackStatistics
      *
-     * @param user user's username
+     * @param username username
      * @return {@link BuildPackStatistics}
      */
-    public BuildPackStatistics statistics(@Nullable String user) {
-        boolean hasUser = StringUtils.hasText(user);
-
-        if (hasUser) {
-            List<BuildPack> buildPacks = buildPackService.findAll(user);
-            return statistics(buildPacks);
+    public BuildPackStatistics userStatistics(String username) {
+        if (!StringUtils.hasText(username)) {
+            throw new PlatformException("username is missing");
         }
 
+        List<BuildPack> buildPacks = buildPackService.findAll(username);
+        return statistics(buildPacks);
+    }
+
+    public BuildPackStatistics allStatistics() {
         List<BuildPack> buildPacks = buildPackService.findAll();
         return statistics(buildPacks);
     }
+
 
     public BuildPackStatistics statistics(List<BuildPack> buildPacks) {
 

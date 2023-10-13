@@ -1,12 +1,12 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.Pageable;
-import io.hotcloud.service.template.Template;
-import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.env.SystemConfiguredEnvironmentQuery;
 import io.hotcloud.service.registry.RegistryImageQueryService;
 import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.service.security.user.UserCollectionQuery;
+import io.hotcloud.service.template.Template;
+import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.service.ActivityQuery;
@@ -78,7 +78,7 @@ public class AdministratorSystemManageViewsController {
             return AdminViews.UserManage.USER_MANAGE_EDIT_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
-            model.addAttribute(WebConstant.STATISTICS, statisticsService.statistics(userid));
+            model.addAttribute(WebConstant.STATISTICS, statisticsService.userStatistics(userid));
             model.addAttribute(WebConstant.USER, userApi.find(userid));
             return AdminViews.UserManage.USER_MANAGE_DETAIL_FRAGMENT;
         }

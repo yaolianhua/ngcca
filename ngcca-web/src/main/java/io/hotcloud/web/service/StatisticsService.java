@@ -40,7 +40,7 @@ public class StatisticsService {
      * @param userid user id
      * @return {@link Statistics}
      */
-    public Statistics statistics(String userid) {
+    public Statistics userStatistics(String userid) {
         Assert.hasText(userid, "user id is null");
         User user = userApi.find(userid);
 
@@ -50,9 +50,9 @@ public class StatisticsService {
         KubernetesClusterStatistics kubernetesClusterStatistics;
         Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
-        templateStatistics = templateInstanceStatisticsService.statistics(user.getUsername());
-        buildPackStatistics = buildPackStatisticsService.statistics(user.getUsername());
-        applicationInstanceStatistics = applicationInstanceStatisticsService.statistics(user.getUsername());
+        templateStatistics = templateInstanceStatisticsService.userStatistics(user.getUsername());
+        buildPackStatistics = buildPackStatisticsService.userStatistics(user.getUsername());
+        applicationInstanceStatistics = applicationInstanceStatisticsService.userStatistics(user.getUsername());
 
         try {
             kubernetesClusterStatistics = kubernetesClusterStatisticsService.namespacedStatistics(user.getNamespace());
@@ -75,7 +75,7 @@ public class StatisticsService {
      *
      * @return {@link Statistics}
      */
-    public Statistics statistics() {
+    public Statistics allStatistics() {
 
         TemplateInstanceStatistics templateStatistics;
         BuildPackStatistics buildPackStatistics;
@@ -83,9 +83,9 @@ public class StatisticsService {
         KubernetesClusterStatistics kubernetesClusterStatistics;
         Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
-        templateStatistics = templateInstanceStatisticsService.statistics("");
-        buildPackStatistics = buildPackStatisticsService.statistics("");
-        applicationInstanceStatistics = applicationInstanceStatisticsService.statistics("");
+        templateStatistics = templateInstanceStatisticsService.allStatistics();
+        buildPackStatistics = buildPackStatisticsService.allStatistics();
+        applicationInstanceStatistics = applicationInstanceStatisticsService.allStatistics();
         Collection<User> users = userApi.users();
         try {
             kubernetesClusterStatistics = kubernetesClusterStatisticsService.allStatistics();
@@ -116,7 +116,7 @@ public class StatisticsService {
 
         List<Statistics> statistics = users.stream()
                 .map(User::getId)
-                .map(this::statistics)
+                .map(this::userStatistics)
                 .toList();
         return PageResult.ofCollectionPage(statistics, pageable);
     }
