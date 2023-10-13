@@ -25,7 +25,7 @@ public class AdministratorIndexViewsController {
 
     @RequestMapping(value = {"/index", ""})
     @WebSession
-    @Log(action = Action.QUERY, target = Target.DASHBOARD, activity = "访问首页")
+    @Log(action = Action.QUERY, target = Target.DASHBOARD, activity = "访问管理员首页")
     public String indexPage(@CookieUser User user,
                             Model model) {
         model.addAttribute(WebConstant.STATISTICS, statisticsService.allCacheStatistics());
