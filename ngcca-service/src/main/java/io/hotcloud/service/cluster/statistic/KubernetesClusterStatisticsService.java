@@ -5,10 +5,11 @@ import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.kubernetes.client.http.*;
+import io.hotcloud.kubernetes.client.http.KubectlClient;
+import io.hotcloud.kubernetes.client.http.PodClient;
+import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.cluster.KubernetesCluster;
-import io.hotcloud.service.security.user.UserApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +22,7 @@ public class KubernetesClusterStatisticsService {
 
     private final KubectlClient kubectlClient;
     private final PodClient podClient;
-    private final DeploymentClient deploymentClient;
-    private final CronJobClient cronJobClient;
-    private final JobClient jobClient;
-    private final DaemonSetClient daemonSetClient;
-    private final StatefulSetClient statefulSetClient;
     private final ServiceClient serviceClient;
-    private final ConfigMapClient configMapClient;
-    private final SecretClient secretClient;
-    private final IngressClient ingressClient;
-    private final UserApi userApi;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final WorkloadObjectQueryService workloadObjectQueryService;
 
