@@ -55,8 +55,7 @@ public class RedisCache extends AbstractValueAdaptingCache {
         Assert.notNull(valueLoader, "Value loader is null");
 
         Boolean hasKey = redisTemplate.hasKey(key);
-        boolean existKey = hasKey != null && hasKey;
-        if (existKey) {
+        if (Boolean.TRUE.equals(hasKey)) {
             return (T) fromStoreValue(redisTemplate.opsForValue().get(key));
         }
         try {
