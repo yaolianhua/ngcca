@@ -23,7 +23,7 @@ public class DashboardStatisticsCacheSchedule {
         //
         userApi.users().forEach(u -> {
             try {
-                Statistics statistics = statisticsService.userCachedStatistics(u.getId());
+                Statistics statistics = statisticsService.userStatistics(u.getId());
                 cache.put(String.format(StatisticsService.DASHBOARD_USER_STATISTICS_KEY, u.getId()), statistics);
             } catch (Exception e) {
                 Log.error(this, null, Event.EXCEPTION, "refresh user [" + u.getId() + "] statistics cache error: " + e.getMessage());
@@ -32,7 +32,7 @@ public class DashboardStatisticsCacheSchedule {
 
 
         try {
-            Statistics statistics = statisticsService.allCacheStatistics();
+            Statistics statistics = statisticsService.allStatistics();
             cache.put(StatisticsService.DASHBOARD_ADMIN_STATISTICS_KEY, statistics);
         } catch (Exception e) {
             Log.error(this, null, Event.SCHEDULE, "refresh admin statistics cache error: " + e.getMessage());
