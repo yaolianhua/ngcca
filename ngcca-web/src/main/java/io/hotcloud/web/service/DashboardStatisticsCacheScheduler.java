@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DashboardStatisticsCacheSchedule {
+public class DashboardStatisticsCacheScheduler {
 
     private final StatisticsService statisticsService;
     private final UserApi userApi;

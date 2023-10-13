@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class KubernetesClusterStatisticsCacheSchedule {
+public class KubernetesClusterStatisticsCacheScheduler {
 
     private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
     private final Cache cache;
