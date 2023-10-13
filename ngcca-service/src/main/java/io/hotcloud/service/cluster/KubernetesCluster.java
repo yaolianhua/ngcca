@@ -3,11 +3,12 @@ package io.hotcloud.service.cluster;
 import io.hotcloud.db.entity.Node;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class KubernetesCluster {
+public class KubernetesCluster implements Serializable {
 
     private String id;
     private String name;

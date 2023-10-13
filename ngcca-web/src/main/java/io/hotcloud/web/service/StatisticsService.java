@@ -1,5 +1,6 @@
 package io.hotcloud.web.service;
 
+import io.hotcloud.common.cache.Cache;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.PageResult;
@@ -33,6 +34,17 @@ public class StatisticsService {
     private final ApplicationInstanceStatisticsService applicationInstanceStatisticsService;
     private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
 
+    public static final String DASHBOARD_USER_STATISTICS_KEY = "dashboard:%s:statistics";
+    public static final String DASHBOARD_ADMIN_STATISTICS_KEY = "dashboard:admin:statistics";
+    private final Cache cache;
+
+    public Statistics userCachedStatistics(String userid) {
+        return cache.get(String.format(DASHBOARD_USER_STATISTICS_KEY, userid), () -> userStatistics(userid));
+    }
+
+    public Statistics allCacheStatistics() {
+        return cache.get(DASHBOARD_ADMIN_STATISTICS_KEY, this::allStatistics);
+    }
 
     /**
      * Get statistics with the giving {@code userid}

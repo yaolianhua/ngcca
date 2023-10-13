@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PodMetrics {
+public class PodMetrics implements Serializable {
     private String namespace;
     private String pod;
     @Builder.Default
@@ -59,7 +60,7 @@ public class PodMetrics {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class RefNode {
+    public static class RefNode implements Serializable {
         private String ip;
         private String name;
     }
@@ -68,7 +69,7 @@ public class PodMetrics {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class RefService {
+    public static class RefService implements Serializable {
         private String type;
         private String name;
         private String clusterIp;
