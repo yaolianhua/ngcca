@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DashboardSchedule {
+public class DashboardStatisticsCacheSchedule {
 
     private final StatisticsService statisticsService;
     private final UserApi userApi;
@@ -19,14 +19,14 @@ public class DashboardSchedule {
     @Scheduled(cron = "*/59 * * * * *")
     public void refresh() {
 
-        Log.debug(this, null, Event.SCHEDULE, "dashboard statistics refresh task is running");
+        Log.debug(this, null, Event.SCHEDULE, "dashboard statistics cache refresh task is running");
         //
         userApi.users().forEach(u -> {
             try {
                 Statistics statistics = statisticsService.userCachedStatistics(u.getId());
                 cache.put(String.format(StatisticsService.DASHBOARD_USER_STATISTICS_KEY, u.getId()), statistics);
             } catch (Exception e) {
-                Log.error(this, null, Event.EXCEPTION, "refresh user [" + u.getId() + "] statistics error: " + e.getMessage());
+                Log.error(this, null, Event.EXCEPTION, "refresh user [" + u.getId() + "] statistics cache error: " + e.getMessage());
             }
         });
 
@@ -35,7 +35,7 @@ public class DashboardSchedule {
             Statistics statistics = statisticsService.allCacheStatistics();
             cache.put(StatisticsService.DASHBOARD_ADMIN_STATISTICS_KEY, statistics);
         } catch (Exception e) {
-            Log.error(this, null, Event.SCHEDULE, "refresh admin statistics error: " + e.getMessage());
+            Log.error(this, null, Event.SCHEDULE, "refresh admin statistics cache error: " + e.getMessage());
         }
 
 
