@@ -8,6 +8,8 @@ public enum Event {
     //
     NOTIFY,
     //
-    EXCEPTION
+    EXCEPTION,
+    //
+    SCHEDULE
 
 }
