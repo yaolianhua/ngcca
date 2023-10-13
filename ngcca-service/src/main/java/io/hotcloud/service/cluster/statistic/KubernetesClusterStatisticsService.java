@@ -3,6 +3,7 @@ package io.hotcloud.service.cluster.statistic;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
+import io.hotcloud.common.cache.Cache;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
@@ -26,6 +27,12 @@ public class KubernetesClusterStatisticsService {
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final WorkloadObjectQueryService workloadObjectQueryService;
 
+    public static final String KUBERNETES_CLUSTER_STATISTICS_KEY = "kubernetes:cluster:statistics";
+    private final Cache cache;
+
+    public KubernetesClusterStatistics allCacheStatistics() {
+        return cache.get(KUBERNETES_CLUSTER_STATISTICS_KEY, this::allStatistics);
+    }
     /**
      *
      *
