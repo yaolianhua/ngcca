@@ -6,12 +6,14 @@ import io.fabric8.kubernetes.api.model.NodeCondition;
 import io.fabric8.kubernetes.api.model.NodeStatus;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.service.cluster.KubernetesCluster;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class NodeMetricsQueryService {
@@ -26,18 +28,23 @@ public class NodeMetricsQueryService {
 
         List<NodeMetrics> result = new ArrayList<>();
         List<io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics> fabric8NodeMetricsList;
+        List<Node> clusterNodes;
         try {
             fabric8NodeMetricsList = kubectlClient.topNodes(cluster.getAgentUrl());
+            clusterNodes = kubectlClient.listNode(cluster.getAgentUrl());
         } catch (Exception e) {
-            Log.error(this, null, Event.EXCEPTION, "[" + cluster.getName() + "]top nodeMetrics error: " + e.getMessage());
+            Log.error(this, null, Event.EXCEPTION, "[" + cluster.getName() + "]server error: " + e.getMessage());
             return result;
         }
 
         for (io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics fabric8NodeMetrics : fabric8NodeMetricsList) {
 
             try {
-                String node = fabric8NodeMetrics.getMetadata().getName();
-                Node fabric8Node = kubectlClient.getNode(cluster.getAgentUrl(), node);
+                String nodeName = fabric8NodeMetrics.getMetadata().getName();
+                Node fabric8Node = clusterNodes.stream()
+                        .filter(e -> Objects.equals(e.getMetadata().getName(), nodeName))
+                        .findFirst()
+                        .orElseThrow(() -> new PlatformException("no items matched. node: " + nodeName));
                 NodeStatus nodeStatus = fabric8Node.getStatus();
 
                 long cpuMilliCoresCapacity = Math.round(nodeStatus.getCapacity().get("cpu").getNumericalAmount().doubleValue() * 1000);
@@ -60,7 +67,7 @@ public class NodeMetricsQueryService {
 
                 final NodeMetrics nodeMetrics = NodeMetrics.builder()
                         .cluster(cluster)
-                        .node(node)
+                        .node(nodeName)
                         .labels(fabric8Node.getMetadata().getLabels())
                         .ip(internalAddress == null ? "unknown" : internalAddress.getAddress())
                         .status(nodeConditionReady == null ? "unknown" : "Ready")

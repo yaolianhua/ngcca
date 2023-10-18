@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.Service;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
@@ -28,13 +29,18 @@ public class PodMetricsQueryService {
 
         List<PodMetrics> result = new ArrayList<>();
         List<io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics> fabric8PodMetricsList;
+        List<Pod> clusterPods;
+        List<Service> clusterServices;
         //
         try {
             fabric8PodMetricsList = StringUtils.hasText(namespaceParameter)
                     ? kubectlClient.topNamespacedPods(cluster.getAgentUrl(), namespaceParameter)
                     : kubectlClient.topPods(cluster.getAgentUrl());
+
+            clusterPods = podClient.readList(cluster.getAgentUrl()).getItems();
+            clusterServices = serviceClient.readList(cluster.getAgentUrl()).getItems();
         } catch (Exception e) {
-            Log.error(this, namespaceParameter, Event.EXCEPTION, "[" + cluster.getName() + "]top pod error: " + e.getMessage());
+            Log.error(this, namespaceParameter, Event.EXCEPTION, "[" + cluster.getName() + "]server error: " + e.getMessage());
             return result;
         }
 
@@ -53,14 +59,20 @@ public class PodMetricsQueryService {
                         .map(e -> e.getUsage().get("memory").getNumericalAmount().doubleValue() / (1024 * 1024))
                         .reduce(0.0, Double::sum);
 
-                Pod podInfo = podClient.read(cluster.getAgentUrl(), namespace, pod);
+                Pod podInfo = clusterPods.stream()
+                        .filter(e -> Objects.equals(e.getMetadata().getNamespace(), namespace) && Objects.equals(e.getMetadata().getName(), pod))
+                        .findFirst()
+                        .orElseThrow(() -> new PlatformException("no items matched. namespace: " + namespace + ", pod: " + pod));
                 io.hotcloud.service.cluster.statistic.PodMetrics.RefNode refNode = io.hotcloud.service.cluster.statistic.PodMetrics.RefNode.builder()
                         .ip(podInfo.getStatus().getHostIP())
                         .name(podInfo.getSpec().getNodeName())
                         .build();
 
                 //
-                List<Service> serviceList = serviceClient.readList(cluster.getAgentUrl(), namespace, Map.of()).getItems();
+                List<Service> serviceList = clusterServices.stream()
+                        .filter(e -> Objects.equals(e.getMetadata().getName(), namespace))
+                        .toList();
+
                 Set<PodMetrics.RefService> refServices = new HashSet<>();
                 for (io.fabric8.kubernetes.api.model.Service service : serviceList) {
                     Map<String, String> podLabels = podInfo.getMetadata().getLabels();
