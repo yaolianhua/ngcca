@@ -44,8 +44,11 @@ public class AdministratorClusterViewsController {
 
     @RequestMapping("/pod")
     @WebSession
-    public String podList(Model model) {
+    public String podList(Model model,
+                          @RequestParam(value = "action", required = false) String action) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getPodMetrics());
-        return AdminViews.Cluster.CLUSTER_POD_LIST;
+        return Objects.equals(WebConstant.VIEW_LIST, action)
+                ? AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT
+                : AdminViews.Cluster.CLUSTER_POD_LIST;
     }
 }

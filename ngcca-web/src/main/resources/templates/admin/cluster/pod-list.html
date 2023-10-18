@@ -46,89 +46,10 @@
           </button>
         </div>
       </div>
-      <div class="card-body">
-        <table class="table table-striped projects" id="pod-list">
-          <thead>
-          <tr>
-            <th style="width: 10%">
-              Pod名称
-            </th>
-            <th style="width: 10%">
-              命名空间
-            </th>
-            <th style="width: 10%">
-              Pod状态
-            </th>
-            <th style="width: 10%">
-              CPU使用（m Cores）
-            </th>
-            <th style="width: 10%">
-              内存使用（Mi）
-            </th>
-            <th style="width: 10%">
-              节点IP
-            </th>
-            <th style="width: 10%">
-              节点名称
-            </th>
-              <th style="width: 10%">
-                  集群名称
-              </th>
-            <th style="width: 20%">
-              操作
-            </th>
 
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="podmetrics: ${collection}">
-            <td>
-              <a th:text="${podmetrics.pod}"></a>
-            </td>
-            <td>
-              <a th:text="${podmetrics.namespace}"></a>
-            </td>
-            <td>
-              <a th:class="${podmetrics.status == 'Running'} ? 'badge badge-success' : 'badge badge-secondary'"
-                 th:text="${podmetrics.status}">
-              </a>
-            </td>
-            <td>
-              <a th:text="${podmetrics.cpuMilliCoresUsage} + ' m Cores' "></a>
-            </td>
-            <td>
-              <a th:text="${podmetrics.memoryMegabyteUsage} + ' Mi' "></a>
-            </td>
-
-            <td>
-              <a th:text="${podmetrics.refNode.ip}"></a>
-            </td>
-            <td>
-              <a th:text="${podmetrics.refNode.name}"></a>
-            </td>
-              <td>
-                  <a th:text="${podmetrics.cluster.name}"></a>
-              </td>
-            <td>
-              <button class="btn btn-info" data-target="#modal-pod-log"
-                      th:attr="onclick=|logs('${podmetrics.cluster.agentUrl}','${podmetrics.namespace}','${podmetrics.pod}')|"
-                      th:disabled="${!podmetrics.onlyOneContainer}">日志
-              </button>
-              <button class="btn btn-secondary" data-target="#modal-pod-yaml"
-                      th:attr="onclick=|yaml('${podmetrics.cluster.agentUrl}','${podmetrics.namespace}','${podmetrics.pod}')|">
-                Yaml
-              </button>
-              <button class="btn btn-success" id="pod-svc" onclick="showsvc(this)"
-                      th:data-svc-show="${podmetrics.serviceShow}"
-                      th:disabled="${!podmetrics.existedPodService}">服务端口
-              </button>
-            </td>
-
-          </tr>
-
-          </tbody>
-        </table>
-      </div>
+      <section id="pod-list-fragment" th:fragment="content">
+        <div th:insert="~{admin/cluster/pod-list-fragment}"></div>
+      </section>
       <!-- /.card-body -->
     </div>
     <!-- /.content -->

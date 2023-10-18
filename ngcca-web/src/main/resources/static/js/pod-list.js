@@ -1,7 +1,17 @@
 const POD_API = "/v1/kubernetes/pods";
+const POD_LIST_VIEWS = "/administrator/cluster/pod?action=list";
+
 let logcodemirror;
 let yamlcodemirror;
-$(function () {
+let intervalId;
+
+function loadPods() {
+    $('#pod-list-fragment').load(POD_LIST_VIEWS, function () {
+        pagePodList();
+    });
+}
+
+function pagePodList() {
     //分页
     $('#pod-list').DataTable({
         "paging": true,
@@ -12,7 +22,10 @@ $(function () {
         "autoWidth": true,
         "responsive": true,
     });
+}
+$(function () {
 
+    pagePodList();
     // log CodeMirror
     logcodemirror = CodeMirror.fromTextArea(document.getElementById("codemirror-log"), {
         mode: "text",
@@ -28,6 +41,8 @@ $(function () {
         lineNumbers: true,
         readOnly: true
     });
+
+    intervalId = setInterval('loadPods()', 10000);
 
 });
 

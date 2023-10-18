@@ -13,6 +13,7 @@ public final class AdminViews {
         public static final String CLUSTER_NODE_LIST_FRAGMENT = "admin/cluster/node-list::content";
         public static final String CLUSTER_LIST = "admin/cluster/cluster-list";
         public static final String CLUSTER_POD_LIST = "admin/cluster/pod-list";
+        public static final String CLUSTER_POD_LIST_FRAGMENT = "admin/cluster/pod-list::content";
 
         private Cluster() {
         }
