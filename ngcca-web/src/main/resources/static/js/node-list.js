@@ -9,10 +9,10 @@ function showlabels(e) {
 
 let intervalId;
 $(function () {
-    intervalId = setInterval('listNode()', 10000);
+    intervalId = setInterval('loadNodes()', 10000);
 })
 
-function listNode() {
+function loadNodes() {
     $('#node-list-fragment').load(NODE_LIST_VIEWS, function () {
 
     });
