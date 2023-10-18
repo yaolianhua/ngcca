@@ -56,10 +56,10 @@
                 <a th:text="${podmetrics.refNode.ip}"></a>
             </td>
             <td>
-                <a th:text="${podmetrics.refNode.name}"></a>
+                <a class="badge badge-info" th:text="${podmetrics.refNode.name}"></a>
             </td>
             <td>
-                <a th:text="${podmetrics.cluster.name}"></a>
+                <a class="badge badge-secondary" th:text="${podmetrics.cluster.name}"></a>
             </td>
             <td>
                 <button class="btn btn-info" data-target="#modal-pod-log"

@@ -67,7 +67,7 @@
           <tbody>
           <tr th:each="cluster: ${collection}">
             <td>
-              <a th:text="${cluster.name}"></a>
+              <a class="badge badge-secondary" th:text="${cluster.name}"></a>
             </td>
             <td>
               <a th:text="${cluster.agentUrl}"></a>

@@ -40,10 +40,10 @@
         <tbody>
         <tr th:each="nodemetrics: ${collection}">
             <td>
-                <a th:text="${nodemetrics.cluster.name}"></a>
+                <a class="badge badge-secondary" th:text="${nodemetrics.cluster.name}"></a>
             </td>
             <td>
-                <a th:text="${nodemetrics.node}"></a>
+                <a class="badge badge-info" th:text="${nodemetrics.node}"></a>
             </td>
             <td>
                 <a th:text="${nodemetrics.ip}"></a>
