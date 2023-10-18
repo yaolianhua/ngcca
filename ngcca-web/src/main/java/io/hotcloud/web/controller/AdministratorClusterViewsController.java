@@ -8,6 +8,9 @@ import io.hotcloud.web.views.AdminViews;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/administrator/cluster")
@@ -31,9 +34,12 @@ public class AdministratorClusterViewsController {
 
     @RequestMapping("/node")
     @WebSession
-    public String nodeList(Model model) {
+    public String nodeList(Model model,
+                           @RequestParam(value = "action", required = false) String action) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getNodeMetrics());
-        return AdminViews.Cluster.CLUSTER_NODE_LIST;
+        return Objects.equals(WebConstant.VIEW_LIST, action)
+                ? AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT
+                : AdminViews.Cluster.CLUSTER_NODE_LIST;
     }
 
     @RequestMapping("/pod")

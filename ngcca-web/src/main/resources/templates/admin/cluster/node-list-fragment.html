@@ -1,0 +1,97 @@
+<div class="card-body p-0">
+    <table class="table table-striped projects">
+        <thead>
+        <tr>
+            <th style="width: 10%">
+                集群名称
+            </th>
+            <th style="width: 10%">
+                节点名称
+            </th>
+            <th style="width: 10%">
+                节点IP
+            </th>
+            <th style="width: 5%">
+                节点状态
+            </th>
+            <th style="width: 10%">
+                CPU使用（m Cores）
+            </th>
+            <th style="width: 10%">
+                内存使用（Mi）
+            </th>
+            <th style="width: 10%">
+                容器运行时
+            </th>
+            <th style="width: 10%">
+                kubelet版本
+            </th>
+            <th style="width: 10%">
+                OS架构
+            </th>
+            <th style="width: 10%">
+                操作系统
+            </th>
+            <th style="width: 5%">
+                操作
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="nodemetrics: ${collection}">
+            <td>
+                <a th:text="${nodemetrics.cluster.name}"></a>
+            </td>
+            <td>
+                <a th:text="${nodemetrics.node}"></a>
+            </td>
+            <td>
+                <a th:text="${nodemetrics.ip}"></a>
+            </td>
+            <td>
+                <a th:class="${nodemetrics.status == 'Ready'} ? 'badge badge-success' : 'badge badge-secondary'"
+                   th:text="${nodemetrics.status}">
+                </a>
+            </td>
+            <td class="project_progress">
+                <small th:text="${nodemetrics.cpuMilliCoresUsage} + ' / ' + ${nodemetrics.cpuMilliCoresCapacity} + ' m Cores' "></small>
+                <div class="progress progress-sm">
+                    <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-cyan"
+                         role="progressbar" th:style="'width: ' + ${nodemetrics.cpuUsagePercentage} + '%'"> [[
+                        ${nodemetrics.cpuUsagePercentage} ]] %
+                    </div>
+                </div>
+            </td>
+
+            <td class="project_progress">
+                <small th:text="${nodemetrics.memoryMegabyteUsage} + ' / ' + ${nodemetrics.memoryMegabyteCapacity} + ' Mi' "></small>
+                <div class="progress progress-sm">
+                    <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-gradient-gray"
+                         role="progressbar" th:style="'width: ' + ${nodemetrics.memoryUsagePercentage} + '%'"> [[
+                        ${nodemetrics.memoryUsagePercentage} ]] %
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <a th:text="${nodemetrics.containerRuntime}"></a>
+            </td>
+            <td>
+                <a th:text="${nodemetrics.kubeletVersion}"></a>
+            </td>
+            <td>
+                <a th:text="${nodemetrics.architecture}"></a>
+            </td>
+            <td>
+                <a th:text="${nodemetrics.osImage}"></a>
+            </td>
+            <td>
+                <button class="btn btn-info" id="node-label" onclick="showlabels(this)"
+                        th:data-node-label="${nodemetrics.labelShow}">标签
+                </button>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
