@@ -14,7 +14,7 @@ public class KubernetesClusterStatisticsCacheScheduler {
     private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
     private final Cache cache;
 
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     public void refresh() {
 
         Log.debug(this, null, Event.SCHEDULE, "kubernetes cluster statistics cache refresh task is running");
@@ -26,9 +26,6 @@ public class KubernetesClusterStatisticsCacheScheduler {
         } catch (Exception e) {
             Log.error(this, null, Event.SCHEDULE, "refresh kubernetes cluster statistics cache error: " + e.getMessage());
         }
-
-
-        Log.debug(this, null, Event.SCHEDULE, "kubernetes cluster statistics cache refresh task is end");
 
     }
 }

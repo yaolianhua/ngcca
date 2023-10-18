@@ -16,7 +16,7 @@ public class DashboardStatisticsCacheScheduler {
     private final UserApi userApi;
     private final Cache cache;
 
-    @Scheduled(cron = "*/59 * * * * *")
+    @Scheduled(cron = "*/8 * * * * *")
     public void refresh() {
 
         Log.debug(this, null, Event.SCHEDULE, "dashboard statistics cache refresh task is running");
@@ -37,9 +37,6 @@ public class DashboardStatisticsCacheScheduler {
         } catch (Exception e) {
             Log.error(this, null, Event.SCHEDULE, "refresh admin statistics cache error: " + e.getMessage());
         }
-
-
-        Log.debug(this, null, Event.SCHEDULE, "dashboard statistics refresh task is end");
 
     }
 }
