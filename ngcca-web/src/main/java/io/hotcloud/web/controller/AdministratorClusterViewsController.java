@@ -29,8 +29,8 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String clusters(Model model,
                            @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, databasedKubernetesClusterService.list());
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+        model.addAttribute(WebConstant.COLLECTION, databasedKubernetesClusterService.list());
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_LIST_FRAGMENT;
         }
 
@@ -41,8 +41,8 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String nodeList(Model model,
                            @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getNodeMetrics());
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+        model.addAttribute(WebConstant.COLLECTION, kubernetesClusterStatisticsService.allCacheStatistics().getNodeMetrics());
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT;
         }
         return AdminViews.Cluster.CLUSTER_NODE_LIST;
@@ -52,8 +52,8 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String podList(Model model,
                           @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getPodMetrics());
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+        model.addAttribute(WebConstant.COLLECTION, kubernetesClusterStatisticsService.allCacheStatistics().getPodMetrics());
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT;
         }
         return AdminViews.Cluster.CLUSTER_POD_LIST;

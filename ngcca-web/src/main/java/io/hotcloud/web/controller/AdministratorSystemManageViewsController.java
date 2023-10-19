@@ -53,12 +53,12 @@ public class AdministratorSystemManageViewsController {
                             @RequestParam(value = "id", required = false) String id) {
         model.addAttribute(WebConstant.TEMPLATES, Arrays.stream(Template.values()).map(Enum::name).collect(Collectors.toList()));
         model.addAttribute(WebConstant.TEMPLATE_LOGOS, STATIC_IMAGES);
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll(name));
             return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_LIST_FRAGMENT;
         }
 
-        model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll(name));
+        model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll(name));
         return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_MANAGE;
     }
 
@@ -69,49 +69,49 @@ public class AdministratorSystemManageViewsController {
                         @RequestParam(value = "id", required = false) String userid,
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
             return AdminViews.UserManage.USER_MANAGE_LIST_FRAGMENT;
         }
-        if (Objects.equals(WebConstant.VIEW_EDIT, action)) {
+        if (Objects.equals(WebConstant.VIEW_EDIT_FRAGMENT, action)) {
             model.addAttribute(WebConstant.USER, userApi.find(userid));
             return AdminViews.UserManage.USER_MANAGE_EDIT_FRAGMENT;
         }
-        if (Objects.equals(WebConstant.VIEW_DETAIL, action)) {
+        if (Objects.equals(WebConstant.VIEW_DETAIL_FRAGMENT, action)) {
             model.addAttribute(WebConstant.STATISTICS, statisticsService.userCachedStatistics(userid));
             model.addAttribute(WebConstant.USER, userApi.find(userid));
             return AdminViews.UserManage.USER_MANAGE_DETAIL_FRAGMENT;
         }
 
-        model.addAttribute(WebConstant.PAGE_RESULT, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+        model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
         return AdminViews.UserManage.USER_MANAGE;
     }
 
     @RequestMapping("/activities")
     @WebSession
     public String activities(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, activityQuery.pagingQuery(null, null, null, new Pageable(1, Integer.MAX_VALUE)).getData());
+        model.addAttribute(WebConstant.COLLECTION, activityQuery.pagingQuery(null, null, null, new Pageable(1, Integer.MAX_VALUE)).getData());
         return AdminViews.ADMIN_ACTIVITY_LIST;
     }
 
     @RequestMapping("/app-environment")
     @WebSession
     public String appenvironment(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, systemConfiguredEnvironmentQuery.list(false));
+        model.addAttribute(WebConstant.COLLECTION, systemConfiguredEnvironmentQuery.list(false));
         return AdminViews.Environment.APP_ENVIRONMENT_LIST;
     }
 
     @RequestMapping("/system-environment")
     @WebSession
     public String systemenvironment(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, systemConfiguredEnvironmentQuery.list(true));
+        model.addAttribute(WebConstant.COLLECTION, systemConfiguredEnvironmentQuery.list(true));
         return AdminViews.Environment.SYSTEM_ENVIRONMENT_LIST;
     }
 
     @RequestMapping("/registry-image")
     @WebSession
     public String registryimages(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, registryImageQueryService.list());
+        model.addAttribute(WebConstant.COLLECTION, registryImageQueryService.list());
         return AdminViews.REGISTRY_IMAGE_LIST;
     }
 

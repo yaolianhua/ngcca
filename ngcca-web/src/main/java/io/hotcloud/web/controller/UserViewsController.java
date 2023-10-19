@@ -1,10 +1,10 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceService;
+import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.template.TemplateInstanceService;
-import io.hotcloud.service.security.user.User;
 import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
@@ -31,7 +31,7 @@ public class UserViewsController {
     @RequestMapping({"/templates"})
     @WebSession
     public String templates(Model model) {
-        model.addAttribute(WebConstant.COLLECTION_RESULT, templateDefinitionService.findAll());
+        model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll());
         return UserViews.TEMPLATE_LIST;
     }
 
@@ -41,11 +41,11 @@ public class UserViewsController {
                                 @RequestParam(value = "action", required = false) String action,
                                 @RequestParam(value = "id", required = false) String id,
                                 @CookieUser User user) {
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.COLLECTION, templateInstanceService.findAll(user.getUsername()));
             return UserViews.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
         }
-        model.addAttribute(WebConstant.COLLECTION_RESULT, templateInstanceService.findAll(user.getUsername()));
+        model.addAttribute(WebConstant.COLLECTION, templateInstanceService.findAll(user.getUsername()));
         return UserViews.USER_TEMPLATE_INSTANCE;
     }
 
@@ -59,11 +59,11 @@ public class UserViewsController {
         applicationInstances = applicationInstances.stream()
                 .filter(e -> !e.isDeleted())
                 .collect(Collectors.toList());
-        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
-            model.addAttribute(WebConstant.COLLECTION_RESULT, applicationInstances);
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.COLLECTION, applicationInstances);
             return UserViews.USER_APPLICATION_LIST_FRAGMENT;
         }
-        model.addAttribute(WebConstant.COLLECTION_RESULT, applicationInstances);
+        model.addAttribute(WebConstant.COLLECTION, applicationInstances);
         return UserViews.USER_APPLICATION;
     }
 }

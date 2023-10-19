@@ -12,8 +12,8 @@ public final class WebConstant {
 
     public static final String SERVER_ENDPOINT = "endpoint";
     public static final String RESPONSE = "response";
-    public static final String PAGE_RESULT = "page";
-    public static final String COLLECTION_RESULT = "collection";
+    public static final String PAGE = "page";
+    public static final String COLLECTION = "collection";
     public static final String TEMPLATES = "templates";
     public static final String TEMPLATE_LOGOS = "logos";
     public static final String STATISTICS = "statistics";
@@ -21,9 +21,9 @@ public final class WebConstant {
     public static final String AUTHORIZATION = "authorization";
     public static final String MESSAGE = "message";
 
-    public static final String VIEW_LIST = "list";
-    public static final String VIEW_EDIT = "edit";
+    public static final String VIEW_LIST_FRAGMENT = "list";
+    public static final String VIEW_EDIT_FRAGMENT = "edit";
 
-    public static final String VIEW_DETAIL = "detail";
+    public static final String VIEW_DETAIL_FRAGMENT = "detail";
 
 }
