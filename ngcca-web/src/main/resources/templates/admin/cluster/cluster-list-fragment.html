@@ -5,16 +5,19 @@
             <th style="width: 10%">
                 集群名称
             </th>
-            <th style="width: 10%">
+            <th style="width: 15%">
                 集群地址
             </th>
-            <th style="width: 30%">
-                控制节点
-            </th>
-            <th style="width: 30%">
-                工作节点
+            <th style="width: 10%">
+                健康状态
             </th>
             <th style="width: 20%">
+                控制节点
+            </th>
+            <th style="width: 20%">
+                工作节点
+            </th>
+            <th style="width: 10%">
                 操作
             </th>
 
@@ -26,16 +29,21 @@
                 <a class="badge badge-secondary" th:text="${cluster.name}"></a>
             </td>
             <td>
-                <a th:text="${cluster.agentUrl}"></a>
+                <a target="_blank" th:href="${cluster.agentUrl} + '/swagger-ui.html'" th:text="${cluster.agentUrl}"></a>
+            </td>
+            <td>
+                <a th:class="${cluster.health} ? 'badge badge-success' : 'badge badge-danger'"
+                   th:text="${cluster.health} ? 'healthy' : 'unhealthy'">
+                </a>
             </td>
             <td>
                 <div th:each="master: ${cluster.masters}">
-                    <small th:text="${master.name} + ' / ' + ${master.ip} + ' / ' + ${master.kubeletVersion} + ' / ' + ${master.containerRuntimeVersion}"></small><br>
+                    <small th:text="${master.name} + ' , ' + ${master.ip}"></small><br>
                 </div>
             </td>
             <td>
                 <div th:each="node: ${cluster.nodes}">
-                    <small th:text="${node.name} + ' / ' + ${node.ip} + ' / ' + ${node.kubeletVersion} + ' / ' + ${node.containerRuntimeVersion}"></small><br>
+                    <small th:text="${node.name} + ' , ' + ${node.ip}"></small><br>
                 </div>
             </td>
             <td>
