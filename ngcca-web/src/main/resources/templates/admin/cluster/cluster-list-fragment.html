@@ -1,0 +1,51 @@
+<div class="card-body p-0">
+    <table class="table table-striped projects">
+        <thead>
+        <tr>
+            <th style="width: 10%">
+                集群名称
+            </th>
+            <th style="width: 10%">
+                集群地址
+            </th>
+            <th style="width: 30%">
+                控制节点
+            </th>
+            <th style="width: 30%">
+                工作节点
+            </th>
+            <th style="width: 20%">
+                操作
+            </th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cluster: ${collection}">
+            <td>
+                <a class="badge badge-secondary" th:text="${cluster.name}"></a>
+            </td>
+            <td>
+                <a th:text="${cluster.agentUrl}"></a>
+            </td>
+            <td>
+                <div th:each="master: ${cluster.masters}">
+                    <small th:text="${master.name} + ' / ' + ${master.ip} + ' / ' + ${master.kubeletVersion} + ' / ' + ${master.containerRuntimeVersion}"></small><br>
+                </div>
+            </td>
+            <td>
+                <div th:each="node: ${cluster.nodes}">
+                    <small th:text="${node.name} + ' / ' + ${node.ip} + ' / ' + ${node.kubeletVersion} + ' / ' + ${node.containerRuntimeVersion}"></small><br>
+                </div>
+            </td>
+            <td>
+                <button class="btn btn-info" data-target="#modal-cluster-edit" id="cluster-edit"
+                        th:data-cluster-id="${cluster.id}">编辑
+                </button>
+            </td>
+
+        </tr>
+
+        </tbody>
+    </table>
+</div>

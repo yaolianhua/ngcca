@@ -15,7 +15,8 @@
 
   <div th:insert="~{admin/sidebar}"></div>
 
-
+  <div th:insert="~{admin/cluster/cluster-add-modal}"></div>
+  <div th:insert="~{admin/cluster/cluster-edit-modal}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -39,55 +40,15 @@
     <!-- Main content -->
     <div class="card">
       <div class="card-header">
-        <div class="card-tools">
-          <button class="btn btn-tool" data-card-widget="collapse" title="Collapse" type="button">
-            <i class="fas fa-minus"></i>
+        <div class="col-sm-1">
+          <button class="btn btn-block  btn-dark" data-target="#modal-cluster-add" data-toggle="modal"
+                  type="button">新建建群
           </button>
         </div>
       </div>
-      <div class="card-body p-0">
-        <table class="table table-striped projects">
-          <thead>
-          <tr>
-            <th style="width: 20%">
-              集群名称
-            </th>
-            <th style="width: 20%">
-              集群地址
-            </th>
-            <th style="width: 30%">
-              控制节点
-            </th>
-            <th style="width: 30%">
-              工作节点
-            </th>
-
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="cluster: ${collection}">
-            <td>
-              <a class="badge badge-secondary" th:text="${cluster.name}"></a>
-            </td>
-            <td>
-              <a th:text="${cluster.agentUrl}"></a>
-            </td>
-            <td>
-              <div th:each="master: ${cluster.masters}">
-                <small th:text="${master.name} + ' / ' + ${master.ip} + ' / ' + ${master.kubeletVersion} + ' / ' + ${master.containerRuntimeVersion}"></small><br>
-              </div>
-            </td>
-            <td>
-              <div th:each="node: ${cluster.nodes}">
-                <small th:text="${node.name} + ' / ' + ${node.ip} + ' / ' + ${node.kubeletVersion} + ' / ' + ${node.containerRuntimeVersion}"></small><br>
-              </div>
-            </td>
-
-          </tr>
-
-          </tbody>
-        </table>
-      </div>
+      <section class="content" id="cluster-list-fragment" th:fragment="content">
+        <div th:insert="~{admin/cluster/cluster-list-fragment}"></div>
+      </section>
       <!-- /.card-body -->
     </div>
     <!-- /.content -->
@@ -106,5 +67,7 @@
 
 <!-- jQuery -->
 <div th:insert="~{global-script}"></div>
+<script th:src="@{/js/cluster.js}">
+</script>
 </body>
 </html>
