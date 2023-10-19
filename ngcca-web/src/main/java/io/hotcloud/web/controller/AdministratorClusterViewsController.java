@@ -27,8 +27,13 @@ public class AdministratorClusterViewsController {
 
     @RequestMapping({"/", ""})
     @WebSession
-    public String clusters(Model model) {
+    public String clusters(Model model,
+                           @RequestParam(value = "action", required = false) String action) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, databasedKubernetesClusterService.list());
+        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+            return AdminViews.Cluster.CLUSTER_LIST_FRAGMENT;
+        }
+
         return AdminViews.Cluster.CLUSTER_LIST;
     }
 
@@ -37,9 +42,10 @@ public class AdministratorClusterViewsController {
     public String nodeList(Model model,
                            @RequestParam(value = "action", required = false) String action) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getNodeMetrics());
-        return Objects.equals(WebConstant.VIEW_LIST, action)
-                ? AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT
-                : AdminViews.Cluster.CLUSTER_NODE_LIST;
+        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+            return AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT;
+        }
+        return AdminViews.Cluster.CLUSTER_NODE_LIST;
     }
 
     @RequestMapping("/pod")
@@ -47,8 +53,9 @@ public class AdministratorClusterViewsController {
     public String podList(Model model,
                           @RequestParam(value = "action", required = false) String action) {
         model.addAttribute(WebConstant.COLLECTION_RESULT, kubernetesClusterStatisticsService.allCacheStatistics().getPodMetrics());
-        return Objects.equals(WebConstant.VIEW_LIST, action)
-                ? AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT
-                : AdminViews.Cluster.CLUSTER_POD_LIST;
+        if (Objects.equals(WebConstant.VIEW_LIST, action)) {
+            return AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT;
+        }
+        return AdminViews.Cluster.CLUSTER_POD_LIST;
     }
 }
