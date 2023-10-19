@@ -24,26 +24,3 @@ function clusteradd() {
         fail(error);
     });
 }
-
-//
-// function userEditSave() {
-//     let data = {};
-//     let value = $('#user-edit-form').serializeArray();
-//     $.each(value, function (index, item) {
-//         data[item.name] = item.value;
-//     });
-//     // Send a POST request
-//     axios({
-//         method: 'put',
-//         url: USER_API,
-//         data: data
-//     }).then(function (response) {
-//         $('#users-fragment').load(USER_LIST_VIEWS, function () {
-//             userPaging();
-//         });
-//
-//         ok(response);
-//     }).catch(function (error) {
-//         fail(error);
-//     });
-// }
