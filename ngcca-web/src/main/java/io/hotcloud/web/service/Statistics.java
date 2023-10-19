@@ -2,7 +2,7 @@ package io.hotcloud.web.service;
 
 import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import io.hotcloud.service.buildpack.model.BuildPackStatistics;
-import io.hotcloud.service.cluster.statistic.KubernetesClusterStatistics;
+import io.hotcloud.service.cluster.statistic.AllClusterStatistics;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.template.TemplateInstanceStatistics;
 import lombok.AllArgsConstructor;
@@ -34,6 +34,6 @@ public class Statistics implements Serializable {
     @Builder.Default
     private ApplicationInstanceStatistics applications = new ApplicationInstanceStatistics();
     @Builder.Default
-    private KubernetesClusterStatistics clusterStatistics = new KubernetesClusterStatistics();
+    private AllClusterStatistics clusterStatistics = new AllClusterStatistics();
 
 }

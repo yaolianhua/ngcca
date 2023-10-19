@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KubernetesClusterStatistics implements Serializable {
+public class AllClusterStatistics implements Serializable {
 
     @Builder.Default
     private List<KubernetesCluster> clusters = new ArrayList<>();

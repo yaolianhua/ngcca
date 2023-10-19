@@ -21,15 +21,15 @@ public class KubernetesClusterStatisticsService {
     public static final String KUBERNETES_CLUSTER_STATISTICS_KEY = "kubernetes:cluster:statistics";
     private final Cache cache;
 
-    public KubernetesClusterStatistics allCacheStatistics() {
+    public AllClusterStatistics allCacheStatistics() {
         return cache.get(KUBERNETES_CLUSTER_STATISTICS_KEY, this::allStatistics);
     }
     /**
      *
      *
-     * @return {@link KubernetesClusterStatistics}
+     * @return {@link AllClusterStatistics}
      */
-    public KubernetesClusterStatistics allStatistics() {
+    public AllClusterStatistics allStatistics() {
         List<WorkloadObject> pods = new ArrayList<>();
         List<WorkloadObject> deployments = new ArrayList<>();
         List<WorkloadObject> jobs = new ArrayList<>();
@@ -66,7 +66,7 @@ public class KubernetesClusterStatisticsService {
 
         }
 
-        return KubernetesClusterStatistics.builder()
+        return AllClusterStatistics.builder()
                 .clusters(kubernetesClusters)
                 .podMetrics(podMetrics)
                 .nodeMetrics(nodeMetrics)
@@ -86,9 +86,9 @@ public class KubernetesClusterStatisticsService {
 
     /**
      *
-     * @return {@link KubernetesClusterStatistics}
+     * @return {@link AllClusterStatistics}
      */
-    public KubernetesClusterStatistics namespacedStatistics(String namespace) {
+    public AllClusterStatistics namespacedStatistics(String namespace) {
 
         List<WorkloadObject> pods = new ArrayList<>();
         List<WorkloadObject> deployments = new ArrayList<>();
@@ -127,7 +127,7 @@ public class KubernetesClusterStatisticsService {
         }
 
 
-        return KubernetesClusterStatistics.builder()
+        return AllClusterStatistics.builder()
                 .clusters(kubernetesClusters)
                 .podMetrics(podMetrics)
                 .nodeMetrics(nodeMetrics)

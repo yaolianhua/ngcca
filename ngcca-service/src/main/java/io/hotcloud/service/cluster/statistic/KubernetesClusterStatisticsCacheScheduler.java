@@ -21,7 +21,7 @@ public class KubernetesClusterStatisticsCacheScheduler {
 
 
         try {
-            KubernetesClusterStatistics statistics = kubernetesClusterStatisticsService.allStatistics();
+            AllClusterStatistics statistics = kubernetesClusterStatisticsService.allStatistics();
             cache.put(KubernetesClusterStatisticsService.KUBERNETES_CLUSTER_STATISTICS_KEY, statistics);
         } catch (Exception e) {
             Log.error(this, null, Event.SCHEDULE, "refresh kubernetes cluster statistics cache error: " + e.getMessage());
