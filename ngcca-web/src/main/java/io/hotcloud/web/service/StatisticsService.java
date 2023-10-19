@@ -9,7 +9,7 @@ import io.hotcloud.service.application.ApplicationInstanceStatisticsService;
 import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import io.hotcloud.service.buildpack.BuildPackStatisticsService;
 import io.hotcloud.service.buildpack.model.BuildPackStatistics;
-import io.hotcloud.service.cluster.statistic.AllClusterStatistics;
+import io.hotcloud.service.cluster.statistic.ClusterListStatistics;
 import io.hotcloud.service.cluster.statistic.KubernetesClusterStatisticsService;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
@@ -59,7 +59,7 @@ public class StatisticsService {
         TemplateInstanceStatistics templateStatistics;
         BuildPackStatistics buildPackStatistics;
         ApplicationInstanceStatistics applicationInstanceStatistics;
-        AllClusterStatistics allClusterStatistics;
+        ClusterListStatistics clusterListStatistics;
         Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
         templateStatistics = templateInstanceStatisticsService.userStatistics(user.getUsername());
@@ -67,16 +67,16 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.userStatistics(user.getUsername());
 
         try {
-            allClusterStatistics = kubernetesClusterStatisticsService.namespacedStatistics(user.getNamespace());
+            clusterListStatistics = kubernetesClusterStatisticsService.namespacedStatistics(user.getNamespace());
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
-            allClusterStatistics = new AllClusterStatistics();
+            clusterListStatistics = new ClusterListStatistics();
         }
         return statisticsBuilder
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .applications(applicationInstanceStatistics)
-                .clusterStatistics(allClusterStatistics)
+                .clusterStatistics(clusterListStatistics)
                 .namespace(null)
                 .user(null)
                 .build();
@@ -92,7 +92,7 @@ public class StatisticsService {
         TemplateInstanceStatistics templateStatistics;
         BuildPackStatistics buildPackStatistics;
         ApplicationInstanceStatistics applicationInstanceStatistics;
-        AllClusterStatistics allClusterStatistics;
+        ClusterListStatistics clusterListStatistics;
         Statistics.StatisticsBuilder statisticsBuilder = Statistics.builder();
 
         templateStatistics = templateInstanceStatisticsService.allStatistics();
@@ -100,17 +100,17 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.allStatistics();
         Collection<User> users = userApi.users();
         try {
-            allClusterStatistics = kubernetesClusterStatisticsService.allStatistics();
+            clusterListStatistics = kubernetesClusterStatisticsService.allStatistics();
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
-            allClusterStatistics = new AllClusterStatistics();
+            clusterListStatistics = new ClusterListStatistics();
         }
         return statisticsBuilder
                 .users(users)
                 .buildPacks(buildPackStatistics)
                 .templates(templateStatistics)
                 .applications(applicationInstanceStatistics)
-                .clusterStatistics(allClusterStatistics)
+                .clusterStatistics(clusterListStatistics)
                 .namespace(null)
                 .user(null)
                 .build();
