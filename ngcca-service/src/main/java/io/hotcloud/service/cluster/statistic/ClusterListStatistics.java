@@ -1,6 +1,5 @@
 package io.hotcloud.service.cluster.statistic;
 
-import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -17,105 +17,113 @@ import java.util.List;
 @Builder
 public class ClusterListStatistics implements Serializable {
 
-    @Builder.Default
-    private List<KubernetesCluster> clusters = new ArrayList<>();
-    @Builder.Default
-    private List<NodeMetrics> nodeMetrics = new ArrayList<>();
-    @Builder.Default
-    private List<PodMetrics> podMetrics = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> pods = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> deployments = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> jobs = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> cronJobs = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> daemonSets = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> statefulSets = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> services = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> configMaps = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> secrets = new ArrayList<>();
-    @Builder.Default
-    private List<WorkloadObject> ingresses = new ArrayList<>();
+    private List<ClusterStatistics> items = new ArrayList<>();
 
+    public List<NodeMetrics> getNodeMetrics() {
+        return items.stream()
+                .flatMap(e -> e.getNodeMetrics().stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<PodMetrics> getPodMetrics() {
+        return items.stream()
+                .flatMap(e -> e.getPodMetrics().stream())
+                .collect(Collectors.toList());
+    }
     public long getTotalNode() {
-        return nodeMetrics.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalNode)
+                .sum();
     }
 
     public long getTotalPod() {
-        return pods.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalPod)
+                .sum();
     }
 
     public long getTotalDeployment() {
-        return deployments.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalDeployment)
+                .sum();
     }
 
     public long getTotalJob() {
-        return jobs.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalJob)
+                .sum();
     }
 
     public long getTotalCronJob() {
-        return cronJobs.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalCronJob)
+                .sum();
     }
 
     public long getTotalDaemonSet() {
-        return daemonSets.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalDaemonSet)
+                .sum();
     }
 
     public long getTotalStatefulSet() {
-        return statefulSets.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalStatefulSet)
+                .sum();
     }
 
     public long getTotalService() {
-        return services.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalService)
+                .sum();
     }
 
     public long getTotalSecret() {
-        return secrets.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalSecret)
+                .sum();
     }
 
     public long getTotalConfigMap() {
-        return configMaps.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalConfigMap)
+                .sum();
     }
 
     public long getTotalIngress() {
-        return ingresses.size();
+        return items.stream()
+                .mapToLong(ClusterStatistics::getTotalIngress)
+                .sum();
     }
 
 
     public long getTotalCluster() {
-        return clusters.size();
+        return items.size();
     }
     public long getTotalCpuMilliCoresCapacity() {
-        return this.nodeMetrics
-                .stream()
+        return items.stream()
+                .flatMap(e -> e.getNodeMetrics().stream())
                 .map(NodeMetrics::getCpuMilliCoresCapacity)
                 .reduce(0L, Long::sum);
     }
 
     public long getTotalMemoryMegabyteCapacity() {
-        return this.nodeMetrics
-                .stream()
+        return items.stream()
+                .flatMap(e -> e.getNodeMetrics().stream())
                 .map(NodeMetrics::getMemoryMegabyteCapacity)
                 .reduce(0L, Long::sum);
     }
 
     public long getTotalCpuMilliCoresUsage() {
-        return this.nodeMetrics
-                .stream()
+        return items.stream()
+                .flatMap(e -> e.getNodeMetrics().stream())
                 .map(NodeMetrics::getCpuMilliCoresUsage)
                 .reduce(0L, Long::sum);
     }
 
     public long getTotalMemoryMegabyteUsage() {
-        return this.nodeMetrics
-                .stream()
+        return items.stream()
+                .flatMap(e -> e.getNodeMetrics().stream())
                 .map(NodeMetrics::getMemoryMegabyteUsage)
                 .reduce(0L, Long::sum);
     }
