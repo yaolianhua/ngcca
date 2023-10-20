@@ -1,7 +1,7 @@
 package io.hotcloud.web.controller;
 
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
-import io.hotcloud.service.cluster.statistic.KubernetesClusterStatisticsService;
+import io.hotcloud.service.cluster.statistic.ClusterListStatisticsService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.views.AdminViews;
@@ -16,12 +16,12 @@ import java.util.Objects;
 @RequestMapping("/administrator/cluster")
 public class AdministratorClusterViewsController {
 
-    private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
+    private final ClusterListStatisticsService clusterListStatisticsService;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
-    public AdministratorClusterViewsController(KubernetesClusterStatisticsService kubernetesClusterStatisticsService,
+    public AdministratorClusterViewsController(ClusterListStatisticsService clusterListStatisticsService,
                                                DatabasedKubernetesClusterService databasedKubernetesClusterService) {
-        this.kubernetesClusterStatisticsService = kubernetesClusterStatisticsService;
+        this.clusterListStatisticsService = clusterListStatisticsService;
         this.databasedKubernetesClusterService = databasedKubernetesClusterService;
     }
 
@@ -41,7 +41,7 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String nodeList(Model model,
                            @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, kubernetesClusterStatisticsService.allCacheStatistics().getNodeMetrics());
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.allCacheStatistics().getNodeMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT;
         }
@@ -52,7 +52,7 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String podList(Model model,
                           @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, kubernetesClusterStatisticsService.allCacheStatistics().getPodMetrics());
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.allCacheStatistics().getPodMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT;
         }

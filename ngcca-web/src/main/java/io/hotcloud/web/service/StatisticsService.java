@@ -10,7 +10,7 @@ import io.hotcloud.service.application.model.ApplicationInstanceStatistics;
 import io.hotcloud.service.buildpack.BuildPackStatisticsService;
 import io.hotcloud.service.buildpack.model.BuildPackStatistics;
 import io.hotcloud.service.cluster.statistic.ClusterListStatistics;
-import io.hotcloud.service.cluster.statistic.KubernetesClusterStatisticsService;
+import io.hotcloud.service.cluster.statistic.ClusterListStatisticsService;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.service.template.TemplateInstanceStatistics;
@@ -32,7 +32,7 @@ public class StatisticsService {
     private final TemplateInstanceStatisticsService templateInstanceStatisticsService;
     private final BuildPackStatisticsService buildPackStatisticsService;
     private final ApplicationInstanceStatisticsService applicationInstanceStatisticsService;
-    private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
+    private final ClusterListStatisticsService clusterListStatisticsService;
 
     public static final String DASHBOARD_USER_STATISTICS_KEY = "dashboard:%s:statistics";
     public static final String DASHBOARD_ADMIN_STATISTICS_KEY = "dashboard:admin:statistics";
@@ -67,7 +67,7 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.userStatistics(user.getUsername());
 
         try {
-            clusterListStatistics = kubernetesClusterStatisticsService.namespacedStatistics(user.getNamespace());
+            clusterListStatistics = clusterListStatisticsService.namespacedClusterListStatistics(user.getNamespace());
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
             clusterListStatistics = new ClusterListStatistics();
@@ -100,7 +100,7 @@ public class StatisticsService {
         applicationInstanceStatistics = applicationInstanceStatisticsService.allStatistics();
         Collection<User> users = userApi.users();
         try {
-            clusterListStatistics = kubernetesClusterStatisticsService.allStatistics();
+            clusterListStatistics = clusterListStatisticsService.clusterListStatistics();
         } catch (Exception e) {
             Log.warn(this, null, Event.EXCEPTION, "get statistics error: " + e.getMessage());
             clusterListStatistics = new ClusterListStatistics();

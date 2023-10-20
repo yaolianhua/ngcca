@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class KubernetesClusterStatisticsService {
+public class ClusterListStatisticsService {
 
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final WorkloadObjectQueryService workloadObjectQueryService;
@@ -22,14 +22,14 @@ public class KubernetesClusterStatisticsService {
     private final Cache cache;
 
     public ClusterListStatistics allCacheStatistics() {
-        return cache.get(KUBERNETES_CLUSTER_STATISTICS_KEY, this::allStatistics);
+        return cache.get(KUBERNETES_CLUSTER_STATISTICS_KEY, this::clusterListStatistics);
     }
     /**
      *
      *
      * @return {@link ClusterListStatistics}
      */
-    public ClusterListStatistics allStatistics() {
+    public ClusterListStatistics clusterListStatistics() {
 
         List<ClusterStatistics> clusterStatisticsList = new ArrayList<>();
         final List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
@@ -63,7 +63,7 @@ public class KubernetesClusterStatisticsService {
      *
      * @return {@link ClusterListStatistics}
      */
-    public ClusterListStatistics namespacedStatistics(String namespace) {
+    public ClusterListStatistics namespacedClusterListStatistics(String namespace) {
 
         List<ClusterStatistics> clusterStatisticsList = new ArrayList<>();
         List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class KubernetesClusterStatisticsCacheScheduler {
+public class ClusterListStatisticsCacheScheduler {
 
-    private final KubernetesClusterStatisticsService kubernetesClusterStatisticsService;
+    private final ClusterListStatisticsService clusterListStatisticsService;
     private final Cache cache;
 
     @Scheduled(cron = "*/5 * * * * *")
@@ -21,8 +21,8 @@ public class KubernetesClusterStatisticsCacheScheduler {
 
 
         try {
-            ClusterListStatistics statistics = kubernetesClusterStatisticsService.allStatistics();
-            cache.put(KubernetesClusterStatisticsService.KUBERNETES_CLUSTER_STATISTICS_KEY, statistics);
+            ClusterListStatistics statistics = clusterListStatisticsService.clusterListStatistics();
+            cache.put(ClusterListStatisticsService.KUBERNETES_CLUSTER_STATISTICS_KEY, statistics);
         } catch (Exception e) {
             Log.error(this, null, Event.SCHEDULE, "refresh kubernetes cluster statistics cache error: " + e.getMessage());
         }
