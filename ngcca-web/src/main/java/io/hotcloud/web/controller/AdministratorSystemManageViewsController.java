@@ -78,7 +78,7 @@ public class AdministratorSystemManageViewsController {
             return AdminViews.UserManage.USER_MANAGE_EDIT_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_DETAIL_FRAGMENT, action)) {
-            model.addAttribute(WebConstant.STATISTICS, statisticsService.userCachedStatistics(userid));
+            model.addAttribute(WebConstant.STATISTICS, statisticsService.getUserStatisticsFromCache(userid));
             model.addAttribute(WebConstant.USER, userApi.find(userid));
             return AdminViews.UserManage.USER_MANAGE_DETAIL_FRAGMENT;
         }

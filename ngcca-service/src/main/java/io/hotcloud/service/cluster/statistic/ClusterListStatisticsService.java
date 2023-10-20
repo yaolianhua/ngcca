@@ -6,22 +6,20 @@ import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ClusterListStatisticsService {
 
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
-    private final WorkloadObjectQueryService workloadObjectQueryService;
-    private final PodMetricsQueryService podMetricsQueryService;
-    private final NodeMetricsQueryService nodeMetricsQueryService;
+    private final ClusterStatisticsService clusterStatisticsService;
 
     public static final String KUBERNETES_CLUSTER_STATISTICS_KEY = "kubernetes:cluster:statistics";
     private final Cache cache;
 
-    public ClusterListStatistics allCacheStatistics() {
+    public ClusterListStatistics getClusterListStatisticsFromCache() {
         return cache.get(KUBERNETES_CLUSTER_STATISTICS_KEY, this::clusterListStatistics);
     }
     /**
@@ -31,29 +29,9 @@ public class ClusterListStatisticsService {
      */
     public ClusterListStatistics clusterListStatistics() {
 
-        List<ClusterStatistics> clusterStatisticsList = new ArrayList<>();
-        final List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
+        List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
 
-        for (KubernetesCluster cluster : kubernetesClusters) {
-
-            ClusterStatistics clusterStatistics = ClusterStatistics.builder()
-                    .cluster(cluster)
-                    .podMetrics(podMetricsQueryService.listPodMetrics(cluster, null))
-                    .nodeMetrics(nodeMetricsQueryService.listNodeMetrics(cluster))
-                    .pods(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD))
-                    .deployments(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT))
-                    .jobs(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.JOB))
-                    .cronJobs(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CRONJOB))
-                    .daemonSets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DAEMONSET))
-                    .statefulSets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.STATEFULSET))
-                    .services(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SERVICE))
-                    .secrets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SECRET))
-                    .configMaps(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CONFIGMAP))
-                    .ingresses(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.INGRESS))
-                    .build();
-
-            clusterStatisticsList.add(clusterStatistics);
-        }
+        List<ClusterStatistics> clusterStatisticsList = kubernetesClusters.stream().map(clusterStatisticsService::clusterStatistics).collect(Collectors.toList());
 
         return ClusterListStatistics.builder().items(clusterStatisticsList).build();
 
@@ -65,28 +43,10 @@ public class ClusterListStatisticsService {
      */
     public ClusterListStatistics namespacedClusterListStatistics(String namespace) {
 
-        List<ClusterStatistics> clusterStatisticsList = new ArrayList<>();
         List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
 
-        for (KubernetesCluster cluster : kubernetesClusters) {
+        List<ClusterStatistics> clusterStatisticsList = kubernetesClusters.stream().map(e -> clusterStatisticsService.namespacedClusterStatistics(e, namespace)).collect(Collectors.toList());
 
-            final ClusterStatistics clusterStatistics = ClusterStatistics.builder()
-                    .cluster(cluster)
-                    .podMetrics(podMetricsQueryService.listPodMetrics(cluster, namespace))
-                    .nodeMetrics(nodeMetricsQueryService.listNodeMetrics(cluster))
-                    .pods(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.POD, namespace))
-                    .deployments(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DEPLOYMENT, namespace))
-                    .jobs(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.JOB, namespace))
-                    .cronJobs(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CRONJOB, namespace))
-                    .daemonSets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.DAEMONSET, namespace))
-                    .statefulSets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.STATEFULSET, namespace))
-                    .services(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SERVICE, namespace))
-                    .secrets(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.SECRET, namespace))
-                    .configMaps(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.CONFIGMAP, namespace))
-                    .ingresses(workloadObjectQueryService.listWorkloadObjects(cluster, WorkloadObjectType.INGRESS, namespace))
-                    .build();
-            clusterStatisticsList.add(clusterStatistics);
-        }
         return ClusterListStatistics.builder().items(clusterStatisticsList).build();
 
     }

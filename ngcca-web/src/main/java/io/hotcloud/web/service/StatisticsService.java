@@ -38,12 +38,12 @@ public class StatisticsService {
     public static final String DASHBOARD_ADMIN_STATISTICS_KEY = "dashboard:admin:statistics";
     private final Cache cache;
 
-    public Statistics userCachedStatistics(String userid) {
-        return cache.get(String.format(DASHBOARD_USER_STATISTICS_KEY, userid), () -> userStatistics(userid));
+    public Statistics getUserStatisticsFromCache(String userid) {
+        return cache.get(String.format(DASHBOARD_USER_STATISTICS_KEY, userid), () -> statistics(userid));
     }
 
-    public Statistics allCacheStatistics() {
-        return cache.get(DASHBOARD_ADMIN_STATISTICS_KEY, this::allStatistics);
+    public Statistics getStatisticsFromCache() {
+        return cache.get(DASHBOARD_ADMIN_STATISTICS_KEY, this::statistics);
     }
 
     /**
@@ -52,7 +52,7 @@ public class StatisticsService {
      * @param userid user id
      * @return {@link Statistics}
      */
-    public Statistics userStatistics(String userid) {
+    public Statistics statistics(String userid) {
         Assert.hasText(userid, "user id is null");
         User user = userApi.find(userid);
 
@@ -87,7 +87,7 @@ public class StatisticsService {
      *
      * @return {@link Statistics}
      */
-    public Statistics allStatistics() {
+    public Statistics statistics() {
 
         TemplateInstanceStatistics templateStatistics;
         BuildPackStatistics buildPackStatistics;
@@ -128,7 +128,7 @@ public class StatisticsService {
 
         List<Statistics> statistics = users.stream()
                 .map(User::getId)
-                .map(this::userStatistics)
+                .map(this::statistics)
                 .toList();
         return PageResult.ofCollectionPage(statistics, pageable);
     }

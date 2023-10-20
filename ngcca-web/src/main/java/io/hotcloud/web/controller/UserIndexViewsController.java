@@ -29,7 +29,7 @@ public class UserIndexViewsController {
     @Log(action = Action.QUERY, target = Target.DASHBOARD, activity = "访问用户首页")
     public String indexPage(Model model,
                             @CookieUser User user) {
-        Statistics statistics = statisticsService.userCachedStatistics(user.getId());
+        Statistics statistics = statisticsService.getUserStatisticsFromCache(user.getId());
         model.addAttribute(WebConstant.STATISTICS, statistics);
         return UserViews.INDEX;
     }

@@ -41,7 +41,7 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String nodeList(Model model,
                            @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.allCacheStatistics().getNodeMetrics());
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT;
         }
@@ -52,7 +52,7 @@ public class AdministratorClusterViewsController {
     @WebSession
     public String podList(Model model,
                           @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.allCacheStatistics().getPodMetrics());
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getPodMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT;
         }

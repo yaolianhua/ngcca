@@ -28,7 +28,7 @@ public class AdministratorIndexViewsController {
     @Log(action = Action.QUERY, target = Target.DASHBOARD, activity = "访问管理员首页")
     public String indexPage(@CookieUser User user,
                             Model model) {
-        model.addAttribute(WebConstant.STATISTICS, statisticsService.allCacheStatistics());
+        model.addAttribute(WebConstant.STATISTICS, statisticsService.getStatisticsFromCache());
 
         return AdminViews.ADMIN_INDEX;
     }
