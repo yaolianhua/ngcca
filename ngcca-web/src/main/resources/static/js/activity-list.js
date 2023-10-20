@@ -38,7 +38,7 @@ function activityempty() {
         if (result.isConfirmed) {
             axios.delete(ACTIVITY_API)
                 .then(response => {
-                    window.location.href = "/administrator/activity/activity-list";
+                    window.location.href = "/administrator/system/activities";
                 })
                 .catch(error => {
                     fail(error);
