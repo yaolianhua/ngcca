@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class NodeMetricsQueryService {
@@ -64,11 +65,21 @@ public class NodeMetricsQueryService {
                         .findFirst()
                         .orElse(null);
 
+                List<NodeImage> nodeImages = fabric8Node.getStatus().getImages()
+                        .stream()
+                        .map(containerImage -> NodeImage.builder()
+                                .cluster(cluster.getName())
+                                .node(nodeName)
+                                .names(containerImage.getNames())
+                                .sizeBytes(containerImage.getSizeBytes())
+                                .build())
+                        .collect(Collectors.toList());
 
-                final NodeMetrics nodeMetrics = NodeMetrics.builder()
+                NodeMetrics nodeMetrics = NodeMetrics.builder()
                         .cluster(cluster)
                         .node(nodeName)
                         .labels(fabric8Node.getMetadata().getLabels())
+                        .images(nodeImages)
                         .ip(internalAddress == null ? "unknown" : internalAddress.getAddress())
                         .status(nodeConditionReady == null ? "unknown" : "Ready")
                         .architecture(nodeStatus.getNodeInfo().getArchitecture())

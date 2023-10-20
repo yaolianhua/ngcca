@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,9 @@ public class NodeMetrics implements Serializable {
 
     @Builder.Default
     private Map<String, String> labels = new HashMap<>();
+
+    @Builder.Default
+    private List<NodeImage> images = new ArrayList<>();
     private long cpuMilliCoresUsage;
     private long memoryMegabyteUsage;
     private long cpuMilliCoresCapacity;

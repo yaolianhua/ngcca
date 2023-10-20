@@ -19,6 +19,13 @@ public class ClusterListStatistics implements Serializable {
 
     private List<ClusterStatistics> items = new ArrayList<>();
 
+    public List<NodeImage> getNodeImages() {
+        return this.getNodeMetrics()
+                .stream()
+                .flatMap(e -> e.getImages().stream())
+                .collect(Collectors.toList());
+
+    }
     public List<NodeMetrics> getNodeMetrics() {
         return items.stream()
                 .flatMap(e -> e.getNodeMetrics().stream())

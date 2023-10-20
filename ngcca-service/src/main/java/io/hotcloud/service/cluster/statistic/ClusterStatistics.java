@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -87,6 +88,12 @@ public class ClusterStatistics implements Serializable {
         return ingresses.size();
     }
 
+    public List<NodeImage> getImages() {
+        return this.nodeMetrics
+                .stream()
+                .flatMap(e -> e.getImages().stream())
+                .collect(Collectors.toList());
+    }
     public long getTotalCpuMilliCoresCapacity() {
         return this.nodeMetrics
                 .stream()

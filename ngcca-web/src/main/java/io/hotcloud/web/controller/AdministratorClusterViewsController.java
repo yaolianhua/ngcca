@@ -44,6 +44,13 @@ public class AdministratorClusterViewsController {
         return AdminViews.Cluster.CLUSTER_NODE_LIST;
     }
 
+    @RequestMapping("/node-image")
+    @WebSession
+    public String nodeimages(Model model) {
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeImages());
+        return AdminViews.Cluster.CLUSTER_NODEIMAGE_LIST;
+    }
+
     @RequestMapping("/pod")
     @WebSession
     public String podList(Model model,

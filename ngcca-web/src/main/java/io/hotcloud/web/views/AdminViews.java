@@ -10,6 +10,7 @@ public final class AdminViews {
 
     public static final class Cluster {
         public static final String CLUSTER_NODE_LIST = "admin/cluster/node-list";
+        public static final String CLUSTER_NODEIMAGE_LIST = "admin/cluster/nodeimage-list";
         public static final String CLUSTER_NODE_LIST_FRAGMENT = "admin/cluster/node-list::content";
         public static final String CLUSTER_LIST = "admin/cluster/cluster-list";
         public static final String CLUSTER_LIST_FRAGMENT = "admin/cluster/cluster-list::content";
