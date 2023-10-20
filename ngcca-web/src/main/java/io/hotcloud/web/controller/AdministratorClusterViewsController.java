@@ -1,6 +1,5 @@
 package io.hotcloud.web.controller;
 
-import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.cluster.statistic.ClusterListStatisticsService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
@@ -17,19 +16,16 @@ import java.util.Objects;
 public class AdministratorClusterViewsController {
 
     private final ClusterListStatisticsService clusterListStatisticsService;
-    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
-    public AdministratorClusterViewsController(ClusterListStatisticsService clusterListStatisticsService,
-                                               DatabasedKubernetesClusterService databasedKubernetesClusterService) {
+    public AdministratorClusterViewsController(ClusterListStatisticsService clusterListStatisticsService) {
         this.clusterListStatisticsService = clusterListStatisticsService;
-        this.databasedKubernetesClusterService = databasedKubernetesClusterService;
     }
 
     @RequestMapping({"/", ""})
     @WebSession
     public String clusters(Model model,
                            @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, databasedKubernetesClusterService.list());
+        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getItems());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_LIST_FRAGMENT;
         }
