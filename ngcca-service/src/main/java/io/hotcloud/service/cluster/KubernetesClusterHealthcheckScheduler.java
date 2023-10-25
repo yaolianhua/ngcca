@@ -20,7 +20,7 @@ public class KubernetesClusterHealthcheckScheduler {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void healthcheck() {
         Log.debug(this, null, Event.SCHEDULE, "kubernetes cluster healthcheck scheduled tasks start running");
-        List<KubernetesCluster> unHealthClusters = databasedKubernetesClusterService.listUnHealth();
+        List<KubernetesCluster> unHealthClusters = databasedKubernetesClusterService.list();
 
         for (KubernetesCluster kubernetesCluster : unHealthClusters) {
             AtomicBoolean health = new AtomicBoolean(false);
