@@ -2,6 +2,13 @@
 const CLUSTER_API = "/v1/kubernetes/clusters";
 const CLUSTER_LIST_VIEWS = "/administrator/cluster?action=list";
 
+const swal = Swal.mixin({
+    customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+})
 function clusteradd() {
     let data = {};
     let value = $('#cluster-add-form').serializeArray();
@@ -52,4 +59,32 @@ function clusteredit() {
     }).catch(function (error) {
         fail(error);
     });
+}
+
+function clusterdelete(e) {
+    let id = $(e).data("cluster-id");
+    swal.fire({
+        title: '确认删除?',
+        text: '删除集群会删除所有与此相关的数据和资源，谨慎操作!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete(CLUSTER_API + "/" + id)
+                .then(response => {
+                    $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS, function () {
+
+                    });
+                    ok(response);
+                })
+                .catch(error => {
+                    fail(error);
+                });
+        } else {
+            //
+        }
+    })
 }

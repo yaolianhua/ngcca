@@ -79,6 +79,9 @@
                         th:data-cluster-id="${clusterStatistics.cluster.id}"
                         type="button">编辑
                 </button>
+                <button class="btn btn-danger btn-sm" onclick="clusterdelete(this)"
+                        th:data-cluster-id="${clusterStatistics.cluster.id}" th:unless="${clusterStatistics.cluster.health}">删除
+                </button>
             </td>
         </tr>
 
