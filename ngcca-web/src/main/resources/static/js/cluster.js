@@ -24,3 +24,32 @@ function clusteradd() {
         fail(error);
     });
 }
+
+function showclustereditmodal(e) {
+    $("#modal-cluster-edit").modal("show");
+    let clusterid = $(e).data("cluster-id");
+    $("#cluster-id").val(clusterid);
+}
+
+function clusteredit() {
+    let data = {};
+    let value = $('#cluster-edit-form').serializeArray();
+    $.each(value, function (index, item) {
+        data[item.name] = item.value;
+    });
+    // Send a POST request
+    axios({
+        method: 'post',
+        url: CLUSTER_API,
+        data: data
+    }).then(function (response) {
+        $('#modal-cluster-edit').modal('hide');
+        $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS, function () {
+
+        });
+
+        ok(response);
+    }).catch(function (error) {
+        fail(error);
+    });
+}

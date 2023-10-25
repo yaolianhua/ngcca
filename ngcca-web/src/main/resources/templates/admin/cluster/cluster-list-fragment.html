@@ -17,14 +17,16 @@
             <th style="width: 10%">
                 内存使用（Mi）
             </th>
-            <th style="width: 20%">
+            <th style="width: 15%">
                 控制节点
             </th>
-            <th style="width: 20%">
+            <th style="width: 15%">
                 工作节点
             </th>
 
-
+            <th style="width: 15%">
+                操作
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -72,7 +74,12 @@
                     <small th:text="${node.name} + ' , ' + ${node.ip}"></small><br>
                 </div>
             </td>
-
+            <td>
+                <button class="btn btn-info btn-sm" data-toggle="modal" onclick="showclustereditmodal(this)"
+                        th:data-cluster-id="${clusterStatistics.cluster.id}"
+                        type="button">编辑
+                </button>
+            </td>
         </tr>
 
         </tbody>

@@ -1,0 +1,52 @@
+<!-- new user modal -->
+<div class="modal fade" id="modal-cluster-edit">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">编辑集群</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal" id="cluster-edit-form">
+                        <div class="card-body">
+                            <input class="form-control" id="cluster-id" name="id" readonly type="hidden">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="clusterName">集群名称</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="clusterName" name="name" placeholder="集群名称"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="agentUrl">代理地址</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="agentUrl" name="httpEndpoint"
+                                           placeholder="kubernetes服务代理访问地址"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="clusteredit()" type="submit">更新</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+    <!-- /.modal-dialog -->
+</div>
