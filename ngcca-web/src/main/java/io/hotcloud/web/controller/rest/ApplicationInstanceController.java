@@ -27,6 +27,7 @@ import static io.hotcloud.common.model.WebResponse.*;
 @RestController
 @RequestMapping("/v1/applications/instance")
 @Tag(name = "Application instance")
+@CrossOrigin
 public class ApplicationInstanceController {
 
     private final ApplicationInstancePlayer applicationInstancePlayer;

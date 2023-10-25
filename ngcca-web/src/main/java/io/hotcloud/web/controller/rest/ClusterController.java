@@ -22,6 +22,7 @@ import static io.hotcloud.common.model.WebResponse.*;
 @RestController
 @RequestMapping("/v1/kubernetes/clusters")
 @Tag(name = "Kubernetes Cluster")
+@CrossOrigin
 public class ClusterController {
 
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
