@@ -25,6 +25,7 @@ metadata:
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
+  #  ingressClassName: nginx
   rules:
     - host: ngcca-ui.docker.desktop
       http:
@@ -75,7 +76,7 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: 119.91.214.25:5000/ngcca/web-server:2023.10.24.180620
+        - image: 119.91.214.25:5000/ngcca/web-server:2023.10.26.145631
           imagePullPolicy: IfNotPresent
           name: web-server
           ports:
@@ -135,15 +136,15 @@ data:
         push-timeout-seconds: 300
     
       kubernetes-agent:
-        host: 119.91.214.25
-        port: 31400
+        host: k8s-agent
+        port: 1400
         domain-name: 
       web-server:
         host: 
         port: 
         endpoint: "http://ngcca-ui.docker.desktop"
       application:
-        dot-suffix-domain: ".vps.linux"
+        dot-suffix-domain: ".linux.ngcca"
         deployment-timeout-second: 1200
       security:
         enabled: true
@@ -168,7 +169,7 @@ data:
         build-timeout-second: 1800
     logging:
       level:
-        io.hotcloud.common.log: debug
+        io.hotcloud.common.log: info
         com.github.dockerjava.api.command: debug
         com.github.dockerjava.core.command: debug
 kind: ConfigMap
