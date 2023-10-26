@@ -34,9 +34,10 @@ spec:
       port: 1400
       protocol: TCP
       targetPort: http
+      nodePort: 31400
   selector:
     k8s-app: k8s-agent
-  type: ClusterIP
+  type: NodePort
   sessionAffinity: None
 ---
 apiVersion: networking.k8s.io/v1
