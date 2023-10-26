@@ -29,7 +29,7 @@ public class ClusterListStatisticsService {
      */
     public ClusterListStatistics clusterListStatistics() {
 
-        List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
+        List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.list();
 
         List<ClusterStatistics> clusterStatisticsList = kubernetesClusters.stream().map(clusterStatisticsService::clusterStatistics).collect(Collectors.toList());
 
@@ -43,7 +43,7 @@ public class ClusterListStatisticsService {
      */
     public ClusterListStatistics namespacedClusterListStatistics(String namespace) {
 
-        List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.listHealth();
+        List<KubernetesCluster> kubernetesClusters = databasedKubernetesClusterService.list();
 
         List<ClusterStatistics> clusterStatisticsList = kubernetesClusters.stream().map(e -> clusterStatisticsService.namespacedClusterStatistics(e, namespace)).collect(Collectors.toList());
 
