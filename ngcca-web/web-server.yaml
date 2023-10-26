@@ -11,9 +11,10 @@ spec:
       port: 4000
       protocol: TCP
       targetPort: http
+      nodePort: 31004
   selector:
     k8s-app: web-server
-  type: ClusterIP
+  type: NodePort
   sessionAffinity: None
 ---
 apiVersion: networking.k8s.io/v1
@@ -25,7 +26,7 @@ metadata:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   rules:
-    - host: web-server.linux.local
+    - host: ngcca-ui.docker.desktop
       http:
         paths:
           - path: /
@@ -55,14 +56,26 @@ spec:
       labels:
         k8s-app: web-server
     spec:
-      hostAliases:
-        - ip: 192.168.110.233
-          hostnames:
-            - harbor.linux-local
-            - linux.local
-
+      #      hostAliases:
+      #        - ip: 192.168.110.233
+      #          hostnames:
+      #            - harbor.linux-local
+      #            - linux.local
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
+              weight: 1
       containers:
-        - image: harbor.linux-local:5000/ngcca/web-server:2023.06.06.170905
+        - image: 119.91.214.25:5000/ngcca/web-server:2023.10.24.180620
           imagePullPolicy: IfNotPresent
           name: web-server
           ports:
@@ -95,30 +108,43 @@ data:
   config: |
     ngcca:
       redis:
-        database: 1
-        password: "QbMufCD@9WVQ^Hv"
-        host: linux.local
+        database: 0
+        password: QbMufCD@9WVQ^Hv
+        host: 120.78.225.168
         port: 6379
       registry:
-        url: harbor.linux-local:5000
+        url: 119.91.214.25:5000
         username: admin
         password: "QbMufCD@9WVQ^Hv"
         imagebuild-namespace: image-build
       minio:
         access-key: admin
         secret-key: "QbMufCD@9WVQ^Hv"
-        endpoint: "http://linux.local:9009"
+        endpoint: "http://120.78.225.168:9009"
       mongodb:
-        uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-test?authSource=admin"
+        uri: "mongodb://admin:QbMufCD%409WVQ^Hv@120.78.225.168:27017/ngcca?authSource=admin"
+      openai:
+        api-key: no-key
+        http-proxy:
+          hostname: localhost
+          port: 0
+        http-client-timeout-seconds: 60
+      docker:
+        host: "tcp://120.78.225.168:2375"
+        pull-timeout-seconds: 300
+        push-timeout-seconds: 300
+    
       kubernetes-agent:
-        host: k8s-agent
-        port: 1400
-        domain-name:
-      buildpack:
-        build-timeout-second: 1200
+        host: 119.91.214.25
+        port: 31400
+        domain-name: 
+      web-server:
+        host: 
+        port: 
+        endpoint: "http://ngcca-ui.docker.desktop"
       application:
+        dot-suffix-domain: ".vps.linux"
         deployment-timeout-second: 1200
-        dot-suffix-domain: ".k8s.local"
       security:
         enabled: true
         ignored-defaults:
@@ -132,25 +158,14 @@ data:
           - "/dist/**"
         ignored-urls:
           - "/index"
+          - "/**/logout"
           - "/administrator/**"
-          - "/template/**"
+          - "/templates/**"
+          - "/user/templates/**"
+          - "/user/applications/**"
           - "/"
-      openai:
-        http-client-timeout-seconds: 60
-        http-proxy:
-          hostname: localhost
-          port: 4000
-        api-key: no-key
-      docker:
-        host: "tcp://linux.local:2375"
-        pull-timeout-seconds: 300
-        push-timeout-seconds: 300
-      web-server:
-        host: 
-        port: 
-        endpoint: http://web-server.linux.local
-    server:
-      port: 4000
+      buildpack:
+        build-timeout-second: 1800
     logging:
       level:
         io.hotcloud.common.log: debug
