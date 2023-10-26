@@ -24,8 +24,11 @@ public class AdministratorClusterViewsController {
     @RequestMapping({"/", ""})
     @WebSession
     public String clusters(Model model,
-                           @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getItems());
+                           @RequestParam(value = "action", required = false) String action,
+                           @RequestParam(value = "refresh", required = false) boolean refresh) {
+        model.addAttribute(WebConstant.COLLECTION,
+                refresh ? clusterListStatisticsService.clusterListStatistics().getItems()
+                        : clusterListStatisticsService.getClusterListStatisticsFromCache().getItems());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_LIST_FRAGMENT;
         }
@@ -36,8 +39,11 @@ public class AdministratorClusterViewsController {
     @RequestMapping("/node")
     @WebSession
     public String nodeList(Model model,
-                           @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeMetrics());
+                           @RequestParam(value = "action", required = false) String action,
+                           @RequestParam(value = "refresh", required = false) boolean refresh) {
+        model.addAttribute(WebConstant.COLLECTION,
+                refresh ? clusterListStatisticsService.clusterListStatistics().getNodeMetrics()
+                        : clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_NODE_LIST_FRAGMENT;
         }
@@ -46,16 +52,22 @@ public class AdministratorClusterViewsController {
 
     @RequestMapping("/node-image")
     @WebSession
-    public String nodeimages(Model model) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeImages());
+    public String nodeimages(Model model,
+                             @RequestParam(value = "refresh", required = false) boolean refresh) {
+        model.addAttribute(WebConstant.COLLECTION,
+                refresh ? clusterListStatisticsService.clusterListStatistics().getNodeImages()
+                        : clusterListStatisticsService.getClusterListStatisticsFromCache().getNodeImages());
         return AdminViews.Cluster.CLUSTER_NODEIMAGE_LIST;
     }
 
     @RequestMapping("/pod")
     @WebSession
     public String podList(Model model,
-                          @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute(WebConstant.COLLECTION, clusterListStatisticsService.getClusterListStatisticsFromCache().getPodMetrics());
+                          @RequestParam(value = "action", required = false) String action,
+                          @RequestParam(value = "refresh", required = false) boolean refresh) {
+        model.addAttribute(WebConstant.COLLECTION,
+                refresh ? clusterListStatisticsService.clusterListStatistics().getPodMetrics()
+                        : clusterListStatisticsService.getClusterListStatisticsFromCache().getPodMetrics());
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             return AdminViews.Cluster.CLUSTER_POD_LIST_FRAGMENT;
         }
