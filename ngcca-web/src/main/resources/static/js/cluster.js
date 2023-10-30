@@ -35,7 +35,11 @@ function clusteradd() {
 function showclustereditmodal(e) {
     $("#modal-cluster-edit").modal("show");
     let clusterid = $(e).data("cluster-id");
+    let clusterName = $(e).data("cluster-name");
+    let clusterUrl = $(e).data("cluster-url");
     $("#cluster-id").val(clusterid);
+    $("#cluster-name").val(clusterName);
+    $("#cluster-url").val(clusterUrl);
 }
 
 function clusteredit() {

@@ -77,6 +77,8 @@
             <td>
                 <button class="btn btn-info btn-sm" data-toggle="modal" onclick="showclustereditmodal(this)"
                         th:data-cluster-id="${clusterStatistics.cluster.id}"
+                        th:data-cluster-name="${clusterStatistics.cluster.name}"
+                        th:data-cluster-url="${clusterStatistics.cluster.agentUrl}"
                         type="button">编辑
                 </button>
                 <button class="btn btn-danger btn-sm" onclick="clusterdelete(this)"
