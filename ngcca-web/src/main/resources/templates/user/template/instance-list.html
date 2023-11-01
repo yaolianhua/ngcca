@@ -15,23 +15,42 @@
 
   <div th:insert="~{sidebar}"></div>
 
-  <div th:insert="~{template/template-instance-yaml-modal}"></div>
-  <div th:insert="~{template/template-instanceIngress-yaml-modal}"></div>
+  <div th:insert="~{user/template/instance-yaml-modal}"></div>
+  <div th:insert="~{user/template/instance-ingress-yaml-modal}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div th:insert="~{content-header}"></div>
-    <!-- /.content-header -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
 
-    <!-- Main content -->
-    <section class="content" id="user-instance-fragment" th:fragment="content">
-      <div th:insert="~{template/user-template-instance-list}"></div>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/administrator/index}">Home</a></li>
+              <li class="breadcrumb-item active">实例列表</li>
+            </ol>
+          </div>
+        </div>
+      </div>
     </section>
-    <!-- /.content -->
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-tools">
+          <button class="btn btn-tool" data-card-widget="collapse" title="Collapse" type="button">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <section class="content" id="user-instance-fragment" th:fragment="content">
+        <div th:insert="~{user/template/instance-list-fragment}"></div>
+      </section>
+    </div>
   </div>
   <!-- /.content-wrapper -->
-    <div th:insert="~{footer}"></div>
+  <div th:insert="~{footer}"></div>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

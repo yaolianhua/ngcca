@@ -8,7 +8,7 @@ $(function () {
 });
 
 //deploy template instance
-function instanceDeploy(e) {
+function deploytemplate(e) {
     $(e).disable = true;
     let name = $(e).data("definition-name");
     animate_swal.fire({
@@ -17,7 +17,7 @@ function instanceDeploy(e) {
     })
     axios.post(TEMPLATE_INSTANCE_API + "?template=" + name)
         .then(response => {
-            window.location.href = "/user/templates";
+            window.location.href = "/user/template-instance";
         })
         .catch(error => {
             fail(error);
