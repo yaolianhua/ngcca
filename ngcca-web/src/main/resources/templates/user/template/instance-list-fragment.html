@@ -55,7 +55,8 @@
                         <span th:class="${instance.success} ? 'badge badge-success' : 'badge badge-secondary'"
                               th:text="${instance.deploying} ? '部署中' : (${instance.success} ? '部署成功' : '部署失败')">
                         </span>
-                        <span data-placement="top" data-toggle="tooltip" data-trigger="hover focus" id="instance-msg"
+                        <span data-placement="top" data-toggle="tooltip" data-trigger="hover focus"
+                              id="instance-msg-tooltip"
                               th:title="${instance.message}"><i class="fa-solid fa-comment-dots"></i></span>
                     </td>
                     <td class="project-state text-left">
@@ -68,18 +69,18 @@
                     </td>
                     <td>
                         <button class="btn btn-primary btn-sm"
-                                onclick="instanceYaml(this)"
+                                onclick="showtemplateinstanceyaml(this)"
                                 th:data-instance-id="${instance.id}">
                             实例 Yaml
                         </button>
                         <button class="btn btn-secondary btn-sm"
-                                onclick="instanceIngressYaml(this)"
+                                onclick="showtemplateinstanceingressyaml(this)"
                                 th:data-instance-id="${instance.id}"
                                 th:disable="${!instance.hasIngress}">
                             Ingress Yaml
                         </button>
                         <button class="btn btn-danger btn-sm"
-                                onclick="instanceDelete(this)"
+                                onclick="deletetemplateinstance(this)"
                                 th:data-instance-id="${instance.id}">
                             删除实例
                         </button>
