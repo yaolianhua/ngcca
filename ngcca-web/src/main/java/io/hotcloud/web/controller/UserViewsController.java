@@ -28,25 +28,25 @@ public class UserViewsController {
     private final TemplateInstanceService templateInstanceService;
     private final ApplicationInstanceService applicationInstanceService;
 
-    @RequestMapping({"/templates"})
+    @RequestMapping({"/user/template-definition"})
     @WebSession
-    public String templates(Model model) {
+    public String templatedefinition(Model model) {
         model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll());
-        return UserViews.TEMPLATE_LIST;
+        return UserViews.TEMPLATE_DEFINITION_LIST;
     }
 
-    @RequestMapping("/user/templates")
+    @RequestMapping("/user/template-instance")
     @WebSession
-    public String usertemplates(Model model,
+    public String templateinstance(Model model,
                                 @RequestParam(value = "action", required = false) String action,
                                 @RequestParam(value = "id", required = false) String id,
                                 @CookieUser User user) {
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             model.addAttribute(WebConstant.COLLECTION, templateInstanceService.findAll(user.getUsername()));
-            return UserViews.USER_TEMPLATE_INSTANCE_LIST_FRAGMENT;
+            return UserViews.INSTANCE_LIST_FRAGMENT;
         }
         model.addAttribute(WebConstant.COLLECTION, templateInstanceService.findAll(user.getUsername()));
-        return UserViews.USER_TEMPLATE_INSTANCE;
+        return UserViews.INSTANCE_LIST;
     }
 
     @RequestMapping("/user/applications")

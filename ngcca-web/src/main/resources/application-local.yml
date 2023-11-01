@@ -29,7 +29,7 @@ ngcca:
   kubernetes-agent:
     #    host: localhost
     #    port: 1400
-    domain-name: k8s-agent.vps.linux
+    domain-name: k8s-agent.vps.tencent
   web-server:
     host: localhost
     port: 4000
@@ -53,8 +53,7 @@ ngcca:
       - "/**/logout"
       - "/administrator/**"
       - "/templates/**"
-      - "/user/templates/**"
-      - "/user/applications/**"
+      - "/user/**"
       - "/"
   buildpack:
     build-timeout-second: 1800
