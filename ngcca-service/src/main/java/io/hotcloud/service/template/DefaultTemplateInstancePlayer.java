@@ -1,6 +1,7 @@
 package io.hotcloud.service.template;
 
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
@@ -73,7 +74,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         templateInstanceService.delete(id);
         Log.info(this, null, String.format("[%s] template '%s' delete ", find.getName(), id));
 
-        String clusterId = find.getClusterId();
+        String clusterId = StringUtils.hasText(find.getClusterId()) ? find.getClusterId() : CommonConstant.DEFAULT_CLUSTER_ID;
         KubernetesCluster cluster = databasedKubernetesClusterService.findById(clusterId);
 
         try {

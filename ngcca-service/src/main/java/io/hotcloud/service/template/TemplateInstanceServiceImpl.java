@@ -1,8 +1,11 @@
 package io.hotcloud.service.template;
 
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.TemplateInstanceEntity;
 import io.hotcloud.db.entity.TemplateInstanceRepository;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -19,9 +22,12 @@ import java.util.stream.StreamSupport;
 public class TemplateInstanceServiceImpl implements TemplateInstanceService {
 
     private final TemplateInstanceRepository templateInstanceRepository;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
-    public TemplateInstanceServiceImpl(TemplateInstanceRepository templateInstanceRepository) {
+    public TemplateInstanceServiceImpl(TemplateInstanceRepository templateInstanceRepository,
+                                       DatabasedKubernetesClusterService databasedKubernetesClusterService) {
         this.templateInstanceRepository = templateInstanceRepository;
+        this.databasedKubernetesClusterService = databasedKubernetesClusterService;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
             find.setLoadBalancerIngressIp(instance.getLoadBalancerIngressIp());
             TemplateInstanceEntity updated = templateInstanceRepository.save(find);
 
-            return updated.toT(TemplateInstance.class);
+            return build(updated);
         }
 
         TemplateInstanceEntity existEntity = templateInstanceRepository.findByUserAndName(instance.getUser(), instance.getName());
@@ -52,26 +58,26 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
 
         TemplateInstanceEntity saved = templateInstanceRepository.save(entity);
 
-        return saved.toT(TemplateInstance.class);
+        return build(saved);
     }
 
     @Override
     public TemplateInstance findOne(String id) {
         TemplateInstanceEntity entity = templateInstanceRepository.findById(id).orElse(null);
-        return entity == null ? null : entity.toT(TemplateInstance.class);
+        return entity == null ? null : build(entity);
     }
 
     @Override
     public TemplateInstance findByUuid(String uuid) {
         TemplateInstanceEntity entity = templateInstanceRepository.findByUuid(uuid);
-        return entity == null ? null : entity.toT(TemplateInstance.class);
+        return entity == null ? null : build(entity);
     }
 
     @Override
     public List<TemplateInstance> findAll() {
         Iterable<TemplateInstanceEntity> entityIterable = templateInstanceRepository.findAll();
         return StreamSupport.stream(entityIterable.spliterator(), false)
-                .map(e -> e.toT(TemplateInstance.class))
+                .map(this::build)
                 .collect(Collectors.toList());
     }
 
@@ -79,7 +85,7 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
     public List<TemplateInstance> findAll(String user) {
         return templateInstanceRepository.findByUser(user)
                 .stream()
-                .map(e -> e.toT(TemplateInstance.class))
+                .map(this::build)
                 .collect(Collectors.toList());
     }
 
@@ -89,5 +95,14 @@ public class TemplateInstanceServiceImpl implements TemplateInstanceService {
             return;
         }
         templateInstanceRepository.deleteById(id);
+    }
+
+    private TemplateInstance build(TemplateInstanceEntity entity) {
+        final String clusterId = StringUtils.hasText(entity.getClusterId()) ? entity.getClusterId() : CommonConstant.DEFAULT_CLUSTER_ID;
+        KubernetesCluster cluster = databasedKubernetesClusterService.findById(clusterId);
+        TemplateInstance result = entity.toT(TemplateInstance.class);
+        result.setCluster(cluster);
+
+        return result;
     }
 }

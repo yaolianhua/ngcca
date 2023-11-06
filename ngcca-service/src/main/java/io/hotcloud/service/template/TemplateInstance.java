@@ -1,5 +1,7 @@
 package io.hotcloud.service.template;
 
+import io.hotcloud.service.cluster.KubernetesCluster;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +22,11 @@ import java.util.stream.Collectors;
 public class TemplateInstance {
     private String id;
     private String clusterId;
+    /**
+     * 查询{@link TemplateInstance}对象时有值
+     */
+    @Nullable
+    private KubernetesCluster cluster = new KubernetesCluster();
     private String uuid;
     private String user;
     private String name;
