@@ -1,8 +1,6 @@
 const POD_API = "/v1/kubernetes/pods";
 const POD_LIST_VIEWS = "/administrator/cluster/pod?action=list";
 
-let logcodemirror;
-let yamlcodemirror;
 let intervalId;
 
 function loadPods() {
@@ -26,22 +24,6 @@ function pagePodList() {
 $(function () {
 
     pagePodList();
-    // log CodeMirror
-    logcodemirror = CodeMirror.fromTextArea(document.getElementById("codemirror-log"), {
-        mode: "text",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
-
-    // yaml CodeMirror
-    yamlcodemirror = CodeMirror.fromTextArea(document.getElementById("codemirror-yaml"), {
-        mode: "yaml",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
-
     intervalId = setInterval('loadPods()', 10000);
 
 });
@@ -55,12 +37,12 @@ function showsvc(e) {
 }
 
 function logs(agentUrl, namespace, pod) {
-    $('#modal-pod-log').modal('show');
+    $('#modal-codemirror-text').modal('show');
     axios.get(POD_API + "/" + namespace + '/' + pod + "/log?tail=500&agentUrl=" + agentUrl)
         .then(response => {
             // Populate data into table
-            logcodemirror.setValue(response.data)
-            logcodemirror.refresh();
+            codemirror_text.setValue(response.data)
+            codemirror_text.refresh();
         })
         .catch(error => {
             fail(error);
@@ -68,12 +50,12 @@ function logs(agentUrl, namespace, pod) {
 }
 
 function yaml(agentUrl, namespace, pod) {
-    $('#modal-pod-yaml').modal('show');
+    $('#modal-codemirror-yaml').modal('show');
     axios.get(POD_API + "/" + namespace + '/' + pod + "/yaml?agentUrl=" + agentUrl)
         .then(response => {
             // Populate data into table
-            yamlcodemirror.setValue(response.data)
-            yamlcodemirror.refresh();
+            codemirror_yaml.setValue(response.data)
+            codemirror_yaml.refresh();
         })
         .catch(error => {
             fail(error);
