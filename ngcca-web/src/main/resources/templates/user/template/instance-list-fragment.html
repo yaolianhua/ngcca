@@ -6,7 +6,7 @@
                 实例
             </th>
             <th style="width: 10%">
-                服务端口
+                服务
             </th>
             <th style="width: 15%">
                 进度
@@ -28,20 +28,20 @@
         <tbody>
                 <tr th:each="instance: ${collection}">
                     <td class="project-state text-left">
-                        <span class="badge badge-info" th:text="${instance.name}"></span>
+                        <span class="badge badge-info" th:text="'模板名称-' + ${instance.name}"></span>
                         <br/>
                         <small class="badge badge-primary" th:text="${instance.createdAt}"></small>
                         <br/>
-                        <small class="badge badge-secondary" th:text="${instance.version}"></small>
+                        <small class="badge badge-secondary" th:text="'版本-' + ${instance.version}"></small>
                         <br/>
-                        <small class="badge badge-success" th:text="${instance.namespace}"></small>
+                        <small class="badge badge-success" th:text="'命名空间-' + ${instance.namespace}"></small>
                     </td>
                     <td class="project-state text-left">
-                        <span class="badge badge-info" th:text="${instance.service}"></span>
+                        <span class="badge badge-info" th:text="'服务名-' + ${instance.service}"></span>
                         <br>
-                        <span class="badge badge-primary" th:text="${instance.targetPorts}"></span>
+                        <span class="badge badge-primary" th:text="'容器端口-' + ${instance.targetPorts}"></span>
                         <br>
-                        <span class="badge badge-secondary" th:text="${instance.nodePorts}"></span>
+                        <span class="badge badge-secondary" th:text="'高位端口-' + ${instance.nodePorts}"></span>
                     </td>
                     <td class="project_progress">
                         <div class="progress progress-sm">
