@@ -15,8 +15,8 @@
 
   <div th:insert="~{sidebar}"></div>
 
-  <div th:insert="~{user/application/application-yaml-modal}"></div>
-  <div th:insert="~{user/application/application-ingress-yaml-modal}"></div>
+    <div th:insert="~{codemirror-yaml-modal}"></div>
+    <div th:insert="~{codemirror-text-modal}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -25,8 +25,8 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <section class="content" id="user-application-fragment" th:fragment="content">
-      <div th:insert="~{user/application/user-application-list}"></div>
+      <section class="content" id="application-list-fragment" th:fragment="content">
+          <div th:insert="~{user/application/application-list-fragment}"></div>
     </section>
     <!-- /.content -->
   </div>

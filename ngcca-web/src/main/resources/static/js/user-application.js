@@ -1,34 +1,17 @@
 //初始化常量
-const APPLICATION_INSTANCE_API = "/v1/applications/instance";
+const APPLICATION_API = "/v1/applications/instance";
 const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;
 
-let instanceYamlCodeMirror;
-let instanceIngressYamlCodeMirror;
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
-    intervalId = setInterval('instances()', 5000);
-
-    //instance yaml
-    instanceYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-application-yaml"), {
-        mode: "yaml",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
-    //instance ingress yaml
-    instanceIngressYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-application-ingress-yaml"), {
-        mode: "yaml",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
+    intervalId = setInterval('applications()', 5000);
 
     //tooltip
-    $('#instance-msg').tooltip();
+    $('#application-tooltip-msg').tooltip();
 });
 
 
@@ -40,44 +23,44 @@ const swal = Swal.mixin({
     buttonsStyling: false
 })
 
-function instanceYaml(e) {
-    let id = $(e).data("instance-id");
-    $('#modal-application-yaml').modal('show');
-    axios.get(APPLICATION_INSTANCE_API + "/" + id)
+function showapplicationyaml(e) {
+    let id = $(e).data("application-id");
+    $('#modal-codemirror-yaml').modal('show');
+    axios.get(APPLICATION_API + "/" + id)
         .then(response => {
             // Populate data into table
-            instanceYamlCodeMirror.setValue(response.data.yaml)
-            instanceYamlCodeMirror.refresh();
+            codemirror_yaml.setValue(response.data.yaml)
+            codemirror_yaml.refresh();
         })
         .catch(error => {
             fail(error);
         });
 }
 
-function instanceIngressYaml(e) {
-    let id = $(e).data("instance-id");
-    $('#modal-application-ingress-yaml').modal('show');
-    axios.get(APPLICATION_INSTANCE_API + "/" + id)
+function showapplicationingressyaml(e) {
+    let id = $(e).data("application-id");
+    $('#modal-codemirror-yaml').modal('show');
+    axios.get(APPLICATION_API + "/" + id)
         .then(response => {
             // Populate data into table
-            instanceIngressYamlCodeMirror.setValue(response.data.ingress)
-            instanceIngressYamlCodeMirror.refresh();
+            codemirror_yaml.setValue(response.data.ingress)
+            codemirror_yaml.refresh();
         })
         .catch(error => {
             fail(error);
         });
 }
 
-//user template instance list
-function instances() {
-    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+//user template application list
+function applications() {
+    $('#application-list-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
 
     });
 }
 
-//user template instance delete
-function instanceDelete(e) {
-    let id = $(e).data("instance-id");
+//user template application delete
+function deleteapplication(e) {
+    let id = $(e).data("application-id");
     swal.fire({
         title: '确认删除?',
         text: '删除实例会删除所有实例相关的服务组件，谨慎操作!',
@@ -88,9 +71,9 @@ function instanceDelete(e) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete(APPLICATION_INSTANCE_API + "/" + id)
+            axios.delete(APPLICATION_API + "/" + id)
                 .then(response => {
-                    $('#user-instance-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+                    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
 
                     });
                     ok(response);
