@@ -8,11 +8,11 @@ import io.hotcloud.service.security.user.UserApi;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AdminUserInitializeProcessor implements RunnerProcessor {
+public class PlatformAdminUserInitializeProcessor implements RunnerProcessor {
 
     private final UserApi userApi;
 
-    public AdminUserInitializeProcessor(UserApi userApi) {
+    public PlatformAdminUserInitializeProcessor(UserApi userApi) {
         this.userApi = userApi;
     }
 
@@ -30,7 +30,7 @@ public class AdminUserInitializeProcessor implements RunnerProcessor {
                 .enabled(true)
                 .build();
         User saved = userApi.save(user);
-        Log.info(this, saved, Event.START, "system user init success");
+        Log.info(this, saved, Event.START, "platform admin user init success");
 
     }
 
