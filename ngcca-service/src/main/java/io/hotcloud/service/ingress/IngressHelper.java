@@ -20,7 +20,7 @@ public class IngressHelper {
         this.ingressClient = ingressClient;
     }
 
-    public String getLoadBalancerIpString(String namespace, String ingress) {
+    public String getLoadBalancerIpString(String agentUrl, String namespace, String ingress) {
         for (int i = 0; i < 10; i++) {
             try {
                 int sleep = (i + 1) * 5;
@@ -29,7 +29,7 @@ public class IngressHelper {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            Ingress ingressRead = ingressClient.read(namespace, ingress);
+            Ingress ingressRead = ingressClient.read(agentUrl, namespace, ingress);
             String loadBalancerIngressIp = ingressRead
                     .getStatus()
                     .getLoadBalancer()

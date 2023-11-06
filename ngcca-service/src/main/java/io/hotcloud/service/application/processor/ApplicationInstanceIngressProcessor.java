@@ -72,7 +72,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
             Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
 
-            String loadBalancerIpString = ingressHelper.getLoadBalancerIpString(applicationInstance.getNamespace(), definition.getName());
+            String loadBalancerIpString = ingressHelper.getLoadBalancerIpString(null, applicationInstance.getNamespace(), definition.getName());
 
             String hosts = definition.getRules().stream().map(IngressDefinition.Rule::getHost).collect(Collectors.joining(","));
 

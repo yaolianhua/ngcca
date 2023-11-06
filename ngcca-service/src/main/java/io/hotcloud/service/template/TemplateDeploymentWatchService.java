@@ -4,12 +4,15 @@ import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.kubernetes.client.http.DeploymentClient;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PodClient;
 import io.hotcloud.kubernetes.client.http.ServiceClient;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.service.application.ApplicationProperties;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import io.hotcloud.service.ingress.IngressHelper;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -37,13 +40,20 @@ public class TemplateDeploymentWatchService {
     private final PodClient podApi;
     private final IngressHelper ingressHelper;
 
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
+
     public void watch(TemplateInstance template) {
 
         try {
+            KubernetesCluster cluster = databasedKubernetesClusterService.findById(template.getClusterId());
+            if (Objects.isNull(cluster)) {
+                throw new PlatformException("cluster not found [" + template.getClusterId() + "]");
+            }
+
             //if timeout
             int timeout = Instant.now().compareTo(template.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
-                String timeoutMessage = retrieveK8sEventsMessage(template);
+                String timeoutMessage = retrieveK8sEventsMessage(cluster, template);
 
                 template.setMessage(timeoutMessage);
                 template.setSuccess(false);
@@ -56,7 +66,7 @@ public class TemplateDeploymentWatchService {
             }
 
             //deploying
-            Deployment deployment = deploymentApi.read(template.getNamespace(), template.getName());
+            Deployment deployment = deploymentApi.read(cluster.getAgentUrl(), template.getNamespace(), template.getName());
             boolean ready = TemplateInstanceDeploymentStatus.isReady(deployment);
             if (!ready) {
                 template.setProgress(50);
@@ -68,7 +78,7 @@ public class TemplateDeploymentWatchService {
             //deployment success
             String nodePorts;
 
-            Service service = serviceApi.read(template.getNamespace(), template.getService());
+            Service service = serviceApi.read(cluster.getAgentUrl(), template.getNamespace(), template.getService());
             Assert.notNull(service, String.format("Read k8s service is null. namespace:%s, name:%s", template.getNamespace(), template.getName()));
             List<ServicePort> ports = service.getSpec().getPorts();
             if (!CollectionUtils.isEmpty(ports) && ports.size() > 1) {
@@ -89,12 +99,12 @@ public class TemplateDeploymentWatchService {
             templateInstanceService.saveOrUpdate(template);
 
             if (StringUtils.hasText(template.getIngress())) {
-                List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(template.getNamespace(), YamlBody.of(template.getIngress()));
+                List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(cluster.getAgentUrl(), template.getNamespace(), YamlBody.of(template.getIngress()));
                 String ingress = metadataList.stream()
                         .map(e -> e.getMetadata().getName())
                         .findFirst().orElse(null);
 
-                String loadBalancerIngressIp = ingressHelper.getLoadBalancerIpString(template.getNamespace(), ingress);
+                String loadBalancerIngressIp = ingressHelper.getLoadBalancerIpString(cluster.getAgentUrl(), template.getNamespace(), ingress);
                 template.setLoadBalancerIngressIp(loadBalancerIngressIp);
                 templateInstanceService.saveOrUpdate(template);
 
@@ -113,17 +123,17 @@ public class TemplateDeploymentWatchService {
     }
 
     @NotNull
-    private String retrieveK8sEventsMessage(TemplateInstance template) {
+    private String retrieveK8sEventsMessage(KubernetesCluster cluster, TemplateInstance template) {
         String timeoutMessage = CommonConstant.TIMEOUT_MESSAGE;
-        PodList podList = podApi.readList(template.getNamespace(), Map.of("app", template.getName()));
+        PodList podList = podApi.readList(cluster.getAgentUrl(), template.getNamespace(), Map.of("app", template.getName()));
         if (Objects.nonNull(podList) && !CollectionUtils.isEmpty(podList.getItems())) {
             List<String> podNameList = podList.getItems()
                     .stream()
                     .map(e -> e.getMetadata().getName())
-                    .collect(Collectors.toList());
+                    .toList();
 
             timeoutMessage = podNameList.stream()
-                    .map(pod -> kubectlApi.namespacedPodEvents(template.getNamespace(), pod))
+                    .map(pod -> kubectlApi.namespacedPodEvents(cluster.getAgentUrl(), template.getNamespace(), pod))
                     .flatMap(Collection::stream)
                     .filter(event -> Objects.equals("Warning", event.getType()))
                     .map(Event::getMessage)
