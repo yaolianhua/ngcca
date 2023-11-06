@@ -4,28 +4,11 @@ const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance?action=list";
 
 let intervalId;
 
-let instanceYamlCodeMirror;
-let instanceIngressYamlCodeMirror;
 $(function () {
     toastr.options = {
         "timeOut": "3000"
     };
     intervalId = setInterval('templateinstancesrefresh()', 5000);
-
-    //instance yaml
-    instanceYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-instance-yaml"), {
-        mode: "yaml",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
-    //instance ingress yaml
-    instanceIngressYamlCodeMirror = CodeMirror.fromTextArea(document.getElementById("codemirror-instance-ingress-yaml"), {
-        mode: "yaml",
-        theme: "monokai",
-        lineNumbers: true,
-        readOnly: true
-    });
 
     //tooltip
     $('#instance-msg-tooltip').tooltip();
@@ -41,13 +24,13 @@ const swal = Swal.mixin({
 })
 
 function showtemplateinstanceyaml(e) {
+    $('#modal-codemirror-yaml').modal('show');
     let id = $(e).data("instance-id");
-    $('#modal-instance-yaml').modal('show');
     axios.get(TEMPLATE_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
-            instanceYamlCodeMirror.setValue(response.data.yaml)
-            instanceYamlCodeMirror.refresh();
+            codemirror_yaml.setValue(response.data.yaml)
+            codemirror_yaml.refresh();
         })
         .catch(error => {
             fail(error);
@@ -55,13 +38,13 @@ function showtemplateinstanceyaml(e) {
 }
 
 function showtemplateinstanceingressyaml(e) {
+    $('#modal-codemirror-yaml').modal('show');
     let id = $(e).data("instance-id");
-    $('#modal-instance-ingress-yaml').modal('show');
     axios.get(TEMPLATE_INSTANCE_API + "/" + id)
         .then(response => {
             // Populate data into table
-            instanceIngressYamlCodeMirror.setValue(response.data.ingress)
-            instanceIngressYamlCodeMirror.refresh();
+            codemirror_yaml.setValue(response.data.ingress)
+            codemirror_yaml.refresh();
         })
         .catch(error => {
             fail(error);
