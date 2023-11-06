@@ -2,6 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.template.TemplateInstanceService;
@@ -27,11 +28,13 @@ public class UserViewsController {
     private final TemplateDefinitionService templateDefinitionService;
     private final TemplateInstanceService templateInstanceService;
     private final ApplicationInstanceService applicationInstanceService;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
     @RequestMapping({"/user/template-definition"})
     @WebSession
     public String templatedefinition(Model model) {
         model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll());
+        model.addAttribute(WebConstant.CLUSTERS, databasedKubernetesClusterService.listHealth());
         return UserViews.TEMPLATE_DEFINITION_LIST;
     }
 

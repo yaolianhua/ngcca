@@ -1,0 +1,38 @@
+<!-- new user modal -->
+<div class="modal fade" id="modal-select-cluster">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">选择集群</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="label-select-cluster">集群列表</label>
+                            <select class="form-control select2" id="label-select-cluster" name="clusterId"
+                                    style="width: 100%;">
+                                <option disabled selected>请选择</option>
+                                <option th:each="cluster : ${ clusters}"
+                                        th:text="${cluster.name}"
+                                        th:value="${cluster.id}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- /.modal-dialog -->
+</div>
