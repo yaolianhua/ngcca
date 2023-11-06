@@ -12,10 +12,10 @@
             <thead>
             <tr>
                 <th style="width: 10%">
-                    应用名称
+                    应用
                 </th>
                 <th style="width: 10%">
-                    服务端口
+                    服务
                 </th>
                 <th style="width: 15%">
                     进度
@@ -35,62 +35,62 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="application: ${collection}">
+            <tr th:each="app: ${collection}">
                 <td class="project-state text-left">
-                    <span class="badge badge-info" th:text="${application.name}"></span>
+                    <span class="badge badge-info" th:text="'应用名称-' + ${app.name}"></span>
                     <br/>
-                    <small class="badge badge-primary" th:text="${application.createdAt}"></small>
+                    <small class="badge badge-primary" th:text="${app.createdAt}"></small>
                     <br/>
-                    <small class="badge badge-success" th:text="${application.namespace}"></small>
+                    <small class="badge badge-success" th:text="'命名空间-' + ${app.namespace}"></small>
                 </td>
                 <td class="project-state text-left">
-                    <span class="badge badge-info" th:text="${application.service}"></span>
+                    <span class="badge badge-info" th:text="'服务名-' + ${app.service}"></span>
                     <br>
-                    <span class="badge badge-primary" th:text="${application.targetPorts}"></span>
+                    <span class="badge badge-primary" th:text="'容器端口-' + ${app.targetPorts}"></span>
                     <br>
-                    <span class="badge badge-primary" th:text="${application.servicePorts}"></span>
+                    <span class="badge badge-success" th:text="'服务端口-' + ${app.servicePorts}"></span>
                     <br>
-                    <span class="badge badge-secondary" th:text="${application.nodePorts}"></span>
+                    <span class="badge badge-secondary" th:text="'高位端口-' + ${app.nodePorts}"></span>
                 </td>
                 <td class="project_progress">
                     <div class="progress progress-sm">
                         <div aria-valuemax="100" aria-valuemin="0" class="progress-bar bg-green"
-                             role="progressbar" th:style="'width: ' + ${application.progress} + '%'">
+                             role="progressbar" th:style="'width: ' + ${app.progress} + '%'">
                         </div>
                     </div>
-                    <small th:text="${application.progress} + '% complete'"></small>
+                    <small th:text="${app.progress} + '% complete'"></small>
                 </td>
                 <td class="project-state text-left">
-                    <span th:class="${application.deploying} ? 'badge badge-secondary' : (${application.success} ? 'badge badge-success' : 'badge badge-danger')"
-                          th:text="${application.deploying} ? '部署中' : (${application.success} ? '部署成功' : '部署失败')">
+                    <span th:class="${app.deploying} ? 'badge badge-secondary' : (${app.success} ? 'badge badge-success' : 'badge badge-danger')"
+                          th:text="${app.deploying} ? '部署中' : (${app.success} ? '部署成功' : '部署失败')">
                     </span>
                     <span data-placement="top" data-toggle="tooltip" data-trigger="hover focus"
                           id="application-tooltip-msg"
-                          th:title="${application.message}"><i class="fa-solid fa-comment-dots"></i></span>
+                          th:title="${app.message}"><i class="fa-solid fa-comment-dots"></i></span>
                 </td>
                 <td class="project-state text-left">
-                    <a class="badge badge-secondary" target="_blank" th:each="ingress : ${application.ingressList}"
+                    <a class="badge badge-secondary" target="_blank" th:each="ingress : ${app.ingressList}"
                        th:href="${'http://' + ingress}"
                        th:text="${ingress}"></a>
                 </td>
                 <td>
-                    <a th:text="${#strings.isEmpty(application.loadBalancerIngressIp) ? '<none>' : application.loadBalancerIngressIp}"></a>
+                    <a th:text="${#strings.isEmpty(app.loadBalancerIngressIp) ? '<none>' : app.loadBalancerIngressIp}"></a>
                 </td>
                 <td>
                     <button class="btn btn-primary btn-sm"
                             onclick="showapplicationyaml(this)"
-                            th:data-application-id="${application.id}">
+                            th:data-application-id="${app.id}">
                         实例 Yaml
                     </button>
                     <button class="btn btn-secondary btn-sm"
                             onclick="showapplicationingressyaml(this)"
-                            th:data-application-id="${application.id}"
-                            th:disabled="${!application.hasIngress}">
+                            th:data-application-id="${app.id}"
+                            th:disabled="${!app.hasIngress}">
                         Ingress Yaml
                     </button>
                     <button class="btn btn-danger btn-sm"
                             onclick="deleteapplication(this)"
-                            th:data-application-id="${application.id}">
+                            th:data-application-id="${app.id}">
                         删除实例
                     </button>
                 </td>

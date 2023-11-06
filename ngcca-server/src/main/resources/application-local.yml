@@ -18,7 +18,7 @@ ngcca:
   kubernetes-agent:
     host:
     port:
-    domain-name: k8s-agent.vps.linux
+    domain-name: k8s-agent.vps.tencent
   buildpack:
     build-timeout-second: 1200
   application:
