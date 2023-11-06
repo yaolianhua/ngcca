@@ -42,7 +42,7 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         if (Objects.isNull(cluster)) {
             throw new PlatformException("cluster not found [" + clusterId + "]");
         }
-        TemplateInstance templateInstance = instanceTemplateProcessors.process(cluster, template, current.getUsername(), namespace);
+        TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
 
         templateInstance.setClusterId(clusterId);
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);

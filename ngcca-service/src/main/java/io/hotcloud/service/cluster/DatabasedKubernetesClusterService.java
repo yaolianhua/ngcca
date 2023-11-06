@@ -1,5 +1,6 @@
 package io.hotcloud.service.cluster;
 
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.KubernetesClusterEntity;
 import io.hotcloud.db.entity.KubernetesClusterRepository;
@@ -26,6 +27,18 @@ public class DatabasedKubernetesClusterService {
 
         if (StringUtils.hasText(info.getId())) {
             Optional<KubernetesClusterEntity> optionalKubernetesCluster = kubernetesClusterRepository.findById(info.getId());
+            if (optionalKubernetesCluster.isEmpty() && Objects.equals(info.getId(), CommonConstant.DEFAULT_CLUSTER_ID)) {
+                if (!StringUtils.hasText(info.getName())) {
+                    throw new PlatformException("cluster name is null");
+                }
+                if (!StringUtils.hasText(info.getAgentUrl())) {
+                    throw new PlatformException("cluster agent url is null");
+                }
+                KubernetesClusterEntity entity = (KubernetesClusterEntity) new KubernetesClusterEntity().toE(info);
+                entity.setCreatedAt(Instant.now());
+                kubernetesClusterRepository.save(entity);
+                return;
+            }
             if (optionalKubernetesCluster.isEmpty()) {
                 throw new PlatformException("cluster not found: id=" + info.getId());
             }

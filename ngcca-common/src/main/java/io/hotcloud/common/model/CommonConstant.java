@@ -11,6 +11,8 @@ public final class CommonConstant {
     public static final String ROOT_PATH = Path.of(FileUtils.getUserDirectoryPath(), "ngcca").toString();
     public static final String ADMIN_USERNAME = "admin";
     public static final String ADMIN_INIT_PASSWORD = "admin123456";
+    public static final String DEFAULT_CLUSTER_ID = "default-cluster";
+    public static final String DEFAULT_CLUSTER_NAME = "default-cluster";
 
     public static final String K8S_APP = "k8s-app";
     public static final String K8S_APP_BUSINESS_DATA_ID = "app.business.data/id";
