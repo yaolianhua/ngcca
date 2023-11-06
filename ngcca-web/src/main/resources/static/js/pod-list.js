@@ -3,13 +3,13 @@ const POD_LIST_VIEWS = "/administrator/cluster/pod?action=list";
 
 let intervalId;
 
-function loadPods() {
+function loadpods() {
     $('#pod-list-fragment').load(POD_LIST_VIEWS, function () {
-        pagePodList();
+        podlist();
     });
 }
 
-function pagePodList() {
+function podlist() {
     //分页
     $('#pod-list').DataTable({
         "paging": true,
@@ -23,8 +23,8 @@ function pagePodList() {
 }
 $(function () {
 
-    pagePodList();
-    intervalId = setInterval('loadPods()', 10000);
+    podlist();
+    intervalId = setInterval('loadpods()', 10000);
 
 });
 
@@ -36,7 +36,7 @@ function showsvc(e) {
     })
 }
 
-function logs(agentUrl, namespace, pod) {
+function podlog(agentUrl, namespace, pod) {
     $('#modal-codemirror-text').modal('show');
     axios.get(POD_API + "/" + namespace + '/' + pod + "/log?tail=500&agentUrl=" + agentUrl)
         .then(response => {
@@ -49,7 +49,7 @@ function logs(agentUrl, namespace, pod) {
         });
 }
 
-function yaml(agentUrl, namespace, pod) {
+function podyaml(agentUrl, namespace, pod) {
     $('#modal-codemirror-yaml').modal('show');
     axios.get(POD_API + "/" + namespace + '/' + pod + "/yaml?agentUrl=" + agentUrl)
         .then(response => {
