@@ -26,6 +26,8 @@ public class TemplateInstanceEntity extends AbstractEntity {
     private String name;
     @Indexed(unique = true)
     private String uuid;
+
+    private String clusterId;
     private String version;
     private int progress;
 

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TemplateInstance {
     private String id;
+    private String clusterId;
     private String uuid;
     private String user;
     private String name;

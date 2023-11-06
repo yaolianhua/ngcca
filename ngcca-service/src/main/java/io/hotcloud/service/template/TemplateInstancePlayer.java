@@ -11,7 +11,7 @@ public interface TemplateInstancePlayer {
      * @param template {@link Template}
      * @return {@link TemplateInstance}
      */
-    TemplateInstance play(Template template);
+    TemplateInstance play(String clusterId, Template template);
 
     /**
      * Delete instance template with the giving id

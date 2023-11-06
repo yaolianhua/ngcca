@@ -3,11 +3,11 @@ package io.hotcloud.server.application;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.server.ServerApplication;
+import io.hotcloud.service.security.user.UserApi;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
 import io.hotcloud.service.template.TemplateInstancePlayer;
 import io.hotcloud.service.template.TemplateInstanceService;
-import io.hotcloud.service.security.user.UserApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -59,7 +59,7 @@ public class TemplateInstancePlayerIT  {
 
         for (Template template : Template.values()) {
             try {
-                player.play(template);
+                player.play("default-cluster", template);
             } catch (Exception e) {
                 Log.warn(this, null, Event.EXCEPTION, e.getMessage());
                 errors.incrementAndGet();
