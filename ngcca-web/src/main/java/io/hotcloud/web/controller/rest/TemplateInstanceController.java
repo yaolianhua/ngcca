@@ -42,12 +42,14 @@ public class TemplateInstanceController {
             summary = "Deploy a template instance",
             responses = {@ApiResponse(responseCode = "201")},
             parameters = {
-                    @Parameter(name = "template", description = "template enums", required = true)
+                    @Parameter(name = "template", description = "template enums", required = true),
+                    @Parameter(name = "clusterId", description = "cluster id", required = false)
             }
     )
     @Log(action = Action.CREATE, target = Target.INSTANCE_TEMPLATE, activity = "发布模板实例")
-    public ResponseEntity<Result<TemplateInstance>> apply(Template template) {
-        TemplateInstance templateInstance = templateInstancePlayer.play(template);
+    public ResponseEntity<Result<TemplateInstance>> apply(Template template,
+                                                          @RequestParam(value = "clusterId", required = false) String clusterId) {
+        TemplateInstance templateInstance = templateInstancePlayer.play(clusterId, template);
         return created(templateInstance);
     }
 
