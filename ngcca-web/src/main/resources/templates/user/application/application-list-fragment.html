@@ -15,6 +15,9 @@
                     应用
                 </th>
                 <th style="width: 10%">
+                    集群
+                </th>
+                <th style="width: 10%">
                     服务
                 </th>
                 <th style="width: 15%">
@@ -23,7 +26,7 @@
                 <th style="width: 10%">
                     部署结果
                 </th>
-                <th style="width: 20%">
+                <th style="width: 15%">
                     Ingress
                 </th>
                 <th style="width: 10%">
@@ -42,6 +45,9 @@
                     <small class="badge badge-primary" th:text="${app.createdAt}"></small>
                     <br/>
                     <small class="badge badge-success" th:text="'命名空间-' + ${app.namespace}"></small>
+                </td>
+                <td class="project-state text-left">
+                    <a class="badge badge-secondary" th:text="${app.cluster.name}"></a>
                 </td>
                 <td class="project-state text-left">
                     <span class="badge badge-info" th:text="'服务名-' + ${app.service}"></span>
