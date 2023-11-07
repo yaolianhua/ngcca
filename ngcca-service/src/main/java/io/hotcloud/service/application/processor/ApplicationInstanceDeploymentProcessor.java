@@ -20,6 +20,7 @@ import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.buildpack.BuildPackService;
 import io.hotcloud.service.buildpack.model.BuildPack;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import io.kubernetes.client.util.Yaml;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -121,11 +122,13 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
     public void processCreate(ApplicationInstance applicationInstance) {
 
         try {
+            KubernetesCluster cluster = applicationInstance.getCluster();
+
             DeploymentCreateRequest request = new DeploymentCreateRequest();
 
             request.setMetadata(buildDeploymentMetadata(applicationInstance));
             request.setSpec(buildDeploymentSpec(applicationInstance));
-            Deployment deployment = deploymentApi.create(request);
+            Deployment deployment = deploymentApi.create(cluster.getAgentUrl(), request);
             try {
                 applicationInstance.setYaml(Yaml.dump(deployment));
                 applicationInstanceService.saveOrUpdate(applicationInstance);
@@ -145,9 +148,9 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
     @SneakyThrows
     @Override
     public void processDelete(ApplicationInstance input) {
-        Deployment deployment = deploymentApi.read(input.getNamespace(), input.getName());
+        Deployment deployment = deploymentApi.read(input.getCluster().getAgentUrl(), input.getNamespace(), input.getName());
         if (Objects.nonNull(deployment)) {
-            deploymentApi.delete(input.getNamespace(), input.getName());
+            deploymentApi.delete(input.getCluster().getAgentUrl(), input.getNamespace(), input.getName());
             Log.info(this, null,
                     String.format("[%s] user's application instance  k8s deployment [%s] deleted", input.getUser(), input.getName()));
         }

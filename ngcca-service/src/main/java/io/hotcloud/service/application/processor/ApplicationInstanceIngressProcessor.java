@@ -7,6 +7,7 @@ import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import io.hotcloud.service.ingress.IngressDefinition;
 import io.hotcloud.service.ingress.IngressHelper;
 import io.hotcloud.service.ingress.IngressTemplateRender;
@@ -67,12 +68,13 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
 
 
             String ingress = IngressTemplateRender.render(definition);
+            final KubernetesCluster cluster = applicationInstance.getCluster();
 
-            kubectlApi.resourceListCreateOrReplace(applicationInstance.getNamespace(), YamlBody.of(ingress));
+            kubectlApi.resourceListCreateOrReplace(cluster.getAgentUrl(), applicationInstance.getNamespace(), YamlBody.of(ingress));
             Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
 
-            String loadBalancerIpString = ingressHelper.getLoadBalancerIpString(null, applicationInstance.getNamespace(), definition.getName());
+            String loadBalancerIpString = ingressHelper.getLoadBalancerIpString(cluster.getAgentUrl(), applicationInstance.getNamespace(), definition.getName());
 
             String hosts = definition.getRules().stream().map(IngressDefinition.Rule::getHost).collect(Collectors.joining(","));
 
@@ -94,7 +96,8 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
     @Override
     public void processDelete(ApplicationInstance input) {
         if (StringUtils.hasText(input.getIngress())) {
-            Boolean deleted = kubectlApi.delete(input.getNamespace(), YamlBody.of(input.getIngress()));
+            final KubernetesCluster cluster = input.getCluster();
+            Boolean deleted = kubectlApi.delete(cluster.getAgentUrl(), input.getNamespace(), YamlBody.of(input.getIngress()));
             Log.info(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] deleted [%s]", input.getUser(), input.getName(), deleted));
         }

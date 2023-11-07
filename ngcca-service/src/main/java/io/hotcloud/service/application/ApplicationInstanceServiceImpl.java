@@ -1,9 +1,12 @@
 package io.hotcloud.service.application;
 
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.ResourceNotFoundException;
 import io.hotcloud.db.entity.ApplicationInstanceEntity;
 import io.hotcloud.db.entity.ApplicationInstanceRepository;
 import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,18 +17,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static io.hotcloud.service.application.model.ApplicationInstance.toApplicationInstance;
-
 @Service
 @RequiredArgsConstructor
 public class ApplicationInstanceServiceImpl implements ApplicationInstanceService {
 
     private final ApplicationInstanceRepository applicationInstanceRepository;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
     @Override
     public List<ApplicationInstance> find(String user, String name) {
         List<ApplicationInstanceEntity> entities = applicationInstanceRepository.findByNameAndUser(name, user);
-        return entities.stream().map(ApplicationInstance::toApplicationInstance).collect(Collectors.toList());
+        return entities.stream().map(this::toApplicationInstance).collect(Collectors.toList());
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
     public List<ApplicationInstance> findAll() {
         Iterable<ApplicationInstanceEntity> iterable = applicationInstanceRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
-                .map(e -> e.toT(ApplicationInstance.class))
+                .map(this::toApplicationInstance)
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +58,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
     public List<ApplicationInstance> findAll(String user) {
         return applicationInstanceRepository.findByUser(user)
                 .stream()
-                .map(e -> e.toT(ApplicationInstance.class))
+                .map(this::toApplicationInstance)
                 .collect(Collectors.toList());
     }
 
@@ -92,6 +94,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setCanHttp(applicationInstance.isCanHttp());
             fetched.setReplicas(applicationInstance.getReplicas());
             fetched.setYaml(applicationInstance.getYaml());
+            fetched.setClusterId(applicationInstance.getClusterId());
 
             fetched.setModifiedAt(Instant.now());
 
@@ -107,5 +110,41 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         ApplicationInstanceEntity saved = applicationInstanceRepository.save(entity);
 
         return toApplicationInstance(saved);
+    }
+
+    public ApplicationInstance toApplicationInstance(ApplicationInstanceEntity entity) {
+        if (Objects.isNull(entity)) {
+            return null;
+        }
+
+        String clusterId = StringUtils.hasText(entity.getClusterId()) ? entity.getClusterId() : CommonConstant.DEFAULT_CLUSTER_ID;
+        KubernetesCluster cluster = databasedKubernetesClusterService.findById(clusterId);
+        return ApplicationInstance.builder()
+                .id(entity.getId())
+                .clusterId(entity.getClusterId())
+                .cluster(cluster)
+                .buildPackId(entity.getBuildPackId())
+                .user(entity.getUser())
+                .name(entity.getName())
+                .progress(entity.getProgress())
+                .namespace(entity.getNamespace())
+                .service(entity.getService())
+                .targetPorts(entity.getTargetPorts())
+                .host(entity.getHost())
+                .servicePorts(entity.getServicePorts())
+                .ingress(entity.getIngress())
+                .loadBalancerIngressIp(entity.getLoadBalancerIngressIp())
+                .nodePorts(entity.getNodePorts())
+                .success(entity.isSuccess())
+                .canHttp(entity.isCanHttp())
+                .deleted(entity.isDeleted())
+                .replicas(entity.getReplicas())
+                .source(entity.getSource())
+                .yaml(entity.getYaml())
+                .envs(entity.getEnvs())
+                .message(entity.getMessage())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
+                .build();
     }
 }

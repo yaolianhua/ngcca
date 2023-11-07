@@ -9,9 +9,10 @@ import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
 import io.hotcloud.kubernetes.model.network.ServiceSpec;
-import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
+import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -67,11 +68,12 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
             spec.setPorts(servicePorts);
             request.setServiceSpec(spec);
 
-            Service fetched = serviceApi.read(metadata.getNamespace(), metadata.getName());
+            final KubernetesCluster cluster = applicationInstance.getCluster();
+            Service fetched = serviceApi.read(cluster.getAgentUrl(), metadata.getNamespace(), metadata.getName());
             if (Objects.nonNull(fetched)) {
                 throw new ResourceConflictException("kubernetes service [" + metadata.getName() + "] has been existed in namespace [" + metadata.getNamespace() + "]");
             }
-            Service svc = serviceApi.create(request);
+            Service svc = serviceApi.create(cluster.getAgentUrl(), request);
 
             String nodePorts = svc.getSpec().getPorts().stream().map(io.fabric8.kubernetes.api.model.ServicePort::getNodePort)
                     .map(String::valueOf)
@@ -98,9 +100,10 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
     @SneakyThrows
     @Override
     public void processDelete(ApplicationInstance input) {
-        Service service = serviceApi.read(input.getNamespace(), input.getName());
+        final KubernetesCluster cluster = input.getCluster();
+        Service service = serviceApi.read(cluster.getAgentUrl(), input.getNamespace(), input.getName());
         if (Objects.nonNull(service)) {
-            serviceApi.delete(input.getNamespace(), input.getName());
+            serviceApi.delete(cluster.getAgentUrl(), input.getNamespace(), input.getName());
             Log.info(this, null, String.format("[%s] user's application instance k8s service [%s] deleted", input.getUser(), input.getName()));
         }
     }

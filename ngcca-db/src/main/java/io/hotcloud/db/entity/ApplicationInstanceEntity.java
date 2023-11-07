@@ -23,6 +23,7 @@ import java.util.Map;
 @Setter
 public class ApplicationInstanceEntity extends AbstractEntity {
 
+    private String clusterId;
     private String buildPackId;
     @Indexed
     private String user;

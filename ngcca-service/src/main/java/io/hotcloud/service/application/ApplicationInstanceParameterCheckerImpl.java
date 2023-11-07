@@ -9,6 +9,8 @@ import io.hotcloud.db.model.ApplicationInstanceSource;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
 import io.hotcloud.service.application.model.ApplicationForm;
 import io.hotcloud.service.application.model.ApplicationInstance;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
 import io.kubernetes.client.openapi.ApiException;
@@ -25,6 +27,7 @@ import java.util.Objects;
 public class ApplicationInstanceParameterCheckerImpl implements ApplicationInstanceParameterChecker {
 
     private final ApplicationInstanceService applicationInstanceService;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final UserApi userApi;
     private final NamespaceClient namespaceApi;
 
@@ -39,10 +42,9 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
             throw new IllegalArgumentException("Application source url is null");
         }
 
-        if (ApplicationInstanceSource.Origin.SOURCE_CODE.equals(applicationForm.getSource().getOrigin())) {
-            if (!StringUtils.hasText(applicationInstanceSource.getGitBranch())) {
+        if (ApplicationInstanceSource.Origin.SOURCE_CODE.equals(applicationForm.getSource().getOrigin()) &&
+                !StringUtils.hasText(applicationInstanceSource.getGitBranch())) {
                 applicationInstanceSource.setGitBranch("master");
-            }
         }
 
         boolean nameValid = Validator.validK8sName(applicationForm.getName());
@@ -53,10 +55,15 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
         String namespace = current.getNamespace();
         Assert.hasText(namespace, String.format("[%s] user cached k8s namespace is null", current.getUsername()));
 
-        Namespace readNamespace = namespaceApi.read(namespace);
+        KubernetesCluster cluster = databasedKubernetesClusterService.findById(applicationForm.getClusterId());
+        if (Objects.isNull(cluster)) {
+            throw new PlatformException("cluster not found [" + applicationForm.getClusterId() + "]");
+        }
+
+        Namespace readNamespace = namespaceApi.read(cluster.getAgentUrl(), namespace);
         if (Objects.isNull(readNamespace)) {
             try {
-                namespaceApi.create(namespace);
+                namespaceApi.create(cluster.getAgentUrl(), namespace);
                 Log.info(this, null,
                         String.format("[%s] user's k8s namespace create success [%s]", current.getUsername(), namespace));
             } catch (ApiException e) {
@@ -70,6 +77,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
         }
 
         return ApplicationInstance.builder()
+                .clusterId(applicationForm.getClusterId())
                 .source(applicationInstanceSource)
                 .success(false)
                 .replicas(applicationForm.getReplicas())

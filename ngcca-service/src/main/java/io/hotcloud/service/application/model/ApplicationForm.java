@@ -1,5 +1,6 @@
 package io.hotcloud.service.application.model;
 
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.db.model.ApplicationInstanceSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,8 @@ import java.util.Map;
 @Builder
 public class ApplicationForm {
 
+    @Builder.Default
+    private String clusterId = CommonConstant.DEFAULT_CLUSTER_ID;
     @Builder.Default
     private String name = "";
     private boolean canHttp;
