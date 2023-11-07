@@ -5,6 +5,12 @@ $(function () {
     toastr.options = {
         "timeOut": "5000"
     };
+    //Initialize Select2 Elements
+    $('.select2').select2()
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
 });
 
 //deploy template instance
