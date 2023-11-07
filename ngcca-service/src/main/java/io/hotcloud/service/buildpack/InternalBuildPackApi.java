@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.JavaRuntime;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.common.utils.INet;
@@ -20,6 +21,8 @@ import io.hotcloud.kubernetes.model.YamlBody;
 import io.hotcloud.service.buildpack.model.BuildImage;
 import io.hotcloud.service.buildpack.model.BuildPackConstant;
 import io.hotcloud.service.buildpack.model.JobState;
+import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.cluster.KubernetesCluster;
 import io.hotcloud.service.registry.SystemRegistryProperties;
 import io.hotcloud.service.registry.SystemRuntimeImage;
 import io.hotcloud.vendor.kaniko.model.DockerConfigJson;
@@ -54,6 +57,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
     private final PodClient podApi;
     private final SystemRegistryProperties systemRegistryProperties;
     private final RegistryImageRepository registryImageRepository;
+    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
 
     private static Map<String, List<String>> resolvedHostAliases(String registry, String httpUrl) {
         Map<String, List<String>> hostAliases = new HashMap<>(8);
@@ -240,7 +244,8 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
     @Override
     protected void doApply(String yaml) {
-        List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(null, YamlBody.of(yaml));
+        final KubernetesCluster defaultCluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
+        List<HasMetadata> metadataList = kubectlApi.resourceListCreateOrReplace(defaultCluster.getAgentUrl(), null, YamlBody.of(yaml));
         for (HasMetadata hasMetadata : metadataList) {
             Log.info(this, null, String.format("%s '%s' create or replace", hasMetadata.getKind(), hasMetadata.getMetadata().getName()));
         }
@@ -248,7 +253,8 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
     @Override
     public JobState getStatus(String namespace, String job) {
-        Job readJob = jobApi.read(namespace, job);
+        final KubernetesCluster defaultCluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
+        Job readJob = jobApi.read(defaultCluster.getAgentUrl(), namespace, job);
         if (Objects.isNull(readJob)) {
             return JobState.UNKNOWN;
         }
@@ -278,14 +284,14 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
     @Override
     public String fetchLog(String namespace, String job) {
-
-        Job kanikoJob = jobApi.read(namespace, job);
+        final KubernetesCluster defaultCluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
+        Job kanikoJob = jobApi.read(defaultCluster.getAgentUrl(), namespace, job);
         if (Objects.isNull(kanikoJob)) {
             Log.warn(this, null, String.format("Fetch kaniko log error. job is null namespace:%s job:%s", namespace, job));
             return "";
         }
 
-        List<Pod> pods = podApi.readList(namespace, kanikoJob.getMetadata().getLabels()).getItems();
+        List<Pod> pods = podApi.readList(defaultCluster.getAgentUrl(), namespace, kanikoJob.getMetadata().getLabels()).getItems();
         if (CollectionUtils.isEmpty(pods)) {
             Log.warn(this, null, String.format("Fetch kaniko log error. list pods is empty namespace:%s job:%s", namespace, job));
             return "";
@@ -293,13 +299,13 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
         Pod pod = pods.get(0);
         try {
-            return podApi.containerLogs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_CONTAINER, 100);
+            return podApi.containerLogs(defaultCluster.getAgentUrl(), namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_CONTAINER, 100);
         } catch (Exception e) {
             try {
-                return podApi.containerLogs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_GIT_CONTAINER, 100);
+                return podApi.containerLogs(defaultCluster.getAgentUrl(), namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_GIT_CONTAINER, 100);
             } catch (Exception e2) {
                 try {
-                    return podApi.containerLogs(namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER, 100);
+                    return podApi.containerLogs(defaultCluster.getAgentUrl(), namespace, pod.getMetadata().getName(), BuildPackConstant.KANIKO_INIT_ALPINE_CONTAINER, 100);
                 } catch (Exception e3) {
                     Log.error(this, null, String.format("Fetch kaniko init container log error. %s", e3.getMessage()));
                     return "";
