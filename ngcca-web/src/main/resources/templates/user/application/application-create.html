@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>NGCCA | 我的应用</title>
+
+    <link th:insert="~{global-link}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <div th:insert="~{navbar}"></div>
+
+    <div th:insert="~{sidebar}"></div>
+
+    <div th:insert="~{codemirror-yaml-modal}"></div>
+    <div th:insert="~{codemirror-text-modal}"></div>
+    <div th:insert="~{user/select-cluster-modal}"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/user/applications}">我的应用</a></li>
+                            <li class="breadcrumb-item active">创建应用</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content-header -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">创建应用</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="bs-stepper">
+                            <div class="bs-stepper-header" role="tablist">
+                                <!-- your steps here -->
+                                <div class="step" data-target="#logins-part">
+                                    <button aria-controls="logins-part" class="step-trigger" id="logins-part-trigger" role="tab"
+                                            type="button">
+                                        <span class="bs-stepper-circle">1</span>
+                                        <span class="bs-stepper-label">Logins</span>
+                                    </button>
+                                </div>
+                                <div class="line"></div>
+                                <div class="step" data-target="#information-part">
+                                    <button aria-controls="information-part" class="step-trigger" id="information-part-trigger"
+                                            role="tab" type="button">
+                                        <span class="bs-stepper-circle">2</span>
+                                        <span class="bs-stepper-label">Various information</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bs-stepper-content">
+                                <!-- your steps content here -->
+                                <div aria-labelledby="logins-part-trigger" class="content" id="logins-part"
+                                     role="tabpanel">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input class="form-control" id="exampleInputEmail1" placeholder="Enter email"
+                                               type="email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input class="form-control" id="exampleInputPassword1" placeholder="Password"
+                                               type="password">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                                </div>
+                                <div aria-labelledby="information-part-trigger" class="content" id="information-part"
+                                     role="tabpanel">
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">File input</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input class="custom-file-input" id="exampleInputFile" type="file">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose
+                                                    file</label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <div th:insert="~{footer}"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<div th:insert="~{global-script}"></div>
+<script th:src="@{/js/user-application.js}">
+</script>
+</body>
+</html>
+
+

@@ -66,6 +66,11 @@ public class UserViewsController {
             model.addAttribute(WebConstant.COLLECTION, applicationInstances);
             return UserViews.USER_APPLICATION_LIST_FRAGMENT;
         }
+
+        if (Objects.equals(WebConstant.VIEW_CREATE_FRAGMENT, action)) {
+            return UserViews.USER_APPLICATION_CREATE;
+        }
+
         model.addAttribute(WebConstant.COLLECTION, applicationInstances);
         return UserViews.USER_APPLICATION;
     }

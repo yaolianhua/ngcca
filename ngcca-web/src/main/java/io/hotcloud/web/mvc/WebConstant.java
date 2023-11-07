@@ -23,6 +23,7 @@ public final class WebConstant {
     public static final String MESSAGE = "message";
 
     public static final String VIEW_LIST_FRAGMENT = "list";
+    public static final String VIEW_CREATE_FRAGMENT = "create";
     public static final String VIEW_EDIT_FRAGMENT = "edit";
 
     public static final String VIEW_DETAIL_FRAGMENT = "detail";

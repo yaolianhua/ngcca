@@ -3,6 +3,7 @@ const APPLICATION_API = "/v1/applications/instance";
 const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;
+let stepper;
 
 $(function () {
     toastr.options = {
@@ -12,6 +13,18 @@ $(function () {
 
     //tooltip
     $('#application-tooltip-msg').tooltip();
+
+    // BS-Stepper Init
+    $(document).ready(function () {
+        stepper = new Stepper($('.bs-stepper')[0])
+    })
+
+    //Initialize Select2 Elements
+    $('.select2').select2();
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    });
 });
 
 
