@@ -68,6 +68,7 @@ public class UserViewsController {
         }
 
         if (Objects.equals(WebConstant.VIEW_CREATE_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.CLUSTERS, databasedKubernetesClusterService.listHealth());
             return UserViews.USER_APPLICATION_CREATE;
         }
 

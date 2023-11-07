@@ -49,11 +49,12 @@
                         <div class="bs-stepper">
                             <div class="bs-stepper-header" role="tablist">
                                 <!-- your steps here -->
-                                <div class="step" data-target="#logins-part">
-                                    <button aria-controls="logins-part" class="step-trigger" id="logins-part-trigger" role="tab"
+                                <div class="step" data-target="#basic-part">
+                                    <button aria-controls="basic-part" class="step-trigger" id="basic-part-trigger"
+                                            role="tab"
                                             type="button">
                                         <span class="bs-stepper-circle">1</span>
-                                        <span class="bs-stepper-label">Logins</span>
+                                        <span class="bs-stepper-label">基本信息</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
@@ -67,17 +68,72 @@
                             </div>
                             <div class="bs-stepper-content">
                                 <!-- your steps content here -->
-                                <div aria-labelledby="logins-part-trigger" class="content" id="logins-part"
+                                <div aria-labelledby="basic-part-trigger" class="content" id="basic-part"
                                      role="tabpanel">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Email address</label>
-                                        <input class="form-control" id="exampleInputEmail1" placeholder="Enter email"
-                                               type="email">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Password</label>
-                                        <input class="form-control" id="exampleInputPassword1" placeholder="Password"
-                                               type="password">
+                                    <div class="card card-secondary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">基本信息</h3>
+
+                                            <div class="card-tools">
+                                                <button class="btn btn-tool" data-card-widget="collapse" title="Collapse"
+                                                        type="button">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="application-name">应用名称 <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" id="application-name" name="name" placeholder="不能包含中文，特殊字符，大写英文。且以小写英文开始"
+                                                       required
+                                                       style="width: 100%;"
+                                                       type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="label-select-cluster">集群 <span
+                                                        style="color: red;">*</span></label>
+                                                <select class="form-control select2bs4" id="label-select-cluster"
+                                                        name="clusterId"
+                                                        style="width: 100%;">
+                                                    <option disabled selected>请选择</option>
+                                                    <option th:each="cluster : ${ clusters}"
+                                                            th:text="${cluster.name}"
+                                                            th:value="${cluster.id}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="application-replicas">应用副本数</label>
+                                                <input class="form-control" id="application-replicas" max="100" min="0"
+                                                       name="replicas" step="1" style="width: 100%;"
+                                                       type="number"
+                                                       value="1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="application-serverport">容器服务端口 <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" id="application-serverport" name="serverPort" step="1"
+                                                       style="width: 100%;"
+                                                       type="number"
+                                                       value="8080">
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-switch">
+                                                    <input class="custom-control-input" id="expose-http-access" name="canHttp"
+                                                           type="checkbox">
+                                                    <label class="custom-control-label" for="expose-http-access">开启域名访问
+                                                        <span style="color: red;">（仅支持http协议类型的服务）</span></label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="application-desc">应用描述</label>
+                                                <textarea class="form-control" id="application-desc"
+                                                          rows="4"></textarea>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
                                     </div>
                                     <button class="btn btn-primary" onclick="stepper.next()">Next</button>
                                 </div>
