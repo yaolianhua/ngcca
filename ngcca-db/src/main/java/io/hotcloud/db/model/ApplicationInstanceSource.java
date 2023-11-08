@@ -20,7 +20,7 @@ public class ApplicationInstanceSource {
      * <ul>
      *   <li/> <a href="http://127.0.0.1:9000/minio-public-buket/demo.jar">http://127.0.0.1:9000/minio-public-buket/demo.jar</a>
      *   <li/> <a href="http://127.0.0.1:9000/minio-public-buket/demo.war">http://127.0.0.1:9000/minio-public-buket/demo.war</a>
-     *   <li/> <a href="http://127.0.0.1:5000/namespace/demo:v1">http://127.0.0.1:5000/namespace/demo:v1</a>
+     *   <li/> <a href="127.0.0.1:5000/namespace/demo:v1">127.0.0.1:5000/namespace/demo:v1</a>
      *   <li/> <a href="https://gitee.com/yannanshan/devops-thymeleaf.git">https://gitee.com/yannanshan/devops-thymeleaf.git</a>
      * <ul/>
      */
