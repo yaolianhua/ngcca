@@ -43,7 +43,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
     public void processCreate(ApplicationInstance applicationInstance) {
 
         try {
-            if (!applicationInstance.isCanHttp()) {
+            if (!applicationInstance.isEnableIngressAccess()) {
                 Log.info(this, null,
                         String.format("[%s] user's application instance [%s] does not need expose http service", applicationInstance.getUser(), applicationInstance.getName()));
                 return;

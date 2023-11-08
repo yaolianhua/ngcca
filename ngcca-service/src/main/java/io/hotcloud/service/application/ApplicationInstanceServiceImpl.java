@@ -91,7 +91,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
             fetched.setHost(applicationInstance.getHost());
             fetched.setName(applicationInstance.getName());
             fetched.setProgress(applicationInstance.getProgress());
-            fetched.setCanHttp(applicationInstance.isCanHttp());
+            fetched.setEnableIngressAccess(applicationInstance.isEnableIngressAccess());
             fetched.setReplicas(applicationInstance.getReplicas());
             fetched.setYaml(applicationInstance.getYaml());
             fetched.setClusterId(applicationInstance.getClusterId());
@@ -136,7 +136,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
                 .loadBalancerIngressIp(entity.getLoadBalancerIngressIp())
                 .nodePorts(entity.getNodePorts())
                 .success(entity.isSuccess())
-                .canHttp(entity.isCanHttp())
+                .enableIngressAccess(entity.isEnableIngressAccess())
                 .deleted(entity.isDeleted())
                 .replicas(entity.getReplicas())
                 .source(entity.getSource())

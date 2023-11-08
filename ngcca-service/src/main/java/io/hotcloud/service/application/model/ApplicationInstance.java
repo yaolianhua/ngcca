@@ -37,7 +37,7 @@ public class ApplicationInstance {
     private String nodePorts;
 
     private boolean deleted;
-    private boolean canHttp;
+    private boolean enableIngressAccess;
     private String host;
     private String ingress;
     private String loadBalancerIngressIp;

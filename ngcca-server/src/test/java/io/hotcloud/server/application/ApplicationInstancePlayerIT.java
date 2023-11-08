@@ -66,7 +66,7 @@ public class ApplicationInstancePlayerIT {
                 .build();
         ApplicationForm form = ApplicationForm.builder()
                 .name("nginx")
-                .canHttp(true)
+                .enableIngressAccess(true)
                 .replicas(3)
                 .serverPort(80)
                 .source(imageSource)
@@ -117,7 +117,7 @@ public class ApplicationInstancePlayerIT {
                 .build();
         ApplicationForm form = ApplicationForm.builder()
                 .name("jenkins")
-                .canHttp(true)
+                .enableIngressAccess(true)
                 .replicas(1)
                 .serverPort(8080)
                 .source(warSource)
@@ -170,7 +170,7 @@ public class ApplicationInstancePlayerIT {
                 .build();
         ApplicationForm form = ApplicationForm.builder()
                 .name("thymeleaf-fragments")
-                .canHttp(true)
+                .enableIngressAccess(true)
                 .replicas(1)
                 .serverPort(8080)
                 .envs(Map.of())
@@ -225,7 +225,7 @@ public class ApplicationInstancePlayerIT {
                 .build();
         ApplicationForm form = ApplicationForm.builder()
                 .name("thymeleaf-fragments")
-                .canHttp(true)
+                .enableIngressAccess(true)
                 .replicas(1)
                 .serverPort(8080)
                 .envs(Map.of())

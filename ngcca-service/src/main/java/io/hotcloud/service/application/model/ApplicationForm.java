@@ -20,7 +20,7 @@ public class ApplicationForm {
     private String clusterId = CommonConstant.DEFAULT_CLUSTER_ID;
     @Builder.Default
     private String name = "";
-    private boolean canHttp;
+    private boolean enableIngressAccess;
 
     @Builder.Default
     private Integer serverPort = 8080;

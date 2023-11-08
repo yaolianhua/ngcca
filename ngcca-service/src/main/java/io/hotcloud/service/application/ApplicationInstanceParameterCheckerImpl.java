@@ -84,7 +84,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
                 .namespace(namespace)
                 .user(current.getUsername())
                 .name(applicationForm.getName())
-                .canHttp(applicationForm.isCanHttp())
+                .enableIngressAccess(applicationForm.isEnableIngressAccess())
                 .createdAt(Instant.now())
                 .targetPorts(String.valueOf(applicationForm.getServerPort()))
                 .envs(applicationForm.getEnvs())
