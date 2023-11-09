@@ -19,6 +19,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.Arrays;
 
@@ -40,6 +41,14 @@ public class WebMvcExceptionHandler {
     public ResponseEntity<Result<Void>> handle(MissingServletRequestParameterException ex, HttpServletRequest request) {
         Log.error(this, null, Event.EXCEPTION, String.format("Required request parameter '%s' for '%s'", ex.getParameterName(), request.getRequestURI()));
         Result<Void> error = Result.error(HttpStatus.BAD_REQUEST.value(), String.format("Required request parameter '%s'", ex.getParameterName()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Result<Void>> handle(MissingServletRequestPartException ex, HttpServletRequest request) {
+        Log.error(this, null, Event.EXCEPTION, String.format("Required request parameter '%s' for '%s'", ex.getRequestPartName(), request.getRequestURI()));
+        Result<Void> error = Result.error(HttpStatus.BAD_REQUEST.value(), String.format("Required request parameter '%s'", ex.getRequestPartName()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
