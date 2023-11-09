@@ -139,6 +139,7 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
         } catch (Exception e) {
             Log.error(this, null, String.format("[%s] user's application instance k8s deployment [%s] create error [%s]", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
             applicationInstance.setMessage(e.getMessage());
+            applicationInstance.setProgress(100);
             applicationInstanceService.saveOrUpdate(applicationInstance);
             throw e;
         }

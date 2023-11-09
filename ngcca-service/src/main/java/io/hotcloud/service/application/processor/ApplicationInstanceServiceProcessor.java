@@ -89,6 +89,7 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
             Log.info(this, null, String.format("[%s] user's application instance k8s service [%s] created", applicationInstance.getUser(), applicationInstance.getName()));
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
+            applicationInstance.setProgress(100);
             applicationInstanceService.saveOrUpdate(applicationInstance);
             Log.error(this, null,
                     String.format("[%s] user's application instance k8s service [%s] created error: %s", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));

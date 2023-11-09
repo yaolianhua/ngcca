@@ -81,6 +81,7 @@ class ApplicationInstanceImageBuildProcessor implements ApplicationInstanceProce
                     String.format("[%s] user's application instance [%s] buildPack [%s] started", applicationInstance.getUser(), applicationInstance.getName(), applicationInstance.getBuildPackId()));
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
+            applicationInstance.setProgress(100);
             applicationInstanceService.saveOrUpdate(applicationInstance);
             Log.error(this, null,
                     String.format("[%s] user's application instance [%s] buildPack [%s] start error: %s", applicationInstance.getUser(), applicationInstance.getName(), applicationInstance.getBuildPackId(), e.getMessage()));

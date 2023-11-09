@@ -84,6 +84,7 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
             applicationInstanceService.saveOrUpdate(applicationInstance);
         } catch (Exception e) {
             applicationInstance.setMessage(e.getMessage());
+            applicationInstance.setProgress(100);
             applicationInstanceService.saveOrUpdate(applicationInstance);
             Log.error(this, null,
                     String.format("[%s] user's application instance k8s ingress [%s] create error: %s", applicationInstance.getUser(), applicationInstance.getName(), e.getMessage()));
