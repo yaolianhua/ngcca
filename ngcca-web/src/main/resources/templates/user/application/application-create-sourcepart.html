@@ -25,16 +25,16 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="upload-package">上传文件<small style="color: red;">（仅支持Java应用二进制包，.jar/.war。待文件上传完成后再进行下一步操作，文件上传成功后会回填链接地址到源地址输入框中）</small></label>
+                <label for="upload-java-package">上传文件<small style="color: red;">（仅支持Java应用二进制包，.jar/.war。待文件上传完成后再进行下一步操作，文件上传成功后会回填链接地址到源地址输入框中）</small></label>
                 <div class="input-group">
                     <div class="custom-file">
                         <input accept=".jar,.war" class="custom-file-input"
-                               id="upload-package" type="file">
+                               id="upload-java-package" type="file">
                         <label class="custom-file-label"
-                               for="upload-package">Browse</label>
+                               for="upload-java-package" type="submit">Browse</label>
                     </div>
                     <div class="input-group-append">
-                        <span class="input-group-text">Upload</span>
+                        <span class="input-group-text" onclick="uploadjavapackage()" type="submit">Upload</span>
                     </div>
                 </div>
             </div>
@@ -51,14 +51,22 @@
                 </div>
                 <input class="form-control" id="http-url" type="text">
             </div>
-
             <div class="form-group">
                 <label for="application-git-branch">分支<small
-                        style="color: red;">（源地址是git地址时填入此值，默认值是master）</small></label>
+                        style="color: red;">（构建源为源代码时填入构建分支信息，默认值是master）</small></label>
                 <input class="form-control" id="application-git-branch"
-                       placeholder="代码仓库的分支名称，例如：master"
+                       placeholder="代码仓库的分支名称"
                        type="text">
             </div>
+            <div class="form-group">
+                <label for="application-git-submodule">子模块<small
+                        style="color: red;">（构建源为源代码时选择需要构建的子模块，默认在仓库项目根路径下进行构建）</small></label>
+                <input class="form-control" id="application-git-submodule"
+                       placeholder="源代码构建的子模块名称"
+                       type="text">
+            </div>
+
+
             <div class="form-group">
                 <label for="application-startargs">启动参数（Java应用）</label>
                 <input class="form-control" id="application-startargs"

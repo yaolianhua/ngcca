@@ -127,6 +127,31 @@ function steppernext(part) {
         stepper.next();
     }
 }
+
+function uploadjavapackage() {
+    let fileinput = $('#upload-java-package')[0];
+    let file = fileinput.files[0];
+    if (isEmpty(file)) {
+        alertWarn("请选择上传文件");
+        return;
+    }
+    let data = new FormData();
+    data.append('file', file);
+
+    $('#modal-loading').modal('show');
+    //Send a POST request
+    axios({
+        method: 'post',
+        url: FILE_UPLOAD_API + "?bucket=" + CURRENT_USERNAME + "&public=true",
+        data: data
+    }).then(function (response) {
+        $('#modal-loading').modal('hide');
+        $('#http-url').val(response.data.data);
+        ok(response);
+    }).catch(function (error) {
+        fail(error);
+    });
+}
 function createapplication() {
 
     let data = {
@@ -179,19 +204,16 @@ function createapplication() {
     data.envStrings = envstring;
 
     console.log(data);
-    // Send a POST request
-    // axios({
-    //     method: 'post',
-    //     url: USER_API,
-    //     data: data
-    // }).then(function (response) {
-    //     $('#modal-new-user').modal('hide');
-    //     $('#users-fragment').load(USER_LIST_VIEWS, function () {
-    //         userPaging();
-    //     });
-    //
-    //     ok(response);
-    // }).catch(function (error) {
-    //     fail(error);
-    // });
+    //Send a POST request
+    axios({
+        method: 'post',
+        url: APPLICATION_API,
+        data: data
+    }).then(function (response) {
+        $('#application-list-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+        });
+        ok(response);
+    }).catch(function (error) {
+        fail(error);
+    });
 }
