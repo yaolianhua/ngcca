@@ -46,37 +46,38 @@
                         <h3 class="card-title">创建应用</h3>
                     </div>
                     <div class="card-body p-0">
-                        <div class="bs-stepper">
-                            <div class="bs-stepper-header" role="tablist">
-                                <!-- your steps here -->
-                                <div class="step" data-target="#basic-part">
-                                    <button aria-controls="basic-part" class="step-trigger" id="basic-part-trigger"
-                                            role="tab"
-                                            type="button">
-                                        <span class="bs-stepper-circle">1</span>
-                                        <span class="bs-stepper-label">基本信息</span>
-                                    </button>
+                        <form id="application-create-form" onsubmit="return false;">
+                            <div class="bs-stepper">
+                                <div class="bs-stepper-header" role="tablist">
+                                    <!-- your steps here -->
+                                    <div class="step" data-target="#basic-part">
+                                        <button aria-controls="basic-part" class="step-trigger" id="basic-part-trigger"
+                                                role="tab"
+                                                type="button">
+                                            <span class="bs-stepper-circle">1</span>
+                                            <span class="bs-stepper-label">基本信息</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#information-part">
+                                        <button aria-controls="information-part" class="step-trigger"
+                                                id="information-part-trigger"
+                                                role="tab" type="button">
+                                            <span class="bs-stepper-circle">2</span>
+                                            <span class="bs-stepper-label">应用源</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#advanced-part">
+                                        <button aria-controls="advanced-part" class="step-trigger"
+                                                id="advanced-part-trigger"
+                                                role="tab" type="button">
+                                            <span class="bs-stepper-circle">3</span>
+                                            <span class="bs-stepper-label">高级配置</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="line"></div>
-                                <div class="step" data-target="#information-part">
-                                    <button aria-controls="information-part" class="step-trigger" id="information-part-trigger"
-                                            role="tab" type="button">
-                                        <span class="bs-stepper-circle">2</span>
-                                        <span class="bs-stepper-label">应用源</span>
-                                    </button>
-                                </div>
-                                <div class="line"></div>
-                                <div class="step" data-target="#advanced-part">
-                                    <button aria-controls="advanced-part" class="step-trigger"
-                                            id="advanced-part-trigger"
-                                            role="tab" type="button">
-                                        <span class="bs-stepper-circle">3</span>
-                                        <span class="bs-stepper-label">高级配置</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="bs-stepper-content">
-                                <form id="application-create-form">
+                                <div class="bs-stepper-content">
 
                                     <div aria-labelledby="basic-part-trigger" class="content" id="basic-part"
                                          role="tabpanel">
@@ -96,17 +97,17 @@
                                                     <label for="application-name">应用名称 <small
                                                             style="color: red;">*</small></label>
                                                     <input class="form-control" id="application-name"
-                                                           name="applicationname"
+                                                           name="name"
                                                            placeholder="不能包含中文，特殊字符，大写英文。且以小写英文开始"
                                                            required
                                                            style="width: 100%;"
                                                            type="text">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="label-select-cluster">集群 <small
+                                                    <label for="selected-cluster">集群 <small
                                                             style="color: red;">*</small></label>
-                                                    <select class="form-control select2bs4" id="label-select-cluster"
-                                                            name="clusterid"
+                                                    <select class="form-control select2bs4" id="selected-cluster"
+                                                            name="clusterId"
                                                             style="width: 100%;">
                                                         <option disabled selected>请选择</option>
                                                         <option th:each="cluster : ${ clusters}"
@@ -127,7 +128,7 @@
                                                     <label for="application-serverport">容器服务端口 <small
                                                             style="color: red;">*</small></label>
                                                     <input class="form-control" id="application-serverport"
-                                                           name="serverport" step="1"
+                                                           name="serverPort" step="1"
                                                            style="width: 100%;"
                                                            type="number"
                                                            value="8080">
@@ -162,6 +163,18 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group">
+                                                    <label for="source-origin">构建源<small
+                                                            style="color: red;">*</small></label>
+                                                    <select class="form-control select2bs4" id="source-origin"
+                                                            style="width: 100%;">
+                                                        <option disabled selected>请选择</option>
+                                                        <option value="IMAGE">镜像</option>
+                                                        <option value="JAR">jar包</option>
+                                                        <option value="WAR">war包</option>
+                                                        <option value="SOURCE_CODE">源代码</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="upload-package">上传文件<small style="color: red;">（仅支持Java应用二进制包，.jar/.war。待文件上传完成后再进行下一步操作，文件上传成功后会回填链接地址到源地址输入框中）</small></label>
                                                     <div class="input-group">
                                                         <div class="custom-file">
@@ -186,26 +199,25 @@
                                                             <small style="color: red;">war：http(s)://fileserver/xxx.war</small><br>
                                                         </label>
                                                     </div>
-                                                    <input class="form-control" id="http-url" name="url" type="text">
+                                                    <input class="form-control" id="http-url" type="text">
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="application-git-branch">分支<small style="color: red;">（源地址是git地址时填入此值，默认值是master）</small></label>
                                                     <input class="form-control" id="application-git-branch"
-                                                           name="gitbranch" placeholder="代码仓库的分支名称，例如：master"
+                                                           placeholder="代码仓库的分支名称，例如：master"
                                                            type="text">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="application-startargs">启动参数（Java应用）</label>
                                                     <input class="form-control" id="application-startargs"
-                                                           name="startargs"
                                                            placeholder="e.g. -Dspring.profiles.active=production"
                                                            type="text">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="application-startoptions">启动配置（Java应用）</label>
                                                     <input class="form-control" id="application-startoptions"
-                                                           name="startoptions" placeholder="e.g. -Xms128m -Xmx512m"
+                                                           placeholder="e.g. -Xms128m -Xmx512m"
                                                            type="text">
                                                 </div>
                                             </div>
@@ -217,7 +229,7 @@
                                          role="tabpanel">
                                         <div class="card card-secondary">
                                             <div class="card-header">
-                                                <h3 class="card-title">基本信息</h3>
+                                                <h3 class="card-title">高级配置</h3>
 
                                                 <div class="card-tools">
                                                     <button class="btn btn-tool" data-card-widget="collapse"
@@ -230,19 +242,22 @@
                                                 <div class="form-group">
                                                     <label for="application-envs">环境变量<small style="color: red;">（环境变量输入格式：key1=value1,key2=value2）</small></label>
                                                     <textarea class="form-control" id="application-envs"
-                                                              name="envstring" rows="4"></textarea>
+                                                              name="envStrings" rows="4"></textarea>
                                                 </div>
                                             </div>
 
                                         </div>
                                         <button class="btn btn-primary" onclick="stepper.previous()">上一步</button>
-                                        <button class="btn btn-primary" type="submit">提交</button>
+                                        <button class="btn btn-primary" onclick="createapplication()" type="submit">
+                                            提交
+                                        </button>
                                     </div>
 
-                                </form>
-                                <!-- your steps content here -->
+                                    <!-- your steps content here -->
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -268,6 +283,12 @@
 <!-- jQuery -->
 <div th:insert="~{global-script}"></div>
 <script th:src="@{/js/user-application.js}">
+</script>
+<script th:inline="javascript" type="text/javascript">
+    // BS-Stepper Init
+    $(document).ready(function () {
+        window.stepper = new Stepper(document.querySelector('.bs-stepper'));
+    })
 </script>
 </body>
 </html>

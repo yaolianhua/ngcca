@@ -3,7 +3,6 @@ const APPLICATION_API = "/v1/applications/instance";
 const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;
-let stepper;
 
 $(function () {
     toastr.options = {
@@ -13,11 +12,6 @@ $(function () {
 
     //tooltip
     $('#application-tooltip-msg').tooltip();
-
-    // BS-Stepper Init
-    $(document).ready(function () {
-        stepper = new Stepper($('.bs-stepper')[0])
-    })
 
     //Initialize Select2 Elements
     $('.select2').select2();
@@ -100,4 +94,59 @@ function deleteapplication(e) {
             //
         }
     })
+}
+
+function createapplication() {
+    let data = {
+        "clusterId": null,
+        "name": null,
+        "enableIngressAccess": false,
+        "serverPort": 0,
+        "source": {
+            "origin": null,
+            "runtime": null,
+            "url": null,
+            "gitBranch": null,
+            "gitSubmodule": null,
+            "startArgs": null,
+            "startOptions": null
+        },
+        "replicas": 1,
+        "envs": {},
+        "envStrings": null
+    };
+    let value = $('#application-create-form').serializeArray();
+    $.each(value, function (index, item) {
+        data[item.name] = item.value;
+    });
+    let source_origin = $('#source-origin').val();
+    let source_url = $('#http-url').val();
+    let source_gitBranch = $('#application-git-branch').val();
+    let source_startArgs = $('#application-startargs').val();
+    let source_startOptions = $('#application-startoptions').val();
+    let enableIngressAccess = $('#enable-ingress-access').val();
+    //
+    data.source.origin = source_origin;
+    data.source.url = source_url;
+    data.source.gitBranch = source_gitBranch;
+    data.source.startArgs = source_startArgs;
+    data.source.startOptions = source_startOptions;
+    data.enableIngressAccess = enableIngressAccess;
+
+    console.log(data);
+    // Send a POST request
+    // axios({
+    //     method: 'post',
+    //     url: USER_API,
+    //     data: data
+    // }).then(function (response) {
+    //     $('#modal-new-user').modal('hide');
+    //     $('#users-fragment').load(USER_LIST_VIEWS, function () {
+    //         userPaging();
+    //     });
+    //
+    //     ok(response);
+    // }).catch(function (error) {
+    //     fail(error);
+    // });
 }
