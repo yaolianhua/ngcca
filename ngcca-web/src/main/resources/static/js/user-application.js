@@ -96,7 +96,39 @@ function deleteapplication(e) {
     })
 }
 
+function stepperprevious() {
+    stepper.previous();
+}
+
+function steppernext(part) {
+    if ("basic" === part) {
+        if (isEmpty($('#application-name').val())) {
+            alertWarn("请输入应用名称");
+            return;
+        }
+        if (isEmpty($('#selected-cluster').val())) {
+            alertWarn("请选择集群");
+            return;
+        }
+
+        stepper.next();
+    }
+
+    if ("source" === part) {
+        if (isEmpty($('#source-origin').val())) {
+            alertWarn("请选择构建源");
+            return;
+        }
+        if (isEmpty($('#http-url').val())) {
+            alertWarn("构建源url为空");
+            return;
+        }
+
+        stepper.next();
+    }
+}
 function createapplication() {
+
     let data = {
         "clusterId": null,
         "name": null,
@@ -132,6 +164,7 @@ function createapplication() {
     data.source.startArgs = source_startArgs;
     data.source.startOptions = source_startOptions;
     data.enableIngressAccess = enableIngressAccess;
+
 
     console.log(data);
     // Send a POST request
