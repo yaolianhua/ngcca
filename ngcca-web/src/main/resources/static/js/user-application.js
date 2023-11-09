@@ -115,7 +115,7 @@ function steppernext(part) {
     }
 
     if ("source" === part) {
-        if (isEmpty($('#source-origin').val())) {
+        if (isEmpty($('#select-source-origin').val())) {
             alertWarn("请选择构建源");
             return;
         }
@@ -147,24 +147,36 @@ function createapplication() {
         "envs": {},
         "envStrings": null
     };
-    let value = $('#application-create-form').serializeArray();
-    $.each(value, function (index, item) {
-        data[item.name] = item.value;
-    });
-    let source_origin = $('#source-origin').val();
-    let source_url = $('#http-url').val();
-    let source_gitBranch = $('#application-git-branch').val();
-    let source_startArgs = $('#application-startargs').val();
-    let source_startOptions = $('#application-startoptions').val();
-    let enableIngressAccess = $('#enable-ingress-access').val();
+    //basic
+    let applicationname = $('#application-name').val();
+    let clusterid = $('#selected-cluster').val();
+    let enableIngressAccess = $('#enable-ingress-access').prop('checked');
+    let serverport = $('#application-serverport').val();
+    let replicas = $('#application-replicas').val();
     //
-    data.source.origin = source_origin;
-    data.source.url = source_url;
-    data.source.gitBranch = source_gitBranch;
-    data.source.startArgs = source_startArgs;
-    data.source.startOptions = source_startOptions;
+    data.name = applicationname;
+    data.clusterId = clusterid;
     data.enableIngressAccess = enableIngressAccess;
+    data.serverPort = serverport;
+    data.replicas = replicas;
 
+    //source origin
+    let sourceorigin = $('#select-source-origin').val();
+    let sourceurl = $('#http-url').val();
+    let sourcegitbranch = $('#application-git-branch').val();
+    let sourcestartargs = $('#application-startargs').val();
+    let sourcestartoptions = $('#application-startoptions').val();
+
+    //
+    data.source.origin = sourceorigin;
+    data.source.url = sourceurl;
+    data.source.gitBranch = sourcegitbranch;
+    data.source.startArgs = sourcestartargs;
+    data.source.startOptions = sourcestartoptions;
+
+    //advanced
+    let envstring = $('#application-envs').val();
+    data.envStrings = envstring;
 
     console.log(data);
     // Send a POST request

@@ -15,7 +15,6 @@
                 <label for="application-name">应用名称 <small
                         style="color: red;">*</small></label>
                 <input class="form-control" id="application-name"
-                       name="name"
                        placeholder="不能包含中文，特殊字符，大写英文。且以小写英文开始"
                        required
                        style="width: 100%;"
@@ -25,7 +24,6 @@
                 <label for="selected-cluster">集群 <small
                         style="color: red;">*</small></label>
                 <select class="form-control select2bs4" id="selected-cluster"
-                        name="clusterId"
                         style="width: 100%;">
                     <option disabled selected>请选择</option>
                     <option th:each="cluster : ${ clusters}"
@@ -38,7 +36,8 @@
                 <label for="application-replicas">应用副本数</label>
                 <input class="form-control" id="application-replicas" max="100"
                        min="0"
-                       name="replicas" step="1" style="width: 100%;"
+                       step="1"
+                       style="width: 100%;"
                        type="number"
                        value="1">
             </div>
@@ -46,7 +45,7 @@
                 <label for="application-serverport">容器服务端口 <small
                         style="color: red;">*</small></label>
                 <input class="form-control" id="application-serverport"
-                       name="serverPort" step="1"
+                       step="1"
                        style="width: 100%;"
                        type="number"
                        value="8080">
@@ -54,7 +53,6 @@
             <div class="form-group">
                 <div class="custom-control custom-switch">
                     <input class="custom-control-input" id="enable-ingress-access"
-                           name="enableingressaccess"
                            type="checkbox">
                     <label class="custom-control-label" for="enable-ingress-access">开启域名访问
                         <small style="color: red;">（http协议类型的服务通过域名直接访问，tcp协议服务通过ip(域名):端口方式进行访问）</small></label>
