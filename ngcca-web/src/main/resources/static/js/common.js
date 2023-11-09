@@ -1,4 +1,8 @@
-axios.defaults.baseURL = $('#server-endpoint').data('server-endpoint');
+//
+const WEB_ENDPOINT = $('#server-endpoint').data('server-endpoint');
+const CURRENT_USERNAME = $('#current-username').data('current-username');
+
+axios.defaults.baseURL = WEB_ENDPOINT;
 axios.defaults.withCredentials = true;
 
 // Request interceptors for API calls
@@ -12,6 +16,8 @@ axios.interceptors.request.use(
     }
 );
 
+
+//
 let codemirror_text;
 let codemirror_yaml;
 
@@ -92,7 +98,7 @@ const animate_swal = Swal.mixin({
 
 //user avatar save
 let avatar;
-const AVATAR_UPLOAD = "/v1/files/upload?bucket=avatar";
+const FILE_UPLOAD_API = "/v1/files/upload";
 const USER_API = "/v1/security/users";
 
 function avatarSave(e) {
@@ -121,7 +127,7 @@ function avatarSave(e) {
 
 }
 
-function dropzone(id, endpoint) {
+function dropzone(username) {
     // DropzoneJS Demo Code Start
     Dropzone.autoDiscover = false;
 
@@ -131,7 +137,7 @@ function dropzone(id, endpoint) {
     let previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);
     let myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: endpoint + AVATAR_UPLOAD, // Set the url
+        url: WEB_ENDPOINT + FILE_UPLOAD_API + "?bucket=" + username, // Set the url
         headers: {"Authorization": 'Bearer ' + getAuthorization()},
         acceptedFiles: "image/jpg, image/png, image/gif",
         success: function (file, response) {
