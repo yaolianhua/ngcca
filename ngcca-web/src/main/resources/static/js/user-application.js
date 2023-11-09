@@ -189,12 +189,15 @@ function createapplication() {
     let sourceorigin = $('#select-source-origin').val();
     let sourceurl = $('#http-url').val();
     let sourcegitbranch = $('#application-git-branch').val();
+    let sourcegitsubmodule = $('#application-git-submodule').val();
     let sourcestartargs = $('#application-startargs').val();
     let sourcestartoptions = $('#application-startoptions').val();
 
     //
     data.source.origin = sourceorigin;
     data.source.url = sourceurl;
+    data.source.runtime = "JAVA17";
+    data.source.gitSubmodule = sourcegitsubmodule;
     data.source.gitBranch = sourcegitbranch;
     data.source.startArgs = sourcestartargs;
     data.source.startOptions = sourcestartoptions;
