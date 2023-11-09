@@ -32,7 +32,7 @@ public class FileUploadService {
         this.properties = properties;
     }
 
-    public String upload(MultipartFile file, String bucket) {
+    public String upload(MultipartFile file, String bucket, boolean enablePublicPolicy) {
 
         try {
             Assert.notNull(file, "MultipartFile is null");
@@ -42,6 +42,10 @@ public class FileUploadService {
 
             if (!bucketApi.exist(bucket)) {
                 bucketApi.make(bucket);
+            }
+
+            if (Boolean.TRUE.equals(enablePublicPolicy)) {
+                bucketApi.setGetObjectPolicy(bucket);
             }
 
             String filename = file.getOriginalFilename();

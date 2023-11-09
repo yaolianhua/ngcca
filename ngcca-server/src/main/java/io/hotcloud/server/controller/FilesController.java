@@ -36,8 +36,9 @@ public class FilesController {
             }
     )
     public ResponseEntity<Result<String>> upload(@RequestPart("file") MultipartFile file,
-                                                 @RequestParam(value = "bucket", required = false) String bucket) {
-        String upload = fileUploadService.upload(file, bucket);
+                                                 @RequestParam(value = "bucket", required = false) String bucket,
+                                                 @RequestParam(value = "public", required = false) Boolean enablePublicPolicy) {
+        String upload = fileUploadService.upload(file, bucket, enablePublicPolicy);
         return created(upload);
     }
 }
