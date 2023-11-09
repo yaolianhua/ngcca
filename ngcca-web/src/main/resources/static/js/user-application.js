@@ -213,8 +213,7 @@ function createapplication() {
         url: APPLICATION_API,
         data: data
     }).then(function (response) {
-        $('#application-list-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
-        });
+        window.location.href = "/user/applications";
         ok(response);
     }).catch(function (error) {
         fail(error);
