@@ -33,23 +33,24 @@ public class FileUploadService {
     }
 
     public String upload(MultipartFile file, String bucket) {
-        Assert.notNull(file, "MultipartFile is null");
-        if (!StringUtils.hasText(bucket)) {
-            bucket = properties.getDefaultBucket();
-        }
-
-        if (!bucketApi.exist(bucket)) {
-            bucketApi.make(bucket);
-        }
-
-        String filename = file.getOriginalFilename();
-        Assert.hasText(filename, "Filename is null");
-
-        long mega = DataSize.ofBytes(file.getSize()).toMegabytes();
-        Assert.state(mega < properties.getMaxUploadMegabytes(),
-                "Max upload megabytes is " + properties.getMaxUploadMegabytes() + "MB");
 
         try {
+            Assert.notNull(file, "MultipartFile is null");
+            if (!StringUtils.hasText(bucket)) {
+                bucket = properties.getDefaultBucket();
+            }
+
+            if (!bucketApi.exist(bucket)) {
+                bucketApi.make(bucket);
+            }
+
+            String filename = file.getOriginalFilename();
+            Assert.hasText(filename, "Filename is null");
+
+            long mega = DataSize.ofBytes(file.getSize()).toMegabytes();
+            Assert.state(mega < properties.getMaxUploadMegabytes(),
+                    "Max upload megabytes is " + properties.getMaxUploadMegabytes() + "MB");
+
             StopWatch watch = new StopWatch();
             watch.start();
             minioObjectApi.uploadFile(bucket, filename, file.getInputStream(), file.getContentType());
