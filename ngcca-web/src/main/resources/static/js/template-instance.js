@@ -26,10 +26,7 @@ function submittemplatedeploy() {
     let clusterid = $('#selected-cluster').val();
     let template = $('#selected-template').val();
 
-    animate_swal.fire({
-        icon: 'info',
-        html: template + "已创建"
-    })
+    alertInfo(template + "已创建");
 
     axios.post(TEMPLATE_INSTANCE_API + "?template=" + template + "&clusterId=" + clusterid)
         .then(response => {
