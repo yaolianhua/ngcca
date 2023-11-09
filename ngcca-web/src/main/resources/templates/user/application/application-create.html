@@ -59,9 +59,9 @@
                                         </button>
                                     </div>
                                     <div class="line"></div>
-                                    <div class="step" data-target="#information-part">
-                                        <button aria-controls="information-part" class="step-trigger"
-                                                id="information-part-trigger"
+                                    <div class="step" data-target="#source-part">
+                                        <button aria-controls="source-part" class="step-trigger"
+                                                id="source-part-trigger"
                                                 role="tab" type="button">
                                             <span class="bs-stepper-circle">2</span>
                                             <span class="bs-stepper-label">应用源</span>
@@ -78,182 +78,10 @@
                                     </div>
                                 </div>
                                 <div class="bs-stepper-content">
-
-                                    <div aria-labelledby="basic-part-trigger" class="content" id="basic-part"
-                                         role="tabpanel">
-                                        <div class="card card-secondary">
-                                            <div class="card-header">
-                                                <h3 class="card-title">基本信息</h3>
-
-                                                <div class="card-tools">
-                                                    <button class="btn btn-tool" data-card-widget="collapse"
-                                                            title="Collapse" type="button">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="application-name">应用名称 <small
-                                                            style="color: red;">*</small></label>
-                                                    <input class="form-control" id="application-name"
-                                                           name="name"
-                                                           placeholder="不能包含中文，特殊字符，大写英文。且以小写英文开始"
-                                                           required
-                                                           style="width: 100%;"
-                                                           type="text">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="selected-cluster">集群 <small
-                                                            style="color: red;">*</small></label>
-                                                    <select class="form-control select2bs4" id="selected-cluster"
-                                                            name="clusterId"
-                                                            style="width: 100%;">
-                                                        <option disabled selected>请选择</option>
-                                                        <option th:each="cluster : ${ clusters}"
-                                                                th:text="${cluster.name}"
-                                                                th:value="${cluster.id}">
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="application-replicas">应用副本数</label>
-                                                    <input class="form-control" id="application-replicas" max="100"
-                                                           min="0"
-                                                           name="replicas" step="1" style="width: 100%;"
-                                                           type="number"
-                                                           value="1">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="application-serverport">容器服务端口 <small
-                                                            style="color: red;">*</small></label>
-                                                    <input class="form-control" id="application-serverport"
-                                                           name="serverPort" step="1"
-                                                           style="width: 100%;"
-                                                           type="number"
-                                                           value="8080">
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        <input class="custom-control-input" id="enable-ingress-access"
-                                                               name="enableingressaccess"
-                                                               type="checkbox">
-                                                        <label class="custom-control-label" for="enable-ingress-access">开启域名访问
-                                                            <small style="color: red;">（http协议类型的服务通过域名直接访问，tcp协议服务通过ip(域名):端口方式进行访问）</small></label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <!-- /.card-body -->
-                                        </div>
-                                        <button class="btn btn-primary" onclick="stepper.next()">下一步</button>
-                                    </div>
-                                    <div aria-labelledby="information-part-trigger" class="content"
-                                         id="information-part" role="tabpanel">
-                                        <div class="card card-secondary">
-                                            <div class="card-header">
-                                                <h3 class="card-title">应用源</h3>
-
-                                                <div class="card-tools">
-                                                    <button class="btn btn-tool" data-card-widget="collapse"
-                                                            title="Collapse" type="button">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="source-origin">构建源<small
-                                                            style="color: red;">*</small></label>
-                                                    <select class="form-control select2bs4" id="source-origin"
-                                                            style="width: 100%;">
-                                                        <option disabled selected>请选择</option>
-                                                        <option value="IMAGE">镜像</option>
-                                                        <option value="JAR">jar包</option>
-                                                        <option value="WAR">war包</option>
-                                                        <option value="SOURCE_CODE">源代码</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="upload-package">上传文件<small style="color: red;">（仅支持Java应用二进制包，.jar/.war。待文件上传完成后再进行下一步操作，文件上传成功后会回填链接地址到源地址输入框中）</small></label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input accept=".jar,.war" class="custom-file-input"
-                                                                   id="upload-package" name="file" type="file">
-                                                            <label class="custom-file-label"
-                                                                   for="upload-package">Browse</label>
-                                                        </div>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">Upload</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="http-url">源地址<small
-                                                            style="color: red;">*</small></label>
-                                                    <div class="form-group">
-                                                        <label for="http-url">
-                                                            <small style="color: red;">镜像地址：127.0.0.1:5000/namespace/imagename:tag</small><br>
-                                                            <small style="color: red;">git地址：https://gitee.com/username/xxx.git</small><br>
-                                                            <small style="color: red;">jar：http(s)://fileserver/xxx.jar</small><br>
-                                                            <small style="color: red;">war：http(s)://fileserver/xxx.war</small><br>
-                                                        </label>
-                                                    </div>
-                                                    <input class="form-control" id="http-url" type="text">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="application-git-branch">分支<small style="color: red;">（源地址是git地址时填入此值，默认值是master）</small></label>
-                                                    <input class="form-control" id="application-git-branch"
-                                                           placeholder="代码仓库的分支名称，例如：master"
-                                                           type="text">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="application-startargs">启动参数（Java应用）</label>
-                                                    <input class="form-control" id="application-startargs"
-                                                           placeholder="e.g. -Dspring.profiles.active=production"
-                                                           type="text">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="application-startoptions">启动配置（Java应用）</label>
-                                                    <input class="form-control" id="application-startoptions"
-                                                           placeholder="e.g. -Xms128m -Xmx512m"
-                                                           type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-primary" onclick="stepper.previous()">上一步</button>
-                                        <button class="btn btn-primary" onclick="stepper.next()">下一步</button>
-                                    </div>
-                                    <div aria-labelledby="advanced-part-trigger" class="content" id="advanced-part"
-                                         role="tabpanel">
-                                        <div class="card card-secondary">
-                                            <div class="card-header">
-                                                <h3 class="card-title">高级配置</h3>
-
-                                                <div class="card-tools">
-                                                    <button class="btn btn-tool" data-card-widget="collapse"
-                                                            title="Collapse" type="button">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="application-envs">环境变量<small style="color: red;">（环境变量输入格式：key1=value1,key2=value2）</small></label>
-                                                    <textarea class="form-control" id="application-envs"
-                                                              name="envStrings" rows="4"></textarea>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <button class="btn btn-primary" onclick="stepper.previous()">上一步</button>
-                                        <button class="btn btn-primary" onclick="createapplication()" type="submit">
-                                            提交
-                                        </button>
-                                    </div>
-
                                     <!-- your steps content here -->
+                                    <div th:insert="~{/user/application/application-create-basicpart}"></div>
+                                    <div th:insert="~{/user/application/application-create-sourcepart}"></div>
+                                    <div th:insert="~{/user/application/application-create-advancedpart}"></div>
                                 </div>
                             </div>
                         </form>

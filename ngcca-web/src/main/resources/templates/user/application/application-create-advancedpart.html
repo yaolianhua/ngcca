@@ -1,0 +1,28 @@
+<div aria-labelledby="advanced-part-trigger" class="content" id="advanced-part"
+     role="tabpanel">
+    <div class="card card-secondary">
+        <div class="card-header">
+            <h3 class="card-title">高级配置</h3>
+
+            <div class="card-tools">
+                <button class="btn btn-tool" data-card-widget="collapse"
+                        title="Collapse" type="button">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="application-envs">环境变量<small
+                        style="color: red;">（环境变量输入格式：key1=value1,key2=value2）</small></label>
+                <textarea class="form-control" id="application-envs"
+                          name="envStrings" rows="4"></textarea>
+            </div>
+        </div>
+
+    </div>
+    <button class="btn btn-primary" onclick="stepper.previous()">上一步</button>
+    <button class="btn btn-primary" onclick="createapplication()" type="submit">
+        提交
+    </button>
+</div>
