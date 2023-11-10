@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 public class ClusterListStatistics implements Serializable {
 
+    @Builder.Default
     private List<ClusterStatistics> items = new ArrayList<>();
 
     public List<NodeImage> getNodeImages() {

@@ -26,7 +26,7 @@ public class TemplateInstance {
      * 查询{@link TemplateInstance}对象时有值
      */
     @Nullable
-    private KubernetesCluster cluster = new KubernetesCluster();
+    private KubernetesCluster cluster;
     private String uuid;
     private String user;
     private String name;

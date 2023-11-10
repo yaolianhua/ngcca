@@ -36,7 +36,7 @@ ngcca:
     endpoint:
   application:
     dot-suffix-domain: ".vps.linux"
-    deployment-timeout-second: 1200
+    deployment-timeout-second: 7200
   security:
     enabled: true
     ignored-defaults:
@@ -56,7 +56,7 @@ ngcca:
       - "/user/**"
       - "/"
   buildpack:
-    build-timeout-second: 1800
+    build-timeout-second: 3600
 logging:
   level:
     io.hotcloud.common.log: debug

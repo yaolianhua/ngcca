@@ -52,8 +52,8 @@ public class KubectlEquivalent implements KubectlApi {
 
         InputStream inputStream = new ByteArrayInputStream(yaml.getBytes());
         List<HasMetadata> hasMetadata = StringUtils.hasText(namespace) ?
-                fabric8Client.load(inputStream).inNamespace(namespace).createOrReplace() :
-                fabric8Client.load(inputStream).createOrReplace();
+                fabric8Client.load(inputStream).inNamespace(namespace).serverSideApply() :
+                fabric8Client.load(inputStream).serverSideApply();
 
         for (HasMetadata metadata : hasMetadata) {
             Log.debug(this, yaml, String.format("%s %s create or replace, namespace %s", metadata.getKind(), metadata.getMetadata().getName(), namespace));
