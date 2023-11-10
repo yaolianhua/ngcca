@@ -14,7 +14,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "buildpack")
 public class BuildPackProperties {
 
-    private int buildTimeoutSecond = 1800;
+    private int buildTimeoutSecond = 3600;
 
     @PostConstruct
     public void print() {

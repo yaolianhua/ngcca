@@ -42,6 +42,7 @@ public class ApplicationDeploymentWatchService {
                 applicationInstance.setMessage(timeoutMessage);
                 applicationInstance.setProgress(100);
                 applicationInstanceService.saveOrUpdate(applicationInstance);
+                Log.warn(this, null, String.format("[%s] user's application instance deployment [%s] deploy timeout", applicationInstance.getUser(), applicationInstance.getName()));
                 return;
             }
 
