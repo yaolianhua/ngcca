@@ -11,6 +11,13 @@ spring:
       auto-index-creation: true
       authentication-database: admin
       uri: ${ngcca.mongodb.uri}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${ngcca.security.oauth2.github.client-id}
+            clientSecret: ${ngcca.security.oauth2.github.client-secret}
   servlet:
     multipart:
       max-request-size: 1024MB

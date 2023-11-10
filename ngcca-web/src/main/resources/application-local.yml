@@ -55,6 +55,10 @@ ngcca:
       - "/templates/**"
       - "/user/**"
       - "/"
+    oauth2:
+      github:
+        client-id: "241c6168a7efeaf852ba"
+        client-secret: "b3f98e25f25aa0807a0bc49c126178a11417e046"
   buildpack:
     build-timeout-second: 3600
 logging:
