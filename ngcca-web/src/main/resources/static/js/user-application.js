@@ -213,8 +213,8 @@ function createapplication() {
         url: APPLICATION_API,
         data: data
     }).then(function (response) {
-        window.location.href = "/user/applications";
         ok(response);
+        window.location.href = "/user/applications";
     }).catch(function (error) {
         fail(error);
     });
