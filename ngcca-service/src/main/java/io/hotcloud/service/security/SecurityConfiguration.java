@@ -6,6 +6,9 @@ import io.hotcloud.service.security.jwt.JwtAuthenticationFilter;
 import io.hotcloud.service.security.jwt.JwtConfiguration;
 import io.hotcloud.service.security.jwt.JwtProperties;
 import io.hotcloud.service.security.jwt.JwtVerifier;
+import io.hotcloud.service.security.oauth2.GithubOauth2AuthenticationSuccessHandler;
+import io.hotcloud.service.security.oauth2.Oauth2AuthenticationSuccessHandler;
+import io.hotcloud.service.security.oauth2.Oauth2GithubProperties;
 import io.hotcloud.service.security.user.UserApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,11 +28,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableConfigurationProperties({
         SecurityProperties.class,
+        Oauth2GithubProperties.class,
         JwtProperties.class
 })
 @Import({
         JwtConfiguration.class,
-        CorsFilterConfigurer.class
+        CorsFilterConfigurer.class,
+        GithubOauth2AuthenticationSuccessHandler.class
 })
 public class SecurityConfiguration {
 
@@ -51,6 +56,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    SecurityProperties securityProperties,
                                                    JwtVerifier jwtVerifier,
+                                                   GithubOauth2AuthenticationSuccessHandler githubOauth2AuthenticationSuccessHandler,
                                                    UserDetailsService userDetailsService) throws Exception {
 
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(HttpMethod.OPTIONS).permitAll());
@@ -68,6 +74,8 @@ public class SecurityConfiguration {
         http.securityContext(scc -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL));
         //enable basic auth
         http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(new Http401UnauthorizedEntryPoint()));
+        //enable oauth2
+        http.oauth2Login(oauth2 -> oauth2.successHandler(new Oauth2AuthenticationSuccessHandler(githubOauth2AuthenticationSuccessHandler)));
 
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().authenticated());
 
