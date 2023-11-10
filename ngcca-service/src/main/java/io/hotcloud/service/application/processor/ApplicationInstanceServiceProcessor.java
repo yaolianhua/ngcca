@@ -9,7 +9,6 @@ import io.hotcloud.kubernetes.model.network.DefaultServiceSpec;
 import io.hotcloud.kubernetes.model.network.ServiceCreateRequest;
 import io.hotcloud.kubernetes.model.network.ServicePort;
 import io.hotcloud.kubernetes.model.network.ServiceSpec;
-import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.cluster.KubernetesCluster;
@@ -27,23 +26,12 @@ import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor
-class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcessor<ApplicationInstance> {
+class ApplicationInstanceServiceProcessor {
 
     private final ServiceClient serviceApi;
     private final ApplicationInstanceService applicationInstanceService;
 
-    @Override
-    public int order() {
-        return DEFAULT_ORDER + 2;
-    }
-
-    @Override
-    public Type getType() {
-        return Type.SERVICE;
-    }
-
     @SneakyThrows
-    @Override
     public void processCreate(ApplicationInstance applicationInstance) {
 
         ServiceCreateRequest request = new ServiceCreateRequest();
@@ -99,7 +87,6 @@ class ApplicationInstanceServiceProcessor implements ApplicationInstanceProcesso
     }
 
     @SneakyThrows
-    @Override
     public void processDelete(ApplicationInstance input) {
         final KubernetesCluster cluster = input.getCluster();
         Service service = serviceApi.read(cluster.getAgentUrl(), input.getNamespace(), input.getName());

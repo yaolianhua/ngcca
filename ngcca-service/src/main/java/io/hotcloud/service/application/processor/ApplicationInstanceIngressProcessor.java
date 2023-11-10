@@ -3,7 +3,6 @@ package io.hotcloud.service.application.processor;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.model.YamlBody;
-import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.application.model.ApplicationInstance;
@@ -22,24 +21,13 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcessor<ApplicationInstance> {
+class ApplicationInstanceIngressProcessor {
 
     private final ApplicationProperties applicationProperties;
     private final KubectlClient kubectlApi;
     private final ApplicationInstanceService applicationInstanceService;
     private final IngressHelper ingressHelper;
 
-    @Override
-    public int order() {
-        return DEFAULT_ORDER + 3;
-    }
-
-    @Override
-    public Type getType() {
-        return Type.INGRESS;
-    }
-
-    @Override
     public void processCreate(ApplicationInstance applicationInstance) {
 
         try {
@@ -94,7 +82,6 @@ class ApplicationInstanceIngressProcessor implements ApplicationInstanceProcesso
 
     }
 
-    @Override
     public void processDelete(ApplicationInstance input) {
         if (StringUtils.hasText(input.getIngress())) {
             final KubernetesCluster cluster = input.getCluster();

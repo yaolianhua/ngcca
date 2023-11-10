@@ -15,7 +15,6 @@ import io.hotcloud.kubernetes.model.pod.container.*;
 import io.hotcloud.kubernetes.model.workload.DeploymentCreateRequest;
 import io.hotcloud.kubernetes.model.workload.DeploymentSpec;
 import io.hotcloud.kubernetes.model.workload.DeploymentTemplate;
-import io.hotcloud.service.application.ApplicationInstanceProcessor;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.buildpack.BuildPackService;
@@ -35,21 +34,11 @@ import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 
 @Component
 @RequiredArgsConstructor
-class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProcessor<ApplicationInstance> {
+class ApplicationInstanceDeploymentProcessor {
 
     private final DeploymentClient deploymentApi;
     private final BuildPackService buildPackService;
     private final ApplicationInstanceService applicationInstanceService;
-
-    @Override
-    public int order() {
-        return DEFAULT_ORDER + 10;
-    }
-
-    @Override
-    public Type getType() {
-        return Type.DEPLOYMENT;
-    }
 
     private ObjectMetadata buildDeploymentMetadata(ApplicationInstance applicationInstance) {
         ObjectMetadata metadata = new ObjectMetadata();
@@ -118,7 +107,6 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
     }
 
     @SneakyThrows
-    @Override
     public void processCreate(ApplicationInstance applicationInstance) {
 
         try {
@@ -147,7 +135,6 @@ class ApplicationInstanceDeploymentProcessor implements ApplicationInstanceProce
     }
 
     @SneakyThrows
-    @Override
     public void processDelete(ApplicationInstance input) {
         Deployment deployment = deploymentApi.read(input.getCluster().getAgentUrl(), input.getNamespace(), input.getName());
         if (Objects.nonNull(deployment)) {
