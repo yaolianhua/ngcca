@@ -28,7 +28,7 @@ class ApplicationInstanceIngressProcessor {
     private final ApplicationInstanceService applicationInstanceService;
     private final IngressHelper ingressHelper;
 
-    public void processCreate(ApplicationInstance applicationInstance) {
+    public void createprocess(ApplicationInstance applicationInstance) {
 
         try {
             if (!applicationInstance.isEnableIngressAccess()) {
@@ -82,7 +82,7 @@ class ApplicationInstanceIngressProcessor {
 
     }
 
-    public void processDelete(ApplicationInstance input) {
+    public void deleteprocess(ApplicationInstance input) {
         if (StringUtils.hasText(input.getIngress())) {
             final KubernetesCluster cluster = input.getCluster();
             Boolean deleted = kubectlApi.delete(cluster.getAgentUrl(), input.getNamespace(), YamlBody.of(input.getIngress()));

@@ -25,6 +25,7 @@ import java.util.Objects;
 public class DefaultBuildPackPlayer implements BuildPackPlayer {
 
     private final BuildPackApi buildPackApi;
+    private final BuildPackCacheApi buildPackCacheApi;
     private final UserApi userApi;
     private final KubectlClient kubectlApi;
     private final NamespaceClient namespaceApi;
@@ -103,6 +104,7 @@ public class DefaultBuildPackPlayer implements BuildPackPlayer {
                 String.format("Delete BuildPack physically [%s]. id:[%s]", physically, id));
 
         try {
+            buildPackCacheApi.removeBuildPackState(id);
             Boolean delete = kubectlApi.delete(existBuildPack.getJobResource().getNamespace(), YamlBody.of(existBuildPack.getYaml()));
             Log.info(this, null, String.format("Deleted BuildPack k8s resources [%s]. namespace [%s] job [%s]", delete, existBuildPack.getJobResource().getNamespace(), existBuildPack.getJobResource().getName()));
         } catch (Exception ex) {

@@ -107,7 +107,7 @@ class ApplicationInstanceDeploymentProcessor {
     }
 
     @SneakyThrows
-    public void processCreate(ApplicationInstance applicationInstance) {
+    public void createprocess(ApplicationInstance applicationInstance) {
 
         try {
             KubernetesCluster cluster = applicationInstance.getCluster();
@@ -135,7 +135,7 @@ class ApplicationInstanceDeploymentProcessor {
     }
 
     @SneakyThrows
-    public void processDelete(ApplicationInstance input) {
+    public void deleteprocess(ApplicationInstance input) {
         Deployment deployment = deploymentApi.read(input.getCluster().getAgentUrl(), input.getNamespace(), input.getName());
         if (Objects.nonNull(deployment)) {
             deploymentApi.delete(input.getCluster().getAgentUrl(), input.getNamespace(), input.getName());

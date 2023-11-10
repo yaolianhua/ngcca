@@ -21,13 +21,13 @@ class ApplicationInstanceImageBuildProcessor {
     private final BuildPackPlayer buildPackPlayer;
     private final ApplicationInstanceService applicationInstanceService;
 
-    public void processFailed(ApplicationInstance input) {
+    public void failedprocess(ApplicationInstance input) {
         input.setProgress(100);
         input.setMessage(CommonConstant.APPLICATION_BUILD_FAILED_MESSAGE);
         applicationInstanceService.saveOrUpdate(input);
     }
 
-    public void processCreate(ApplicationInstance applicationInstance) {
+    public void createprocess(ApplicationInstance applicationInstance) {
         BuildPack buildPack = null;
 
         try {
@@ -76,7 +76,7 @@ class ApplicationInstanceImageBuildProcessor {
 
     }
 
-    public void processDelete(ApplicationInstance input) {
+    public void deleteprocess(ApplicationInstance input) {
         Log.info(this, null, String.format("[%s] user's application instance buildPack [%s] delete", input.getUser(), input.getBuildPackId()));
         if (StringUtils.hasText(input.getBuildPackId())) {
             buildPackPlayer.delete(input.getBuildPackId(), false);

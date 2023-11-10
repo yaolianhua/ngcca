@@ -23,7 +23,7 @@ public class ApplicationInstanceProcessors {
     public void processCreate(ApplicationInstance instance) {
 
         //start build
-        imageBuildProcessor.processCreate(instance);
+        imageBuildProcessor.createprocess(instance);
 
         //wait build done
         if (StringUtils.hasText(instance.getBuildPackId())) {
@@ -41,31 +41,31 @@ public class ApplicationInstanceProcessors {
                 }
                 if (Objects.equals(JobState.FAILED, status)) {
                     Log.error(this, null, String.format("[%s] user's application instance [%s] deploy failed. image build failed [%s]", instance.getUser(), instance.getName(), instance.getBuildPackId()));
-                    imageBuildProcessor.processFailed(instance);
+                    imageBuildProcessor.failedprocess(instance);
                     return;
                 }
             }
         }
 
         //create service
-        serviceProcessor.processCreate(instance);
+        serviceProcessor.createprocess(instance);
 
         //create ingress if need
-        ingressProcessor.processCreate(instance);
+        ingressProcessor.createprocess(instance);
 
         //create deployment
-        deploymentProcessor.processCreate(instance);
+        deploymentProcessor.createprocess(instance);
 
     }
 
     public void processDelete(ApplicationInstance instance) {
         //
-        imageBuildProcessor.processDelete(instance);
+        imageBuildProcessor.deleteprocess(instance);
 
-        ingressProcessor.processDelete(instance);
+        ingressProcessor.deleteprocess(instance);
 
-        serviceProcessor.processDelete(instance);
+        serviceProcessor.deleteprocess(instance);
 
-        deploymentProcessor.processDelete(instance);
+        deploymentProcessor.deleteprocess(instance);
     }
 }

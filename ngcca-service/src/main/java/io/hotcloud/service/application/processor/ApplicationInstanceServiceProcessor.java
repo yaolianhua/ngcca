@@ -32,7 +32,7 @@ class ApplicationInstanceServiceProcessor {
     private final ApplicationInstanceService applicationInstanceService;
 
     @SneakyThrows
-    public void processCreate(ApplicationInstance applicationInstance) {
+    public void createprocess(ApplicationInstance applicationInstance) {
 
         ServiceCreateRequest request = new ServiceCreateRequest();
         try {
@@ -87,7 +87,7 @@ class ApplicationInstanceServiceProcessor {
     }
 
     @SneakyThrows
-    public void processDelete(ApplicationInstance input) {
+    public void deleteprocess(ApplicationInstance input) {
         final KubernetesCluster cluster = input.getCluster();
         Service service = serviceApi.read(cluster.getAgentUrl(), input.getNamespace(), input.getName());
         if (Objects.nonNull(service)) {

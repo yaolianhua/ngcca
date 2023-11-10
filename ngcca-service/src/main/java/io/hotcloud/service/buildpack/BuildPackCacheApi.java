@@ -6,5 +6,7 @@ public interface BuildPackCacheApi {
 
     void cacheBuildPackState(String buildPackId, JobState state);
 
+    void removeBuildPackState(String buildPackId);
+
     JobState getBuildPackState(String buildPackId);
 }

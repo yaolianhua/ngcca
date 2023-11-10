@@ -23,6 +23,11 @@ public class BuildPackCacheManager implements BuildPackCacheApi {
     }
 
     @Override
+    public void removeBuildPackState(String buildPackId) {
+        cache.evict(String.format(CK_BUILD_STATE, buildPackId));
+    }
+
+    @Override
     public JobState getBuildPackState(String buildPackId) {
         return cache.get(String.format(CK_BUILD_STATE, buildPackId), JobState.class);
     }
