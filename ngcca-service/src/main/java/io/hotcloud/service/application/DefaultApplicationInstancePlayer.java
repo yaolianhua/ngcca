@@ -1,15 +1,16 @@
 package io.hotcloud.service.application;
 
 import io.hotcloud.common.log.Log;
+import io.hotcloud.service.application.model.ApplicationCreateEvent;
 import io.hotcloud.service.application.model.ApplicationForm;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.application.processor.ApplicationInstanceProcessors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 @Component
 @RequiredArgsConstructor
@@ -18,19 +19,20 @@ public class DefaultApplicationInstancePlayer implements ApplicationInstancePlay
     private final ApplicationInstanceProcessors applicationInstanceProcessors;
     private final ApplicationInstanceParameterChecker parameterChecker;
     private final ApplicationInstanceService applicationInstanceService;
-    private final ExecutorService executorService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public ApplicationInstance play(ApplicationForm form) {
 
         ApplicationInstance applicationInstance = parameterChecker.check(form);
 
-        ApplicationInstance saved = applicationInstanceService.saveOrUpdate(applicationInstance);
+        ApplicationInstance instance = applicationInstanceService.saveOrUpdate(applicationInstance);
 
-        Log.info(this, form, "create application instance");
+        Log.info(this, form, "application instance [" + form.getName() + "] created");
 
-        executorService.execute(() -> applicationInstanceProcessors.processCreate(saved));
-        return saved;
+        applicationEventPublisher.publishEvent(new ApplicationCreateEvent(instance));
+
+        return instance;
     }
 
     @Override

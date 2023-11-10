@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationInstance {
+public class ApplicationInstance implements Serializable {
 
     private String id;
     private String clusterId;
