@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -46,6 +47,13 @@ public class RedisCache extends AbstractValueAdaptingCache {
         Assert.hasText(key, "Key is null");
         Assert.notNull(value, "Value is null");
         redisTemplate.opsForValue().set(key, toStoreValue(value));
+    }
+
+    @Override
+    public void put(String key, Object value, long timeout, TimeUnit timeUnit) {
+        Assert.hasText(key, "Key is null");
+        Assert.notNull(value, "Value is null");
+        redisTemplate.opsForValue().set(key, toStoreValue(value), timeout, timeUnit);
     }
 
     @SuppressWarnings("unchecked")

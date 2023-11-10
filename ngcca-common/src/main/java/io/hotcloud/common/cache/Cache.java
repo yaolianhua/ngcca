@@ -1,6 +1,7 @@
 package io.hotcloud.common.cache;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaolianhua789@gmail.com
@@ -16,6 +17,10 @@ public interface Cache {
      * @param value the value to be associated with the specified key
      */
     void put(String key, Object value);
+
+    default void put(String key, Object value, long timeout, TimeUnit timeUnit) {
+        throw new UnsupportedOperationException("Unsupported operation");
+    }
 
     /**
      * Atomically associate the specified value with the specified key in this cache

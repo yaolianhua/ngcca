@@ -4,6 +4,8 @@ import io.hotcloud.common.cache.Cache;
 import io.hotcloud.service.buildpack.model.JobState;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 
 @Component
 public class BuildPackCacheManager implements BuildPackCacheApi {
@@ -17,7 +19,7 @@ public class BuildPackCacheManager implements BuildPackCacheApi {
 
     @Override
     public void cacheBuildPackState(String buildPackId, JobState state) {
-        cache.put(String.format(CK_BUILD_STATE, buildPackId), state);
+        cache.put(String.format(CK_BUILD_STATE, buildPackId), state, 3L, TimeUnit.HOURS);
     }
 
     @Override
