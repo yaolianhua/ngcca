@@ -3,7 +3,7 @@ const TEMPLATE_DEFINITION_API = "/v1/definition/templates";
 const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage?action=list";
 
 $(function () {
-    templatePaging();
+    templatedefinitionpage();
     toastr.options = {
         "timeOut": "3000"
     };
@@ -18,7 +18,7 @@ const swal = Swal.mixin({
 })
 
 //dataTable init
-function templatePaging() {
+function templatedefinitionpage() {
     $('#template-list').DataTable({
         "paging": true,
         "lengthChange": false,
@@ -31,7 +31,7 @@ function templatePaging() {
 }
 
 //template save
-function templateS() {
+function savetemplatedefinition() {
     let data = {};
     let value = $('#template-form').serializeArray();
     $.each(value, function (index, item) {
@@ -45,7 +45,7 @@ function templateS() {
     }).then(function (response) {
         $('#modal-new-template').modal('hide');
         $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
-            templatePaging();
+            templatedefinitionpage();
         });
 
         ok(response);
@@ -54,15 +54,9 @@ function templateS() {
     });
 }
 
-//template list
-function templates() {
-    $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
-        templatePaging();
-    });
-}
-
 //template delete
-function templateD(id) {
+function deletetemplatedefinition(e) {
+    let id = $(e).data("template-definition-id");
     swal.fire({
         title: '确认删除?',
         text: '删除模板会导致实例模板数据不可用，若要使用需要再次添加，请谨慎！',
@@ -76,7 +70,7 @@ function templateD(id) {
             axios.delete(TEMPLATE_DEFINITION_API + '/' + id)
                 .then(response => {
                     $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
-                        templatePaging();
+                        templatedefinitionpage();
                     });
                     ok(response);
                 })

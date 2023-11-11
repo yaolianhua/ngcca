@@ -1,0 +1,51 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="col-sm-1">
+                        <button class="btn btn-block btn-dark" data-target="#modal-new-template" data-toggle="modal"
+                                type="button">添加模板
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="template-list">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>版本</th>
+                            <th>描述</th>
+                            <th>描述详情</th>
+                            <th>创建时间</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="definition: ${collection}">
+                            <td th:text="${definition.name}"></td>
+                            <td th:text="${definition.version}"></td>
+                            <td th:text="${definition.shortDesc}"></td>
+                            <td th:text="${definition.description}"></td>
+                            <td th:text="${definition.createdAt}"></td>
+                            <td th:text="${definition.modifiedAt}"></td>
+                            <td class="project-actions text-center">
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="deletetemplatedefinition(this)"
+                                        th:data-template-definition-id="${definition.id}"><i
+                                        class="fas fa-trash"></i>删除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

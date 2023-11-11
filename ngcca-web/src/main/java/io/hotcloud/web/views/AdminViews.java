@@ -35,8 +35,8 @@ public final class AdminViews {
     }
 
     public static final class TemplateDefinition {
-        public static final String TEMPLATE_DEFINITION_LIST_FRAGMENT = "admin/system/template-definition/template-list::content";
-        public static final String TEMPLATE_DEFINITION_MANAGE = "admin/system/template-definition/template-manage";
+        public static final String TEMPLATE_LIST_FRAGMENT = "admin/system/template-definition/template-list-fragment::content";
+        public static final String TEMPLATE_LIST = "admin/system/template-definition/template-list";
 
         private TemplateDefinition() {
         }

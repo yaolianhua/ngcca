@@ -53,11 +53,11 @@ public class AdministratorSystemManageViewsController {
         model.addAttribute(WebConstant.TEMPLATE_LOGOS, STATIC_IMAGES);
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll(name));
-            return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_LIST_FRAGMENT;
+            return AdminViews.TemplateDefinition.TEMPLATE_LIST_FRAGMENT;
         }
 
         model.addAttribute(WebConstant.COLLECTION, templateDefinitionService.findAll(name));
-        return AdminViews.TemplateDefinition.TEMPLATE_DEFINITION_MANAGE;
+        return AdminViews.TemplateDefinition.TEMPLATE_LIST;
     }
 
     @RequestMapping("/user-manage")

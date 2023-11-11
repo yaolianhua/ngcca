@@ -1,52 +1,42 @@
-<section class="content" th:fragment="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>NGCCA | 模板管理</title>
 
-                <div class="card-header">
-                        <div class="col-sm-1">
-                            <button class="btn btn-block btn-dark" data-target="#modal-new-template" data-toggle="modal"
-                                    type="button">添加模板
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table class="table table-bordered table-hover" id="template-list">
-                            <thead>
-                            <tr>
-                                <th>名称</th>
-                                <th>版本</th>
-                                <th>描述</th>
-                                <th>描述详情</th>
-                                <th>创建时间</th>
-                                <th>更新时间</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="templateDefinition: ${collection}">
-                                <td th:text="${templateDefinition.name}"></td>
-                                <td th:text="${templateDefinition.version}"></td>
-                                <td th:text="${templateDefinition.shortDesc}"></td>
-                                <td th:text="${templateDefinition.description}"></td>
-                                <td th:text="${templateDefinition.createdAt}"></td>
-                                <td th:text="${templateDefinition.modifiedAt}"></td>
-                                <td class="project-actions text-center">
-                                    <button class="btn btn-danger btn-sm"
-                                            th:attr="onclick=|templateD('${templateDefinition.id}')|"><i
-                                            class="fas fa-trash"></i>删除
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
+  <link th:insert="~{global-link}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
 
-                        </table>
+  <div th:insert="~{admin/navbar}"></div>
+  <div th:insert="~{admin/sidebar}"></div>
+  <div th:insert="~{admin/system/template-definition/template-new-modal}"></div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div th:insert="~{content-header}"></div>
+
+    <!-- Main content -->
+    <section class="content" id="templates-fragment" th:fragment="content">
+      <div th:insert="~{admin/system/template-definition/template-list-fragment}"></div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <div th:insert="~{footer}"></div>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+<div th:insert="~{global-script}"></div>
+<script th:src="@{/js/template-manage.js}">
+</script>
+</body>
+</html>
