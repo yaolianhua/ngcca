@@ -23,7 +23,7 @@ function deploytemplate(e) {
 
 function submittemplatedeploy() {
     $('#modal-select-cluster').modal("hide");
-    let clusterid = $('#selected-cluster').val();
+    let clusterid = $('#selected-template-cluster').val();
     let template = $('#selected-template').val();
 
     alertInfo(template + "已创建");

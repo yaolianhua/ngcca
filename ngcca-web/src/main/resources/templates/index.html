@@ -10,10 +10,8 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <div th:insert="~{avatar-upload-modal}"></div>
-  <div th:insert="~{user-profile-modal}"></div>
-  <div th:insert="~{navbar}"></div>
 
+<div th:insert="~{navbar}"></div>
   <div th:insert="~{sidebar}"></div>
 
 
@@ -64,29 +62,6 @@
           </div>
 
         </div>
-
-        <!--<div class="row">
-          &lt;!&ndash; timeline &ndash;&gt;
-          <div class="col-md-12">
-            <div class="timeline">
-
-              <div th:each="activity: ${activities}">
-                <i class="fas" th:classappend="${activity.icon}"></i>
-                <div class="timeline-item">
-                  <span class="time" th:text="${activity.createdAt}"><i class="fas fa-clock"></i></span>
-                  <h3 class="timeline-header">
-                    <span th:text="${activity.displayName}"></span>
-                  </h3>
-
-                  <div class="timeline-body" th:text="${activity.description}">
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>-->
 
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
@@ -217,9 +192,6 @@
         }
       }
     })
-
-    let username = [[ ${user.username}]]
-    dropzone(username);
 
   })
 </script>

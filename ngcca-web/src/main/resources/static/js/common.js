@@ -1,10 +1,22 @@
 //
 const WEB_ENDPOINT = $('#server-endpoint').data('server-endpoint');
 const CURRENT_USERNAME = $('#current-username').data('current-username');
+const FILE_UPLOAD_API = "/v1/files/upload";
+const USER_API = "/v1/security/users";
 
+//swal
+const animate_swal = Swal.mixin({
+    showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+    }
+})
+
+//axios authorization header set
 axios.defaults.baseURL = WEB_ENDPOINT;
 axios.defaults.withCredentials = true;
-
 // Request interceptors for API calls
 axios.interceptors.request.use(
     config => {
@@ -16,12 +28,23 @@ axios.interceptors.request.use(
     }
 );
 
+//Get authorization from cookies
+function getAuthorization() {
+    let strcookie = document.cookie;//获取cookie字符串
+    let arrcookie = strcookie.split("; ");//分割
+    //遍历匹配
+    for (let i = 0; i < arrcookie.length; i++) {
+        let arr = arrcookie[i].split("=");
+        if (arr[0] === "authorization") {
+            return arr[1];
+        }
+    }
+    return "";
+}
 
-//
+//codemirror
 let codemirror_text;
 let codemirror_yaml;
-
-// init codemirror
 $(function () {
 
     // text CodeMirror
@@ -41,20 +64,6 @@ $(function () {
     });
 
 });
-
-//Get authorization from cookies
-function getAuthorization() {
-    let strcookie = document.cookie;//获取cookie字符串
-    let arrcookie = strcookie.split("; ");//分割
-    //遍历匹配
-    for (let i = 0; i < arrcookie.length; i++) {
-        let arr = arrcookie[i].split("=");
-        if (arr[0] === "authorization") {
-            return arr[1];
-        }
-    }
-    return "";
-}
 
 function ok(response) {
     console.log(response);
@@ -87,20 +96,8 @@ function alertInfo(msg) {
     })
 }
 
-const animate_swal = Swal.mixin({
-    showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-    }
-})
-
 //user avatar save
 let avatar;
-const FILE_UPLOAD_API = "/v1/files/upload";
-const USER_API = "/v1/security/users";
-
 function avatarSave(e) {
     if (avatar === '' || avatar === undefined || avatar === null || avatar === 'null') {
         alert('请上传头像');
@@ -127,6 +124,8 @@ function avatarSave(e) {
 
 }
 
+//avatar upload init
+dropzone(CURRENT_USERNAME);
 function dropzone(username) {
     // DropzoneJS Demo Code Start
     Dropzone.autoDiscover = false;
@@ -137,7 +136,7 @@ function dropzone(username) {
     let previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);
     let myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: WEB_ENDPOINT + FILE_UPLOAD_API + "?bucket=" + username, // Set the url
+        url: WEB_ENDPOINT + FILE_UPLOAD_API + "?bucket=" + username + "&public=true", // Set the url
         headers: {"Authorization": 'Bearer ' + getAuthorization()},
         acceptedFiles: "image/jpg, image/png, image/gif",
         success: function (file, response) {

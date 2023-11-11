@@ -1,3 +1,7 @@
+<div th:insert="~{avatar-upload-modal}"></div>
+<div th:insert="~{user-profile-modal}"></div>
+<div th:insert="~{codemirror-yaml-modal}"></div>
+<div th:insert="~{codemirror-text-modal}"></div>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -50,7 +54,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/user/template-instance}">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-cloud nav-icon"></i>
                                 <p>我的模板</p>
                             </a>
                         </li>
@@ -61,7 +65,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/user/applications}">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-brands fa-soundcloud nav-icon"></i>
                                 <p>我的应用</p>
                             </a>
                         </li>

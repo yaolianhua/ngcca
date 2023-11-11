@@ -14,8 +14,8 @@
                 <div class="card card-default">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="label-select-cluster">集群列表</label>
-                            <select class="form-control select2bs4" id="label-select-cluster" name="clusterId"
+                            <label for="selected-template-cluster">集群列表</label>
+                            <select class="form-control select2bs4" id="selected-template-cluster" name="clusterId"
                                     style="width: 100%;">
                                 <option disabled selected>请选择</option>
                                 <option th:each="cluster : ${ clusters}"
@@ -29,6 +29,7 @@
                 </div>
 
                 <div class="modal-footer">
+                    <input id="selected-template" type="hidden" value="">
                     <button class="btn btn-info" onclick="submittemplatedeploy()" type="submit">提交</button>
                 </div>
             </div>
