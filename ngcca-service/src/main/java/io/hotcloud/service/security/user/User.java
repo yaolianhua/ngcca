@@ -31,6 +31,7 @@ public class User implements UserDetails {
     private boolean enabled;
 
     private String avatar;
+    private String social;
 
     private Instant createdAt;
     private Instant modifiedAt;

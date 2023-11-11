@@ -25,4 +25,5 @@ public class UserEntity extends AbstractEntity {
     private boolean enabled;
 
     private String avatar;
+    private String social;
 }
