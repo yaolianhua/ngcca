@@ -39,7 +39,7 @@ public class ApplicationDeploymentWatchService {
             int timeout = Instant.now().compareTo(applicationInstance.getCreatedAt().plusSeconds(applicationProperties.getDeploymentTimeoutSecond()));
             if (timeout > 0) {
                 String timeoutMessage = retrieveK8sEventsMessage(applicationInstance);
-                applicationInstance.setMessage(timeoutMessage);
+                applicationInstance.setMessage(CommonConstant.TIMEOUT_MESSAGE + ":" + timeoutMessage);
                 applicationInstance.setProgress(100);
                 applicationInstanceService.saveOrUpdate(applicationInstance);
                 Log.warn(this, null, String.format("[%s] user's application instance deployment [%s] deploy timeout", applicationInstance.getUser(), applicationInstance.getName()));
