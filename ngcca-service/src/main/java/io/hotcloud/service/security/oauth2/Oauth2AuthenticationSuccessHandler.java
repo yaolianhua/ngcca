@@ -1,5 +1,6 @@
 package io.hotcloud.service.security.oauth2;
 
+import io.hotcloud.service.security.user.UserSocialSource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +22,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
-        if (Objects.equals("github", oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
+        if (Objects.equals(UserSocialSource.GITHUB, oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
             githubOauth2AuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
         }
     }
