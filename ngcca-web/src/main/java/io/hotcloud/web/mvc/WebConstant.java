@@ -19,7 +19,6 @@ public final class WebConstant {
     public static final String TEMPLATE_LOGOS = "logos";
     public static final String STATISTICS = "statistics";
     public static final String ACTIVITIES = "activities";
-    public static final String AUTHORIZATION = "authorization";
     public static final String MESSAGE = "message";
 
     public static final String VIEW_LIST_FRAGMENT = "list";

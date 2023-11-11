@@ -1,5 +1,6 @@
 package io.hotcloud.web.mvc;
 
+import io.hotcloud.service.security.WebCookie;
 import io.hotcloud.service.security.jwt.JwtVerifier;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;

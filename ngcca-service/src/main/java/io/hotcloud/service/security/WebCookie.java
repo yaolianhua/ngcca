@@ -1,4 +1,4 @@
-package io.hotcloud.web.mvc;
+package io.hotcloud.service.security;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ public final class WebCookie {
     }
 
     public static Cookie generateAuthorizationCookie(String authorization) {
-        Cookie cookie = new Cookie(WebConstant.AUTHORIZATION, authorization);
+        Cookie cookie = new Cookie(HttpRequestHeader.AUTHORIZATION, authorization);
         cookie.setPath("/");
         cookie.setHttpOnly(false);
         // expires in 7 days
@@ -28,7 +28,7 @@ public final class WebCookie {
 
     public static void removeAuthorizationCookie(HttpServletRequest request, HttpServletResponse response) {
 
-        Cookie cookie = new Cookie(WebConstant.AUTHORIZATION, null);
+        Cookie cookie = new Cookie(HttpRequestHeader.AUTHORIZATION, null);
         cookie.setPath("/");
         cookie.setHttpOnly(false);
         cookie.setMaxAge(0);
@@ -52,7 +52,7 @@ public final class WebCookie {
             return null;
         }
         Cookie cookie = Stream.of(cookies)
-                .filter(e -> WebConstant.AUTHORIZATION.equals(e.getName()))
+                .filter(e -> HttpRequestHeader.AUTHORIZATION.equals(e.getName()))
                 .findFirst()
                 .orElse(null);
 
