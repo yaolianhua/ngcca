@@ -7,6 +7,7 @@ import io.hotcloud.service.security.jwt.JwtConfiguration;
 import io.hotcloud.service.security.jwt.JwtProperties;
 import io.hotcloud.service.security.jwt.JwtVerifier;
 import io.hotcloud.service.security.oauth2.GithubOauth2AuthenticationSuccessHandler;
+import io.hotcloud.service.security.oauth2.Oauth2AuthenticationFailureHandler;
 import io.hotcloud.service.security.oauth2.Oauth2AuthenticationSuccessHandler;
 import io.hotcloud.service.security.oauth2.Oauth2GithubProperties;
 import io.hotcloud.service.security.user.UserApi;
@@ -75,7 +76,10 @@ public class SecurityConfiguration {
         //enable basic auth
         http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(new Http401UnauthorizedEntryPoint()));
         //enable oauth2
-        http.oauth2Login(oauth2 -> oauth2.successHandler(new Oauth2AuthenticationSuccessHandler(githubOauth2AuthenticationSuccessHandler)));
+        http.oauth2Login(
+                oauth2 -> oauth2.successHandler(new Oauth2AuthenticationSuccessHandler(githubOauth2AuthenticationSuccessHandler))
+                        .failureHandler(new Oauth2AuthenticationFailureHandler())
+        );
 
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().authenticated());
 
