@@ -2,9 +2,12 @@ package io.hotcloud.service.security.oauth2;
 
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
+import io.hotcloud.service.security.SecurityCookie;
+import io.hotcloud.service.security.login.BearerToken;
+import io.hotcloud.service.security.login.LoginApi;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
-import io.hotcloud.service.security.user.UserSocialSource;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -17,9 +20,11 @@ import java.util.Objects;
 public class GithubOauth2AuthenticationSuccessHandler {
 
     private final UserApi userApi;
+    private final LoginApi loginApi;
 
-    public GithubOauth2AuthenticationSuccessHandler(UserApi userApi) {
+    public GithubOauth2AuthenticationSuccessHandler(UserApi userApi, LoginApi loginApi) {
         this.userApi = userApi;
+        this.loginApi = loginApi;
     }
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -35,10 +40,13 @@ public class GithubOauth2AuthenticationSuccessHandler {
         }
 
         try {
-            response.sendRedirect("/login?username=" + username + "&password=" + UserSocialSource.DEFAULT_PASSWORD);
-            Log.info(this, githubUser, Event.NORMAL, "[github] social login redirect login");
+            BearerToken bearerToken = loginApi.basicLogin(username, githubUser.getPassword());
+            Cookie cookie = SecurityCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
+            response.addCookie(cookie);
+            response.sendRedirect("/index");
+            Log.info(this, githubUser, Event.NORMAL, "[github] social login success");
         } catch (IOException e) {
-            Log.error(this, githubUser, Event.EXCEPTION, "[github] social login redirect login failure");
+            Log.error(this, githubUser, Event.EXCEPTION, "[github] social login login failure");
         }
     }
 
