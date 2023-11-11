@@ -1,19 +1,19 @@
 package io.hotcloud.service.security;
 
+import io.hotcloud.common.log.Event;
+import io.hotcloud.common.log.Log;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.stream.Stream;
 
-@Slf4j
-public final class WebCookie {
+public final class SecurityCookie {
 
-    private WebCookie() {
+    private SecurityCookie() {
     }
 
     public static Cookie generateAuthorizationCookie(String authorization) {
@@ -42,13 +42,13 @@ public final class WebCookie {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
         if (servletRequestAttributes == null) {
-            log.warn("[WebCookie] servletRequestAttributes is null");
+            Log.warn(SecurityCookie.class.getName(), null, Event.NORMAL, "servletRequestAttributes is null");
             return null;
         }
         HttpServletRequest request = servletRequestAttributes.getRequest();
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            log.warn("[WebCookie] cookie is null");
+            Log.warn(SecurityCookie.class.getName(), null, Event.NORMAL, "get cookie from request is null");
             return null;
         }
         Cookie cookie = Stream.of(cookies)

@@ -1,6 +1,6 @@
 package io.hotcloud.web.mvc;
 
-import io.hotcloud.service.security.WebCookie;
+import io.hotcloud.service.security.SecurityCookie;
 import io.hotcloud.service.security.jwt.JwtVerifier;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
@@ -44,7 +44,7 @@ public class GlobalSessionAspect {
     private Object around(ProceedingJoinPoint point) throws Throwable {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
+        String authorization = SecurityCookie.retrieveCurrentHttpServletRequestAuthorization();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
         if (!StringUtils.hasText(authorization)) {
             if (request.getRequestURI().startsWith(PREFIX_ADMIN)) {

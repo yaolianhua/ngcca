@@ -2,7 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
-import io.hotcloud.service.security.WebCookie;
+import io.hotcloud.service.security.SecurityCookie;
 import io.hotcloud.service.security.login.BearerToken;
 import io.hotcloud.service.security.login.LoginApi;
 import io.hotcloud.service.security.user.User;
@@ -51,7 +51,7 @@ public class AdministratorLoginLogoutViewsController {
                 model.addAttribute(WebConstant.MESSAGE, "non-admin account");
                 return AdminViews.ADMIN_LOGIN;
             } else {
-                Cookie cookie = WebCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
+                Cookie cookie = SecurityCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
                 response.addCookie(cookie);
                 return AdminViews.REDIRECT_ADMIN_INDEX;
             }
@@ -68,7 +68,7 @@ public class AdministratorLoginLogoutViewsController {
                               HttpServletResponse response,
                               @CookieUser User user) {
         try {
-            WebCookie.removeAuthorizationCookie(request, response);
+            SecurityCookie.removeAuthorizationCookie(request, response);
         } catch (Exception e) {
             //
         }

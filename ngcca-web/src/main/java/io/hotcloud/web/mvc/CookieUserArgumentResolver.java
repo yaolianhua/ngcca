@@ -1,6 +1,6 @@
 package io.hotcloud.web.mvc;
 
-import io.hotcloud.service.security.WebCookie;
+import io.hotcloud.service.security.SecurityCookie;
 import io.hotcloud.service.security.jwt.JwtVerifier;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.security.user.UserApi;
@@ -38,7 +38,7 @@ public class CookieUserArgumentResolver implements HandlerMethodArgumentResolver
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = WebCookie.retrieveCurrentHttpServletRequestAuthorization();
+        String authorization = SecurityCookie.retrieveCurrentHttpServletRequestAuthorization();
         if (!jwtVerifier.valid(authorization)) {
             log.warn("Resolve web user failed. get authorization null from cookie");
             return null;

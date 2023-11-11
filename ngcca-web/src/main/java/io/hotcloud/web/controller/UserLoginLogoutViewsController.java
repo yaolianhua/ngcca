@@ -2,7 +2,7 @@ package io.hotcloud.web.controller;
 
 import io.hotcloud.common.model.activity.Action;
 import io.hotcloud.common.model.activity.Target;
-import io.hotcloud.service.security.WebCookie;
+import io.hotcloud.service.security.SecurityCookie;
 import io.hotcloud.service.security.login.BearerToken;
 import io.hotcloud.service.security.login.LoginApi;
 import io.hotcloud.service.security.user.User;
@@ -44,7 +44,7 @@ public class UserLoginLogoutViewsController {
                         @ModelAttribute("password") String password) {
         try {
             BearerToken bearerToken = loginApi.basicLogin(username, password);
-            Cookie cookie = WebCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
+            Cookie cookie = SecurityCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
             response.addCookie(cookie);
 
             return UserViews.REDIRECT_INDEX;
@@ -62,7 +62,7 @@ public class UserLoginLogoutViewsController {
                               HttpServletResponse response,
                               @CookieUser User user) {
         try {
-            WebCookie.removeAuthorizationCookie(request, response);
+            SecurityCookie.removeAuthorizationCookie(request, response);
         } catch (Exception e) {
             //
         }
