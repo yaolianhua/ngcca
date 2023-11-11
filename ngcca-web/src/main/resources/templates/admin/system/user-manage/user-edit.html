@@ -8,13 +8,15 @@
                             <h3 class="card-title">编辑用户</h3>
                         </div>
                         <form id="user-edit-form">
-                            <div class="card-body">
+                            <div class="card-body box-profile">
                                 <input name="id" th:value="${user.id}" type="hidden">
-                                <div class="form-group">
-                                    <label for="username">用户名</label>
-                                    <input class="form-control" id="username" name="username" readonly
-                                           th:value="${user.username}" type="text">
+                                <div class="text-center">
+                                    <img alt="User profile picture"
+                                         class="profile-user-img img-fluid img-circle"
+                                         th:src="${user.avatar}">
                                 </div>
+                                <h3 class="profile-username text-center" th:text="${user.username}"></h3>
+
                                 <div class="form-group">
                                     <label for="nickname">昵称</label>
                                     <input class="form-control" id="nickname" name="nickname"

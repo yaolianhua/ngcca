@@ -86,15 +86,6 @@ function userEditPage(e) {
     });
 }
 
-//user detail view
-function userDetailPage(e) {
-    let id = $(e).data("user-id");
-    let username = $(e).data("username");
-    $('#users-fragment').load(USER_DETAIL_VIEWS + id, function () {
-        dropzone(username);
-    });
-}
-
 //user list
 function usersPage() {
     $('#users-fragment').load(USER_LIST_VIEWS, function () {

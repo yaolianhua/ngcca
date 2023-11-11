@@ -10,7 +10,6 @@ import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
 import io.hotcloud.web.service.ActivityQuery;
-import io.hotcloud.web.service.StatisticsService;
 import io.hotcloud.web.views.AdminViews;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -41,7 +40,6 @@ public class AdministratorSystemManageViewsController {
     private final ActivityQuery activityQuery;
     private final SystemConfiguredEnvironmentQuery systemConfiguredEnvironmentQuery;
 
-    private final StatisticsService statisticsService;
     private final RegistryImageQueryService registryImageQueryService;
     private final TemplateDefinitionService templateDefinitionService;
 
@@ -71,20 +69,15 @@ public class AdministratorSystemManageViewsController {
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
             model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
-            return AdminViews.UserManage.USER_MANAGE_LIST_FRAGMENT;
+            return AdminViews.UserManage.USER_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_EDIT_FRAGMENT, action)) {
             model.addAttribute(WebConstant.USER, userApi.find(userid));
-            return AdminViews.UserManage.USER_MANAGE_EDIT_FRAGMENT;
-        }
-        if (Objects.equals(WebConstant.VIEW_DETAIL_FRAGMENT, action)) {
-            model.addAttribute(WebConstant.STATISTICS, statisticsService.getUserStatisticsFromCache(userid));
-            model.addAttribute(WebConstant.USER, userApi.find(userid));
-            return AdminViews.UserManage.USER_MANAGE_DETAIL_FRAGMENT;
+            return AdminViews.UserManage.USER_EDIT_FRAGMENT;
         }
 
         model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
-        return AdminViews.UserManage.USER_MANAGE;
+        return AdminViews.UserManage.USER_LIST;
     }
 
     @RequestMapping("/activities")

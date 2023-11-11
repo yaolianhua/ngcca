@@ -26,10 +26,9 @@ public final class AdminViews {
     public static final String ADMIN_ACTIVITY_LIST = "admin/system/activity-list";
 
     public static final class UserManage {
-        public static final String USER_MANAGE_LIST_FRAGMENT = "admin/system/user-manage/user-list::content";
-        public static final String USER_MANAGE_EDIT_FRAGMENT = "admin/system/user-manage/user-edit::content";
-        public static final String USER_MANAGE_DETAIL_FRAGMENT = "admin/system/user-manage/user-detail::content";
-        public static final String USER_MANAGE = "admin/system/user-manage/user-manage";
+        public static final String USER_LIST_FRAGMENT = "admin/system/user-manage/user-list::content";
+        public static final String USER_EDIT_FRAGMENT = "admin/system/user-manage/user-edit::content";
+        public static final String USER_LIST = "admin/system/user-manage/user-list";
 
         private UserManage() {
         }
