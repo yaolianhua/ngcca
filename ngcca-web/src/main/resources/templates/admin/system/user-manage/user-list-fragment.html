@@ -19,6 +19,7 @@
                             <th>手机号</th>
                             <th>邮箱地址</th>
                             <th>用户状态</th>
+                            <th>用户来源</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>用户操作</th>
@@ -31,6 +32,7 @@
                             <td th:text="${user.mobile}"></td>
                             <td th:text="${user.email}"></td>
                             <td th:text="${user.enabled} ? '已激活' : '已禁用'"></td>
+                            <th th:text="${#strings.isEmpty(user.social) ? '后台' : user.social}"></th>
                             <td th:text="${user.createdAt}"></td>
                             <td th:text="${user.modifiedAt}"></td>
                             <td class="project-actions text-center">
