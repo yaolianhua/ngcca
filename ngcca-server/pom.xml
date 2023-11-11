@@ -48,18 +48,6 @@
             </exclusions>
         </dependency>
 
-        <!-- javafaker -->
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
