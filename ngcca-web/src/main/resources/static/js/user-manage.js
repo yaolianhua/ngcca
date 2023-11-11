@@ -1,10 +1,9 @@
 //初始化常量
 const USER_LIST_VIEWS = "/administrator/system/user-manage?action=list";
 const USER_EDIT_VIEWS = "/administrator/system/user-manage?action=edit&id=";
-const USER_DETAIL_VIEWS = "/administrator/system/user-manage?action=detail&id=";
 
 $(function () {
-    userPaging();
+    userlistpage();
     toastr.options = {
         "timeOut": "3000"
     };
@@ -19,7 +18,7 @@ const swal = Swal.mixin({
 })
 
 //dataTable init
-function userPaging() {
+function userlistpage() {
     $('#user-list').DataTable({
         "paging": true,
         "lengthChange": false,
@@ -32,7 +31,7 @@ function userPaging() {
 }
 
 //user save
-function userSave() {
+function saveuser() {
     let data = {};
     let value = $('#user-form').serializeArray();
     $.each(value, function (index, item) {
@@ -55,8 +54,8 @@ function userSave() {
     });
 }
 
-//user edit
-function userEditSave() {
+//user edit save
+function submituseredit() {
     let data = {};
     let value = $('#user-edit-form').serializeArray();
     $.each(value, function (index, item) {
@@ -79,7 +78,7 @@ function userEditSave() {
 }
 
 //user edit view
-function userEditPage(e) {
+function usereditpage(e) {
     let id = $(e).data("user-id");
     $('#users-fragment').load(USER_EDIT_VIEWS + id, function () {
 
@@ -87,14 +86,14 @@ function userEditPage(e) {
 }
 
 //user list
-function usersPage() {
+function userlist() {
     $('#users-fragment').load(USER_LIST_VIEWS, function () {
-        userPaging();
+        userlistpage();
     });
 }
 
 //user delete
-function userDelete(e) {
+function deleteuser(e) {
     let id = $(e).data("user-id");
     swal.fire({
         title: '确认删除?',
@@ -122,8 +121,8 @@ function userDelete(e) {
     })
 }
 
-//user on
-function userOn(e) {
+//user enable
+function enableuser(e) {
     let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/true')
         .then(response => {
@@ -137,8 +136,8 @@ function userOn(e) {
         });
 }
 
-//user off
-function userOff(e) {
+//user disable
+function disableuser(e) {
     let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/false')
         .then(response => {

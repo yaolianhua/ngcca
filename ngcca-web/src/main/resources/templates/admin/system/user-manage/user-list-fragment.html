@@ -25,7 +25,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="user: ${page.data}">
+                        <tr th:each="user: ${collection}">
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.nickname}"></td>
                             <td th:text="${user.mobile}"></td>
@@ -35,24 +35,24 @@
                             <td th:text="${user.modifiedAt}"></td>
                             <td class="project-actions text-center">
                                 <button class="btn btn-info btn-sm"
-                                        onclick="userEditPage(this)"
+                                        onclick="usereditpage(this)"
                                         th:data-user-id="${user.id}">
                                     <i class="fas fa-pencil-alt"></i>编辑
                                 </button>
                                 <button class="btn btn-default btn-sm"
-                                        onclick="userOn(this)"
+                                        onclick="enableuser(this)"
                                         th:data-username="${user.username}"
                                         th:style="${user.enabled} ? 'display: none' : ''"><i
                                         class="fas fa-bell"></i>激活
                                 </button>
                                 <button class="btn btn-warning btn-sm"
-                                        onclick="userOff(this)"
+                                        onclick="disableuser(this)"
                                         th:data-username="${user.username}"
                                         th:style="${user.enabled} ? '' : 'display: none'"><i
                                         class="fas fa-bell-slash"></i>禁用
                                 </button>
                                 <button class="btn btn-danger btn-sm"
-                                        onclick="userDelete(this)"
+                                        onclick="deleteuser(this)"
                                         th:data-user-id="${user.id}">
                                     <i class="fas fa-trash"></i>删除
                                 </button>

@@ -68,7 +68,7 @@ public class AdministratorSystemManageViewsController {
                         @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "enabled", required = false) Boolean enabled) {
         if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
-            model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+            model.addAttribute(WebConstant.COLLECTION, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)).getData());
             return AdminViews.UserManage.USER_LIST_FRAGMENT;
         }
         if (Objects.equals(WebConstant.VIEW_EDIT_FRAGMENT, action)) {
@@ -76,7 +76,7 @@ public class AdministratorSystemManageViewsController {
             return AdminViews.UserManage.USER_EDIT_FRAGMENT;
         }
 
-        model.addAttribute(WebConstant.PAGE, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)));
+        model.addAttribute(WebConstant.COLLECTION, userCollectionQuery.pagingQuery(username, enabled, Pageable.of(1, Integer.MAX_VALUE)).getData());
         return AdminViews.UserManage.USER_LIST;
     }
 
