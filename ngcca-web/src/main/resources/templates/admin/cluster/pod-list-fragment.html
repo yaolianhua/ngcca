@@ -8,7 +8,7 @@
             <th style="width: 10%">
                 命名空间
             </th>
-            <th style="width: 10%">
+            <th style="width: 5%">
                 Pod状态
             </th>
             <th style="width: 12%">
@@ -23,8 +23,11 @@
             <th style="width: 10%">
                 节点名称
             </th>
-            <th style="width: 10%">
+            <th style="width: 5%">
                 集群名称
+            </th>
+            <th style="width: 10%">
+                创建时间
             </th>
             <th style="width: 15%">
                 操作
@@ -60,6 +63,9 @@
             </td>
             <td>
                 <a class="badge badge-secondary" th:text="${podmetrics.cluster.name}"></a>
+            </td>
+            <td>
+                <a th:text="${podmetrics.refNode.ip}"></a>
             </td>
             <td>
                 <button class="btn btn-info"

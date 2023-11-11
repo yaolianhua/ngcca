@@ -105,6 +105,7 @@ public class PodMetricsQueryService {
                 PodMetrics podMetrics = PodMetrics.builder()
                         .namespace(namespace)
                         .pod(pod)
+                        .createTimestamp(podInfo.getMetadata().getCreationTimestamp())
                         .containers(containers)
                         .status(podInfo.getStatus().getPhase())
                         .refNode(refNode)

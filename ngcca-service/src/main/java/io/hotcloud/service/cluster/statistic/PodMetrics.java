@@ -27,6 +27,7 @@ public class PodMetrics implements Serializable {
     private KubernetesCluster cluster = new KubernetesCluster();
     @Builder.Default
     private Set<RefService> refServices = new HashSet<>();
+    private String createTimestamp;
     private long cpuMilliCoresUsage;
     private long memoryMegabyteUsage;
 
