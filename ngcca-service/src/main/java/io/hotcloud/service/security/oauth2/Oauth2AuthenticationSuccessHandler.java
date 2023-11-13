@@ -14,9 +14,11 @@ import java.util.Objects;
 public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final GithubOauth2AuthenticationSuccessHandler githubOauth2AuthenticationSuccessHandler;
+    private final GitlabOauth2AuthenticationSuccessHandler gitlabOauth2AuthenticationSuccessHandler;
 
-    public Oauth2AuthenticationSuccessHandler(GithubOauth2AuthenticationSuccessHandler githubOauth2AuthenticationSuccessHandler) {
+    public Oauth2AuthenticationSuccessHandler(GithubOauth2AuthenticationSuccessHandler githubOauth2AuthenticationSuccessHandler, GitlabOauth2AuthenticationSuccessHandler gitlabOauth2AuthenticationSuccessHandler) {
         this.githubOauth2AuthenticationSuccessHandler = githubOauth2AuthenticationSuccessHandler;
+        this.gitlabOauth2AuthenticationSuccessHandler = gitlabOauth2AuthenticationSuccessHandler;
     }
 
     @Override
@@ -24,6 +26,10 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
         if (Objects.equals(UserSocialSource.GITHUB, oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
             githubOauth2AuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
+        }
+
+        if (Objects.equals(UserSocialSource.GITLAB, oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
+            gitlabOauth2AuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
         }
     }
 }

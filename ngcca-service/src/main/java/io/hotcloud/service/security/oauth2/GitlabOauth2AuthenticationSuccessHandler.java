@@ -17,12 +17,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.io.IOException;
 import java.util.Objects;
 
-public class GithubOauth2AuthenticationSuccessHandler {
+public class GitlabOauth2AuthenticationSuccessHandler {
 
     private final UserApi userApi;
     private final LoginApi loginApi;
 
-    public GithubOauth2AuthenticationSuccessHandler(UserApi userApi, LoginApi loginApi) {
+    public GitlabOauth2AuthenticationSuccessHandler(UserApi userApi, LoginApi loginApi) {
         this.userApi = userApi;
         this.loginApi = loginApi;
     }
@@ -31,22 +31,22 @@ public class GithubOauth2AuthenticationSuccessHandler {
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User principal = oAuth2AuthenticationToken.getPrincipal();
 
-        String username = Oauth2Helper.obtainGithubUsernameOrGenerate(principal);
-        User githubUser = Oauth2Helper.buildGithubUser(principal);
+        String username = Oauth2Helper.obtainGitlabUsernameOrGenerate(principal);
+        User gitlabUser = Oauth2Helper.buildGitlabUser(principal);
         User databaseUser = userApi.retrieve(username);
         if (Objects.isNull(databaseUser)) {
-            userApi.save(githubUser);
-            Log.info(this, githubUser, Event.NORMAL, "[github] social login. saved database user");
+            userApi.save(gitlabUser);
+            Log.info(this, gitlabUser, Event.NORMAL, "[gitlab] social login. saved database user");
         }
 
         try {
-            BearerToken bearerToken = loginApi.basicLogin(username, githubUser.getPassword());
+            BearerToken bearerToken = loginApi.basicLogin(username, gitlabUser.getPassword());
             Cookie cookie = SecurityCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
             response.addCookie(cookie);
             response.sendRedirect("/index");
-            Log.info(this, githubUser, Event.NORMAL, "[github] social login success");
+            Log.info(this, gitlabUser, Event.NORMAL, "[gitlab] social login success");
         } catch (IOException e) {
-            Log.error(this, githubUser, Event.EXCEPTION, "[github] social login failure: " + e.getMessage());
+            Log.error(this, gitlabUser, Event.EXCEPTION, "[gitlab] social login failure: " + e.getMessage());
         }
     }
 
