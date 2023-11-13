@@ -38,7 +38,7 @@ public final class Validator {
         return valid;
     }
 
-    final static Pattern USERNAME_PATTERN = Pattern.compile("^[a-z][a-z0-9]{4,15}$");
+    final static Pattern USERNAME_PATTERN = Pattern.compile("^[a-z][a-z0-9]{4,45}$");
 
     public static boolean validUsername(String username) {
         Assert.hasText(username, "username is null");

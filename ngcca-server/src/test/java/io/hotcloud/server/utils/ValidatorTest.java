@@ -76,7 +76,7 @@ class ValidatorTest {
     static Stream<String> invalidUsernameProvider() {
         return Stream.of(
                 "jack",      //length
-                "adminjasonsmihthy", //length
+                "adminjasonsmihthyadminjasonsmihthyadminjasonsmihthyadminjasonsmihthy", //length
                 "Admin",
                 "jason@",
                 "123smith123",
