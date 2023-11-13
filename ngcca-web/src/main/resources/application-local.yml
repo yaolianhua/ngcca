@@ -31,9 +31,9 @@ ngcca:
     #    port: 1400
     domain-name: k8s-agent.vps.tencent
   web-server:
-    host: localhost
-    port: 4000
-    endpoint:
+    host:
+    port:
+    endpoint: http://localhost:4000
   application:
     dot-suffix-domain: ".vps.linux"
     deployment-timeout-second: 7200
@@ -59,6 +59,10 @@ ngcca:
       github:
         client-id: "241c6168a7efeaf852ba"
         client-secret: "b3f98e25f25aa0807a0bc49c126178a11417e046"
+      gitlab:
+        client-id: "7a8680a3321f9ef21ce05f1746bb50a15ba8240818794f3e222af902043306d5"
+        client-secret: "gloas-b962f886b24167b29f177d95d0fde8326c3ce45f3bb3e6b6650ee734a6905878"
+        redirect-uri: "${ngcca.web-server.endpoint}/login/oauth2/code/gitlab"
   buildpack:
     build-timeout-second: 3600
 logging:
