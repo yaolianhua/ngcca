@@ -11,6 +11,9 @@ import java.util.Objects;
 
 public class Oauth2Helper {
 
+    private Oauth2Helper() {
+    }
+
     public static String obtainGithubUsernameOrGenerate(OAuth2User oAuth2User) {
         Object login = oAuth2User.getAttribute("login");
 
@@ -19,7 +22,7 @@ public class Oauth2Helper {
         }
         Faker faker = new Faker();
         String usernameWithDot = faker.name().username();
-        return usernameWithDot.replaceAll("\\.", "");
+        return usernameWithDot.replace(".", "");
     }
 
     public static User buildGithubUser(OAuth2User oAuth2User) {
