@@ -19,6 +19,6 @@ public class Oauth2GithubProperties {
 
     @PostConstruct
     public void print() {
-        Log.info(this, this, Event.START, "load security oauth2 [github] properties ");
+        Log.info(this, this, Event.START, "[github] load security oauth2 properties ");
     }
 }

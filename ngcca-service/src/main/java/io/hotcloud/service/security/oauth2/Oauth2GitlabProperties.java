@@ -20,6 +20,6 @@ public class Oauth2GitlabProperties {
 
     @PostConstruct
     public void print() {
-        Log.info(this, this, Event.START, "load security oauth2 [gitlab] properties ");
+        Log.info(this, this, Event.START, "[gitlab] load security oauth2 properties ");
     }
 }
