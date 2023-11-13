@@ -45,7 +45,7 @@ public class UserService implements UserApi {
         Assert.hasText(user.getUsername(), "username is null");
         Assert.hasText(user.getPassword(), "password is null");
 
-        Assert.state(Validator.validUsername(user.getUsername()), "username must be start with a lowercase letter and contain lowercase letters and numbers only! [5-16] characters");
+        Assert.state(Validator.validUsername(user.getUsername()), "illegal username: " + Validator.USERNAME_PATTERN.pattern());
         Assert.isTrue(!exist(user.getUsername()), "username [" + user.getUsername() + "] already exist!");
 
         UserEntity entity = (UserEntity) new UserEntity().toE(user);

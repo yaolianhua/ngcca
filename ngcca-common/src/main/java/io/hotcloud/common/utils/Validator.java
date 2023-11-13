@@ -38,14 +38,14 @@ public final class Validator {
         return valid;
     }
 
-    final static Pattern USERNAME_PATTERN = Pattern.compile("^[a-z][a-z0-9]{4,45}$");
+    public static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-z][a-z0-9]{4,45}$");
 
     public static boolean validUsername(String username) {
         Assert.hasText(username, "username is null");
         return USERNAME_PATTERN.matcher(username).matches();
     }
 
-    final static Pattern K8S_NAME_PATTERN = Pattern.compile("[a-z0-9]([-a-z0-9]*[a-z0-9])?");
+    public static final Pattern K8S_NAME_PATTERN = Pattern.compile("[a-z0-9]([-a-z0-9]*[a-z0-9])?");
     public static boolean validK8sName(String name){
         return K8S_NAME_PATTERN.matcher(name).matches();
     }
