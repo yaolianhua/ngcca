@@ -26,7 +26,8 @@ public class SecurityProperties {
             "/swagger**/**",
             "/v3/api-docs/**",
             "/favicon.ico",
-            "/pub"
+            "/pub",
+            "/**/login"
     );
 
     @PostConstruct
