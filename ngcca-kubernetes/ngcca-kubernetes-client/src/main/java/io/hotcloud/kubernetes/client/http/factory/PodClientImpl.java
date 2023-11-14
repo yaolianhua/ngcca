@@ -35,7 +35,7 @@ class PodClientImpl implements PodClient {
     public PodClientImpl(KubernetesAgentProperties clientProperties,
                          RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
+        uri = URI.create(clientProperties.getDefaultEndpoint() + API);
     }
 
     private URI getApiUri(String agent) {

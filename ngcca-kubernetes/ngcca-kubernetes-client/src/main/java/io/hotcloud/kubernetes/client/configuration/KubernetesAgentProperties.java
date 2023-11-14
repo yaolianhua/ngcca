@@ -4,26 +4,23 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 @ConfigurationProperties("ngcca.kubernetes-agent")
 @Slf4j
 @Data
 public class KubernetesAgentProperties {
 
-    private String host = "k8s-agent";
-    private Integer port = 1400;
-    private String domainName;
+    private String endpoint;
 
     @PostConstruct
     public void print() {
-        log.info("load kubernetes agent address '{}'", getAgentHttpUrl());
+        log.info("load default kubernetes-agent endpoint '{}'", getDefaultEndpoint());
     }
 
-    public String getAgentHttpUrl() {
-        if (StringUtils.hasText(domainName)) {
-            return String.format("http://%s", domainName);
-        }
-        return String.format("http://%s:%s", host, port);
+    public String getDefaultEndpoint() {
+        Assert.hasText(this.endpoint, "default kubernetes-agent endpoint is null");
+        Assert.isTrue(this.endpoint.startsWith("http://") || this.endpoint.startsWith("https://"), "endpoint missing protocol");
+        return this.endpoint;
     }
 }

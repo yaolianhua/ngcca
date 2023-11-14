@@ -15,21 +15,9 @@ ngcca:
     endpoint: "http://mid.vps-a.linux:9009"
   mongodb:
     uri: "mongodb://admin:QbMufCD%409WVQ^Hv@mid.vps-a.linux:27017/ngcca?authSource=admin"
-  openai:
-    api-key: no-key
-    http-proxy:
-      hostname: localhost
-      port: 0
-    http-client-timeout-seconds: 60
-  docker:
-    host: "tcp://mid.vps-a.linux:2375"
-    pull-timeout-seconds: 300
-    push-timeout-seconds: 300
 
   kubernetes-agent:
-    #    host: localhost
-    #    port: 1400
-    domain-name: k8s-agent.vps.tencent
+    endpoint: http://k8s-agent.vps.tencent
   web-server:
     host:
     port:

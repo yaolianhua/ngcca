@@ -24,7 +24,7 @@ public class PlatformDefaultClusterInitializeProcessor implements RunnerProcesso
         KubernetesClusterRequestCreateParameter parameter = new KubernetesClusterRequestCreateParameter();
         parameter.setId(CommonConstant.DEFAULT_CLUSTER_ID);
         parameter.setName(CommonConstant.DEFAULT_CLUSTER_NAME);
-        parameter.setHttpEndpoint(kubernetesAgentProperties.getAgentHttpUrl());
+        parameter.setHttpEndpoint(kubernetesAgentProperties.getDefaultEndpoint());
 
         kubernetesClusterService.createOrUpdate(parameter);
         Log.info(this, null, Event.START, "platform default cluster record init success");

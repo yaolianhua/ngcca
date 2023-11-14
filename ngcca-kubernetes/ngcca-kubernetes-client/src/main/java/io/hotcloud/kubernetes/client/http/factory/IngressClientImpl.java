@@ -23,7 +23,7 @@ public class IngressClientImpl implements IngressClient {
 
     public IngressClientImpl(KubernetesAgentProperties clientProperties,
                              RestTemplate restTemplate) {
-        uri = URI.create(clientProperties.getAgentHttpUrl() + API);
+        uri = URI.create(clientProperties.getDefaultEndpoint() + API);
         this.restTemplate = restTemplate;
     }
 
