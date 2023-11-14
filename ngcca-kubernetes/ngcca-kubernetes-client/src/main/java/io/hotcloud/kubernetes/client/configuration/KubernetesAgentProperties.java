@@ -15,12 +15,12 @@ public class KubernetesAgentProperties {
 
     @PostConstruct
     public void print() {
+        Assert.hasText(this.endpoint, "default kubernetes-agent endpoint is null");
+        Assert.isTrue(this.endpoint.startsWith("http://") || this.endpoint.startsWith("https://"), "endpoint missing protocol");
         log.info("load default kubernetes-agent endpoint '{}'", getDefaultEndpoint());
     }
 
     public String getDefaultEndpoint() {
-        Assert.hasText(this.endpoint, "default kubernetes-agent endpoint is null");
-        Assert.isTrue(this.endpoint.startsWith("http://") || this.endpoint.startsWith("https://"), "endpoint missing protocol");
         return this.endpoint;
     }
 }

@@ -7,8 +7,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Objects;
+import org.springframework.util.Assert;
 
 import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 
@@ -18,21 +17,16 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Data
 public class WebServerProperties {
 
-    private String host = "web-server";
-    private Integer port = 4000;
-
     private String endpoint;
 
     public String getEndpoint() {
-        if (Objects.nonNull(endpoint) && !endpoint.isBlank()) {
-            return endpoint;
-        }
-
-        return String.format("http://%s:%s", host, port);
+        return this.endpoint;
     }
 
     @PostConstruct
     public void print() {
+        Assert.hasText(this.endpoint, "web server endpoint is null");
+        Assert.isTrue(this.endpoint.startsWith("http://") || this.endpoint.startsWith("https://"), "endpoint missing protocol");
         Log.info(this, this, Event.START, "load web server properties");
     }
 }

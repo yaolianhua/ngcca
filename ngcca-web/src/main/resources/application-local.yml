@@ -19,24 +19,15 @@ ngcca:
   kubernetes-agent:
     endpoint: http://k8s-agent.vps.tencent
   web-server:
-    host:
-    port:
     endpoint: http://localhost:4000
   application:
     dot-suffix-domain: ".vps.linux"
-    deployment-timeout-second: 7200
   security:
-    enabled: true
-    ignored-defaults:
-      - "/swagger**/**"
-      - "/v3/api-docs/**"
-      - "/favicon.ico"
-      - "/pub"
+    ignored-urls:
       - "/**/login"
       - "/plugins/**"
       - "/js/**"
       - "/dist/**"
-    ignored-urls:
       - "/index"
       - "/**/logout"
       - "/administrator/**"
@@ -51,8 +42,6 @@ ngcca:
         client-id: "7a8680a3321f9ef21ce05f1746bb50a15ba8240818794f3e222af902043306d5"
         client-secret: "gloas-b962f886b24167b29f177d95d0fde8326c3ce45f3bb3e6b6650ee734a6905878"
         redirect-uri: "${ngcca.web-server.endpoint}/login/oauth2/code/gitlab"
-  buildpack:
-    build-timeout-second: 3600
 logging:
   level:
     io.hotcloud.common.log: debug
