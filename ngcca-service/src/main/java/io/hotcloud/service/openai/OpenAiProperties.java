@@ -11,7 +11,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "openai")
 public class OpenAiProperties {
 
-    private String apiKey;
+    private String apiKey = "api-key";
     /**
      * Http proxy
      */
