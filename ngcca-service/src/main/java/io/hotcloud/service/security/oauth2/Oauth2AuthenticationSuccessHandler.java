@@ -3,6 +3,7 @@ package io.hotcloud.service.security.oauth2;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.service.security.SecurityCookie;
+import io.hotcloud.service.security.SecurityProperties;
 import io.hotcloud.service.security.login.BearerToken;
 import io.hotcloud.service.security.login.LoginApi;
 import io.hotcloud.service.security.user.User;
@@ -57,7 +58,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
         BearerToken bearerToken = loginApi.basicLogin(user.getUsername(), user.getPassword());
         Cookie cookie = SecurityCookie.generateAuthorizationCookie(bearerToken.getAuthorization());
         response.addCookie(cookie);
-        response.sendRedirect("/index");
+        response.sendRedirect(SecurityProperties.INDEX_PAGE);
 
     }
 }

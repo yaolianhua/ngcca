@@ -18,6 +18,7 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 public class SecurityProperties {
 
     public static final String SECURITY_ENABLED_PROPERTY = CONFIG_PREFIX + "security.enabled";
+    public static final String INDEX_PAGE = "/index";
     private boolean enabled = true;
 
     private Set<String> ignoredUrls = new HashSet<>();
