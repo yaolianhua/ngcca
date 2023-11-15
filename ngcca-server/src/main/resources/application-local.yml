@@ -16,7 +16,7 @@ ngcca:
   mongodb:
     uri: "mongodb://admin:QbMufCD%409WVQ^Hv@mid.vps-a.linux:27017/ngcca?authSource=admin"
   kubernetes-agent:
-    endpoint: k8s-agent.vps.tencent
+    endpoint: http://k8s-agent.vps.tencent
   application:
     dot-suffix-domain: ".vps.linux"
 logging:

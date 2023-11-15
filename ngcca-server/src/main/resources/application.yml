@@ -11,6 +11,27 @@ spring:
       auto-index-creation: true
       authentication-database: admin
       uri: ${ngcca.mongodb.uri}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${ngcca.security.oauth2.github.client-id}
+            client-secret: ${ngcca.security.oauth2.github.client-secret}
+          gitlab:
+            client-id: ${ngcca.security.oauth2.gitlab.client-id}
+            client-secret: ${ngcca.security.oauth2.gitlab.client-secret}
+            redirect-uri: ${ngcca.security.oauth2.gitlab.redirect-uri}
+            authorization-grant-type: "authorization_code"
+            scope:
+              - read_user
+        provider:
+          gitlab:
+            authorization-uri: "https://gitlab.com/oauth/authorize"
+            token-uri: "https://gitlab.com/oauth/token"
+            user-info-uri: "https://gitlab.com/api/v4/user"
+            user-name-attribute: "username"
+            jwk-set-uri: "https://gitlab.com/oauth/discovery/keys"
   cloud:
     compatibility-verifier:
       enabled: false
