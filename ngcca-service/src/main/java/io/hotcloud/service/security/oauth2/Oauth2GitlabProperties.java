@@ -14,9 +14,9 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "security.oauth2.gitlab")
 public class Oauth2GitlabProperties {
 
-    private String clientId;
-    private String clientSecret;
-    private String redirectUri;
+    private String clientId = "gitlabclientid";
+    private String clientSecret = "gitlabclientsecret";
+    private String redirectUri = "gitlabredirecturi";
 
     @PostConstruct
     public void print() {

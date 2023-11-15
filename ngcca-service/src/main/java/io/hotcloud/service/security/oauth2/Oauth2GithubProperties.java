@@ -14,8 +14,8 @@ import static io.hotcloud.common.model.CommonConstant.CONFIG_PREFIX;
 @Properties(prefix = CONFIG_PREFIX + "security.oauth2.github")
 public class Oauth2GithubProperties {
 
-    private String clientId;
-    private String clientSecret;
+    private String clientId = "githubclientid";
+    private String clientSecret = "githubclientsecret";
 
     @PostConstruct
     public void print() {
