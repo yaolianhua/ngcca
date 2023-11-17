@@ -1,6 +1,7 @@
 package io.hotcloud.db.entity;
 
 import io.hotcloud.db.AbstractEntity;
+import io.hotcloud.db.model.ApplicationInstanceResource;
 import io.hotcloud.db.model.ApplicationInstanceSource;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +52,8 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private Integer replicas = 1;
     @Builder.Default
     private Map<String, String> envs = new HashMap<>();
+    @Builder.Default
+    private ApplicationInstanceResource resource = new ApplicationInstanceResource();
 
     private boolean success;
     private String message;

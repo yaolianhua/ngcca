@@ -88,6 +88,7 @@ public class ApplicationInstanceParameterCheckerImpl implements ApplicationInsta
                 .createdAt(Instant.now())
                 .targetPorts(String.valueOf(applicationForm.getServerPort()))
                 .envs(applicationForm.getEnvs())
+                .resource(applicationForm.getResource())
                 .build();
     }
 }

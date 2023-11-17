@@ -170,8 +170,8 @@ class ApplicationInstanceDeploymentProcessor {
         }
         container.setPorts(ports);
         Resources resources = new Resources();
-        resources.setRequests(Map.of("cpu", "100m", "memory", "128Mi"));
-        resources.setLimits(Map.of("cpu", "1000m", "memory", "4096Mi"));
+        resources.setRequests(Map.of("cpu", applicationInstance.getResource().getRequests().getCpu(), "memory", applicationInstance.getResource().getRequests().getMemory()));
+        resources.setLimits(Map.of("cpu", applicationInstance.getResource().getLimits().getCpu(), "memory", applicationInstance.getResource().getLimits().getMemory()));
         container.setResources(resources);
 
 

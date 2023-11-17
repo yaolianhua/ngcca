@@ -105,6 +105,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
         ApplicationInstanceEntity entity = (ApplicationInstanceEntity) new ApplicationInstanceEntity().toE(applicationInstance);
         entity.setEnvs(applicationInstance.getEnvs());
         entity.setSource(applicationInstance.getSource());
+        entity.setResource(applicationInstance.getResource());
         entity.setCreatedAt(Instant.now());
 
         ApplicationInstanceEntity saved = applicationInstanceRepository.save(entity);
@@ -142,6 +143,7 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceServic
                 .source(entity.getSource())
                 .yaml(entity.getYaml())
                 .envs(entity.getEnvs())
+                .resource(entity.getResource())
                 .message(entity.getMessage())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())

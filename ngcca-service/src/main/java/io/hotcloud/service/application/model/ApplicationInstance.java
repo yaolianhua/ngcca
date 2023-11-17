@@ -1,5 +1,6 @@
 package io.hotcloud.service.application.model;
 
+import io.hotcloud.db.model.ApplicationInstanceResource;
 import io.hotcloud.db.model.ApplicationInstanceSource;
 import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,8 @@ public class ApplicationInstance implements Serializable {
     private Integer replicas = 1;
     @Builder.Default
     private Map<String, String> envs = new HashMap<>();
+    @Builder.Default
+    private ApplicationInstanceResource resource = new ApplicationInstanceResource();
 
     private boolean success;
     private String message;
