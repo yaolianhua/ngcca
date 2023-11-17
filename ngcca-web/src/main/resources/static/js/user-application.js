@@ -1,5 +1,6 @@
 //初始化常量
 const APPLICATION_API = "/v1/applications/instance";
+const REGISTRY_SEARCH_API = "/v1/registries";
 const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;
@@ -32,6 +33,82 @@ const swal = Swal.mixin({
     buttonsStyling: false
 })
 
+function togglediv() {
+    let value = $('#select-source-origin').val();
+    if (value === "JAR" || value === "WAR") {
+        $('#search-repository-div').css("display", "none");
+        $('#upload-package-div').css("display", "block");
+    }
+    if (value === "IMAGE") {
+        $('#upload-package-div').css("display", "none");
+        $('#search-repository-div').css("display", "block");
+    }
+
+    if (value === "SOURCE_CODE") {
+        $('#upload-package-div').css("display", "none");
+        $('#search-repository-div').css("display", "none");
+    }
+}
+
+function searchrepositories(e) {
+    let url = $(e).data("registry-endpoint");
+    let username = $(e).data("registry-username");
+    let password = $(e).data("registry-password");
+    let key = $('#search-repository').val();
+    let requestUri = REGISTRY_SEARCH_API + "/harbor/repositories?registry=" + url + "&username=" + username + "&password=" + password + "&q=" + key + "&page=1&pageSize=30";
+
+    $('#modal-select-repository').modal('show');
+    axios.get(requestUri)
+        .then(response => {
+            $('#selected-repository').empty();
+            $('#selected-repository').append($('<option>', {
+                disabled: true,
+                selected: true,
+                text: "请选择"
+            }));
+            $.each(response.data.data, function (index, item) {
+                $('#selected-repository').append($('<option>', {
+                    value: item.name,
+                    text: item.name
+                }));
+            })
+        })
+        .catch(error => {
+            fail(error);
+        });
+}
+
+function triggersearchrepositorytag(e) {
+    let url = $('#search-repository-button').data("registry-endpoint");
+    let username = $('#search-repository-button').data("registry-username");
+    let password = $('#search-repository-button').data("registry-password");
+    let repositoryname = $(e).val();
+    let requestUri = REGISTRY_SEARCH_API + "/harbor/tags?registry=" + url + "&username=" + username + "&password=" + password + "&repository=" + repositoryname + "&page=1&pageSize=30";
+    axios.get(requestUri)
+        .then(response => {
+            $('#selected-repository-tag').empty();
+            $('#selected-repository-tag').append($('<option>', {
+                disabled: true,
+                selected: true,
+                text: "请选择"
+            }));
+            $.each(response.data.data, function (index, item) {
+                $('#selected-repository-tag').append($('<option>', {
+                    value: item.imageName,
+                    text: item.tag
+                }));
+            })
+        })
+        .catch(error => {
+            fail(error);
+        });
+}
+
+function choosedrepository() {
+    $('#modal-select-repository').modal('hide');
+    let imagename = $('#selected-repository-tag').val();
+    $('#http-url').val(imagename);
+}
 function showapplicationyaml(e) {
     let id = $(e).data("application-id");
     $('#modal-codemirror-yaml').modal('show');

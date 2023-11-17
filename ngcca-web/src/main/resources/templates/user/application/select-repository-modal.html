@@ -1,0 +1,44 @@
+<div class="modal fade" id="modal-select-repository">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">选择镜像</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="selected-repository">名称</label>
+                            <select class="form-control select2bs4" id="selected-repository"
+                                    onchange="triggersearchrepositorytag(this)"
+                                    style="width: 100%;">
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="selected-repository-tag">标签</label>
+                            <select class="form-control select2bs4" id="selected-repository-tag"
+                                    style="width: 100%;">
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-info" onclick="choosedrepository()" type="submit">确定</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- /.modal-dialog -->
+</div>

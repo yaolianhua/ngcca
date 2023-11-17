@@ -15,7 +15,9 @@
             <div class="form-group">
                 <label for="select-source-origin">构建源<small
                         style="color: red;">*</small></label>
-                <select class="form-control select2bs4" id="select-source-origin"
+                <select class="form-control select2bs4"
+                        id="select-source-origin"
+                        onchange="togglediv()"
                         style="width: 100%;">
                     <option disabled selected>请选择</option>
                     <option value="IMAGE">镜像</option>
@@ -24,7 +26,7 @@
                     <option value="SOURCE_CODE">源代码</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="upload-package-div" style="display: none">
                 <label for="upload-java-package">上传文件<small style="color: red;">（仅支持Java应用二进制包，.jar/.war。待文件上传完成后再进行下一步操作，文件上传成功后会回填链接地址到源地址输入框中）</small></label>
                 <div class="input-group">
                     <div class="custom-file">
@@ -37,6 +39,24 @@
                         <span class="input-group-text" onclick="uploadjavapackage()" type="submit">Upload</span>
                     </div>
                 </div>
+            </div>
+            <div class="form-group" id="search-repository-div" style="display: none">
+                <label for="search-repository">镜像搜索</label>
+                <div class="input-group">
+                    <input class="form-control form-control-lg" id="search-repository" placeholder="镜像关键字"
+                           type="search">
+                    <div class="input-group-append">
+                        <button class="btn btn-lg btn-default"
+                                id="search-repository-button"
+                                onclick="searchrepositories(this)"
+                                th:data-registry-endpoint="${registryproperties.endpoint}"
+                                th:data-registry-password="${registryproperties.password}"
+                                th:data-registry-username="${registryproperties.username}" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
             <div class="form-group">
                 <label for="http-url">源地址<small
