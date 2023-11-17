@@ -45,4 +45,11 @@ public class SystemRegistryProperties {
         Assert.hasText(imagebuildNamespace, "Registry imagebuild namespace is null");
         Log.info(this, this, Event.START, "load system registry properties");
     }
+
+    public String getEndpoint() {
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url;
+        }
+        return "http://" + url;
+    }
 }
