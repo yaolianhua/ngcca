@@ -1,3 +1,4 @@
+
 $(function () {
     pagelist();
 });
@@ -36,7 +37,8 @@ function activityempty() {
         if (result.isConfirmed) {
             axios.delete(ACTIVITY_API)
                 .then(response => {
-                    window.location.href = "/administrator/system/activities";
+                    window.location.href = ACTIVITY_VIEWS;
+                    ok(response);
                 })
                 .catch(error => {
                     fail(error);

@@ -31,6 +31,7 @@ function submittemplatedeploy() {
     axios.post(TEMPLATE_INSTANCE_API + "?template=" + template + "&clusterId=" + clusterid)
         .then(response => {
             window.location.href = "/user/template-instance";
+            ok(response);
         })
         .catch(error => {
             fail(error);

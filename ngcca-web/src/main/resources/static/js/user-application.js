@@ -1,7 +1,5 @@
 //初始化常量
 
-const USER_APPLICATION_LIST_VIEWS = "/user/applications";
-
 let intervalId;
 
 $(function () {

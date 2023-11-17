@@ -1,4 +1,4 @@
-const NODE_LIST_VIEWS = "/administrator/cluster/node";
+
 function showlabels(e) {
     let labels = $(e).data("node-label");
     animate_swal.fire({

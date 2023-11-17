@@ -1,4 +1,4 @@
-const POD_LIST_VIEWS = "/administrator/cluster/pod";
+
 
 let intervalId;
 

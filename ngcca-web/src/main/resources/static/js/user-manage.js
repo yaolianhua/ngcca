@@ -1,5 +1,4 @@
 //初始化常量
-const USER_LIST_VIEWS = "/administrator/system/user-manage";
 
 $(function () {
     userlistpage();

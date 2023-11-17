@@ -1,5 +1,5 @@
 //初始化常量
-const CLUSTER_LIST_VIEWS = "/administrator/cluster";
+
 
 const swal = Swal.mixin({
     customClass: {

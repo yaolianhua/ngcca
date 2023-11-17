@@ -1,7 +1,5 @@
 //初始化常量
 
-const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage";
-
 $(function () {
     templatedefinitionpage();
     toastr.options = {

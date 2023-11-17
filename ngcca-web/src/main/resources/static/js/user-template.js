@@ -1,7 +1,5 @@
 //初始化常量
 
-const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance";
-
 let intervalId;
 
 $(function () {
