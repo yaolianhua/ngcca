@@ -1,13 +1,4 @@
-//初始化常量
 
-
-const swal = Swal.mixin({
-    customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-})
 function clusteradd() {
     let data = {};
     let value = $('#cluster-add-form').serializeArray();

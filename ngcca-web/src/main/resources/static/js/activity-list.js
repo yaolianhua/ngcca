@@ -2,15 +2,6 @@
 $(function () {
     pagelist();
 });
-
-const swal = Swal.mixin({
-    customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-})
-
 function pagelist() {
     //分页
     $('#activity-list').DataTable({

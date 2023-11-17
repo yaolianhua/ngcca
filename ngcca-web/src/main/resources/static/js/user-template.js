@@ -12,15 +12,6 @@ $(function () {
     $('#instance-msg-tooltip').tooltip();
 });
 
-
-const swal = Swal.mixin({
-    customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-})
-
 function showtemplateinstanceyaml(e) {
     $('#modal-codemirror-yaml').modal('show');
     let id = $(e).data("instance-id");

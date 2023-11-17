@@ -21,15 +21,6 @@ $(function () {
     bsCustomFileInput.init();
 });
 
-
-const swal = Swal.mixin({
-    customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-})
-
 function togglediv() {
     let value = $('#select-source-origin').val();
     if (value === "JAR" || value === "WAR") {

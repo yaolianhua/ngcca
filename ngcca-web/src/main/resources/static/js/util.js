@@ -8,6 +8,14 @@ const animate_swal = Swal.mixin({
     }
 })
 
+const swal = Swal.mixin({
+    customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+})
+
 function ok(response) {
     console.log(response);
     toastr.success('操作成功')
