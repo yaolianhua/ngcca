@@ -1,5 +1,3 @@
-const ACTIVITY_API = "/v1/activities";
-
 $(function () {
     pagelist();
 });

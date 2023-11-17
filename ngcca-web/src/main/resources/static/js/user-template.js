@@ -1,5 +1,5 @@
 //初始化常量
-const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
+
 const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance?action=list";
 
 let intervalId;

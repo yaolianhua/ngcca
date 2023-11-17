@@ -1,18 +1,6 @@
 //
 const WEB_ENDPOINT = $('#server-endpoint').data('server-endpoint');
 const CURRENT_USERNAME = $('#current-username').data('current-username');
-const FILE_UPLOAD_API = "/v1/files/upload";
-const USER_API = "/v1/security/users";
-
-//swal
-const animate_swal = Swal.mixin({
-    showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-    }
-})
 
 //axios authorization header set
 axios.defaults.baseURL = WEB_ENDPOINT;
@@ -64,37 +52,6 @@ $(function () {
     });
 
 });
-
-function ok(response) {
-    console.log(response);
-    toastr.success('操作成功')
-}
-
-function fail(error) {
-    console.log(error);
-    toastr.error(error.response.data.message);
-}
-
-function isEmpty(str) {
-    return str === "" ||
-        str === "null" ||
-        str === "undefined" ||
-        str == null;
-}
-
-function alertWarn(msg) {
-    animate_swal.fire({
-        icon: 'warning',
-        html: msg
-    })
-}
-
-function alertInfo(msg) {
-    animate_swal.fire({
-        icon: 'info',
-        html: msg
-    })
-}
 
 //user avatar save
 let avatar;

@@ -1,5 +1,4 @@
 //初始化常量
-const CLUSTER_API = "/v1/kubernetes/clusters";
 const CLUSTER_LIST_VIEWS = "/administrator/cluster?action=list&refresh=true";
 
 const swal = Swal.mixin({

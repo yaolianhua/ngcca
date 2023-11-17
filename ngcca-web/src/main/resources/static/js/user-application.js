@@ -1,6 +1,5 @@
 //初始化常量
-const APPLICATION_API = "/v1/applications/instance";
-const REGISTRY_SEARCH_API = "/v1/registries";
+
 const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
 
 let intervalId;

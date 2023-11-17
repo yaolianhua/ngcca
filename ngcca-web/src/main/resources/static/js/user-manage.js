@@ -45,7 +45,7 @@ function saveuser() {
     }).then(function (response) {
         $('#modal-new-user').modal('hide');
         $('#users-fragment').load(USER_LIST_VIEWS, function () {
-            userPaging();
+            userlistpage();
         });
 
         ok(response);
@@ -68,7 +68,7 @@ function submituseredit() {
         data: data
     }).then(function (response) {
         $('#users-fragment').load(USER_LIST_VIEWS, function () {
-            userPaging();
+            userlistpage();
         });
 
         ok(response);
@@ -108,7 +108,7 @@ function deleteuser(e) {
             axios.delete(USER_API + "/" + id)
                 .then(response => {
                     $('#users-fragment').load(USER_LIST_VIEWS, function () {
-                        userPaging();
+                        userlistpage();
                     });
                     ok(response);
                 })
@@ -127,7 +127,7 @@ function enableuser(e) {
     axios.put(USER_API + "/" + user + '/true')
         .then(response => {
             $('#users-fragment').load(USER_LIST_VIEWS, function () {
-                userPaging();
+                userlistpage();
             });
             ok(response);
         })
@@ -142,7 +142,7 @@ function disableuser(e) {
     axios.put(USER_API + "/" + user + '/false')
         .then(response => {
             $('#users-fragment').load(USER_LIST_VIEWS, function () {
-                userPaging();
+                userlistpage();
             });
             ok(response);
         })

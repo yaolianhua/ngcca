@@ -1,4 +1,3 @@
-const POD_API = "/v1/kubernetes/pods";
 const POD_LIST_VIEWS = "/administrator/cluster/pod?action=list";
 
 let intervalId;
