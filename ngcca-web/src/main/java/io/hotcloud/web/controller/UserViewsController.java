@@ -3,6 +3,7 @@ package io.hotcloud.web.controller;
 import io.hotcloud.service.application.ApplicationInstanceService;
 import io.hotcloud.service.application.model.ApplicationInstance;
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
+import io.hotcloud.service.registry.SystemRegistryProperties;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.template.TemplateInstanceService;
@@ -29,6 +30,7 @@ public class UserViewsController {
     private final TemplateInstanceService templateInstanceService;
     private final ApplicationInstanceService applicationInstanceService;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
+    private final SystemRegistryProperties systemRegistryProperties;
 
     @RequestMapping({"/user/template-definition"})
     @WebSession
@@ -68,6 +70,7 @@ public class UserViewsController {
         }
 
         if (Objects.equals(WebConstant.VIEW_CREATE_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.SYSTEM_REGISTRY_PROPERTIES, systemRegistryProperties);
             model.addAttribute(WebConstant.CLUSTERS, databasedKubernetesClusterService.listHealth());
             return UserViews.USER_APPLICATION_CREATE;
         }
