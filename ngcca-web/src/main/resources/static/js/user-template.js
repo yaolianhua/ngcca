@@ -1,6 +1,6 @@
 //初始化常量
 
-const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance?action=list";
+const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance";
 
 let intervalId;
 
@@ -53,7 +53,7 @@ function showtemplateinstanceingressyaml(e) {
 
 //user template instance list
 function templateinstancesrefresh() {
-    $('#template-instance-list-fragment').load(TEMPLATE_INSTANCE_LIST_VIEWS, function () {
+    $('#template-instance-list-fragment').load(TEMPLATE_INSTANCE_LIST_VIEWS + "?action=list", function () {
 
     });
 }
@@ -73,7 +73,7 @@ function deletetemplateinstance(e) {
         if (result.isConfirmed) {
             axios.delete(TEMPLATE_INSTANCE_API + "/" + id)
                 .then(response => {
-                    $('#template-instance-list-fragment').load(TEMPLATE_INSTANCE_LIST_VIEWS, function () {
+                    $('#template-instance-list-fragment').load(TEMPLATE_INSTANCE_LIST_VIEWS + "?action=list", function () {
 
                     });
                     ok(response);

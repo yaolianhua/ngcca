@@ -1,5 +1,5 @@
 //初始化常量
-const CLUSTER_LIST_VIEWS = "/administrator/cluster?action=list&refresh=true";
+const CLUSTER_LIST_VIEWS = "/administrator/cluster";
 
 const swal = Swal.mixin({
     customClass: {
@@ -21,7 +21,7 @@ function clusteradd() {
         data: data
     }).then(function (response) {
         $('#modal-cluster-add').modal('hide');
-        $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS, function () {
+        $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS + "?action=list&refresh=true", function () {
 
         });
 
@@ -54,7 +54,7 @@ function clusteredit() {
         data: data
     }).then(function (response) {
         $('#modal-cluster-edit').modal('hide');
-        $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS, function () {
+        $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS + "?action=list&refresh=true", function () {
 
         });
 
@@ -78,7 +78,7 @@ function clusterdelete(e) {
         if (result.isConfirmed) {
             axios.delete(CLUSTER_API + "/" + id)
                 .then(response => {
-                    $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS, function () {
+                    $('#cluster-list-fragment').load(CLUSTER_LIST_VIEWS + "?action=list&refresh=true", function () {
 
                     });
                     ok(response);

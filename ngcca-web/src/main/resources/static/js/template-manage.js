@@ -1,6 +1,6 @@
 //初始化常量
 
-const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage?action=list";
+const TEMPLATE_DEFINITION_LIST_VIEWS = "/administrator/template-manage";
 
 $(function () {
     templatedefinitionpage();
@@ -44,7 +44,7 @@ function savetemplatedefinition() {
         data: data
     }).then(function (response) {
         $('#modal-new-template').modal('hide');
-        $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
+        $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS + "?action=list", function () {
             templatedefinitionpage();
         });
 
@@ -69,7 +69,7 @@ function deletetemplatedefinition(e) {
         if (result.isConfirmed) {
             axios.delete(TEMPLATE_DEFINITION_API + '/' + id)
                 .then(response => {
-                    $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS, function () {
+                    $('#templates-fragment').load(TEMPLATE_DEFINITION_LIST_VIEWS + "?action=list", function () {
                         templatedefinitionpage();
                     });
                     ok(response);

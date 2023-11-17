@@ -1,6 +1,6 @@
 //初始化常量
 
-const USER_APPLICATION_LIST_VIEWS = "/user/applications?action=list";
+const USER_APPLICATION_LIST_VIEWS = "/user/applications";
 
 let intervalId;
 
@@ -138,7 +138,7 @@ function showapplicationingressyaml(e) {
 
 //user template application list
 function applications() {
-    $('#application-list-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+    $('#application-list-fragment').load(USER_APPLICATION_LIST_VIEWS + "?action=list", function () {
 
     });
 }
@@ -158,7 +158,7 @@ function deleteapplication(e) {
         if (result.isConfirmed) {
             axios.delete(APPLICATION_API + "/" + id)
                 .then(response => {
-                    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS, function () {
+                    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS + "?action=list", function () {
 
                     });
                     ok(response);

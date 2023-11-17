@@ -1,6 +1,5 @@
 //初始化常量
-const USER_LIST_VIEWS = "/administrator/system/user-manage?action=list";
-const USER_EDIT_VIEWS = "/administrator/system/user-manage?action=edit&id=";
+const USER_LIST_VIEWS = "/administrator/system/user-manage";
 
 $(function () {
     userlistpage();
@@ -42,13 +41,11 @@ function saveuser() {
         method: 'post',
         url: USER_API,
         data: data
-    }).then(function (response) {
+    }).then(function () {
         $('#modal-new-user').modal('hide');
-        $('#users-fragment').load(USER_LIST_VIEWS, function () {
+        $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
             userlistpage();
         });
-
-        ok(response);
     }).catch(function (error) {
         fail(error);
     });
@@ -67,7 +64,7 @@ function submituseredit() {
         url: USER_API,
         data: data
     }).then(function (response) {
-        $('#users-fragment').load(USER_LIST_VIEWS, function () {
+        $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
             userlistpage();
         });
 
@@ -80,14 +77,14 @@ function submituseredit() {
 //user edit view
 function usereditpage(e) {
     let id = $(e).data("user-id");
-    $('#users-fragment').load(USER_EDIT_VIEWS + id, function () {
+    $('#users-fragment').load(USER_LIST_VIEWS + "?action=edit&id=" + id, function () {
 
     });
 }
 
 //user list
 function userlist() {
-    $('#users-fragment').load(USER_LIST_VIEWS, function () {
+    $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
         userlistpage();
     });
 }
@@ -107,7 +104,7 @@ function deleteuser(e) {
         if (result.isConfirmed) {
             axios.delete(USER_API + "/" + id)
                 .then(response => {
-                    $('#users-fragment').load(USER_LIST_VIEWS, function () {
+                    $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
                         userlistpage();
                     });
                     ok(response);
@@ -126,7 +123,7 @@ function enableuser(e) {
     let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/true')
         .then(response => {
-            $('#users-fragment').load(USER_LIST_VIEWS, function () {
+            $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
                 userlistpage();
             });
             ok(response);
@@ -141,7 +138,7 @@ function disableuser(e) {
     let user = $(e).data("username");
     axios.put(USER_API + "/" + user + '/false')
         .then(response => {
-            $('#users-fragment').load(USER_LIST_VIEWS, function () {
+            $('#users-fragment').load(USER_LIST_VIEWS + "?action=list", function () {
                 userlistpage();
             });
             ok(response);

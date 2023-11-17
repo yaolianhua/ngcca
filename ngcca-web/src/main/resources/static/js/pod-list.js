@@ -1,9 +1,9 @@
-const POD_LIST_VIEWS = "/administrator/cluster/pod?action=list";
+const POD_LIST_VIEWS = "/administrator/cluster/pod";
 
 let intervalId;
 
 function loadpods() {
-    $('#pod-list-fragment').load(POD_LIST_VIEWS, function () {
+    $('#pod-list-fragment').load(POD_LIST_VIEWS + "?action=list", function () {
         podlist();
     });
 }
