@@ -47,4 +47,6 @@ spring:
           enabled: false
 server:
   port: 4000
+  tomcat:
+    relaxed-query-chars: ^
 

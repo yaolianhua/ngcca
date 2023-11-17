@@ -39,4 +39,8 @@ spring:
       config:
         import-check:
           enabled: false
+server:
+  port: 8080
+  tomcat:
+    relaxed-query-chars: ^
 
