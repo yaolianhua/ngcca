@@ -81,7 +81,7 @@ class HarborRegistrySearchClient implements RegistrySearchClient {
                 .queryParam("page_size", pageable.getPageSize())
                 .build(namespace, imageName)
                 .toString();
-        Log.debug(this, this, String.format("Harbor repository tags search. request url '%s'", requestUrl));
+        Log.debug(this, null, String.format("Harbor repository tags search. request url '%s'", requestUrl));
 
         try {
             HttpEntity<?> httpEntity = HttpEntity.EMPTY;
