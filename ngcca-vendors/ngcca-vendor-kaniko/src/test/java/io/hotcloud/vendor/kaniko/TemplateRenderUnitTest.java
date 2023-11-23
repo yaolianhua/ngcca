@@ -61,7 +61,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob);
+            Assert.assertEquals(yaml, kanikoJob.trim());
         }
     }
 
@@ -100,7 +100,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob);
+            Assert.assertEquals(yaml, kanikoJob.trim());
         }
     }
 
@@ -137,7 +137,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob);
+            Assert.assertEquals(yaml, kanikoJob.trim());
         }
     }
 }
