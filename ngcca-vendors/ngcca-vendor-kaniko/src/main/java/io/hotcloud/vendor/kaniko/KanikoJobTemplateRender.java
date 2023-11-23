@@ -1,9 +1,16 @@
 package io.hotcloud.vendor.kaniko;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.KanikoJobTemplate;
 import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
@@ -21,8 +28,19 @@ public class KanikoJobTemplateRender {
     public static final String ARTIFACT_TEMPLATE_YAML;
 
     public static final String SECRET_TEMPLATE_YAML;
+    private static final ObjectMapper yamlObjectMapper;
 
     static {
+        YAMLFactory yamlFactory = new YAMLFactory();
+        yamlFactory.disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
+        yamlFactory.disable(YAMLGenerator.Feature.SPLIT_LINES);
+        yamlFactory.enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+
+        yamlObjectMapper = Jackson2ObjectMapperBuilder.json()
+                .factory(yamlFactory)
+                .serializationInclusion(JsonInclude.Include.NON_EMPTY)
+                .build();
+
         try {
             SOURCE_CODE_TEMPLATE_YAML = new BufferedReader(new InputStreamReader(new ClassPathResource("sourcecode-template.yaml").getInputStream())).lines().collect(Collectors.joining("\n"));
             ARTIFACT_TEMPLATE_YAML = new BufferedReader(new InputStreamReader(new ClassPathResource("artifact-template.yaml").getInputStream())).lines().collect(Collectors.joining("\n"));
@@ -75,6 +93,7 @@ public class KanikoJobTemplateRender {
     public static String parseJob(KanikoJobExpressionVariable job) {
 
         HashMap<String, String> renders = new HashMap<>(32);
+
         renders.put(Kaniko.NAMESPACE, job.getNamespace());
         renders.put(Kaniko.ID, job.getBusinessId());
         renders.put(Kaniko.JOB_NAME, job.getJob());
@@ -86,15 +105,25 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.DOCKERFILE_ENCODED, job.getEncodedDockerfile());
         renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, "alpine");
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, "kaniko");
-        renders.put(Kaniko.HOST_ALIASES, buildHostAliases(job.getHostAliases()));
-
+//        renders.put(Kaniko.HOST_ALIASES, buildHostAliases(job.getHostAliases()));
         renders.put(Kaniko.GIT_BRANCH, Objects.nonNull(job.getGit()) ? job.getGit().getBranch() : null);
         renders.put(Kaniko.HTTP_GIT_URL, Objects.nonNull(job.getGit()) ? job.getGit().getHttpGitUrl() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, Objects.nonNull(job.getGit()) ? job.getGit().getInitGitContainer() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_NAME, "git");
 
         String template = job.hasGit() ? SOURCE_CODE_TEMPLATE_YAML : ARTIFACT_TEMPLATE_YAML;
-        return TemplateRender.apply(template, renders);
+        String yaml = TemplateRender.apply(template, renders);
+
+        KanikoJobTemplate jobTemplate = yamlObjectMapper.readValue(yaml, new TypeReference<>() {
+        });
+
+        List<KanikoJobTemplate.HostAliases> hostAliases = job.getHostAliases().entrySet().stream()
+                .map(e -> new KanikoJobTemplate.HostAliases(e.getKey(), e.getValue()))
+                .toList();
+        jobTemplate.getSpec().getTemplate().getSpec().setHostAliases(hostAliases);
+
+        yaml = yamlObjectMapper.writeValueAsString(jobTemplate);
+        return yaml;
     }
 
     /**
