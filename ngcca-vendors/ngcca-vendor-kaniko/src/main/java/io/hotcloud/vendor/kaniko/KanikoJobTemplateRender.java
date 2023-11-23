@@ -11,7 +11,6 @@ import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,36 +49,6 @@ public class KanikoJobTemplateRender {
         }
     }
 
-    /**
-     * <pre>
-     *     {@code hostAliases:
-     *   - ip: "127.0.0.1"
-     *     hostnames:
-     *     - "foo.local"
-     *     - "bar.local"
-     *   - ip: "10.1.2.3"
-     *     hostnames:
-     *     - "foo.remote"
-     *     - "bar.remote"}
-     * </pre>
-     */
-    private static String buildHostAliases(Map<String, List<String>> hostAliases) {
-        StringBuilder builder = new StringBuilder();
-        if (CollectionUtils.isEmpty(hostAliases)) {
-            return builder.append("hostAliases: [ ]").toString();
-        }
-
-        builder.append("hostAliases:").append("\n");
-        for (Map.Entry<String, List<String>> entry : hostAliases.entrySet()) {
-            builder.append("      - ip: ").append(entry.getKey()).append("\n");
-            builder.append("        hostnames:").append("\n");
-            for (String hostname : entry.getValue()) {
-                builder.append("        - ").append(hostname).append("\n");
-            }
-        }
-
-        return builder.toString().stripTrailing();
-    }
 
     /**
      * 从模板创建可直接部署的k8s的job资源对象
@@ -105,7 +74,6 @@ public class KanikoJobTemplateRender {
         renders.put(Kaniko.DOCKERFILE_ENCODED, job.getEncodedDockerfile());
         renders.put(Kaniko.INIT_ALPINE_CONTAINER_NAME, "alpine");
         renders.put(Kaniko.KANIKO_CONTAINER_NAME, "kaniko");
-//        renders.put(Kaniko.HOST_ALIASES, buildHostAliases(job.getHostAliases()));
         renders.put(Kaniko.GIT_BRANCH, Objects.nonNull(job.getGit()) ? job.getGit().getBranch() : null);
         renders.put(Kaniko.HTTP_GIT_URL, Objects.nonNull(job.getGit()) ? job.getGit().getHttpGitUrl() : null);
         renders.put(Kaniko.INIT_GIT_CONTAINER_IMAGE, Objects.nonNull(job.getGit()) ? job.getGit().getInitGitContainer() : null);
@@ -162,7 +130,5 @@ public class KanikoJobTemplateRender {
         String INIT_ALPINE_CONTAINER_IMAGE = "INIT_ALPINE_CONTAINER_IMAGE";
         String DOCKERFILE_ENCODED = "DOCKERFILE_ENCODED";
         String DOCKER_CONFIG_JSON = "DOCKER_CONFIG_JSON";
-
-        String HOST_ALIASES = "HOST_ALIASES";
     }
 }
