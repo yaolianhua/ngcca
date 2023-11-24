@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
-import io.hotcloud.vendor.kaniko.model.KanikoJobTemplate;
+import io.hotcloud.vendor.kaniko.model.JobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.JobTemplateObject;
 import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
@@ -55,11 +55,11 @@ public class KanikoJobTemplateRender {
      * <p>1. 从Git克隆创建的模板
      * <P>2. 从给定包创建的模板
      *
-     * @param job {@link KanikoJobExpressionVariable}
+     * @param job {@link JobExpressionVariable}
      * @return job yaml
      */
     @SneakyThrows
-    public static String parseJob(KanikoJobExpressionVariable job) {
+    public static String parseJob(JobExpressionVariable job) {
 
         HashMap<String, String> renders = new HashMap<>(32);
 
@@ -82,11 +82,11 @@ public class KanikoJobTemplateRender {
         String template = job.hasGit() ? SOURCE_CODE_TEMPLATE_YAML : ARTIFACT_TEMPLATE_YAML;
         String yaml = TemplateRender.apply(template, renders);
 
-        KanikoJobTemplate jobTemplate = yamlObjectMapper.readValue(yaml, new TypeReference<>() {
+        JobTemplateObject jobTemplate = yamlObjectMapper.readValue(yaml, new TypeReference<>() {
         });
 
-        List<KanikoJobTemplate.HostAliases> hostAliases = job.getHostAliases().entrySet().stream()
-                .map(e -> new KanikoJobTemplate.HostAliases(e.getKey(), e.getValue()))
+        List<JobTemplateObject.HostAliases> hostAliases = job.getHostAliases().entrySet().stream()
+                .map(e -> new JobTemplateObject.HostAliases(e.getKey(), e.getValue()))
                 .toList();
         jobTemplate.getSpec().getTemplate().getSpec().setHostAliases(hostAliases);
 

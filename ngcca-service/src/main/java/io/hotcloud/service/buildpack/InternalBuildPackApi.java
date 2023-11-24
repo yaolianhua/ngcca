@@ -27,7 +27,7 @@ import io.hotcloud.service.registry.SystemRegistryProperties;
 import io.hotcloud.service.registry.SystemRuntimeImage;
 import io.hotcloud.vendor.kaniko.model.DockerConfigJson;
 import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.JobExpressionVariable;
 import io.hotcloud.vendor.kaniko.model.SecretExpressionVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -128,7 +128,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
 
     @Override
     protected BuildPackJobResource prepareJobResource(String namespace, BuildImage buildImage) {
-        KanikoJobExpressionVariable expressionVariable = determinedKanikoJobExpressionVariable(buildImage, namespace);
+        JobExpressionVariable expressionVariable = determinedKanikoJobExpressionVariable(buildImage, namespace);
         String jobYamlString = parseJob(expressionVariable);
 
         BuildPackJobResource jobResource = BuildPackJobResource.builder()
@@ -176,8 +176,8 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         throw new UnsupportedOperationException("Not supported operation for BuildImage");
     }
 
-    private KanikoJobExpressionVariable determinedKanikoJobExpressionVariable(BuildImage buildImage,
-                                                                              String namespace) {
+    private JobExpressionVariable determinedKanikoJobExpressionVariable(BuildImage buildImage,
+                                                                        String namespace) {
 
         String k8sName = resolvedK8sName(buildImage);
         String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
@@ -189,7 +189,7 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
         DockerfileJavaArtifactExpressionVariable javaArtifact = determinedDockerfileJavaArtifactExpressionVariable(buildImage);
 
         if (buildImage.isSourceCode()) {
-            return KanikoJobExpressionVariable.of(
+            return JobExpressionVariable.of(
                     UUIDGenerator.uuidNoDash(),
                     namespace,
                     k8sName,
@@ -198,14 +198,14 @@ class InternalBuildPackApi extends AbstractBuildPackApi {
                     registryImageRepository.findByName(SystemRuntimeImage.KANIKO.name().toLowerCase()).getValue(),
                     registryImageRepository.findByName(SystemRuntimeImage.ALPINE.name().toLowerCase()).getValue(),
                     DockerfileJava(javaArtifact, true),
-                    KanikoJobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImageRepository.findByName(SystemRuntimeImage.GIT.name().toLowerCase()).getValue()),
+                    JobExpressionVariable.GitExpressionVariable.of(buildImage.getSource().getHttpGitUrl(), buildImage.getSource().getBranch(), registryImageRepository.findByName(SystemRuntimeImage.GIT.name().toLowerCase()).getValue()),
                     resolvedHostAliases(systemRegistryProperties.getUrl(), buildImage.getSource().getHttpGitUrl())
             );
         }
 
         if (buildImage.isJar() || buildImage.isWar()) {
             String httpUrl = buildImage.isJar() ? buildImage.getJar().getPackageUrl() : buildImage.getWar().getPackageUrl();
-            return KanikoJobExpressionVariable.of(
+            return JobExpressionVariable.of(
                     UUIDGenerator.uuidNoDash(),
                     namespace,
                     k8sName,

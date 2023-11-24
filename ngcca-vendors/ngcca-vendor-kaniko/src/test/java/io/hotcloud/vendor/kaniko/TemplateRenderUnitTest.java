@@ -2,7 +2,7 @@ package io.hotcloud.vendor.kaniko;
 
 
 import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
-import io.hotcloud.vendor.kaniko.model.KanikoJobExpressionVariable;
+import io.hotcloud.vendor.kaniko.model.JobExpressionVariable;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +39,7 @@ class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
-        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
+        JobExpressionVariable jobExpressionVariable = JobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
@@ -48,7 +48,7 @@ class TemplateRenderUnitTest {
                 "harbor.local:5000/library/kaniko:20221029",
                 "harbor.local:5000/library/alpine:latest",
                 dockerfileEncoded,
-                KanikoJobExpressionVariable.GitExpressionVariable.of(
+                JobExpressionVariable.GitExpressionVariable.of(
                         "https://git.docker.local/self-host/thymeleaf-fragments.git",
                         "master",
                         "harbor.local:5000/library/alpine-git:latest"
@@ -82,7 +82,7 @@ class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
-        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
+        JobExpressionVariable jobExpressionVariable = JobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",
@@ -119,7 +119,7 @@ class TemplateRenderUnitTest {
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(warDockerfile.getBytes(StandardCharsets.UTF_8));
-        KanikoJobExpressionVariable jobExpressionVariable = KanikoJobExpressionVariable.of(
+        JobExpressionVariable jobExpressionVariable = JobExpressionVariable.of(
                 "985b8ff6-09e1-4226-891e-5c9dc7bbd155",
                 "kaniko-test",
                 "kaniko-test",

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Data
-public class KanikoJobExpressionVariable {
+public class JobExpressionVariable {
 
     /**
      * k8s namespace
@@ -51,16 +51,16 @@ public class KanikoJobExpressionVariable {
 
     private GitExpressionVariable git;
 
-    public static KanikoJobExpressionVariable of(String businessId,
-                                                 String namespace,
-                                                 String job,
-                                                 String secret,
-                                                 String destination,
-                                                 String kaniko,
-                                                 String initAlpineContainer,
-                                                 String encodedDockerfile,
-                                                 GitExpressionVariable git,
-                                                 Map<String, List<String>> hostAliases) {
+    public static JobExpressionVariable of(String businessId,
+                                           String namespace,
+                                           String job,
+                                           String secret,
+                                           String destination,
+                                           String kaniko,
+                                           String initAlpineContainer,
+                                           String encodedDockerfile,
+                                           GitExpressionVariable git,
+                                           Map<String, List<String>> hostAliases) {
 
         Assert.hasText(businessId, "business ID is null");
         Assert.hasText(namespace, "namespace is null");
@@ -71,7 +71,7 @@ public class KanikoJobExpressionVariable {
         Assert.hasText(initAlpineContainer, "init alpine container image is null");
         Assert.hasText(encodedDockerfile, "dockerfile is null");
 
-        KanikoJobExpressionVariable expressionVariable = new KanikoJobExpressionVariable();
+        JobExpressionVariable expressionVariable = new JobExpressionVariable();
         expressionVariable.setBusinessId(businessId);
         expressionVariable.setNamespace(namespace);
         expressionVariable.setJob(job);
