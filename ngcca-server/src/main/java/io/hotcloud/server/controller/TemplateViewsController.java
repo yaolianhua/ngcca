@@ -21,7 +21,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/v1/templateviews")
 @Tag(name = "template view")
-public class BuildPackYamlController {
+public class TemplateViewsController {
 
 
 
