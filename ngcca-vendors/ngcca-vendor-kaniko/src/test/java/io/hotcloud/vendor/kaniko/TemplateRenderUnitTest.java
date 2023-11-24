@@ -3,7 +3,7 @@ package io.hotcloud.vendor.kaniko;
 
 import io.hotcloud.vendor.kaniko.model.DockerfileJavaArtifactExpressionVariable;
 import io.hotcloud.vendor.kaniko.model.JobExpressionVariable;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -35,7 +35,7 @@ class TemplateRenderUnitTest {
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/maven-jar.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-            Assert.assertEquals(dockerfile, jarDockerfile);
+            Assertions.assertEquals(dockerfile, jarDockerfile);
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
@@ -61,7 +61,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob.trim());
+            Assertions.assertEquals(yaml, kanikoJob.trim());
         }
     }
 
@@ -78,7 +78,7 @@ class TemplateRenderUnitTest {
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/jar.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-            Assert.assertEquals(dockerfile, jarDockerfile);
+            Assertions.assertEquals(dockerfile, jarDockerfile);
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(jarDockerfile.getBytes(StandardCharsets.UTF_8));
@@ -100,7 +100,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob.trim());
+            Assertions.assertEquals(yaml, kanikoJob.trim());
         }
     }
 
@@ -115,7 +115,7 @@ class TemplateRenderUnitTest {
         try (InputStream inputStream = TemplateRenderUnitTest.class.getResourceAsStream("/war.Dockerfile")) {
             assert inputStream != null;
             String dockerfile = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-            Assert.assertEquals(dockerfile, warDockerfile);
+            Assertions.assertEquals(dockerfile, warDockerfile);
         }
 
         String dockerfileEncoded = Base64.getEncoder().encodeToString(warDockerfile.getBytes(StandardCharsets.UTF_8));
@@ -137,7 +137,7 @@ class TemplateRenderUnitTest {
             assert inputStream != null;
             String yaml = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
-            Assert.assertEquals(yaml, kanikoJob.trim());
+            Assertions.assertEquals(yaml, kanikoJob.trim());
         }
     }
 }
