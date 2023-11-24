@@ -19,12 +19,18 @@ public class DockerfileTemplateRender {
     public static final String JAR_TEMPLATE_DOCKERFILE;
     public static final String MAVEN_JAR_TEMPLATE_DOCKERFILE;
     public static final String WAR_TEMPLATE_DOCKERFILE;
+    public static final String JAVA8_RUNTIME_DOCKERFILE;
+    public static final String JAVA11_RUNTIME_DOCKERFILE;
+    public static final String JAVA17_RUNTIME_DOCKERFILE;
 
     static {
         try {
             JAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("jar-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
             MAVEN_JAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("maven-jar-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
             WAR_TEMPLATE_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("war-template.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
+            JAVA8_RUNTIME_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("java8-runtime.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
+            JAVA11_RUNTIME_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("java11-runtime.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
+            JAVA17_RUNTIME_DOCKERFILE = new BufferedReader(new InputStreamReader(new ClassPathResource("java17-runtime.Dockerfile").getInputStream())).lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

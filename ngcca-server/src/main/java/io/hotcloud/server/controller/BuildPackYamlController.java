@@ -1,7 +1,8 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.service.buildpack.BuildPackYamlService;
+import io.hotcloud.vendor.kaniko.DockerfileTemplateRender;
+import io.hotcloud.vendor.kaniko.KanikoJobTemplateRender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,31 +10,95 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Objects;
 
 @SwaggerBearerAuth
 @RestController
-@RequestMapping("/v1/buildpacks/yaml")
-@Tag(name = "BuildPack template yaml")
+@RequestMapping("/v1/templateviews")
+@Tag(name = "template view")
 public class BuildPackYamlController {
 
-    private final BuildPackYamlService buildPackYamlService;
 
-    public BuildPackYamlController(BuildPackYamlService buildPackYamlService) {
-        this.buildPackYamlService = buildPackYamlService;
-    }
 
     @GetMapping
     @Operation(
-            summary = "buildpack template yaml query",
+            summary = "template views",
+            responses = {@ApiResponse(responseCode = "200")}
+    )
+    public ResponseEntity<?> list() {
+
+        List<String> templates = List.of(
+                DockerfileTemplateRender.JAVA8_RUNTIME_DOCKERFILE,
+                DockerfileTemplateRender.JAVA11_RUNTIME_DOCKERFILE,
+                DockerfileTemplateRender.JAVA17_RUNTIME_DOCKERFILE,
+                DockerfileTemplateRender.JAR_TEMPLATE_DOCKERFILE,
+                DockerfileTemplateRender.WAR_TEMPLATE_DOCKERFILE,
+                DockerfileTemplateRender.MAVEN_JAR_TEMPLATE_DOCKERFILE,
+                KanikoJobTemplateRender.SOURCE_CODE_TEMPLATE_YAML,
+                KanikoJobTemplateRender.ARTIFACT_TEMPLATE_YAML,
+                KanikoJobTemplateRender.SECRET_TEMPLATE_YAML
+        );
+        return ResponseEntity.ok(templates);
+    }
+
+    @GetMapping("/dockerfile/{type}")
+    @Operation(
+            summary = "template views",
             responses = {@ApiResponse(responseCode = "200")},
             parameters = {
-                    @Parameter(name = "type", description = "template type", schema = @Schema(allowableValues = {"dockerfile-jar", "dockerfile-jar-maven", "dockerfile-war", "imagebuild-source", "imagebuild-jar-war", "imagebuild-secret"}))
+                    @Parameter(name = "type", description = "query type", schema = @Schema(allowableValues = {"java8runtime", "java11runtime", "java17runtime", "jar", "war", "maven"}))
             }
     )
-    public ResponseEntity<?> search(@RequestParam(value = "type") String type) {
-        return ResponseEntity.ok(buildPackYamlService.search(type));
+    public ResponseEntity<?> dockerfile(@PathVariable("type") String q) {
+        String text = null;
+        if (Objects.equals(q, "java8runtime")) {
+            text = DockerfileTemplateRender.JAVA8_RUNTIME_DOCKERFILE;
+        }
+        if (Objects.equals(q, "java11runtime")) {
+            text = DockerfileTemplateRender.JAVA11_RUNTIME_DOCKERFILE;
+        }
+        if (Objects.equals(q, "java17runtime")) {
+            text = DockerfileTemplateRender.JAVA17_RUNTIME_DOCKERFILE;
+        }
+        if (Objects.equals(q, "jar")) {
+            text = DockerfileTemplateRender.JAR_TEMPLATE_DOCKERFILE;
+        }
+        if (Objects.equals(q, "war")) {
+            text = DockerfileTemplateRender.WAR_TEMPLATE_DOCKERFILE;
+        }
+        if (Objects.equals(q, "maven")) {
+            text = DockerfileTemplateRender.MAVEN_JAR_TEMPLATE_DOCKERFILE;
+        }
+
+        return ResponseEntity.ok(text);
     }
+
+    @GetMapping("/yaml/{type}")
+    @Operation(
+            summary = "template views",
+            responses = {@ApiResponse(responseCode = "200")},
+            parameters = {
+                    @Parameter(name = "type", description = "query type", schema = @Schema(allowableValues = {"sourcecode", "artifact", "secret"}))
+            }
+    )
+    public ResponseEntity<?> yaml(@PathVariable("type") String q) {
+        String text = null;
+        if (Objects.equals(q, "sourcecode")) {
+            text = KanikoJobTemplateRender.SOURCE_CODE_TEMPLATE_YAML;
+        }
+        if (Objects.equals(q, "artifact")) {
+            text = KanikoJobTemplateRender.ARTIFACT_TEMPLATE_YAML;
+        }
+        if (Objects.equals(q, "secret")) {
+            text = KanikoJobTemplateRender.SECRET_TEMPLATE_YAML;
+        }
+
+        return ResponseEntity.ok(text);
+    }
+
 }
