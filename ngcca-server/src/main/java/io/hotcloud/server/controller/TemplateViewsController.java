@@ -1,8 +1,8 @@
 package io.hotcloud.server.controller;
 
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.vendor.kaniko.DockerfileTemplateRender;
-import io.hotcloud.vendor.kaniko.KanikoJobTemplateRender;
+import io.hotcloud.vendor.kaniko.DockerfileUtils;
+import io.hotcloud.vendor.kaniko.JobUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,15 +33,15 @@ public class TemplateViewsController {
     public ResponseEntity<?> list() {
 
         List<String> templates = List.of(
-                DockerfileTemplateRender.JAVA8_RUNTIME_DOCKERFILE,
-                DockerfileTemplateRender.JAVA11_RUNTIME_DOCKERFILE,
-                DockerfileTemplateRender.JAVA17_RUNTIME_DOCKERFILE,
-                DockerfileTemplateRender.JAR_TEMPLATE_DOCKERFILE,
-                DockerfileTemplateRender.WAR_TEMPLATE_DOCKERFILE,
-                DockerfileTemplateRender.MAVEN_JAR_TEMPLATE_DOCKERFILE,
-                KanikoJobTemplateRender.SOURCE_CODE_TEMPLATE_YAML,
-                KanikoJobTemplateRender.ARTIFACT_TEMPLATE_YAML,
-                KanikoJobTemplateRender.SECRET_TEMPLATE_YAML
+                DockerfileUtils.JAVA8_RUNTIME_DOCKERFILE,
+                DockerfileUtils.JAVA11_RUNTIME_DOCKERFILE,
+                DockerfileUtils.JAVA17_RUNTIME_DOCKERFILE,
+                DockerfileUtils.JAR_TEMPLATE_DOCKERFILE,
+                DockerfileUtils.WAR_TEMPLATE_DOCKERFILE,
+                DockerfileUtils.MAVEN_JAR_TEMPLATE_DOCKERFILE,
+                JobUtils.SOURCE_CODE_TEMPLATE_YAML,
+                JobUtils.ARTIFACT_TEMPLATE_YAML,
+                JobUtils.SECRET_TEMPLATE_YAML
         );
         return ResponseEntity.ok(templates);
     }
@@ -57,22 +57,22 @@ public class TemplateViewsController {
     public ResponseEntity<?> dockerfile(@PathVariable("type") String q) {
         String text = null;
         if (Objects.equals(q, "java8runtime")) {
-            text = DockerfileTemplateRender.JAVA8_RUNTIME_DOCKERFILE;
+            text = DockerfileUtils.JAVA8_RUNTIME_DOCKERFILE;
         }
         if (Objects.equals(q, "java11runtime")) {
-            text = DockerfileTemplateRender.JAVA11_RUNTIME_DOCKERFILE;
+            text = DockerfileUtils.JAVA11_RUNTIME_DOCKERFILE;
         }
         if (Objects.equals(q, "java17runtime")) {
-            text = DockerfileTemplateRender.JAVA17_RUNTIME_DOCKERFILE;
+            text = DockerfileUtils.JAVA17_RUNTIME_DOCKERFILE;
         }
         if (Objects.equals(q, "jar")) {
-            text = DockerfileTemplateRender.JAR_TEMPLATE_DOCKERFILE;
+            text = DockerfileUtils.JAR_TEMPLATE_DOCKERFILE;
         }
         if (Objects.equals(q, "war")) {
-            text = DockerfileTemplateRender.WAR_TEMPLATE_DOCKERFILE;
+            text = DockerfileUtils.WAR_TEMPLATE_DOCKERFILE;
         }
         if (Objects.equals(q, "maven")) {
-            text = DockerfileTemplateRender.MAVEN_JAR_TEMPLATE_DOCKERFILE;
+            text = DockerfileUtils.MAVEN_JAR_TEMPLATE_DOCKERFILE;
         }
 
         return ResponseEntity.ok(text);
@@ -89,13 +89,13 @@ public class TemplateViewsController {
     public ResponseEntity<?> yaml(@PathVariable("type") String q) {
         String text = null;
         if (Objects.equals(q, "sourcecode")) {
-            text = KanikoJobTemplateRender.SOURCE_CODE_TEMPLATE_YAML;
+            text = JobUtils.SOURCE_CODE_TEMPLATE_YAML;
         }
         if (Objects.equals(q, "artifact")) {
-            text = KanikoJobTemplateRender.ARTIFACT_TEMPLATE_YAML;
+            text = JobUtils.ARTIFACT_TEMPLATE_YAML;
         }
         if (Objects.equals(q, "secret")) {
-            text = KanikoJobTemplateRender.SECRET_TEMPLATE_YAML;
+            text = JobUtils.SECRET_TEMPLATE_YAML;
         }
 
         return ResponseEntity.ok(text);

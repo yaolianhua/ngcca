@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class DockerfileTemplateRender {
+public class DockerfileUtils {
     public static final String JAR_TEMPLATE_DOCKERFILE;
     public static final String MAVEN_JAR_TEMPLATE_DOCKERFILE;
     public static final String WAR_TEMPLATE_DOCKERFILE;

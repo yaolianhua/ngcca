@@ -42,9 +42,9 @@ import java.util.regex.Pattern;
 
 import static io.hotcloud.common.model.CommonConstant.K8S_APP;
 import static io.hotcloud.common.model.CommonConstant.K8S_APP_BUSINESS_DATA_ID;
-import static io.hotcloud.vendor.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.vendor.kaniko.KanikoJobTemplateRender.parseJob;
-import static io.hotcloud.vendor.kaniko.KanikoJobTemplateRender.parseSecret;
+import static io.hotcloud.vendor.kaniko.DockerfileUtils.DockerfileJava;
+import static io.hotcloud.vendor.kaniko.JobUtils.parseJob;
+import static io.hotcloud.vendor.kaniko.JobUtils.parseSecret;
 
 @Service
 @RequiredArgsConstructor

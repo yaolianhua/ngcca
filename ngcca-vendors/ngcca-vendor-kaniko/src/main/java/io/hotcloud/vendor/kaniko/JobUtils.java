@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class KanikoJobTemplateRender {
+public class JobUtils {
 
     public static final String SOURCE_CODE_TEMPLATE_YAML;
     public static final String ARTIFACT_TEMPLATE_YAML;

@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.hotcloud.vendor.kaniko.DockerfileTemplateRender.DockerfileJava;
-import static io.hotcloud.vendor.kaniko.KanikoJobTemplateRender.parseJob;
+import static io.hotcloud.vendor.kaniko.DockerfileUtils.DockerfileJava;
+import static io.hotcloud.vendor.kaniko.JobUtils.parseJob;
 
 class TemplateRenderUnitTest {
 
