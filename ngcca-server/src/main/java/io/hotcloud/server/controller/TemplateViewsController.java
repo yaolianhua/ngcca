@@ -30,7 +30,7 @@ public class TemplateViewsController {
             summary = "template views",
             responses = {@ApiResponse(responseCode = "200")}
     )
-    public ResponseEntity<?> list() {
+    public ResponseEntity<List<String>> list() {
 
         List<String> templates = List.of(
                 DockerfileUtils.JAVA8_RUNTIME_DOCKERFILE,
@@ -54,7 +54,7 @@ public class TemplateViewsController {
                     @Parameter(name = "type", description = "query type", schema = @Schema(allowableValues = {"java8runtime", "java11runtime", "java17runtime", "jar", "war", "maven"}))
             }
     )
-    public ResponseEntity<?> dockerfile(@PathVariable("type") String q) {
+    public ResponseEntity<String> dockerfile(@PathVariable("type") String q) {
         String text = null;
         if (Objects.equals(q, "java8runtime")) {
             text = DockerfileUtils.JAVA8_RUNTIME_DOCKERFILE;
@@ -86,7 +86,7 @@ public class TemplateViewsController {
                     @Parameter(name = "type", description = "query type", schema = @Schema(allowableValues = {"sourcecode", "artifact", "secret"}))
             }
     )
-    public ResponseEntity<?> yaml(@PathVariable("type") String q) {
+    public ResponseEntity<String> yaml(@PathVariable("type") String q) {
         String text = null;
         if (Objects.equals(q, "sourcecode")) {
             text = JobUtils.SOURCE_CODE_TEMPLATE_YAML;
