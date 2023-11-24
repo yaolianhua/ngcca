@@ -16,33 +16,9 @@ ngcca:
   mongodb:
     uri: "mongodb://admin:QbMufCD%409WVQ^Hv@mid.vps-a.linux:27017/ngcca?authSource=admin"
   kubernetes-agent:
-    host:
-    port:
-    domain-name: k8s-agent.vps.tencent
-  buildpack:
-    build-timeout-second: 1200
+    endpoint: http://k8s-agent.vps.tencent
   application:
-    deployment-timeout-second: 1200
     dot-suffix-domain: ".vps.linux"
-  security:
-    enabled: true
-    ignored-defaults:
-      - "/swagger**/**"
-      - "/v3/api-docs/**"
-      - "/favicon.ico"
-      - "/pub"
-      - "/**/login"
-    ignored-urls:
-  openai:
-    api-key: no-key
-    http-proxy:
-      hostname: localhost
-      port: 0
-    http-client-timeout-seconds: 60
-  docker:
-    host: "tcp://linux.local:2375"
-    pull-timeout-seconds: 300
-    push-timeout-seconds: 300
 logging:
   level:
     io.hotcloud.common.log: info
