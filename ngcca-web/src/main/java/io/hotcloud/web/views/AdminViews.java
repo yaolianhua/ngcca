@@ -54,4 +54,6 @@ public final class AdminViews {
         }
     }
 
+    public static final String BUILD_TEMPLATE_VIEWS = "admin/system/build-templateviews";
+
 }

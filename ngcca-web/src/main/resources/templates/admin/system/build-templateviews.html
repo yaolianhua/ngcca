@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>NGCCA | 构建模板</title>
+
+    <link th:insert="~{global-link}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <div th:insert="~{admin/navbar}"></div>
+    <div th:insert="~{admin/sidebar}"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/administrator/system/index}">Home</a></li>
+                            <li class="breadcrumb-item active">构建模板</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-sm-8">
+                        <a class="btn btn-app bg-secondary" onclick="java8runtime()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-brands fa-java"></i>Java8运行时
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="java11runtime()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-brands fa-java"></i>Java11运行时
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="java17runtime()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-brands fa-java"></i>Java17运行时
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="jar()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-solid fa-cube"></i>Jar
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="war()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-solid fa-cube"></i>War
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="maven()">
+                            <span class="badge bg-success">Dockerfile</span>
+                            <i class="fas fa-solid fa-cube"></i>Maven
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="sourcecode()">
+                            <span class="badge bg-success">Yaml</span>
+                            <i class="fas fa-brands fa-docker"></i>源代码
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="artifact()">
+                            <span class="badge bg-success">Yaml</span>
+                            <i class="fas fa-brands fa-docker"></i>制品
+                        </a>
+                        <a class="btn btn-app bg-secondary" onclick="secret()">
+                            <span class="badge bg-success">Yaml</span>
+                            <i class="fas fa-brands fa-docker"></i>secret
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div id="build-templateviews-dockerfile" style="display: none">
+                        <label for="buildtemplateviews-codemirror-dockerfile">Dockerfile构建模板</label>
+                        <textarea id="buildtemplateviews-codemirror-dockerfile"></textarea>
+                    </div>
+                    <div id="build-templateviews-yaml" style="display: none">
+                        <label for="buildtemplateviews-codemirror-yaml">Kaniko构建模板</label>
+                        <textarea id="buildtemplateviews-codemirror-yaml"></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+    <div th:insert="~{footer}"></div>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+<div th:insert="~{global-script}"></div>
+<script th:src="@{/js/build-templateviews.js}"></script>
+</body>
+</html>

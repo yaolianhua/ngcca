@@ -108,4 +108,10 @@ public class AdministratorSystemManageViewsController {
         return AdminViews.REGISTRY_IMAGE_LIST;
     }
 
+    @RequestMapping("/build-templateviews")
+    @WebSession
+    public String buildtemplateviews(Model model) {
+        return AdminViews.BUILD_TEMPLATE_VIEWS;
+    }
+
 }

@@ -8,6 +8,7 @@ const TEMPLATE_INSTANCE_API = "/v1/templates/instance";
 const TEMPLATE_DEFINITION_API = "/v1/definition/templates";
 const APPLICATION_API = "/v1/applications/instance";
 const REGISTRY_SEARCH_API = "/v1/registries";
+const BUILD_TEMPLATEVIEWS_API = "/v1/templateviews"
 
 // View API
 const ACTIVITY_VIEWS = "/administrator/system/activities";
