@@ -15,6 +15,7 @@ public class Volume {
     private EmptyDirVolume emptyDir;
     private GitRepoVolume gitRepo;
     private HostPathVolume hostPath;
+    private LocalVolume local;
     private NFSVolume nfs;
     private SecretVolume secretVolume;
     private PersistentVolumeClaimVolume persistentVolumeClaim;
@@ -26,6 +27,7 @@ public class Volume {
                 Objects.nonNull(emptyDir) ||
                 Objects.nonNull(gitRepo) ||
                 Objects.nonNull(hostPath) ||
+                Objects.nonNull(local) ||
                 Objects.nonNull(nfs) ||
                 Objects.nonNull(secretVolume) ||
                 Objects.nonNull(persistentVolumeClaim);
@@ -57,6 +59,10 @@ public class Volume {
 
     public boolean isNfs() {
         return nfs != null;
+    }
+
+    public boolean isLocal() {
+        return local != null;
     }
 
 

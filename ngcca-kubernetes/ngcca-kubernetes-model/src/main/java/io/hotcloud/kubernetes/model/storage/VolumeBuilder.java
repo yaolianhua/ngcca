@@ -38,10 +38,13 @@ public final class VolumeBuilder {
         } else if (volume.isSecret()) {
             V1SecretVolumeSource v1SecretVolumeSource = build(volume.getSecretVolume());
             v1Volume.setSecret(v1SecretVolumeSource);
+        } else if (volume.isLocal()) {
+            V1LocalVolumeSource v1LocalVolumeSource = build(volume.getLocal());
+            throw new RuntimeException("Unsupported volume type");
         }
 
         if (!StringUtils.hasText(volume.getName())) {
-            volume.setName(String.format("volume-%s", UUID.randomUUID().toString().replaceAll("-", "")));
+            volume.setName(String.format("volume-%s", UUID.randomUUID().toString().replace("-", "")));
         }
         v1Volume.setName(volume.getName());
         return v1Volume;
@@ -102,6 +105,14 @@ public final class VolumeBuilder {
         v1EmptyDirVolumeSource.setSizeLimit(quantity);
 
         return v1EmptyDirVolumeSource;
+    }
+
+    public static V1LocalVolumeSource build(LocalVolume localVolume) {
+        final V1LocalVolumeSource v1LocalVolumeSource = new V1LocalVolumeSource();
+        v1LocalVolumeSource.setFsType(localVolume.getFsType());
+        v1LocalVolumeSource.setPath(localVolume.getPath());
+
+        return v1LocalVolumeSource;
     }
 
     public static V1HostPathVolumeSource build(HostPathVolume hostPathVolume) {

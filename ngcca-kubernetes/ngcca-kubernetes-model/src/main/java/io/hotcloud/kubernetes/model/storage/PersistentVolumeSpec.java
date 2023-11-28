@@ -20,6 +20,7 @@ public class PersistentVolumeSpec {
     private Map<String, String> capacity = new HashMap<>();
 
     private HostPathVolume hostPath;
+    private LocalVolume local;
 
     private List<String> mountOptions = new ArrayList<>();
 

@@ -59,6 +59,12 @@ public final class PersistentVolumeBuilder {
             v1PersistentVolumeSpec.setHostPath(v1HostPathVolumeSource);
         }
 
+        LocalVolume local = param.getSpec().getLocal();
+        if (Objects.nonNull(local)) {
+            V1LocalVolumeSource v1LocalVolumeSource = VolumeBuilder.build(local);
+            v1PersistentVolumeSpec.setLocal(v1LocalVolumeSource);
+        }
+
         V1ObjectReference v1ObjectReference = new V1ObjectReference();
         v1ObjectReference.setName(param.getSpec().getClaimRef().getName());
         v1ObjectReference.setNamespace(param.getSpec().getClaimRef().getNamespaces());
