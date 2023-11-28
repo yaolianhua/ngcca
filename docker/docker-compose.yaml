@@ -1,41 +1,5 @@
 version: '3'
 services:
-  ## server
-  ngcca-server:
-    restart: always
-    image: 119.91.214.25:5000/ngcca/ngcca-server:2023.08.23.180546
-    container_name: ngcca_server
-    hostname: ngcca-server.local
-    volumes:
-      - ngcca_server_volume:/ngcca-server
-    ports:
-      - "8080:8080"
-    env_file:
-      - env
-    depends_on:
-      - ngcca-minio
-      - ngcca-mongo
-      - ngcca-redis
-    networks:
-      - ngcca
-  ## web
-  ngcca-web:
-    restart: always
-    image: 119.91.214.25:5000/ngcca/web-server:2023.08.24.163329
-    container_name: ngcca_web
-    hostname: ngcca-web.local
-    volumes:
-      - ngcca_web_volume:/web-server
-    ports:
-      - "4000:4000"
-    env_file:
-      - env
-    depends_on:
-      - ngcca-minio
-      - ngcca-mongo
-      - ngcca-redis
-    networks:
-      - ngcca
   ## minio
   ngcca-minio:
     restart: always
@@ -43,7 +7,7 @@ services:
     container_name: ngcca_minio
     hostname: minio.local
     volumes:
-      - ngcca_minio_volume:/data
+      - minio_volume:/data
     ports:
       - "9009:9000"
       - "9001:9001"
@@ -68,7 +32,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ngcca_redis_volume:/bitnami/redis/data
+      - redis_volume:/bitnami/redis/data
     environment:
       - REDIS_PASSWORD=QbMufCD@9WVQ^Hv
     networks:
@@ -97,14 +61,12 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ngcca_mongo_volume:/data/db
+      - mongo_volume:/data/db
     # - ./mongodb/mongod.conf:/etc/mongo/mongod.conf
 volumes:
-  ngcca_minio_volume:
-  ngcca_mongo_volume:
-  ngcca_redis_volume:
-  ngcca_web_volume:
-  ngcca_server_volume:
+  minio_volume:
+  mongo_volume:
+  redis_volume:
 networks:
   ngcca:
     external: true
