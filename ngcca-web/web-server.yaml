@@ -27,7 +27,7 @@ metadata:
 spec:
   #  ingressClassName: nginx
   rules:
-    - host: ngcca-ui.docker.desktop
+    - host: ngcca-web.linux
       http:
         paths:
           - path: /
@@ -124,49 +124,32 @@ data:
         endpoint: "http://120.78.225.168:9009"
       mongodb:
         uri: "mongodb://admin:QbMufCD%409WVQ^Hv@120.78.225.168:27017/ngcca?authSource=admin"
-      openai:
-        api-key: no-key
-        http-proxy:
-          hostname: localhost
-          port: 0
-        http-client-timeout-seconds: 60
-      docker:
-        host: "tcp://120.78.225.168:2375"
-        pull-timeout-seconds: 300
-        push-timeout-seconds: 300
-    
       kubernetes-agent:
-        host: k8s-agent
-        port: 1400
-        domain-name: 
+        endpoint: http://119.91.214.25:1400 
       web-server:
-        host: 
-        port: 
-        endpoint: "http://ngcca-ui.docker.desktop"
+        endpoint: "http://ngcca-ui.linux"
       application:
-        dot-suffix-domain: ".linux.ngcca"
-        deployment-timeout-second: 1200
+        dot-suffix-domain: "ngcca.linux"
       security:
-        enabled: true
-        ignored-defaults:
-          - "/swagger**/**"
-          - "/v3/api-docs/**"
-          - "/favicon.ico"
-          - "/pub"
+        ignored-urls:
           - "/**/login"
           - "/plugins/**"
           - "/js/**"
           - "/dist/**"
-        ignored-urls:
           - "/index"
           - "/**/logout"
           - "/administrator/**"
           - "/templates/**"
-          - "/user/templates/**"
-          - "/user/applications/**"
+          - "/user/**"
           - "/"
-      buildpack:
-        build-timeout-second: 1800
+        oauth2:
+          github:
+            client-id: "241c6168a7efeaf852ba"
+            client-secret: "b3f98e25f25aa0807a0bc49c126178a11417e046"
+          gitlab:
+            client-id: "7a8680a3321f9ef21ce05f1746bb50a15ba8240818794f3e222af902043306d5"
+            client-secret: "gloas-b962f886b24167b29f177d95d0fde8326c3ce45f3bb3e6b6650ee734a6905878"
+            redirect-uri: "${ngcca.web-server.endpoint}/login/oauth2/code/gitlab"
     logging:
       level:
         io.hotcloud.common.log: info

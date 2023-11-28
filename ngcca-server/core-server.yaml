@@ -25,7 +25,7 @@ metadata:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   rules:
-    - host: core-server.linux.local
+    - host: ngcca-server.linux
       http:
         paths:
           - path: /
@@ -55,11 +55,11 @@ spec:
       labels:
         k8s-app: ngcca-server
     spec:
-      hostAliases:
-        - ip: 192.168.110.233
-          hostnames:
-            - harbor.linux-local
-            - linux.local
+      #      hostAliases:
+      #        - ip: 192.168.110.233
+      #          hostnames:
+      #            - harbor.linux-local
+      #            - linux.local
 
       containers:
         - image: harbor.linux-local:5000/ngcca/core-server:2023.06.06.165020
@@ -95,49 +95,25 @@ data:
   config: |
     ngcca:
       redis:
-        database: 1
+        database: 0
         password: "QbMufCD@9WVQ^Hv"
-        host: linux.local
+        host: 120.78.225.168
         port: 6379
       registry:
-        url: harbor.linux-local:5000
+        url: 119.91.214.25:5000
         username: admin
         password: "QbMufCD@9WVQ^Hv"
         imagebuild-namespace: image-build
       minio:
         access-key: admin
         secret-key: "QbMufCD@9WVQ^Hv"
-        endpoint: "http://linux.local:9009"
+        endpoint: "http://120.78.225.168:9009"
       mongodb:
-        uri: "mongodb://admin:QbMufCD%409WVQ^Hv@linux.local:27017/ngcca-test?authSource=admin"
+        uri: "mongodb://admin:QbMufCD%409WVQ^Hv@120.78.225.168:27017/ngcca?authSource=admin"
       kubernetes-agent:
-        host: k8s-agent
-        port: 1400
-        domain-name:
-      buildpack:
-        build-timeout-second: 1200
+        endpoint: http://119.91.214.25:1400
       application:
-        deployment-timeout-second: 1200
-        dot-suffix-domain: ".k8s.local"
-      security:
-        enabled: true
-        ignored-defaults:
-          - "/swagger**/**"
-          - "/v3/api-docs/**"
-          - "/favicon.ico"
-          - "/pub"
-          - "/**/login"
-        ignored-urls:
-      openai:
-        http-client-timeout-seconds: 60
-        http-proxy:
-          hostname: localhost
-          port: 8080
-        api-key: no-key
-      docker:
-        host: "tcp://linux.local:2375"
-        pull-timeout-seconds: 300
-        push-timeout-seconds: 300
+        dot-suffix-domain: ".ngcca.linux"
     server:
       port: 8080
     logging:
