@@ -54,17 +54,6 @@ public class VolumeCreateService {
         String pvc = prefix + "-pvc";
         String namespace = user.getNamespace();
 
-
-        VolumeEntity volume = new VolumeEntity();
-        volume.setName(name);
-        volume.setCreateUsername(user.getUsername());
-        volume.setType(VolumesType.LOCAL);
-        volume.setGigabytes(gigabytes);
-        volume.setPersistentVolume(pv);
-        volume.setPersistentVolumeClaim(pvc);
-        volume.setNamespace(namespace);
-        VolumeEntity saved = volumeRepository.save(volume);
-
         KubernetesCluster cluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
         Node storageNode = kubectlClient.listNode(cluster.getAgentUrl()).stream()
                 .filter(e -> e.getMetadata().getLabels().containsKey(K8sLabel.STORAGE_NODE))
@@ -78,6 +67,15 @@ public class VolumeCreateService {
             throw new PlatformException("create volume error: " + e.getMessage());
         }
 
+        VolumeEntity volume = new VolumeEntity();
+        volume.setName(name);
+        volume.setCreateUsername(user.getUsername());
+        volume.setType(VolumesType.LOCAL);
+        volume.setGigabytes(gigabytes);
+        volume.setPersistentVolume(pv);
+        volume.setPersistentVolumeClaim(pvc);
+        volume.setNamespace(namespace);
+        VolumeEntity saved = volumeRepository.save(volume);
         return Volumes.toVolumes(saved);
 
     }
