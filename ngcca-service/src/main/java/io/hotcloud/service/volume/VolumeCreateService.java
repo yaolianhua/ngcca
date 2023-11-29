@@ -30,6 +30,53 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * <pre>{@code kind: StorageClass
+ * apiVersion: storage.k8s.io/v1
+ * metadata:
+ *   name: local-storage
+ * provisioner: kubernetes.io/no-provisioner
+ * volumeBindingMode: WaitForFirstConsumer
+ * ---
+ * apiVersion: v1
+ * kind: PersistentVolume
+ * metadata:
+ *   name: jenkins-pv-volume
+ *   labels:
+ *     type: local
+ * spec:
+ *   storageClassName: local-storage
+ *   claimRef:
+ *     name: jenkins-pv-claim
+ *     namespace: devops-tools
+ *   capacity:
+ *     storage: 10Gi
+ *   accessModes:
+ *     - ReadWriteOnce
+ *   local:
+ *     path: /mnt
+ *   nodeAffinity:
+ *     required:
+ *       nodeSelectorTerms:
+ *       - matchExpressions:
+ *         - key: kubernetes.io/hostname
+ *           operator: In
+ *           values:
+ *           - worker-node01
+ * ---
+ * apiVersion: v1
+ * kind: PersistentVolumeClaim
+ * metadata:
+ *   name: jenkins-pv-claim
+ *   namespace: devops-tools
+ * spec:
+ *   storageClassName: local-storage
+ *   accessModes:
+ *     - ReadWriteOnce
+ *   resources:
+ *     requests:
+ *       storage: 3Gi}</pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class VolumeCreateService {
@@ -79,54 +126,6 @@ public class VolumeCreateService {
         return Volumes.toVolumes(saved);
 
     }
-
-    /**
-     * <pre>{@code kind: StorageClass
-     * apiVersion: storage.k8s.io/v1
-     * metadata:
-     *   name: local-storage
-     * provisioner: kubernetes.io/no-provisioner
-     * volumeBindingMode: WaitForFirstConsumer
-     * ---
-     * apiVersion: v1
-     * kind: PersistentVolume
-     * metadata:
-     *   name: jenkins-pv-volume
-     *   labels:
-     *     type: local
-     * spec:
-     *   storageClassName: local-storage
-     *   claimRef:
-     *     name: jenkins-pv-claim
-     *     namespace: devops-tools
-     *   capacity:
-     *     storage: 10Gi
-     *   accessModes:
-     *     - ReadWriteOnce
-     *   local:
-     *     path: /mnt
-     *   nodeAffinity:
-     *     required:
-     *       nodeSelectorTerms:
-     *       - matchExpressions:
-     *         - key: kubernetes.io/hostname
-     *           operator: In
-     *           values:
-     *           - worker-node01
-     * ---
-     * apiVersion: v1
-     * kind: PersistentVolumeClaim
-     * metadata:
-     *   name: jenkins-pv-claim
-     *   namespace: devops-tools
-     * spec:
-     *   storageClassName: local-storage
-     *   accessModes:
-     *     - ReadWriteOnce
-     *   resources:
-     *     requests:
-     *       storage: 3Gi}</pre>
-     */
 
     private void createPersistentVolumeClaim(String agent, String namespace, String pvc) throws ApiException {
         PersistentVolumeClaimCreateRequest claimCreateRequest = new PersistentVolumeClaimCreateRequest();
