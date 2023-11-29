@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class LocalVolume {
 
+    public static final String DEFAULT_PATH = "/data";
+
     /**
      * Filesystem type to mount. It applies only when the Path is a block device.
      * Must be a filesystem type supported by the host operating system. Ex.
@@ -17,5 +19,5 @@ public class LocalVolume {
      * The full path to the volume on the node. It can be either a directory or
      * block device (disk, partition, ...).
      */
-    private String path;
+    private String path = DEFAULT_PATH;
 }

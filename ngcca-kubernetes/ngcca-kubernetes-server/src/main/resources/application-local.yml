@@ -6,7 +6,6 @@ ngcca:
     database: 0
   kubernetes:
     in-cluster: false
-    cluster-id: default-cluster
 logging:
   level:
     io.hotcloud.common.log: debug

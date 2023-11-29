@@ -25,8 +25,6 @@ public class KubernetesProperties {
      */
     private boolean inCluster = true;
 
-    private String clusterId = "default-cluster";
-
     public static String defaultKubeconfigPath() {
         return String.format("%s/.kube/config", System.getenv("HOME"));
     }

@@ -16,4 +16,4 @@ server:
   port: 1401
 logging:
   level:
-    io.hotcloud.common.log: info
+    io.hotcloud.common.log: debug
