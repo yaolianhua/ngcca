@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.storage.StorageClass;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.VolumeEntity;
 import io.hotcloud.db.entity.VolumeRepository;
@@ -66,7 +67,7 @@ public class VolumeCreateService {
 
         KubernetesCluster cluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
         Node storageNode = kubectlClient.listNode(cluster.getAgentUrl()).stream()
-                .filter(e -> e.getMetadata().getLabels().containsKey("storage-node/hostname"))
+                .filter(e -> e.getMetadata().getLabels().containsKey(K8sLabel.STORAGE_NODE))
                 .findFirst()
                 .orElseThrow(() -> new PlatformException("there is no node labeled 'storage-node/hostname'"));
         try {
@@ -170,7 +171,7 @@ public class VolumeCreateService {
 
 
         NodeSelectorTerm.MatchRequirement matchRequirement = new NodeSelectorTerm.MatchRequirement();
-        matchRequirement.setKey("storage-node/hostname");
+        matchRequirement.setKey(K8sLabel.STORAGE_NODE);
         matchRequirement.setOperator(NodeSelectorTerm.Operator.In);
         matchRequirement.setValues(List.of(k8sNodeName));
 

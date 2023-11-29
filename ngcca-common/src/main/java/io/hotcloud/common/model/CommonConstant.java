@@ -14,8 +14,10 @@ public final class CommonConstant {
     public static final String DEFAULT_CLUSTER_ID = "default-cluster";
     public static final String DEFAULT_CLUSTER_NAME = "default-cluster";
 
-    public static final String K8S_APP = "k8s-app";
-    public static final String K8S_APP_BUSINESS_DATA_ID = "app.business.data/id";
+    @Deprecated(forRemoval = true)
+    public static final String K8S_APP = K8sLabel.K8S_APP;
+    @Deprecated(forRemoval = true)
+    public static final String K8S_APP_BUSINESS_DATA_ID = K8sLabel.K8S_APP_BUSINESS_DATA_ID;
 
     public static final String SUCCESS_MESSAGE = "success";
     public static final String APPLICATION_DEPLOYING_MESSAGE = "deploying";
