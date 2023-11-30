@@ -3,7 +3,6 @@ package io.hotcloud.db.entity;
 import io.hotcloud.db.AbstractEntity;
 import io.hotcloud.db.model.ApplicationInstanceResource;
 import io.hotcloud.db.model.ApplicationInstanceSource;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -48,11 +47,10 @@ public class ApplicationInstanceEntity extends AbstractEntity {
     private ApplicationInstanceSource source;
     private String yaml;
 
-    @Builder.Default
     private Integer replicas = 1;
-    @Builder.Default
+
     private Map<String, String> envs = new HashMap<>();
-    @Builder.Default
+
     private ApplicationInstanceResource resource = new ApplicationInstanceResource();
 
     private boolean success;
