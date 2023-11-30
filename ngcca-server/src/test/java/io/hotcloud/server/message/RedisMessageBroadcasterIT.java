@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static io.hotcloud.common.model.CommonConstant.MESSAGE_QUEUE_TEST;
+import static io.hotcloud.common.model.RedisMessageQueue.MESSAGE_QUEUE_TEST;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(

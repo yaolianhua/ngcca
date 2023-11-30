@@ -2,7 +2,7 @@ package io.hotcloud.common.message;
 
 import io.hotcloud.common.model.Message;
 
-import static io.hotcloud.common.model.CommonConstant.MESSAGE_QUEUE_NGCCA;
+import static io.hotcloud.common.model.RedisMessageQueue.MESSAGE_QUEUE_NGCCA;
 
 @FunctionalInterface
 public interface MessageBroadcaster {

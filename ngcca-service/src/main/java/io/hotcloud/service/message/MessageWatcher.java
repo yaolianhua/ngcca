@@ -4,8 +4,8 @@ import io.hotcloud.common.cache.RedisCommand;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.message.MessageObserver;
-import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.Message;
+import io.hotcloud.common.model.RedisMessageQueue;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class MessageWatcher {
     public void watch() {
 
         try {
-            for (String messageKey : CommonConstant.MESSAGE_QUEUE_LIST) {
+            for (String messageKey : RedisMessageQueue.MESSAGE_QUEUE_LIST) {
                 Object obj = redisCommand.lpop(messageKey);
                 if (obj instanceof Message<?> message) {
                     Log.debug(this, messageKey, Event.NOTIFY, "left pop redis queue data");
