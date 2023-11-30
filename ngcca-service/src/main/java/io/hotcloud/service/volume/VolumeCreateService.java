@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <pre>{@code kind: StorageClass
@@ -88,6 +89,17 @@ public class VolumeCreateService {
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final VolumeRepository volumeRepository;
     private final UserApi userApi;
+
+    public void update(String id, boolean used) {
+        final Optional<VolumeEntity> optional = volumeRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new PlatformException("volume not found [" + id + "]", 404);
+        }
+
+        VolumeEntity entity = optional.get();
+        entity.setUsed(used);
+        volumeRepository.save(entity);
+    }
 
     public Volumes create(String name, Integer gigabytes) {
         Assert.notNull(name, "volume name is null");

@@ -29,6 +29,8 @@ public class Volumes {
 
     private String namespace;
 
+    private boolean used;
+
     private Instant createdAt;
 
     public static Volumes toVolumes(VolumeEntity entity) {
@@ -41,6 +43,7 @@ public class Volumes {
                 .persistentVolume(entity.getPersistentVolume())
                 .persistentVolumeClaim(entity.getPersistentVolumeClaim())
                 .namespace(entity.getNamespace())
+                .used(entity.isUsed())
                 .createdAt(entity.getCreatedAt()).build();
     }
 

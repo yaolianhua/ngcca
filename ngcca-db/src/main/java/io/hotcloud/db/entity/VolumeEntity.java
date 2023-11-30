@@ -24,4 +24,6 @@ public class VolumeEntity extends AbstractEntity {
 
     private String namespace;
 
+    private boolean used;
+
 }

@@ -35,6 +35,9 @@ public class VolumeDeleteService {
         }
 
         VolumeEntity volume = optionalVolume.get();
+        if (volume.isUsed()) {
+            throw new PlatformException("volume is in use");
+        }
         String namespace = volume.getNamespace();
         String persistentVolume = volume.getPersistentVolume();
         String persistentVolumeClaim = volume.getPersistentVolumeClaim();
