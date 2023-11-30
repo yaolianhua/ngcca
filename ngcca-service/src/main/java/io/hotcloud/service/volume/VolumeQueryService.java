@@ -37,5 +37,12 @@ public class VolumeQueryService {
         return PageResult.ofCollectionPage(volumes, pageable);
     }
 
+    public List<Volumes> queryUserVolumes(String username) {
+        List<VolumeEntity> volumeEntities = volumeRepository.findByCreateUsername(username);
+        return volumeEntities.stream()
+                .map(Volumes::toVolumes)
+                .collect(Collectors.toList());
+    }
+
 
 }

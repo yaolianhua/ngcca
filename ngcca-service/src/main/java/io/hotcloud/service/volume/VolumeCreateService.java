@@ -26,6 +26,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -134,6 +135,7 @@ public class VolumeCreateService {
         volume.setPersistentVolume(pv);
         volume.setPersistentVolumeClaim(pvc);
         volume.setNamespace(namespace);
+        volume.setCreatedAt(Instant.now());
         VolumeEntity saved = volumeRepository.save(volume);
         return Volumes.toVolumes(saved);
 
