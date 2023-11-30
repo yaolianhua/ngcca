@@ -92,8 +92,8 @@ public class VolumeCreateService {
     public Volumes create(String name, Integer gigabytes) {
         Assert.notNull(name, "volume name is null");
         Assert.notNull(gigabytes, "volume size (Gigabytes) is null");
-        if (gigabytes > 10) {
-            throw new PlatformException("The maximum capacity of the storage volume does not exceed 10Gi");
+        if (gigabytes > 5) {
+            throw new PlatformException("The maximum capacity of the storage volume does not exceed 5Gi");
         }
         User user = userApi.current();
         String prefix = String.format("%s-%s", user.getUsername(), RandomStringUtils.randomAlphabetic(7).toLowerCase());
