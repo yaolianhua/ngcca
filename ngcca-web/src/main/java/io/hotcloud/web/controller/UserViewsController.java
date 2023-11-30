@@ -7,6 +7,8 @@ import io.hotcloud.service.registry.SystemRegistryProperties;
 import io.hotcloud.service.security.user.User;
 import io.hotcloud.service.template.TemplateDefinitionService;
 import io.hotcloud.service.template.TemplateInstanceService;
+import io.hotcloud.service.volume.VolumeQueryService;
+import io.hotcloud.service.volume.Volumes;
 import io.hotcloud.web.mvc.CookieUser;
 import io.hotcloud.web.mvc.WebConstant;
 import io.hotcloud.web.mvc.WebSession;
@@ -29,6 +31,7 @@ public class UserViewsController {
     private final TemplateDefinitionService templateDefinitionService;
     private final TemplateInstanceService templateInstanceService;
     private final ApplicationInstanceService applicationInstanceService;
+    private final VolumeQueryService volumeQueryService;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final SystemRegistryProperties systemRegistryProperties;
 
@@ -77,5 +80,22 @@ public class UserViewsController {
 
         model.addAttribute(WebConstant.COLLECTION, applicationInstances);
         return UserViews.USER_APPLICATION;
+    }
+
+    @RequestMapping("/user/volumes")
+    @WebSession
+    public String volumes(Model model,
+                          @RequestParam(value = "action", required = false) String action,
+                          @RequestParam(value = "id", required = false) String id,
+                          @CookieUser User user) {
+        List<Volumes> volumes = volumeQueryService.queryUserVolumes(user.getUsername());
+
+        if (Objects.equals(WebConstant.VIEW_LIST_FRAGMENT, action)) {
+            model.addAttribute(WebConstant.COLLECTION, volumes);
+            return UserViews.USER_VOLUME_LIST_FRAGMENT;
+        }
+
+        model.addAttribute(WebConstant.COLLECTION, volumes);
+        return UserViews.USER_VOLUME;
     }
 }
