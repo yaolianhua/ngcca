@@ -1,8 +1,6 @@
 package io.hotcloud.service.volume;
 
 import io.fabric8.kubernetes.api.model.Node;
-import io.fabric8.kubernetes.api.model.storage.StorageClass;
-import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
@@ -11,7 +9,6 @@ import io.hotcloud.db.entity.VolumeRepository;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
-import io.hotcloud.kubernetes.client.http.StorageClassClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
@@ -29,7 +26,6 @@ import org.springframework.util.Assert;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -85,7 +81,7 @@ public class VolumeCreateService {
 
     private final PersistentVolumeClient persistentVolumeClient;
     private final PersistentVolumeClaimClient persistentVolumeClaimClient;
-    private final StorageClassClient storageClassClient;
+
     private final KubectlClient kubectlClient;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final VolumeRepository volumeRepository;
@@ -122,7 +118,6 @@ public class VolumeCreateService {
                 .findFirst()
                 .orElseThrow(() -> new PlatformException("there is no node labeled 'storage-node/hostname'"));
         try {
-            createStorageClassIfNeed(cluster.getAgentUrl());
             createPersistentVolume(gigabytes, cluster.getAgentUrl(), namespace, pv, pvc, storageNode.getMetadata().getName());
             createPersistentVolumeClaim(cluster.getAgentUrl(), namespace, pvc);
         } catch (ApiException e) {
@@ -202,21 +197,6 @@ public class VolumeCreateService {
 
 
         persistentVolumeClient.create(agent, request);
-    }
-
-    private void createStorageClassIfNeed(String agent) throws ApiException {
-        StorageClass storageClass = storageClassClient.read(agent, StorageClassName.LOCAL_STORAGE);
-        if (Objects.isNull(storageClass)) {
-            StorageClassCreateRequest storageClassCreateRequest = new StorageClassCreateRequest();
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setName(StorageClassName.LOCAL_STORAGE);
-            storageClassCreateRequest.setMetadata(objectMetadata);
-
-            storageClassCreateRequest.setProvisioner("kubernetes.io/no-provisioner");
-            storageClassCreateRequest.setVolumeBindingMode("WaitForFirstConsumer");
-            storageClassClient.create(agent, storageClassCreateRequest);
-            Log.info(this, agent, "created storageClass " + StorageClassName.LOCAL_STORAGE);
-        }
     }
 
 }
