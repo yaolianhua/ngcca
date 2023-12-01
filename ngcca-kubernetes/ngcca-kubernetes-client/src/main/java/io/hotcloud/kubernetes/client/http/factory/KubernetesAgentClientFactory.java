@@ -68,6 +68,9 @@ public class KubernetesAgentClientFactory {
         if (Objects.equals(client, IngressClient.class)) {
             return (T) new IngressClientImpl(properties, restTemplate);
         }
+        if (Objects.equals(client, NodeClient.class)) {
+            return (T) new NodeClientImpl(properties, restTemplate);
+        }
 
         throw new UnsupportedOperationException("Unsupported type [" + client.getName() + "]");
 

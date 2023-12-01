@@ -83,4 +83,9 @@ import org.springframework.context.annotation.Bean;
     public IngressClient ingressHttpClient(KubernetesAgentClientFactory factory) {
         return factory.getClient(IngressClient.class);
     }
+
+    @Bean
+    public NodeClient nodeHttpClient(KubernetesAgentClientFactory factory) {
+        return factory.getClient(NodeClient.class);
+    }
 }
