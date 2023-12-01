@@ -11,13 +11,6 @@ $(function () {
     //tooltip
     $('#application-tooltip-msg').tooltip();
 
-    //Initialize Select2 Elements
-    $('.select2').select2();
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-        theme: 'bootstrap4'
-    });
-
     bsCustomFileInput.init();
 });
 
@@ -147,9 +140,7 @@ function deleteapplication(e) {
         if (result.isConfirmed) {
             axios.delete(APPLICATION_API + "/" + id)
                 .then(response => {
-                    $('#user-application-fragment').load(USER_APPLICATION_LIST_VIEWS + "?action=list", function () {
-
-                    });
+                    applications();
                     ok(response);
                 })
                 .catch(error => {
@@ -279,7 +270,7 @@ function createapplication() {
         data: data
     }).then(function (response) {
         ok(response);
-        window.location.href = "/user/applications";
+        applications();
     }).catch(function (error) {
         fail(error);
     });
