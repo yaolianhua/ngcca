@@ -84,6 +84,7 @@ public class VolumesController {
                     @Parameter(name = "id", description = "volume id")
             }
     )
+    @Log(action = Action.DELETE, target = Target.VOLUME, activity = "删除数据卷")
     public ResponseEntity<Result<Void>> delete(@PathVariable("id") String id) {
         volumeDeleteService.delete(id);
         return none();
@@ -97,6 +98,7 @@ public class VolumesController {
                     @Parameter(name = "username", description = "username")
             }
     )
+    @Log(action = Action.DELETE, target = Target.VOLUME, activity = "删除数据卷")
     public ResponseEntity<Result<Void>> deleteByUsername(@PathVariable("username") String username) {
         volumeDeleteService.deleteByUsername(username);
         return none();
