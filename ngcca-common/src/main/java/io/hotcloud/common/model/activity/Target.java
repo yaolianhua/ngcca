@@ -8,5 +8,6 @@ public enum Target {
     MINIO,
     POD,
     USER,
-    DASHBOARD
+    DASHBOARD,
+    VOLUME
 }

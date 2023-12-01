@@ -4,7 +4,10 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
+import io.hotcloud.common.model.activity.Action;
+import io.hotcloud.common.model.activity.Target;
 import io.hotcloud.service.volume.*;
+import io.hotcloud.web.mvc.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,6 +43,7 @@ public class VolumesController {
             responses = {@ApiResponse(responseCode = "201")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "volume create request body")
     )
+    @Log(action = Action.CREATE, target = Target.VOLUME, activity = "创建数据卷")
     public ResponseEntity<Result<Volumes>> create(@RequestBody VolumeCreateBody body) {
         Volumes volumes = volumeCreateService.create(body);
         return created(volumes);
