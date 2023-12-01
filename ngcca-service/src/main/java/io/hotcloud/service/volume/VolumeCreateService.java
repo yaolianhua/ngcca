@@ -102,7 +102,9 @@ public class VolumeCreateService {
         volumeRepository.save(entity);
     }
 
-    public Volumes create(String name, Integer gigabytes) {
+    public Volumes create(VolumeCreateBody body) {
+        String name = body.getName();
+        Integer gigabytes = body.getGigabytes();
         Assert.notNull(name, "volume name is null");
         Assert.notNull(gigabytes, "volume size (Gigabytes) is null");
         if (gigabytes > 5) {

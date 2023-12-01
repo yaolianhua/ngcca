@@ -4,10 +4,7 @@ import io.hotcloud.common.model.PageResult;
 import io.hotcloud.common.model.Pageable;
 import io.hotcloud.common.model.Result;
 import io.hotcloud.common.model.SwaggerBearerAuth;
-import io.hotcloud.service.volume.VolumeCreateService;
-import io.hotcloud.service.volume.VolumeDeleteService;
-import io.hotcloud.service.volume.VolumeQueryService;
-import io.hotcloud.service.volume.Volumes;
+import io.hotcloud.service.volume.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,14 +38,10 @@ public class VolumesController {
     @Operation(
             summary = "create volume",
             responses = {@ApiResponse(responseCode = "201")},
-            parameters = {
-                    @Parameter(name = "name", description = "volume name"),
-                    @Parameter(name = "gigabytes", description = "volume capacity")
-            }
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "volume create request body")
     )
-    public ResponseEntity<Result<Volumes>> create(@RequestParam("name") String name,
-                                                  @RequestParam("gigabytes") Integer gigabytes) {
-        Volumes volumes = volumeCreateService.create(name, gigabytes);
+    public ResponseEntity<Result<Volumes>> create(@RequestBody VolumeCreateBody body) {
+        Volumes volumes = volumeCreateService.create(body);
         return created(volumes);
     }
 
