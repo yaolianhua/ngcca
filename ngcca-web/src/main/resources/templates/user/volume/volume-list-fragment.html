@@ -1,0 +1,73 @@
+<!-- Default box -->
+<div class="card">
+    <div class="card-header">
+        <div class="col-sm-1">
+            <a class="btn btn-app bg-secondary" data-target="#modal-create-volume" data-toggle="modal">
+                <span class="badge bg-success">新建</span>
+                <i class="fas fa-solid fa-floppy-disk"></i>数据卷
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped projects">
+            <thead>
+            <tr>
+                <th style="width: 10%">
+                    名称
+                </th>
+                <th style="width: 10%">
+                    大小
+                </th>
+                <th style="width: 15%">
+                    pv
+                </th>
+                <th style="width: 15%">
+                    pvc
+                </th>
+                <th style="width: 10%">
+                    状态
+                </th>
+                <th style="width: 20%">
+                    创建时间
+                </th>
+                <th style="width: 10%">
+                    操作
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="volume: ${collection}">
+                <td class="project-state text-left">
+                    <a th:text="${volume.name}"></a>
+                </td>
+                <td class="project-state text-left">
+                    <a class="badge badge-secondary" th:text="${volume.gigabytes} + ' Gi'"></a>
+                </td>
+                <td class="project-state text-left">
+                    <a class="badge badge-info" th:text="${volume.persistentVolume}"></a>
+                </td>
+                <td class="project-state text-left">
+                    <a class="badge badge-info" th:text="${volume.persistentVolumeClaim}"></a>
+                </td>
+
+                <td>
+                    <a th:text="${volume.used ? '已使用' : '未使用'}"></a>
+                </td>
+                <td class="project-state text-left">
+                    <a th:text="${volume.createdAt}"></a>
+                </td>
+
+                <td>
+                    <button class="btn btn-danger btn-sm"
+                            onclick="deletevolume(this)"
+                            th:data-volume-id="${volume.id}">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->

@@ -9,6 +9,7 @@ const TEMPLATE_DEFINITION_API = "/v1/definition/templates";
 const APPLICATION_API = "/v1/applications/instance";
 const REGISTRY_SEARCH_API = "/v1/registries";
 const BUILD_TEMPLATEVIEWS_API = "/v1/templateviews"
+const VOLUME_API = "/v1/volumes"
 
 // View API
 const ACTIVITY_VIEWS = "/administrator/system/activities";
@@ -20,4 +21,5 @@ const USER_LIST_VIEWS = "/administrator/system/user-manage";
 
 const USER_APPLICATION_LIST_VIEWS = "/user/applications";
 const TEMPLATE_INSTANCE_LIST_VIEWS = "/user/template-instance";
+const USER_VOLUMES_LIST_VIEWS = "/user/volumes";
 

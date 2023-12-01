@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>NGCCA | 数据卷</title>
+
+  <link th:insert="~{global-link}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <div th:insert="~{navbar}"></div>
+  <div th:insert="~{sidebar}"></div>
+  <div th:insert="~{/user/volume/create-volume-modal}"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{/user/volumes}">数据卷</a></li>
+              <li class="breadcrumb-item active">数据卷列表</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content" id="volume-list-fragment" th:fragment="content">
+      <div th:insert="~{user/volume/volume-list-fragment}"></div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <div th:insert="~{footer}"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<div th:insert="~{global-script}"></div>
+<script th:src="@{/js/user-volume.js}">
+</script>
+</body>
+</html>
