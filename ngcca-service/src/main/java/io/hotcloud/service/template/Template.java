@@ -8,5 +8,6 @@ public enum Template {
     REDISINSIGHT,
     MYSQL,
     RABBITMQ,
-    BUSYBOX
+    BUSYBOX,
+    JENKINS
 }

@@ -29,6 +29,8 @@ public class SystemRegistryImageProperties {
 
     private String rabbitmq;
 
+    private String jenkins;
+
     private String busybox;
 
     private String kaniko;

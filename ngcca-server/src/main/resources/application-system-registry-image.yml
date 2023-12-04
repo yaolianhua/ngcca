@@ -10,6 +10,7 @@ ngcca:
       rabbitmq: library/rabbitmq:3.9-management
       mysql: library/mysql:8.0.27
       mongodb: library/mongo:5.0
+      jenkins: library/jenkins:lts
       kaniko: library/kaniko:v1.11.0
       java8: library/java8-runtime:latest
       java11: library/java11-runtime:latest
