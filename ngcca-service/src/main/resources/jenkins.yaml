@@ -85,7 +85,7 @@ spec:
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
-            claimName: #{[ JENKINS ]}
+            claimName: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -107,20 +107,20 @@ spec:
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: local-storage
+  name: template-local-storage
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: #{[ JENKINS ]}
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pv
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: template-local-storage
   claimRef:
-    name: #{[ JENKINS ]}
+    name: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pvc
     namespace: #{[ NAMESPACE ]}
   capacity:
     storage: 5Gi
@@ -140,10 +140,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: #{[ JENKINS ]}
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pvc
   namespace: #{[ NAMESPACE ]}
 spec:
-  storageClassName: local-storage
+  storageClassName: template-local-storage
   accessModes:
     - ReadWriteOnce
   resources:
