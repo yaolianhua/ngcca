@@ -40,5 +40,12 @@
     "logo": "/dist/img/template/rabbitmq.png",
     "shortDesc": "RabbitMQ是一种开源的消息中间件，实现了高效、可靠的异步消息传递",
     "description": "RabbitMQ是一种开源的消息中间件，实现了高效、可靠的异步消息传递。它采用AMQP（Advanced Message Queuing Protocol）协议作为消息传递的标准，支持多种编程语言和平台，并提供了许多高级特性，例如：灵活的路由规则、确认机制、持久化、事务支持和集群部署等。RabbitMQ 可以用于解耦分布式应用程序之间的通信，降低系统间依赖性，也可以用于实现消息队列、任务调度等应用场景"
+  },
+  {
+    "name": "JENKINS",
+    "version": "lts",
+    "logo": "/dist/img/template/jenkins.png",
+    "shortDesc": "Jenkins是一款开源 CI&CD 软件，用于自动化各种任务，包括构建、测试和部署软件",
+    "description": "Jenkins是一款开源 CI&CD 软件，用于自动化各种任务，包括构建、测试和部署软件。Jenkins 支持各种运行方式，可通过系统包、Docker 或者通过一个独立的 Java 程序"
   }
 ]
