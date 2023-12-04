@@ -1,10 +1,11 @@
 package io.hotcloud.service.template.processor;
 
 import io.hotcloud.common.utils.UUIDGenerator;
-import io.hotcloud.service.template.model.MysqlTemplate;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
 import io.hotcloud.service.template.TemplateInstanceProcessor;
+import io.hotcloud.service.template.TemplateVariables;
+import io.hotcloud.service.template.model.MysqlTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -18,12 +19,12 @@ class MysqlTemplateInstanceProcessor implements TemplateInstanceProcessor {
     }
 
     @Override
-    public TemplateInstance process(Template template, String imageUrl, String user, String namespace) {
+    public TemplateInstance process(Template template, TemplateVariables variables) {
 
         if (!support(template)) {
             return null;
         }
-        MysqlTemplate mysqlTemplate = new MysqlTemplate(imageUrl, namespace);
+        MysqlTemplate mysqlTemplate = new MysqlTemplate(variables.getImageUrl(), variables.getNamespace());
 
         String uuid = UUIDGenerator.uuidNoDash();
         return TemplateInstance.builder()
@@ -33,7 +34,7 @@ class MysqlTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .success(false)
                 .targetPorts("3306")
                 .service(mysqlTemplate.getService())
-                .user(user)
+                .user(variables.getUsername())
                 .yaml(mysqlTemplate.getYaml(uuid))
                 .build();
     }

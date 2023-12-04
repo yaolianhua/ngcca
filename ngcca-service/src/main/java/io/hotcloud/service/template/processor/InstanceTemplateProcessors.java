@@ -5,6 +5,7 @@ import io.hotcloud.db.entity.RegistryImageRepository;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
 import io.hotcloud.service.template.TemplateInstanceProcessor;
+import io.hotcloud.service.template.TemplateVariables;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -30,8 +31,13 @@ public class InstanceTemplateProcessors {
         RegistryImageEntity image = registryImageRepository.findByName(template.name().toLowerCase());
         Assert.notNull(image, "get registry image entity null");
 
+        TemplateVariables variables = TemplateVariables.builder()
+                .imageUrl(image.getValue())
+                .username(user)
+                .namespace(namespace)
+                .build();
         for (TemplateInstanceProcessor processor : processors) {
-            TemplateInstance templateInstance = processor.process(template, image.getValue(), user, namespace);
+            TemplateInstance templateInstance = processor.process(template, variables);
             if (Objects.nonNull(templateInstance)) {
                 templateInstance.setVersion(image.getTag());
                 return templateInstance;

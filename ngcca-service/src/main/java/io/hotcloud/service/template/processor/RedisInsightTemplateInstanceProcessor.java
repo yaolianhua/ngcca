@@ -3,11 +3,12 @@ package io.hotcloud.service.template.processor;
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.ingress.IngressDefinition;
-import io.hotcloud.service.template.model.RedisInsightTemplate;
+import io.hotcloud.service.registry.SystemRegistryImageProperties;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
 import io.hotcloud.service.template.TemplateInstanceProcessor;
-import io.hotcloud.service.registry.SystemRegistryImageProperties;
+import io.hotcloud.service.template.TemplateVariables;
+import io.hotcloud.service.template.model.RedisInsightTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -34,16 +35,16 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
     }
 
     @Override
-    public TemplateInstance process(Template template, String imageUrl, String user, String namespace) {
+    public TemplateInstance process(Template template, TemplateVariables variables) {
 
         if (!support(template)) {
             return null;
         }
         String busybox = systemRegistryImageProperties.getBusybox();
-        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(imageUrl, busybox, namespace);
+        RedisInsightTemplate redisInsightTemplate = new RedisInsightTemplate(variables.getImageUrl(), busybox, variables.getNamespace());
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
-                .namespace(namespace)
+                .namespace(variables.getNamespace())
                 .name(host)
                 .rules(List.of(IngressDefinition.Rule.builder()
                         .service(redisInsightTemplate.getService())
@@ -62,7 +63,7 @@ class RedisInsightTemplateInstanceProcessor implements TemplateInstanceProcessor
                 .targetPorts("8001")
                 .httpPort("8001")
                 .service(redisInsightTemplate.getService())
-                .user(user)
+                .user(variables.getUsername())
                 .yaml(redisInsightTemplate.getYaml(uuid))
                 .ingress(render(ingressDefinition))
                 .build();

@@ -3,10 +3,11 @@ package io.hotcloud.service.template.processor;
 import io.hotcloud.common.utils.UUIDGenerator;
 import io.hotcloud.service.application.ApplicationProperties;
 import io.hotcloud.service.ingress.IngressDefinition;
-import io.hotcloud.service.template.model.MinioTemplate;
 import io.hotcloud.service.template.Template;
 import io.hotcloud.service.template.TemplateInstance;
 import io.hotcloud.service.template.TemplateInstanceProcessor;
+import io.hotcloud.service.template.TemplateVariables;
+import io.hotcloud.service.template.model.MinioTemplate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -31,15 +32,15 @@ class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
     }
 
     @Override
-    public TemplateInstance process(Template template, String imageUrl, String user, String namespace) {
+    public TemplateInstance process(Template template, TemplateVariables variables) {
 
         if (!support(template)) {
             return null;
         }
-        MinioTemplate minioTemplate = new MinioTemplate(imageUrl, namespace);
+        MinioTemplate minioTemplate = new MinioTemplate(variables.getImageUrl(), variables.getNamespace());
         String host = RandomStringUtils.randomAlphabetic(12).toLowerCase() + applicationProperties.getDotSuffixDomain();
         IngressDefinition ingressDefinition = IngressDefinition.builder()
-                .namespace(namespace)
+                .namespace(variables.getNamespace())
                 .name(host)
                 .rules(List.of(IngressDefinition.Rule.builder()
                                 .service(minioTemplate.getService())
@@ -67,7 +68,7 @@ class MinioTemplateInstanceProcessor implements TemplateInstanceProcessor {
                 .targetPorts(ports)
                 .httpPort(ports)
                 .service(minioTemplate.getService())
-                .user(user)
+                .user(variables.getUsername())
                 .yaml(minioTemplate.getYaml(uuid))
                 .ingress(render(ingressDefinition))
                 .build();
