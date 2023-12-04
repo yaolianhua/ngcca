@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: jenkins-admin
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
 rules:
   - apiGroups: [ "" ]
     resources: [ "*" ]
@@ -11,20 +11,20 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: jenkins-admin
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
   namespace: #{[ NAMESPACE ]}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: jenkins-admin
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: jenkins-admin
+  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
 subjects:
   - kind: ServiceAccount
-    name: jenkins-admin
+    name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
     namespace: #{[ NAMESPACE ]}
 ---
 apiVersion: apps/v1
@@ -47,7 +47,7 @@ spec:
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
-      serviceAccountName: jenkins-admin
+      serviceAccountName: #{[ NAMESPACE ]}-#{[ JENKINS ]}
       containers:
         - name: jenkins
           image: #{[ JENKINS_IMAGE ]}
