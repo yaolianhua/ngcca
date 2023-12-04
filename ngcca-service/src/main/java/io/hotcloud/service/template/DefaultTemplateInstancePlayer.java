@@ -1,7 +1,9 @@
 package io.hotcloud.service.template;
 
+import io.fabric8.kubernetes.api.model.Node;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.common.model.CommonConstant;
+import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.NamespaceClient;
@@ -43,7 +45,12 @@ public class DefaultTemplateInstancePlayer implements TemplateInstancePlayer {
         if (Objects.isNull(cluster)) {
             throw new PlatformException("cluster not found [" + clusterId + "]");
         }
-        TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace);
+        Node storageNode = kubectlApi.listNode(cluster.getAgentUrl()).stream()
+                .filter(e -> e.getMetadata().getLabels().containsKey(K8sLabel.STORAGE_NODE))
+                .findFirst()
+                .orElseThrow(() -> new PlatformException("there is no node labeled 'storage-node/hostname'"));
+
+        TemplateInstance templateInstance = instanceTemplateProcessors.process(template, current.getUsername(), namespace, storageNode.getMetadata().getName());
 
         templateInstance.setClusterId(clusterId);
         TemplateInstance saved = templateInstanceService.saveOrUpdate(templateInstance);

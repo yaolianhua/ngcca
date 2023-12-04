@@ -27,7 +27,7 @@ public class InstanceTemplateProcessors {
         this.registryImageRepository = registryImageRepository;
     }
 
-    public TemplateInstance process(Template template, String user, String namespace) {
+    public TemplateInstance process(Template template, String user, String namespace, String storageNode) {
         RegistryImageEntity image = registryImageRepository.findByName(template.name().toLowerCase());
         Assert.notNull(image, "get registry image entity null");
 
@@ -35,6 +35,7 @@ public class InstanceTemplateProcessors {
                 .imageUrl(image.getValue())
                 .username(user)
                 .namespace(namespace)
+                .storageNode(storageNode)
                 .build();
         for (TemplateInstanceProcessor processor : processors) {
             TemplateInstance templateInstance = processor.process(template, variables);
