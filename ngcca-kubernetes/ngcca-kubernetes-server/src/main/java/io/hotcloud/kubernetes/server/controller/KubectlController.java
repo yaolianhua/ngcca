@@ -279,7 +279,7 @@ public class KubectlController {
             },
             responses = {@ApiResponse(responseCode = "202")}
     )
-    public ResponseEntity<String> cat(@PathVariable(value = "namespace") String namespace,
+    public ResponseEntity<String> exec(@PathVariable(value = "namespace") String namespace,
                                       @PathVariable(value = "pod") String pod,
                                       @RequestParam(value = "command") String command) {
         return ResponseEntity.ok(kubectlApi.exec(namespace, pod, command));
