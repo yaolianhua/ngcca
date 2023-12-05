@@ -8,6 +8,8 @@ import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
+import io.fabric8.kubernetes.client.dsl.ExecListener;
+import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.hotcloud.common.log.Log;
 import io.hotcloud.kubernetes.api.KubectlApi;
 import io.hotcloud.kubernetes.api.PodApi;
@@ -21,12 +23,14 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -282,4 +286,42 @@ public class KubectlEquivalent implements KubectlApi {
                 .getItems();
     }
 
+    @Override
+    public String exec(String namespace, String pod, String command) {
+        RequestParamAssertion.assertNamespaceNotNull(namespace);
+        RequestParamAssertion.assertResourceNameNotNull(pod);
+        String[] commands = command.split(" ");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CompletableFuture<String> data = new CompletableFuture<>();
+        try (ExecWatch execWatch = fabric8Client.pods()
+                .inNamespace(namespace)
+                .withName(pod)
+                .writingOutput(baos)
+                .writingError(baos)
+                .usingListener(new ExecListener() {
+                    @Override
+                    public void onOpen() {
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, Response failureResponse) {
+                        data.completeExceptionally(t);
+                    }
+
+                    @Override
+                    public void onClose(int code, String reason) {
+                        data.complete(baos.toString());
+                    }
+                })
+                .exec(commands)) {
+            return data.get(5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            throw new RuntimeException(e);
+        }
+    }
 }

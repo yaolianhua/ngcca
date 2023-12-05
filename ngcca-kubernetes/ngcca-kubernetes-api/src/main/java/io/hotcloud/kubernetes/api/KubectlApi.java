@@ -181,5 +181,13 @@ public interface KubectlApi {
                 .orElse(null);
     }
 
-
+    /**
+     * execute command on pod Equivalent to using kubectl exec -it {@code pod} -- your exec cmd
+     *
+     * @param namespace k8s namespace
+     * @param pod       k8s pod name
+     * @param command   exec cmd strings
+     * @return stdout result
+     */
+    String exec(String namespace, String pod, String command);
 }

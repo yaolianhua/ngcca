@@ -268,4 +268,20 @@ public class KubectlController {
     public ResponseEntity<List<Node>> listNodes() {
         return ResponseEntity.ok(nodeApi.nodes(null).getItems());
     }
+
+    @PostMapping("/{namespace}/{pod}/exec")
+    @Operation(
+            summary = "kubectl exec command on pod",
+            parameters = {
+                    @Parameter(name = "namespace", description = "k8s namespace"),
+                    @Parameter(name = "pod", description = "k8s pod name"),
+                    @Parameter(name = "command", description = "execute cmd")
+            },
+            responses = {@ApiResponse(responseCode = "202")}
+    )
+    public ResponseEntity<String> cat(@PathVariable(value = "namespace") String namespace,
+                                      @PathVariable(value = "pod") String pod,
+                                      @RequestParam(value = "command") String command) {
+        return ResponseEntity.ok(kubectlApi.exec(namespace, pod, command));
+    }
 }
