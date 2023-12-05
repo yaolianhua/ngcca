@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -152,16 +153,20 @@ public interface KubectlApi {
     /**
      * List cluster nodes. Equivalent to using kubectl get node
      *
+     * @see NodeApi#nodes(Map)
      * @return {@link Node}
      */
+    @Deprecated(forRemoval = true)
     List<Node> listNode();
 
     /**
      * Get node. Equivalent to using kubectl get node {@code node_name}
      *
+     * @see NodeApi#node(String)
      * @param node node name
      * @return {@link Node}
      */
+    @Deprecated(forRemoval = true)
     default Node getNode(String node) {
         return this.listNode()
                 .stream()

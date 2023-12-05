@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.fabric8.kubernetes.api.model.metrics.v1beta1.PodMetrics;
 import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.api.NodeApi;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,9 +31,12 @@ import java.util.concurrent.TimeUnit;
 public class KubectlController {
 
     private final KubectlApi kubectlApi;
+    private final NodeApi nodeApi;
 
-    public KubectlController(KubectlApi kubectlApi) {
+    public KubectlController(KubectlApi kubectlApi,
+                             NodeApi nodeApi) {
         this.kubectlApi = kubectlApi;
+        this.nodeApi = nodeApi;
     }
 
     @PostMapping
@@ -253,7 +257,7 @@ public class KubectlController {
             responses = {@ApiResponse(responseCode = "200")}
     )
     public ResponseEntity<Node> getNode(@PathVariable(value = "node") String node) {
-        return ResponseEntity.ok(kubectlApi.getNode(node));
+        return ResponseEntity.ok(nodeApi.node(node));
     }
 
     @GetMapping("/nodes")
@@ -262,6 +266,6 @@ public class KubectlController {
             responses = {@ApiResponse(responseCode = "200")}
     )
     public ResponseEntity<List<Node>> listNodes() {
-        return ResponseEntity.ok(kubectlApi.listNode());
+        return ResponseEntity.ok(nodeApi.nodes(null).getItems());
     }
 }
