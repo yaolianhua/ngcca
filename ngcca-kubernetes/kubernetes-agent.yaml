@@ -97,7 +97,7 @@ spec:
                     operator: Exists
               weight: 1
       containers:
-        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.10.26.133709
+        - image: 119.91.214.25:5000/ngcca/kubernetes-agent:2023.12.06.162520
           env:
             - name: NGCCA_REDIS_HOST
               value: "192.168.110.94"
@@ -129,4 +129,11 @@ spec:
               port: 1400
               path: /livez
             periodSeconds: 20
+          volumeMounts:
+            - mountPath: /ngcca
+              name: ngcca-data
+      volumes:
+        - name: ngcca-data
+          persistentVolumeClaim:
+            claimName: ngcca-data-pvc
       serviceAccountName: k8s-agent
