@@ -1,13 +1,11 @@
 package io.hotcloud.service.volume;
 
-import io.fabric8.kubernetes.api.model.Node;
 import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.VolumeEntity;
 import io.hotcloud.db.entity.VolumeRepository;
-import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -85,7 +83,6 @@ public class VolumeCreateService {
     private final PersistentVolumeClient persistentVolumeClient;
     private final PersistentVolumeClaimClient persistentVolumeClaimClient;
 
-    private final KubectlClient kubectlClient;
     private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final VolumeRepository volumeRepository;
     private final UserApi userApi;
@@ -115,13 +112,10 @@ public class VolumeCreateService {
         String pvc = prefix + "-pvc";
         String namespace = user.getNamespace();
 
-        KubernetesCluster cluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
-        Node storageNode = kubectlClient.listNode(cluster.getAgentUrl()).stream()
-                .filter(e -> e.getMetadata().getLabels().containsKey(K8sLabel.STORAGE_NODE))
-                .findFirst()
-                .orElseThrow(() -> new PlatformException("there is no node labeled 'storage-node/hostname'"));
+        KubernetesCluster cluster = databasedKubernetesClusterService.findById(body.getClusterId());
+
         try {
-            createPersistentVolume(gigabytes, cluster.getAgentUrl(), namespace, pv, pvc, storageNode.getMetadata().getName());
+            createPersistentVolume(gigabytes, cluster.getAgentUrl(), namespace, pv, pvc);
             createPersistentVolumeClaim(cluster.getAgentUrl(), namespace, pvc);
         } catch (ApiException | IOException e) {
             throw new PlatformException("create volume error: " + e.getMessage());
@@ -159,7 +153,7 @@ public class VolumeCreateService {
         persistentVolumeClaimClient.create(agent, claimCreateRequest);
     }
 
-    private void createPersistentVolume(Integer gigabytes, String agent, String namespace, String pv, String pvc, String k8sNodeName) throws ApiException, IOException {
+    private void createPersistentVolume(Integer gigabytes, String agent, String namespace, String pv, String pvc) throws ApiException, IOException {
         PersistentVolumeCreateRequest request = new PersistentVolumeCreateRequest();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setName(pv);
@@ -187,8 +181,7 @@ public class VolumeCreateService {
 
         NodeSelectorTerm.MatchRequirement matchRequirement = new NodeSelectorTerm.MatchRequirement();
         matchRequirement.setKey(K8sLabel.STORAGE_NODE);
-        matchRequirement.setOperator(NodeSelectorTerm.Operator.In);
-        matchRequirement.setValues(List.of(k8sNodeName));
+        matchRequirement.setOperator(NodeSelectorTerm.Operator.Exists);
 
         NodeSelectorTerm nodeSelectorTerm = new NodeSelectorTerm();
         nodeSelectorTerm.setMatchExpressions(List.of(matchRequirement));
