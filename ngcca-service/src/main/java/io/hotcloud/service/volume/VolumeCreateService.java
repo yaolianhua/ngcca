@@ -1,6 +1,7 @@
 package io.hotcloud.service.volume;
 
 import io.fabric8.kubernetes.api.model.Node;
+import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
@@ -23,6 +24,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +124,7 @@ public class VolumeCreateService {
         try {
             createPersistentVolume(gigabytes, cluster.getAgentUrl(), namespace, pv, pvc, storageNode.getMetadata().getName());
             createPersistentVolumeClaim(cluster.getAgentUrl(), namespace, pvc);
-        } catch (ApiException e) {
+        } catch (ApiException | IOException e) {
             throw new PlatformException("create volume error: " + e.getMessage());
         }
 
@@ -156,7 +160,7 @@ public class VolumeCreateService {
         persistentVolumeClaimClient.create(agent, claimCreateRequest);
     }
 
-    private void createPersistentVolume(Integer gigabytes, String agent, String namespace, String pv, String pvc, String k8sNodeName) throws ApiException {
+    private void createPersistentVolume(Integer gigabytes, String agent, String namespace, String pv, String pvc, String k8sNodeName) throws ApiException, IOException {
         PersistentVolumeCreateRequest request = new PersistentVolumeCreateRequest();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setName(pv);
@@ -176,6 +180,11 @@ public class VolumeCreateService {
         spec.setAccessModes(List.of("ReadWriteOnce"));
 
         LocalVolume local = new LocalVolume();
+        Path path = Path.of(CommonConstant.ROOT_PATH, pv);
+        if (!FileHelper.exists(path)) {
+            Files.createDirectories(path);
+        }
+        local.setPath(path.toString());
         spec.setLocal(local);
 
 
