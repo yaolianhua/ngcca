@@ -31,7 +31,7 @@ public final class PersistentVolumeClaimBuilder {
         V1PersistentVolumeClaimSpec v1PersistentVolumeClaimSpec = new V1PersistentVolumeClaimSpec();
 
         v1PersistentVolumeClaimSpec.setAccessModes(param.getSpec().getAccessModes());
-        v1PersistentVolumeClaimSpec.setVolumeMode(param.getSpec().getVolumeMode().name());
+        v1PersistentVolumeClaimSpec.setVolumeMode(param.getSpec().getVolumeMode());
         v1PersistentVolumeClaimSpec.setStorageClassName(param.getSpec().getStorageClassName());
 
         LabelSelector selector = param.getSpec().getSelector();

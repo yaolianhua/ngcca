@@ -25,13 +25,8 @@ public class PersistentVolumeClaimSpec {
     @Valid
     private Resources resources = new Resources();
 
-    private VolumeMode volumeMode = VolumeMode.Filesystem;
+    private String volumeMode = VolumeMode.FILE_SYSTEM;
 
     private String volumeName;
-
-    public enum VolumeMode {
-        //
-        Filesystem, Block
-    }
 
 }
