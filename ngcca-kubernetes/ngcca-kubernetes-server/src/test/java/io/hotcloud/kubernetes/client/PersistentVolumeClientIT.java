@@ -8,6 +8,7 @@ import io.hotcloud.kubernetes.ClientIntegrationTestBase;
 import io.hotcloud.kubernetes.client.http.KubectlClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
+import io.hotcloud.kubernetes.model.affinity.NodeSelectorOperator;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
 import io.hotcloud.kubernetes.model.storage.*;
 import io.kubernetes.client.openapi.ApiException;
@@ -109,7 +110,7 @@ public class PersistentVolumeClientIT extends ClientIntegrationTestBase {
                 .orElseThrow(() -> new PlatformException("there is no node labeled 'storage-node/hostname'"));
         NodeSelectorTerm.MatchRequirement matchRequirement = new NodeSelectorTerm.MatchRequirement();
         matchRequirement.setKey("storage-node/hostname");
-        matchRequirement.setOperator(NodeSelectorTerm.Operator.In);
+        matchRequirement.setOperator(NodeSelectorOperator.IN);
         matchRequirement.setValues(List.of(storageNode.getMetadata().getName()));
 
         NodeSelectorTerm nodeSelectorTerm = new NodeSelectorTerm();

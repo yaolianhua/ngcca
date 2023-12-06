@@ -19,13 +19,8 @@ public class NodeSelectorTerm {
     public static class MatchRequirement {
 
         private String key;
-        private Operator operator = Operator.In;
+        private String operator = NodeSelectorOperator.IN;
         private List<String> values = new ArrayList<>();
 
-    }
-
-    public enum Operator {
-        //
-        In, NotIn, Exists, DoesNotExist, Gt, Lt
     }
 }

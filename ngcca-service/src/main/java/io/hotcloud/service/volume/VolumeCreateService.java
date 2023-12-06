@@ -10,6 +10,7 @@ import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
 import io.hotcloud.kubernetes.model.Resources;
+import io.hotcloud.kubernetes.model.affinity.NodeSelectorOperator;
 import io.hotcloud.kubernetes.model.affinity.NodeSelectorTerm;
 import io.hotcloud.kubernetes.model.storage.*;
 import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
@@ -181,7 +182,7 @@ public class VolumeCreateService {
 
         NodeSelectorTerm.MatchRequirement matchRequirement = new NodeSelectorTerm.MatchRequirement();
         matchRequirement.setKey(K8sLabel.STORAGE_NODE);
-        matchRequirement.setOperator(NodeSelectorTerm.Operator.Exists);
+        matchRequirement.setOperator(NodeSelectorOperator.EXISTS);
 
         NodeSelectorTerm nodeSelectorTerm = new NodeSelectorTerm();
         nodeSelectorTerm.setMatchExpressions(List.of(matchRequirement));

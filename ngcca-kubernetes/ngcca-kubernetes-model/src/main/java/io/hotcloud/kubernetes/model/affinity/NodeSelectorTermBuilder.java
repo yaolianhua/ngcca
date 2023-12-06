@@ -22,7 +22,7 @@ public final class NodeSelectorTermBuilder {
                 .map(matchRequirement -> {
                     V1NodeSelectorRequirement v1NodeSelectorRequirement = new V1NodeSelectorRequirement();
                     v1NodeSelectorRequirement.setKey(matchRequirement.getKey());
-                    v1NodeSelectorRequirement.setOperator(matchRequirement.getOperator().name());
+                    v1NodeSelectorRequirement.setOperator(matchRequirement.getOperator());
                     v1NodeSelectorRequirement.setValues(matchRequirement.getValues());
                     return v1NodeSelectorRequirement;
                 }).collect(Collectors.toList());
@@ -32,7 +32,7 @@ public final class NodeSelectorTermBuilder {
                 .map(matchRequirement -> {
                     V1NodeSelectorRequirement v1NodeSelectorRequirement = new V1NodeSelectorRequirement();
                     v1NodeSelectorRequirement.setKey(matchRequirement.getKey());
-                    v1NodeSelectorRequirement.setOperator(matchRequirement.getOperator().name());
+                    v1NodeSelectorRequirement.setOperator(matchRequirement.getOperator());
                     v1NodeSelectorRequirement.setValues(matchRequirement.getValues());
                     return v1NodeSelectorRequirement;
                 }).collect(Collectors.toList());
