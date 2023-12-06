@@ -20,7 +20,7 @@ public final class PodAffinityTermBuilder {
                 .map(e -> {
                     V1LabelSelectorRequirement v1LabelSelectorRequirement = new V1LabelSelectorRequirement();
                     v1LabelSelectorRequirement.setKey(e.getKey());
-                    v1LabelSelectorRequirement.setOperator(e.getOperator().name());
+                    v1LabelSelectorRequirement.setOperator(e.getOperator());
                     v1LabelSelectorRequirement.setValues(e.getValues());
                     return v1LabelSelectorRequirement;
                 }).collect(Collectors.toList());

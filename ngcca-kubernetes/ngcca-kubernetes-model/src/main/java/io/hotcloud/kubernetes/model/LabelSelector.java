@@ -31,13 +31,8 @@ public class LabelSelector {
     public static class LabelSelectorRequirement{
         private String key;
 
-        private Operator operator = Operator.In;
+        private String operator = LabelSelectorOperator.IN;
 
         private List<String> values = new ArrayList<>();
-    }
-
-    public enum Operator {
-        //
-        In, NotIn, Exists, DoesNotExist
     }
 }

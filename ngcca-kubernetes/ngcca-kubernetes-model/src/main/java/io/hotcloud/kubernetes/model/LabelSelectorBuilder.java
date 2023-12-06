@@ -23,7 +23,7 @@ public final class LabelSelectorBuilder {
             V1LabelSelectorRequirement v1LabelSelectorRequirement = new V1LabelSelectorRequirement();
             v1LabelSelectorRequirement.setKey(e.getKey());
             v1LabelSelectorRequirement.setValues(e.getValues());
-            v1LabelSelectorRequirement.setOperator(e.getOperator().name());
+            v1LabelSelectorRequirement.setOperator(e.getOperator());
             return v1LabelSelectorRequirement;
         }).collect(Collectors.toList());
 
