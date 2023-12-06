@@ -34,12 +34,7 @@ public class PersistentVolumeSpec {
 
     private ClaimRef claimRef = new ClaimRef();
 
-    private VolumeMode volumeMode = VolumeMode.Filesystem;
-
-    public enum VolumeMode {
-        //
-        Filesystem, Block
-    }
+    private String volumeMode = VolumeMode.FILE_SYSTEM;
 
     public enum ReclaimPolicy {
         //
