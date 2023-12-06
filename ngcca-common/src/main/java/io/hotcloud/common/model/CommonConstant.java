@@ -1,13 +1,9 @@
 package io.hotcloud.common.model;
 
-import org.apache.commons.io.FileUtils;
-
-import java.nio.file.Path;
-
 public final class CommonConstant {
 
     public static final String CONFIG_PREFIX = "ngcca.";
-    public static final String ROOT_PATH = Path.of(FileUtils.getUserDirectoryPath(), "ngcca").toString();
+    public static final String ROOT_PATH = "/ngcca";
     public static final String ADMIN_USERNAME = "admin";
     public static final String ADMIN_INIT_PASSWORD = "admin123456";
     public static final String DEFAULT_CLUSTER_ID = "default-cluster";
