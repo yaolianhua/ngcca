@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.hotcloud.kubernetes.api.KubectlApi;
+import io.hotcloud.kubernetes.api.NodeApi;
 import io.hotcloud.kubernetes.model.CopyAction;
 import io.hotcloud.kubernetes.model.YamlBody;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = KubectlController.class)
 @MockBeans(value = {
         @MockBean(classes = {
-                KubectlApi.class
+                KubectlApi.class,
+                NodeApi.class
         })
 })
 public class KubectlControllerTest {
