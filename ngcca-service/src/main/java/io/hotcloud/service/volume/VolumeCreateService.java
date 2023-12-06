@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
@@ -181,9 +180,7 @@ public class VolumeCreateService {
 
         LocalVolume local = new LocalVolume();
         Path path = Path.of(CommonConstant.ROOT_PATH, pv);
-        if (!FileHelper.exists(path)) {
-            Files.createDirectories(path);
-        }
+        FileHelper.createDirectories(path);
         local.setPath(path.toString());
         spec.setLocal(local);
 
