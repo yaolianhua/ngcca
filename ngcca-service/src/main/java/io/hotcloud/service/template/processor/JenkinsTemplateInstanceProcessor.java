@@ -36,7 +36,7 @@ class JenkinsTemplateInstanceProcessor implements TemplateInstanceProcessor {
         if (!support(template)) {
             return null;
         }
-        JenkinsTemplate jenkinsTemplate = new JenkinsTemplate(variables.getImageUrl(), variables.getNamespace(), variables.getStorageNode());
+        JenkinsTemplate jenkinsTemplate = new JenkinsTemplate(variables.getImageUrl(), variables.getNamespace());
         String host = DomainUtils.generateDomain(Template.JENKINS.name().toLowerCase(), applicationProperties.getDotSuffixDomain());
         IngressDefinition ingressDefinition = IngressDefinition.builder()
                 .namespace(variables.getNamespace())

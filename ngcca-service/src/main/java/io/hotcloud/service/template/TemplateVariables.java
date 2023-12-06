@@ -16,5 +16,4 @@ public class TemplateVariables {
     private String imageUrl;
     private String username;
     private String namespace;
-    private String storageNode;
 }
