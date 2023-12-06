@@ -79,7 +79,7 @@ public final class PersistentVolumeBuilder {
         v1PersistentVolumeSpec.setAccessModes(param.getSpec().getAccessModes());
         v1PersistentVolumeSpec.setVolumeMode(param.getSpec().getVolumeMode());
         v1PersistentVolumeSpec.setStorageClassName(param.getSpec().getStorageClassName());
-        v1PersistentVolumeSpec.setPersistentVolumeReclaimPolicy(param.getSpec().getPersistentVolumeReclaimPolicy().name());
+        v1PersistentVolumeSpec.setPersistentVolumeReclaimPolicy(param.getSpec().getPersistentVolumeReclaimPolicy());
         v1PersistentVolumeSpec.setMountOptions(param.getSpec().getMountOptions());
 
         v1PersistentVolume.setMetadata(v1ObjectMeta);

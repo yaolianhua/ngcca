@@ -165,7 +165,7 @@ public class VolumeCreateService {
 
         PersistentVolumeSpec spec = new PersistentVolumeSpec();
         spec.setStorageClassName(StorageClassName.LOCAL_STORAGE);
-        spec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Delete);
+        spec.setPersistentVolumeReclaimPolicy(PersistentVolumeReclaimPolicy.DELETE);
 
         PersistentVolumeSpec.ClaimRef claimRef = new PersistentVolumeSpec.ClaimRef();
         claimRef.setName(pvc);

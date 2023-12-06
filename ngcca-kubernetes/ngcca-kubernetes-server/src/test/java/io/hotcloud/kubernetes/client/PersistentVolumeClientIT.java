@@ -69,7 +69,7 @@ public class PersistentVolumeClientIT extends ClientIntegrationTestBase {
         PersistentVolumeSpec spec = new PersistentVolumeSpec();
         spec.setAccessModes(List.of("ReadWriteOnce"));
         spec.setCapacity(Map.of("storage", "1Gi"));
-        spec.setPersistentVolumeReclaimPolicy(PersistentVolumeSpec.ReclaimPolicy.Recycle);
+        spec.setPersistentVolumeReclaimPolicy(PersistentVolumeReclaimPolicy.RECYCLE);
         HostPathVolume hostPathVolume = new HostPathVolume();
         hostPathVolume.setPath("/tmp");
         hostPathVolume.setType("");

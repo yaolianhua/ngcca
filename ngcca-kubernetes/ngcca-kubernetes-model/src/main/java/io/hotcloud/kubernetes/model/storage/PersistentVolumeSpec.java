@@ -28,18 +28,13 @@ public class PersistentVolumeSpec {
 
     private VolumeNodeAffinity nodeAffinity = new VolumeNodeAffinity();
 
-    private ReclaimPolicy persistentVolumeReclaimPolicy = ReclaimPolicy.Recycle;
+    private String persistentVolumeReclaimPolicy = PersistentVolumeReclaimPolicy.RECYCLE;
 
     private String storageClassName;
 
     private ClaimRef claimRef = new ClaimRef();
 
     private String volumeMode = VolumeMode.FILE_SYSTEM;
-
-    public enum ReclaimPolicy {
-        //
-        Retain, Recycle, Delete
-    }
 
     @Data
     public static class ClaimRef {
