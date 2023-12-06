@@ -1,32 +1,3 @@
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
-rules:
-  - apiGroups: [ "" ]
-    resources: [ "*" ]
-    verbs: [ "*" ]
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
-  namespace: #{[ NAMESPACE ]}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
-subjects:
-  - kind: ServiceAccount
-    name: #{[ NAMESPACE ]}-#{[ JENKINS ]}
-    namespace: #{[ NAMESPACE ]}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,7 +18,7 @@ spec:
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
-      serviceAccountName: #{[ NAMESPACE ]}-#{[ JENKINS ]}
+      serviceAccountName: ngcca-admin
       containers:
         - name: jenkins
           image: #{[ JENKINS_IMAGE ]}
@@ -104,13 +75,6 @@ spec:
     - port: 8080
       targetPort: 8080
 ---
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: template-local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
----
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -118,7 +82,8 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: template-local-storage
+  storageClassName: local-storage
+  persistentVolumeReclaimPolicy: Delete
   claimRef:
     name: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pvc
     namespace: #{[ NAMESPACE ]}
@@ -127,7 +92,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   local:
-    path: /mnt
+    path: #{[ VOLUME_PATH ]}
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -143,7 +108,7 @@ metadata:
   name: #{[ NAMESPACE ]}-#{[ JENKINS ]}-pvc
   namespace: #{[ NAMESPACE ]}
 spec:
-  storageClassName: template-local-storage
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
