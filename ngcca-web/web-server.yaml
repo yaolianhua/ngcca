@@ -96,6 +96,8 @@ spec:
             - mountPath: /web-server/config
               name: web-server-config-volume
               readOnly: false
+            - mountPath: /ngcca
+              name: ngcca-data
       volumes:
         - configMap:
             name: web-server-config
@@ -103,6 +105,9 @@ spec:
               - key: config
                 path: application.yml
           name: web-server-config-volume
+        - name: ngcca-data
+          persistentVolumeClaim:
+            claimName: ngcca-data-pvc
 ---
 apiVersion: v1
 data:
@@ -125,9 +130,9 @@ data:
       mongodb:
         uri: "mongodb://admin:QbMufCD%409WVQ^Hv@120.78.225.168:27017/ngcca?authSource=admin"
       kubernetes-agent:
-        endpoint: http://119.91.214.25:1400 
+        endpoint: http://119.91.214.25:31400 
       web-server:
-        endpoint: "http://ngcca-ui.linux"
+        endpoint: "http://ngcca-web.linux"
       application:
         dot-suffix-domain: "ngcca.linux"
       security:
