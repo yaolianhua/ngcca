@@ -6,6 +6,7 @@ import io.hotcloud.common.model.K8sLabel;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.VolumeEntity;
 import io.hotcloud.db.entity.VolumeRepository;
+import io.hotcloud.db.model.Cluster;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
 import io.hotcloud.kubernetes.model.ObjectMetadata;
@@ -124,6 +125,12 @@ public class VolumeCreateService {
 
         VolumeEntity volume = new VolumeEntity();
         volume.setName(name);
+        Cluster simpleCluster = Cluster.builder()
+                .name(cluster.getName())
+                .endpoint(cluster.getAgentUrl())
+                .id(cluster.getId())
+                .build();
+        volume.setCluster(simpleCluster);
         volume.setCreateUsername(user.getUsername());
         volume.setType(VolumesType.LOCAL);
         volume.setGigabytes(gigabytes);

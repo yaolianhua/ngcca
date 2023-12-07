@@ -1,19 +1,20 @@
 package io.hotcloud.service.volume;
 
+import io.fabric8.kubernetes.api.model.PersistentVolume;
+import io.hotcloud.common.file.FileHelper;
 import io.hotcloud.common.log.Event;
 import io.hotcloud.common.log.Log;
-import io.hotcloud.common.model.CommonConstant;
 import io.hotcloud.common.model.exception.PlatformException;
 import io.hotcloud.db.entity.VolumeEntity;
 import io.hotcloud.db.entity.VolumeRepository;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClaimClient;
 import io.hotcloud.kubernetes.client.http.PersistentVolumeClient;
-import io.hotcloud.service.cluster.DatabasedKubernetesClusterService;
-import io.hotcloud.service.cluster.KubernetesCluster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -24,7 +25,6 @@ public class VolumeDeleteService {
     private final PersistentVolumeClient persistentVolumeClient;
     private final PersistentVolumeClaimClient persistentVolumeClaimClient;
 
-    private final DatabasedKubernetesClusterService databasedKubernetesClusterService;
     private final VolumeRepository volumeRepository;
 
 
@@ -42,11 +42,15 @@ public class VolumeDeleteService {
         String persistentVolume = volume.getPersistentVolume();
         String persistentVolumeClaim = volume.getPersistentVolumeClaim();
 
-        KubernetesCluster cluster = databasedKubernetesClusterService.findById(CommonConstant.DEFAULT_CLUSTER_ID);
-
         try {
-            persistentVolumeClient.delete(cluster.getAgentUrl(), persistentVolume);
-            persistentVolumeClaimClient.delete(cluster.getAgentUrl(), namespace, persistentVolumeClaim);
+            PersistentVolume pv = persistentVolumeClient.read(volume.getCluster().getEndpoint(), persistentVolume);
+            if (Objects.equals(VolumesType.LOCAL, volume.getType())) {
+                String path = pv.getSpec().getLocal().getPath();
+                FileHelper.deleteRecursively(Path.of(path));
+            }
+
+            persistentVolumeClient.delete(volume.getCluster().getEndpoint(), persistentVolume);
+            persistentVolumeClaimClient.delete(volume.getCluster().getEndpoint(), namespace, persistentVolumeClaim);
         } catch (Exception e) {
             throw new PlatformException("delete volume error: " + e.getMessage());
         }

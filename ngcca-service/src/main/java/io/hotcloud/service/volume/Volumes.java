@@ -1,6 +1,7 @@
 package io.hotcloud.service.volume;
 
 import io.hotcloud.db.entity.VolumeEntity;
+import io.hotcloud.db.model.Cluster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Volumes {
 
     private String id;
     private String name;
+    private Cluster cluster;
 
     private Integer gigabytes;
 
@@ -37,6 +39,7 @@ public class Volumes {
         return Volumes.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .cluster(entity.getCluster())
                 .gigabytes(entity.getGigabytes())
                 .type(entity.getType())
                 .createUsername(entity.getCreateUsername())
